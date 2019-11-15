@@ -1,0 +1,279 @@
+// Base
+class Mechbase_Utility : Actor
+{
+	enum Hardpoints
+	{
+		Head = 0,
+		CTorso,
+		LTorso,
+		RTorso,
+		LArm,
+		RArm,
+		LLeg,
+		RLeg
+	}
+
+	int hardslots;
+	Vector2 pos;
+	String displayName;
+	float weight;
+	bool moveable;
+	int worth;
+	int ammogive;
+	class<Ammo> ammotype;
+	
+	
+	Property Hardpos : pos;
+	Property Criticals : hardslots;
+	Property DisplayName : displayName;
+	Property CValue : worth;
+	Property Tonnage : weight;
+	Property Moveable : moveable;
+	Property AmmoGiveType : ammotype;
+	Property AmmoGiveAmt : ammogive;
+	
+	Default
+	{
+		Mechbase_Utility.Tonnage 0;
+		Mechbase_Utility.Moveable 0;
+		Mechbase_Utility.CValue 0;
+		Mechbase_Utility.AmmoGiveType "";
+		Mechbase_Utility.AmmoGiveAmt 0;
+	}
+}
+
+// Immovable 
+
+class StructEngine : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "ENGINE";
+		Mechbase_Utility.Criticals 2;
+	}
+}
+class StructLifesupport : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "LIFESUPPORT";
+		Mechbase_Utility.Criticals 1;
+	}
+}
+class StructSensors : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "Sensors";
+		Mechbase_Utility.Criticals 1;
+	}
+}
+class StructCockpit : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "Cockpit";
+		Mechbase_Utility.Criticals 1;
+	}
+}
+class StructGyro : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "Gyro";
+		Mechbase_Utility.Criticals 2;
+	}
+}
+class StructShoulder : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "Shoulder";
+		Mechbase_Utility.Criticals 1;
+	}
+}
+class StructHip : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "Hip";
+		Mechbase_Utility.Criticals 1;
+	}
+}
+class StructActuator : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "Actuator";
+		Mechbase_Utility.Criticals 1;
+	}
+}
+
+// Moveable
+
+class Heatsink : Mechbase_Utility
+{
+	float cooling;
+	Property Efficiency : cooling;
+	
+	Default
+	{
+		Mechbase_Utility.Tonnage 1;
+		Mechbase_Utility.displayName "Heat Sink";
+		Heatsink.Efficiency 0.10;
+		Mechbase_Utility.Criticals 1;
+		Mechbase_Utility.Moveable 1;
+		Mechbase_Utility.CValue 12600;
+	}
+}
+
+class JumpJet : Mechbase_Utility
+{
+	float thrust_power;
+	Property thrust : thrust_power;
+	
+	Default
+	{
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.displayName "Jump Jet";
+		Mechbase_Utility.Criticals 1;
+		JumpJet.thrust 2.0;
+		Mechbase_Utility.Moveable 1;
+		Mechbase_Utility.CValue 8450;
+	}
+	
+}
+
+class DoubleHeatsink : Heatsink
+{
+	Default
+	{
+		Mechbase_Utility.Tonnage 1;
+		Mechbase_Utility.displayName "Heat Sink";
+		Heatsink.Efficiency 0.24;
+		Mechbase_Utility.Criticals 2;
+		Mechbase_Utility.Moveable 1;
+		Mechbase_Utility.CValue 22530;
+	}
+}
+
+class AntiMissileSystem : Mechbase_Utility
+{
+	int cooldown;
+	int pdamage;
+	int ammouse;
+	int activerange; // AMS becomes active when another missile enters range.
+	class<AMS_Missile> amstype;
+	
+	Property Cooldown : cooldown;
+	Property Damage : pdamage;
+	Property AmmoUse : ammouse;
+	property ActiveRange : activerange;
+	Property MissileType : amstype;
+
+	Default
+	{
+		Mechbase_Utility.Tonnage 1.5;
+		Mechbase_Utility.displayName "AMS";
+		Mechbase_Utility.Criticals 2;
+		Mechbase_Utility.Moveable 1;
+		Mechbase_Utility.CValue 27050;
+		AntiMissileSystem.Cooldown 3;
+		AntiMissileSystem.Damage 3;
+		AntiMissileSystem.ActiveRange 480;
+		AntiMissileSystem.AmmoUse 1;
+		AntiMissileSystem.MissileType "AntiMissile";
+		Mechbase_Utility.AmmoGiveType "AMSAmmo";
+		Mechbase_Utility.AmmoGiveAmt 600;
+	}
+	
+}
+
+// Armor
+
+class ArmoryUtility : Inventory
+{
+	class<Inventory> type;
+	int amt;
+	
+	Property Setup : type, amt;
+	
+	Default
+	{
+		Inventory.maxamount 999;
+		+INVENTORY.ALWAYSPICKUP
+	}
+	
+	
+	override bool TryPickup (in out Actor toucher)
+	{
+		if(type)
+		{
+			toucher.GiveInventory(type,amt);
+			Die(self,self);
+			return false;
+		}
+		return super.TryPickup(toucher);
+	}
+	
+	virtual void EquipUtil(Mechwarrior plr, MechHardpoint hpoint)
+	{
+	
+	}
+	
+}
+
+class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
+{
+	Default
+	{	
+		Inventory.PickupMessage "Picked up a small Endosteel component";
+		Tag "Endosteel Piece";
+		Inventory.Icon "ENDOA0";
+		XScale 0.3;
+		YScale 0.3;
+	}
+	States
+	{
+		Spawn:
+			ENDO A 1;
+		loop;
+	}
+	
+	override void EquipUtil(Mechwarrior plr, MechHardpoint hpoint)
+	{
+		/*
+		if(hpoint.armor >= hpoint.max_armor) 
+		{
+			plr.sendHUDAlert("Hardpoint armor limit reached.",Font.CR_ORANGE);
+			return;
+		}
+		*/
+		if(hpoint.internalhp <= 0)
+		{
+			plr.sendHUDAlert("Hardpoint must be repaired first!",Font.CR_RED);
+			return;
+		}
+		hpoint.armor++;
+		plr.TakeInventory(getClassName(),1);
+	}
+}
+
+class EndoGreen : EndosteelBonus replaces GreenArmor 
+{
+	Default
+	{
+		ArmoryUtility.Setup "EndosteelBonus", 25;
+		Inventory.PickupMessage "Picked up a medium Endosteel component";
+	}
+
+}
+
+class EndoBlue : EndosteelBonus replaces BlueArmor 
+{
+	Default
+	{
+		ArmoryUtility.Setup "EndosteelBonus", 60;
+		Inventory.PickupMessage "Picked up a large Endosteel component";
+	}
+}

@@ -1,0 +1,33 @@
+colorchanger LaserDecalAnimator
+{
+	Color "Black"
+	FadeTime 0.3
+	FadeStart 0
+}
+
+decal GreenLaserDecal 
+{
+	pic LASRDEC 
+	shade "Green"
+	Animator LaserDecalAnimator
+	randomflipx
+	randomflipy
+}
+
+decal BlueLaserDecal 
+{
+	pic LASRDEC 
+	shade "Blue"
+	Animator LaserDecalAnimator
+	randomflipx
+	randomflipy
+}
+
+decal RedLaserDecal 
+{
+	pic LASRDEC 
+	shade "Red"
+	Animator LaserDecalAnimator
+	randomflipx
+	randomflipy
+}

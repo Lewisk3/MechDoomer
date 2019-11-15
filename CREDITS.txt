@@ -1,0 +1,16 @@
+	- Mech sounds/Mech models/Mech Lore -
+Activision/BattleTech/Mechwarrior 2 : 31st Century Combat
+Activision/BattleTech/Mechwarrior 2 : Mercenaries
+
+	- Explosion Sprites -
+http://www.brickshelf.com/cgi-bin/gallery.cgi?i=5576954
+
+	- MechDoomer ZScript -
+Lewisk3 (Redxone)
+Xaser   (Argents ArgRocketReticle)
+
+	- Gutamatics math library -
+ https://gitlab.com/Gutawer/gzdoom-gutamatics
+
+	- Music -
+Timothy Seals ( A New Dawn ) - https://www.youtube.com/watch?v=l1MH3fB4jwY&list=PLqFtbV2G_dq4CIzmzG2UV0ThmhzgNktJq&index=1

@@ -1,0 +1,708 @@
+// Lasers
+
+class MediumLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "MLASER";
+		Mechbase_Weapon.WeaponType "Laser_MED";
+		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 3200;
+	}	
+}
+class LargeLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "LLASER";
+		Mechbase_Weapon.WeaponType "Laser_LRG";
+		Mechbase_Weapon.WeaponParams 30,75;
+		Mechbase_Weapon.Tonnage 5;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 5700;
+	}	
+}
+class SmallLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "SLASER";
+		Mechbase_Weapon.WeaponType "Laser_SML";
+		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.Tonnage 0.5;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 2400;
+	}	
+}
+class ERMediumLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "erMLAS";
+		Mechbase_Weapon.WeaponType "Laser_ERMED";
+		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 4150;
+	}	
+}
+class ERLargeLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "erLLAS";
+		Mechbase_Weapon.WeaponType "Laser_ERLRG";
+		Mechbase_Weapon.WeaponParams 30,75;
+		Mechbase_Weapon.Tonnage 5;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 6210;
+	}	
+}
+class ERSmallLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "erSLAS";
+		Mechbase_Weapon.WeaponType "Laser_ERSML";
+		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.Tonnage 0.5;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 2850;
+	}	
+}
+class MediumPulseLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "MPLAS";
+		Mechbase_Weapon.WeaponType "Laser_MEDP";
+		Mechbase_Weapon.WeaponParams 20,88;
+		Mechbase_Weapon.Tonnage 2;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 4300;
+	}	
+}
+class LargePulseLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "LPLAS";
+		Mechbase_Weapon.WeaponType "Laser_LRGP";
+		Mechbase_Weapon.WeaponParams 30,78;
+		Mechbase_Weapon.Tonnage 7;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 6420;
+	}	
+}
+class SmallPulseLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "SPLAS";
+		Mechbase_Weapon.WeaponType "Laser_SMLP";
+		Mechbase_Weapon.WeaponParams 5,90;
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 3050;
+	}	
+}
+
+// Energy
+
+class Flamer : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "FLAMER";
+		Mechbase_Weapon.WeaponType "FlameProjectile";
+		Mechbase_Weapon.WeaponParams 30,35;
+		Mechbase_Weapon.WeaponDelay 1;
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 6400;
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(4,16,16,"Energy/Flamer");
+	}
+}
+
+class PPC : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "PPC";
+		Mechbase_Weapon.WeaponType "PPCProjectile";
+		Mechbase_Weapon.WeaponParams 20, 27;
+		Mechbase_Weapon.Tonnage 7;
+		Mechbase_Weapon.HardslotSize 3;
+		Mechbase_Weapon.CValue 10375;
+	}
+}
+
+class ERPPC : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "ER PPC";
+		Mechbase_Weapon.WeaponType "ERPPCProjectile";
+		Mechbase_Weapon.WeaponParams 20, 27;
+		Mechbase_Weapon.Tonnage 7;
+		Mechbase_Weapon.HardslotSize 3;
+		Mechbase_Weapon.CValue 13250;
+	}
+}
+
+// Missiles - SRM
+class SRM2 : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "SRM2 ";
+		
+		Mechbase_Weapon.WeaponType "SRM";
+		Mechbase_Weapon.WeaponParams 30,35;
+		Mechbase_Weapon.WeaponDelay 8;
+		Mechbase_Weapon.AmmoType "SRM_Ammo";
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.AmmoGive 120;
+		Mechbase_Weapon.Tonnage 2; // 1
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 3700;
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(2,16,16,"Missiles/SRM2");
+	}
+}
+class SSRM2 : SRM2
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "SSRM2 ";
+		Mechbase_Weapon.WeaponType "SSRM";
+		Mechbase_Weapon.AmmoType "SSRM_Ammo";
+		Mechbase_Weapon.Tonnage 3; 
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 4800;
+		Mechbase_Weapon.IsHommingMissile true;
+		Mechbase_Weapon.LockingSpeed 2.8; // 35 tics until concise lock.
+	}
+}
+class SRM4 : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "SRM4 ";
+		Mechbase_Weapon.WeaponType "SRM";
+		Mechbase_Weapon.WeaponParams 30,35;
+		Mechbase_Weapon.WeaponDelay 12;
+		Mechbase_Weapon.AmmoType "SRM_Ammo";
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.AmmoGive 200;
+		Mechbase_weapon.HardslotSize 4;
+		Mechbase_Weapon.Tonnage 4;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 5500;
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(4,16,16,"Missiles/SRM4");
+	}
+}
+class SSRM4 : SRM4
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "SSRM4 ";
+		Mechbase_Weapon.WeaponType "SSRM";
+		Mechbase_Weapon.AmmoType "SSRM_Ammo";
+		Mechbase_Weapon.Tonnage 5;
+		Mechbase_Weapon.HardslotSize 3;
+		Mechbase_Weapon.CValue 6250;
+		Mechbase_Weapon.IsHommingMissile true;
+		Mechbase_Weapon.LockingSpeed 2.8; // 35 tics until concise lock.
+	}
+}
+
+class SRM6 : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "SRM6 ";
+		Mechbase_Weapon.WeaponType "SRM";
+		Mechbase_Weapon.WeaponParams 30,35;
+		Mechbase_Weapon.WeaponDelay 16;
+		Mechbase_Weapon.AmmoType "SRM_Ammo";
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.AmmoGive 200;
+		Mechbase_Weapon.Tonnage 6;
+		Mechbase_Weapon.HardslotSize 3;
+		Mechbase_Weapon.CValue 7280;
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(6,16,16,"Missiles/SRM6");
+	}
+}
+class SSRM6 : SRM6
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "SSRM6 ";
+		Mechbase_Weapon.WeaponType "SSRM";
+		Mechbase_Weapon.AmmoType "SSRM_Ammo";
+		Mechbase_Weapon.Tonnage 7;
+		Mechbase_Weapon.HardslotSize 4;
+		Mechbase_Weapon.CValue 8520;
+		Mechbase_Weapon.IsHommingMissile true;
+		Mechbase_Weapon.LockingSpeed 2.8; // 35 tics until concise lock.
+	}
+}
+
+// Missiles - LRM
+class LRM5: Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "LRM5";
+		Mechbase_Weapon.WeaponType "LRM";
+		Mechbase_Weapon.WeaponParams 30,15;
+		Mechbase_Weapon.WeaponDelay 7;
+		Mechbase_Weapon.AmmoType "LRM_Ammo";
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.AmmoGive 240;
+		Mechbase_Weapon.Tonnage 4;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 8200;
+		Mechbase_Weapon.IsHommingMissile true;
+		Mechbase_Weapon.LockingSpeed 2; // 50 tics until concise lock.
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(5,16,16,"Missiles/LRM");
+	}
+}
+class LRM10: LRM5
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "LRM10";
+		Mechbase_Weapon.Tonnage 7;
+		Mechbase_Weapon.HardslotSize 3;
+		Mechbase_Weapon.CValue 11600;
+		Mechbase_Weapon.IsHommingMissile true;
+		Mechbase_Weapon.LockingSpeed 2; // 50 tics until concise lock.
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(10,16,16,"Missiles/LRM");
+	}
+}
+class LRM15: LRM5
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "LRM15";
+		Mechbase_Weapon.Tonnage 9;
+		Mechbase_Weapon.HardslotSize 4;
+		Mechbase_Weapon.CValue 14200;
+		Mechbase_Weapon.IsHommingMissile true;
+		Mechbase_Weapon.LockingSpeed 2; // 50 tics until concise lock.
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(15,16,16,"Missiles/LRM");
+	}
+}
+class LRM20: LRM5
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "LRM20";
+		Mechbase_Weapon.Tonnage 12;
+		Mechbase_Weapon.HardslotSize 5;
+		Mechbase_Weapon.CValue 15560;
+		Mechbase_Weapon.IsHommingMissile true;
+		Mechbase_Weapon.LockingSpeed 2; // 50 tics until concise lock.
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(20,0,0,"Missiles/LRM");
+	}
+}
+
+// Ballistics
+
+class GaussRifle : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "GAUSS";
+		Mechbase_Weapon.AmmoType "GaussRounds";
+		Mechbase_Weapon.WeaponType "Gauss";
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.AmmoGive 10;
+		Mechbase_Weapon.Tonnage 12;
+		Mechbase_Weapon.HardslotSize 8;
+		Mechbase_Weapon.CValue 14830;
+	}
+}
+
+class MachineGun : Mechbase_Weapon
+{	
+	Default
+	{
+		Mechbase_Weapon.DisplayName "MGUN";
+		//Mechbase_Weapon.Hitscan 20,800;
+		Mechbase_Weapon.WeaponType "MGunBullet";
+		Mechbase_Weapon.AmmoType "BulletsMGun";
+		//Mechbase_Weapon.WeaponDelay 5;
+		Mechbase_Weapon.WeaponParams 20,50;
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.AmmoGive 350;
+		Mechbase_Weapon.AttackSound "Ballistics/MGUN";
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 2600;
+	}
+}
+
+class Autocannon2 : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "xAC2";
+		Mechbase_Weapon.WeaponType "AC_2";
+		Mechbase_Weapon.WeaponParams 20,60;
+		Mechbase_Weapon.AmmoType "AC2_Ammo";
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.AmmoGive 40;
+		Mechbase_Weapon.Tonnage 2;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 8800;
+	}	
+}
+class UAutocannon2 : Autocannon2
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "UAC2";
+		Mechbase_Weapon.WeaponType "UAC_2";
+		Mechbase_Weapon.AmmoType "UAC2_Ammo";
+		Mechbase_Weapon.Tonnage 4;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 9400;
+	}
+}
+
+class Autocannon5 : Autocannon2
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "xAC5";
+		Mechbase_Weapon.WeaponType "AC_5";
+		Mechbase_Weapon.AmmoType "AC5_Ammo";
+		Mechbase_Weapon.Tonnage 5;
+		Mechbase_Weapon.HardslotSize 4;
+		Mechbase_Weapon.CValue 9250;
+	}	
+}
+class UAutocannon5 : Autocannon5
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "UAC5";
+		Mechbase_Weapon.WeaponType "UAC_5";
+		Mechbase_Weapon.AmmoType "UAC5_Ammo";
+		Mechbase_Weapon.Tonnage 6;
+		Mechbase_Weapon.HardslotSize 4;
+		Mechbase_Weapon.CValue 11600;
+	}
+}
+
+class Autocannon10 : Autocannon2
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "xAC10";
+		Mechbase_Weapon.WeaponType "AC_10";
+		Mechbase_Weapon.AmmoType "AC10_Ammo";
+		Mechbase_Weapon.Tonnage 8;
+		Mechbase_Weapon.HardslotSize 7;
+		Mechbase_Weapon.CValue 12850;
+	}	
+}
+class UAutocannon10 : Autocannon10
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "UAC10";
+		Mechbase_Weapon.WeaponType "UAC_10";
+		Mechbase_Weapon.AmmoType "UAC10_Ammo";
+		Mechbase_Weapon.Tonnage 10;
+		Mechbase_Weapon.HardslotSize 7;
+		Mechbase_Weapon.CValue 10250;
+	}
+}
+
+
+class Autocannon20 : Autocannon2
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "xAC20";
+		Mechbase_Weapon.WeaponType "AC_20";
+		Mechbase_Weapon.AmmoType "AC20_Ammo";
+		Mechbase_Weapon.Tonnage 12;
+		Mechbase_Weapon.HardslotSize 7;
+		Mechbase_Weapon.CValue 13480;
+	}	
+}
+class UAutocannon20 : Autocannon20
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "UAC20";
+		Mechbase_Weapon.WeaponType "UAC_20";
+		Mechbase_Weapon.AmmoType "UAC20_Ammo";
+		Mechbase_Weapon.Tonnage 14;
+		Mechbase_Weapon.HardslotSize 7;
+		Mechbase_Weapon.CValue 15850;
+	}
+}
+
+// Ammos
+class GaussRounds : Ammo
+{
+	Default
+	{
+		Inventory.maxamount 100;
+	}
+}
+
+class BulletsMGun : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+class AC2_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+class AC5_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+class AC10_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+class AC20_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+class UAC2_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+class UAC5_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+class UAC10_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+class UAC20_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 999;
+	}
+}
+//SRM
+class SRM_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 9999;
+	}
+}
+class SSRM_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 9999;
+	}
+}
+// LRM
+class LRM_Ammo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 9999;
+	}
+}
+
+// Weapon related utilities
+
+class MechFootstepEmitter : Actor
+{
+	Default
+	{
+		SeeSound "Mech/Footstep";
+		Speed 5;
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 1;
+		stop;
+	}
+}
+
+class ExtendedActorChecks : Actor
+{
+	static bool TryTracerHit(Actor origin, Actor thing, int numrays = 40, double ang = 90, double distance = 500*64, double vrange = 32)	
+	{
+		FTranslatedLineTarget t;
+
+		// offset angles from its attack ang
+		for (int i = 0; i < numrays; i++)
+		{
+			double an = origin.angle - ang / 2 + ang / numrays*i;
+
+			origin.AimLineAttack(an, distance, t, vrange);
+		
+			if (t.linetarget != null)
+			{
+				if(t.linetarget == thing) return true;
+			}
+		}
+		return false;
+	}
+}
+
+// Weapon handler
+class CrosshairHandler : Weapon
+{
+	Default
+	{
+		Weapon.SlotNumber 6;
+		Weapon.SelectionOrder 3700;
+		+WEAPON.AMMO_OPTIONAL
+		Tag " ";
+	}
+	
+	int boboffs;
+	int bobdir;
+	
+	override void PostBeginPlay()
+	{
+		bobdir = 1;
+		super.PostBeginPlay();
+	}
+	
+	action MechWarrior getPilot()
+	{
+		let plr = MechWarrior(Self);
+		return plr;
+	}
+	
+	States
+	{	
+		Ready:
+			TNT1 A 0;
+			TNT1 A 1 Fast
+			{
+				let plr = getPilot();
+				if(plr) 
+				{
+					if(plr.boblendir != invoker.bobdir)
+					{
+						// Hurr durr... sound slots.
+						A_FireProjectile("MechFootstepEmitter");
+						invoker.bobdir = plr.boblendir;
+					}
+					if(CVar.FindCVar("mwd_nohud").getBool()) A_SetCrossHair(0);
+					if(!plr.mech_shutdown && !CVar.FindCVar("mwd_nohud").getBool())
+					{ 
+						A_SetCrossHair(8); 
+						if(GetPlayerInput(0) & BT_ATTACK) A_SetCrossHair(9);
+						let weap = plr.getSelectedWeapon();
+						if(weap)
+						{
+							if(plr.targetlocked && weap.isHomming)
+							{
+								A_SetCrossHair(12);
+							}
+							else if(plr.locktimer > 25 && weap.isHomming)
+							{
+								A_SetCrossHair(11);
+							}
+							else if(weap.isHomming)
+							{
+								A_SetCrossHair(10);
+							}
+						}
+					} 
+					else 
+					{ 
+						A_SetCrossHair(0); 
+					}
+				}
+				A_WeaponReady(WRF_NOBOB);
+			}
+		loop;
+		Select:
+			TNT1 A 0;
+			TNT1 A 1 Offset(-1,35);
+		DoSelect:
+			CROW A 0 A_Raise();
+		loop;
+		Deselect:
+			TNT1 A 0;
+			TNT1 A 1 Offset(1,300);
+		DoLower:
+			CROW A 0 A_Lower();
+		loop;
+		Fire:
+			TNT1 A 1;
+		goto Ready;
+	}
+}

@@ -1,0 +1,608 @@
+
+struct FadingText
+{
+	String txt;
+	float alpha;
+	int col;
+}
+
+class MechStatusBar : BaseStatusBar
+{
+	HUDFont mHUDFont;
+	Actor prevtarg;
+	float hud_alpha;
+	int tAlign;
+	TextureID compass;
+	bool invalid;
+	int compassoffs;
+	int compassdir;
+	int bobdir;
+	int boboffs;
+	int hpcounter;
+	int scrwidth;
+	int scrheight;
+	bool inMenu;
+	bool inHUDLoadout;
+	Vector2 loadm_base;
+	int loadm_selected;
+	int loadm_invselected;
+	int loadm_weapselected;
+	int struc_invselected;
+	int struc_weapselected;
+	Mechbase_Weapon loadout_weapon;
+	bool infomode;
+	int internalcash;
+	int cashcounter;
+	String loadout_invweapon;
+	int invoffset;
+	FadingText dCash;
+	
+	// Scalar constant
+	float defwidth;
+	float defheight;
+	float hud_xoffs;
+	float hud_yoffs;
+	
+	Font fnt;
+	
+	/*******************************\
+	|	  Scaled HUD functions.     |
+	|                               |
+	\*******************************/
+	
+	vector2, vector2 GetRelativeScale(vector2 pos, vector2 scale=(1,1), float cwidth=0, float cheight=0)
+	{
+ 		cwidth = !cwidth ? defwidth : cwidth; 
+		cheight = !cheight ? defheight : cheight; 
+		vector2 hscale = GetHUDScale();
+		hscale = ( int(hscale.x), int(hscale.x) ); // Force even scalar.
+		float rwidth  = (Screen.getWidth()  / float(cwidth) ) / hscale.x;
+		float rheight = (Screen.getHeight() / float(cheight)) / hscale.y;
+		vector2 rscale = (scale.x * rwidth, scale.y * rheight);
+		float relxoff = hud_xoffs * rwidth;
+		float relyoff = hud_yoffs * rheight;
+		vector2 rpos = ( (pos.x)*rwidth, (pos.y)*rheight );
+		
+		return rpos, rscale;
+	}
+	
+	// All H_ function auto adjust to the screen resolution based on 1080p coords.	
+	void H_DrawImage(Name img, vector2 pos, uint flags=0, vector2 scale=(1,1), vector2 bsize = (-1,-1), float alpha=-1)
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale(pos, scale);
+		alpha = (alpha < 0) ? hud_alpha : alpha;
+		DrawImage(img, rpos, flags, alpha, bsize, rscale);
+	}
+	
+	void H_DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1))
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale(pos, scale);
+		alpha = (alpha < 0) ? hud_alpha : alpha;
+		DrawTexture(texture, rpos, flags, alpha, (-1, -1), rscale);
+	}
+	
+	void H_Fill(Color col, double x, double y, double w, double h, int flags = 0)
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale((x,y),(w,h));
+		Fill(col, rpos.x, rpos.y, rscale.x, rscale.y, flags);
+	}
+	
+	void H_SetClipRect(int x, int y, int width, int height)
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale((x,y),(width,height));
+		SetClipRect( rpos.x, rpos.y, rscale.x, rscale.y );
+	}
+	
+	void H_DrawStringBigFont(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=-1)
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale(pos);
+		alpha = (alpha < 0) ? hud_alpha : alpha;
+		HUDFont bHUDFont = HUDFont.Create("dbigfont");
+		DrawString(bHUDFont, str, rpos, flags, translation, alpha);
+	}
+	
+	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=-1)
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale(pos);
+		alpha = (alpha < 0) ? hud_alpha : alpha;
+		DrawString(mHUDFont, str, rpos, flags, translation, alpha);
+	}
+		
+	void drawAngledLine(int x, int y, int distance, float angle, float fov, Color c)
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale( (x, y) );
+		Screen.drawLine(rpos.x,rpos.y,rpos.x+(cos(angle+fov)*(distance*rscale.x)),rpos.y-(sin(angle+fov)*(distance*rscale.y)),c);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+	float point_distance(Actor one, Actor two, float scale)
+	{
+		int x = one.pos.x - two.pos.x;
+		int y = one.pos.y - two.pos.y;
+		int z = one.pos.z - two.pos.z;
+		return sqrt( x*x + y*y + z*z )/scale;
+	}
+	
+	bool isTypeOfStruct(String type)
+	{	
+		class<Mechbase_Utility> util = type;
+		return util;
+	}
+
+	override void Init()
+	{
+		Super.Init();
+		defwidth = 1920;
+		defheight = 1080;
+		hud_xoffs = 800;
+		hud_yoffs = 860;
+		SetSize(32, 320, 200);
+		compassoffs = 0;
+		compassdir = 1;
+		bobdir = 1;
+		hud_alpha = 1.0;
+		compass = TexMan.CheckForTexture("MBEARING",TexMan.TYPE_ANY);
+		tAlign = DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_BOTTOM;
+		internalcash = -1; 
+		
+		// Create the font used for the fullscreen HUD
+		fnt = "MechFont";
+		mHUDFont = HUDFont.Create(fnt);
+		
+	}
+	
+	override void Tick()
+	{	
+		if(CPlayer && CPlayer.mo)
+		{
+			let mech = MechWarrior(CPlayer.mo);	
+			if(!mech) 
+			{
+				super.tick();
+				return;
+			}
+			if(cashcounter != mech.money_cbills) 
+			{
+				int money = mech.money_cbills - cashcounter;
+				if(mech.money_cbills < cashcounter)
+				{ 
+					cashcounter+= money/20; 
+					dCash.txt = money.."";
+					dCash.col = Font.CR_DARKRED;
+					if(cashcounter < mech.money_cbills) cashcounter = mech.money_cbills;
+					if(money/20 == 0) cashcounter = mech.money_cbills;
+				}
+				if(mech.money_cbills > cashcounter)
+				{ 
+					cashcounter+= money/20; 
+					dCash.txt = "+" .. money;
+					dCash.col = Font.CR_GREEN;
+					if(cashcounter > mech.money_cbills) cashcounter = mech.money_cbills;
+					if(money/20 == 0) cashcounter = mech.money_cbills;
+				}
+				
+			}
+			if(mech.vel.length() > 0.08)
+			{
+				boboffs += (mech.vel.length()/4) * bobdir;
+			}
+			if(abs(boboffs) > 8) bobdir *= -1;
+		}
+	
+		super.tick();
+	}
+	
+	void drawWeapons(HUDFont fnt, vector2 pos, float scalex, float scaley)
+	{
+		int lastweap;
+		if(CPlayer && CPlayer.mo)
+		{
+			let mech = MechWarrior(CPlayer.mo);		
+			for(let weap = mech.Inv; weap != null; weap = weap.Inv)
+			{
+				let ww = Mechbase_Weapon(weap);
+				if(ww)
+				{
+					int ftranslation = Font.CR_GREEN;
+					static const int group_colors[] =
+					{
+						Font.CR_GREEN,
+						Font.CR_WHITE,
+						Font.CR_YELLOW,
+						Font.CR_BROWN
+					};
+					int grp = clamp(ww.group-1,0,3);
+					ftranslation = group_colors[grp];
+					if(ww.ammotype && ww.ammouse > mech.countinv(ww.ammotype))ftranslation = Font.CR_DARKRED;
+					if( ww.cooldown_timer > 0 )ftranslation = Font.CR_DARKRED;
+					int selx = (ww.WeaponID+1)%2;
+					int sely = (ww.WeaponID+1)/2;
+					if(ww.ammotype)
+						H_DrawString(ww.displayName .. " " .. mech.countinv(ww.ammotype),(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
+					if(!ww.ammotype)
+						H_DrawString(ww.displayName,(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
+					if(lastweap < ww.WeaponID) lastweap = ww.WeaponID;
+				}
+			}
+			// Special exclusive weapon drawing for a struct!
+			
+			int amsid=1;
+			for(int i = 0; i < mech.mechstructs.Size(); i++)
+			{
+				String cname = mech.mechstructs[i];
+				cname.ToLower();
+				if(cname == "antimissilesystem")
+				{
+					int ftranslation = Font.CR_SAPPHIRE;
+					int nselx = (lastweap+1+amsid)%2;
+					int nsely = (lastweap+1+amsid)/2;
+					class<AntiMissileSystem> defams = "AntiMissileSystem";
+					class<Mechbase_Utility> mutil = "AntiMissileSystem";
+					let ams_def = GetDefaultByType(defams);
+					let util_def = GetDefaultByType(mutil);
+					if(util_def.ammotype && ams_def.ammouse > mech.countinv(util_def.ammotype))ftranslation = Font.CR_DARKRED;
+					if(mech.ams_timer > 0)ftranslation = Font.CR_DARKRED;
+					string prefix = util_def.displayName;
+					if(util_def.ammotype)
+						H_DrawString(prefix .. " " .. mech.countinv(util_def.ammotype),(pos.x+(nselx*scalex),pos.y+(nsely*scaley)),0,ftranslation);
+					if(!util_def.ammotype)
+						H_DrawString(prefix,(pos.x+(nselx*scalex),pos.y+(nsely*scaley)),0,ftranslation);
+					amsid++;
+				}
+			}
+			
+			
+		}
+		
+	}
+	
+	bool checkWeaponBusy(int ind)
+	{
+		if(CPlayer && CPlayer.mo)
+		{
+			let mech = MechWarrior(CPlayer.mo);		
+			for(let weap = mech.Inv; weap; weap = weap.Inv)
+			{
+				let ww = Mechbase_Weapon(weap);
+				if(ww)
+				{
+					if(ww.WeaponID == ind)
+					{
+						return (ww.cooldown_timer > 0);
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	override void Draw (int state, double TicFrac)
+	{
+		Super.Draw (state, TicFrac);
+		
+		if(inMenu)H_DrawString("HUD is in menu.",(100,-500));
+		if(CPlayer && CPlayer.mo)
+		{
+			let mech = MechWarrior(CPlayer.mo);
+			if(!mech) invalid = true;
+		}
+		if (state == HUD_StatusBar)
+		{
+			BeginStatusBar();
+			DrawFullScreenStuff (TicFrac);
+		}
+		else if (state == HUD_Fullscreen)
+		{
+			BeginHUD();
+			DrawMainBar (TicFrac);
+			if(CVar.GetCVar("hud_scale",CPlayer).getInt() > 1)
+			{
+				H_DrawStringBigFont("- HUD is not being displayed correctly -",(-1600,20),0,Font.CR_DARKRED);
+				H_DrawStringBigFont(" Press Tilda(`) Then type - hud_scale 1. Alternatively - ",(-1930,60),0,Font.CR_WHITE);
+				H_DrawStringBigFont(" Options->HUD Options->Scaling Options->Fullscreen HUD: 1",(-1930,100),0,Font.CR_WHITE);
+			}
+			else if(!CVar.GetCVar("hud_aspectscale",CPlayer).getBool())
+			{
+				H_DrawStringBigFont("- HUD is not scaled correctly -",(-1200,0),0,Font.CR_DARKRED);
+				H_DrawStringBigFont(" Press Tilda(`) Then type - hud_aspectscale 1.",(-1300,20),0,Font.CR_WHITE);
+				H_DrawStringBigFont(" Options->HUD Options->Scaling Options->",(-1300,40),0,Font.CR_WHITE);
+				H_DrawStringBigFont(" HUD Preserves Aspect Ratio: ON",(-1300,60),0,Font.CR_WHITE);
+	
+			}
+			if(invalid) 
+			{
+				H_DrawStringBigFont("Player class not supported!",(-1200,200),0,Font.CR_DARKRED);
+				return;
+			}
+		}
+	}
+	
+	int realAngle(float ang)
+	{
+		return acos(cos(ang));
+	}
+	
+	void DrawBars()
+	{
+		if(CPlayer && CPlayer.mo) 
+		{
+			let mech = MechWarrior(CPlayer.mo);
+			if(!mech) return;
+			
+			vector2 throttlepos = (742, -103);
+			vector2 jetpos = (1243, -80);
+			vector2 heatpos = (901, -80);
+			vector2 deltapos = (1201, -80);
+			
+			if(!mech.defaultmovement)
+			{
+				H_DrawImage("Throttle",(920+795,150+720));
+				if(abs(mech.throttle) <= 0.01)
+					H_Fill(Color(int(100*hud_alpha),0,255,0), throttlepos.x,throttlepos.y, 14, -3, DI_SCREEN_CENTER_BOTTOM);
+				if(mech.throttle > 0)
+				{
+					H_Fill(Color(int(100*hud_alpha),0,255,0), throttlepos.x,throttlepos.y, 14, -(mech.throttle*150), DI_SCREEN_CENTER_BOTTOM);
+				}
+				else
+				{
+					H_Fill(Color(int(100*hud_alpha),0,0,255), throttlepos.x,throttlepos.y, 14, -(mech.throttle*140), DI_SCREEN_CENTER_BOTTOM);
+				}
+				
+				// Torso angle
+				if(!mech.uncappedtorso) 
+				{
+					H_Fill(Color(int(255*hud_alpha),0,255,0),960,36,-(mech.angle-mech.LegAng)*1.6,8);
+					if( abs(mech.angle-mech.LegAng) <= 1)H_Fill(Color(int(255*hud_alpha),0,255,0),960,36,4,8);
+				}
+			}
+			
+			if(mech.Mech_HasJets) 
+			{
+				H_DrawString("Jets",(448+795,125+720));
+				H_Fill(Color(int(100*hud_alpha),255,0,0),jetpos.x,jetpos.y,132,16);
+				H_Fill(Color(int(100*hud_alpha),0,255,0),jetpos.x,jetpos.y,mech.mech_jetsfuel*1.32,16);
+			}
+			H_DrawString("Heat",(-38+795,125+720));
+			H_Fill(Color(int(255*hud_alpha),206,206,0),heatpos.x-147,heatpos.y,290,16);
+			if(mech.HeatLevel > 50)
+			{
+				float hmin = clamp(mech.HeatLevel-50,0,48);
+				float hmax = clamp(-(mech.HeatLevel-50),-50,0);
+				H_Fill(Color(int(255*hud_alpha),255,0,0),heatpos.x,heatpos.y,hmin*3,16);
+				H_Fill(Color(int(255*hud_alpha),255,0,0),heatpos.x,heatpos.y,hmax*3,16);
+			}
+			else
+			{
+				float hmin = clamp(mech.HeatLevel,0,50);
+				float hmax = clamp(-(mech.HeatLevel),-50,0);
+				H_Fill(Color(int(255*hud_alpha),2,30,216),heatpos.x,heatpos.y,143-(hmin)*3,16);
+				H_Fill(Color(int(255*hud_alpha),2,30,216),heatpos.x,heatpos.y,-(148+((hmax)*3)),16);
+			}
+			H_DrawString("dH/dT",(285+795,125+720));
+			H_Fill(Color(int(255*hud_alpha),206,206,0),deltapos.x-128,deltapos.y,125,16);
+			float hmax = clamp(-(mech.deltaHeat),-50,0);
+			H_Fill(Color(int(255*hud_alpha),2,30,216),deltapos.x,deltapos.y,-(130+((hmax)*3)),16);
+			
+		}
+	}
+	
+	void Draw_Radar()
+	{	
+		if(CPlayer && CPlayer.mo)
+		{
+			float scale = 7;
+			let mech = MechWarrior(CPlayer.mo);
+			if(!mech) return;
+			ThinkerIterator act_it = ThinkerIterator.Create("Actor");
+			Actor obj;
+						
+			// Draw FOV bars (For some reason the xaxis needs to be divided by 2 to scale correctly.)
+			float drawang = mech.defaultmovement ? 90 : mech.angle-mech.LegAng+90;
+			drawAngledLine(268,228,166,drawang,mech.player.FOV/2,Color(int(255*hud_alpha),53,255,53));
+			drawAngledLine(268,228,166,drawang,-mech.player.FOV/2,Color(int(255*hud_alpha),53,255,53));
+	
+			H_DrawImage("MECRADAR",(268,326),0,(1,0.8));
+			float radarx = 1650;
+			float radary = 706;
+			
+			while(obj = Actor(act_it.Next()))
+			{
+				int x = mech.pos.x - obj.pos.x;
+				int y = mech.pos.y - obj.pos.y;
+				int dis = point_distance(obj,Actor(CPlayer.mo),scale);
+				if( dis < 135 )
+				{
+					int x = mech.pos.x - obj.pos.x;
+					int y = mech.pos.y - obj.pos.y;
+					int dx = ( y * cos((mech.angle) )) - ( x * sin((mech.angle)) );
+					int dy = ( y * sin((mech.angle) )) + ( x * cos((mech.angle)) );
+					dx /= scale;
+					dy /= scale;
+					// If we're not the player and we're awake.
+					let nmech = MechWarrior(obj);
+					if( nmech != mech && obj.target != NULL)
+					{
+						if(obj.bSOLID && obj.bSHOOTABLE)H_DrawImage("ENEMYIND",(dx-radarx,dy-radary),0,(0.8,0.6));
+						if(obj == mech.targetenemy)
+						{
+							H_DrawString("+",(dx-radarx,dy-radary));
+							
+						}
+						//if(obj.bNOGRAVITY)DrawString(mHUDFont,"-",(dx-278,dy-200),tAlign,hud_alpha);
+					}
+				}
+			}
+		}
+	}
+	
+	float GetHardpointVitalRatio(MechHardpoint hp)
+	{
+		float hp_vitals    = hp.armor+hp.internalhp;
+		float hp_maxvitals = hp.max_armor+hp.max_internal;
+		if(hp.internalhp <= 0) hp_vitals = 0;
+		if(hp_vitals == 0) return 1.0;
+		float vres = 1.0 - (hp_vitals / hp_maxvitals);
+		if(vres < 0.1) vres = 0;
+		return vres;
+	}
+	
+	void DrawMainBar (double TicFrac)
+	{
+		if(CPlayer && CPlayer.mo)
+		{		
+			let mech = MechWarrior(CPlayer.mo);
+			if(!mech)return;	
+			
+			H_DrawImage(mech.hud_cockpit,(955,940+boboffs),0,(3.2,2.0));
+			if(mech.health <= 0) return;
+			
+			if(CVar.FindCVar("mwd_nohud").getBool()) return;
+			
+			H_DrawImage("CBILLS",(1640,305),0,(1.3,1));
+			String cash = cashcounter .. "";
+			H_DrawString(cash,(1655,286));
+			
+			if(dCash.txt != "" && dCash.alpha > 0) 
+			{
+				H_DrawString(dCash.txt,(1657,303),0,dCash.col,dCash.alpha);
+				dCash.alpha -= 0.01;
+			}
+			if(dCash.txt != "" && dCash.alpha <= 0){ dCash.txt = ""; dCash.alpha = 1.0; }
+			
+			
+			if(mech.mech_shutdown)return;
+			Draw_Radar();
+			H_DrawImage("MWTARGET",(200,836));
+			if(mech.targetenemy)
+			{
+				TexMan.SetCameraToTexture(Actor(mech.targetreticle.cam),"TestCamera",90.0);
+				TextureID targ = TexMan.CheckForTexture("TestCamera",TexMan.TYPE_ANY);
+				H_DrawTexture(targ,(199,826));
+				String dist = mech.Distance3D(mech.targetenemy)/5 .. "";
+				dist.truncate(dist.Length()-6);
+				H_DrawString("Type: " .. mech.targetenemy.getTag(),(86,833));
+				H_DrawString("Distance: " .. dist .. "m",(86,856));
+				// Enemy health bar
+				float percenthealth = float(mech.targetenemy.SpawnHealth()-(mech.targetenemy.SpawnHealth()-hpcounter) ) / mech.targetenemy.SpawnHealth();
+				if(mech.targetenemy.health < hpcounter)hpcounter -= 3;
+				if(hpcounter == 0) hpcounter = mech.targetenemy.health;
+				if(mech.targetenemy.health <= 0) hpcounter = 0;
+				if(prevtarg != mech.targetenemy)
+				{
+					hpcounter = 0;
+					prevtarg = mech.targetenemy;
+				}
+				H_Fill(Color(int(255*hud_alpha),0,0,0), -836, -240,
+					142, 8, DI_SCREEN_CENTER_BOTTOM);
+				H_Fill(Color(int(255*hud_alpha),0,173,0), -836, -240,
+					percenthealth*142, 8, DI_SCREEN_CENTER_BOTTOM);
+				String percenthp = percenthealth*100 .. "";
+				percenthp.truncate(percenthp.Length()-6);
+				H_DrawString(percenthp .. "%" ,(170,658));
+			}
+			drawWeapons(mHUDFont,(1370,45),240,50);
+			
+			// Draw armor/paperdoll
+			vector2 hudmech_size = (240, 180);
+
+			H_DrawImage(mech.hud_mech.."A",(750+795,90+720),0,(1,0.8));
+			
+			float hd_dmg = GetHardpointVitalRatio(mech.hardpoints.hd);
+			float ct_dmg = GetHardpointVitalRatio(mech.hardpoints.ct);
+			float lt_dmg = GetHardpointVitalRatio(mech.hardpoints.lt);
+			float rt_dmg = GetHardpointVitalRatio(mech.hardpoints.rt);
+			float la_dmg = GetHardpointVitalRatio(mech.hardpoints.la);
+			float ra_dmg = GetHardpointVitalRatio(mech.hardpoints.ra);
+			float ll_dmg = GetHardpointVitalRatio(mech.hardpoints.rl);
+			float rl_dmg = GetHardpointVitalRatio(mech.hardpoints.ll);
+			
+			//console.printf("%f :> %d",ct_dmg,mech.hardpoints.ct.armor+mech.hardpoints.ct.internalhp);
+			
+			String concat = "B";
+			
+			// Center torso
+			if(mech.hardpoints.hd.internalhp+mech.hardpoints.ct.internalhp <= 0) concat = "C";
+			H_SetClipRect(1450+hudmech_size.x/3, 645, hudmech_size.x/7,hudmech_size.y/2);
+			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),hd_dmg+ct_dmg);
+			ClearClipRect();
+			// Left torso
+			concat = "B";
+			if(mech.hardpoints.lt.internalhp <=0 ) concat = "C";
+			H_SetClipRect(1450+hudmech_size.x/4, 645, hudmech_size.x/12,hudmech_size.y/2);
+			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),lt_dmg);
+			ClearClipRect();
+			// Right torso
+			concat = "B";
+			if(mech.hardpoints.rt.internalhp <=0) concat = "C";
+			H_SetClipRect(1450+hudmech_size.x/2.1, 645, hudmech_size.x/13,hudmech_size.y/2);
+			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),rt_dmg);
+			ClearClipRect();
+			// Left arm
+			concat = "B";
+			if(mech.hardpoints.la.internalhp <=0) concat = "C";
+			H_SetClipRect(1450, 645+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
+			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),la_dmg);
+			ClearClipRect();
+			// Right arm
+			concat = "B";
+			if(mech.hardpoints.ra.internalhp <=0) concat = "C";
+			H_SetClipRect(1450+hudmech_size.x/1.8, 645+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
+			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),ra_dmg);
+			ClearClipRect();
+			// Left leg
+			concat = "B";
+			if(mech.hardpoints.ll.internalhp <=0) concat = "C";
+			H_SetClipRect(1450+hudmech_size.x/2, 645+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
+			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),rl_dmg);
+			ClearClipRect();
+			// Right leg
+			concat = "B";
+			if(mech.hardpoints.rl.internalhp <=0) concat = "C";
+			H_SetClipRect(1450+hudmech_size.x/5.9, 645+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
+			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),ll_dmg);
+			ClearClipRect();
+		
+			
+			// Draw weapon indicator
+			String weapind = "WEAPIND";
+			int selx = (mech.selectedWeapon+1)%2;
+			int sely = (mech.selectedWeapon+1)/2;
+			vector2 weappos = ( 1450 + (selx*240), 65 + (sely*50) );
+			if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
+			if(mech.selectedWeapon <= mech.weapons)H_DrawImage(weapind,weappos,0,(0.8,0.6));
+			
+			// Draw "compass" :P
+			// Draw speedometer.
+			if(!mech.defaultmovement)
+			{
+				H_DrawImage("MBEARMID",(960,90));
+				if(mech.LegVel > 0) compassoffs += 1;
+				if(mech.LegVel < 0) compassoffs -= 1;
+				H_SetClipRect(780, 0, 360, 256);
+				H_DrawTexture(compass, (1126+compassoffs, 115) );
+				ClearClipRect();
+				if(compassoffs > 239)compassoffs = -234;
+				if(compassoffs < -239)compassoffs = 234;
+				
+				H_DrawString(int(mech.MoveSpeedKPH*mech.throttle) .. "Kph" ,(820+795,100+720));
+			}
+			DrawBars();
+		}
+		
+		//if(inHUDLoadout) drawLoadoutHUD();
+	}
+
+	void DrawFullScreenStuff (double TicFrac)
+	{
+		H_DrawString("Please switch to fullscreen HUD! (Press '+') ",(-100,-500),0,Font.CR_DARKRED);
+	}
+}
+

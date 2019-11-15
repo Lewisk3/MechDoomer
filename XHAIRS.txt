@@ -1,0 +1,5 @@
+8 "MechWarrior Reticle"
+9 "MechWarrior Reticle (Firing)"
+10 "MechWarrior Reticle (Missile)"
+11 "MechWarrior Reticle (Missile-Locking)"
+12 "MechWarrior Reticle (Missile-Locked)"

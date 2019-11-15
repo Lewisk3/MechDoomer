@@ -1,0 +1,87 @@
+
+// Debris
+class MissileDebris : Actor
+{
+	Default
+	{
+		Gravity 1.0;
+		Radius 11;
+		Height 8;
+	}
+	States
+	{
+		Spawn:
+			MISS A 1
+			{
+				vector3 floorpos = (pos.x,pos.y,floorz);
+				pitch = MDMath.Lerp(pitch, MDMath.getPitchBetween(pos, floorpos), 0.4);
+			}
+			TNT1 A 0 A_JumpIf(pos.z != floorz, "Spawn");
+		DeathWait:
+			MISS A 1 A_FadeOut(0.005);
+		wait;
+	}
+}
+
+class Debris_Spawner : Actor
+{
+	override void PostBeginPlay()
+	{
+		for(int i = 0; i < 12; i++)
+		{
+			int angle = angle+random(-360,360);
+			int speed = 3;
+			Vector3 npos = pos;
+			float xo = -(cos(angle)*30);
+			float yo = -(sin(angle)*30);
+			npos.x += xo;
+			npos.y += yo;
+			let debris = Spawn("DEBRIS_3D",npos);
+			if(debris)
+			{
+				debris.A_SetRoll(roll+random(-180,180));
+				debris.pitch = pitch+random(-20,45);
+				debris.vel = (
+						-(cos(angle)*cos(pitch)),
+						-(sin(angle)*cos(pitch)),
+						sin(debris.pitch) * (speed)
+						) * speed;
+			}
+		}
+		super.PostBeginPlay();
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 2;
+		stop;
+	}
+}
+class DEBRIS_3D : Actor
+{
+	Default
+	{
+		+BOUNCEONWALLS
+		+BOUNCEONFLOORS
+		BounceType "Doom";
+		BounceCount 1;
+		BounceFactor 1.2;
+		Gravity 0.3;
+		Projectile;
+		-NOGRAVITY
+	}
+
+	States
+	{
+		Spawn:
+			DEBR A 1 ;
+		loop;
+		Death:
+			DEBR A 1;
+			TNT1 A 0 { bSOLID = false; }
+		DeathLoop:
+			DEBR A 1 A_FadeOut(0.03);
+		wait;
+	}
+}

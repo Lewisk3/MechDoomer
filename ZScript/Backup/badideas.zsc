@@ -1,0 +1,174 @@
+	
+	// Grab exact relative angle
+	angle_relative += (player.cmd.yaw/1.6) * (360./65536.);
+	angle_relative = clamp(angle_relative,LegAng - MaxYaw,LegAng + MaxYaw);
+		
+	// Lerp to new angle
+	if(angle_relative > torsoYaw) torsoYaw += torsoSpeed;
+	if(angle_relative < torsoYaw) torsoYaw -= torsoSpeed;
+	
+	// Crude voodoo "Detector"
+	ThinkerIterator voodoocheck = ThinkerIterator.Create("MechWarrior");
+	int plrinstances = 0;
+	MechWarrior plr;
+	while(plr = MechWarrior(voodoocheck.Next()))
+	{
+		if(plr)plrinstances++;
+	}
+	// Darn voodoos!
+	if(plrinstances > 1) A_Print("WARNING: Duplicate player detected, mech may behave strangly!");
+	
+
+	// A hacky attempt at using lineattack to produce a reference to the enemy it hit.
+class InformationPuff : FastProjectile
+{
+	Default
+	{
+		Projectile;
+		+SEEKERMISSILE
+		+NOGRAVITY
+		Speed 100;
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 1;
+		loop;
+		Death:
+			TNT1 A 0 NoDelay A_SeekerMissile(0,0,SMF_LOOK,256,1);
+			TNT1 A 4;
+		stop;
+	}
+	
+}
+
+	
+	void BrokenTargetProjection(Mechwarrior mech)
+	{
+		if(mech.targetenemy)
+		{
+			Actor target = mech.targetenemy;
+	
+			vector3 eyepos = (mech.pos.x, mech.pos.y, mech.player.viewz);
+			float viewfov = mech.player.FOV;
+			vector3 tpos;
+			
+			for (int i = 0; i < 4; i++)
+			{
+				vector3 ofs;
+				float dir = atan2(mech.pos.y - target.pos.y, mech.pos.x - target.pos.x);
+				if (i % 2) // order should be: bottom left, bottom right, top left, top right. or it might make a swastika 
+					ofs.xy = MDMath.VRotate((-target.radius, 0),  dir);
+				else
+					ofs.xy = MDMath.VRotate((target.radius, 0),  dir);
+				if (i < 2)
+					ofs.z = target.height;
+					
+				tpos = target.pos + ofs;
+				string graphic;
+				switch (i)
+				{
+					case 0: graphic = "RETCB0"; break;
+					case 1: graphic = "RETCA0"; break;
+					case 2: graphic = "RETCD0"; break;
+					case 3: graphic = "RETCC0"; break;
+				}
+				// the following is ripped more or less from m_flak
+				vector3 tdir = Level.Vec3Diff(eyepos, tpos);
+				vector3 wpos = eyepos + tdir;
+				vector3 spos = MWD_CoordUtil.WorldToScreen(wpos, eyepos, mech.pitch, mech.angle, mech.roll, viewfov);
+				if (spos.z <= 1.0)
+				{
+					vector2 vpos = MWD_CoordUtil.ToViewport(spos);
+					DrawImage(graphic, vpos, 0);
+					console.printf("Drawing: %s [%d,%d]",graphic,vpos.x,vpos.y);
+				}
+			}	
+		}
+	}
+
+
+			fromworldpos = MWD_CoordUtil.WorldToScreen(target.pos,eyepos,mech.pitch,mech.angle,mech.roll,viewfov);
+			[screencoords, behind] = MWD_CoordUtil.toViewport(fromworldpos);
+			
+			if (-1 < fromworldpos.z && fromworldpos.z <= 1)
+			{
+				  // this is the coordinates where you're drawing to:
+				  if (distance == 0) { return; }
+				  //screencoords.y -= mech.viewheight; // Idek
+				  float   heightmod     = clamp(distance*0.05,0,55); 
+				  double  height        = target.height;
+				  double  radius        = target.radius;
+				  double  visibleRadius = radius * 2000.0 / distance;
+				  double  visibleHeight = height * 1000.0 / distance;
+				  Vector2 left   = (screencoords.x - visibleRadius / 2.0, screencoords.y);
+				  Vector2 right  = (screencoords.x + visibleRadius / 2.0, screencoords.y);
+				  Vector2 top    = (screencoords.x, (screencoords.y-20 - visibleHeight / 4.0) -heightmod);
+				  Vector2 bottom = (screencoords.x, (screencoords.y + visibleHeight / 4.0) -heightmod*1.25);
+				  Vector2 topLeft     = (left.x,  top.y);
+				  Vector2 topRight    = (right.x, top.y);
+				  Vector2 bottomLeft  = (left.x,  bottom.y);
+				  Vector2 bottomRight = (right.x, bottom.y);
+				
+				  DrawImage("RETCA0",topLeft,0,1.0);
+				  DrawImage("RETCB0",topRight,0,1.0);
+				  DrawImage("RETCC0",bottomLeft,0,1.0);
+				  DrawImage("RETCD0",bottomRight,0,1.0);
+			}
+		}
+		
+		
+		
+// :: KeyConf :: 
+	
+// Old (Deprecated) Key system.
+
+/*
+alias Mech_Stop "netevent \"giveinvbutton:IBTN_STOP\""
+alias Mech_Center_Legs "netevent \"giveinvbutton:IBTN_CENTER\""
+alias Mech_Center_Torso "netevent \"giveinvbutton:IBTN_CENTERTORSO\""
+alias Mech_Weapon_Firemode "netevent \"giveinvbutton:IBTN_bFIREMODE\""
+alias Mech_JumpJets_Fire "" // Special event handled key!
+alias Mech_Override "netevent \"giveinvbutton:IBTN_OVERRIDE\""
+alias Mech_NextGroup "netevent \"giveinvbutton:IBTN_NXTGROUP\""
+alias Mech_PrevGroup "netevent \"giveinvbutton:IBTN_PRVGROUP\""
+alias Mech_SetWeapGrp1 "netevent \"mechsetgroup:1\""
+alias Mech_SetWeapGrp2 "netevent \"mechsetgroup:2\""
+alias Mech_SetWeapGrp3 "netevent \"mechsetgroup:3\""
+alias Mech_SetWeapGrp4 "netevent \"mechsetgroup:4\""
+alias Mech_ToggleInfrared "give IBTN_INFRARED"
+alias Mech_NextWeap "netevent \"giveinvbutton:IBTN_NEXTWEAPON\""
+alias Mech_PrevWeap "netevent \"giveinvbutton:IBTN_PREVWEAPON\""
+alias Mech_TargetEnemy "netevent \"giveinvbutton:IBTN_TARGET\""
+alias Mech_Alphastrike "netevent \"giveinvbutton:IBTN_SHOOTALLWEAPONSLIKEAMADLAD\""
+alias Mech_Shutdown "netevent \"giveinvbutton:IBTN_SHUTDOWN\""
+alias Mech_LoadoutUI ""
+
+addkeysection "MechDoomer - Actions" "MWD_CONTROLS"
+addmenukey "Stop Mech" Mech_Stop
+addmenukey "Edit Loadout" Mech_LoadoutUI
+addmenukey "Target Enemy" Mech_TargetEnemy
+addmenukey "Override Shutdown" Mech_Override
+addmenukey "Shutdown" Mech_Shutdown
+addmenukey "Toggle Zoom" "+zoom"
+addmenukey "Toggle Infrared" Mech_ToggleInfrared;
+addmenukey "Jump Jets" Mech_JumpJets_Fire 
+addmenukey "Center Legs to Torso" Mech_Center_Legs
+addmenukey "Center Torso to Legs" Mech_Center_Torso
+addkeysection "MechDoomer - Weapons" "MWD_WEAPONS"
+addmenukey "Next Weapon" Mech_NextWeap
+addmenukey "Prev Weapon" Mech_PrevWeap
+addmenukey "Next Group" Mech_NextGroup
+addmenukey "Prev Group" Mech_PrevGroup
+addmenukey "Toggle Firemode" Mech_Weapon_Firemode
+addmenukey "Set Group One" Mech_SetWeapGrp1
+addmenukey "Set Group Two" Mech_SetWeapGrp2
+addmenukey "Set Group Three" Mech_SetWeapGrp3
+addmenukey "Set Group Four" Mech_SetWeapGrp4
+addmenukey "Fire Group One" "+user1"
+addmenukey "Fire Group Two" "+user2"
+addmenukey "Fire Group Three" "+user3"
+addmenukey "Fire Group Four" "+user4"
+addmenukey "Fire All Weapons" Mech_Alphastrike
+*/

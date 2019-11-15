@@ -1,0 +1,5 @@
+MechFont
+{
+	Template MONA%03d
+	DONTTRANSLATE
+}

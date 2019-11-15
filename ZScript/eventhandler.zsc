@@ -1,0 +1,242 @@
+
+class MechDoomerEvents : EventHandler 
+{
+	ui Mechlab_Menu mechlab;
+
+	override void RenderOverlay(RenderEvent e)
+	{
+		CVar target_mode = CVar.GetCVar("mwd_viewport_target",e.camera.player);
+		let plr = Mechwarrior(e.Camera);
+		
+		// https://forum.zdoom.org/viewtopic.php?f=122&t=61330#p1064117
+		if(!automapactive && plr && plr.targetenemy && target_mode.getBool())
+		{
+			double fovH = (e.camera.player != NULL) ? e.camera.player.FOV : e.camera.cameraFOV;
+			mwd_Matrix worldToClip = mwd_Matrix.worldToClip(e.viewPos, e.viewAngle, e.viewPitch, e.viewRoll, fovH);
+			Actor projActor = plr.targetenemy;
+			if (plr && projActor) 
+			{
+				// this moves the position of the actor into absolute coordinates relative to the viewPos
+				// (which the view matrix is expecting)
+				Vector3 adjustedWorldPos = e.viewPos + LevelLocals.vec3Diff(e.viewPos, projActor.pos);
+				
+				Vector3 positions[8];
+				positions[0] = (adjustedWorldPos + ( projActor.radius,  projActor.radius, 0               ));
+				positions[1] = (adjustedWorldPos + (-projActor.radius,  projActor.radius, 0               ));
+				positions[2] = (adjustedWorldPos + ( projActor.radius, -projActor.radius, 0               ));
+				positions[3] = (adjustedWorldPos + (-projActor.radius, -projActor.radius, 0               ));
+				positions[4] = (adjustedWorldPos + ( projActor.radius,  projActor.radius, projActor.height));
+				positions[5] = (adjustedWorldPos + (-projActor.radius,  projActor.radius, projActor.height));
+				positions[6] = (adjustedWorldPos + ( projActor.radius, -projActor.radius, projActor.height));
+				positions[7] = (adjustedWorldPos + (-projActor.radius, -projActor.radius, projActor.height));
+				
+				Vector3 ndcPositions[8];
+				// ndcCounter tracks how many valid ndcPositions were found, if it's not 8 by the end of the loop then
+				// we won't draw anything
+				int ndcCounter = 0;
+				bool anyOnScreen = false;
+				for (int i = 0; i < 8; i++) 
+				{
+					Vector3 worldPos = positions[i];
+					Vector3 ndcPos = worldToClip.multiplyVector3(worldPos).asVector3();
+					
+					if (ndcPos.x <= 1 && ndcPos.x >= -1 &&
+						ndcPos.y <= 1 && ndcPos.y >= -1   ) anyOnScreen = true;
+					if (ndcPos.z <= 1 && ndcPos.z >= -1) 
+					{
+						ndcCounter++;
+						ndcPositions[i] = ndcPos;
+					}
+				}
+				
+				if (anyOnScreen && ndcCounter >= 8) 
+				{
+					// the infinities are used here since any real number will be automatically lower/higher than infinity/-infinity
+					double lowestX  =  double.infinity;
+					double lowestY  =  double.infinity;
+					double highestX = -double.infinity;
+					double highestY = -double.infinity;
+					
+					// create a bounding box from the projected positions
+					for (int i = 0; i < 8; i++) 
+					{
+						Vector2 ndc = ndcPositions[i].xy;
+						if (ndc.x < lowestX ) lowestX  = ndc.x;
+						if (ndc.y < lowestY ) lowestY  = ndc.y;
+						if (ndc.x > highestX) highestX = ndc.x;
+						if (ndc.y > highestY) highestY = ndc.y;
+					}
+					
+					Vector3 corners[4];
+					corners[0] = (clamp(lowestX , -0.95, 0.95), clamp(lowestY , -0.95, 0.95), 0);
+					corners[1] = (clamp(highestX, -0.95, 0.95), clamp(lowestY , -0.95, 0.95), 0);
+					corners[2] = (clamp(lowestX , -0.95, 0.95), clamp(highestY, -0.95, 0.95), 0);
+					corners[3] = (clamp(highestX, -0.95, 0.95), clamp(highestY, -0.95, 0.95), 0);
+					string cornerTextures[4];
+					cornerTextures[0] = "RETCC0";
+					cornerTextures[1] = "RETCD0";
+					cornerTextures[2] = "RETCA0";
+					cornerTextures[3] = "RETCB0";
+					Vector2 cornerDirs[4];
+					cornerDirs[0] = (-1,  1);
+					cornerDirs[1] = ( 1,  1);
+					cornerDirs[2] = (-1, -1);
+					cornerDirs[3] = ( 1, -1);
+					
+					// double frac = (gametic + e.fracTic) / 35.0;
+					for (int i = 0; i < 4; i++) 
+					{
+						Vector2 viewportPos = mwd_GlobalMaths.ndcToViewPort(corners[i]);
+						viewportPos.y -= 15;
+						// viewportPos += (2 * abs(2 * (frac - floor(frac + 0.5))) - 1) * 6 * cornerDirs[i];
+						
+						Screen.drawTexture(TexMan.checkForTexture(cornerTextures[i], TexMan.Type_Any), false, viewportPos.x, viewportPos.y);
+					}
+					// Vector2 tlCornerPos = mwd_GlobalMaths.ndcToViewPort(corners[2]) + (2 * abs(2 * (frac - floor(frac + 0.5))) - 1) * 6 * cornerDirs[2];
+					// Screen.drawText(smallfont, Font.CR_WHITE, tlCornerPos.x + 8, tlCornerPos.y + 8, projActor.getTag());
+				}
+			}
+		}
+	}
+
+	override void WorldThingDamaged(WorldEvent e)
+	{
+		String ThingHit = e.Thing.GetClassName();
+		String SourceName = "UNDEFINED";
+	
+		// Make sure the damage is coming from the player.
+		if (e.DamageSource)
+		{SourceName = e.DamageSource.GetClassName();}
+		
+		// Make names easier to check against.
+		SourceName.ToLower();
+		ThingHit.ToLower();
+
+		int Thinghealth = e.Thing.SpawnHealth();
+		int gibhealth = -Thinghealth;
+		if (e.Thing.Health <= 0) 
+		{
+			if(SourceName != "undefined")
+			{
+				if(MechWarrior(e.DamageSource))
+				{
+					int amt = max(Thinghealth * 3.27,1);
+					MechWarrior(e.DamageSource).adjustMoney(amt);
+				}
+			}
+		}
+	}
+	
+	clearscope static bool checkBoundKey(int keycode, String binding)
+	{
+		int btnone, btntwo;
+		[btnone, btntwo] = Bindings.GetKeysForCommand(binding);
+		btntwo = (btntwo == 0) ? btnone : btntwo;
+		if(!btnone && !btntwo) return false;
+		return (keycode == btnone || keycode == btntwo);
+	}
+	
+	// Returns: True if command on key is valid, false if it is not.
+	override bool InputProcess(InputEvent e)
+	{
+		int keyscn = (e.Type == e.Type_KeyDown) ? e.KeyScan : 0;
+		if(checkBoundKey(keyscn,"Mech_JumpJets_Fire"))
+		{
+			EventHandler.SendNetworkEvent("+mwd_user5");
+			return true;
+		}
+		else
+		{
+			EventHandler.SendNetworkEvent("-mwd_user5");
+		}
+		
+		if(checkBoundKey(keyscn,"Mech_LoadoutUI"))
+		{
+			Menu m = Menu.GetCurrentMenu();
+			
+			let plr = Mechwarrior(players[consoleplayer].mo);
+			if(!plr) return false;
+			
+			if (!Mechlab_Menu(m))
+			{
+				mechlab = new('Mechlab_Menu');
+				mechlab.Init(null, plr);
+				mechlab.ActivateMenu();
+			}
+			return true;
+		}
+		
+		return false;
+	}
+
+	
+	override void NetworkProcess(ConsoleEvent e)
+	{
+		String netcmd = e.Name;
+		let plr = MechWarrior(players[e.Player].mo);
+		netcmd.ToLower();
+		if(plr)
+		{
+			// Process mechlab netevents
+			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
+			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
+			if(netcmd == "equip_invweap") plr.equipWeaponInv(e.Args[0]+1,plr.getHardpointPos(e.Args[1]),1);
+			if(netcmd == "move_weapinv" ) plr.moveWeaponToInv(e.Args[0]);
+			if(netcmd == "equip_structinvweap") plr.equipStructInv(e.Args[0]+1,plr.getHardpointPos(e.Args[1]),1);
+			if(netcmd == "movestruct_weapinv") plr.moveStructToInv(e.Args[0],1);
+			if(netcmd == "sort_inv") plr.sortWeaponInv();
+			if(netcmd == "remove_inv")
+			{
+				class<Mechbase_Weapon>  witem = plr.weapon_items[e.Args[0]];
+				class<Mechbase_Utility> uitem = plr.weapon_items[e.Args[0]];
+				if(uitem) plr.adjustMoney(GetDefaultByType(uitem).worth);
+				if(witem) plr.adjustMoney(GetDefaultByType(witem).worth);
+				plr.weapon_items.delete(e.Args[0]);
+			}
+		
+			if(netcmd == "+mwd_user5")plr.btn_userfive = true;
+			if(netcmd == "-mwd_user5")plr.btn_userfive = false;
+			Array<String> netcmds;
+			netcmds.Clear();
+			netcmd.split(netcmds,":");	
+			if(netcmds[0] == "autil_useitem") plr.ActivateArmorUtility(netcmds[1],e.Args[0]);
+			if(netcmds[0] == "debug_dmg")
+			{
+				plr.ProcessHardpointDamage(netcmds[1],10);
+			}
+			if(netcmds[0] == "giveinvbutton")
+			{
+				class<Inventory> item = netcmds[1];
+				if(item && (item is "I_Boolean"))
+				{
+					plr.GiveInventory(item,1);
+				}
+				else
+				{
+					console.printf("No such button, %s!", netcmds[1]);
+				}
+			}
+			if(netcmds[0] == "mechsetgroup")
+			{
+				int amt = (netcmds[1].CharCodeAt(0))-48;
+				plr.GiveInventory("IBTN_SETWEAPGRP",amt);
+			}
+			if(netcmds[0] == "giveweapon")
+			{
+				class<Mechbase_Weapon> mweap = netcmds[1];
+				class<Mechbase_Utility> mutil = netcmds[1];
+				if(mweap || mutil)
+				{
+					console.printf("Obtained: " .. netcmds[1]);
+					plr.addWeaponToInv(netcmds[1]);
+				}
+				else
+				{
+					console.printf("Weapon not of type \"Mechbase_Weapon\" or \"Mechbase_Utility\"");
+				}
+			}
+		}
+	}	
+}
+
+

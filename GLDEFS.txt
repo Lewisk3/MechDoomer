@@ -1,0 +1,135 @@
+pointlight GreenPointLight
+{
+    color 0.0 1.0 0.0
+    size 45
+}
+pointlight YellowLight
+{
+	color 0.96 0.92 0
+	size 30
+}
+pointlight DarkRedPointLight
+{
+    color 0.5 0.0 0.0
+    size 45
+}
+pointlight RedPointLight
+{
+    color 1.0 0.0 0.0
+    size 45
+}
+pointlight BluePointLight
+{
+    color 0.0 0.0 1.0
+    size 45
+}
+
+pointlight BlueBrightLight
+{
+    color 0.0 0.0 5.0
+    size 80
+}
+
+pulselight BluePulseLight
+{
+    color 0.25 0.25 0.83
+    size 45
+    secondarySize 32
+    interval 0.5
+}
+
+object FlameProjectile
+{
+	Frame FIO1 { light DarkRedPointLight }
+	Frame FIO2 { light DarkRedPointLight }
+}
+
+object PlasmaWeaponDisp
+{
+	Frame LASR { light BluePointLight }
+}
+
+object GaussWeaponDisp
+{
+	Frame GAUS { light DarkRedPointLight }
+}
+
+object ACWeaponDisp
+{
+	Frame AUTO { light YellowLight }
+}
+
+object SRMWeaponDisp 
+{
+	Frame MISS { light YellowLight }
+}
+object LRMWeaponDisp
+{
+	Frame MISS { light YellowLight }
+}
+
+object EnergyWeaponDisp
+{
+	Frame LASR { light GreenPointLight }
+}
+
+object MassiveWeaponDisp
+{
+	Frame MASS { light BluePulseLight }
+}
+
+
+object MissileExplosion
+{
+	Frame EXPL { light DarkRedPointLight }
+}
+
+
+object PPCExplosion
+{
+	Frame PEXP { light BlueBrightLight }
+}
+object SRM 
+{
+	Frame MISS { light YellowLight }
+}
+object LRM 
+{
+	Frame MISS { light YellowLight }
+}
+object Laser_SML
+{
+	Frame LASR { light RedPointLight }
+}
+object Laser_MED 
+{
+	Frame LASR { light GreenPointLight }
+}
+object Laser_LRG
+{
+	Frame LASR { light BluePointLight }
+}
+object Laser_ERSML
+{
+	Frame LASR { light RedPointLight }
+}
+object Laser_ERMED 
+{
+	Frame LASR { light GreenPointLight }
+}
+object Laser_ERLRG
+{
+	Frame LASR { light BluePointLight }
+}
+object Laser_SMLP
+{
+	Frame LASR { light RedPointLight }
+}
+object Laser_MEDP
+{
+	Frame LASR { light GreenPointLight }
+}
+object Laser_LRGP
+{
+	Frame LASR { light BluePointLight }
+}

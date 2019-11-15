@@ -1,0 +1,161 @@
+
+class SoundQueue : Object
+{
+	Array<Sound> snds;
+	int onsound;
+	int maxsounds;
+	int curmax;
+	int realsounds;
+	int timer;
+	
+	struct SoundInfo
+	{
+		int qID;
+		int length;
+		Sound snd;
+	}
+	
+	SoundInfo soundplaying;
+	
+	Actor master;
+	
+	static SoundQueue SQ_Create(Actor user, int maxsnds = 64)
+	{
+		let sq = new("SoundQueue");
+		sq.snds.Clear();
+		sq.onsound = 0;
+		sq.realsounds = 0;
+		sq.maxsounds = maxsnds;
+		sq.master = user;
+		for(int i = 0; i < maxsnds; i++)
+		{
+			// Fill with blanks because this isn't a dynamic queue.
+			sq.snds.Push(" ");
+		}
+		
+		return sq;
+	}
+	
+	// Moves to the next sound and returns true if looping.
+	void NextSound()
+	{
+		timer = 0;
+		onsound ++;
+		if(snds[onsound] == " ")onsound = 0;
+	}
+	
+	void pushSound(Sound snd)
+	{
+		if(realsounds < maxsounds)
+		{
+			snds[realsounds] = snd;
+			curmax++;
+			realsounds++;
+		}
+		// Needs to be intialized if it's the first sound.
+		if(realsounds <= 1) PlaySound();
+	}
+	
+	void PlaySound()
+	{
+		// Only play if a sound is present.
+		if(snds[onsound] != " ")
+		{
+			S_Sound(snds[onsound],CHAN_BODY,1,0);
+			soundplaying.qID = onsound;
+			soundplaying.length = S_GetLength(snds[onsound])*36;
+			soundplaying.snd = snds[onsound];
+		}
+	}
+	
+	bool isEmpty()
+	{
+		return (realsounds == 0);
+	}
+	
+	void Empty()
+	{
+		for(int i = 0; i <= curmax; i++) 
+		{
+			popSound();
+			NextSound();
+		}
+	}
+	
+	Sound popSound(int dir=0)
+	{
+		if(onsound+dir < 0 || onsound+dir > snds.Size()-1) return "";
+		Sound psound = snds[onsound+dir];
+		snds[onsound+dir] = "";
+		realsounds--;
+		if(realsounds < 0) realsounds = 0;
+		return psound;
+	}
+	
+	virtual void DebugSoundQueue()
+	{
+		for(int i = 0; i < 4; i++)
+		{
+			if(i > realsounds-1)
+			{
+				console.printf("-----------------");
+				continue;
+			}
+			if(i != onsound)
+			{
+				console.printf("<%i>[%i/%i]  %s ",onsound,i+1,realsounds,snds[i]);
+			}
+			else
+			{
+				console.printf("<%i>[%i/%i] >%s<",onsound,i+1,realsounds,snds[i]);
+			}
+		}
+	}
+	
+	virtual void Tick()
+	{
+		timer++;
+		if(timer > soundplaying.length) 
+		{
+			// Pull sound from stack, move to next sound, play that.
+			if(snds[onsound] == soundplaying.snd) popSound(); // Prevent sound-insert deletion.
+			NextSound();
+			PlaySound();
+		}
+		
+		//  DebugSoundQueue();
+	}
+	
+}
+
+class SoundEmitter : Actor
+{
+	Sound audio;
+
+	Default
+	{
+		+CLIENTSIDEONLY
+		+NOBLOCKMAP
+		-SHOOTABLE
+	}
+
+	static SoundEmitter SE_Trigger(Sound snd = "weapons/pistol", vector3 worldpos = (0,0,0) )
+	{
+		let a_snd = SoundEmitter(Spawn("SoundEmitter",worldpos));
+		if(a_snd)
+		{
+			a_snd.SeeSound = snd;
+			a_snd.audio = snd;
+		}
+		return a_snd;
+	}	
+	
+
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			TNT1 A 1 A_PlaySound(audio,CHAN_BODY,1.0,false,0);
+		stop;
+	}
+}

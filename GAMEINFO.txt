@@ -1,0 +1,2 @@
+STARTUPTITLE = "MechDoomer - Mechwarrior 2 in GZDoom (v2.18a)"
+STARTUPCOLORS = "b52205", "110000"

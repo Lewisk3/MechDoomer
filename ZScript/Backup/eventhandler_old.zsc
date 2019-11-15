@@ -1,0 +1,183 @@
+
+class MechDoomerEvents : StaticEventHandler 
+{
+
+	override void OnRegister()
+	{	
+		self.RequireMouse = true;
+		super.OnRegister();
+	}
+	
+	override void WorldThingDamaged(WorldEvent e)
+	{
+		String ThingHit = e.Thing.GetClassName();
+		String SourceName = "UNDEFINED";
+	
+		// Make sure the damage is coming from the player.
+		if (e.DamageSource)
+		{SourceName = e.DamageSource.GetClassName();}
+		
+		// Make names easier to check against.
+		SourceName.ToLower();
+		ThingHit.ToLower();
+
+		int Thinghealth = e.Thing.SpawnHealth();
+		int gibhealth = -Thinghealth;
+		if (e.Thing.Health <= 0) 
+		{
+			if(SourceName != "undefined")
+			{
+				if(MechWarrior(e.DamageSource))
+				{
+					int amt = max(Thinghealth * 3.27,1);
+					MechWarrior(e.DamageSource).adjustMoney(amt);
+				}
+			}
+		}
+	}
+	
+	clearscope bool checkBoundKey(int keycode, String binding)
+	{
+		int btnone, btntwo;
+		[btnone, btntwo] = Bindings.GetKeysForCommand(binding);
+		btntwo = (btntwo == 0) ? btnone : btntwo;
+		if(!btnone && !btntwo) return false;
+		return (keycode == btnone || keycode == btntwo);
+	}
+	
+	override bool InputProcess(InputEvent e)
+	{
+		int keyscn = 0;
+		if(e.Type == e.Type_KeyDown)
+		{
+			keyscn = e.KeyScan;
+		}
+		else
+		{
+			keyscn = 0;
+		}
+		if(checkBoundKey(keyscn,"Mech_JumpJets_Fire"))
+		{
+			EventHandler.SendNetworkEvent("+mwd_user5");
+		}
+		else
+		{
+			EventHandler.SendNetworkEvent("-mwd_user5");
+		}
+		
+		if(checkBoundKey(keyscn,"Mech_LoadoutUI"))
+		{
+			EventHandler.SendNetworkEvent("update_uiproc");
+		}
+		
+		return false;
+	}
+
+	
+	override void NetworkProcess(ConsoleEvent e)
+	{
+		String netcmd = e.Name;
+		let plr = MechWarrior(players[e.Player].mo);
+		netcmd.ToLower();
+		if(plr)
+		{
+			if(netcmd == "+mwd_user5")plr.btn_userfive = true;
+			if(netcmd == "-mwd_user5")plr.btn_userfive = false;
+			Array<String> netcmds;
+			netcmds.Clear();
+			netcmd.split(netcmds,":");
+			if(netcmds[0] == "svcheatscansuckit")
+			{
+				class<Inventory> item = netcmds[1];
+				if(item)
+				{
+					plr.GiveInventory(item,1);
+				}
+			}
+			if(netcmds[0] == "mechsetgroup")
+			{
+				int amt = (netcmds[1].CharCodeAt(0))-48;
+				plr.GiveInventory("IBTN_SETWEAPGRP",amt);
+			}
+			if(netcmds[0] == "giveweapon")
+			{
+				class<Mechbase_Weapon> mweap = netcmds[1];
+				class<Mechbase_Utility> mutil = netcmds[1];
+				if(mweap || mutil)
+				{
+					console.printf("Obtained: " .. netcmds[1]);
+					plr.addWeaponToInv(netcmds[1]);
+				}
+				else
+				{
+					console.printf("Weapon not of type \"Mechbase_Weapon\" or \"Mechbase_Utility\"");
+				}
+			}
+			if(netcmd == "ui_update")
+			{
+				int uivar_id = e.Args[0];
+				int uivar_valx = e.Args[1];
+				int uivar_valy = e.Args[2];
+				if(uivar_id == 0)
+				{
+					plr.uiobj.mousex = uivar_valx;
+					plr.uiobj.mousey = uivar_valy;
+				}
+				if(uivar_id == 1)plr.uiobj.key = uivar_valx;
+				if(uivar_id == 2)
+				{
+					bool bstate = uivar_valx;
+					plr.uiobj.mousebtnone_click = false; 
+					if(!plr.uiobj.mousebtnone && bstate) plr.uiobj.mousebtnone_click = true; 
+					plr.uiobj.mousebtnone = bstate;
+				}
+				if(uivar_id == 3)
+				{
+					bool bstate = uivar_valx;
+					plr.uiobj.mousebtntwo_click = false; 
+					if(plr.uiobj.mousebtntwo && !bstate) plr.uiobj.mousebtntwo_click = true; 
+					plr.uiobj.mousebtntwo = bstate;
+				}
+				if(uivar_id == 4)
+				{
+					plr.uiobj.scroll = uivar_valx;
+				}
+			}
+		}
+		if(netcmd == "update_uiproc")
+		{
+			self.IsUiProcessor = !self.IsUiProcessor;
+			plr.uiobj.inloadout = self.IsUiProcessor;
+		}
+	}
+	
+	
+	override bool UIProcess(UIEvent e)
+	{	
+		int keycode = 0;
+		if(e.Type == e.Type_LButtonDown) {EventHandler.SendNetworkEvent("ui_update",2,true);} 
+		if(e.Type == e.Type_RButtonDown) {EventHandler.SendNetworkEvent("ui_update",3,true);}
+		if(e.Type == e.Type_LButtonUp) EventHandler.SendNetworkEvent("ui_update",2,false);
+		if(e.Type == e.Type_RButtonUp) EventHandler.SendNetworkEvent("ui_update",3,false);
+		if(e.Type == e.Type_WheelUp)
+		{
+			EventHandler.SendNetworkEvent("ui_update",4,-1);
+		}
+		else if(e.Type == e.Type_WheelDown)
+		{
+			EventHandler.SendNetworkEvent("ui_update",4,1);
+		}
+		//if(e.Type == e.Type_RButtonDown) mousetwo = true;
+		if(e.Type == e.Type_KeyDown) { keycode = e.KeyChar-65; EventHandler.SendNetworkEvent("ui_update",1,keycode); } else { keycode = 0; }
+		if(checkBoundKey(keycode,"Mech_LoadoutUI") || e.KeyChar == e.Key_Escape)
+				EventHandler.SendNetworkEvent("update_uiproc");
+		
+		if(e.Type == e.Type_MouseMove) EventHandler.SendNetworkEvent("ui_update",0,e.MouseX,e.MouseY);
+		//console.printf("Mouse: %d, %d",mouseone,mousetwo);
+		
+		return false;
+	}
+	
+}
+
+

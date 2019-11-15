@@ -1,0 +1,930 @@
+// Weapon base
+
+class Mechbase_Actor : Actor
+{
+	int heatgen;
+	float cooldown;
+	vector3 spawnpos;
+	double basedamage;
+	MechWarrior mechplayer;
+	
+	Property Heat : heatgen;
+	Property Cooldown : cooldown;
+	
+	void BaseInit()
+	{
+		spawnpos = pos;
+		_SetBaseDamage();
+	}
+	float getTravelDistance()
+	{
+		return MDMath.Distance3D(pos, spawnpos);
+	}
+	float getPitchTo(Vector3 topos)
+	{	
+		return MDMath.getPitchBetween(pos, topos);
+	}
+	void adjustHeatLevel(int amt)
+	{
+		if(mechplayer) mechplayer.HeatLevel += amt;
+	}
+	void setCooldown(float val)
+	{
+		cooldown=val;
+	}
+	void _SetBaseDamage()
+	{
+		basedamage = damage;
+	}
+	void setHeat(float val)
+	{
+		heatgen=val;
+	}
+}
+
+class Mechbase_Weapon : Inventory
+{
+	int cooldown_timer;
+	int group;
+	int WeaponID;
+	Vector2 mount;
+	bool dofire;
+	bool isHomming;
+	int volley_amt;
+	int volley_inital;
+	int hardslots;
+	float weight;
+	Name displayName;
+	class<Mechbase_Actor> weapType;
+	int weapDistance;
+	int weapSpeed;
+	int worth;
+	int ammouse;
+	int ammogive;
+	float lockonspeed;
+	float hitscan_dmg;
+	bool aimtarget;
+	float hitscan_distance;
+	//float hitscan_amt;
+	int delay;
+	class<Ammo> ammotype;
+	Sound atksnd;
+	
+	Property DisplayName : displayName;
+	Property DefaultGroup : group;
+	Property MountedPos : mount;
+	Property WeaponType : weapType;
+	Property Hitscan : hitscan_dmg, hitscan_distance;
+	Property AmmoType : ammotype;
+	Property AmmoGive : ammogive;
+	Property AmmoUse : ammouse;
+	Property CValue : worth;
+	Property IsHommingMissile : isHomming;
+	Property LockingSpeed : lockonspeed;
+	Property WeaponDelay : delay;
+	Property AttackSound : atksnd;
+	Property WeaponParams : weapDistance, weapSpeed;
+	Property HardslotSize : hardslots;
+	Property Tonnage : weight;
+	
+	Default
+	{
+		Mechbase_Weapon.DisplayName "Base Weapon";
+		Mechbase_Weapon.DefaultGroup 1;
+		Mechbase_Weapon.WeaponParams 18, 30;
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 1;
+		Inventory.maxamount 10; // Each weapon should have atleast 10 available slots.
+	}
+	
+	action bool checkCooldown()
+	{
+		return (invoker.cooldown_timer == 0);
+	}
+
+	action bool FireBullets(int damage,int distance=0,int sxoff=1, int syoff=1)
+	{
+		if(!checkCooldown()) return false;
+		let plr = MechWarrior(invoker.Owner);
+		if(invoker.ammouse > 0)
+		{
+			if(plr.countinv(invoker.ammotype) < invoker.ammouse) return false;
+			plr.TakeInventory(invoker.ammotype,invoker.ammouse);
+		}
+		if(plr)
+		{
+			plr.A_PlaySound(invoker.atksnd,CHAN_WEAPON);
+			plr.LineAttack(plr.angle,distance,plr.pitch,damage,"Ballistic","BulletPuff");
+			//(double angle, double distance, double pitch, int damage, Name damageType, class<Actor> pufftype, int flags = 0, out FTranslatedLineTarget victim = null, double offsetz = 0., double offsetforward = 0., double offsetside = 0.);
+		}
+		invoker.cooldown_timer = invoker.delay;
+		return true;
+	}
+	action bool FireVolley(int amt=0, int xspread=5, int yspread=5, Sound volleysnd="")
+	{
+		if(!invoker.dofire && checkCooldown())
+		{
+			let plr = MechWarrior(invoker.Owner);
+			if(!plr) return false;
+			if(invoker.ammouse > 0 && plr.countinv(invoker.ammotype) < invoker.ammouse) return false;
+			plr.A_PlaySound(volleysnd,CHAN_WEAPON-1);
+			invoker.dofire = true;
+			invoker.volley_amt = amt;
+			invoker.volley_inital = amt;
+		}
+		else if(invoker.volley_amt > 0)
+		{
+			if(FireWeapon(invoker.weapType,invoker.mount.x+random(-xspread,xspread),
+						  invoker.mount.y+random(-yspread,yspread),invoker.weapDistance,invoker.weapSpeed)) 
+				invoker.volley_amt--;
+		}
+		if(invoker.volley_amt <= 0 && invoker.dofire)
+		{
+			invoker.dofire = false;
+			invoker.cooldown_timer = invoker.delay * invoker.volley_inital;
+			return false;
+		}
+		return true;
+	}
+	action bool FireWeapon(class<Mechbase_Actor> type, int xoffset, int yoffset, int distance, int spd, bool instant=false)
+	{	
+		if(checkCooldown() || instant)
+		{
+			let plr = MechWarrior(invoker.Owner);
+			if(!plr)return false;
+			if(invoker.ammouse > 0)
+			{
+				if(plr.countinv(invoker.ammotype) < invoker.ammouse) return false;
+				plr.TakeInventory(invoker.ammotype,invoker.ammouse);
+			}
+			plr.A_PlaySound(invoker.atksnd,CHAN_WEAPON);
+			xoffset += random(-5,5);
+			yoffset += random(-5,5);
+			float xo = (cos(plr.angle+xoffset))*distance;
+			float yo = (sin(plr.angle+xoffset))*distance;
+			//console.printf(": %f, %f",xoffset,yoffset);
+			Vector3 lpos = (plr.pos.x+xo,plr.pos.y+yo,plr.pos.z+(plr.viewheight*plr.player.CrouchFactor)+yoffset);
+			
+			let weap = Mechbase_Actor(Spawn(type,lpos));
+			if(weap)
+			{
+				invoker.cooldown_timer = weap.cooldown;
+				weap.target = invoker.Owner;
+				weap.mechplayer = MechWarrior(invoker.Owner);
+				weap.pitch = plr.pitch;
+				weap.angle = plr.angle;
+				weap.vel = (
+						cos(plr.angle)*cos(plr.pitch),
+						sin(plr.angle)*cos(plr.pitch),
+						-sin(plr.pitch)
+						) * spd;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	void weapon_tick()
+	{
+		let plr = MechWarrior(Owner);
+		if(!plr) return;
+		
+		// Discard lock if we're not a homing weapon and we've just been selected.
+		if(plr.selectedWeapon == WeaponID && !isHomming && plr.locktimer )
+		{
+			plr.locktimer = 0;
+			plr.targetlocked = false;
+		}
+		
+		if(cooldown_timer > 0)cooldown_timer--;
+		if(dofire)FireVolley();
+		
+		if(isHomming && Owner)
+		{
+			// If this weapon is selected.
+			if(plr.selectedWeapon == WeaponID)
+			{	
+				// Target locked logic.
+				LookExParams visview;
+				visview.FOV = plr.player.FOV * 0.8;
+				visview.maxDist = double.infinity;
+				visview.flags = LOF_NOSIGHTCHECK;
+				bool inview = plr.IsVisible(plr.targetenemy, true, visview); 				
+				
+				aimtarget = ( plr.targetenemy && plr.targetreticle && inview);
+
+				if(plr.locktimer == 0 && aimtarget)SoundEmitter.SE_Trigger("Mech/Target/BeginLock",Owner.pos);
+				if(plr.locktimer < 100 && aimtarget) plr.locktimer += lockonspeed;
+				if(plr.locktimer > 90 && !plr.targetlocked && aimtarget) 
+				{
+					plr.targetlocked = true;
+					plr.prevlock = plr.targetenemy;
+					SoundEmitter.SE_Trigger("Mech/Target/Locked",Owner.pos);
+				}
+				if(!aimtarget && plr.locktimer > 0) plr.locktimer -= lockonspeed*2;
+				if(plr.locktimer < 100) plr.targetlocked = false;
+				
+				if(plr.targetenemy && !plr.prevlock) plr.prevlock = plr.targetenemy;
+				if(plr.targetlocked && plr.targetenemy != plr.prevlock) 
+				{
+					plr.locktimer = 0;
+				}
+				
+				//console.printf("[Missile Status]\n LOS: %i\n Lock Process: %i%\n Has Lock: %i", aimtarget, locktimer, plr.targetlocked);
+			}
+		}
+		//if(dofire) MWFire();
+		//console.printf("Cooldown: %d",cooldown_timer);
+	}
+	
+	override void PostBeginPlay()
+	{
+		cooldown_timer = 0;
+		dofire = false;
+		super.PostBeginPlay();
+	}
+	
+	override void tick()
+	{
+		weapon_tick();
+		super.tick();
+	}
+
+	virtual bool MWFire()
+	{
+		int curammo = 0;
+		bool ret;
+		if(ammotype) curammo = Owner.countinv(ammotype);
+		if(weapType)
+		{
+			ret = FireWeapon(weapType,mount.x,mount.y,weapDistance,weapSpeed);
+		}
+		else
+		{
+			ret = FireBullets(hitscan_dmg,hitscan_distance);
+		}
+		if(curammo > 0)
+		{
+			if(Owner.countinv(ammotype) == 0)
+			{
+				// If you want to make a betty skin, this is just another option.
+				A_PlaySound("Mech/Betty/NoAmmo",CHAN_WEAPON);
+			}
+		}
+		return ret;
+		//dofire = false;
+	}
+}
+
+
+// Missiles
+class MechMissile : Mechbase_Actor
+{
+	float realdamage;
+	float minimum_range;
+	float maximum_range;
+	bool homming;
+	bool inrange;
+	
+	Property MinimumRange : minimum_range;
+	Property MaximumRange : maximum_range;
+	Property Homming : homming;
+	
+	Default
+	{	
+		Radius 11;
+		Height 8;
+		//+DEHEXPLOSION
+		//+ROCKETTRAIL
+		//+PUFFGETSOWNER
+		//+SCREENSEEKER
+		SeeSound "weapons/rocklf";
+		//DeathSound "weapons/rocklx";
+		Projectile;
+	}
+	
+	override void PostBeginPlay()
+	{
+		BaseInit();
+		if(mechplayer && mechplayer.targetlocked) tracer = mechplayer.targetenemy;
+		if(homming) bSEEKERMISSILE = true;
+		if(minimum_range > 0) 
+		{
+			inrange = false;
+			SetDamage(0);
+			realdamage = 0; 
+		}
+		else
+		{
+			inrange = true;
+		}
+		super.PostBeginPlay();
+	}
+	
+	override void tick()
+	{
+		float distance = getTravelDistance();
+		if(inrange)
+		{
+			realdamage = basedamage * (1.0-(distance/(maximum_range*4.5)));
+			realdamage = clamp(realdamage,0,basedamage);
+			setDamage(floor(realdamage));
+			if(distance > maximum_range*4.5) inrange = false;
+		}
+		else if( distance >= (minimum_range*4.5) && distance < (maximum_range*4.5) )
+		{
+			inrange = true; 
+			setDamage(basedamage); 
+		}
+		super.tick();
+	}
+	
+	  States
+	  {
+		  Spawn:
+			MISS A 1;
+			MISS A 3 adjustHeatLevel(heatgen);
+		  SpawnLoop:
+			MISS A 1 Bright A_JumpIfTargetInLOS("Seek");
+			Loop;
+		  Seek:
+			MISS AAAA 1 Bright 
+			{
+				if(homming && tracer) 
+				{
+					pitch = getPitchTo(tracer.pos);
+					A_SeekerMissile(20,20,SMF_CURSPEED,maximum_range/64);
+				}
+			}
+		  goto SpawnLoop;
+		  Death:
+			TNT1 A 2 Bright 
+			{ 
+				if(inrange) 
+				{
+					A_PlaySound("weapons/rocklx");
+					A_Explode(damage/2,256); 
+					Spawn("MissileExplosion",pos); 
+				}
+				else
+				{
+					let misl = Spawn("MissileDebris", pos);
+					misl.Scale.x = Scale.x;
+					misl.Scale.y = Scale.y;
+					misl.angle = angle;
+				}
+			}
+			Stop;
+	  }
+}
+
+// Lasers
+class Laser : Mechbase_Actor
+{
+	Sound lasersound;
+	Color gfx_color;
+	int range;
+	double realdamage;
+	
+	Property FireSound : lasersound;
+	Property FXColor : gfx_color;
+	Property MaxRange : range;
+	
+	Default
+	{
+		Height 2;
+		Radius 3;
+		+NOGRAVITY;
+		Alpha 1.0;
+		RenderStyle "Add";
+		Decal "DoomImpScorch";
+		+PUFFGETSOWNER
+		Laser.FireSound "";
+		Laser.FXColor "FF FF FF";
+		Laser.MaxRange 60;
+		Mechbase_Actor.Heat 1;
+		Speed 0.1;
+		//RenderStyle "Add";
+		Projectile;
+	}
+
+	override void tick()
+	{
+		if(!basedamage) BaseInit();
+		realdamage = basedamage * (1.0-(getTravelDistance()/(range*6)));
+		realdamage = clamp(realdamage,0,basedamage);
+		setDamage(floor(realdamage));
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			LASR A 1;
+			TNT1 A 0 
+			{
+				adjustHeatLevel(heatgen);
+				A_PlaySound(lasersound,CHAN_WEAPON,1,0,0);
+			}
+		SpawnLoop:
+			LASR A 1;
+		loop;
+		Death:
+			LASR A 1;
+			LASR A 1
+			{
+				// console.printf("Damage: %d", floor(realdamage) );
+				for(int i = 0; i < 30; i++)
+				{
+					A_SpawnParticle(gfx_color,SPF_FULLBRIGHT | SPF_RELATIVE,16,2,
+					random(-45,45),random(-30,30),0,random(-30,30),0,3,0.5,0);
+				}
+			}
+			TNT1 A 0 A_PlaySound("Laser/Impact",random(1,16));
+		stop;
+	}
+}
+
+class PPCExplosion : Actor
+{
+	Default
+	{
+		+NOGRAVITY
+		+NOBLOCKMAP
+		XScale 0.8;
+		YScale 0.8;
+	}
+
+	States
+	{
+		Spawn:
+			PEXP OPABCDEFGHIJKLMN 2;
+		stop;
+	}
+}
+
+class MissileExplosion : Actor
+{
+	Default
+	{
+		+NOGRAVITY
+		+NOBLOCKMAP
+		XScale 1.6;
+		YScale 1.6;
+	}
+
+	States
+	{
+		Spawn:
+			EXPL ABCDEFGHIJKLMNOP 2;
+		stop;
+	}
+}
+
+class AMS_Missile : Mechbase_Actor
+{
+	int projdmg;
+	float convergefactor;
+	property Effectiveness : projdmg;
+	property Efficiency : convergefactor;
+	
+	
+	Default
+	{
+		Projectile;
+		+SEEKERMISSILE
+		-NOBLOCKMAP
+		Height 4;
+		Radius 3;
+		Speed 9;
+		Scale 0.15;
+		AMS_Missile.Effectiveness 3;
+		AMS_Missile.Efficiency 0.8;
+	}
+	
+	override void PostBeginPlay()
+	{
+		speed *= convergefactor;
+		super.PostBeginPlay();
+	}
+	
+	States
+	{
+	  Spawn:
+		AMSL A 4;
+	  SpawnLoop:
+		AMSL A 1 Bright
+		{
+			if(tracer)
+			{
+				angle = AngleTo(tracer);
+				if(tracer.damage <= 0) 
+				{
+					tracer.Die(tracer,self);
+					return ResolveState(Null);
+				}
+				if(Distance3D(tracer) <= radius*4) 
+				{
+					tracer.SetDamage(tracer.damage-projdmg); 
+					return ResolveState("Death");
+				}
+				A_SeekerMissile(20,20,SMF_CURSPEED,999/64);
+			}
+			else
+			{
+				Die(self,self);
+			}
+			return ResolveState(Null);
+		}
+		Loop;
+	  Death:
+		TNT1 A 1 
+		{	
+			let exp = MissileExplosion(Spawn("MissileExplosion",pos));
+			if(exp)
+			{
+				exp.A_SetScale(0.3,0.3);
+			}
+		}
+		Stop;
+	}
+}
+
+class PPCBall : Mechbase_Actor
+{
+	Sound firesound;
+	Property FireSound : firesound;
+	int minimum_range;
+
+	Property MinimumRange : minimum_range;
+	
+	Default
+	{
+		Height 3;
+		Radius 3;
+		Damage 40;
+		Speed 1;
+		PPCBall.FireSound "Energy/PPC";
+		Alpha 0.75;
+		RenderStyle "Add";
+		+PUFFGETSOWNER
+		XScale 0.25;
+		YScale 0.2;
+		Projectile;
+	}
+
+	override void tick()
+	{
+		if(!basedamage) BaseInit();
+		if(minimum_range > 0)
+		{
+			if( getTravelDistance() >= (minimum_range*3) ) 
+			{
+				A_SetRenderStyle(1.0,STYLE_NORMAL);
+				setDamage(basedamage);
+			}
+			else
+			{
+				setDamage(0);
+			}
+		}
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			MPPC A 1;
+			TNT1 A 0 
+			{				
+				adjustHeatLevel(heatgen);
+				A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
+			}
+		SpawnLoop:
+			MPPC A 1;
+		loop;
+		
+		Death:
+			MPPC A 1;
+			TNT1 A 5 
+			{
+				// /A_Explode();
+				Spawn("PPCExplosion",pos);
+			}
+			TNT1 A 0 
+			{
+				if(damage) 
+				{
+					vector3 spos = pos;
+					spos.x += frandom(-8,8);
+					spos.y += frandom(-8,8);
+					let expl = Spawn("MissileExplosion",spos);
+					expl.Scale.x = frandom(0.6,1.3);
+					expl.Scale.y = frandom(0.6,1.3);
+				}
+			}
+			stop;
+	}
+}
+
+class Flame : Mechbase_Actor
+{
+	Sound firesound;
+	Property FireSound : firesound;
+		
+	Default
+	{
+		Speed 10;
+		Damage 18; // OP lolz
+		DamageType "Fire";
+		Flame.FireSound "";
+		RenderStyle "Add";
+		Alpha 1.0;
+		XScale 0.6;
+		YScale 0.6;
+		Projectile;
+	}
+	States
+	{
+		Spawn:
+			FIO1 B 1;
+			TNT1 A 0 
+			{
+				adjustHeatLevel(heatgen);
+				A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
+			}
+		SpawnLoop:
+			FIO1 BCDEFGHIJKLMN 1;
+		stop;
+		 
+		Death:
+			FIO2 A 2 A_FadeOut(0.1);
+		stop;
+	}
+}
+
+class GaussBall : Mechbase_Actor
+{
+	Sound firesound;
+	Property FireSound : firesound;
+	
+	Default
+	{
+		Speed 30;
+		GaussBall.FireSound "Ballistics/Gauss";
+		Projectile;
+	}
+
+	States
+	{
+		Spawn:
+			GAUS A 1;
+			TNT1 A 0 
+			{
+				//adjustHeatLevel(heatgen);
+				A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
+			}
+		SpawnLoop:
+			GAUS A 1;
+		loop;
+		
+		Death:
+			GAUS A 1;
+			GAUS A 1 
+			{
+				let deb = Spawn("Debris_Spawner",pos);
+				if(deb)
+				{
+					deb.angle = angle;
+					deb.pitch = pitch;
+				}
+			}
+		stop;
+	}
+}
+
+class AutocannonBall : Mechbase_Actor
+{
+
+	Sound firesound;
+	Property FireSound : firesound;
+	
+	Default
+	{
+		Speed 60;
+		Radius 10;
+		Height 5;
+		AutocannonBall.FireSound "Ballistics/Autocannon";
+		Projectile;
+	}
+	
+	States
+	{
+		Spawn:
+			AUTO A 1;
+			TNT1 A 0 
+			{
+				adjustHeatLevel(heatgen);
+				A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
+			}
+		SpawnLoop:
+			AUTO A 1;
+		loop;
+		
+		Death:
+			AUTO A 1;
+			AUTO A 1 
+			{
+				let deb = Spawn("Debris_Spawner",pos);
+				if(deb)
+				{
+					deb.angle = angle;
+					deb.pitch = pitch;
+				}
+			}
+		stop;
+	}
+}
+class MechBullet : Mechbase_Actor
+{
+
+	Default
+	{
+		Damage 5;
+		Speed 100;
+		Projectile;
+	}
+	
+	States
+	{
+		Spawn:
+			AUTO A 12;
+		stop;
+		
+		Death:
+			PUFF ABCD 2;
+		stop;
+	}
+}
+
+// Targetting effects (Adaptation of Xasers rocket-lock from Argent)
+
+class MechTargetCamera : Actor
+{
+	vector3 offset;
+	
+	Default
+	{
+		+NOINTERACTION
+	}
+
+	static MechTargetCamera Create(Actor reticle, Actor obj,vector3 offs)
+	{
+		let cam = MechTargetCamera(Spawn("MechTargetCamera",(0,0,0)));
+		cam.tracer = obj;
+		cam.offset = offs;
+		cam.master = reticle;
+		
+		return cam;
+	}
+
+	States
+	{
+		Spawn:
+			TNT1 A 1
+			{
+				if(tracer && tracer.health > 0)
+				{
+				    A_Warp(AAPTR_TRACER, 2, offset.x, offset.y + tracer.height/2, 0, 
+						WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE, null, 0, 1.5);
+					angle = tracer.angle-180;
+				} else { return ResolveState("Death"); }
+				
+				return ResolveState(Null);
+			}
+		loop;
+		
+		Death:
+			TNT1 A 1;
+		stop;
+	}
+}
+
+class MechTargetReticle : Actor
+{
+	Vector2 offset;
+	Vector2 dest_offset;
+	MechTargetCamera cam;
+	
+	Array<MechTargetReticle> corners;
+
+	Default
+	{
+		+NOINTERACTION
+		//RenderStyle 'Add';
+		Alpha 1.0;
+		Scale 0.5;
+	}
+
+	override void tick()
+	{
+		// Move to destination offset
+		if(dest_offset.x > offset.x) offset.x += 4;
+		if(dest_offset.x < offset.x) offset.x -= 4;
+		if(dest_offset.y > offset.y) offset.y += 4;
+		if(dest_offset.y < offset.y) offset.y -= 4;
+		if( abs(dest_offset.x-offset.x) < 2) offset.x = dest_offset.x;
+		if( abs(dest_offset.y-offset.y) < 2) offset.y = dest_offset.y;
+		
+		super.tick();
+	}
+
+	States
+	{
+	Spawn:
+		RETC A 0 Bright; // primer state. The frame gets changed on spawn.
+		RETC "#" 1 Bright 
+		{
+			if(CVar.GetCVar("mwd_viewport_target",master.player).getBool())
+			{
+				sprite = GetSpriteIndex("TNT1");
+			}
+			RFollowTracer();
+		}
+		Wait;
+	Death:
+		RETC "#" 1;
+		stop;
+	}
+
+	static MechTargetReticle InitCreate(Actor shooter, Actor victim, int size)
+	{
+		if(shooter && victim) {
+			
+			let masterReticle        = MechTargetReticle.RSpawn(shooter, victim, (-size -victim.radius/2,       victim.height/2), 1);
+			masterReticle.corners.Push(MechTargetReticle.RSpawn(shooter, victim, ( size +victim.radius/2,       victim.height/2), 0));
+			masterReticle.corners.Push(MechTargetReticle.RSpawn(shooter, victim, (-size -victim.radius/2, size -victim.height/2), 3));
+			masterReticle.corners.Push(MechTargetReticle.RSpawn(shooter, victim, ( size +victim.radius/2, size -victim.height/2), 2));
+			masterReticle.cam = MechTargetCamera.Create(masterReticle,victim,(0,0,0));
+			return masterReticle;
+		}
+		return null;
+	}
+
+	static MechTargetReticle RSpawn(Actor shooter, Actor victim, Vector2 destoff, int frame)
+	{
+		if(shooter && victim) {
+			Vector2 rotpos = RotateVector((0, 1), shooter.AngleTo(victim));
+			let newReticle = MechTargetReticle(Spawn('MechTargetReticle', victim.pos + (rotpos.x, rotpos.y, victim.height/2)));
+			if(newReticle) {
+				newReticle.master = shooter;
+				newReticle.tracer = victim;
+				newReticle.dest_offset = destoff;
+				newReticle.frame  = frame;
+			}
+			return newReticle;
+		}
+		return null;
+	}
+
+	void RDeconstruct(bool alsoDie = true)
+	{
+		// [XA: Argent]
+		// Remove thyself and minions.
+		let plr = MechWarrior(master);
+		// We check cam to make sure we're the master, otherwise we get 3 betty announcements.
+		if(plr && cam && tracer && tracer.health <= 0)
+		{
+			plr.mechsounds.pushSound("Mech/Betty/TargetEliminated");
+		}	
+		for(int i = 0; i < corners.Size(); i++) {
+			if(corners[i]) {
+				corners[i].RDeconstruct(alsoDie);
+			}
+		}
+		if(alsoDie) {
+			SetStateLabel('Death');
+		}
+	}
+
+	state RFollowTracer()
+	{
+		// [XA: Argent]
+		// Keep the reticle indicator on target. Also check if the target still
+		// exists; if they prematurely die or are removed, trigger fade-out.
+		if(tracer && tracer.health > 0) 
+		{
+			A_Warp(AAPTR_TRACER, 2, offset.x, offset.y + tracer.height/2, tracer.AngleTo(master), WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE|WARPF_ABSOLUTEANGLE);
+			return null;
+		}
+		else 
+		{ 
+			RDeconstruct(false);
+			return ResolveState('Death');
+		} 
+	}
+}
+
+
+
+

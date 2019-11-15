@@ -1,0 +1,6 @@
+GameInfo 
+{	
+	titlemusic = "MW2_TTL"
+	statusbarclass = "MechStatusBar"
+	eventhandlers = "MechDoomerEvents"
+}

@@ -1,0 +1,72 @@
+LISTMENU "MainMenu"
+{
+		LineSpacing 13
+		StaticPatchCentered 150,2,"MWLOGO"
+		Position 105, 72
+		centermenu
+		Font "BIGFONT", "BLACK"
+		TextItem "New Game","n", "PlayerclassMenu"
+		TextItem "Load Game","l", "LoadGameMenu"
+		TextItem "Save Game","s", "SaveGameMenu"
+		Font "BIGFONT", "BLACK"
+		TextItem "Options","o", "OptionsMenu"
+		TextItem "Quit Game","q", "QuitMenu"
+		//StaticPatchCentered 160, 154, "RLOGO"
+		Position 1, 1
+		Font "SMALLFONT", "ORANGE"
+		StaticText 68,50,"MechDoomer 2.18a - Alpha."
+}
+
+
+
+AddOptionMenu "CustomizeControls"
+{
+	Submenu    "MechDoomer Controls"      , "MechDoomerControlsMenu"
+}
+
+OptionMenu "MechDoomerControlsMenu"
+{
+	Title "MechDoomer Controls"
+	ScrollTop 2
+	StaticTextSwitchable "$CNTRLMNU_SWITCHTEXT1", "$CNTRLMNU_SWITCHTEXT2", "ControlMessage"
+	StaticText " "
+	StaticText "Primary Systems", "Yellow"
+	Control	   "Shutdown"					 , "netevent \"giveinvbutton:IBTN_SHUTDOWN\""
+	Control	   "Override Shutdown"			 , "netevent \"giveinvbutton:IBTN_OVERRIDE\""
+	Control    "Zoom"						 , "+zoom"
+	Control    "Target Enemy"				 , "netevent \"giveinvbutton:IBTN_TARGET\""
+	Control    "Open Mechlab"				 , "Mech_LoadoutUI"
+	Control    "Toggle Infrared"			 , "netevent \"giveinvbutton:IBTN_INFRARED\""
+	StaticText " "
+	
+	StaticText "Movement Systems","Yellow"
+	Control    "Stop Mech"           		 , "netevent \"giveinvbutton:IBTN_STOP\""
+	Control    "Center Legs to Torso"        , "netevent \"giveinvbutton:IBTN_CENTER\""
+	Control    "Center Torso to Legs"		 , "netevent \"giveinvbutton:IBTN_CENTERTORSO\""
+	Control    "Jump Jets"             		 , "Mech_JumpJets_Fire"
+	StaticText " "
+	
+	StaticText "Weapons Systems","Yellow"
+	Control "Toggle Firemode"				 , "netevent \"giveinvbutton:IBTN_bFIREMODE\""
+	Control "Next Weapon"					 , "netevent \"giveinvbutton:IBTN_NEXTWEAPON\""
+	Control "Previous Weapon"				 , "netevent \"giveinvbutton:IBTN_PREVWEAPON\""
+	Control "Next Group"					 , "netevent \"giveinvbutton:IBTN_NXTGROUP\""
+	Control "Previous Group"	       		 , "netevent \"giveinvbutton:IBTN_PRVGROUP\""
+	StaticText " "
+	
+	StaticText "Alpha-Strike Bindings","Yellow"
+	Control "Fire Group One"				 , "+user1"
+	Control "Fire Group Two"				 , "+user2"
+	Control "Fire Group Three"				 , "+user3"
+	Control "Fire Group Four"				 , "+user4"
+	Control "Fire All Weapons"				 , "netevent \"giveinvbutton:IBTN_SHOOTALLWEAPONSLIKEAMADLAD\""
+	StaticText " "
+	
+	StaticText "Weapon Grouping","Yellow"
+	StaticText "	Highlight a weapon then press","Black"
+	StaticText "	one of these to set its group.","Black"
+	Control "Set Group One"					 , "netevent \"mechsetgroup:1\""
+	Control "Set Group Two"					 , "netevent \"mechsetgroup:2\""
+	Control "Set Group Three"				 , "netevent \"mechsetgroup:3\""
+	Control "Set Group Four"				 , "netevent \"mechsetgroup:4\""
+}

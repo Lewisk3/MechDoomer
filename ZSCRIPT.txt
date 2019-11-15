@@ -1,0 +1,51 @@
+version "4.0"
+
+class HudSpriteInitializer : Actor
+{
+	States
+	{
+		Sprites: 
+			CROW # -1;
+			WOLF # -1;
+	}
+}
+
+// Gutamatics includes
+#include "zscript/Gutamatics/GlobalMaths.zsc"
+#include "zscript/Gutamatics/Matrix.zsc"
+// More math
+#include "ZScript/mech_math.zsc"
+
+// MechDoomer includes
+#include "ZScript/soundsys.zsc"
+#include "ZScript/mechhud.zsc"
+#include "ZScript/datastructs.zsc"
+#include "ZScript/mech_structures.zsc"
+#include "ZScript/weapon_base.zsc"
+#include "ZScript/weapon_objects.zsc"
+#include "ZScript/weapon_registry.zsc"
+#include "ZScript/mech_base.zsc"
+#include "ZScript/mechs.zsc"
+#include "ZScript/weapons.zsc"
+#include "ZScript/debris.zsc"
+#include "ZScript/ammo_disp.zsc"
+#include "ZScript/eventhandler.zsc"
+#include "ZScript/mechlab.zsc"
+
+class IBTN_STOP : I_Boolean {}
+class IBTN_CENTER : I_Boolean {}
+class IBTN_CENTERTORSO : I_Boolean {}
+class IBTN_bFIREMODE : I_Boolean {}
+//class IBTN_JJETS : I_Boolean {}
+class IBTN_OVERRIDE : I_Boolean {}
+class IBTN_INFRARED : I_Boolean {}
+class IBTN_NXTGROUP : I_Boolean {}
+class IBTN_PRVGROUP : I_Boolean {}
+class IBTN_SHUTDOWN : I_Boolean {}
+class IBTN_SETWEAPGRP : I_Nine {}
+class IBTN_TARGET : I_Boolean {}
+class IBTN_NEXTWEAPON : I_Boolean {}
+class IBTN_PREVWEAPON : I_Boolean {}
+class IBTN_SHOOTALLWEAPONSLIKEAMADLAD : I_Boolean {}
+//class IBTN_FIREGROUP : I_Nine {}
+//class IBTN_CHASECAM : I_Boolean {}

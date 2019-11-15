@@ -1,0 +1,874 @@
+
+struct MouseStatus
+{
+	bool left_btn;
+	bool right_btn;
+	bool left_pressed;
+	bool right_pressed;
+	int scroll;
+}
+
+class Mechlab_Menu : GenericMenu
+{
+	// Structs
+	MouseStatus mstats;
+	Vector2 mpos;
+	Mechwarrior mechplr;
+	FadingText plrHudMessage;
+	ArmoryUtility autil_item;
+	
+	// Textures
+	TextureID tMain;
+	TextureID tArmory;
+	TextureID tBtn_Highlight;
+	TextureID tMech_Head;
+	TextureID tMech_RTorso;
+	TextureID tMech_CTorso;
+	TextureID tMech_LTorso;
+	TextureID tMech_RArm;
+	TextureID tMech_LArm;
+	TextureID tMech_RLeg;
+	TextureID tMech_LLeg;
+	TextureID tInv_ArrowUp;
+	TextureID tInv_ArrowDown;
+	TextureID tMessageBox;
+	
+	// Bools
+	bool page_init;
+	
+	// Ints
+	int hud_page;
+	int page_offs;
+	int defwidth;
+	int defheight;
+	int inputclear;
+	int infomode;
+	int invoffset;
+	
+	
+	// Rectangles
+	Color debug_color;
+	Rect mouse, rHD, rCT, rLT, rRT, rLA, rRA, rLL, rRL, weapbox, invbox, equipbtn, dequipbtn, scrapbtn, sortbtn, modebtn, autilbtn, repairbtn;
+	
+	// Fonts
+	HUDFont mHUDFont;
+	
+	// Mechlab Loadout Variables
+	Mechbase_Weapon loadout_weapon;
+	String loadout_invweapon;
+	int hardpoint;  		// Selected mechplr hardpoint
+	int loadm_invselected;  // Selected item in inventory
+	int loadm_weapselected; // Selected weapon
+	int struc_invselected;  // Selected struct in inventory
+	int struc_weapselected; // Selected struct in mechplr
+	int autil_selected; 	// Selected armor utility
+	int astat_selected;		// Selected armor status (internal, armor)
+	
+	// Scalar functions (All H_ function auto adjust to the screen resolution based on 1080p coords.)	
+	vector2, vector2 GetRelativeScale(vector2 pos, vector2 scale=(1,1), float cwidth=0, float cheight=0)
+	{
+ 		cwidth = !cwidth ? defwidth : cwidth; 
+		cheight = !cheight ? defheight : cheight; 
+		vector2 hscale = statusbar.GetHUDScale();
+		hscale = ( int(hscale.x), int(hscale.x) ); // Force even scalar.
+		float rwidth  = (Screen.getWidth()  / float(cwidth) ) / hscale.x;
+		float rheight = (Screen.getHeight() / float(cheight)) / hscale.y;
+		vector2 rscale = (scale.x * rwidth, scale.y * rheight);
+		vector2 rpos = ( (pos.x)*rwidth, (pos.y)*rheight );
+		
+		return rpos, rscale;
+	}
+
+	void H_DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1), float alpha=1)
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale(pos, scale);
+		statusbar.DrawTexture(texture, rpos, flags, alpha, (-1, -1), rscale);
+	}
+	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=1)
+	{
+		vector2 rpos, rscale;
+		[rpos, rscale] = GetRelativeScale(pos);
+		statusbar.DrawString(mHUDFont, str, rpos, flags, translation, alpha);
+	}
+	void H_DrawLine(int x0, int y0, int x1, int y1, Color color)
+	{
+		vector2 pos0, pos1, _;
+		[pos0, _] = GetRelativeScale( (x0,y0) );
+		[pos1, _] = GetRelativeScale( (x1,y1) );
+		Screen.DrawLine(pos0.x, pos0.y, pos1.x, pos1.y, color);
+	}
+	
+	// Rect utilities
+	vector2, vector2 GetActualRectPos(Rect r)
+	{
+		vector2 pos0, pos1, _;
+		[pos0, _] = GetRelativeScale( (r.x,r.y) );
+		[pos1, _] = GetRelativeScale( (r.w+r.x,r.h+r.y) );
+		return pos0, pos1;
+	}
+	
+	void initRect(Rect r, double x, double y, double w, double h)
+	{
+		r.x = x;
+		r.y = y;
+		r.w = w;
+		r.h = h;
+	}
+	
+	void drawRect( Rect r, Color c, bool absolute=false )
+	{
+		if(!absolute)
+		{
+			H_DrawLine(r.x,     r.y,     r.x+r.w, r.y+r.h, c);  //: \
+			H_DrawLine(r.x,     r.y,     r.x+r.w, r.y,     c);  //: -
+			H_DrawLine(r.x,     r.y+r.h, r.x+r.w, r.y+r.h, c);  //: _
+			H_DrawLine(r.x,     r.y,     r.x,     r.y+r.h, c);  //: |
+			H_DrawLine(r.x+r.w, r.y,     r.x+r.w, r.y+r.h, c);  //:  |
+		}
+		else
+		{
+			Screen.DrawLine(r.x,     r.y,     r.x+r.w, r.y+r.h, c);  //: \
+			Screen.DrawLine(r.x,     r.y,     r.x+r.w, r.y,     c);  //: -
+			Screen.DrawLine(r.x,     r.y+r.h, r.x+r.w, r.y+r.h, c);  //: _
+			Screen.DrawLine(r.x,     r.y,     r.x,     r.y+r.h, c);  //: |
+			Screen.DrawLine(r.x+r.w, r.y,     r.x+r.w, r.y+r.h, c);  //:  |
+		}
+	}
+
+	bool checkCollision( Rect one, Rect two )
+	{
+		vector2 a0, a1, b0, b1;
+		a0 = (one.x, one.y);
+		a1 = (one.x+one.w, one.y+one.h);
+		[b0, b1] = GetActualRectPos(two);
+		
+		bool collision;
+			
+		collision = (a0.x < b1.x && a1.x > b0.x && a0.y < b1.y && a1.y > b0.y);
+		
+		Color c = collision ? Color(255,255,0,0) : debug_color;
+		
+		//drawRect(one, c, true);
+		//drawRect(two, c);
+
+		return collision;
+	}
+
+
+	// Actual Menu
+	void Init(Menu parent, Mechwarrior CPlayer)
+	{
+		statusbar.SetSize(32, 320, 200);
+		menuactive = OnNoPause;
+		mParentMenu = parent;
+		mechplr = CPlayer;
+		mMouseCapture = true;
+		mBackbuttonSelected = false;
+		DontDim = false;
+		debug_color = Color(255,230,16,230);
+		defwidth = 1920;
+		defheight = 1080;
+		loadm_weapselected = -1;
+		loadm_invselected = -1;
+		struc_weapselected = -1;
+		struc_invselected = -1;
+		autil_selected = -1;
+		astat_selected = -1;
+		infomode = 1;
+		
+		hud_page = 0;  // Mechlab Page or Armory Page
+		
+		tMain = TexMan.CheckForTexture("LOADMHUD", TexMan.Type_Any);
+		tArmory = TexMan.CheckForTexture("LOADRHUD", TexMan.Type_Any);
+		tMech_Head = TexMan.CheckForTexture("LMHUD_HD", TexMan.Type_Any);
+		tMech_LTorso = TexMan.CheckForTexture("LMHUD_LT", TexMan.Type_Any);
+		tMech_CTorso = TexMan.CheckForTexture("LMHUD_CT", TexMan.Type_Any);
+		tMech_RTorso = TexMan.CheckForTexture("LMHUD_RT", TexMan.Type_Any);
+		tMech_LArm = TexMan.CheckForTexture("LMHUD_LA", TexMan.Type_Any);
+		tMech_RArm = TexMan.CheckForTexture("LMHUD_RA", TexMan.Type_Any);
+		tMech_LLeg = TexMan.CheckForTexture("LMHUD_LL", TexMan.Type_Any);
+		tMech_RLeg = TexMan.CheckForTexture("LMHUD_RL", TexMan.Type_Any);
+		tInv_ArrowUp = TexMan.CheckForTexture("HUDARW", TexMan.Type_Any);
+		tInv_ArrowDown = TexMan.CheckForTexture("HUDARWD", TexMan.Type_Any);
+		tBtn_Highlight = TexMan.CheckForTexture("BTNBOX", TexMan.Type_Any);
+		tMessageBox = TexMan.CheckForTexture("HMESSBG", TexMan.Type_Any);
+		
+		mHUDFont = HUDFont.Create("MechFont");
+		hardpoint = -1;
+		
+		// mechplr hardpoint rects
+		initRect(rHD,908,458,96,45);
+		initRect(rCT,919,524,76,175);
+		initRect(rLA,770,524,62,182);
+		initRect(rRA,1082,524,62,182);
+		initRect(rLT,850,524,62,162);
+		initRect(rRT,1002,524,62,162);
+		initRect(rLL,843,724,90,172);
+		initRect(rRL,983,724,90,172);
+		// Border rects
+		initRect(weapbox,750,130,415,790);
+		initRect(invbox,1198,130,375,790);
+		// Action Buttons
+		initRect(sortbtn,1506,143,50,20);
+		initRect(scrapbtn,1491,883,75,25);
+		initRect(dequipbtn,1079,459,75,25);
+		initRect(equipbtn,641,300,75,25);
+		initRect(autilbtn,990,407,160,30);
+		initRect(repairbtn,769,407,90,30);
+		
+		initRect(mouse, mpos.x, mpos.y, 8,8);
+	}
+
+	override bool OnUIEvent(UiEvent ev)
+	{
+		int keyscn = (ev.Type == UIEvent.Type_KeyDown) ? ev.KeyChar-65 : 0;
+		if(keyscn > 0){ if(MechDoomerEvents.checkBoundKey(keyscn,"Mech_LoadoutUI")) Close(); }
+		
+		if(ev.Type == UIEvent.Type_MouseMove)
+		{
+			mpos.x = ev.MouseX-5;
+			mpos.y = ev.MouseY-5;
+			mouse.x = mpos.x;
+			mouse.y = mpos.y;
+		}
+		
+		if(ev.Type == UIEvent.Type_RButtonDown) mstats.right_btn = true;
+		if(ev.Type == UIEvent.Type_RButtonUp  ) 
+		{
+			if(mstats.right_btn) mstats.right_pressed = true;
+			mstats.right_btn = false;
+		}
+		if(ev.Type == UIEvent.Type_LButtonDown) mstats.left_btn  = true;
+		if(ev.Type == UIEvent.Type_LButtonUp  ) 
+		{
+			if(mstats.left_btn) mstats.left_pressed  = true;
+			mstats.left_btn = false;
+		}
+		if(ev.Type == UIEvent.Type_WheelUp  ) mstats.scroll = -1;
+		if(ev.Type == UIEvent.Type_WheelDown) mstats.scroll = 1;
+		
+		return false;
+	}
+
+
+	override bool MenuEvent (int mkey, bool fromcontroller)
+	{
+		switch (mkey)
+		{
+		case MKEY_Back:
+			Close();
+			return true;
+		}
+		return false;
+	}
+
+	void drawLoadoutBody(int sx, int sy, int ind)
+	{
+		vector2 mechparts = (957, 762);
+		
+		uint fontcol = Font.CR_WHITE;
+		if( !ValidateHardpoint(ind) ) fontcol = Font.CR_DARKRED;
+		
+		switch(ind)
+		{ 
+			Case 0: // HD
+				H_DrawTexture(tMech_Head,mechparts,0,(0.9,0.7));
+				H_DrawString("Head",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			break;
+			Case 1: // CT
+				H_DrawTexture(tMech_CTorso,mechparts,0,(0.9,0.7));
+				H_DrawString("Center Torso",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			break;
+			Case 2: // LT
+				H_DrawTexture(tMech_LTorso,mechparts,0,(0.9,0.7));
+				H_DrawString("Left Torso",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			break;
+			Case 3: // RT
+				H_DrawTexture(tMech_RTorso,mechparts,0,(0.9,0.7));
+				H_DrawString("Right Torso",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			break;
+			Case 4: // LA
+				H_DrawTexture(tMech_LArm,mechparts,0,(0.9,0.7));
+				H_DrawString("Left Arm",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			break;
+			Case 5: // RA
+				H_DrawTexture(tMech_RArm,mechparts,0,(0.9,0.7));
+				H_DrawString("Right Arm",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			break;
+			Case 6: // LL
+				H_DrawTexture(tMech_LLeg,mechparts,0,(0.9,0.7));
+				H_DrawString("Left Leg",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			break;
+			Case 7: // RL
+				H_DrawTexture(tMech_RLeg,mechparts,0,(0.9,0.7));
+				H_DrawString("Right Leg",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			break;
+			default:
+			break;
+		}
+	}
+	
+	void drawMechlabInfo()
+	{
+		String weapston = (mechplr.weapons_tonnage .. "");
+		String mechston = (mechplr.mech_tonnage .. "");
+		String heateff = mechplr.HeatEfficiency .. "";
+		String maxspd = mechplr.MoveSpeedKPH .. "";
+		if(mechplr.overtonnage) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
+		
+		maxspd.truncate(maxspd.Length()-4);
+		heateff.truncate(heateff.Length()-3);
+		weapston.truncate(weapston.length()-4);
+		mechston.truncate(mechston.length()-4);
+		vector2 detailpos = (330,400);
+		H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
+		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
+		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+40));
+		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+60));
+		H_DrawString("Slots free: " .. mechplr.getFreeSlots(),(detailpos.x,detailpos.y+80));
+		
+		if(mstats.left_btn && checkCollision(mouse,dequipbtn))
+		{
+			H_DrawTexture(tBtn_Highlight,(1115,409),0,(0.9,0.7));
+		}
+		if(mstats.left_btn && checkCollision(mouse,equipbtn))H_DrawTexture(tBtn_Highlight,(676,277),0,(0.92,0.7));
+		if(mstats.left_btn && checkCollision(mouse,scrapbtn))H_DrawTexture(tBtn_Highlight,(1527,763),0,(0.9,0.7));
+		if(mstats.left_btn && checkCollision(mouse,sortbtn)) H_DrawTexture(tBtn_Highlight,(1529,141),0,(0.67,0.53));
+		
+
+		if(mstats.scroll == -1 && invoffset-1 > -1){ mstats.scroll = 0;  invoffset--; }
+		if(mstats.scroll ==  1 && invoffset+40 < mechplr.weapon_items.Size()){ mstats.scroll = 0;  invoffset++; }
+		if( mstats.left_btn )
+		{
+			if( !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
+			{
+				mechplr.sendHudAlert("Hardpoint is destroyed!", Font.CR_DARKRED);
+				return;
+			}
+			if(checkCollision(mouse,weapbox)) infomode = 1;
+			if(checkCollision(mouse,invbox)) infomode = 0; 
+			if(checkCollision(mouse,sortbtn)) MechDoomerEvents.SendNetworkEvent("sort_inv");
+			if(checkCollision(mouse,scrapbtn) && (loadm_invselected > -1 || struc_invselected > -1) )
+			{
+				if(loadm_invselected > -1)
+				{
+					MechDoomerEvents.SendNetworkEvent("remove_inv",loadm_invselected);
+				}
+				if(struc_invselected > -1)
+				{
+					MechDoomerEvents.SendNetworkEvent("remove_inv",struc_invselected);
+				}
+				loadm_invselected = -1;
+				struc_invselected = -1;
+			}
+			if(checkCollision(mouse,dequipbtn) && loadm_weapselected > -1 && loadout_weapon) 
+			{
+				MechDoomerEvents.SendNetworkEvent("move_weapinv",loadout_weapon.WeaponID);
+				loadm_weapselected = -1;
+			}
+			if(checkCollision(mouse,dequipbtn) && struc_weapselected > -1) 
+			{
+				MechDoomerEvents.SendNetworkEvent("movestruct_weapinv",struc_weapselected);
+				struc_weapselected = -1;
+			}
+			if(checkCollision(mouse,equipbtn) && loadm_invselected > -1 && mechplr.weapon_items.Size() > 0) 
+			{
+				MechDoomerEvents.SendNetworkEvent("equip_invweap",loadm_invselected,hardpoint);
+				loadm_invselected = -1;
+			}
+			if(checkCollision(mouse,equipbtn) && struc_invselected > -1) 
+			{
+				MechDoomerEvents.SendNetworkEvent("equip_structinvweap",struc_invselected,hardpoint);
+				struc_invselected = -1;
+			}
+			if(checkCollision(mouse,rHD)) {hardpoint = 0; loadm_weapselected=-1;}
+			if(checkCollision(mouse,rCT)) {hardpoint = 1; loadm_weapselected=-1;}
+			if(checkCollision(mouse,rLT)) {hardpoint = 2; loadm_weapselected=-1;}
+			if(checkCollision(mouse,rRT)) {hardpoint = 3; loadm_weapselected=-1;}
+			if(checkCollision(mouse,rLA)) {hardpoint = 4; loadm_weapselected=-1;}
+			if(checkCollision(mouse,rRA)) {hardpoint = 5; loadm_weapselected=-1;}
+			if(checkCollision(mouse,rLL)) {hardpoint = 6; loadm_weapselected=-1;}
+			if(checkCollision(mouse,rRL)) {hardpoint = 7; loadm_weapselected=-1;}
+		}
+		int linesize = 20;
+		if(infomode == 0)
+		{
+			detailpos = (330,160);
+			if(struc_invselected > -1)
+			{
+				class<Mechbase_Utility> util = mechplr.weapon_items[struc_invselected];
+				class<Heatsink> hsink = mechplr.weapon_items[struc_invselected];
+				class<JumpJet> jjet = mechplr.weapon_items[struc_invselected];
+				if(!util) {struc_invselected=-1; return;}
+				H_DrawString("Name: " .. util.getClassName(), detailpos);
+				String wtons = GetDefaultByType(util).weight .. "";
+				wtons.truncate(wtons.Length()-4);
+				H_DrawString("Weight: " .. wtons .. " tons" ,(detailpos.x,detailpos.y+linesize));
+				H_DrawString("Criticals: " .. GetDefaultByType(util).hardslots,(detailpos.x,detailpos.y+linesize*2));
+				if(jjet)
+				{
+					String hef = ( (GetDefaultByType(jjet).thrust_power* 1/100) + 2) .. "";
+					hef.truncate(hef.Length()-3);
+					H_DrawString("Strength: " .. hef,(detailpos.x,detailpos.y+linesize*3));	
+				}
+				if(hsink)
+				{
+					String hef = GetDefaultByType(hsink).cooling .. "";
+					hef.truncate(hef.Length()-3);
+					H_DrawString("Cooling Efficiency: +" .. hef,(detailpos.x,detailpos.y+linesize*3));
+				}
+				H_DrawString("CBill Value: " .. GetDefaultByType(util).worth ,(detailpos.x,detailpos.y+linesize*4));
+			}
+			if(loadm_invselected > -1 && mechplr.weapon_items.Size() > 0)
+			{
+				String invtype = mechplr.weapon_items[loadm_invselected];
+				Class<Mechbase_Weapon> invweap = invtype;
+				if(!invweap) {loadm_invselected=-1; return;}
+				H_DrawString("Name: " .. invtype,detailpos);
+				H_DrawString("Nickname: " .. GetDefaultByType(invweap).displayName, (detailpos.x,detailpos.y+linesize)); 
+				String wtons = GetDefaultByType(invweap).weight .. "";
+				wtons.truncate(wtons.Length()-4);
+				H_DrawString("Weight: " .. wtons .. " tons" ,(detailpos.x,detailpos.y+linesize*2));
+				H_DrawString("Criticals: " .. GetDefaultByType(invweap).hardslots ,(detailpos.x,detailpos.y+linesize*3));
+				H_DrawString("CBill Value: " .. GetDefaultByType(invweap).worth ,(detailpos.x,detailpos.y+linesize*4));
+			}
+		}
+		else
+		{
+			detailpos = (330,160);
+			if(struc_weapselected > -1)
+			{
+				class<Mechbase_Utility> util = mechplr.mechstructs[struc_weapselected];
+				class<Heatsink> hsink = mechplr.mechstructs[struc_weapselected];
+				class<JumpJet> jjet = mechplr.mechstructs[struc_weapselected];
+				H_DrawString("Name: " .. util.getClassName() ,detailpos);
+				String wtons = GetDefaultByType(util).weight .. "";
+				wtons.truncate(wtons.Length()-4);
+				H_DrawString("Weight: " .. wtons .. " tons" ,(detailpos.x,detailpos.y+linesize));
+				H_DrawString("Criticals: " .. GetDefaultByType(util).hardslots ,(detailpos.x,detailpos.y+linesize*2));
+				if(jjet)
+				{
+					String hef = ( (GetDefaultByType(jjet).thrust_power* 1/100) + 2) .. "";
+					hef.truncate(hef.Length()-3);
+					H_DrawString("Strength: " .. hef,(detailpos.x,detailpos.y+linesize*3));	
+				}
+				if(hsink)
+				{
+					String hef = GetDefaultByType(hsink).cooling .. "";
+					hef.truncate(hef.Length()-3);
+					H_DrawString("Cooling Efficiency: +" .. hef,(detailpos.x,detailpos.y+linesize*3));
+				}
+				H_DrawString("CBill Value: " .. GetDefaultByType(util).worth ,(detailpos.x,detailpos.y+linesize*4));
+			}
+			if(loadm_weapselected > -1 && loadout_weapon)
+			{
+				H_DrawString("Name: " .. mechplr.resolveWeaponName(loadout_weapon),detailpos);
+				H_DrawString("Nickname: " .. loadout_weapon.displayName, (detailpos.x,detailpos.y+linesize)); 
+				String wtons = loadout_weapon.weight .. "";
+				wtons.truncate(wtons.Length()-4);
+				H_DrawString("Weight: " .. wtons .. " tons" ,(detailpos.x,detailpos.y+linesize*2));
+				H_DrawString("Criticals: " .. loadout_weapon.hardslots ,(detailpos.x,detailpos.y+linesize*3));
+				H_DrawString("CBill Value: " .. loadout_weapon.worth ,(detailpos.x,detailpos.y+linesize*4));
+			}
+		}
+		if(invoffset > 0)H_DrawTexture(tInv_ArrowUp,(1550,-500),0,(0.9,0.7));
+		if(invoffset+40 < mechplr.weapon_items.Size())H_DrawTexture(tInv_ArrowDown,(1550,-472),0,(0.9,0.7));
+	}
+	
+	
+	void drawInventory(int px, int py, int start, int max)
+	{
+		max = start+max > mechplr.weapon_items.Size() ? mechplr.weapon_items.Size() : start+max;
+		for(int i = start; i < max; i++)
+		{
+			class<Mechbase_Weapon> mw = mechplr.weapon_items[i];
+			class<Mechbase_Utility> ut = mechplr.weapon_items[i];
+			if(ut)
+			{
+				int fcr = Font.CR_DARKGRAY;
+				int sely = (i-start)*20;
+				int slots =  GetDefaultByType(ut).hardslots;
+				Rect checkmouse;
+				initRect(checkmouse,px-55,py+((i-start)*24)+25,14*(mechplr.weapon_items[i].Length()+3),15);
+				//drawRect(checkmouse,debug_color);
+				if(mstats.left_btn && checkCollision(mouse,checkmouse) && GetDefaultByType(ut).moveable)
+				{ 
+					loadm_invselected=-1; 
+					struc_invselected = i; 
+				}
+				if(i == struc_invselected) { fcr = Font.CR_SAPPHIRE; }
+				H_DrawString(mechplr.weapon_items[i] .. "(#"..slots..")", (px-68,py+sely),0,fcr);	
+				if(!GetDefaultByType(ut).moveable)H_DrawString("ERROR: Immoveable Item!", (px-68,py+sely),0,Font.CR_DARKRED);	
+			}
+			if(mw)
+			{
+				int fcr = Font.CR_WHITE;
+				int sely = (i-start)*20;
+				int slots =  GetDefaultByType(mw).hardslots;
+				Rect checkmouse;
+				initRect(checkmouse,px-55,py+((i-start)*24)+25,14*(mechplr.weapon_items[i].Length()+3),15);
+				//drawRect(checkmouse,debug_color);
+				if(mstats.left_btn && checkCollision(mouse,checkmouse)) { loadm_invselected=i; struc_invselected = -1; }
+				if(i == loadm_invselected) { fcr = Font.CR_DARKRED; loadout_invweapon = mechplr.weapon_items[i]; }
+				H_DrawString(mechplr.weapon_items[i] .. "(#"..slots..")", (px-68,py+sely),0,fcr);
+			}
+		}
+	}
+
+	void DrawHardpointItems(int ind, int sx, int sy)
+	{
+		Vector2 pos    = mechplr.getHardpointPos(ind);
+		vector2 hslots = mechplr.getHardpointSlots(ind);
+		
+		int offsy = 0;
+		int offsx = 0;
+		int slottranslation = Font.CR_GRAY;
+		
+		// Display slot numbers
+		for(int i = 0; i < hslots.x; i++)
+		{
+			offsy += 20;
+			if( i < hslots.y) { slottranslation =Font.CR_DARKRED; } else { slottranslation = Font.CR_GRAY; }
+			H_DrawString((i+1)..". ", (sx-45,sy+offsy-35),0,slottranslation);
+		}
+		// Display structures
+		offsy = 0;
+		offsx = 0; // Used for hitbox offsets here.
+		int wind = 0;
+		for(int i = 0; i < mechplr.mechstructs.Size(); i++)
+		{
+			class<Mechbase_Utility> ut = mechplr.mechstructs[i];
+			if(ut)
+			{
+				let def_ut = GetDefaultByType(ut);
+				if(mechplr.mechstructs_x[i] == pos.x && mechplr.mechstructs_y[i] == pos.y)
+				{
+					int fcr = Font.CR_DARKGRAY;
+					for(int s = 0; s < def_ut.hardslots; s++)
+					{	
+						if(i == struc_weapselected)fcr = Font.CR_GREEN;
+						String suffix = "";
+						if(def_ut.hardslots > 1 && def_ut.moveable)suffix = " (#" .. s+1 .. ")";
+						Rect checkmouse;
+						initRect(checkmouse,sx,sy+offsx+20,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
+						if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
+						{
+							if(def_ut.moveable)
+							{
+								struc_weapselected=i; 
+								loadm_weapselected=-1;
+							}
+						}
+						if(!def_ut.moveable)fcr = Font.CR_DARKRED;
+						H_DrawString(def_ut.displayName .. suffix, (sx,sy+offsy-15),0,fcr);
+						offsy += 20;
+						offsx += 23;
+					}
+				}
+			}
+		}
+		// Display weapons
+		for(let w = mechplr.Inv; w; w = w.Inv)
+		{
+			let ww = Mechbase_Weapon(w);
+			if(ww)
+			{
+				if(ww.mount == pos)
+				{
+					wind++;
+					int fcr = Font.CR_WHITE;
+					if(wind == loadm_weapselected+1) { fcr = Font.CR_YELLOW; loadout_weapon = ww; }
+					for(int i = 0; i < ww.hardslots; i++)
+					{							
+ 						String suffix = "";
+						if(ww.hardslots > 1)suffix = " (#" .. i+1 .. ")";
+						Rect checkmouse;
+						initRect(checkmouse,sx,sy+offsx+20,14*(mechplr.resolveWeaponName(ww).Length()+suffix.Length()+4),15);
+						//drawRect(checkmouse, debug_color);
+						if(mstats.left_btn && checkCollision(mouse,checkmouse)) { loadm_weapselected=wind-1; struc_weapselected=-1; }
+						H_DrawString(mechplr.resolveWeaponName(ww) .. suffix, (sx,sy+offsy-15),0,fcr);
+						offsy += 20;
+						offsx += 23;
+					}
+				}
+			}
+		}
+	}
+	
+	void DrawArmorUtilites(int sx, int sy)
+	{
+		int offsy = 0;
+		for(let w = mechplr.Inv; w; w = w.Inv)
+		{
+			let armorutil = ArmoryUtility(w);
+			if(armorutil)
+			{
+				Rect checkmouse;
+				string itemstr = armorutil.getTag() .. " x" .. mechplr.countinv(armorutil.getClassName());
+				initRect(checkmouse,sx,sy+offsy+20,14*itemstr.length(),10);
+				if( checkCollision(mouse, checkmouse) && mstats.left_btn ) autil_item = armorutil;
+				uint fcr = Font.CR_WHITE;
+				if(armorutil == autil_item) fcr = Font.CR_GREEN;
+				H_DrawString(itemstr, (sx,sy+offsy-15), 0, fcr);
+				offsy += 15;
+			}
+		}
+	}
+	
+	void drawArmoryInfo()
+	{
+		// Draw Utils
+		DrawArmorUtilites(1220,170);
+		
+		String weapston = (mechplr.weapons_tonnage .. "");
+		String mechston = (mechplr.mech_tonnage .. "");
+		String heateff = mechplr.HeatEfficiency .. "";
+		String maxspd = mechplr.MoveSpeedKPH .. "";
+		maxspd.truncate(maxspd.Length()-4);
+		heateff.truncate(heateff.Length()-3);
+		weapston.truncate(weapston.length()-4);
+		mechston.truncate(mechston.length()-4);
+		vector2 detailpos = (330,280);
+		vector2 cbillpos  = (330,150);
+		vector2 statuspos = (755,185);
+		
+		// This is surrounded in curly braces so it can be collapsed and temporarily
+		// removed from view.
+		float curarmor, maxarmor, curinternal, maxinternal;
+		{
+			curarmor += mechplr.hardpoints.hd.armor;
+			curarmor += mechplr.hardpoints.ct.armor;
+			curarmor += mechplr.hardpoints.lt.armor;
+			curarmor += mechplr.hardpoints.rt.armor;
+			curarmor += mechplr.hardpoints.la.armor;
+			curarmor += mechplr.hardpoints.ra.armor;
+			curarmor += mechplr.hardpoints.ll.armor;
+			curarmor += mechplr.hardpoints.rl.armor;
+			
+			maxarmor += mechplr.hardpoints.hd.max_armor;
+			maxarmor += mechplr.hardpoints.ct.max_armor;
+			maxarmor += mechplr.hardpoints.lt.max_armor;
+			maxarmor += mechplr.hardpoints.rt.max_armor;
+			maxarmor += mechplr.hardpoints.la.max_armor;
+			maxarmor += mechplr.hardpoints.ra.max_armor;
+			maxarmor += mechplr.hardpoints.ll.max_armor;
+			maxarmor += mechplr.hardpoints.rl.max_armor;
+			
+			curinternal += mechplr.hardpoints.hd.internalhp;
+			curinternal += mechplr.hardpoints.ct.internalhp;
+			curinternal += mechplr.hardpoints.lt.internalhp;
+			curinternal += mechplr.hardpoints.rt.internalhp;
+			curinternal += mechplr.hardpoints.la.internalhp;
+			curinternal += mechplr.hardpoints.ra.internalhp;
+			curinternal += mechplr.hardpoints.ll.internalhp;
+			curinternal += mechplr.hardpoints.rl.internalhp;
+			
+			maxinternal += mechplr.hardpoints.hd.max_internal;
+			maxinternal += mechplr.hardpoints.ct.max_internal;
+			maxinternal += mechplr.hardpoints.lt.max_internal;
+			maxinternal += mechplr.hardpoints.rt.max_internal;
+			maxinternal += mechplr.hardpoints.la.max_internal;
+			maxinternal += mechplr.hardpoints.ra.max_internal;
+			maxinternal += mechplr.hardpoints.ll.max_internal;
+			maxinternal += mechplr.hardpoints.rl.max_internal;
+		}
+		
+		string armorpercent = (curarmor/maxarmor * 100).."";
+		string internalpercent = (curinternal/maxinternal * 100).."";
+		armorpercent.truncate(armorpercent.length()-6);
+		internalpercent.truncate(internalpercent.length()-6);
+		HardpointVitals hv = mechplr.getHardpointVitals(hardpoint);
+		string armorstr = "ARMOR: ".. int(hv.armor) .. "/" .. int(hv.max_armor);
+		string internalstr = "INTERNALS: ".. int(hv.internalhp) .. "/" .. int(hv.max_internal);
+		uint ArmorFont = (hv.armor < hv.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
+		uint InternalsFont = (hv.internalhp < hv.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
+		if(astat_selected == 0) ArmorFont = Font.CR_GREEN;
+		if(astat_selected == 1) InternalsFont = Font.CR_GREEN;
+		
+		int repair_cost = 0;
+		if( astat_selected != -1) repair_cost = mechplr.CalculateHardpointRepairCost(hv,astat_selected);
+		
+		H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
+		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
+		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+40));
+		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+60));
+		H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+100));
+		H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+120));
+		
+		float cbills_remain = mechplr.money_cbills-repair_cost;
+		if(cbills_remain < 0) cbills_remain = 0;
+		
+		H_DrawString("Funds: ".. mechplr.money_cbills, cbillpos);
+		H_DrawString("Price: ".. repair_cost, (cbillpos.x, cbillpos.y+20) );
+		H_DrawString("Bal: ".. int(cbills_remain), (cbillpos.x, cbillpos.y+40) );
+		
+		if( mstats.left_btn )
+		{
+			// Armor status selector
+			if(hardpoint >= 0)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					Rect checkmouse;
+					string compare = !i ? armorstr : internalstr;
+					initRect(checkmouse,statuspos.x,statuspos.y+(i*20)+40,14*compare.length(),10);
+					if( checkCollision(mouse, checkmouse) ) astat_selected = i;
+				}
+				
+				if(checkCollision(mouse,autilbtn) && autil_item)
+				{
+					H_DrawTexture(tBtn_Highlight,(1068,368),0,(2.0,0.7));
+					MechDoomerEvents.SendNetworkEvent("autil_useitem:" .. autil_item.getClassName(),hardpoint);
+					mstats.left_btn = false;
+				}
+				
+				if( checkCollision(mouse,repairbtn) )
+				{
+					H_DrawTexture(tBtn_Highlight,(811,368),0,(1.1,0.7));
+					mstats.left_btn = false;
+					
+					if(astat_selected != -1)
+					{
+						if(!repair_cost)  
+						{
+							mechplr.sendHudAlert("Nothing to repair.",Font.CR_ORANGE);	
+							return;
+						}
+						MechDoomerEvents.SendNetworkEvent("repair_hardpoint", hardpoint, astat_selected);
+					}
+					else
+						mechplr.sendHudAlert("You must select a component to repair!",Font.CR_ORANGE);	
+				}
+			}
+			
+			if(checkCollision(mouse,rHD)) {hardpoint = 0; astat_selected=-1;}
+			if(checkCollision(mouse,rCT)) {hardpoint = 1; astat_selected=-1;}
+			if(checkCollision(mouse,rLT)) {hardpoint = 2; astat_selected=-1;}
+			if(checkCollision(mouse,rRT)) {hardpoint = 3; astat_selected=-1;}
+			if(checkCollision(mouse,rLA)) {hardpoint = 4; astat_selected=-1;}
+			if(checkCollision(mouse,rRA)) {hardpoint = 5; astat_selected=-1;}
+			if(checkCollision(mouse,rLL)) {hardpoint = 6; astat_selected=-1;}
+			if(checkCollision(mouse,rRL)) {hardpoint = 7; astat_selected=-1;}
+		}
+		
+		// Draw hardpoint vitals
+		if(hardpoint < 0) return;
+		
+		H_DrawString(armorstr, statuspos,0,ArmorFont);
+		H_DrawString(internalstr, (statuspos.x,statuspos.y+20), 0, InternalsFont);
+	}
+	
+	bool ValidateHardpoint(int ind)
+	{
+		if(ind == -1) return true; // No such hardpoint.
+		
+		let valid = mechplr.getHardpointVitals(ind);
+		return (valid.internalhp > 0);
+	}
+	
+	void HUD_ChangePageRelative(int offs)
+	{
+		mstats.left_btn = false;
+		mstats.right_btn = false;
+		hud_page += offs;
+		page_init = false;
+	}
+
+	override void Drawer ()
+	{
+		statusbar.BeginHUD();
+		
+		// Mechlab mode
+		if(hud_page == 0)
+		{
+			if(!page_init)
+			{
+				page_offs = 1;
+				initRect(modebtn,463,731,238,35);
+				page_init = true;
+			}
+			H_DrawTexture(tMain, (942,807), 0, (0.9,0.7) );
+			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,800,160);
+			drawInventory(1278,150, invoffset, 30);
+			drawLoadoutBody(931,120,hardpoint);
+			drawMechlabInfo();
+		} 
+		// Armory mode
+		else if(hud_page == 1)
+		{
+			if(!page_init)
+			{
+				page_offs = -1;
+				initRect(modebtn,475,600,238,35);
+				page_init = true;
+			}
+			H_DrawTexture(tArmory, (942,807), 0, (0.9,0.7) );
+			drawLoadoutBody(931,120,hardpoint);
+			drawArmoryInfo();
+		}
+		
+		//drawRect(rHD, debug_color);
+		//drawRect(rCT, debug_color);
+		//drawRect(rRT, debug_color);
+		//drawRect(rLT, debug_color);
+		//drawRect(rLA, debug_color);
+		//drawRect(rRA, debug_color);
+		//drawRect(rLL, debug_color);
+		//drawRect(rRL, debug_color);
+		
+		//drawRect(invbox, debug_color);
+		//drawRect(weapbox, debug_color);
+		//drawRect(equipbtn, debug_color);
+		//drawRect(dequipbtn, debug_color);
+		//drawRect(scrapbtn, debug_color);
+		//drawRect(sortbtn, debug_color);
+		//drawRect(modebtn, debug_color);
+		//drawRect(autilbtn, debug_color);
+		//drawRect(repairbtn, debug_color);
+			
+		// Global Actions
+		if(mstats.left_btn && checkCollision(mouse,modebtn) && page_init) 
+		{
+			//H_DrawTexture(tBtn_Highlight,(modebtn.x+120,modebtn.y-88),0,(2.9,0.8));
+			HUD_ChangePageRelative(page_offs);
+		}		
+		// Player produced HUD message.
+		if(mechplr.hAlert.text != "")
+		{
+			plrHudMessage.txt = mechplr.hAlert.text;
+			plrHudMessage.alpha = 0.2;
+			plrHudMessage.col = mechplr.hAlert.col;
+			mechplr.hAlert.text = "";
+		}
+		if(mstats.left_btn && plrHudMessage.txt != "" && plrHudMessage.alpha >= 1.0) 
+		{
+			plrHudMessage.txt = "";
+			mstats.left_btn = false;
+		}
+							
+		if(plrHudMessage.txt != "" && plrHudMessage.alpha > 0) 
+		{
+			vector2 messagepos = (960, 450);
+			H_DrawTexture(tMessageBox,(messagepos.x+30,messagepos.y),0,(1.3,0.7),plrHudMessage.alpha);
+			H_DrawString(plrHudMessage.txt,(messagepos.x-240,messagepos.y-90),0,plrHudMessage.col,plrHudMessage.alpha);
+			H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-24),0,Font.CR_White,plrHudMessage.alpha);
+			if(plrHudMessage.alpha < 1.0) plrHudMessage.alpha += 0.05;
+		}
+		
+	}
+	
+	override void Ticker()
+	{
+		if(inputclear == 0)
+		{
+			mstats.left_pressed = false;
+			mstats.right_pressed = false;
+			mstats.scroll = 0;
+			inputclear = 12;
+		}
+		if(inputclear > 0) inputclear --;
+	}
+}
+
+

@@ -1,0 +1,148 @@
+PulseLasers/Small  PULSSML
+PulseLasers/Medium PULSMED
+PulseLasers/Large  PULSLRG
+Lasers/Small 	   LASRSML
+Lasers/Medium 	   LASRMED
+Lasers/Large 	   LASRLRG
+ERLasers/Small 	   LASERSML
+ERLasers/Medium    LASERMED
+ERLasers/Large 	   LASERLRG
+Laser/Impact       LASRHIT
+Missiles/SRM2      MECSRM2
+Missiles/SRM4      MECSRM4
+Missiles/SRM6      MECSRM6
+Missiles/LRM	   MECLRM
+Missiles/AMS       MECWAMS
+Ballistics/MGUN       BALMGUN
+Ballistics/Autocannon MECAUTOC
+Ballistics/Gauss      MECGAUSS
+Energy/PPC    MECPPC
+Energy/Flamer MECHFLM
+
+$volume Ballistics/Gauss 0.6
+$volume Ballistics/Autocannon 0.5
+$volume Missiles/SRM2 0.5
+$volume Missiles/SRM4 0.5
+$volume Missiles/SRM6 0.5
+$volume Missiles/AMS 0.35
+$volume PulseLasers/Small  0.4
+$volume PulseLasers/Medium 0.4
+$volume PulseLasers/Large  0.4
+$volume ERLasers/Small  0.4
+$volume ERLasers/Medium 0.4
+$volume ERLasers/Large  0.4
+$volume Lasers/Small  0.4
+$volume Lasers/Medium 0.4
+$volume Lasers/Large  0.4
+$volume Laser/Impact 1.0
+
+
+// Mech Betty
+Mech/Betty/HeatCritical HEATWARN
+Mech/Betty/ShutdownInit MWSHUTSQ
+Mech/Betty/ShutdownOverride MWSHUTOV
+Mech/Betty/ShuttingDown MWSHUTDN
+Mech/Betty/SystemsCheck MWSTART
+Mech/Betty/Chainfire CHAINFIR
+Mech/Betty/Groupfire GROUPFIR
+Mech/Betty/Engaged ENGAGED
+Mech/Betty/Disabled DISABLED
+Mech/Betty/TargetEliminated TARGDEAD
+Mech/Betty/Destroyed DESTRYED
+Mech/Betty/CriticalHit CRITHIT
+Mech/Betty/CenterTorso BETTY_CT
+Mech/Betty/LeftTorso BETTY_LT
+Mech/Betty/RightTorso BETTY_RT
+Mech/Betty/LeftArm BETTY_LA
+Mech/Betty/RightArm BETTY_RA
+Mech/Betty/LeftLeg BETTY_LL
+Mech/Betty/RightLeg BETTY_RL
+Mech/Betty/Heatsink HEATSINK
+Mech/Betty/WeaponDestroyed WDESTRYD
+
+// Unused betty
+Mech/Betty/NoAmmo AMMODEPL
+
+$volume Mech/Betty/TargetEliminated 0.7
+
+// Mech cockpit (informative) sounds
+Mech/NextWeapon MECHWNXT
+Mech/HeatWarn MECHEATW
+Mech/Override MECOVRR
+Mech/Shutdown MECHSHUT
+Mech/PowerOne MECHPOW1
+Mech/PowerTwo MECHPOW2
+Mech/PowerThree MECHPOW3
+Mech/StartupDone MECHSYSC
+Mech/Infrared MECINFRA
+Mech/JetLoop MECHJET
+Mech/AccelFromStop1 MECHENG3
+Mech/AccelFromStop2 MECHENG4
+Mech/DeccelToStop1 MECHENG1
+Mech/DeccelToStop2 MECHENG5
+Mech/DeccelToStop3 MECHENG6
+Mech/TorsoTwist TORSOMOV
+Mech/ReactorHum REACTHUM
+Mech/Zoom WEAPZOOM
+Mech/WeaponBusy WEAPBUSY
+Mech/Footstep MECSTEP
+
+// Target sequence
+Mech/Target/Get 	  TARGGET
+Mech/Target/BeginLock TARLOCKP
+Mech/Target/Locked    TARLOCKD
+
+// Hit sounds
+Mech/Damaged/NoArmor MPAINLW
+Mech/Damaged/HardpointDead MPAINME
+Mech/Damaged/Critical MPAINHD
+Mech/Damaged/Explosion MPAINMX
+
+
+$random Mech/Power { Mech/PowerOne Mech/PowerTwo Mech/PowerThree}
+$random Mech/DeccelToStop { Mech/DeccelToStop1 Mech/DeccelToStop2 Mech/DeccelToStop3}
+$random Mech/AccelFromStop { Mech/AccelFromStop1 Mech/AccelFromStop2 }
+$volume Mech/Footstep 0.54
+$volume Mech/DeccelToStop 0.6
+$volume Mech/AccelFromStop 0.6
+$volume Mech/TorsoTwist 0.4
+$volume Mech/JetLoop 0.6
+$volume Mech/Target/Get 0.5
+$volume Mech/Target/Lock 0.5
+
+// MechWarrior - plr sounds
+$playersound            MechWarrior	other	*land		MLAND
+$playersound            MechWarrior	other	*grunt		MLAND
+$playersound            MechWarrior	other	*pain25		MPAINLW
+$playersound            MechWarrior	other	*pain50		MPAINME
+$playersound            MechWarrior	other	*pain75		MPAINHD
+$playersound            MechWarrior	other	*pain100 	MPAINMX
+$playersound            MechWarrior	other	*splat  	MLANDHD
+$playersound            MechWarrior	other	*falling 	 MFALLING
+$playersound            MechWarrior	other	*wimpydeath  MDEDWIM
+$playersound            MechWarrior	other	*death  	 MDED
+$playersound            MechWarrior	other	*xdeath 	 MDEDWOW
+
+$playersound            MechWarrior	female	*land		MLAND
+$playersound            MechWarrior	female	*grunt		MLAND
+$playersound            MechWarrior	female	*pain25		MPAINLW
+$playersound            MechWarrior	female	*pain50		MPAINME
+$playersound            MechWarrior	female	*pain75		MPAINHD
+$playersound            MechWarrior	female	*pain100 	MPAINMX
+$playersound            MechWarrior	female	*splat  	MLANDHD
+$playersound            MechWarrior	female	*falling 	 MFALLING
+$playersound            MechWarrior	female	*wimpydeath  MDEDWIM
+$playersound            MechWarrior	female	*death  	 MDED
+$playersound            MechWarrior	female	*xdeath 	 MDEDWOW
+
+$playersound            MechWarrior	male	*land		MLAND
+$playersound            MechWarrior	male	*grunt		MLAND
+$playersound            MechWarrior	male	*pain25		MPAINLW
+$playersound            MechWarrior	male	*pain50		MPAINME
+$playersound            MechWarrior	male	*pain75		MPAINHD
+$playersound            MechWarrior	male	*pain100 	MPAINMX
+$playersound            MechWarrior	male	*splat  	MLANDHD
+$playersound            MechWarrior	male	*falling 	 MFALLING
+$playersound            MechWarrior	male	*wimpydeath  MDEDWIM
+$playersound            MechWarrior	male	*death  	 MDED
+$playersound            MechWarrior	male	*xdeath 	 MDEDWOW

@@ -1,0 +1,132 @@
+struct Rect 
+{
+	float x,y,w,h;
+}
+
+struct UIObject play
+{
+	bool inloadout;
+	bool mousebtnone;
+	bool mousebtntwo;
+	int scroll;
+	bool mousebtnone_click;
+	bool mousebtntwo_click;
+	int mousex;
+	int mousey;
+	float mousex_delta; // unused
+	float mousey_delta; // unused
+	int key;
+}
+
+struct HardpointData play
+{
+	int hd, ct, lt, rt, la, ra, ll, rl;
+}
+
+class HardpointVitals : Object
+{
+	float armor;
+	float internalhp;
+	float max_armor;
+	float max_internal;
+}
+
+struct MechHardpoint play
+{
+	// Position
+	vector2 pos;
+
+	// Slots
+	int slots;
+	int maxslots;
+	
+	// Vitals
+	float armor;
+	float internalhp;
+	float max_armor;
+	float max_internal;
+}
+
+struct MechHardpoints play
+{	
+	MechHardpoint hd;
+	MechHardpoint ct;
+	MechHardpoint lt;
+	MechHardpoint rt;
+	MechHardpoint la;
+	MechHardpoint ra;
+	MechHardpoint ll;
+	MechHardpoint rl;
+}
+
+class I_Boolean : Inventory
+{
+	Default
+	{
+		Inventory.maxamount 1;
+	}
+}
+
+class I_Int16 : Inventory
+{
+	Default
+	{
+		Inventory.maxamount 65536;
+	}
+}
+
+class I_Percent : Inventory
+{
+	Default
+	{
+		Inventory.maxamount 100;
+	}
+}
+
+class I_Angle : Inventory
+{
+	Default
+	{
+		Inventory.maxamount 360;
+	}
+}
+
+class I_Five : Inventory
+{
+	Default
+	{
+		Inventory.maxamount 5;
+	}
+}
+
+class I_Nine : Inventory
+{
+	Default
+	{
+		Inventory.maxamount 999;
+	}
+}
+
+
+class I_Weapon : Inventory
+{
+	int group;
+	class<Mechbase_Weapon> source;
+	Vector2 mountpos;
+}
+
+class A_Int16 : Ammo
+{
+	Default
+	{
+		Inventory.maxamount 65536;
+	}
+}
+
+class A_Nine : Ammo
+{
+	Default
+	{
+		Inventory.maxamount 999;
+	}
+}

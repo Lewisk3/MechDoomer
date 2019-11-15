@@ -1,0 +1,7 @@
+sprite MWLOGO, 664, 180
+{
+	xscale 3
+	yscale 3
+	offset -90, 0
+	patch MWLOGO, 0, 0 
+}

@@ -1,0 +1,11 @@
+//clearplayerclasses
+addplayerclass "BattleArmor"
+addplayerclass "Stormcrow"
+//addplayerclass "Shadowcat"
+addplayerclass "Timberwolf"
+addplayerclass "Jenner"
+addplayerclass "Atlas"
+addplayerclass "EbonJaguar"
+addplayerclass "Warhammer"
+addplayerclass "Nova"
+

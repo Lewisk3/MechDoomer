@@ -1,0 +1,721 @@
+
+class Mechbay : Inventory
+{
+	Actor obj;
+
+	Default
+	{
+		Radius 12;
+		Height 4;
+		-NOBLOCKMAP;
+	}
+	
+	float point_distance(Actor one, Actor two, float scale)
+	{
+		int x = one.pos.x - two.pos.x;
+		int y = one.pos.y - two.pos.y;
+		int z = one.pos.z - two.pos.z;
+		return sqrt( x*x + y*y + z*z )/scale;
+	}
+	
+	override void Touch (Actor toucher)
+	{
+		if(!toucher.player) return;
+		let plr = MechWarrior(toucher.player.mo);
+		if(plr)obj = toucher;
+	}
+	
+	void HealMechHardpoint(Mechwarrior plr, MechHardpoint hp)
+	{
+		if(!plr) return;
+		if(hp.armor < hp.max_armor && plr.money_cbills > 20) 
+		{
+			hp.armor+=1;
+			plr.money_cbills -= 20;
+		}
+		if(hp.internalhp < hp.max_internal && plr.money_cbills > 20) 
+		{
+			hp.internalhp+=1;
+			plr.money_cbills -= 20;
+		}
+	}
+	
+	override void tick()
+	{
+		if(obj)
+		{
+			if(point_distance(obj.player.mo,self,1) > 50) 
+			{
+				obj = null;
+				return;
+			}
+			let plr = MechWarrior(obj.player.mo);
+			if(plr)
+			{
+				if(!plr.mech_shutdown)
+				{
+					plr.A_Print("Mech must be shutdown to initiate repairs.");
+				}
+				else
+				{
+					A_Print("Repairing...");
+					if(plr.money_cbills < 20){ plr.A_Print("Insufficient funds."); return; }
+					
+					// Heal mech hardpoints
+					HealMechHardpoint(plr,plr.hardpoints.hd);
+					HealMechHardpoint(plr,plr.hardpoints.ct);
+					HealMechHardpoint(plr,plr.hardpoints.lt);
+					HealMechHardpoint(plr,plr.hardpoints.rt);
+					HealMechHardpoint(plr,plr.hardpoints.la);
+					HealMechHardpoint(plr,plr.hardpoints.ra);
+					HealMechHardpoint(plr,plr.hardpoints.ll);
+					HealMechHardpoint(plr,plr.hardpoints.rl);	
+				}
+			}
+		}
+		super.tick();
+	}
+	
+	override void PostBeginPlay()
+	{
+		float xo = (cos(angle+5))*8;
+		float yo = (sin(angle+5))*8;
+		//console.printf(": %f, %f",xoffset,yoffset);
+		Vector3 lpos = (pos.x+xo,pos.y+yo,pos.z);
+		let bay = Spawn("Mechbay_3D",pos);
+		if(bay)
+		{
+			bay.target = Owner;
+			bay.pitch = pitch;
+			bay.angle = angle;
+		}
+		super.PostBeginPlay();
+	}
+	
+	States
+	{
+		Spawn:
+			MBAY A 1;
+		loop;
+	}
+	
+}
+
+class MechAmmoDispenser : Inventory
+{
+
+	Array<String> dispense;
+	Array<Int> dispense_amt;
+	
+	virtual void DispenseInit() {}
+	
+	void addAmmo(String type, int amt)
+	{
+		dispense.push(type);
+		dispense_amt.push(amt);
+	}
+	override bool TryPickup (in out Actor toucher)
+	{
+		let plr = PlayerPawn(toucher);
+		// Throw all ammo into dispenser.
+		dispense.Clear();
+		DispenseInit();
+		if(plr)
+		{
+			for(int i = 0; i < dispense.Size(); i++)
+			{
+				console.printf("Ammo pickup: %s, %d",dispense[i] .. "",dispense_amt[i]); 
+				//if(dispense[i] == "heatsink"){ plr.giveHeatsinks(dispense_amt[i]); continue; }
+				plr.GiveInventory(dispense[i],dispense_amt[i]);
+			}
+		}
+		GoAwayAndDie();
+		return true;
+	}
+}
+
+class MechInvDispenser : Inventory
+{
+
+	Array<String> dispense;
+	Array<Int> dispense_amt;
+	
+	virtual void DispenseInit() {}
+	
+	void addItem(String type, int amt)
+	{
+		dispense.push(type);
+		dispense_amt.push(amt);
+	}
+	override bool TryPickup (in out Actor toucher)
+	{
+		let plr = MechWarrior(toucher);
+		// Throw all ammo into dispenser.
+		dispense.Clear();
+		DispenseInit();
+		if(plr)
+		{
+			for(int i = 0; i < dispense.Size(); i++)
+			{
+				console.printf("Item pickup: %s, %d",dispense[i] .. "",dispense_amt[i]); 
+				//if(dispense[i] == "heatsink"){ plr.giveHeatsinks(dispense_amt[i]); continue; }
+				plr.addWeaponToInv(dispense[i],dispense_amt[i]);
+			}
+		}
+		GoAwayAndDie();
+		return true;
+	}
+}
+
+class MechWeaponDispenser : Inventory
+{
+	Array<String> weaponNames;
+	Array<String> items;
+	Array<Int> items_amt;
+	Array<String> dispense;
+	Array<Int> dispense_amt;
+	class<MechWarrior> base;
+	MechWarrior mechtoucher;
+	
+	Property requireMech : base;
+	
+	void addItem(String type, int amt)
+	{
+		items.push(type);
+		items_amt.push(amt);
+	}
+	void addStruct(String type, int amt)
+	{
+		dispense.push(type);
+		dispense_amt.push(amt);
+	}
+	void addWeapon(String weapon)
+	{
+		weaponNames.push(weapon);
+	}
+	
+	virtual void setupWeapons()
+	{
+	}
+	
+	bool giveWeapons(MechWarrior mech)
+	{
+		items.Clear();
+		items_amt.Clear();
+		weaponNames.Clear();
+		setupWeapons();
+		if(mech)
+		{
+			if(base)
+			{
+				if(base != mech.GetClass()) return false;
+			}
+			// These should all be filled evenly.
+			if(items.Size() != items_amt.Size()) return false;
+			if(dispense.Size() != dispense_amt.Size()) return false;
+			
+			for(int i = 0; i < weaponNames.Size(); i++)
+			{
+				mech.addWeaponToInv(weaponNames[i]);
+			}
+			for(int x = 0; x < items.Size(); x++)
+			{
+				items[x].ToLower();
+				mech.GiveInventory(items[x],items_amt[x]);
+			}
+			for(int i = 0; i < dispense.Size(); i++)
+			{
+				mech.addWeaponToInv(dispense[i],dispense_amt[i]);
+			}
+			
+			return true;
+		}
+		return false;
+	}
+	
+	override bool TryPickup (in out Actor toucher)
+	{
+		mechtoucher = MechWarrior(toucher);
+		bool result = giveWeapons(mechtoucher);;
+		if(result)GoAwayAndDie();
+		return result; //result;
+	}
+}
+
+class EnergyWeaponDispenser : MechWeaponDispenser
+{
+	String realmsg;
+	
+	override void setupWeapons()
+	{
+		Array<String> weapons;
+		weapons.push("MediumLaser");
+		weapons.push("SmallLaser");
+		weapons.push("LargeLaser");
+		if(random(1,2)==2)weapons.push("ERLargeLaser");
+		if(random(1,2)==2)weapons.push("ERMediumLaser");
+		if(random(1,2)==2)weapons.push("ERSmallLaser");
+		if(random(1,4)==4)weapons.push("PPC");
+		if(random(1,6)==6)weapons.push("ERPPC");
+		
+		int weap = random(0,weapons.Size()-1);
+		addWeapon(weapons[weap]);
+		realmsg = "Picked up " .. weapons[weap];
+	}
+	
+	override String PickupMessage () { return realmsg; }
+}
+
+
+class SRMWeaponDispenser : MechWeaponDispenser
+{
+	String realmsg;
+	
+	override void setupWeapons()
+	{
+		Array<String> weapons;
+		Array<String> items;
+		weapons.push("SRM2");
+		weapons.push("SRM4");
+		weapons.push("SRM6");
+		if(random(1,2)==6)weapons.push("SSRM2");
+		if(random(1,4)==8)weapons.push("SSRM4");
+		if(random(1,4)==4)weapons.push("SSRM6");
+		items.push("AntiMissileSystem");
+		
+		int weap = random(0,weapons.Size()+2);
+		int item = random(0,items.Size()-1);
+		
+		if(weap > weapons.Size()-1 && items.Size() > 0) 
+		{
+			int amt = random(1,2);
+			addStruct(items[item],amt);
+			realmsg = "Picked up " .. items[item] .. " x" ..amt;
+		}
+		else if(weap <= weapons.Size()-1)
+		{
+			addWeapon(weapons[weap]);
+			realmsg = "Picked up " .. weapons[weap];
+		}
+	}
+	
+	override String PickupMessage () { return realmsg; }
+}
+class LRMWeaponDispenser : MechWeaponDispenser
+{
+	String realmsg;
+	
+	override void setupWeapons()
+	{
+		Array<String> weapons;
+		weapons.push("LRM5");
+		weapons.push("LRM10");
+		weapons.push("LRM15");
+		if(random(1,2)==6)weapons.push("LRM15");
+		if(random(1,4)==8)weapons.push("LRM20");
+		
+		int weap = random(0,weapons.Size()-1);
+		addWeapon(weapons[weap]);
+		realmsg = "Picked up " .. weapons[weap];
+	}
+	
+	override String PickupMessage () { return realmsg; }
+}
+class ACWeaponDispenser : MechWeaponDispenser
+{
+	String realmsg;
+	
+	override void setupWeapons()
+	{
+		Array<String> weapons;
+		weapons.push("Autocannon2");
+		weapons.push("UAutocannon2");
+		weapons.push("MachineGun");
+		weapons.push("Autocannon5");
+		if(random(1,2)==2)weapons.push("UAutocannon5");
+		if(random(1,2)==2)weapons.push("Autocannon10");
+		if(random(1,4)==4)weapons.push("UAutocannon10");
+		if(random(1,4)==4)weapons.push("Autocannon20");
+		if(random(1,4)==4)weapons.push("UAutocannon20");
+		
+		int weap = random(0,weapons.Size()-1);
+		addWeapon(weapons[weap]);
+		realmsg = "Picked up " .. weapons[weap];
+	}
+	
+	override String PickupMessage () { return realmsg; }
+}
+class GaussWeaponDispenser : MechWeaponDispenser
+{
+	String realmsg;
+	
+	override void setupWeapons()
+	{
+		addWeapon("GaussRifle");
+		realmsg = "Picked up GaussRifle";
+	}
+	
+	override String PickupMessage () { return realmsg; }
+}
+
+class PlasmaWeaponDispenser : MechWeaponDispenser
+{
+	String realmsg;
+	
+	override void setupWeapons()
+	{
+		Array<String> weapons;
+		weapons.push("SmallPulseLaser");
+		weapons.push("MediumPulseLaser");
+		weapons.push("LargePulseLaser");
+		if(random(1,2)==2)weapons.push("Flamer");
+		
+		int weap = random(0,weapons.Size()-1);
+		addWeapon(weapons[weap]);
+		realmsg = "Picked up " .. weapons[weap];
+	}
+	
+	override String PickupMessage () { return realmsg; }
+}
+
+class MassiveWeaponDispenser : MechWeaponDispenser
+{
+	String realmsg;
+	
+	override void setupWeapons()
+	{
+		Array<String> picked;
+		Array<String> weapons;
+		weapons.push("MediumLaser");
+		weapons.push("SmallLaser");
+		weapons.push("LargeLaser");
+		weapons.push("ERLargeLaser");
+		weapons.push("ERMediumLaser");
+		weapons.push("ERSmallLaser");
+		weapons.push("PPC");
+		weapons.push("ERPPC");
+		weapons.push("SmallPulseLaser");
+		weapons.push("MediumPulseLaser");
+		weapons.push("LargePulseLaser");
+		weapons.push("Flamer");
+		weapons.push("Autocannon2");
+		weapons.push("UAutocannon2");
+		weapons.push("MachineGun");
+		weapons.push("Autocannon5");
+		weapons.push("UAutocannon5");
+		weapons.push("Autocannon10");
+		weapons.push("UAutocannon10");
+		weapons.push("Autocannon20");
+		weapons.push("UAutocannon20");
+		weapons.push("SRM2");
+		weapons.push("SRM4");
+		weapons.push("SRM6");
+		weapons.push("SSRM2");
+		weapons.push("SSRM4");
+		weapons.push("SSRM6");
+		weapons.push("LRM5");
+		weapons.push("LRM10");
+		weapons.push("LRM15");
+		weapons.push("LRM20");
+		weapons.push("AntiMissileSystem");
+		
+		for(int i = 0; i < 3; i++)
+		{
+			int weap = random(0,weapons.Size()-1);
+			class<Mechbase_Weapon> mweap = weapons[weap];
+			class<Mechbase_Utility> mutil = weapons[weap];
+			if(mweap) addWeapon(weapons[weap]);
+			if(mutil) addStruct(weapons[weap],random(1,2));
+			picked.push(weapons[weap]);
+		}
+		realmsg = "Picked up 3 weapons: " .. picked[0] .. ", " .. picked[1] .. ", " .. picked[2];
+	}
+	
+	override String PickupMessage () { return realmsg; }
+}
+
+class EnergyWeaponDisp : EnergyWeaponDispenser replaces Shotgun
+{
+	override void PostBeginPlay(){ if(random(1,2)==2)GoAwayAndDie(); }
+	override void tick()
+	{
+		angle++;
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			LASR A 1;
+		loop;
+	}
+}
+
+class SRMWeaponDisp : SRMWeaponDispenser replaces RocketLauncher
+{
+	override void tick()
+	{
+		angle++;
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			MISS A 1;
+		loop;
+	}
+}
+class LRMWeaponDisp : LRMWeaponDispenser replaces SuperShotgun
+{
+	override void tick()
+	{
+		angle++;
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			MISS A 1;
+		loop;
+	}
+}
+class ACWeaponDisp : ACWeaponDispenser replaces Chaingun
+{
+	override void PostBeginPlay(){ if(random(1,2)==2)GoAwayAndDie(); }
+	override void tick()
+	{
+		angle++;
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			AUTO A 1;
+		loop;
+	}
+}
+class GaussWeaponDisp : GaussWeaponDispenser replaces Chainsaw
+{
+	override void tick()
+	{
+		angle++;
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			GAUS A 1;
+		loop;
+	}
+}
+class PlasmaWeaponDisp : PlasmaWeaponDispenser replaces PlasmaRifle
+{
+	override void tick()
+	{
+		angle++;
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			LASR A 1;
+		loop;
+	}
+}
+
+class MassiveWeaponDisp :  MassiveWeaponDispenser replaces BFG9000
+{
+	override void tick()
+	{
+		angle++;
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			MASS A 1;
+		loop;
+	}
+}
+
+// Ammo replacements
+
+class Heatsink_Pickup : MechInvDispenser replaces Cell
+{
+	override void DispenseInit()
+	{	
+		bool dbl = (random(1,4)==4);
+		if(!dbl)addItem("Heatsink",random(1,2));
+		if(dbl)
+		{
+			scale.y = 1.5;
+			addItem("DoubleHeatsink",random(1,2));
+		}
+	}
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			HSNK A -1;
+		stop;
+	}
+}
+
+class BigHeatsink_Pickup : MechInvDispenser replaces CellPack
+{
+	override void DispenseInit()
+	{	
+		bool dbl = (random(1,2)==2);
+		if(!dbl)addItem("Heatsink",random(2,4));
+		if(dbl)
+		{
+			addItem("DoubleHeatsink",random(2,4));
+		}
+	}
+	States
+	{
+		Spawn:
+			TNT1 A 0;
+			HSNK A -1;
+		stop;
+	}
+}
+
+
+
+class MGUNAmmoDisp_Box : MechAmmoDispenser replaces ClipBox
+{
+	Default
+	{
+		XScale 2.0;
+		YScale 2.0;
+	}
+
+	override void DispenseInit()
+	{	
+		addAmmo("BulletsMGun",150);
+		addAmmo("AC2_Ammo",8);
+		addAmmo("AC5_Ammo",5);
+		addAmmo("AC10_Ammo",4);
+		addAmmo("AC20_Ammo",2);
+		addAmmo("UAC2_Ammo",8);
+		addAmmo("UAC5_Ammo",5);
+		addAmmo("UAC10_Ammo",4);
+		addAmmo("UAC20_Ammo",2);
+	}
+	States
+	{
+	  Spawn:
+	     AMMO A -1;
+	  Stop;
+    }
+}
+
+class MGUNAmmoDisp_Clip : MechAmmoDispenser replaces Clip
+{
+	override void DispenseInit()
+	{	
+		addAmmo("BulletsMGun",75);
+	}
+	States
+	{
+	  Spawn:
+	     CLIP A -1;
+	  Stop;
+    }
+}
+
+class MissileBox : MechAmmoDispenser replaces RocketBox
+{
+	Default
+	{
+		XScale 1.5;
+		YScale 1.5;
+	}
+	
+	override void DispenseInit()
+	{	
+		addAmmo("SRM_Ammo",120);
+		addAmmo("LRM_Ammo",60);
+		addAmmo("SSRM_Ammo",120);
+		addAmmo("GaussRounds",15);
+	}
+	States
+	{
+	  Spawn:
+		 BROK A -1;
+	  Stop;
+	}
+}
+
+class ACAmmoDisp : MechAmmoDispenser replaces Shell
+{
+  override void DispenseInit()
+  {	
+	addAmmo("AC2_Ammo",4);
+	addAmmo("AC5_Ammo",2);
+	addAmmo("AC10_Ammo",1);
+	if(random(1,2)==2)addAmmo("AC20_Ammo",1);
+	if(random(1,2)==2)addAmmo("UAC2_Ammo",6);
+	if(random(1,2)==2)addAmmo("UAC5_Ammo",4);
+	if(random(1,4)==4)addAmmo("UAC10_Ammo",2);
+	if(random(1,4)==4)addAmmo("UAC20_Ammo",2);
+  }
+  States
+  {
+  Spawn:
+	TNT1 A 0;
+    AUTO A -1;
+    Stop;
+  }
+}
+
+
+class GaussDisp : MechAmmoDispenser replaces ShellBox
+{
+  override void DispenseInit()
+  {	
+	 addAmmo("GaussRounds",4);
+  }
+  States
+  {
+  Spawn:
+	TNT1 A 0;
+    GAUS A -1;
+    Stop;
+  }
+}
+
+class MissileAmmoDisp : MechAmmoDispenser replaces RocketAmmo
+{
+	override void DispenseInit()
+	{	
+		addAmmo("SRM_Ammo",6);
+		addAmmo("SSRM_Ammo",6);
+		addAmmo("LRM_Ammo",10);
+		if(random(1,2)==2)addAmmo("GaussRounds",2);
+	}
+	States
+	{
+	  Spawn:
+		 TNT1 A 0;
+		 MISS A -1;
+	  Stop;
+	}
+}
+
+
+
