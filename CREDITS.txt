@@ -6,8 +6,9 @@ Activision/BattleTech/Mechwarrior 2 : Mercenaries
 http://www.brickshelf.com/cgi-bin/gallery.cgi?i=5576954
 
 	- MechDoomer ZScript -
-Lewisk3 (Redxone)
-Xaser   (Argents ArgRocketReticle)
+Lewisk3    (Lead programmer)
+Xaser      (Argents ArgRocketReticle)
+Caligari87 (Mech bobbing code)
 
 	- Gutamatics math library -
  https://gitlab.com/Gutawer/gzdoom-gutamatics
