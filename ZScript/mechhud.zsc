@@ -292,7 +292,11 @@ class MechStatusBar : BaseStatusBar
 		if(CPlayer && CPlayer.mo)
 		{
 			let mech = MechWarrior(CPlayer.mo);
-			if(!mech) invalid = true;
+			if(!mech) 
+			{
+				console.printf("Failed to display HUD, unsupported player class!");
+				return;
+			}
 		}
 		if (state == HUD_StatusBar)
 		{
@@ -303,31 +307,20 @@ class MechStatusBar : BaseStatusBar
 		{
 			BeginHUD();
 			DrawMainBar (TicFrac);
-			if(CVar.GetCVar("hud_scale",CPlayer).getInt() > 1)
+			if( 
+				CVar.GetCVar("hud_scale",CPlayer).getInt() >  1 || 
+			    CVar.GetCVar("uiscale",CPlayer).getInt()   != 1 || 
+			   !CVar.GetCVar("hud_aspectscale",CPlayer).getBool()  )
 			{
-				H_DrawStringBigFont("- HUD is not being displayed correctly -",(-1600,20),0,Font.CR_DARKRED);
-				H_DrawStringBigFont(" Press Tilda(`) Then type - hud_scale 1. Alternatively - ",(-1930,60),0,Font.CR_WHITE);
-				H_DrawStringBigFont(" HUD Options->Scaling Options->Fullscreen HUD: 1",(-1930,100),0,Font.CR_WHITE);
+				invalid = true;
 			}
-			else if(!CVar.GetCVar("hud_aspectscale",CPlayer).getBool())
-			{
-				H_DrawStringBigFont("- HUD is not scaled correctly -",(-1200,0),0,Font.CR_DARKRED);
-				H_DrawStringBigFont(" Press Tilda(`) Then type - hud_aspectscale 1.",(-1300,20),0,Font.CR_WHITE);
-				H_DrawStringBigFont(" HUD Options->Scaling Options->",(-1300,40),0,Font.CR_WHITE);
-				H_DrawStringBigFont(" HUD Preserves Aspect Ratio: ON",(-1300,60),0,Font.CR_WHITE);
-			}
-			else if(CVar.GetCVar("uiscale",CPlayer).getInt() != 1)
-			{
-				H_DrawStringBigFont("- HUD is not scaled correctly -",(-1200,0),0,Font.CR_DARKRED);
-				H_DrawStringBigFont(" Press Tilda(`) Then type - uiscale 1.",(-1300,20),0,Font.CR_WHITE);
-				H_DrawStringBigFont(" HUD Options->Scaling Options->",(-1300,40),0,Font.CR_WHITE);
-				H_DrawStringBigFont(" User Interface Scale: 1",(-1300,60),0,Font.CR_WHITE);
-			}
-			if(invalid) 
-			{
-				H_DrawStringBigFont("Player class not supported!",(-1200,200),0,Font.CR_DARKRED);
-				return;
-			}
+		}
+		if(invalid)
+		{
+			console.printf("- HUD is not being displayed properly -");
+			console.printf(" Please do the following to fix it");
+			console.printf(" Customize Controls -> MechDoomer Controls");
+			console.printf(" Bind \"Fix HUD\" button.");
 		}
 	}
 	
@@ -636,11 +629,7 @@ class MechStatusBar : BaseStatusBar
 
 	void DrawFullScreenStuff (double TicFrac) 
 	{
-		if(!invalid && !automapactive)
-		{
-			console.printf("Unsupported screensize. Display -> Screensize: 11 is supported.");
-			invalid = true;
-		}
+		invalid = true;
 	}
 }
 
