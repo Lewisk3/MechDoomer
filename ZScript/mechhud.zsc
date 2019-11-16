@@ -458,6 +458,7 @@ class MechStatusBar : BaseStatusBar
 	{
 		if(CPlayer && CPlayer.mo)
 		{		
+			DrawKeys();
 			let mech = MechWarrior(CPlayer.mo);
 			if(!mech)return;	
 			
@@ -598,6 +599,32 @@ class MechStatusBar : BaseStatusBar
 		}
 		
 		//if(inHUDLoadout) drawLoadoutHUD();
+	}
+
+	void DrawKeys()
+	{
+		if(!CPlayer) return;
+		
+		bool locks[6];
+		String image;
+		for(int i = 0; i < 6; i++) locks[i] = CPlayer.mo.CheckKeys(i + 1, false, true);
+		// key 1
+		if (locks[1] && locks[4]) image = "STKEYS6";
+		else if (locks[1]) image = "STKEYS0";
+		else if (locks[4]) image = "STKEYS3";
+		H_DrawImage(image, (32, 48+32),0,(6.0,4.6));
+		// key 2
+		if (locks[2] && locks[5]) image = "STKEYS7";
+		else if (locks[2]) image = "STKEYS1";
+		else if (locks[5]) image = "STKEYS4";
+		else image = "";
+		H_DrawImage(image, (32, 96+32),0,(6.0,4.6));
+		// key 3
+		if (locks[0] && locks[3]) image = "STKEYS8";
+		else if (locks[0]) image = "STKEYS2";
+		else if (locks[3]) image = "STKEYS5";
+		else image = "";
+		H_DrawImage(image, (32, 144+32),0,(6.0,4.6));
 	}
 
 	void DrawFullScreenStuff (double TicFrac)
