@@ -461,6 +461,7 @@ class MechStatusBar : BaseStatusBar
 			DrawKeys();
 			let mech = MechWarrior(CPlayer.mo);
 			if(!mech)return;	
+			invalid = false;
 			
 			H_DrawImage(mech.hud_cockpit,(955,940+boboffs),0,(3.2,2.0));
 			if(mech.health <= 0) return;
@@ -627,9 +628,13 @@ class MechStatusBar : BaseStatusBar
 		H_DrawImage(image, (32, 144+32),0,(6.0,4.6));
 	}
 
-	void DrawFullScreenStuff (double TicFrac)
+	void DrawFullScreenStuff (double TicFrac) 
 	{
-		H_DrawString("Please switch to fullscreen HUD! (Press '+') ",(-100,-500),0,Font.CR_DARKRED);
+		if(!invalid)
+		{
+			console.printf("Unsupported screensize. Display -> Screensize: 11 is supported.");
+			invalid = true;
+		}
 	}
 }
 
