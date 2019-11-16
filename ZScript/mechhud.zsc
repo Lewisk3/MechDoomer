@@ -307,15 +307,21 @@ class MechStatusBar : BaseStatusBar
 			{
 				H_DrawStringBigFont("- HUD is not being displayed correctly -",(-1600,20),0,Font.CR_DARKRED);
 				H_DrawStringBigFont(" Press Tilda(`) Then type - hud_scale 1. Alternatively - ",(-1930,60),0,Font.CR_WHITE);
-				H_DrawStringBigFont(" Options->HUD Options->Scaling Options->Fullscreen HUD: 1",(-1930,100),0,Font.CR_WHITE);
+				H_DrawStringBigFont(" HUD Options->Scaling Options->Fullscreen HUD: 1",(-1930,100),0,Font.CR_WHITE);
 			}
 			else if(!CVar.GetCVar("hud_aspectscale",CPlayer).getBool())
 			{
 				H_DrawStringBigFont("- HUD is not scaled correctly -",(-1200,0),0,Font.CR_DARKRED);
 				H_DrawStringBigFont(" Press Tilda(`) Then type - hud_aspectscale 1.",(-1300,20),0,Font.CR_WHITE);
-				H_DrawStringBigFont(" Options->HUD Options->Scaling Options->",(-1300,40),0,Font.CR_WHITE);
+				H_DrawStringBigFont(" HUD Options->Scaling Options->",(-1300,40),0,Font.CR_WHITE);
 				H_DrawStringBigFont(" HUD Preserves Aspect Ratio: ON",(-1300,60),0,Font.CR_WHITE);
-	
+			}
+			else if(CVar.GetCVar("uiscale",CPlayer).getInt() != 1)
+			{
+				H_DrawStringBigFont("- HUD is not scaled correctly -",(-1200,0),0,Font.CR_DARKRED);
+				H_DrawStringBigFont(" Press Tilda(`) Then type - uiscale 1.",(-1300,20),0,Font.CR_WHITE);
+				H_DrawStringBigFont(" HUD Options->Scaling Options->",(-1300,40),0,Font.CR_WHITE);
+				H_DrawStringBigFont(" User Interface Scale: 1",(-1300,60),0,Font.CR_WHITE);
 			}
 			if(invalid) 
 			{
