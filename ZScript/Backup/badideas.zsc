@@ -1,125 +1,45 @@
-	
-	// Grab exact relative angle
-	angle_relative += (player.cmd.yaw/1.6) * (360./65536.);
-	angle_relative = clamp(angle_relative,LegAng - MaxYaw,LegAng + MaxYaw);
-		
-	// Lerp to new angle
-	if(angle_relative > torsoYaw) torsoYaw += torsoSpeed;
-	if(angle_relative < torsoYaw) torsoYaw -= torsoSpeed;
-	
-	// Crude voodoo "Detector"
-	ThinkerIterator voodoocheck = ThinkerIterator.Create("MechWarrior");
-	int plrinstances = 0;
-	MechWarrior plr;
-	while(plr = MechWarrior(voodoocheck.Next()))
-	{
-		if(plr)plrinstances++;
-	}
-	// Darn voodoos!
-	if(plrinstances > 1) A_Print("WARNING: Duplicate player detected, mech may behave strangly!");
-	
-
-	// A hacky attempt at using lineattack to produce a reference to the enemy it hit.
-class InformationPuff : FastProjectile
+// Weapon related utilities
+class ExtendedActorChecks : Actor
 {
-	Default
+	static bool TryTracerHit(Actor origin, Actor thing, int numrays = 40, double ang = 90, double distance = 500*64, double vrange = 32)	
 	{
-		Projectile;
-		+SEEKERMISSILE
-		+NOGRAVITY
-		Speed 100;
-	}
-	
-	States
-	{
-		Spawn:
-			TNT1 A 1;
-		loop;
-		Death:
-			TNT1 A 0 NoDelay A_SeekerMissile(0,0,SMF_LOOK,256,1);
-			TNT1 A 4;
-		stop;
-	}
-	
-}
+		FTranslatedLineTarget t;
 
-	
-	void BrokenTargetProjection(Mechwarrior mech)
-	{
-		if(mech.targetenemy)
+		// offset angles from its attack ang
+		for (int i = 0; i < numrays; i++)
 		{
-			Actor target = mech.targetenemy;
-	
-			vector3 eyepos = (mech.pos.x, mech.pos.y, mech.player.viewz);
-			float viewfov = mech.player.FOV;
-			vector3 tpos;
-			
-			for (int i = 0; i < 4; i++)
-			{
-				vector3 ofs;
-				float dir = atan2(mech.pos.y - target.pos.y, mech.pos.x - target.pos.x);
-				if (i % 2) // order should be: bottom left, bottom right, top left, top right. or it might make a swastika 
-					ofs.xy = MDMath.VRotate((-target.radius, 0),  dir);
-				else
-					ofs.xy = MDMath.VRotate((target.radius, 0),  dir);
-				if (i < 2)
-					ofs.z = target.height;
-					
-				tpos = target.pos + ofs;
-				string graphic;
-				switch (i)
-				{
-					case 0: graphic = "RETCB0"; break;
-					case 1: graphic = "RETCA0"; break;
-					case 2: graphic = "RETCD0"; break;
-					case 3: graphic = "RETCC0"; break;
-				}
-				// the following is ripped more or less from m_flak
-				vector3 tdir = Level.Vec3Diff(eyepos, tpos);
-				vector3 wpos = eyepos + tdir;
-				vector3 spos = MWD_CoordUtil.WorldToScreen(wpos, eyepos, mech.pitch, mech.angle, mech.roll, viewfov);
-				if (spos.z <= 1.0)
-				{
-					vector2 vpos = MWD_CoordUtil.ToViewport(spos);
-					DrawImage(graphic, vpos, 0);
-					console.printf("Drawing: %s [%d,%d]",graphic,vpos.x,vpos.y);
-				}
-			}	
-		}
-	}
+			double an = origin.angle - ang / 2 + ang / numrays*i;
 
-
-			fromworldpos = MWD_CoordUtil.WorldToScreen(target.pos,eyepos,mech.pitch,mech.angle,mech.roll,viewfov);
-			[screencoords, behind] = MWD_CoordUtil.toViewport(fromworldpos);
-			
-			if (-1 < fromworldpos.z && fromworldpos.z <= 1)
+			origin.AimLineAttack(an, distance, t, vrange);
+		
+			if (t.linetarget != null)
 			{
-				  // this is the coordinates where you're drawing to:
-				  if (distance == 0) { return; }
-				  //screencoords.y -= mech.viewheight; // Idek
-				  float   heightmod     = clamp(distance*0.05,0,55); 
-				  double  height        = target.height;
-				  double  radius        = target.radius;
-				  double  visibleRadius = radius * 2000.0 / distance;
-				  double  visibleHeight = height * 1000.0 / distance;
-				  Vector2 left   = (screencoords.x - visibleRadius / 2.0, screencoords.y);
-				  Vector2 right  = (screencoords.x + visibleRadius / 2.0, screencoords.y);
-				  Vector2 top    = (screencoords.x, (screencoords.y-20 - visibleHeight / 4.0) -heightmod);
-				  Vector2 bottom = (screencoords.x, (screencoords.y + visibleHeight / 4.0) -heightmod*1.25);
-				  Vector2 topLeft     = (left.x,  top.y);
-				  Vector2 topRight    = (right.x, top.y);
-				  Vector2 bottomLeft  = (left.x,  bottom.y);
-				  Vector2 bottomRight = (right.x, bottom.y);
-				
-				  DrawImage("RETCA0",topLeft,0,1.0);
-				  DrawImage("RETCB0",topRight,0,1.0);
-				  DrawImage("RETCC0",bottomLeft,0,1.0);
-				  DrawImage("RETCD0",bottomRight,0,1.0);
+				if(t.linetarget == thing) return true;
 			}
 		}
-		
-		
-		
+		return false;
+	}
+}
+
+// Grab exact relative angle
+angle_relative += (player.cmd.yaw/1.6) * (360./65536.);
+angle_relative = clamp(angle_relative,LegAng - MaxYaw,LegAng + MaxYaw);
+	
+// Lerp to new angle
+if(angle_relative > torsoYaw) torsoYaw += torsoSpeed;
+if(angle_relative < torsoYaw) torsoYaw -= torsoSpeed;
+
+// Crude voodoo "Detector"
+ThinkerIterator voodoocheck = ThinkerIterator.Create("MechWarrior");
+int plrinstances = 0;
+MechWarrior plr;
+while(plr = MechWarrior(voodoocheck.Next()))
+{
+	if(plr)plrinstances++;
+}
+// Darn voodoos!
+if(plrinstances > 1) A_Print("WARNING: Duplicate player detected, mech may behave strangly!");
+
 // :: KeyConf :: 
 	
 // Old (Deprecated) Key system.

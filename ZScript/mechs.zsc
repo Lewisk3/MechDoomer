@@ -86,7 +86,7 @@ class BattleArmor : MechWarrior_Smooth
 		MechWarrior.LegSpeed 2;
 		Mechwarrior.MoveSpeed 75;
 		MechWarrior.TwistRange 130;
-		MechWarrior.heatEff 0.40;
+		MechWarrior.heatEff 0.20;
 		MechWarrior.HudCockpit "WARHHUD";
 		MechWarrior.HudMech "ATLAICO";
 		MechWarrior.Weight 5;

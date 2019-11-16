@@ -190,7 +190,6 @@ class AntiMissileSystem : Mechbase_Utility
 }
 
 // Armor
-
 class ArmoryUtility : Inventory
 {
 	class<Inventory> type;
@@ -258,7 +257,6 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		plr.TakeInventory(getClassName(),1);
 	}
 }
-
 class EndoGreen : EndosteelBonus replaces GreenArmor 
 {
 	Default
@@ -268,12 +266,114 @@ class EndoGreen : EndosteelBonus replaces GreenArmor
 	}
 
 }
-
 class EndoBlue : EndosteelBonus replaces BlueArmor 
 {
 	Default
 	{
 		ArmoryUtility.Setup "EndosteelBonus", 60;
 		Inventory.PickupMessage "Picked up a large Endosteel component";
+	}
+}
+
+
+// Misc (WIP) 
+class Mechbay : Inventory
+{
+	Actor obj;
+
+	Default
+	{
+		Radius 12;
+		Height 4;
+		-NOBLOCKMAP;
+	}
+	
+	float point_distance(Actor one, Actor two, float scale)
+	{
+		int x = one.pos.x - two.pos.x;
+		int y = one.pos.y - two.pos.y;
+		int z = one.pos.z - two.pos.z;
+		return sqrt( x*x + y*y + z*z )/scale;
+	}
+	
+	override void Touch (Actor toucher)
+	{
+		if(!toucher.player) return;
+		let plr = MechWarrior(toucher.player.mo);
+		if(plr)obj = toucher;
+	}
+	
+	void HealMechHardpoint(Mechwarrior plr, MechHardpoint hp)
+	{
+		if(!plr) return;
+		if(hp.armor < hp.max_armor && plr.money_cbills > 20) 
+		{
+			hp.armor+=1;
+			plr.money_cbills -= 20;
+		}
+		if(hp.internalhp < hp.max_internal && plr.money_cbills > 20) 
+		{
+			hp.internalhp+=1;
+			plr.money_cbills -= 20;
+		}
+	}
+	
+	override void tick()
+	{
+		if(obj)
+		{
+			if(point_distance(obj.player.mo,self,1) > 50) 
+			{
+				obj = null;
+				return;
+			}
+			let plr = MechWarrior(obj.player.mo);
+			if(plr)
+			{
+				if(!plr.mech_shutdown)
+				{
+					plr.A_Print("Mech must be shutdown to initiate repairs.");
+				}
+				else
+				{
+					A_Print("Repairing...");
+					if(plr.money_cbills < 20){ plr.A_Print("Insufficient funds."); return; }
+					
+					// Heal mech hardpoints
+					HealMechHardpoint(plr,plr.hardpoints.hd);
+					HealMechHardpoint(plr,plr.hardpoints.ct);
+					HealMechHardpoint(plr,plr.hardpoints.lt);
+					HealMechHardpoint(plr,plr.hardpoints.rt);
+					HealMechHardpoint(plr,plr.hardpoints.la);
+					HealMechHardpoint(plr,plr.hardpoints.ra);
+					HealMechHardpoint(plr,plr.hardpoints.ll);
+					HealMechHardpoint(plr,plr.hardpoints.rl);	
+				}
+			}
+		}
+		super.tick();
+	}
+	
+	override void PostBeginPlay()
+	{
+		float xo = (cos(angle+5))*8;
+		float yo = (sin(angle+5))*8;
+		//console.printf(": %f, %f",xoffset,yoffset);
+		Vector3 lpos = (pos.x+xo,pos.y+yo,pos.z);
+		let bay = Spawn("Mechbay_3D",pos);
+		if(bay)
+		{
+			bay.target = Owner;
+			bay.pitch = pitch;
+			bay.angle = angle;
+		}
+		super.PostBeginPlay();
+	}
+	
+	States
+	{
+		Spawn:
+			MBAY A 1;
+		loop;
 	}
 }

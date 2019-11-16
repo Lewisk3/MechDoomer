@@ -159,3 +159,18 @@ class SoundEmitter : Actor
 		stop;
 	}
 }
+class MechFootstepEmitter : Actor
+{
+	Default
+	{
+		SeeSound "Mech/Footstep";
+		Speed 5;
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 1;
+		stop;
+	}
+}

@@ -1,29 +1,4 @@
 // Lasers
-
-class MediumLaser : Mechbase_Weapon
-{
-	Default
-	{
-		Mechbase_Weapon.DisplayName "MLASER";
-		Mechbase_Weapon.WeaponType "Laser_MED";
-		Mechbase_Weapon.WeaponParams 20,85;
-		Mechbase_Weapon.Tonnage 1;
-		Mechbase_Weapon.HardslotSize 1;
-		Mechbase_Weapon.CValue 3200;
-	}	
-}
-class LargeLaser : Mechbase_Weapon
-{
-	Default
-	{
-		Mechbase_Weapon.DisplayName "LLASER";
-		Mechbase_Weapon.WeaponType "Laser_LRG";
-		Mechbase_Weapon.WeaponParams 30,75;
-		Mechbase_Weapon.Tonnage 5;
-		Mechbase_Weapon.HardslotSize 2;
-		Mechbase_Weapon.CValue 5700;
-	}	
-}
 class SmallLaser : Mechbase_Weapon
 {
 	Default
@@ -36,30 +11,6 @@ class SmallLaser : Mechbase_Weapon
 		Mechbase_Weapon.CValue 2400;
 	}	
 }
-class ERMediumLaser : Mechbase_Weapon
-{
-	Default
-	{
-		Mechbase_Weapon.DisplayName "erMLAS";
-		Mechbase_Weapon.WeaponType "Laser_ERMED";
-		Mechbase_Weapon.WeaponParams 20,85;
-		Mechbase_Weapon.Tonnage 1;
-		Mechbase_Weapon.HardslotSize 1;
-		Mechbase_Weapon.CValue 4150;
-	}	
-}
-class ERLargeLaser : Mechbase_Weapon
-{
-	Default
-	{
-		Mechbase_Weapon.DisplayName "erLLAS";
-		Mechbase_Weapon.WeaponType "Laser_ERLRG";
-		Mechbase_Weapon.WeaponParams 30,75;
-		Mechbase_Weapon.Tonnage 5;
-		Mechbase_Weapon.HardslotSize 2;
-		Mechbase_Weapon.CValue 6210;
-	}	
-}
 class ERSmallLaser : Mechbase_Weapon
 {
 	Default
@@ -70,30 +21,6 @@ class ERSmallLaser : Mechbase_Weapon
 		Mechbase_Weapon.Tonnage 0.5;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 2850;
-	}	
-}
-class MediumPulseLaser : Mechbase_Weapon
-{
-	Default
-	{
-		Mechbase_Weapon.DisplayName "MPLAS";
-		Mechbase_Weapon.WeaponType "Laser_MEDP";
-		Mechbase_Weapon.WeaponParams 20,88;
-		Mechbase_Weapon.Tonnage 2;
-		Mechbase_Weapon.HardslotSize 1;
-		Mechbase_Weapon.CValue 4300;
-	}	
-}
-class LargePulseLaser : Mechbase_Weapon
-{
-	Default
-	{
-		Mechbase_Weapon.DisplayName "LPLAS";
-		Mechbase_Weapon.WeaponType "Laser_LRGP";
-		Mechbase_Weapon.WeaponParams 30,78;
-		Mechbase_Weapon.Tonnage 7;
-		Mechbase_Weapon.HardslotSize 2;
-		Mechbase_Weapon.CValue 6420;
 	}	
 }
 class SmallPulseLaser : Mechbase_Weapon
@@ -109,8 +36,81 @@ class SmallPulseLaser : Mechbase_Weapon
 	}	
 }
 
-// Energy
+class MediumLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "MLASER";
+		Mechbase_Weapon.WeaponType "Laser_MED";
+		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 3200;
+	}	
+}
+class ERMediumLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "erMLAS";
+		Mechbase_Weapon.WeaponType "Laser_ERMED";
+		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 4150;
+	}	
+}
+class MediumPulseLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "MPLAS";
+		Mechbase_Weapon.WeaponType "Laser_MEDP";
+		Mechbase_Weapon.WeaponParams 20,88;
+		Mechbase_Weapon.Tonnage 2;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 4300;
+	}	
+}
 
+class LargeLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "LLASER";
+		Mechbase_Weapon.WeaponType "Laser_LRG";
+		Mechbase_Weapon.WeaponParams 30,75;
+		Mechbase_Weapon.Tonnage 5;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 5700;
+	}	
+}
+class ERLargeLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "erLLAS";
+		Mechbase_Weapon.WeaponType "Laser_ERLRG";
+		Mechbase_Weapon.WeaponParams 30,75;
+		Mechbase_Weapon.Tonnage 5;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 6210;
+	}	
+}
+class LargePulseLaser : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "LPLAS";
+		Mechbase_Weapon.WeaponType "Laser_LRGP";
+		Mechbase_Weapon.WeaponParams 30,78;
+		Mechbase_Weapon.Tonnage 7;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 6420;
+	}	
+}
+
+// Energy
 class Flamer : Mechbase_Weapon
 {
 	Default
@@ -142,7 +142,6 @@ class PPC : Mechbase_Weapon
 		Mechbase_Weapon.CValue 10375;
 	}
 }
-
 class ERPPC : Mechbase_Weapon
 {
 	Default
@@ -343,22 +342,6 @@ class LRM20: LRM5
 }
 
 // Ballistics
-
-class GaussRifle : Mechbase_Weapon
-{
-	Default
-	{
-		Mechbase_Weapon.DisplayName "GAUSS";
-		Mechbase_Weapon.AmmoType "GaussRounds";
-		Mechbase_Weapon.WeaponType "Gauss";
-		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 10;
-		Mechbase_Weapon.Tonnage 12;
-		Mechbase_Weapon.HardslotSize 8;
-		Mechbase_Weapon.CValue 14830;
-	}
-}
-
 class MachineGun : Mechbase_Weapon
 {	
 	Default
@@ -370,7 +353,7 @@ class MachineGun : Mechbase_Weapon
 		//Mechbase_Weapon.WeaponDelay 5;
 		Mechbase_Weapon.WeaponParams 20,50;
 		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 350;
+		Mechbase_Weapon.AmmoGive 250;
 		Mechbase_Weapon.AttackSound "Ballistics/MGUN";
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
@@ -482,15 +465,29 @@ class UAutocannon20 : Autocannon20
 	}
 }
 
-// Ammos
-class GaussRounds : Ammo
+class GaussRifle : Mechbase_Weapon
 {
 	Default
 	{
-		Inventory.maxamount 100;
+		Mechbase_Weapon.DisplayName "GAUSS";
+		Mechbase_Weapon.AmmoType "GaussRounds";
+		Mechbase_Weapon.WeaponType "Gauss";
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.AmmoGive 10;
+		Mechbase_Weapon.Tonnage 12;
+		Mechbase_Weapon.HardslotSize 8;
+		Mechbase_Weapon.CValue 14830;
 	}
 }
 
+// Ammos
+class AMSAmmo : Ammo
+{
+	Default
+	{
+		inventory.maxamount 9999;
+	}
+}
 class BulletsMGun : Ammo
 {
 	Default
@@ -554,7 +551,13 @@ class UAC20_Ammo : Ammo
 		inventory.maxamount 999;
 	}
 }
-//SRM
+class GaussRounds : Ammo
+{
+	Default
+	{
+		Inventory.maxamount 100;
+	}
+}
 class SRM_Ammo : Ammo
 {
 	Default
@@ -569,52 +572,11 @@ class SSRM_Ammo : Ammo
 		inventory.maxamount 9999;
 	}
 }
-// LRM
 class LRM_Ammo : Ammo
 {
 	Default
 	{
 		inventory.maxamount 9999;
-	}
-}
-
-// Weapon related utilities
-
-class MechFootstepEmitter : Actor
-{
-	Default
-	{
-		SeeSound "Mech/Footstep";
-		Speed 5;
-	}
-	
-	States
-	{
-		Spawn:
-			TNT1 A 1;
-		stop;
-	}
-}
-
-class ExtendedActorChecks : Actor
-{
-	static bool TryTracerHit(Actor origin, Actor thing, int numrays = 40, double ang = 90, double distance = 500*64, double vrange = 32)	
-	{
-		FTranslatedLineTarget t;
-
-		// offset angles from its attack ang
-		for (int i = 0; i < numrays; i++)
-		{
-			double an = origin.angle - ang / 2 + ang / numrays*i;
-
-			origin.AimLineAttack(an, distance, t, vrange);
-		
-			if (t.linetarget != null)
-			{
-				if(t.linetarget == thing) return true;
-			}
-		}
-		return false;
 	}
 }
 
