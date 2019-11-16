@@ -630,7 +630,7 @@ class MechStatusBar : BaseStatusBar
 
 	void DrawFullScreenStuff (double TicFrac) 
 	{
-		if(!invalid)
+		if(!invalid && !automapactive)
 		{
 			console.printf("Unsupported screensize. Display -> Screensize: 11 is supported.");
 			invalid = true;
