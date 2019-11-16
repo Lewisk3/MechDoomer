@@ -14,7 +14,7 @@ LISTMENU "MainMenu"
 		//StaticPatchCentered 160, 154, "RLOGO"
 		Position 1, 1
 		Font "SMALLFONT", "ORANGE"
-		StaticText 68,50,"MechDoomer 2.18a - Alpha."
+		StaticText 68,50,"MechDoomer 2.20a - Alpha."
 }
 
 
