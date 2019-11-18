@@ -274,6 +274,10 @@ class MechWarrior : DoomPlayer
 				GiveInventory("mw_InvInfo",1);
 				inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));
 			}
+			else
+			{
+				inv_context = mw_InvInfo(invctx);
+			}
 		}
 	}
 
