@@ -169,24 +169,24 @@ class MechStatusBar : BaseStatusBar
 				super.tick();
 				return;
 			}
-			if(cashcounter != mech.money_cbills) 
+			if(cashcounter != mech.inv_context.money_cbills) 
 			{
-				int money = mech.money_cbills - cashcounter;
-				if(mech.money_cbills < cashcounter)
+				int money = mech.inv_context.money_cbills - cashcounter;
+				if(mech.inv_context.money_cbills < cashcounter)
 				{ 
 					cashcounter+= money/20; 
 					dCash.txt = money.."";
 					dCash.col = Font.CR_DARKRED;
-					if(cashcounter < mech.money_cbills) cashcounter = mech.money_cbills;
-					if(money/20 == 0) cashcounter = mech.money_cbills;
+					if(cashcounter < mech.inv_context.money_cbills) cashcounter = mech.inv_context.money_cbills;
+					if(money/20 == 0) cashcounter = mech.inv_context.money_cbills;
 				}
-				if(mech.money_cbills > cashcounter)
+				if(mech.inv_context.money_cbills > cashcounter)
 				{ 
 					cashcounter+= money/20; 
 					dCash.txt = "+" .. money;
 					dCash.col = Font.CR_GREEN;
-					if(cashcounter > mech.money_cbills) cashcounter = mech.money_cbills;
-					if(money/20 == 0) cashcounter = mech.money_cbills;
+					if(cashcounter > mech.inv_context.money_cbills) cashcounter = mech.inv_context.money_cbills;
+					if(money/20 == 0) cashcounter = mech.inv_context.money_cbills;
 				}
 				
 			}
@@ -235,9 +235,9 @@ class MechStatusBar : BaseStatusBar
 			// Special exclusive weapon drawing for a struct!
 			
 			int amsid=1;
-			for(int i = 0; i < mech.mechstructs.Size(); i++)
+			for(int i = 0; i < mech.inv_context.mechstructs.Size(); i++)
 			{
-				String cname = mech.mechstructs[i];
+				String cname = mech.inv_context.mechstructs[i].Tag;
 				cname.ToLower();
 				if(cname == "antimissilesystem")
 				{
@@ -460,6 +460,8 @@ class MechStatusBar : BaseStatusBar
 			DrawKeys();
 			let mech = MechWarrior(CPlayer.mo);
 			if(!mech)return;	
+			if(!mech.inv_context) return;
+			
 			invalid = false;
 			
 			H_DrawImage(mech.hud_cockpit,(955,940+boboffs),0,(3.2,2.0));
@@ -516,57 +518,57 @@ class MechStatusBar : BaseStatusBar
 
 			H_DrawImage(mech.hud_mech.."A",(750+795,90+720),0,(1,0.8));
 			
-			float hd_dmg = GetHardpointVitalRatio(mech.hardpoints.hd);
-			float ct_dmg = GetHardpointVitalRatio(mech.hardpoints.ct);
-			float lt_dmg = GetHardpointVitalRatio(mech.hardpoints.lt);
-			float rt_dmg = GetHardpointVitalRatio(mech.hardpoints.rt);
-			float la_dmg = GetHardpointVitalRatio(mech.hardpoints.la);
-			float ra_dmg = GetHardpointVitalRatio(mech.hardpoints.ra);
-			float ll_dmg = GetHardpointVitalRatio(mech.hardpoints.rl);
-			float rl_dmg = GetHardpointVitalRatio(mech.hardpoints.ll);
+			float hd_dmg = GetHardpointVitalRatio(mech.inv_context.hardpoints.hd);
+			float ct_dmg = GetHardpointVitalRatio(mech.inv_context.hardpoints.ct);
+			float lt_dmg = GetHardpointVitalRatio(mech.inv_context.hardpoints.lt);
+			float rt_dmg = GetHardpointVitalRatio(mech.inv_context.hardpoints.rt);
+			float la_dmg = GetHardpointVitalRatio(mech.inv_context.hardpoints.la);
+			float ra_dmg = GetHardpointVitalRatio(mech.inv_context.hardpoints.ra);
+			float ll_dmg = GetHardpointVitalRatio(mech.inv_context.hardpoints.rl);
+			float rl_dmg = GetHardpointVitalRatio(mech.inv_context.hardpoints.ll);
 			
-			//console.printf("%f :> %d",ct_dmg,mech.hardpoints.ct.armor+mech.hardpoints.ct.internalhp);
+			//console.printf("%f :> %d",ct_dmg,mech.inv_context.hardpoints.ct.armor+mech.inv_context.hardpoints.ct.internalhp);
 			
 			String concat = "B";
 			
 			// Center torso
-			if(mech.hardpoints.hd.internalhp+mech.hardpoints.ct.internalhp <= 0) concat = "C";
+			if(mech.inv_context.hardpoints.hd.internalhp+mech.inv_context.hardpoints.ct.internalhp <= 0) concat = "C";
 			H_SetClipRect(1450+hudmech_size.x/3, 645, hudmech_size.x/7,hudmech_size.y/2);
 			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),hd_dmg+ct_dmg);
 			ClearClipRect();
 			// Left torso
 			concat = "B";
-			if(mech.hardpoints.lt.internalhp <=0 ) concat = "C";
+			if(mech.inv_context.hardpoints.lt.internalhp <=0 ) concat = "C";
 			H_SetClipRect(1450+hudmech_size.x/4, 645, hudmech_size.x/12,hudmech_size.y/2);
 			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),lt_dmg);
 			ClearClipRect();
 			// Right torso
 			concat = "B";
-			if(mech.hardpoints.rt.internalhp <=0) concat = "C";
+			if(mech.inv_context.hardpoints.rt.internalhp <=0) concat = "C";
 			H_SetClipRect(1450+hudmech_size.x/2.1, 645, hudmech_size.x/13,hudmech_size.y/2);
 			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),rt_dmg);
 			ClearClipRect();
 			// Left arm
 			concat = "B";
-			if(mech.hardpoints.la.internalhp <=0) concat = "C";
+			if(mech.inv_context.hardpoints.la.internalhp <=0) concat = "C";
 			H_SetClipRect(1450, 645+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
 			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),la_dmg);
 			ClearClipRect();
 			// Right arm
 			concat = "B";
-			if(mech.hardpoints.ra.internalhp <=0) concat = "C";
+			if(mech.inv_context.hardpoints.ra.internalhp <=0) concat = "C";
 			H_SetClipRect(1450+hudmech_size.x/1.8, 645+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
 			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),ra_dmg);
 			ClearClipRect();
 			// Left leg
 			concat = "B";
-			if(mech.hardpoints.ll.internalhp <=0) concat = "C";
+			if(mech.inv_context.hardpoints.ll.internalhp <=0) concat = "C";
 			H_SetClipRect(1450+hudmech_size.x/2, 645+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
 			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),rl_dmg);
 			ClearClipRect();
 			// Right leg
 			concat = "B";
-			if(mech.hardpoints.rl.internalhp <=0) concat = "C";
+			if(mech.inv_context.hardpoints.rl.internalhp <=0) concat = "C";
 			H_SetClipRect(1450+hudmech_size.x/5.9, 645+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
 			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),ll_dmg);
 			ClearClipRect();

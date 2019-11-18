@@ -178,7 +178,7 @@ class MechDoomerEvents : EventHandler
 		if(plr)
 		{
 			// Process mechlab netevents
-			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
+			if(netcmd == "kill mech") { plr.inv_context.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
 			if(netcmd == "equip_invweap") plr.equipWeaponInv(e.Args[0]+1,plr.getHardpointPos(e.Args[1]),1);
 			if(netcmd == "move_weapinv" ) plr.moveWeaponToInv(e.Args[0]);
@@ -187,11 +187,11 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "sort_inv") plr.sortWeaponInv();
 			if(netcmd == "remove_inv")
 			{
-				class<Mechbase_Weapon>  witem = plr.weapon_items[e.Args[0]];
-				class<Mechbase_Utility> uitem = plr.weapon_items[e.Args[0]];
+				class<Mechbase_Weapon>  witem = plr.inv_context.weapon_items[e.Args[0]];
+				class<Mechbase_Utility> uitem = plr.inv_context.weapon_items[e.Args[0]];
 				if(uitem) plr.adjustMoney(GetDefaultByType(uitem).worth);
 				if(witem) plr.adjustMoney(GetDefaultByType(witem).worth);
-				plr.weapon_items.delete(e.Args[0]);
+				plr.inv_context.weapon_items.delete(e.Args[0]);
 			}
 		
 			if(netcmd == "+mwd_user5")plr.btn_userfive = true;

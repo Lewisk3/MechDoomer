@@ -311,7 +311,7 @@ class Mechlab_Menu : GenericMenu
 	
 	void drawMechlabInfo()
 	{
-		String weapston = (mechplr.weapons_tonnage .. "");
+		String weapston = (mechplr.inv_context.weapons_tonnage .. "");
 		String mechston = (mechplr.mech_tonnage .. "");
 		String heateff = mechplr.HeatEfficiency .. "";
 		String maxspd = mechplr.MoveSpeedKPH .. "";
@@ -338,7 +338,7 @@ class Mechlab_Menu : GenericMenu
 		
 
 		if(mstats.scroll == -1 && invoffset-1 > -1){ mstats.scroll = 0;  invoffset--; }
-		if(mstats.scroll ==  1 && invoffset+40 < mechplr.weapon_items.Size()){ mstats.scroll = 0;  invoffset++; }
+		if(mstats.scroll ==  1 && invoffset+40 < mechplr.inv_context.weapon_items.Size()){ mstats.scroll = 0;  invoffset++; }
 		if( mstats.left_btn )
 		{
 			if( !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
@@ -372,7 +372,7 @@ class Mechlab_Menu : GenericMenu
 				MechDoomerEvents.SendNetworkEvent("movestruct_weapinv",struc_weapselected);
 				struc_weapselected = -1;
 			}
-			if(checkCollision(mouse,equipbtn) && loadm_invselected > -1 && mechplr.weapon_items.Size() > 0) 
+			if(checkCollision(mouse,equipbtn) && loadm_invselected > -1 && mechplr.inv_context.weapon_items.Size() > 0) 
 			{
 				MechDoomerEvents.SendNetworkEvent("equip_invweap",loadm_invselected,hardpoint);
 				loadm_invselected = -1;
@@ -397,9 +397,9 @@ class Mechlab_Menu : GenericMenu
 			detailpos = (330,160);
 			if(struc_invselected > -1)
 			{
-				class<Mechbase_Utility> util = mechplr.weapon_items[struc_invselected];
-				class<Heatsink> hsink = mechplr.weapon_items[struc_invselected];
-				class<JumpJet> jjet = mechplr.weapon_items[struc_invselected];
+				class<Mechbase_Utility> util = mechplr.inv_context.weapon_items[struc_invselected];
+				class<Heatsink> hsink = mechplr.inv_context.weapon_items[struc_invselected];
+				class<JumpJet> jjet = mechplr.inv_context.weapon_items[struc_invselected];
 				if(!util) {struc_invselected=-1; return;}
 				H_DrawString("Name: " .. util.getClassName(), detailpos);
 				String wtons = GetDefaultByType(util).weight .. "";
@@ -420,9 +420,9 @@ class Mechlab_Menu : GenericMenu
 				}
 				H_DrawString("CBill Value: " .. GetDefaultByType(util).worth ,(detailpos.x,detailpos.y+linesize*4));
 			}
-			if(loadm_invselected > -1 && mechplr.weapon_items.Size() > 0)
+			if(loadm_invselected > -1 && mechplr.inv_context.weapon_items.Size() > 0)
 			{
-				String invtype = mechplr.weapon_items[loadm_invselected];
+				String invtype = mechplr.inv_context.weapon_items[loadm_invselected];
 				Class<Mechbase_Weapon> invweap = invtype;
 				if(!invweap) {loadm_invselected=-1; return;}
 				H_DrawString("Name: " .. invtype,detailpos);
@@ -439,9 +439,9 @@ class Mechlab_Menu : GenericMenu
 			detailpos = (330,160);
 			if(struc_weapselected > -1)
 			{
-				class<Mechbase_Utility> util = mechplr.mechstructs[struc_weapselected];
-				class<Heatsink> hsink = mechplr.mechstructs[struc_weapselected];
-				class<JumpJet> jjet = mechplr.mechstructs[struc_weapselected];
+				class<Mechbase_Utility> util = mechplr.inv_context.mechstructs[struc_weapselected].Tag;
+				class<Heatsink> hsink = mechplr.inv_context.mechstructs[struc_weapselected].Tag;
+				class<JumpJet> jjet = mechplr.inv_context.mechstructs[struc_weapselected].Tag;
 				H_DrawString("Name: " .. util.getClassName() ,detailpos);
 				String wtons = GetDefaultByType(util).weight .. "";
 				wtons.truncate(wtons.Length()-4);
@@ -473,24 +473,25 @@ class Mechlab_Menu : GenericMenu
 			}
 		}
 		if(invoffset > 0)H_DrawTexture(tInv_ArrowUp,(1550,-500),0,(0.9,0.7));
-		if(invoffset+40 < mechplr.weapon_items.Size())H_DrawTexture(tInv_ArrowDown,(1550,-472),0,(0.9,0.7));
+		if(invoffset+40 < mechplr.inv_context.weapon_items.Size())H_DrawTexture(tInv_ArrowDown,(1550,-472),0,(0.9,0.7));
 	}
 	
 	
 	void drawInventory(int px, int py, int start, int max)
 	{
-		max = start+max > mechplr.weapon_items.Size() ? mechplr.weapon_items.Size() : start+max;
+		max = start+max > mechplr.inv_context.weapon_items.Size() ? mechplr.inv_context.weapon_items.Size() : start+max;
 		for(int i = start; i < max; i++)
 		{
-			class<Mechbase_Weapon> mw = mechplr.weapon_items[i];
-			class<Mechbase_Utility> ut = mechplr.weapon_items[i];
+			String weapname = mechplr.inv_context.weapon_items[i];
+			class<Mechbase_Weapon> mw  = weapname;
+			class<Mechbase_Utility> ut = weapname;
 			if(ut)
 			{
 				int fcr = Font.CR_DARKGRAY;
 				int sely = (i-start)*20;
 				int slots =  GetDefaultByType(ut).hardslots;
 				Rect checkmouse;
-				initRect(checkmouse,px-55,py+((i-start)*24)+25,14*(mechplr.weapon_items[i].Length()+3),15);
+				initRect(checkmouse,px-55,py+((i-start)*24)+25,14*(weapname.Length()+3),15);
 				//drawRect(checkmouse,debug_color);
 				if(mstats.left_btn && checkCollision(mouse,checkmouse) && GetDefaultByType(ut).moveable)
 				{ 
@@ -498,7 +499,7 @@ class Mechlab_Menu : GenericMenu
 					struc_invselected = i; 
 				}
 				if(i == struc_invselected) { fcr = Font.CR_SAPPHIRE; }
-				H_DrawString(mechplr.weapon_items[i] .. "(#"..slots..")", (px-68,py+sely),0,fcr);	
+				H_DrawString(weapname .. "(#"..slots..")", (px-68,py+sely),0,fcr);	
 				if(!GetDefaultByType(ut).moveable)H_DrawString("ERROR: Immoveable Item!", (px-68,py+sely),0,Font.CR_DARKRED);	
 			}
 			if(mw)
@@ -507,11 +508,11 @@ class Mechlab_Menu : GenericMenu
 				int sely = (i-start)*20;
 				int slots =  GetDefaultByType(mw).hardslots;
 				Rect checkmouse;
-				initRect(checkmouse,px-55,py+((i-start)*24)+25,14*(mechplr.weapon_items[i].Length()+3),15);
+				initRect(checkmouse,px-55,py+((i-start)*24)+25,14*(weapname.Length()+3),15);
 				//drawRect(checkmouse,debug_color);
 				if(mstats.left_btn && checkCollision(mouse,checkmouse)) { loadm_invselected=i; struc_invselected = -1; }
-				if(i == loadm_invselected) { fcr = Font.CR_DARKRED; loadout_invweapon = mechplr.weapon_items[i]; }
-				H_DrawString(mechplr.weapon_items[i] .. "(#"..slots..")", (px-68,py+sely),0,fcr);
+				if(i == loadm_invselected) { fcr = Font.CR_DARKRED; loadout_invweapon = weapname; }
+				H_DrawString(weapname .. "(#"..slots..")", (px-68,py+sely),0,fcr);
 			}
 		}
 	}
@@ -536,13 +537,13 @@ class Mechlab_Menu : GenericMenu
 		offsy = 0;
 		offsx = 0; // Used for hitbox offsets here.
 		int wind = 0;
-		for(int i = 0; i < mechplr.mechstructs.Size(); i++)
+		for(int i = 0; i < mechplr.inv_context.mechstructs.Size(); i++)
 		{
-			class<Mechbase_Utility> ut = mechplr.mechstructs[i];
+			class<Mechbase_Utility> ut = mechplr.inv_context.mechstructs[i].Tag;
 			if(ut)
 			{
 				let def_ut = GetDefaultByType(ut);
-				if(mechplr.mechstructs_x[i] == pos.x && mechplr.mechstructs_y[i] == pos.y)
+				if(mechplr.inv_context.mechstructs[i].pos == pos)
 				{
 					int fcr = Font.CR_DARKGRAY;
 					for(int s = 0; s < def_ut.hardslots; s++)
@@ -621,7 +622,7 @@ class Mechlab_Menu : GenericMenu
 		// Draw Utils
 		DrawArmorUtilites(1220,170);
 		
-		String weapston = (mechplr.weapons_tonnage .. "");
+		String weapston = (mechplr.inv_context.weapons_tonnage .. "");
 		String mechston = (mechplr.mech_tonnage .. "");
 		String heateff = mechplr.HeatEfficiency .. "";
 		String maxspd = mechplr.MoveSpeedKPH .. "";
@@ -637,41 +638,41 @@ class Mechlab_Menu : GenericMenu
 		// removed from view.
 		float curarmor, maxarmor, curinternal, maxinternal;
 		{
-			curarmor += mechplr.hardpoints.hd.armor;
-			curarmor += mechplr.hardpoints.ct.armor;
-			curarmor += mechplr.hardpoints.lt.armor;
-			curarmor += mechplr.hardpoints.rt.armor;
-			curarmor += mechplr.hardpoints.la.armor;
-			curarmor += mechplr.hardpoints.ra.armor;
-			curarmor += mechplr.hardpoints.ll.armor;
-			curarmor += mechplr.hardpoints.rl.armor;
+			curarmor += mechplr.inv_context.hardpoints.hd.armor;
+			curarmor += mechplr.inv_context.hardpoints.ct.armor;
+			curarmor += mechplr.inv_context.hardpoints.lt.armor;
+			curarmor += mechplr.inv_context.hardpoints.rt.armor;
+			curarmor += mechplr.inv_context.hardpoints.la.armor;
+			curarmor += mechplr.inv_context.hardpoints.ra.armor;
+			curarmor += mechplr.inv_context.hardpoints.ll.armor;
+			curarmor += mechplr.inv_context.hardpoints.rl.armor;
 			
-			maxarmor += mechplr.hardpoints.hd.max_armor;
-			maxarmor += mechplr.hardpoints.ct.max_armor;
-			maxarmor += mechplr.hardpoints.lt.max_armor;
-			maxarmor += mechplr.hardpoints.rt.max_armor;
-			maxarmor += mechplr.hardpoints.la.max_armor;
-			maxarmor += mechplr.hardpoints.ra.max_armor;
-			maxarmor += mechplr.hardpoints.ll.max_armor;
-			maxarmor += mechplr.hardpoints.rl.max_armor;
+			maxarmor += mechplr.inv_context.hardpoints.hd.max_armor;
+			maxarmor += mechplr.inv_context.hardpoints.ct.max_armor;
+			maxarmor += mechplr.inv_context.hardpoints.lt.max_armor;
+			maxarmor += mechplr.inv_context.hardpoints.rt.max_armor;
+			maxarmor += mechplr.inv_context.hardpoints.la.max_armor;
+			maxarmor += mechplr.inv_context.hardpoints.ra.max_armor;
+			maxarmor += mechplr.inv_context.hardpoints.ll.max_armor;
+			maxarmor += mechplr.inv_context.hardpoints.rl.max_armor;
 			
-			curinternal += mechplr.hardpoints.hd.internalhp;
-			curinternal += mechplr.hardpoints.ct.internalhp;
-			curinternal += mechplr.hardpoints.lt.internalhp;
-			curinternal += mechplr.hardpoints.rt.internalhp;
-			curinternal += mechplr.hardpoints.la.internalhp;
-			curinternal += mechplr.hardpoints.ra.internalhp;
-			curinternal += mechplr.hardpoints.ll.internalhp;
-			curinternal += mechplr.hardpoints.rl.internalhp;
+			curinternal += mechplr.inv_context.hardpoints.hd.internalhp;
+			curinternal += mechplr.inv_context.hardpoints.ct.internalhp;
+			curinternal += mechplr.inv_context.hardpoints.lt.internalhp;
+			curinternal += mechplr.inv_context.hardpoints.rt.internalhp;
+			curinternal += mechplr.inv_context.hardpoints.la.internalhp;
+			curinternal += mechplr.inv_context.hardpoints.ra.internalhp;
+			curinternal += mechplr.inv_context.hardpoints.ll.internalhp;
+			curinternal += mechplr.inv_context.hardpoints.rl.internalhp;
 			
-			maxinternal += mechplr.hardpoints.hd.max_internal;
-			maxinternal += mechplr.hardpoints.ct.max_internal;
-			maxinternal += mechplr.hardpoints.lt.max_internal;
-			maxinternal += mechplr.hardpoints.rt.max_internal;
-			maxinternal += mechplr.hardpoints.la.max_internal;
-			maxinternal += mechplr.hardpoints.ra.max_internal;
-			maxinternal += mechplr.hardpoints.ll.max_internal;
-			maxinternal += mechplr.hardpoints.rl.max_internal;
+			maxinternal += mechplr.inv_context.hardpoints.hd.max_internal;
+			maxinternal += mechplr.inv_context.hardpoints.ct.max_internal;
+			maxinternal += mechplr.inv_context.hardpoints.lt.max_internal;
+			maxinternal += mechplr.inv_context.hardpoints.rt.max_internal;
+			maxinternal += mechplr.inv_context.hardpoints.la.max_internal;
+			maxinternal += mechplr.inv_context.hardpoints.ra.max_internal;
+			maxinternal += mechplr.inv_context.hardpoints.ll.max_internal;
+			maxinternal += mechplr.inv_context.hardpoints.rl.max_internal;
 		}
 		
 		string armorpercent = (curarmor/maxarmor * 100).."";
@@ -696,10 +697,10 @@ class Mechlab_Menu : GenericMenu
 		H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+100));
 		H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+120));
 		
-		float cbills_remain = mechplr.money_cbills-repair_cost;
+		float cbills_remain = mechplr.inv_context.money_cbills-repair_cost;
 		if(cbills_remain < 0) cbills_remain = 0;
 		
-		H_DrawString("Funds: ".. mechplr.money_cbills, cbillpos);
+		H_DrawString("Funds: ".. mechplr.inv_context.money_cbills, cbillpos);
 		H_DrawString("Price: ".. repair_cost, (cbillpos.x, cbillpos.y+20) );
 		H_DrawString("Bal: ".. int(cbills_remain), (cbillpos.x, cbillpos.y+40) );
 		

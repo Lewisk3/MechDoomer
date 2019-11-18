@@ -140,6 +140,28 @@ struct HudAlert
 	int col;
 }
 
+class mw_InvStruct
+{
+	string Tag;
+	vector2 pos;
+}
+
+class mw_InvInfo : Inventory
+{
+	
+	MechHardpoints hardpoints;
+	Array<String> weapon_items; // Stores all mech items before they go into the inventory.
+	Array<mw_InvStruct> mechstructs;  // These are equipped structs.
+	
+	int money_cbills;			// moneys
+	float weapons_tonnage;		// How much weapons weigh.
+		
+	Default
+	{
+		inventory.maxamount 1;
+	}
+}
+
 class MechWarrior : DoomPlayer
 {
 	/* 
@@ -148,19 +170,12 @@ class MechWarrior : DoomPlayer
 	*/
 
 	// Volatile pointers
+	mw_InvInfo inv_context;
 	Actor targetenemy;
 	Actor prevlock;
 	MechTargetReticle targetreticle;
-	MechHardpoints hardpoints;
 	HudAlert hAlert;
 	SoundQueue mechsounds;
-	
-	// Intrinsic Arrays
-	Array<String> weapon_items; // Stores all mech items before they go into the inventory.
-	Array<String> mechstructs;  // These are equipped structs.
-	Array<Int> mechstructs_x;   // Can't create struct dynarray. hardpoint x.
-	Array<Int> mechstructs_y;   // Can't create sturct dynarray. hardpoint y
-
 
 	// Volatile ints
 	int selectedGroup;
@@ -168,15 +183,14 @@ class MechWarrior : DoomPlayer
 	int weapons;
 	int ticks;
 	int prevticks;
-	int money_cbills; 			// (Special case, gets moved between mechs; Context dependant volatility)
 	int shutdown_timer;
 	int Mech_JetCount;
 	int ams_timer;
 	int maxgroup;
 	int boblendir;
 	
-	
 	// Intrinsic floats
+	float mech_tonnage;
 	float baseHeatEfficiency;
 	float LegSpeed;
 	float MaxYaw;
@@ -184,7 +198,6 @@ class MechWarrior : DoomPlayer
 	float LookSpeed;
 	float MoveSpeedKPH;
 	float pitchRange;
-	float mech_tonnage;
 	float enginesize;
 	
 	// Volatile floats
@@ -205,7 +218,6 @@ class MechWarrior : DoomPlayer
 	float mech_jetsfuel;
 	float defaultfov;
 	float boblength;
-	float weapons_tonnage;
 	float locktimer;
 	float overfactor;
 	float rolloffs;
@@ -252,6 +264,19 @@ class MechWarrior : DoomPlayer
 	Property OverTonnage: overtonnage;
 	
 
+	void setupInvContext()
+	{
+		if(!inv_context)
+		{
+			let invctx = FindInventory("mw_InvInfo");
+			if(!invctx)
+			{
+				GiveInventory("mw_InvInfo",1);
+				inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));
+			}
+		}
+	}
+
 	clearscope void sendHudAlert(String str, int c)
 	{
 		hAlert.text = str;
@@ -279,96 +304,96 @@ class MechWarrior : DoomPlayer
 	
 	void adjustMoney(int amt)
 	{
-		money_cbills += amt;
+		inv_context.money_cbills += amt;
 	}
 	
 	// Setup weapon location hardpoints and hardpoint slots.
 	void setupHardpoints(Vector2 hd, Vector2 ct, Vector2 rt, Vector2 lt, Vector2 la, Vector2 ra, Vector2 ll, Vector2 rl)
 	{
-		hardpoints.hd.pos = hd;
-		hardpoints.ct.pos = ct;
-		hardpoints.lt.pos = lt;
-		hardpoints.rt.pos = rt;
-		hardpoints.la.pos = la;
-		hardpoints.ra.pos = ra;
-		hardpoints.ll.pos = ll;
-		hardpoints.rl.pos = rl;
+		inv_context.hardpoints.hd.pos = hd;
+		inv_context.hardpoints.ct.pos = ct;
+		inv_context.hardpoints.lt.pos = lt;
+		inv_context.hardpoints.rt.pos = rt;
+		inv_context.hardpoints.la.pos = la;
+		inv_context.hardpoints.ra.pos = ra;
+		inv_context.hardpoints.ll.pos = ll;
+		inv_context.hardpoints.rl.pos = rl;
 	}
 	
 	void setupHardpointVitals(int hda,int cta,int lta,int rta,int laa,int raa,int lla,int rla,int hdi,int cti,int lti,int rti,int lai,int rai,int lli,int rli)
 	{
 		// This looks really messy but idk what else i can do.
-		hardpoints.hd.max_armor = hda;
-		hardpoints.ct.max_armor = cta;
-		hardpoints.lt.max_armor = lta;
-		hardpoints.rt.max_armor = rta;
-		hardpoints.la.max_armor = laa;
-		hardpoints.ra.max_armor = raa;
-		hardpoints.ll.max_armor = lla;
-		hardpoints.rl.max_armor = rla;
-		hardpoints.hd.armor = hda;
-		hardpoints.ct.armor = cta;
-		hardpoints.lt.armor = lta;
-		hardpoints.rt.armor = rta;
-		hardpoints.la.armor = laa;
-		hardpoints.ra.armor = raa;
-		hardpoints.ll.armor = lla;
-		hardpoints.rl.armor = rla;
-		hardpoints.hd.max_internal = hdi;
-		hardpoints.ct.max_internal = cti;
-		hardpoints.lt.max_internal = lti;
-		hardpoints.rt.max_internal = rti;
-		hardpoints.la.max_internal = lai;
-		hardpoints.ra.max_internal = rai;
-		hardpoints.ll.max_internal = lli;
-		hardpoints.rl.max_internal = rli;
-		hardpoints.hd.internalhp = hdi;
-		hardpoints.ct.internalhp = cti;
-		hardpoints.lt.internalhp = lti;
-		hardpoints.rt.internalhp = rti;
-		hardpoints.la.internalhp = lai;
-		hardpoints.ra.internalhp = rai;
-		hardpoints.ll.internalhp = lli;
-		hardpoints.rl.internalhp = rli;
+		inv_context.hardpoints.hd.max_armor = hda;
+		inv_context.hardpoints.ct.max_armor = cta;
+		inv_context.hardpoints.lt.max_armor = lta;
+		inv_context.hardpoints.rt.max_armor = rta;
+		inv_context.hardpoints.la.max_armor = laa;
+		inv_context.hardpoints.ra.max_armor = raa;
+		inv_context.hardpoints.ll.max_armor = lla;
+		inv_context.hardpoints.rl.max_armor = rla;
+		inv_context.hardpoints.hd.armor = hda;
+		inv_context.hardpoints.ct.armor = cta;
+		inv_context.hardpoints.lt.armor = lta;
+		inv_context.hardpoints.rt.armor = rta;
+		inv_context.hardpoints.la.armor = laa;
+		inv_context.hardpoints.ra.armor = raa;
+		inv_context.hardpoints.ll.armor = lla;
+		inv_context.hardpoints.rl.armor = rla;
+		inv_context.hardpoints.hd.max_internal = hdi;
+		inv_context.hardpoints.ct.max_internal = cti;
+		inv_context.hardpoints.lt.max_internal = lti;
+		inv_context.hardpoints.rt.max_internal = rti;
+		inv_context.hardpoints.la.max_internal = lai;
+		inv_context.hardpoints.ra.max_internal = rai;
+		inv_context.hardpoints.ll.max_internal = lli;
+		inv_context.hardpoints.rl.max_internal = rli;
+		inv_context.hardpoints.hd.internalhp = hdi;
+		inv_context.hardpoints.ct.internalhp = cti;
+		inv_context.hardpoints.lt.internalhp = lti;
+		inv_context.hardpoints.rt.internalhp = rti;
+		inv_context.hardpoints.la.internalhp = lai;
+		inv_context.hardpoints.ra.internalhp = rai;
+		inv_context.hardpoints.ll.internalhp = lli;
+		inv_context.hardpoints.rl.internalhp = rli;
 	}
 	
 	void setupHardpointSlots(int hds=10,int cts=12,int rts=12, int lts=12, int las=12,int ras=12, int lls=2,int rls=2)
 	{
-		hardpoints.hd.maxslots = hds;
-		hardpoints.hd.slots = getWeaponSlotsUsed(hardpoints.hd.pos);
-		hardpoints.ct.maxslots = cts;
-		hardpoints.ct.slots = getWeaponSlotsUsed(hardpoints.ct.pos);
-		hardpoints.rt.maxslots = rts;
-		hardpoints.rt.slots = getWeaponSlotsUsed(hardpoints.rt.pos);
-		hardpoints.lt.maxslots = lts;
-		hardpoints.lt.slots = getWeaponSlotsUsed(hardpoints.lt.pos);
-		hardpoints.la.maxslots= las;
-		hardpoints.la.slots = getWeaponSlotsUsed(hardpoints.la.pos);
-		hardpoints.ra.maxslots = ras;
-		hardpoints.ra.slots = getWeaponSlotsUsed(hardpoints.ra.pos);
-		hardpoints.ll.maxslots = lls;
-		hardpoints.ll.slots = getWeaponSlotsUsed(hardpoints.ll.pos);
-		hardpoints.rl.maxslots = rls;
-		hardpoints.rl.slots = getWeaponSlotsUsed(hardpoints.rl.pos);
+		inv_context.hardpoints.hd.maxslots = hds;
+		inv_context.hardpoints.hd.slots = getWeaponSlotsUsed(inv_context.hardpoints.hd.pos);
+		inv_context.hardpoints.ct.maxslots = cts;
+		inv_context.hardpoints.ct.slots = getWeaponSlotsUsed(inv_context.hardpoints.ct.pos);
+		inv_context.hardpoints.rt.maxslots = rts;
+		inv_context.hardpoints.rt.slots = getWeaponSlotsUsed(inv_context.hardpoints.rt.pos);
+		inv_context.hardpoints.lt.maxslots = lts;
+		inv_context.hardpoints.lt.slots = getWeaponSlotsUsed(inv_context.hardpoints.lt.pos);
+		inv_context.hardpoints.la.maxslots= las;
+		inv_context.hardpoints.la.slots = getWeaponSlotsUsed(inv_context.hardpoints.la.pos);
+		inv_context.hardpoints.ra.maxslots = ras;
+		inv_context.hardpoints.ra.slots = getWeaponSlotsUsed(inv_context.hardpoints.ra.pos);
+		inv_context.hardpoints.ll.maxslots = lls;
+		inv_context.hardpoints.ll.slots = getWeaponSlotsUsed(inv_context.hardpoints.ll.pos);
+		inv_context.hardpoints.rl.maxslots = rls;
+		inv_context.hardpoints.rl.slots = getWeaponSlotsUsed(inv_context.hardpoints.rl.pos);
 		// Setup criticals
 		if(MoveSpeedKPH > 64)
 		{
-			equipStruct("StructEngine",hardpoints.lt.pos);
-			equipStruct("StructEngine",hardpoints.rt.pos);	
+			equipStruct("StructEngine",inv_context.hardpoints.lt.pos);
+			equipStruct("StructEngine",inv_context.hardpoints.rt.pos);	
 		}
-		if(MoveSpeedKPH > 81) equipStruct("StructEngine",hardpoints.ct.pos);	
-		equipStruct("StructGyro",hardpoints.hd.pos);
-		equipStruct("StructLifesupport",hardpoints.hd.pos);
-		equipStruct("StructSensors",hardpoints.hd.pos);
-		equipStruct("StructCockpit",hardpoints.hd.pos);
-		equipStruct("StructHip",hardpoints.lt.pos);
-		equipStruct("StructHip",hardpoints.rt.pos);
-		equipStruct("StructActuator",hardpoints.la.pos);
-		equipStruct("StructActuator",hardpoints.ra.pos);
-		equipStruct("StructEngine",hardpoints.ct.pos);
-		equipStruct("StructEngine",hardpoints.ct.pos);
-		equipStruct("StructGyro",hardpoints.ct.pos);
-		equipStruct("StructGyro",hardpoints.ct.pos);
+		if(MoveSpeedKPH > 81) equipStruct("StructEngine",inv_context.hardpoints.ct.pos);	
+		equipStruct("StructGyro",inv_context.hardpoints.hd.pos);
+		equipStruct("StructLifesupport",inv_context.hardpoints.hd.pos);
+		equipStruct("StructSensors",inv_context.hardpoints.hd.pos);
+		equipStruct("StructCockpit",inv_context.hardpoints.hd.pos);
+		equipStruct("StructHip",inv_context.hardpoints.lt.pos);
+		equipStruct("StructHip",inv_context.hardpoints.rt.pos);
+		equipStruct("StructActuator",inv_context.hardpoints.la.pos);
+		equipStruct("StructActuator",inv_context.hardpoints.ra.pos);
+		equipStruct("StructEngine",inv_context.hardpoints.ct.pos);
+		equipStruct("StructEngine",inv_context.hardpoints.ct.pos);
+		equipStruct("StructGyro",inv_context.hardpoints.ct.pos);
+		equipStruct("StructGyro",inv_context.hardpoints.ct.pos);
 	}
 	
 	void DestroyHardpointItems(MechHardpoint hp, bool recurse=true)
@@ -392,24 +417,22 @@ class MechWarrior : DoomPlayer
 	
 	void DestroyHardpointStructs(MechHardpoint hp, bool recurse=true)
 	{
-		for(int i = 0; i < mechstructs.Size(); i++)
+		for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 		{
-			Vector2 strucpos = (mechstructs_x[i], mechstructs_y[i]);
-			let ut = GetDefaultByType(utilcast(mechstructs[i]));
+			Vector2 strucpos = inv_context.mechstructs[i].pos;
+			let ut = GetDefaultByType(utilcast(inv_context.mechstructs[i].Tag));
 			
 			if(strucpos == hp.pos && ut.moveable)
 			{
-				class<Heatsink> hs = mechstructs[i];
+				class<Heatsink> hs = inv_context.mechstructs[i].Tag;
 				if(hs) 
 				{
 					mechsounds.pushSound("Mech/Betty/Heatsink");
 					mechsounds.pushSound("Mech/Betty/Destroyed");
 				}
 				adjustHardslots(strucpos,-ut.hardslots);
-				weapons_tonnage -= ut.weight;
-				mechstructs.delete(i);
-				mechstructs_x.delete(i);
-				mechstructs_y.delete(i);
+				inv_context.weapons_tonnage -= ut.weight;
+				inv_context.mechstructs.delete(i);
 				if(recurse) DestroyHardpointStructs(hp,recurse);
 			}
 		}
@@ -473,28 +496,28 @@ class MechWarrior : DoomPlayer
 	int checkHardslots(Vector2 pos)
 	{
 		int slots = 0;
-		if(pos == hardpoints.hd.pos) slots = (hardpoints.hd.maxslots-hardpoints.hd.slots);
-		if(pos == hardpoints.ct.pos) slots = (hardpoints.ct.maxslots-hardpoints.ct.slots);
-		if(pos == hardpoints.lt.pos) slots = (hardpoints.lt.maxslots-hardpoints.lt.slots);
-		if(pos == hardpoints.rt.pos) slots = (hardpoints.rt.maxslots-hardpoints.rt.slots);
-		if(pos == hardpoints.la.pos) slots = (hardpoints.la.maxslots-hardpoints.la.slots);
-		if(pos == hardpoints.ra.pos) slots = (hardpoints.ra.maxslots-hardpoints.ra.slots);
-		if(pos == hardpoints.ll.pos) slots = (hardpoints.ll.maxslots-hardpoints.ll.slots);
-		if(pos == hardpoints.rl.pos) slots = (hardpoints.rl.maxslots-hardpoints.rl.slots);
+		if(pos == inv_context.hardpoints.hd.pos) slots = (inv_context.hardpoints.hd.maxslots-inv_context.hardpoints.hd.slots);
+		if(pos == inv_context.hardpoints.ct.pos) slots = (inv_context.hardpoints.ct.maxslots-inv_context.hardpoints.ct.slots);
+		if(pos == inv_context.hardpoints.lt.pos) slots = (inv_context.hardpoints.lt.maxslots-inv_context.hardpoints.lt.slots);
+		if(pos == inv_context.hardpoints.rt.pos) slots = (inv_context.hardpoints.rt.maxslots-inv_context.hardpoints.rt.slots);
+		if(pos == inv_context.hardpoints.la.pos) slots = (inv_context.hardpoints.la.maxslots-inv_context.hardpoints.la.slots);
+		if(pos == inv_context.hardpoints.ra.pos) slots = (inv_context.hardpoints.ra.maxslots-inv_context.hardpoints.ra.slots);
+		if(pos == inv_context.hardpoints.ll.pos) slots = (inv_context.hardpoints.ll.maxslots-inv_context.hardpoints.ll.slots);
+		if(pos == inv_context.hardpoints.rl.pos) slots = (inv_context.hardpoints.rl.maxslots-inv_context.hardpoints.rl.slots);
 		return slots;
 	}
 	
 	clearscope int getFreeSlots()
 	{
 		int slots = 0;
-		slots += (hardpoints.hd.maxslots-hardpoints.hd.slots);
-		slots += (hardpoints.ct.maxslots-hardpoints.ct.slots);
-		slots += (hardpoints.lt.maxslots-hardpoints.lt.slots);
-		slots += (hardpoints.rt.maxslots-hardpoints.rt.slots);
-		slots += (hardpoints.la.maxslots-hardpoints.la.slots);
-		slots += (hardpoints.ra.maxslots-hardpoints.ra.slots);
-		slots += (hardpoints.ll.maxslots-hardpoints.ll.slots);
-		slots += (hardpoints.rl.maxslots-hardpoints.rl.slots);
+		slots += (inv_context.hardpoints.hd.maxslots-inv_context.hardpoints.hd.slots);
+		slots += (inv_context.hardpoints.ct.maxslots-inv_context.hardpoints.ct.slots);
+		slots += (inv_context.hardpoints.lt.maxslots-inv_context.hardpoints.lt.slots);
+		slots += (inv_context.hardpoints.rt.maxslots-inv_context.hardpoints.rt.slots);
+		slots += (inv_context.hardpoints.la.maxslots-inv_context.hardpoints.la.slots);
+		slots += (inv_context.hardpoints.ra.maxslots-inv_context.hardpoints.ra.slots);
+		slots += (inv_context.hardpoints.ll.maxslots-inv_context.hardpoints.ll.slots);
+		slots += (inv_context.hardpoints.rl.maxslots-inv_context.hardpoints.rl.slots);
 		
 		return slots;
 	}
@@ -504,28 +527,28 @@ class MechWarrior : DoomPlayer
 	clearscope vector2 getHardpointSlots(int ind)
 	{
 		vector2 hslots = ( 0, 0 );
-		if(ind == 0) hslots = (hardpoints.hd.maxslots, hardpoints.hd.slots);
-		if(ind == 1) hslots = (hardpoints.ct.maxslots, hardpoints.ct.slots);
-		if(ind == 2) hslots = (hardpoints.lt.maxslots, hardpoints.lt.slots);
-		if(ind == 3) hslots = (hardpoints.rt.maxslots, hardpoints.rt.slots);
-		if(ind == 4) hslots = (hardpoints.la.maxslots, hardpoints.la.slots);
-		if(ind == 5) hslots = (hardpoints.ra.maxslots, hardpoints.ra.slots);
-		if(ind == 6) hslots = (hardpoints.ll.maxslots, hardpoints.ll.slots);
-		if(ind == 7) hslots = (hardpoints.rl.maxslots, hardpoints.rl.slots);
+		if(ind == 0) hslots = (inv_context.hardpoints.hd.maxslots, inv_context.hardpoints.hd.slots);
+		if(ind == 1) hslots = (inv_context.hardpoints.ct.maxslots, inv_context.hardpoints.ct.slots);
+		if(ind == 2) hslots = (inv_context.hardpoints.lt.maxslots, inv_context.hardpoints.lt.slots);
+		if(ind == 3) hslots = (inv_context.hardpoints.rt.maxslots, inv_context.hardpoints.rt.slots);
+		if(ind == 4) hslots = (inv_context.hardpoints.la.maxslots, inv_context.hardpoints.la.slots);
+		if(ind == 5) hslots = (inv_context.hardpoints.ra.maxslots, inv_context.hardpoints.ra.slots);
+		if(ind == 6) hslots = (inv_context.hardpoints.ll.maxslots, inv_context.hardpoints.ll.slots);
+		if(ind == 7) hslots = (inv_context.hardpoints.rl.maxslots, inv_context.hardpoints.rl.slots);
 		return hslots;
 	}
 	
 	clearscope vector2 getHardpointPos(int ind)
 	{
 		vector2 hpos = ( 0, 0 );
-		if(ind == 0) hpos = hardpoints.hd.pos;
-		if(ind == 1) hpos = hardpoints.ct.pos;
-		if(ind == 2) hpos = hardpoints.lt.pos;
-		if(ind == 3) hpos = hardpoints.rt.pos;
-		if(ind == 4) hpos = hardpoints.la.pos;
-		if(ind == 5) hpos = hardpoints.ra.pos;
-		if(ind == 6) hpos = hardpoints.ll.pos;
-		if(ind == 7) hpos = hardpoints.rl.pos;
+		if(ind == 0) hpos = inv_context.hardpoints.hd.pos;
+		if(ind == 1) hpos = inv_context.hardpoints.ct.pos;
+		if(ind == 2) hpos = inv_context.hardpoints.lt.pos;
+		if(ind == 3) hpos = inv_context.hardpoints.rt.pos;
+		if(ind == 4) hpos = inv_context.hardpoints.la.pos;
+		if(ind == 5) hpos = inv_context.hardpoints.ra.pos;
+		if(ind == 6) hpos = inv_context.hardpoints.ll.pos;
+		if(ind == 7) hpos = inv_context.hardpoints.rl.pos;
 		return hpos;
 	}
 	
@@ -535,52 +558,52 @@ class MechWarrior : DoomPlayer
 		switch(ind)
 		{
 			case 0:
-				hvital.armor = hardpoints.hd.armor;
-				hvital.max_armor = hardpoints.hd.max_armor;
-				hvital.internalhp = hardpoints.hd.internalhp;
-				hvital.max_internal = hardpoints.hd.max_internal;
+				hvital.armor = inv_context.hardpoints.hd.armor;
+				hvital.max_armor = inv_context.hardpoints.hd.max_armor;
+				hvital.internalhp = inv_context.hardpoints.hd.internalhp;
+				hvital.max_internal = inv_context.hardpoints.hd.max_internal;
 			break;
 			case 1:
-				hvital.armor = hardpoints.ct.armor;
-				hvital.max_armor = hardpoints.ct.max_armor;
-				hvital.internalhp = hardpoints.ct.internalhp;
-				hvital.max_internal = hardpoints.ct.max_internal;
+				hvital.armor = inv_context.hardpoints.ct.armor;
+				hvital.max_armor = inv_context.hardpoints.ct.max_armor;
+				hvital.internalhp = inv_context.hardpoints.ct.internalhp;
+				hvital.max_internal = inv_context.hardpoints.ct.max_internal;
 			break;
 			case 2:
-				hvital.armor = hardpoints.lt.armor;
-				hvital.max_armor = hardpoints.lt.max_armor;
-				hvital.internalhp = hardpoints.lt.internalhp;
-				hvital.max_internal = hardpoints.lt.max_internal;
+				hvital.armor = inv_context.hardpoints.lt.armor;
+				hvital.max_armor = inv_context.hardpoints.lt.max_armor;
+				hvital.internalhp = inv_context.hardpoints.lt.internalhp;
+				hvital.max_internal = inv_context.hardpoints.lt.max_internal;
 			break;
 			case 3:
-				hvital.armor = hardpoints.rt.armor;
-				hvital.max_armor = hardpoints.rt.max_armor;
-				hvital.internalhp = hardpoints.rt.internalhp;
-				hvital.max_internal = hardpoints.rt.max_internal;
+				hvital.armor = inv_context.hardpoints.rt.armor;
+				hvital.max_armor = inv_context.hardpoints.rt.max_armor;
+				hvital.internalhp = inv_context.hardpoints.rt.internalhp;
+				hvital.max_internal = inv_context.hardpoints.rt.max_internal;
 			break;
 			case 4:
-				hvital.armor = hardpoints.la.armor;
-				hvital.max_armor = hardpoints.la.max_armor;
-				hvital.internalhp = hardpoints.la.internalhp;
-				hvital.max_internal = hardpoints.la.max_internal;
+				hvital.armor = inv_context.hardpoints.la.armor;
+				hvital.max_armor = inv_context.hardpoints.la.max_armor;
+				hvital.internalhp = inv_context.hardpoints.la.internalhp;
+				hvital.max_internal = inv_context.hardpoints.la.max_internal;
 			break;
 			case 5:
-				hvital.armor = hardpoints.ra.armor;
-				hvital.max_armor = hardpoints.ra.max_armor;
-				hvital.internalhp = hardpoints.ra.internalhp;
-				hvital.max_internal = hardpoints.ra.max_internal;
+				hvital.armor = inv_context.hardpoints.ra.armor;
+				hvital.max_armor = inv_context.hardpoints.ra.max_armor;
+				hvital.internalhp = inv_context.hardpoints.ra.internalhp;
+				hvital.max_internal = inv_context.hardpoints.ra.max_internal;
 			break;
 			case 6:
-				hvital.armor = hardpoints.ll.armor;
-				hvital.max_armor = hardpoints.ll.max_armor;
-				hvital.internalhp = hardpoints.ll.internalhp;
-				hvital.max_internal = hardpoints.ll.max_internal;
+				hvital.armor = inv_context.hardpoints.ll.armor;
+				hvital.max_armor = inv_context.hardpoints.ll.max_armor;
+				hvital.internalhp = inv_context.hardpoints.ll.internalhp;
+				hvital.max_internal = inv_context.hardpoints.ll.max_internal;
 			break;
 			case 7:
-				hvital.armor = hardpoints.rl.armor;
-				hvital.max_armor = hardpoints.rl.max_armor;
-				hvital.internalhp = hardpoints.rl.internalhp;
-				hvital.max_internal = hardpoints.rl.max_internal;
+				hvital.armor = inv_context.hardpoints.rl.armor;
+				hvital.max_armor = inv_context.hardpoints.rl.max_armor;
+				hvital.internalhp = inv_context.hardpoints.rl.internalhp;
+				hvital.max_internal = inv_context.hardpoints.rl.max_internal;
 			break;
 		}
 		return hvital;
@@ -591,14 +614,14 @@ class MechWarrior : DoomPlayer
 		if(countinv(type) > 0)
 		{
 			let autil = ArmoryUtility(FindInventory(type));
-			if(hindex == 0) autil.EquipUtil(self,hardpoints.hd);
-			if(hindex == 1) autil.EquipUtil(self,hardpoints.ct);
-			if(hindex == 2) autil.EquipUtil(self,hardpoints.lt);
-			if(hindex == 3) autil.EquipUtil(self,hardpoints.rt);
-			if(hindex == 4) autil.EquipUtil(self,hardpoints.la);
-			if(hindex == 5) autil.EquipUtil(self,hardpoints.ra);
-			if(hindex == 6) autil.EquipUtil(self,hardpoints.ll);
-			if(hindex == 7) autil.EquipUtil(self,hardpoints.rl);
+			if(hindex == 0) autil.EquipUtil(self,inv_context.hardpoints.hd);
+			if(hindex == 1) autil.EquipUtil(self,inv_context.hardpoints.ct);
+			if(hindex == 2) autil.EquipUtil(self,inv_context.hardpoints.lt);
+			if(hindex == 3) autil.EquipUtil(self,inv_context.hardpoints.rt);
+			if(hindex == 4) autil.EquipUtil(self,inv_context.hardpoints.la);
+			if(hindex == 5) autil.EquipUtil(self,inv_context.hardpoints.ra);
+			if(hindex == 6) autil.EquipUtil(self,inv_context.hardpoints.ll);
+			if(hindex == 7) autil.EquipUtil(self,inv_context.hardpoints.rl);
 		}
 	}
 
@@ -616,21 +639,21 @@ class MechWarrior : DoomPlayer
 	{
 		let hv = getHardpointVitals(hindex);
 		int cost = CalculateHardpointRepairCost(hv,stat);
-		if(money_cbills < cost) 
+		if(inv_context.money_cbills < cost) 
 		{
 			sendHudAlert("Insufficient funds!",Font.CR_DARKRED);
 		}
 		else
 		{
-			money_cbills -= cost;
-			if(hindex == 0) _DoHardpointRepair(hardpoints.hd, stat);
-			if(hindex == 1) _DoHardpointRepair(hardpoints.ct, stat);
-			if(hindex == 2) _DoHardpointRepair(hardpoints.lt, stat);
-			if(hindex == 3) _DoHardpointRepair(hardpoints.rt, stat);
-			if(hindex == 4) _DoHardpointRepair(hardpoints.la, stat);
-			if(hindex == 5) _DoHardpointRepair(hardpoints.ra, stat);
-			if(hindex == 6) _DoHardpointRepair(hardpoints.ll, stat);
-			if(hindex == 7) _DoHardpointRepair(hardpoints.rl, stat);
+			inv_context.money_cbills -= cost;
+			if(hindex == 0) _DoHardpointRepair(inv_context.hardpoints.hd, stat);
+			if(hindex == 1) _DoHardpointRepair(inv_context.hardpoints.ct, stat);
+			if(hindex == 2) _DoHardpointRepair(inv_context.hardpoints.lt, stat);
+			if(hindex == 3) _DoHardpointRepair(inv_context.hardpoints.rt, stat);
+			if(hindex == 4) _DoHardpointRepair(inv_context.hardpoints.la, stat);
+			if(hindex == 5) _DoHardpointRepair(inv_context.hardpoints.ra, stat);
+			if(hindex == 6) _DoHardpointRepair(inv_context.hardpoints.ll, stat);
+			if(hindex == 7) _DoHardpointRepair(inv_context.hardpoints.rl, stat);
 		}
 	}
 	void _DoHardpointRepair(MechHardpoint hp, int stats)
@@ -643,33 +666,33 @@ class MechWarrior : DoomPlayer
 	clearscope vector2 FindHardpointVitals(vector2 pos)
 	{
 		vector2 ffs = ( 0, 0 );
-		if(pos == hardpoints.hd.pos) ffs = (hardpoints.hd.armor, hardpoints.hd.internalhp);
-		if(pos == hardpoints.ct.pos) ffs = (hardpoints.ct.armor, hardpoints.ct.internalhp);
-		if(pos == hardpoints.lt.pos) ffs = (hardpoints.lt.armor, hardpoints.lt.internalhp);
-		if(pos == hardpoints.rt.pos) ffs = (hardpoints.rt.armor, hardpoints.rt.internalhp);
-		if(pos == hardpoints.la.pos) ffs = (hardpoints.la.armor, hardpoints.la.internalhp);
-		if(pos == hardpoints.ra.pos) ffs = (hardpoints.ra.armor, hardpoints.ra.internalhp);
-		if(pos == hardpoints.ll.pos) ffs = (hardpoints.ll.armor, hardpoints.ll.internalhp);
-		if(pos == hardpoints.rl.pos) ffs = (hardpoints.rl.armor, hardpoints.rl.internalhp);
+		if(pos == inv_context.hardpoints.hd.pos) ffs = (inv_context.hardpoints.hd.armor, inv_context.hardpoints.hd.internalhp);
+		if(pos == inv_context.hardpoints.ct.pos) ffs = (inv_context.hardpoints.ct.armor, inv_context.hardpoints.ct.internalhp);
+		if(pos == inv_context.hardpoints.lt.pos) ffs = (inv_context.hardpoints.lt.armor, inv_context.hardpoints.lt.internalhp);
+		if(pos == inv_context.hardpoints.rt.pos) ffs = (inv_context.hardpoints.rt.armor, inv_context.hardpoints.rt.internalhp);
+		if(pos == inv_context.hardpoints.la.pos) ffs = (inv_context.hardpoints.la.armor, inv_context.hardpoints.la.internalhp);
+		if(pos == inv_context.hardpoints.ra.pos) ffs = (inv_context.hardpoints.ra.armor, inv_context.hardpoints.ra.internalhp);
+		if(pos == inv_context.hardpoints.ll.pos) ffs = (inv_context.hardpoints.ll.armor, inv_context.hardpoints.ll.internalhp);
+		if(pos == inv_context.hardpoints.rl.pos) ffs = (inv_context.hardpoints.rl.armor, inv_context.hardpoints.rl.internalhp);
 		return ffs;
 	}
 	
 	void adjustHardslots(Vector2 pos, int amt)
 	{
-		if(pos == hardpoints.hd.pos) hardpoints.hd.slots += amt;
-		if(pos == hardpoints.ct.pos) hardpoints.ct.slots += amt;
-		if(pos == hardpoints.lt.pos) hardpoints.lt.slots += amt;
-		if(pos == hardpoints.rt.pos) hardpoints.rt.slots += amt;
-		if(pos == hardpoints.la.pos) hardpoints.la.slots += amt;
-		if(pos == hardpoints.ra.pos) hardpoints.ra.slots += amt;
-		if(pos == hardpoints.ll.pos) hardpoints.ll.slots += amt;
-		if(pos == hardpoints.rl.pos) hardpoints.rl.slots += amt;
+		if(pos == inv_context.hardpoints.hd.pos) inv_context.hardpoints.hd.slots += amt;
+		if(pos == inv_context.hardpoints.ct.pos) inv_context.hardpoints.ct.slots += amt;
+		if(pos == inv_context.hardpoints.lt.pos) inv_context.hardpoints.lt.slots += amt;
+		if(pos == inv_context.hardpoints.rt.pos) inv_context.hardpoints.rt.slots += amt;
+		if(pos == inv_context.hardpoints.la.pos) inv_context.hardpoints.la.slots += amt;
+		if(pos == inv_context.hardpoints.ra.pos) inv_context.hardpoints.ra.slots += amt;
+		if(pos == inv_context.hardpoints.ll.pos) inv_context.hardpoints.ll.slots += amt;
+		if(pos == inv_context.hardpoints.rl.pos) inv_context.hardpoints.rl.slots += amt;
 	}
 	
 	void removeWeapon(Mechbase_Weapon w)
 	{
 		// This is need because hardpoints and stuff.
-		weapons_tonnage -= w.weight;
+		inv_context.weapons_tonnage -= w.weight;
 		// TakeInventory(resolveWeaponName(w),1);
 		adjustHardslots(w.mount,-w.hardslots);
 		RemoveInventory(w);
@@ -699,7 +722,7 @@ class MechWarrior : DoomPlayer
 		inv_ind --;
 		
 		// Make sure our inventory type is a weapon!
-		class<Mechbase_Weapon> invweap = weapon_items[inv_ind];
+		class<Mechbase_Weapon> invweap = inv_context.weapon_items[inv_ind];
 		if(!invweap) return false;
 		
 		for(let w = Inv; w; w = w.Inv)
@@ -712,10 +735,10 @@ class MechWarrior : DoomPlayer
 					weaptype = resolveWeaponName(ww);
 					int prevweaps = weapons;
 					weapons = ww.WeaponID-1;
-					equipWeapon(weapon_items[inv_ind],ww.mount,ww.group,false);
+					equipWeapon(inv_context.weapon_items[inv_ind],ww.mount,ww.group,false);
 					weapons = prevweaps;
 					removeWeapon(ww);
-					weapon_items[inv_ind] = weaptype;
+					inv_context.weapon_items[inv_ind] = weaptype;
 					return true;
 				}
 			}
@@ -750,19 +773,17 @@ class MechWarrior : DoomPlayer
 	
 	bool moveStructToInv(int struc_ind, bool move=true)
 	{
-		for(int i = 0; i < mechstructs.Size(); i++)
+		for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 		{
 			if(i == struc_ind)
 			{
-				let ut = GetDefaultByType(utilcast(mechstructs[i]));
+				let ut = GetDefaultByType(utilcast(inv_context.mechstructs[i].Tag));
 				if(!ut.moveable) return false;
-				Vector2 strucpos = (mechstructs_x[i], mechstructs_y[i]);
+				Vector2 strucpos = inv_context.mechstructs[i].pos;
 				adjustHardslots(strucpos,-ut.hardslots);
-				weapons_tonnage -= ut.weight;
-				addStructToInv(mechstructs[i]);
-				if(move)mechstructs.delete(i);
-				if(move)mechstructs_x.delete(i);
-				if(move)mechstructs_y.delete(i);
+				inv_context.weapons_tonnage -= ut.weight;
+				addStructToInv(inv_context.mechstructs[i].Tag);
+				if(move)inv_context.mechstructs.delete(i);
 				return true;
 			}
 		}
@@ -771,7 +792,7 @@ class MechWarrior : DoomPlayer
 	
 	void addWeaponToInv(String weapon,int amt=1,bool giveammo = true)
 	{
-		if(weapon_items.Size() == 0) weapon_items.Clear();
+		if(inv_context.weapon_items.Size() == 0) inv_context.weapon_items.Clear();
 		class<Mechbase_Weapon> weap = weapon;
 		class<Mechbase_Utility> util = weapon;
 		if(weap)
@@ -785,23 +806,23 @@ class MechWarrior : DoomPlayer
 			if(utildef.ammotype && giveammo) A_GiveInventory(utildef.ammotype,utildef.ammogive);
 		}
 		
-		for(int i = 0; i < amt; i++)weapon_items.push(weapon);
+		for(int i = 0; i < amt; i++)inv_context.weapon_items.push(weapon);
 	}
 	
 	void addStructToInv(String mstruc)
 	{
 		class<Mechbase_Utility> util = mstruc;
 		if(!util) return;
-		weapon_items.push(mstruc);
+		inv_context.weapon_items.push(mstruc);
 	}
 	
 	// Equip weapon from items
 	bool equipWeaponInv(int ind, Vector2 pos, int grp, bool move=true)
 	{
-		class<Mechbase_Weapon> weap = weapon_items[ind-1];
+		class<Mechbase_Weapon> weap = inv_context.weapon_items[ind-1];
 		if(!weap) return false;
 		
-		if( weapons_tonnage+GetDefaultByType(weap).weight > mech_tonnage && !overtonnage)
+		if( inv_context.weapons_tonnage+GetDefaultByType(weap).weight > mech_tonnage && !overtonnage)
 		{
 			sendHudAlert("Cannot equip weapon, over tonnage!", Font.CR_DARKRED);
 			return false;
@@ -813,18 +834,18 @@ class MechWarrior : DoomPlayer
 		}
 		 
 		 // Equip weapon in inventory, don't give ammo.
-		if(!equipWeapon(weapon_items[ind-1],pos,grp,false)) return false;
-		if(move)weapon_items.delete(ind-1);
+		if(!equipWeapon(inv_context.weapon_items[ind-1],pos,grp,false)) return false;
+		if(move)inv_context.weapon_items.delete(ind-1);
 		return true;
 	}
 	
 	// Equip struct from items
 	bool equipStructInv(int ind, Vector2 pos, bool move=true)
 	{
-		class<Mechbase_Utility> util = weapon_items[ind-1];
+		class<Mechbase_Utility> util = inv_context.weapon_items[ind-1];
 		if(!util) return false;
 		
-		if( weapons_tonnage+GetDefaultByType(util).weight > mech_tonnage && !overtonnage)
+		if( inv_context.weapons_tonnage+GetDefaultByType(util).weight > mech_tonnage && !overtonnage)
 		{
 			sendHudAlert("Cannot equip item, over tonnage!", Font.CR_DARKRED);
 			return false;
@@ -836,8 +857,8 @@ class MechWarrior : DoomPlayer
 		}
 		 
 		 // Equip without giving starting ammunition
-		if(!equipStruct(weapon_items[ind-1],pos,1,false)) return false;
-		if(move)weapon_items.delete(ind-1);
+		if(!equipStruct(inv_context.weapon_items[ind-1],pos,1,false)) return false;
+		if(move)inv_context.weapon_items.delete(ind-1);
 		return true;
 	}
 	
@@ -926,15 +947,15 @@ class MechWarrior : DoomPlayer
 	void clearWeapons()
 	{
 		ClearInventory();
-		hardpoints.hd.slots = 0;
-		hardpoints.ct.slots = 0;
-		hardpoints.lt.slots = 0;
-		hardpoints.rt.slots = 0;
-		hardpoints.la.slots = 0;
-		hardpoints.ra.slots = 0;
-		hardpoints.ll.slots = 0;
-		hardpoints.rl.slots = 0;
-		weapons_tonnage = 0;
+		inv_context.hardpoints.hd.slots = 0;
+		inv_context.hardpoints.ct.slots = 0;
+		inv_context.hardpoints.lt.slots = 0;
+		inv_context.hardpoints.rt.slots = 0;
+		inv_context.hardpoints.la.slots = 0;
+		inv_context.hardpoints.ra.slots = 0;
+		inv_context.hardpoints.ll.slots = 0;
+		inv_context.hardpoints.rl.slots = 0;
+		inv_context.weapons_tonnage = 0;
 		GiveInventory("CrosshairHandler",1);
 		weapons = 0;	
 	}
@@ -954,10 +975,11 @@ class MechWarrior : DoomPlayer
 		}
 		for(int i = 0; i < amt; i++)
 		{
-			mechstructs.push(type.getClassName());
-			mechstructs_x.push(pos.x);
-			mechstructs_y.push(pos.y);
-			weapons_tonnage += GetDefaultByType(type).weight;
+			let st = new("mw_InvStruct");
+			st.Tag = type.getClassName();
+			st.pos = pos;
+			inv_context.mechstructs.push(st);
+			inv_context.weapons_tonnage += GetDefaultByType(type).weight;
 			adjustHardslots(pos,GetDefaultByType(type).hardslots);
 		}
 		return true;
@@ -967,10 +989,10 @@ class MechWarrior : DoomPlayer
 	{
 		int count = 0;
 		type.ToLower();
-		if(!mechstructs.Size()) mechstructs.Clear();
-		for(int i = 0; i < mechstructs.Size(); i++)
+		if(!inv_context.mechstructs.Size()) inv_context.mechstructs.Clear();
+		for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 		{
-			String cname = mechstructs[i];
+			String cname = inv_context.mechstructs[i].Tag;
 			cname.ToLower();
 			type.ToLower();
 			if(cname == type) count++;
@@ -1016,7 +1038,7 @@ class MechWarrior : DoomPlayer
 					ww.group = group;
 					ww.mount = vpos;
 					adjustHardslots(ww.mount,ww.hardslots);
-					weapons_tonnage += ww.weight;
+					inv_context.weapons_tonnage += ww.weight;
 					if(ww.ammotype && giveammo)GiveInventory(ww.ammotype,ww.ammogive);
 					//console.printf("Adding Weapon: %s at %d",ww.displayName,ww.WeaponID);
 				}
@@ -1087,13 +1109,13 @@ class MechWarrior : DoomPlayer
 	
 	void process_antimissilesystem()
 	{
-		for(int i = 0; i < mechstructs.Size(); i++)
+		for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 		{
-			String cname = mechstructs[i];
+			String cname = inv_context.mechstructs[i].Tag;
 			cname.ToLower();
 			if(cname == "antimissilesystem")
 			{
-				trigger_ams( (mechstructs_x[i],mechstructs_y[i]) );
+				trigger_ams( inv_context.mechstructs[i].pos );
 			}
 		}
 		if(ams_timer > 0) ams_timer--;
@@ -1289,7 +1311,7 @@ class MechWarrior : DoomPlayer
  		if( (GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) && Mech_HasJets && mech_jetsfuel > 0)
 		{
 			class<JumpJet> jj = "JumpJet";
-			float truetonnage = overtonnage ? weapons_tonnage : mech_tonnage;
+			float truetonnage = overtonnage ? inv_context.weapons_tonnage : mech_tonnage;
 			double tonmod = 100-( truetonnage-(5*Mech_JetCount) );
 			double zthrust = ( Mech_JetCount * GetDefaultByType(jj).thrust_power ) * ( tonmod/100 ) + ((mech_jetsfuel/100)*2);
 			vel.z = zthrust * defaultmovement ? 5 : 1;
@@ -1484,19 +1506,19 @@ class MechWarrior : DoomPlayer
 		{
 			type = sortedtypes[i];
 			type.toLower();
-			for(int x = 0; x < weapon_items.Size(); x++)
+			for(int x = 0; x < inv_context.weapon_items.Size(); x++)
 			{
-				String thing = weapon_items[x];
+				String thing = inv_context.weapon_items[x];
 				thing.ToLower();
 				if(thing == type)
 				{
-					newinv.push(weapon_items[x]);
+					newinv.push(inv_context.weapon_items[x]);
 				}
 			}
 		}
 		// Re-allocate
-		weapon_items.Clear();
-		for(int i = 0; i < newinv.Size(); i++) weapon_items.push(newinv[i]);
+		inv_context.weapon_items.Clear();
+		for(int i = 0; i < newinv.Size(); i++) inv_context.weapon_items.push(newinv[i]);
 	}
 	
 	void mech_weapons()
@@ -1739,13 +1761,13 @@ class MechWarrior : DoomPlayer
 			{
 				A_PlaySound("Mech/Damaged/Critical",3);
 				mechsounds.pushSound("Mech/Betty/CriticalHit");
-				if(hp == hardpoints.lt) mechsounds.pushSound("Mech/Betty/LeftTorso");
-				if(hp == hardpoints.rt) mechsounds.pushSound("Mech/Betty/RightTorso");
-				if(hp == hardpoints.la) mechsounds.pushSound("Mech/Betty/LeftArm");
-				if(hp == hardpoints.ra) mechsounds.pushSound("Mech/Betty/RightArm");
-				if(hp == hardpoints.ll) mechsounds.pushSound("Mech/Betty/LeftLeg");
-				if(hp == hardpoints.rl) mechsounds.pushSound("Mech/Betty/RightLeg");
-				if(hp == hardpoints.ct) mechsounds.pushSound("Mech/Betty/CenterTorso");
+				if(hp == inv_context.hardpoints.lt) mechsounds.pushSound("Mech/Betty/LeftTorso");
+				if(hp == inv_context.hardpoints.rt) mechsounds.pushSound("Mech/Betty/RightTorso");
+				if(hp == inv_context.hardpoints.la) mechsounds.pushSound("Mech/Betty/LeftArm");
+				if(hp == inv_context.hardpoints.ra) mechsounds.pushSound("Mech/Betty/RightArm");
+				if(hp == inv_context.hardpoints.ll) mechsounds.pushSound("Mech/Betty/LeftLeg");
+				if(hp == inv_context.hardpoints.rl) mechsounds.pushSound("Mech/Betty/RightLeg");
+				if(hp == inv_context.hardpoints.ct) mechsounds.pushSound("Mech/Betty/CenterTorso");
 				if(random(0,1)==1)DestroyHardpointItems(hp,false);
 			}
 			hp.internalhp -= dmg;
@@ -1759,13 +1781,13 @@ class MechWarrior : DoomPlayer
 				}
 			
 				A_PlaySound("Mech/Damaged/HardpointDead",3);
-				if(hp == hardpoints.lt) mechsounds.pushSound("Mech/Betty/LeftTorso");
-				if(hp == hardpoints.rt) mechsounds.pushSound("Mech/Betty/RightTorso");
-				if(hp == hardpoints.la) mechsounds.pushSound("Mech/Betty/LeftArm");
-				if(hp == hardpoints.ra) mechsounds.pushSound("Mech/Betty/RightArm");
-				if(hp == hardpoints.ll) mechsounds.pushSound("Mech/Betty/LeftLeg");
-				if(hp == hardpoints.rl) mechsounds.pushSound("Mech/Betty/RightLeg");
-				if(hp != hardpoints.ct) mechsounds.pushSound("Mech/Betty/Destroyed");
+				if(hp == inv_context.hardpoints.lt) mechsounds.pushSound("Mech/Betty/LeftTorso");
+				if(hp == inv_context.hardpoints.rt) mechsounds.pushSound("Mech/Betty/RightTorso");
+				if(hp == inv_context.hardpoints.la) mechsounds.pushSound("Mech/Betty/LeftArm");
+				if(hp == inv_context.hardpoints.ra) mechsounds.pushSound("Mech/Betty/RightArm");
+				if(hp == inv_context.hardpoints.ll) mechsounds.pushSound("Mech/Betty/LeftLeg");
+				if(hp == inv_context.hardpoints.rl) mechsounds.pushSound("Mech/Betty/RightLeg");
+				if(hp != inv_context.hardpoints.ct) mechsounds.pushSound("Mech/Betty/Destroyed");
 	
 				DestroyHardpointItems(hp);
 			}
@@ -1778,10 +1800,10 @@ class MechWarrior : DoomPlayer
 	
 	void SpreadHardpointDamage(MechHardpoint hp, float dmg)
 	{
-		if(hp == hardpoints.la) DamageHardpoint(hardpoints.lt,dmg/2);
-		if(hp == hardpoints.ra) DamageHardpoint(hardpoints.rt,dmg/2);
-		if(hp == hardpoints.lt) DamageHardpoint(hardpoints.ct,dmg/4);
-		if(hp == hardpoints.rt) DamageHardpoint(hardpoints.ct,dmg/4);
+		if(hp == inv_context.hardpoints.la) DamageHardpoint(inv_context.hardpoints.lt,dmg/2);
+		if(hp == inv_context.hardpoints.ra) DamageHardpoint(inv_context.hardpoints.rt,dmg/2);
+		if(hp == inv_context.hardpoints.lt) DamageHardpoint(inv_context.hardpoints.ct,dmg/4);
+		if(hp == inv_context.hardpoints.rt) DamageHardpoint(inv_context.hardpoints.ct,dmg/4);
 	}
 	
 	override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
@@ -1844,17 +1866,17 @@ class MechWarrior : DoomPlayer
 	void ProcessHardpointDamage(Name mod, float damage, Actor damager = NULL)
 	{	
 		bool heatdmg = ( mod == "overheating" );
-		//if(mod == "MechDamage_HD" || (heatdmg && random(1,12)==12) ) DamageHardpoint(hardpoints.hd,damage,heatdmg&&random(0,1));
-		if(mod == "MechDamage_CT" || (heatdmg && random(1,5)==5) ) DamageHardpoint(hardpoints.ct,damage,heatdmg&&random(0,1));
-		if(mod == "MechDamage_LT" || (heatdmg && random(1,3)==3) ) DamageHardpoint(hardpoints.lt,damage,heatdmg&&random(0,1));
-		if(mod == "MechDamage_RT" || (heatdmg && random(1,3)==3) ) DamageHardpoint(hardpoints.rt,damage,heatdmg&&random(0,1));
-		if(mod == "MechDamage_LA" || (heatdmg && random(1,4)==4) ) DamageHardpoint(hardpoints.la,damage,heatdmg&&random(0,1));
-		if(mod == "MechDamage_RA" || (heatdmg && random(1,4)==4) ) DamageHardpoint(hardpoints.ra,damage,heatdmg&&random(0,1));
-		if(mod == "MechDamage_LL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.ll,damage,heatdmg&&random(0,1));
-		if(mod == "MechDamage_RL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.rl,damage,heatdmg&&random(0,1));
+		//if(mod == "MechDamage_HD" || (heatdmg && random(1,12)==12) ) DamageHardpoint(inv_context.hardpoints.hd,damage,heatdmg&&random(0,1));
+		if(mod == "MechDamage_CT" || (heatdmg && random(1,5)==5) ) DamageHardpoint(inv_context.hardpoints.ct,damage,heatdmg&&random(0,1));
+		if(mod == "MechDamage_LT" || (heatdmg && random(1,3)==3) ) DamageHardpoint(inv_context.hardpoints.lt,damage,heatdmg&&random(0,1));
+		if(mod == "MechDamage_RT" || (heatdmg && random(1,3)==3) ) DamageHardpoint(inv_context.hardpoints.rt,damage,heatdmg&&random(0,1));
+		if(mod == "MechDamage_LA" || (heatdmg && random(1,4)==4) ) DamageHardpoint(inv_context.hardpoints.la,damage,heatdmg&&random(0,1));
+		if(mod == "MechDamage_RA" || (heatdmg && random(1,4)==4) ) DamageHardpoint(inv_context.hardpoints.ra,damage,heatdmg&&random(0,1));
+		if(mod == "MechDamage_LL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(inv_context.hardpoints.ll,damage,heatdmg&&random(0,1));
+		if(mod == "MechDamage_RL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(inv_context.hardpoints.rl,damage,heatdmg&&random(0,1));
 		
-		if(  hardpoints.hd.internalhp <= 0 || hardpoints.ct.internalhp <= 0 ||
-			(hardpoints.ll.internalhp <= 0 && hardpoints.rl.internalhp <= 0)   ) 
+		if(  inv_context.hardpoints.hd.internalhp <= 0 || inv_context.hardpoints.ct.internalhp <= 0 ||
+			(inv_context.hardpoints.ll.internalhp <= 0 && inv_context.hardpoints.rl.internalhp <= 0)   ) 
 		{
 			Die(NULL,damager);
 			health = 0;
@@ -1867,11 +1889,13 @@ class MechWarrior : DoomPlayer
 		// Setup mech support systems.
 		if(!player) return;
 		
+		setupInvContext();
 		SetupWeapons();
+		
 		selectedGroup = 1;
 		boblendir = 1;
 		selectedWeapon = 1;
-		weapons_tonnage += enginesize;
+		inv_context.weapons_tonnage += enginesize;
 		maxgroup = getMaxWeaponGrouping();
 		defaultfov = player.desiredFOV;
 		
@@ -1901,6 +1925,7 @@ class MechWarrior : DoomPlayer
 	
 	override void tick()
 	{	
+		if(!inv_context) setupInvContext();
 		
 		if(defaultmovement)
 		{			
@@ -1922,19 +1947,19 @@ class MechWarrior : DoomPlayer
 			if(overtonnage)
 			{
 				float truetonnage = mech_shutdown ? mech_tonnage*0.5 : mech_tonnage;
-				overfactor = clamp(truetonnage/(weapons_tonnage*0.35), 0.1, 1.0);
+				overfactor = clamp(truetonnage/(inv_context.weapons_tonnage*0.35), 0.1, 1.0);
 				A_SetSpeed(MoveSpeed*0.12*overfactor*throttle_max);
 			}
 			
 		    // Process hardpoint damage effects
-			if( hardpoints.ll.internalhp <= 0 || 
-				hardpoints.rl.internalhp <= 0   )
+			if( inv_context.hardpoints.ll.internalhp <= 0 || 
+				inv_context.hardpoints.rl.internalhp <= 0   )
 			{
 				throttle_max = 0.5;
 				LegSpeed = 1;
 			}
-			else if( hardpoints.lt.internalhp < hardpoints.lt.max_internal || 
-				     hardpoints.rt.internalhp < hardpoints.rt.max_internal    )
+			else if( inv_context.hardpoints.lt.internalhp < inv_context.hardpoints.lt.max_internal || 
+				     inv_context.hardpoints.rt.internalhp < inv_context.hardpoints.rt.max_internal    )
 			{
 				throttle_max = 0.8;
 			}

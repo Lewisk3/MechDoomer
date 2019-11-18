@@ -306,15 +306,15 @@ class Mechbay : Inventory
 	void HealMechHardpoint(Mechwarrior plr, MechHardpoint hp)
 	{
 		if(!plr) return;
-		if(hp.armor < hp.max_armor && plr.money_cbills > 20) 
+		if(hp.armor < hp.max_armor && plr.inv_context.money_cbills > 20) 
 		{
 			hp.armor+=1;
-			plr.money_cbills -= 20;
+			plr.inv_context.money_cbills -= 20;
 		}
-		if(hp.internalhp < hp.max_internal && plr.money_cbills > 20) 
+		if(hp.internalhp < hp.max_internal && plr.inv_context.money_cbills > 20) 
 		{
 			hp.internalhp+=1;
-			plr.money_cbills -= 20;
+			plr.inv_context.money_cbills -= 20;
 		}
 	}
 	
@@ -337,17 +337,17 @@ class Mechbay : Inventory
 				else
 				{
 					A_Print("Repairing...");
-					if(plr.money_cbills < 20){ plr.A_Print("Insufficient funds."); return; }
+					if(plr.inv_context.money_cbills < 20){ plr.A_Print("Insufficient funds."); return; }
 					
 					// Heal mech hardpoints
-					HealMechHardpoint(plr,plr.hardpoints.hd);
-					HealMechHardpoint(plr,plr.hardpoints.ct);
-					HealMechHardpoint(plr,plr.hardpoints.lt);
-					HealMechHardpoint(plr,plr.hardpoints.rt);
-					HealMechHardpoint(plr,plr.hardpoints.la);
-					HealMechHardpoint(plr,plr.hardpoints.ra);
-					HealMechHardpoint(plr,plr.hardpoints.ll);
-					HealMechHardpoint(plr,plr.hardpoints.rl);	
+					HealMechHardpoint(plr,plr.inv_context.hardpoints.hd);
+					HealMechHardpoint(plr,plr.inv_context.hardpoints.ct);
+					HealMechHardpoint(plr,plr.inv_context.hardpoints.lt);
+					HealMechHardpoint(plr,plr.inv_context.hardpoints.rt);
+					HealMechHardpoint(plr,plr.inv_context.hardpoints.la);
+					HealMechHardpoint(plr,plr.inv_context.hardpoints.ra);
+					HealMechHardpoint(plr,plr.inv_context.hardpoints.ll);
+					HealMechHardpoint(plr,plr.inv_context.hardpoints.rl);	
 				}
 			}
 		}
