@@ -338,7 +338,7 @@ class Mechlab_Menu : GenericMenu
 		
 
 		if(mstats.scroll == -1 && invoffset-1 > -1){ mstats.scroll = 0;  invoffset--; }
-		if(mstats.scroll ==  1 && invoffset+40 < mechplr.inv_context.weapon_items.Size()){ mstats.scroll = 0;  invoffset++; }
+		if(mstats.scroll ==  1 && invoffset+30 < mechplr.inv_context.weapon_items.Size()){ mstats.scroll = 0;  invoffset++; }
 		if( mstats.left_btn )
 		{
 			if( !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
@@ -473,7 +473,7 @@ class Mechlab_Menu : GenericMenu
 			}
 		}
 		if(invoffset > 0)H_DrawTexture(tInv_ArrowUp,(1550,-500),0,(0.9,0.7));
-		if(invoffset+40 < mechplr.inv_context.weapon_items.Size())H_DrawTexture(tInv_ArrowDown,(1550,-472),0,(0.9,0.7));
+		if(invoffset+30 < mechplr.inv_context.weapon_items.Size())H_DrawTexture(tInv_ArrowDown,(1550,-472),0,(0.9,0.7));
 	}
 	
 	
