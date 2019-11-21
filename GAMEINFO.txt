@@ -1,2 +1,2 @@
-STARTUPTITLE = "MechDoomer - Mechwarrior 2 in GZDoom (v2.23a)"
+STARTUPTITLE = "MechDoomer - Mechwarrior 2 in GZDoom (v2.24a)"
 STARTUPCOLORS = "b52205", "110000"
