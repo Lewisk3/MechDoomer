@@ -137,7 +137,7 @@ class JumpJet : Mechbase_Utility
 		Mechbase_Utility.Tonnage 0.5;
 		Mechbase_Utility.displayName "Jump Jet";
 		Mechbase_Utility.Criticals 1;
-		JumpJet.thrust 2.0;
+		JumpJet.thrust MWJJET_THRUST;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 8450;
 	}

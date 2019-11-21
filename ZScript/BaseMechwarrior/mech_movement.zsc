@@ -182,14 +182,13 @@ void mech_movement()
 		}
 	}
 	
-	
 	if( (GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) && Mech_HasJets && mech_jetsfuel > 0)
 	{
 		class<JumpJet> jj = "JumpJet";
 		float truetonnage = overtonnage ? inv_context.weapons_tonnage : mech_tonnage;
 		double tonmod = 100-( truetonnage-(5*Mech_JetCount) );
 		double zthrust = ( Mech_JetCount * GetDefaultByType(jj).thrust_power ) * ( tonmod/100 ) + ((mech_jetsfuel/100)*2);
-		vel.z = zthrust * defaultmovement ? 5 : 1;
+		vel.z = zthrust * (defaultmovement ? 2 : 1);
 		mech_jetsfuel -= 1;
 		A_PlaySound("Mech/JetLoop",5,1,1);
 	} 
