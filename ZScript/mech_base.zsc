@@ -263,22 +263,20 @@ class MechWarrior : DoomPlayer
 	Property InfiniteTorsoTwist: uncappedtorso;
 	Property OverTonnage: overtonnage;
 	
-
-	void setupInvContext()
+	// Essentially macros, renamed functions.
+	void giveWeaponAmmo(class<Ammo> type, int amt) { GiveInventory(type, amt); }
+	
+	// End of macros.
+	bool setupInventory()
 	{
 		if(!inv_context)
 		{
-			let invctx = FindInventory("mw_InvInfo");
-			if(!invctx)
-			{
-				GiveInventory("mw_InvInfo",1);
-				inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));
-			}
-			else
-			{
-				inv_context = mw_InvInfo(invctx);
-			}
+			GiveInventory("mw_InvInfo",1);
+			inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));
+			inv_context.weapons_tonnage += enginesize;
+			setupWeapons();
 		}
+		return inv_context==NULL;
 	}
 
 	clearscope void sendHudAlert(String str, int c)
@@ -297,10 +295,6 @@ class MechWarrior : DoomPlayer
 		return 0;
 	}
 
-	void giveWeaponAmmo(class<Ammo> type, int amt)
-	{
-		GiveInventory(type, amt);
-	}
 	bool checkVoodoo()
 	{
 		return (!player || !player.mo || player.mo != self);
@@ -1883,37 +1877,36 @@ class MechWarrior : DoomPlayer
 			(inv_context.hardpoints.ll.internalhp <= 0 && inv_context.hardpoints.rl.internalhp <= 0)   ) 
 		{
 			Die(NULL,damager);
-			health = 0;
-			player.health = 0;
+			A_SetHealth(0);
 		}
 	}
-	
+
 	override void PostBeginPlay()
 	{
 		// Setup mech support systems.
-		if(!player) return;
+		if(checkVoodoo()) 
+		{
+			super.PostBeginPlay();
+			return;
+		}
+		setupInventory();
 		
-		setupInvContext();
-		SetupWeapons();
-		
+		weapons_fired = false;
+		weapon_groupfire = false;
 		selectedGroup = 1;
 		boblendir = 1;
 		selectedWeapon = 1;
-		inv_context.weapons_tonnage += enginesize;
+		mech_jetsfuel = 100;
 		maxgroup = getMaxWeaponGrouping();
 		defaultfov = player.desiredFOV;
-		
+				
 		// SoundQueue 
 		mechsounds = SoundQueue.SQ_Create(self, 32);
 		
-		weapons_fired = false;
-		if(countStruct("JumpJet")>0) mech_jetsfuel = 100;
-		weapon_groupfire = false;
-		LegAng = angle;
-		//angle = 0;
 		speed = 0; // Stop normal movement;
+		LegAng = angle;
+		
 		// Convert KPH to UPT
-		//startMechbay();
 		MoveSpeed = ceil((MoveSpeedKPH*15000)/100000);
 		MoveSpeed_Max = MoveSpeed;
 		throttle_max = 1;
@@ -1922,31 +1915,34 @@ class MechWarrior : DoomPlayer
 			A_SetSpeed(MoveSpeed*0.08);
 			level.aircontrol = 1;
 			level.airfriction = 0.87;
-		}
-		
+		}	
 		super.PostBeginPlay();
 	}
 	
 	override void tick()
 	{	
-		if(!inv_context) setupInvContext();
-		
-		if(defaultmovement)
-		{			
-			// Roll/Sway system
-			uint btns = player.cmd.buttons;
-			bool strafing = (btns & BT_MOVELEFT) | (btns & BT_MOVERIGHT);
-			if(btns & BT_MOVELEFT) rolloffs -= 1;
-			if(btns & BT_MOVERIGHT) rolloffs += 1;
-			if(!strafing) rolloffs *= 0.90;
-			if(abs(rolloffs) < 0.2) rolloffs = 0;
-			rolloffs = clamp(rolloffs,-2.25,2.25);
-			
-			if( rolloffs != 0 ) A_SetRoll(rolloffs);
-		}
-		
-		if(!checkVoodoo() && health > 0) 
+		if(checkVoodoo()) 
 		{
+			super.Tick();
+			return;
+		}
+		if(!inv_context) setupInventory();		
+		
+		if(health > 0) 
+		{
+			if(defaultmovement)
+			{			
+				// Roll/Sway system
+				uint btns = player.cmd.buttons;
+				bool strafing = (btns & BT_MOVELEFT) | (btns & BT_MOVERIGHT);
+				if(btns & BT_MOVELEFT) rolloffs -= 1;
+				if(btns & BT_MOVERIGHT) rolloffs += 1;
+				if(!strafing) rolloffs *= 0.90;
+				if(abs(rolloffs) < 0.2) rolloffs = 0;
+				rolloffs = clamp(rolloffs,-2.25,2.25);
+				
+				if( rolloffs != 0 ) A_SetRoll(rolloffs);
+			}
 			// Overtonnage logic
 			if(overtonnage)
 			{

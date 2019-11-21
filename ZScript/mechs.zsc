@@ -8,12 +8,13 @@ class MechWarrior_Smooth : MechWarrior
 		Player.SideMove 1.0, 1.0;
 		Player.ViewBob 0;
 		Player.JumpZ 0;
+		Player.StartItem "CrosshairHandler", 1;
 	}
 	// This may seem like a mistake, it's not.
 	// This somehow makes movement a WHOLE lot smoother, idek, it WAS a mistake at first.
 	override void tick()
 	{
-		if(!mech_shutdown)
+		if(!mech_shutdown && !checkVoodoo())
 		{
 			mech_movement();
 			// Bob must also be called OUTSIDE of the base class.
