@@ -1,0 +1,32 @@
+	/*****************************\
+	|	 Miscellaneous Systems    |
+	\*****************************/
+extend class MechwarriorBase;
+
+void startMechbay()
+{
+	let bay = Spawn("mechbay",pos);
+	float xo = (cos(angle+12))*32;
+	float yo = (sin(angle+12))*32;
+	let door = Spawn("Door_3D",(pos.x+xo,pos.y+yo,pos.z+60));
+	if(bay)bay.angle = angle;
+	if(door)door.angle = angle+128;
+	mech_shutdown = true;
+	mechsounds.pushSound("Mech/Betty/SystemsCheck");
+	A_PlaySound("Mech/Power",4);
+	mechsounds.pushSound("Mech/StartupDone");
+	manualshutdown = false;
+	prevticks = ticks;
+	lockangle = angle;
+	lockpitch = pitch;
+}
+
+void adjustMoney(int amt) 
+{ 
+	inv_context.money_cbills += amt; 
+}
+
+void giveWeaponAmmo(class<Ammo> type, int amt) 
+{ 
+	GiveInventory(type, amt); 
+}

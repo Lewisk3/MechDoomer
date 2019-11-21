@@ -1,0 +1,266 @@
+	/*************************\
+	|	   Combat System      |
+	\*************************/
+extend class MechWarriorBase;
+
+// Properties
+float baseHeatEfficiency;
+
+// Vars
+bool heatwarn;
+bool supersink;
+int ams_timer;
+float HeatEfficiency;
+float HeatLevel;
+float prevheat;
+float deltaHeat;
+
+// Main
+void mech_weapons()
+{
+	if((ticks - prevticks ) > 5)
+	{
+		buttonTick = true;
+		prevticks = ticks;
+	}
+
+	// Process Heat levels and struct functionality.
+	deltaHeat = HeatLevel-prevheat;
+	class<Heatsink> hs = "Heatsink";
+	class<Heatsink> dhs = "DoubleHeatsink";
+	process_antimissilesystem();
+	
+	HeatEfficiency = baseHeatEfficiency+( countStruct("Heatsink")*GetDefaultByType(hs).cooling );
+	HeatEfficiency += baseHeatEfficiency+( countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling );
+	Mech_HasJets = (countStruct("JumpJet") > 0);
+	Mech_JetCount = countStruct("JumpJet");
+	if(supersink) HeatEfficiency *= 2;
+	if(HeatLevel > 0) HeatLevel -= HeatEfficiency;
+	if(HeatLevel < 0) HeatLevel = 0;
+	if(HeatLevel > 120) DamageMobj(self,null,random(6,12),"overheating",DMG_NO_ARMOR | DMG_NO_FACTOR);
+	if(HeatLevel <= 30) heatwarn = false;
+	if(HeatLevel > 55 && !heatwarn)
+	{
+		A_PlaySound("Mech/HeatWarn",1,1);
+		mechsounds.pushSound("Mech/Betty/HeatCritical");
+		heatwarn = true;
+	}
+	if(HeatLevel >= 85 && !doShutdown && canShutdown) 
+	{
+		A_Print("Shutdown sequence initiated!");
+		mechsounds.pushSound("Mech/Betty/ShutdownInit");
+		doShutdown = true;
+		canShutdown = false;
+		shutdown_timer = ticks;
+	}
+	if(HeatLevel <= 65) canShutdown = true;
+	if( ((ticks - shutdown_timer) > 105) && doShutdown )
+	{
+		A_StopSound(1);
+		A_Print("Shutting down...");
+		A_PlaySound("Mech/Betty/ShuttingDown",1);
+		doShutdown = true;
+		lockangle = angle;
+		lockpitch = pitch;
+		mech_shutdown = true;
+		shutdown_timer = ticks;
+		A_PlaySound("Mech/Shutdown",2);
+	}
+	if(HeatLevel > 200) HeatLevel = 200;
+	
+	if(selectedWeapon > weapons)selectedWeapon = 1;
+	if(selectedGroup > 4)selectedGroup = 1;
+	if(GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK)
+	{
+		FireWeapons(weapon_groupfire);
+		weapons_fired = true;
+		if(buttonTick)buttonTick = false;
+	}
+	else if(weapons_fired) 
+	{	
+		nextWeapon(true);
+		weapons_fired = false;
+	}
+	
+	if(countinv("IBTN_SETWEAPGRP"))
+	{	
+		if(countinv("IBTN_SETWEAPGRP") > 4)
+		{
+			console.printf("ERROR: Invalid weapon group :> %d",countinv("IBTN_SETWEAPGRP"));
+			TakeInventory("IBTN_SETWEAPGRP",999);
+		}
+		else
+		{
+			setWeaponGroupAt(selectedWeapon,countinv("IBTN_SETWEAPGRP"));
+			maxgroup = getMaxWeaponGrouping();
+		}
+		TakeInventory("IBTN_SETWEAPGRP",999);
+	}
+	
+	if(countinv("IBTN_SHOOTALLWEAPONSLIKEAMADLAD"))
+	{
+		FireGroup(0,true); // pew pew pew, whoosh, whoosh, whoosh, pow, pow, po.. *explodes*
+		TakeInventory("IBTN_SHOOTALLWEAPONSLIKEAMADLAD",1);
+	}
+	
+	if(countinv("IBTN_NXTGROUP"))
+	{
+		int grp = getWeaponGroupAt(selectedWeapon)+1;
+		if(grp > maxgroup)grp = 1;
+		selectedWeapon = getNearestWeaponAt(grp);
+		TakeInventory("IBTN_NXTGROUP",1);
+	}
+	
+	if(countinv("IBTN_PRVGROUP"))
+	{
+		int grp = getWeaponGroupAt(selectedWeapon)-1;
+		if(grp < 1)grp = maxgroup;
+		selectedWeapon = getNearestWeaponAt(grp);
+		TakeInventory("IBTN_PRVGROUP",1);
+	}
+	
+	if(countinv("IBTN_SHUTDOWN"))
+	{
+		A_Print("Shutting down...");
+		mechsounds.pushSound("Mech/Betty/ShuttingDown");
+		A_PlaySound("Mech/Shutdown",1);
+		mech_shutdown = true;
+		manualshutdown = true;
+		lockpitch = pitch;
+		lockangle = angle;
+		TakeInventory("IBTN_SHUTDOWN",1);
+	}
+	
+	// Don't hold onto dead target.
+	if(targetenemy && targetenemy.health <= 0) targetenemy = null;
+	
+	if(!targetenemy && targetreticle)
+	{
+		// Don't hold onto dead/invalid target.
+		targetreticle.RDeconstruct();
+		targetreticle = null;
+	}
+	
+	if(countinv("IBTN_TARGET"))
+	{
+		TakeInventory("IBTN_TARGET",999);
+		
+		// Get reference to shootable actor under players aim.
+		// AimLineAttack or AimTarget fail to respect viewheight, hence the LineTrace.
+		FLineTraceData lt;
+		LineTrace(angle, 9999, pitch, 0, viewheight, 0.0,0.0, lt);
+		if(lt.HitActor)
+		{
+			SoundEmitter.SE_Trigger("Mech/Target/Get",pos);
+			if(targetreticle)targetreticle.RDeconstruct();
+			targetenemy = lt.HitActor;
+			targetreticle = MechTargetReticle.InitCreate(self, targetenemy, 16);
+		}
+	}
+	
+	if(countinv("IBTN_bFIREMODE"))
+	{
+		weapon_groupfire = !weapon_groupfire;
+		if(weapon_groupfire){
+			mechsounds.pushSound("Mech/Betty/Groupfire");
+			mechsounds.pushSound("Mech/Betty/Engaged");
+			TakeInventory("IBTN_bFIREMODE",1);
+		} else {
+			mechsounds.pushSound("Mech/Betty/Chainfire");
+			mechsounds.pushSound("Mech/Betty/Engaged");
+			TakeInventory("IBTN_bFIREMODE",1);
+		}
+		TakeInventory("IBTN_bFIREMODE",1);
+	}
+	
+	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER1 ) FireGroup(1);
+	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER2 ) FireGroup(2);
+	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER3 ) FireGroup(3);
+	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER4 ) FireGroup(4);
+	
+	if(countinv("IBTN_NEXTWEAPON"))
+	{
+		A_PlaySound("Mech/NextWeapon",6);
+		selectedWeapon++;
+		TakeInventory("IBTN_NEXTWEAPON",1);
+	}		
+	if(countinv("IBTN_PREVWEAPON"))
+	{
+		A_PlaySound("Mech/NextWeapon",6);
+		selectedWeapon--;
+		if(selectedWeapon < 1) selectedWeapon = weapons;
+		TakeInventory("IBTN_PREVWEAPON",1);
+	}
+	
+	prevheat = HeatLevel;
+	ticks++;
+}
+
+// AMS
+void process_antimissilesystem()
+{
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		String cname = inv_context.mechstructs[i].Tag;
+		cname.ToLower();
+		if(cname == "antimissilesystem")
+		{
+			trigger_ams( inv_context.mechstructs[i].pos );
+		}
+	}
+	if(ams_timer > 0) ams_timer--;
+}
+void trigger_ams(vector2 amshardpoint)
+{
+	class<Mechbase_Utility> amsut = "AntiMissileSystem";
+	class<AntiMissileSystem> amsdef = "AntiMissileSystem";
+	let def_utams = GetDefaultByType(amsut);
+	let def_ams = GetDefaultByType(amsdef);
+	
+	if(ams_timer <= 0)
+	{	
+		// Check ammunition.
+		if(def_utams.ammotype) 
+		{
+			if(countinv(def_utams.ammotype) < def_ams.ammouse) return;
+		}
+		// Check if a projectile is near us.
+		ThinkerIterator ams_it = ThinkerIterator.Create("Actor");
+		Actor obj;
+		while(obj = Actor(ams_it.Next()))
+		{
+			if(obj is "AMS_Missile" || obj is "Mechbase_Actor") continue;
+			if(obj)
+			{	
+				if( CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
+				{
+					//console.printf("Firing AMS at: " .. obj.getTag());
+					SoundEmitter.SE_Trigger("Missiles/AMS");
+					amshardpoint.x += random(-5,5);
+					amshardpoint.y += random(-5,5);
+					float xo = (cos(AngleTo(obj)+amshardpoint.x))*25;
+					float yo = (sin(AngleTo(obj)+amshardpoint.x))*25;
+					Vector3 lpos = (pos.x+xo,pos.y+yo,pos.z+(viewheight*player.crouchFactor)+amshardpoint.y);		
+					obj.bSHOOTABLE = true;
+					let ams = AMS_Missile(Spawn(def_ams.amstype,lpos));
+					if(ams)
+					{
+						// AMS Sound FX
+						ams.tracer = obj;
+						ams.master = self;
+						ams_timer = def_ams.cooldown;
+						ams.pitch = obj.pitch;
+						ams.angle = ams.AngleTo(obj);
+						// Will automatically set convengence factor in postplay.
+						ams.vel = (
+								cos(ams.AngleTo(obj))*cos(obj.pitch),
+								sin(ams.AngleTo(obj))*cos(obj.pitch),
+								-sin(obj.pitch)*5
+								) * obj.speed;
+						if(def_utams.ammotype) TakeInventory(def_utams.ammotype,def_ams.ammouse);
+					}
+				}
+			}
+		}
+	}
+}

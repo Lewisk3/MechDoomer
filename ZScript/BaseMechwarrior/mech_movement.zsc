@@ -1,0 +1,370 @@
+	/*************************\
+	|	  Movement System     |
+	\*************************/
+extend class MechWarriorBase;
+
+// Properties
+bool defaultmovement;
+bool uncappedtorso;
+bool overtonnage;
+
+float pitchRange;
+float LegSpeed;
+float MoveSpeedKPH;
+float MaxYaw;
+float MaxPitch;
+
+// Vars
+bool snd_reactor;
+bool snd_accelerate;
+bool Mech_HasJets;
+bool doShutdown;
+bool mech_shutdown;
+bool zoomed_in;
+bool canShutdown;
+bool bInfrared;
+bool manualshutdown;
+
+int Mech_JetCount;
+int boblendir;
+int shutdown_timer;
+
+float LegAng;
+float lockpitch;
+float lockangle;
+float MoveSpeed;
+float MoveSpeed_Max;
+float throttle;
+float throttle_max;
+float mech_jetsfuel;
+float LookVel;
+float LegVel;
+float overfactor;
+float rolloffs;
+float boblength;
+float TiltOsc;
+float StepOsc;
+float TiltOffset;
+float StepOffset;
+float CrouchMulti;
+
+// Main
+void mech_movement()
+{
+	if(!player) return;
+	// Dead boi walkin
+	if(health <= 0) return;
+	
+	// Movement Quirks
+	if(defaultmovement)
+	{			
+		// Roll/Sway system
+		uint btns = player.cmd.buttons;
+		bool strafing = (btns & BT_MOVELEFT) | (btns & BT_MOVERIGHT);
+		if(btns & BT_MOVELEFT) rolloffs -= 1;
+		if(btns & BT_MOVERIGHT) rolloffs += 1;
+		if(!strafing) rolloffs *= 0.90;
+		if(abs(rolloffs) < 0.2) rolloffs = 0;
+		rolloffs = clamp(rolloffs,-2.25,2.25);
+		
+		if( rolloffs != 0 ) A_SetRoll(rolloffs);
+	}
+	// Overtonnage logic
+	if(overtonnage)
+	{
+		float truetonnage = mech_shutdown ? mech_tonnage*0.5 : mech_tonnage;
+		overfactor = clamp(truetonnage/(inv_context.weapons_tonnage*0.35), 0.1, 1.0);
+		A_SetSpeed(MoveSpeed*0.12*overfactor*throttle_max);
+	}
+	
+	// Leg Movement
+	if(!defaultmovement)
+	{
+		if(player.cmd.yaw+player.cmd.pitch != 0 && (abs((angle-LegAng)) < MaxYaw || uncappedtorso) )
+			{ A_PlaySound("Mech/TorsoTwist",4,0.3,1); } else { A_StopSound(4); }
+			
+		if(throttle == 0) snd_accelerate = true;
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_FORWARD)
+		{
+			throttle += 0.02;
+			// If stop is pressed and we continue moving, we don't want the two "forces" to fight.
+			TakeInventory("IBTN_STOP",1);
+			if(snd_accelerate){A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false;}
+		}
+		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle > 0.02)
+		{
+			throttle -= 0.02;
+			if(!snd_accelerate){A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true;}
+		}
+		
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_BACK) 
+		{
+			throttle -= 0.02;
+			TakeInventory("IBTN_STOP",1);
+			if(!snd_accelerate){A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true;}
+		}
+		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle < 0)
+		{
+			throttle += 0.02;
+			if(snd_accelerate){A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false;}
+		}
+		
+		throttle = clamp(throttle,-(throttle_max/2),throttle_max);
+		
+		if(throttle > 0.5 && !snd_reactor)
+		{
+			A_PlaySound("Mech/ReactorHum",5,1.0,1);
+			snd_reactor = true;
+		}
+		else if(throttle < 0.5 && snd_reactor)
+		{
+			A_StopSound(5);
+			snd_reactor = false;
+		}
+		
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_MOVERIGHT)
+		{
+			TakeInventory("IBTN_CENTER",1);
+			LegVel = -LegSpeed;
+			LookVel = -LegSpeed;
+		}
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_MOVELEFT )
+		{
+			TakeInventory("IBTN_CENTER",1);
+			LegVel = LegSpeed;
+			LookVel = LegSpeed;
+		}		
+		if(!(GetPlayerInput(INPUT_BUTTONS) & BT_MOVERIGHT) && 
+		   !(GetPlayerInput(INPUT_BUTTONS) & BT_MOVELEFT))
+		  {
+			 LookVel = 0;
+			 LegVel = 0;
+		  }
+		   
+		if(countinv("IBTN_STOP"))
+		{
+			if(abs(throttle) <= 0.1)TakeInventory("IBTN_STOP",1);
+			if(throttle < 0)throttle += 0.02;
+			if(throttle > 0)throttle -= 0.02;
+			snd_accelerate = true;
+			if(abs(throttle) <= 0.1)throttle = 0;
+		}
+		if(countinv("IBTN_CENTER") && !uncappedtorso)
+		{
+			int yaw = int(angle-LegAng);
+			if(yaw > 0) LegVel =  2;
+			if(yaw < 0) LegVel = -2;
+			if(yaw == 0)TakeInventory("IBTN_CENTER",1);
+		}
+		if(countinv("IBTN_CENTERTORSO") && !uncappedtorso)
+		{
+			int yaw = int(angle-LegAng);
+			if(yaw > 0)angle-=2;
+			if(yaw < 0)angle+=2;
+			if(pitch > 0)pitch-=2;
+			if(pitch < 0)pitch+=2;
+			if(yaw == 0)TakeInventory("IBTN_CENTERTORSO",1);
+		}
+		
+		A_SetRoll( roll + 
+			   (( (cos( (angle-LegAng)-90  ) * pitch) )
+				- (cos(angle)*(sin( pitch )*10)))
+		);
+		// Move mech by a percentage of throttle.
+		vel = (cos(LegAng)*(throttle*MoveSpeed),sin(LegAng)*(throttle*MoveSpeed),vel.z);
+		LegAng += LegVel;
+		angle += LookVel;
+		Pitch = clamp(Pitch, -pitchRange, pitchRange);
+		if(MaxYaw < 360 && !uncappedtorso)
+		{
+			if(angle - LegAng > MaxYaw)  angle = LegAng + MaxYaw;
+			if(angle - LegAng < -MaxYaw) angle = LegAng - MaxYaw;
+		}
+	}
+	
+	
+	if( (GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) && Mech_HasJets && mech_jetsfuel > 0)
+	{
+		class<JumpJet> jj = "JumpJet";
+		float truetonnage = overtonnage ? inv_context.weapons_tonnage : mech_tonnage;
+		double tonmod = 100-( truetonnage-(5*Mech_JetCount) );
+		double zthrust = ( Mech_JetCount * GetDefaultByType(jj).thrust_power ) * ( tonmod/100 ) + ((mech_jetsfuel/100)*2);
+		vel.z = zthrust * defaultmovement ? 5 : 1;
+		mech_jetsfuel -= 1;
+		A_PlaySound("Mech/JetLoop",5,1,1);
+	} 
+	else if(!btn_userfive && mech_jetsfuel > 0)
+	{
+		A_StopSound(5);
+	}
+	
+	if(btn_userfive && Mech_HasJets && mech_jetsfuel > 0)
+	{
+		class<JumpJet> jj = "JumpJet";
+		double tonmod = 100-( mech_tonnage-(5*Mech_JetCount) );
+		vel.z = ( Mech_JetCount * GetDefaultByType(jj).thrust_power ) * ( tonmod/100 ) + ((mech_jetsfuel/100)*2);
+		mech_jetsfuel -= 1;
+		A_PlaySound("Mech/JetLoop",5,1,1);
+	} 
+	else if ( !((GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) && mech_jetsfuel > 0))
+	{
+		A_StopSound(5);
+	}
+	
+	if( (GetPlayerInput(0) & BT_ZOOM) )
+	{
+		if(player.DesiredFOV > 30)
+		{
+			player.DesiredFOV -= 3;
+			A_PlaySound("Mech/Zoom",7,1,1);
+		}
+		else
+		{
+			A_StopSound(7);
+		}
+	}
+	else
+	{
+		if(player.DesiredFOV < defaultfov)
+		{
+			player.DesiredFOV += 3;
+			A_PlaySound("Mech/Zoom",7,1,1);
+		}
+		else
+		{
+			A_StopSound(7);
+		}
+	}
+
+	// Cool utilities for easier pilotability!
+	if(countinv("IBTN_OVERRIDE"))
+	{
+		if(!doShutdown)
+		{
+			TakeInventory("IBTN_OVERRIDE",1);
+		}
+		else
+		{
+			A_Print("Shutdown overridden.");
+			doShutdown = false;
+			shutdown_timer = ticks;
+			A_PlaySound("Mech/Override",1);
+			mechsounds.pushSound("Mech/Betty/ShutdownOverride");
+			TakeInventory("IBTN_OVERRIDE",1);
+		}
+	}
+
+	if(countinv("IBTN_INFRARED"))
+	{	
+		if(bInfrared)
+		{
+			TakeInventory("InfraredAmp",1);
+		}
+		else
+		{
+			A_PlaySound("Mech/Infrared",CHAN_WEAPON);
+			GiveInventory("InfraredGiver",1);
+		}
+		TakeInventory("IBTN_INFRARED",1);
+		bInfrared = !bInfrared;
+	}
+
+	// Stompy boi
+	if(vel.length() > 0.08)
+	{
+		boblength += (vel.length()/4) * boblendir;
+	}
+	if(abs(boblength) > 42)
+	{
+		boblendir *= -1;
+	}
+	if(countStruct("JumpJet") > 0 && mech_jetsfuel < 100 && 
+	 !(GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) &&
+	 !btn_userfive && player.OnGround) mech_jetsfuel += 0.5;
+}
+
+void process_shutdown()
+{
+	if(!defaultmovement)
+	{	
+		angle = lockangle;
+		pitch = lockpitch;
+	}
+	if(!manualshutdown)
+	{	
+		if(throttle > 0)throttle -= 0.1;
+		if(throttle < 0)throttle += 0.1;
+		if( ((ticks - shutdown_timer) > 125) && HeatLevel <= 0 && doShutdown)
+		{
+			// If we are very efficiently cooled, powerup early
+			prevticks = ticks;
+			mechsounds.pushSound("Mech/Betty/SystemsCheck");
+			A_PlaySound("Mech/Power",2);
+			mechsounds.pushSound("Mech/StartupDone");
+			doShutdown = false;
+		}
+		if(!doShutdown && (ticks-prevticks) > 250)powerup();
+		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*1.5;
+	}
+	else
+	{
+		if(countinv("IBTN_SHUTDOWN"))
+		{
+			mechsounds.pushSound("Mech/Betty/SystemsCheck");
+			A_PlaySound("Mech/Power",2);
+			mechsounds.pushSound("Mech/StartupDone");
+			manualshutdown = false;
+			TakeInventory("IBTN_SHUTDOWN",1);
+			prevticks = ticks;
+		}
+	}
+	ticks++;
+}
+void powerup()
+{
+	mech_shutdown = false;
+	doShutdown = false;
+}
+
+// Bobbing
+void Bobbing() {
+	// Don't bob on voodoos!
+	if(!player || !player.mo || player.mo != self) return;
+	
+	float tiltosc_amp =  10 + (vel.Length()/3);
+	float steposc_amp =  15 + (vel.Length()/2);
+	tiltosc_amp = clamp(tiltosc_amp,0,18);
+	steposc_amp = clamp(steposc_amp,0,24);
+	TiltOsc += tiltosc_amp;
+	StepOsc += steposc_amp;
+	
+	CrouchMulti = 2 - Player.CrouchFactor;
+
+	if (TiltOsc >= 360.0 || TiltOsc < 0.0)    {
+		TiltOsc = 0.0;
+	}
+	if (StepOsc >= 360.0 || StepOsc < 0.0)    {
+		StepOsc = 0.0;
+	}
+
+	int vel = vel.length();
+	if(vel != 0)
+	{
+		TiltOffset  = sin(TiltOsc);
+		TiltOffset *= (vel/2) - (LegVel*2);
+		TiltOffset *= 0.15;
+		if(defaultmovement) StepOffset *= 3;
+		TiltOffset *= CrouchMulti;
+
+		StepOffset  = sin(StepOsc);
+		StepOffset *= (vel/2) + (LegVel*2);
+		StepOffset *= (1.78 + ((mech_tonnage-40)/100));
+		StepOffset *= 0.8;
+		if(defaultmovement) StepOffset *= 0.7;
+		StepOffset *= CrouchMulti;
+	}
+	
+	A_SetRoll(-TiltOffset);
+	//SetOrigin(Vec3Angle(TiltOffset * 0.5, angle+90, 0, false), true);
+	Player.ViewZ += StepOffset;
+}

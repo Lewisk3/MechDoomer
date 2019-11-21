@@ -1,0 +1,93 @@
+	/*************************\
+	|	 Structure Systems    |
+	\*************************/
+extend class MechwarriorBase;
+
+// Get
+int countStruct(String type)
+{
+	int count = 0;
+	type.ToLower();
+	if(!inv_context.mechstructs.Size()) inv_context.mechstructs.Clear();
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		String cname = inv_context.mechstructs[i].Tag;
+		cname.ToLower();
+		type.ToLower();
+		if(cname == type) count++;
+	}
+	return count;
+}
+
+// Equip or Add
+bool equipStructInv(int ind, Vector2 pos, bool move=true)
+{
+	// Equip struct from items
+	class<Mechbase_Utility> util = inv_context.weapon_items[ind-1];
+	if(!util) return false;
+	
+	if( inv_context.weapons_tonnage+GetDefaultByType(util).weight > mech_tonnage && !overtonnage)
+	{
+		sendHudAlert("Cannot equip item, over tonnage!", Font.CR_DARKRED);
+		return false;
+	}
+	if( checkHardslots(pos) < GetDefaultByType(util).hardslots )
+	{
+		sendHudAlert("Cannot equip item, no freeslots!", Font.CR_DARKRED);
+		return false;	
+	}
+	 
+	 // Equip without giving starting ammunition
+	if(!equipStruct(inv_context.weapon_items[ind-1],pos,1,false)) return false;
+	if(move)inv_context.weapon_items.delete(ind-1);
+	return true;
+}
+bool equipStruct(class<Mechbase_Utility> type, Vector2 pos, int amt = 1,bool giveammo=true)
+{
+	if( (checkHardslots(pos)-(GetDefaultByType(type).hardslots*amt)) < 0)
+	{
+		if(!GetDefaultByType(type).moveable) console.printf("WARNING: Failed to equip critical item: %s",type.getClassName());
+		return false;
+	}
+	let str_def = GetDefaultByType(type);
+	if(str_def.ammogive > 0 && str_def.ammotype != "" && giveammo) 
+	{
+		A_GiveInventory(str_def.ammotype,str_def.ammogive);
+	}
+	for(int i = 0; i < amt; i++)
+	{
+		let st = new("mw_InvStruct");
+		st.Tag = type.getClassName();
+		st.pos = pos;
+		inv_context.mechstructs.push(st);
+		inv_context.weapons_tonnage += GetDefaultByType(type).weight;
+		adjustHardslots(pos,GetDefaultByType(type).hardslots);
+	}
+	return true;
+}
+void addStructToInv(String mstruc)
+{
+	class<Mechbase_Utility> util = mstruc;
+	if(!util) return;
+	inv_context.weapon_items.push(mstruc);
+}
+
+// Move
+bool moveStructToInv(int struc_ind, bool move=true)
+{
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		if(i == struc_ind)
+		{
+			let ut = GetDefaultByType(utilcast(inv_context.mechstructs[i].Tag));
+			if(!ut.moveable) return false;
+			Vector2 strucpos = inv_context.mechstructs[i].pos;
+			adjustHardslots(strucpos,-ut.hardslots);
+			inv_context.weapons_tonnage -= ut.weight;
+			addStructToInv(inv_context.mechstructs[i].Tag);
+			if(move)inv_context.mechstructs.delete(i);
+			return true;
+		}
+	}
+	return false;
+}

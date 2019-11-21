@@ -215,7 +215,7 @@ class ArmoryUtility : Inventory
 		return super.TryPickup(toucher);
 	}
 	
-	virtual void EquipUtil(Mechwarrior plr, MechHardpoint hpoint)
+	virtual void EquipUtil(MechwarriorBase plr, MechHardpoint hpoint)
 	{
 	
 	}
@@ -239,7 +239,7 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		loop;
 	}
 	
-	override void EquipUtil(Mechwarrior plr, MechHardpoint hpoint)
+	override void EquipUtil(MechwarriorBase plr, MechHardpoint hpoint)
 	{
 		/*
 		if(hpoint.armor >= hpoint.max_armor) 

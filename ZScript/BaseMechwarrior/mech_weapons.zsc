@@ -1,0 +1,451 @@
+	/*************************\
+	|	  Weapons Systems     |
+	\*************************/
+extend class MechwarriorBase;
+
+// Vars
+Actor targetenemy;
+Actor prevlock;
+MechTargetReticle targetreticle;
+bool weapon_groupfire;
+bool targetlocked;
+bool weapons_fired;
+int selectedGroup;
+int selectedWeapon;
+int weapons;
+int maxgroup;
+float locktimer;
+
+// Normalize
+void normalizeWeaponsID(int offs)
+{
+	int weapsid = weapons-offs;
+	weapons -= offs;
+	for(let w = Inv; w; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			ww.WeaponID = weapsid;
+			weapsid--;
+		}
+	}
+}
+clearscope String resolveWeaponName(Mechbase_Weapon ww)
+{	
+	Array<String> weaponslot;
+	weaponslot.Clear();
+	String weapcheck = ww.getClassName();
+	String weaptype = weapcheck;
+	weapcheck.Split(weaponslot,"_");
+	if(ww is weaponslot[0]) weaptype = weaponslot[0];
+	//console.printf("Weapon is: %s",weaptype);
+	return weaptype;
+}
+
+// Get
+int getWeaponSlotsUsed(Vector2 loc)
+{
+	int slots = 0;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.mount == loc) slots += ww.hardslots;
+		}
+	}
+	return slots;
+}
+int getMaxWeaponGrouping()
+{
+	int mxgrp = 1;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.group > mxgrp)mxgrp = ww.group;
+		}
+	}
+	return mxgrp;
+}
+Mechbase_Weapon getSelectedWeapon()
+{	
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.WeaponID == selectedWeapon) return ww;
+		}
+	}
+	return null;
+}
+int getWeaponGroupAt(int ind)
+{
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.WeaponID == ind) return ww.group;
+		}
+	}
+	return 1;
+}
+bool, int getNextWeaponIn(int ind, int grp)
+{
+	int mxgrp = 0;
+	bool found = false;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.WeaponID > ind && ww.group == grp)
+			{
+				// /console.printf("Found: I: %d, G: %d",ww.WeaponID,ww.group);
+				mxgrp = ww.WeaponID;
+				found = true;
+			}
+		}
+	}
+	return found, mxgrp;
+}
+int getNearestWeaponAt(int group, bool markactive=false)
+{
+	int prevind = weapons;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if( (ww.WeaponID < prevind) && ww.group == group )
+			{
+				prevind = ww.WeaponID;
+			}
+		}
+	}
+	return prevind;
+}
+
+// Set
+bool setWeaponGroupAt(int ind, int group)
+{
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.WeaponID == ind) 
+			{
+				ww.group = group;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+void clearWeapons()
+{
+	ClearInventory();
+	inv_context.hardpoints.hd.slots = 0;
+	inv_context.hardpoints.ct.slots = 0;
+	inv_context.hardpoints.lt.slots = 0;
+	inv_context.hardpoints.rt.slots = 0;
+	inv_context.hardpoints.la.slots = 0;
+	inv_context.hardpoints.ra.slots = 0;
+	inv_context.hardpoints.ll.slots = 0;
+	inv_context.hardpoints.rl.slots = 0;
+	inv_context.weapons_tonnage = 0;
+	GiveInventory("CrosshairHandler",1);
+	weapons = 0;	
+}
+
+// Remove
+void removeWeapon(Mechbase_Weapon w)
+{
+	// This is need because hardpoints and stuff.
+	inv_context.weapons_tonnage -= w.weight;
+	adjustHardslots(w.mount,-w.hardslots);
+	RemoveInventory(w);
+}
+bool removeWeaponAt(int ind)
+{
+	for(let w = Inv; w; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.WeaponID == ind)
+			{
+				removeWeapon(ww);
+				normalizeWeaponsID(1);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+// Swap or Move
+bool swapWeaponToInv(int weap_ind, int inv_ind)
+{
+	String weaptype;
+	inv_ind --;
+	
+	// Make sure our inventory type is a weapon!
+	class<Mechbase_Weapon> invweap = inv_context.weapon_items[inv_ind];
+	if(!invweap) return false;
+	
+	for(let w = Inv; w; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(weap_ind == ww.WeaponID)
+			{
+				weaptype = resolveWeaponName(ww);
+				int prevweaps = weapons;
+				weapons = ww.WeaponID-1;
+				equipWeapon(inv_context.weapon_items[inv_ind],ww.mount,ww.group,false);
+				weapons = prevweaps;
+				removeWeapon(ww);
+				inv_context.weapon_items[inv_ind] = weaptype;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+bool moveWeaponToInv(int weap_ind)
+{
+	for(let w = Inv; w; w = w.Inv)
+	{
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.WeaponID == weap_ind)
+			{
+				addWeaponToInv(resolveWeaponName(ww),1,false);
+				removeWeapon(ww);
+				normalizeWeaponsID(1);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+// Equip or Add
+bool equipWeaponInv(int ind, Vector2 pos, int grp, bool move=true)
+{
+	// Equip weapon from items
+	class<Mechbase_Weapon> weap = inv_context.weapon_items[ind-1];
+	if(!weap) return false;
+	
+	if( inv_context.weapons_tonnage+GetDefaultByType(weap).weight > mech_tonnage && !overtonnage)
+	{
+		sendHudAlert("Cannot equip weapon, over tonnage!", Font.CR_DARKRED);
+		return false;
+	}
+	if( checkHardslots(pos) < GetDefaultByType(weap).hardslots )
+	{
+		sendHudAlert("Cannot equip weapon, no freeslots!", Font.CR_DARKRED);
+		return false;	
+	}
+	 
+	 // Equip weapon in inventory, don't give ammo.
+	if(!equipWeapon(inv_context.weapon_items[ind-1],pos,grp,false)) return false;
+	if(move)inv_context.weapon_items.delete(ind-1);
+	return true;
+}
+bool equipWeapon(class<Mechbase_Weapon> type, Vector2 vpos, int group, bool giveammo = true)
+{
+	if(checkVoodoo()) return false;
+	GiveInventory(type,1);
+	if(countinv(type) > 1)
+	{
+		int slotcheck = 1;
+		Name ntype;
+		// You can only have 12 of each weapon, max.
+		for(int i = 1; i < 12; i++)
+		{
+			if(countinv( Name(type) .. "_" .. i )) continue;
+			ntype = Name(type) .. "_" .. i;
+			slotcheck = i;
+		}
+		if(!ntype)
+		{
+			sendHudAlert("Weapon Systems Error. Buffer overloaded!", Font.CR_DARKRED);
+			//console.printf("No free slot found for: %s",(Name(type) .. ""));
+			return false;
+		}
+		GiveInventory(ntype,1);
+		//console.printf("Obtaining another %s; slot #%d",(Name(ntype) .. ""),slotcheck);
+	}
+	weapons++;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.WeaponID == 0)
+			{
+				//console.printf("Setting new ID: %d",weapons); 
+				ww.WeaponID = weapons;
+				ww.group = group;
+				ww.mount = vpos;
+				adjustHardslots(ww.mount,ww.hardslots);
+				inv_context.weapons_tonnage += ww.weight;
+				if(ww.ammotype && giveammo)GiveInventory(ww.ammotype,ww.ammogive);
+				//console.printf("Adding Weapon: %s at %d",ww.displayName,ww.WeaponID);
+			}
+		}
+	}
+	maxgroup = getMaxWeaponGrouping();
+	return true;
+}
+void addWeaponToInv(String weapon,int amt=1,bool giveammo = true)
+{
+	if(inv_context.weapon_items.Size() == 0) inv_context.weapon_items.Clear();
+	class<Mechbase_Weapon> weap = weapon;
+	class<Mechbase_Utility> util = weapon;
+	if(weap)
+	{
+		let weapdef = GetDefaultByType(weap);
+		if(weapdef.ammotype && giveammo) A_GiveInventory(weapdef.ammotype,weapdef.ammogive);
+	}
+	if(util)
+	{
+		let utildef = GetDefaultByType(util);
+		if(utildef.ammotype && giveammo) A_GiveInventory(utildef.ammotype,utildef.ammogive);
+	}
+	
+	for(int i = 0; i < amt; i++)inv_context.weapon_items.push(weapon);
+}
+
+// Next
+void nextWeapon(bool gcycle=false)
+{
+	//console.printf("[4] %d",getNearestWeaponAt(getWeaponGroupAt(selectedWeapon)));
+	if(weapon_groupfire || gcycle)
+	{
+		bool valid;
+		int ind;
+		[valid, ind] = getNextWeaponIn(selectedWeapon, getWeaponGroupAt(selectedWeapon));
+		if(!valid)
+		{
+			selectedWeapon = getNearestWeaponAt(getWeaponGroupAt(selectedWeapon));
+		}
+		else
+		{
+			selectedWeapon = ind;
+		}
+	}
+	else
+	{
+		selectedWeapon++;
+	}
+}
+
+// Sort
+void sortWeaponInv()
+{
+	Array<string> newinv;
+	Array<String> sortedtypes;
+	sortedtypes.Clear();
+	newinv.Clear();
+	String type;
+	sortedtypes.push("JumpJet");
+	sortedtypes.push("AntiMissileSystem");
+	sortedtypes.push("Heatsink");
+	sortedtypes.push("DoubleHeatsink");
+	sortedtypes.push("MediumLaser");
+	sortedtypes.push("SmallLaser");
+	sortedtypes.push("LargeLaser");
+	sortedtypes.push("ERLargeLaser");
+	sortedtypes.push("ERMediumLaser");
+	sortedtypes.push("ERSmallLaser");
+	sortedtypes.push("SmallPulseLaser");
+	sortedtypes.push("MediumPulseLaser");
+	sortedtypes.push("LargePulseLaser");
+	sortedtypes.push("PPC");
+	sortedtypes.push("ERPPC");
+	sortedtypes.push("Flamer");
+	sortedtypes.push("MachineGun");
+	sortedtypes.push("Autocannon2");
+	sortedtypes.push("Autocannon5");
+	sortedtypes.push("Autocannon10");
+	sortedtypes.push("Autocannon20");
+	sortedtypes.push("UAutocannon2");
+	sortedtypes.push("UAutocannon5");
+	sortedtypes.push("UAutocannon10");
+	sortedtypes.push("UAutocannon20");
+	sortedtypes.push("GaussRifle");
+	sortedtypes.push("SRM2");
+	sortedtypes.push("SRM4");
+	sortedtypes.push("SRM6");
+	sortedtypes.push("SSRM2");
+	sortedtypes.push("SSRM4");
+	sortedtypes.push("SSRM6");
+	sortedtypes.push("LRM5");
+	sortedtypes.push("LRM10");
+	sortedtypes.push("LRM15");
+	sortedtypes.push("LRM20");
+	// Sort all items of unique types.
+	for(int i = 0; i < sortedtypes.Size(); i++)
+	{
+		type = sortedtypes[i];
+		type.toLower();
+		for(int x = 0; x < inv_context.weapon_items.Size(); x++)
+		{
+			String thing = inv_context.weapon_items[x];
+			thing.ToLower();
+			if(thing == type)
+			{
+				newinv.push(inv_context.weapon_items[x]);
+			}
+		}
+	}
+	// Re-allocate
+	inv_context.weapon_items.Clear();
+	for(int i = 0; i < newinv.Size(); i++) inv_context.weapon_items.push(newinv[i]);
+}
+
+// Fire
+void FireGroup(int group, bool alpha=false)
+{
+	if(checkVoodoo()) return;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{	
+			if( (ww.group == group) || alpha) ww.MWFire();
+		}
+	}
+}
+void FireWeapons(bool groupfire=true)
+{
+	if(checkVoodoo()) return;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{	if(groupfire)
+			{
+				//int bit = 2 ** (ww.group-1);
+				if(ww.group == getWeaponGroupAt(selectedWeapon))
+				{
+					if(!ww.MWFire() && buttonTick && !weapon_groupfire) A_PlaySound("Mech/WeaponBusy",3);
+				}
+			}
+			else if(ww.WeaponID == selectedWeapon)
+			{
+				if(!ww.MWFire() && buttonTick && !weapon_groupfire && weapons_fired == 0) A_PlaySound("Mech/WeaponBusy",3);
+			}
+		}
+	}
+}

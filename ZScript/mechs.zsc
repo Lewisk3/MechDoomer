@@ -1,4 +1,4 @@
-class MechWarrior_Smooth : MechWarrior
+class MechWarrior : MechWarriorBase
 {
 	Default
 	{
@@ -8,7 +8,16 @@ class MechWarrior_Smooth : MechWarrior
 		Player.SideMove 1.0, 1.0;
 		Player.ViewBob 0;
 		Player.JumpZ 0;
-		Player.StartItem "CrosshairHandler", 1;
+		Player.StartItem "CrosshairHandler";	
+		Player.SoundClass "MechWarrior";
+
+		MechWarriorBase.heatEff 0.05;
+		MechWarriorBase.HudCockpit "CROW";
+		MechWarriorBase.HudMech "";
+		MechWarriorBase.LegSpeed 2;
+		MechWarriorBase.MoveSpeed 4;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.PitchRange 30;
 	}
 	// This may seem like a mistake, it's not.
 	// This somehow makes movement a WHOLE lot smoother, idek, it WAS a mistake at first.
@@ -29,7 +38,7 @@ class MechWarrior_Smooth : MechWarrior
 	|   Custom Mech Properties    |
 	|-----------------------------|
 
-	(All properties must be prefixed with MechWarrior.<property>)
+	(All properties must be prefixed with MechWarriorBase.<property>)
 	* Custom Properties *
 	|	heatEff         	<float>   [ Specifies how heat efficient the mech is by default, without heatsinks]
 	|   LegSpeed        	<float>   [ How fast the legs move, when pressing Left or Right strafe]
@@ -79,21 +88,21 @@ class MechWarrior_Smooth : MechWarrior
 	
 */
 
-class BattleArmor : MechWarrior_Smooth
+class BattleArmor : MechWarrior
 {
 	Default
 	{
 		Mass 600;
-		MechWarrior.LegSpeed 2;
-		Mechwarrior.MoveSpeed 75;
-		MechWarrior.TwistRange 130;
-		MechWarrior.heatEff 0.20;
-		MechWarrior.HudCockpit "WARHHUD";
-		MechWarrior.HudMech "ATLAICO";
-		MechWarrior.Weight 5;
-		MechWarrior.EngineWeight 0.5;
-		MechWarrior.DefaultMovement true;
-		MechWarrior.OverTonnage true;
+		MechWarriorBase.LegSpeed 2;
+		MechWarriorBase.MoveSpeed 75;
+		MechWarriorBase.TwistRange 130;
+		MechWarriorBase.heatEff 0.20;
+		MechWarriorBase.HudCockpit "WARHHUD";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.Weight 5;
+		MechWarriorBase.EngineWeight 0.5;
+		MechWarriorBase.DefaultMovement true;
+		MechWarriorBase.OverTonnage true;
 		Player.DisplayName "BattleArmor (Traditional Doom Movement)";
 		Player.ViewHeight 51;
 	}
@@ -112,19 +121,19 @@ class BattleArmor : MechWarrior_Smooth
 	}
 }
 
-class Warhammer : MechWarrior_Smooth
+class Warhammer : MechWarrior
 {
 	Default
 	{
 		Mass 3200;
-		MechWarrior.LegSpeed 1;
-		Mechwarrior.MoveSpeed 64.8;
-		MechWarrior.TwistRange 100;
-		MechWarrior.heatEff 0.08;
-		MechWarrior.HudCockpit "WARHHUD";
-		MechWarrior.HudMech "WARHICO";
-		MechWarrior.Weight 80;
-		MechWarrior.EngineWeight 30;
+		MechWarriorBase.LegSpeed 1;
+		MechWarriorBase.MoveSpeed 64.8;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.HudCockpit "WARHHUD";
+		MechWarriorBase.HudMech "WARHICO";
+		MechWarriorBase.Weight 80;
+		MechWarriorBase.EngineWeight 30;
 		Player.DisplayName "Warhammer Prime";
 		Player.ViewHeight 88;
 	}
@@ -153,20 +162,20 @@ class Warhammer : MechWarrior_Smooth
 }
 
 
-class Stormcrow : MechWarrior_Smooth
+class Stormcrow : MechWarrior
 {
 	Default
 	{
 		Health 600;
 		Mass 2200;
-		MechWarrior.LegSpeed 1.6;
-		Mechwarrior.MoveSpeed 81;
-		MechWarrior.TwistRange 100;
-		MechWarrior.heatEff 0.08;
-		MechWarrior.EngineWeight 30;
-		MechWarrior.HudCockpit "CROWHUD";
-		MechWarrior.HudMech "SCRWICO";
-		MechWarrior.Weight 55;
+		MechWarriorBase.LegSpeed 1.6;
+		MechWarriorBase.MoveSpeed 81;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.EngineWeight 30;
+		MechWarriorBase.HudCockpit "CROWHUD";
+		MechWarriorBase.HudMech "SCRWICO";
+		MechWarriorBase.Weight 55;
 		Player.DisplayName "Stormcrow Prime";
 		Player.ViewHeight 85;
 	}
@@ -188,19 +197,19 @@ class Stormcrow : MechWarrior_Smooth
 
 }
 
-class Timberwolf : MechWarrior_Smooth
+class Timberwolf : MechWarrior
 {
 	Default
 	{
 		Mass 3000;
-		MechWarrior.LegSpeed 1.5;
-		Mechwarrior.MoveSpeed 81;
-		MechWarrior.TwistRange 80;
-		MechWarrior.heatEff 0.08;
-		MechWarrior.HudCockpit "WOLFHUD";
-		MechWarrior.EngineWeight 30;
-		MechWarrior.HudMech "TWLFICO";
-		MechWarrior.Weight 75;
+		MechWarriorBase.LegSpeed 1.5;
+		MechWarriorBase.MoveSpeed 81;
+		MechWarriorBase.TwistRange 80;
+		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.HudCockpit "WOLFHUD";
+		MechWarriorBase.EngineWeight 30;
+		MechWarriorBase.HudMech "TWLFICO";
+		MechWarriorBase.Weight 75;
 		Player.DisplayName "Timberwolf Prime";
 		Player.ViewHeight 90;
 	}
@@ -228,19 +237,19 @@ class Timberwolf : MechWarrior_Smooth
 
 }
 
-class Jenner : MechWarrior_Smooth
+class Jenner : MechWarrior
 {
 	Default
 	{
 		Mass 1400;
-		MechWarrior.LegSpeed 2;
-		Mechwarrior.MoveSpeed 120;
-		MechWarrior.TwistRange 90;
-		MechWarrior.heatEff 0.08;
-		MechWarrior.Weight 35;
-		MechWarrior.EngineWeight 15.5;
-		MechWarrior.HudCockpit "JENNHUD";
-		MechWarrior.HudMech "JENNICO";
+		MechWarriorBase.LegSpeed 2;
+		MechWarriorBase.MoveSpeed 120;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.Weight 35;
+		MechWarriorBase.EngineWeight 15.5;
+		MechWarriorBase.HudCockpit "JENNHUD";
+		MechWarriorBase.HudMech "JENNICO";
 		Player.DisplayName "Jenner Prime";
 		Player.ViewHeight 70;
 	}
@@ -266,19 +275,19 @@ class Jenner : MechWarrior_Smooth
 	}
 }
 
-class Nova : MechWarrior_Smooth
+class Nova : MechWarrior
 {
 	Default
 	{
 		Mass 2000;
-		MechWarrior.LegSpeed 1.7;
-		Mechwarrior.MoveSpeed 86.4;
-		MechWarrior.TwistRange 20;
-		MechWarrior.heatEff 0.08;
-		MechWarrior.Weight 50;
-		MechWarrior.EngineWeight 26;
-		MechWarrior.HudCockpit "NOVAHUD";
-		MechWarrior.HudMech "NOVAICO";
+		MechWarriorBase.LegSpeed 1.7;
+		MechWarriorBase.MoveSpeed 86.4;
+		MechWarriorBase.TwistRange 20;
+		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.Weight 50;
+		MechWarriorBase.EngineWeight 26;
+		MechWarriorBase.HudCockpit "NOVAHUD";
+		MechWarriorBase.HudMech "NOVAICO";
 		Player.DisplayName "Nova Prime";
 		Player.ViewHeight 70;
 	}
@@ -303,17 +312,17 @@ class Nova : MechWarrior_Smooth
 }
 
 // Mercs
-class Shadowcat : MechWarrior_Smooth
+class Shadowcat : MechWarrior
 {
 	Default
 	{
 		Mass 2400;
-		MechWarrior.LegSpeed 1.8;
-		Mechwarrior.MoveSpeed 97;
-		MechWarrior.TwistRange 90;
-		MechWarrior.heatEff 0.08;
-		MechWarrior.EngineWeight 20;
-		MechWarrior.Weight 60;
+		MechWarriorBase.LegSpeed 1.8;
+		MechWarriorBase.MoveSpeed 97;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.EngineWeight 20;
+		MechWarriorBase.Weight 60;
 		Player.DisplayName "ShadowCat Prime";
 		Player.ViewHeight 70;
 	}
@@ -336,19 +345,19 @@ class Shadowcat : MechWarrior_Smooth
 
 
 // Mercs
-class Atlas : MechWarrior_Smooth
+class Atlas : MechWarrior
 {
 	Default
 	{
 		Mass 4000;
-		MechWarrior.LegSpeed 1;
-		Mechwarrior.MoveSpeed 54;		
-		MechWarrior.TwistRange 60;
-		MechWarrior.heatEff 0.08;
-		MechWarrior.HudCockpit "ATLSHUD";
-		MechWarrior.EngineWeight 40;
-		MechWarrior.HudMech "ATLAICO";
-		MechWarrior.Weight 100;
+		MechWarriorBase.LegSpeed 1;
+		MechWarriorBase.MoveSpeed 54;		
+		MechWarriorBase.TwistRange 60;
+		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.HudCockpit "ATLSHUD";
+		MechWarriorBase.EngineWeight 40;
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.Weight 100;
 		Player.DisplayName "Atlas Prime";
 		Player.ViewHeight 130;
 	}
@@ -376,18 +385,18 @@ class Atlas : MechWarrior_Smooth
 }
 
 // Mercs
-class EbonJaguar : MechWarrior_Smooth
+class EbonJaguar : MechWarrior
 {
 	Default
 	{
-		MechWarrior.LegSpeed 1.6;
-		Mechwarrior.MoveSpeed 86;
-		MechWarrior.TwistRange 100;
-		MechWarrior.heatEff 0.08;
-		MechWarrior.HudCockpit "EBONHUD";
-		MechWarrior.EngineWeight 30;
-		MechWarrior.HudMech "ATLAICO";
-		MechWarrior.Weight 65;
+		MechWarriorBase.LegSpeed 1.6;
+		MechWarriorBase.MoveSpeed 86;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.HudCockpit "EBONHUD";
+		MechWarriorBase.EngineWeight 30;
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.Weight 65;
 		Player.DisplayName "EbonJaguar Prime";
 		Player.ViewHeight 86;
 	} 

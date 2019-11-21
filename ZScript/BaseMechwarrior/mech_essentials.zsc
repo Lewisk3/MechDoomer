@@ -1,0 +1,169 @@
+	/*****************************\
+	|	  Essential Functions     |
+	\*****************************/
+extend class MechwarriorBase;
+
+// Vars
+mw_InvInfo inv_context;
+HudAlert hAlert;
+SoundQueue mechsounds;
+bool buttonTick;
+bool btn_userfive;
+int ticks;
+int prevticks;
+float enginesize;
+float mech_tonnage;
+float defaultfov;
+
+// Properties
+String hud_cockpit;
+String hud_mech;
+
+// Inventory
+bool setupInventory()
+{
+	if(!inv_context)
+	{
+		GiveInventory("mw_InvInfo",1);
+		inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));
+		inv_context.weapons_tonnage += enginesize;
+		setupWeapons();
+	}
+	return inv_context==NULL;
+}
+
+// Virtual
+virtual void SetupWeapons() 
+{
+	setupHardpoints( (0,20), (0,0), (-30,-15), (30,-15), (-120,0), (120,0), (-60,-30), (60,-30) );
+	setupHardpointSlots();
+}
+
+// Override
+override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
+{	
+	if(checkVoodoo()) return super.DamageMobj(inflictor,source,damage,mod,flags,angle);
+	
+	float newdmg = float(damage)/10;
+	if( !source ) 
+	{
+		ProcessHardpointDamage(mod,newdmg);
+		return 0;
+	}
+	
+	Actor damager = inflictor;
+	if(mod == "hitscan") damager = source;
+	double shootslope = (source.height/2);
+
+	// Preform ray cast to determine where the shooter is aiming.
+	FLineTraceData lt;
+	damager.LineTrace(inflictor.angle+90,2048,source.pitch+random(-8,16),0,shootslope-random(0,source.height/4),0,0,lt);
+	vector3 dmgpos = lt.HitLocation;
+	double plrdmgz = (viewheight*Player.crouchfactor);
+
+	vector2 mechangle = ( pos.x, pos.y );
+	vector2 dmgpos2D  = ( dmgpos.x, dmgpos.y );
+	mechangle = MDMath.VRotate(mechangle,angle+90);
+	int lrpos = AngleTo(source);
+	float hitangle = abs(atan2(mechangle.x - dmgpos.x , mechangle.y - dmgpos.y)) + frandom(-16,16);
+	
+	// Legs
+	if( dmgpos.z < pos.z+(plrdmgz/4) ) 
+	{ 
+		if(lrpos > 0) ProcessHardpointDamage("MechDamage_LL",newdmg,damager);
+		if(lrpos < 0) ProcessHardpointDamage("MechDamage_RL",newdmg,damager);
+	}
+	else // Torso
+	{	
+		// left/right torsos
+		if( hitangle > 40 && hitangle < 100)
+		{
+			if(lrpos < 0) ProcessHardpointDamage("MechDamage_RT",newdmg,damager);
+			if(lrpos > 0) ProcessHardpointDamage("MechDamage_LT",newdmg,damager);
+		}
+		// Left/right arm
+		else if( hitangle >= 100 )
+		{
+			if(lrpos < 0) ProcessHardpointDamage("MechDamage_RA",newdmg,damager);
+			if(lrpos > 0) ProcessHardpointDamage("MechDamage_LA",newdmg,damager);
+		}
+		// Center torso
+		else
+		{
+			ProcessHardpointDamage("MechDamage_CT",newdmg,damager);
+		}
+	}
+	
+	return 0;
+}
+
+override void PostBeginPlay()
+{
+	// Setup mech support systems.
+	if(checkVoodoo()) 
+	{
+		super.PostBeginPlay();
+		return;
+	}
+	setupInventory();
+	
+	weapons_fired = false;
+	weapon_groupfire = false;
+	selectedGroup = 1;
+	boblendir = 1;
+	selectedWeapon = 1;
+	mech_jetsfuel = 100;
+	maxgroup = getMaxWeaponGrouping();
+	defaultfov = player.desiredFOV;
+			
+	// SoundQueue 
+	mechsounds = SoundQueue.SQ_Create(self, 32);
+	
+	speed = 0; // Stop normal movement;
+	LegAng = angle;
+	
+	// Convert KPH to UPT
+	MoveSpeed = ceil((MoveSpeedKPH*15000)/100000);
+	MoveSpeed_Max = MoveSpeed;
+	throttle_max = 1;
+	if(defaultmovement) 
+	{
+		A_SetSpeed(MoveSpeed*0.08);
+		level.aircontrol = 1;
+		level.airfriction = 0.87;
+	}	
+	super.PostBeginPlay();
+}
+	
+override void tick()
+{	
+	if(checkVoodoo()) 
+	{
+		super.Tick();
+		return;
+	}
+	if(!inv_context) setupInventory();		
+	if(health > 0) 
+	{
+		mechsounds.Tick();
+		if(!mech_shutdown)
+		{
+			// Make sure player doesn't have any actual weapons.
+			for(let w = Inv; w != null; w = w.Inv)
+			{
+				let weap = Weapon(w);
+				if(weap)
+				{
+					if(!(weap is "CrosshairHandler")) weap.Destroy();
+				}
+			}
+		
+			if(vel.length() > 0) A_Explode(3+(vel.length()*1.5),30,!XF_HURTSOURCE);
+			mech_movement(); 
+			HardpointDamageEffects();
+			mech_weapons();
+		}
+		if(mech_shutdown)process_shutdown();
+	}
+	super.tick();
+}

@@ -1,0 +1,119 @@
+// Powerups and Cockpit Effects
+class SuperCooled : Powerup
+{
+	Default
+	{
+		Powerup.Duration 2100; // lasts 1 minute;
+	}
+	
+	override void DoEffect()
+	{
+		super.DoEffect();
+		
+		if (Owner == NULL)
+		{
+			return;
+		}
+		
+		let mech = MechWarriorBase(Owner.player.mo);
+		mech.supersink = true;
+	}
+	
+	override void EndEffect()
+	{
+		super.EndEffect();
+
+		if (Owner == NULL)
+		{
+			return;
+		}
+		
+		let mech = MechWarriorBase(Owner.player.mo);
+		mech.supersink = false;
+	}
+}
+class InfraredAmp : PowerLightAmp 
+{
+	int fadeto;
+	bool activate;
+	
+	Default
+	{
+		Powerup.Duration 0x7FFFFFFD; // lasts about 2 years;
+	}
+	
+	override void PostBeginPlay()
+	{
+		fadeto = BlendColor.a;
+		BlendColor.a = 0;
+	}
+	
+	override void tick()
+	{
+		if(BlendColor.a < fadeto)
+		{
+			BlendColor.a += (fadeto) / (35 * 0.3); // .3 Second fade
+			Colormap = ((BlendColor & 0xFFFF0000) == SPECIALCOLORMAP_MASK)? BlendColor & 0xffff : PlayerInfo.NOFIXEDCOLORMAP;
+		}
+		
+		// Activate powerup halfway through fade.
+		if(BlendColor.a > fadeto/2)	activate = true;
+		
+	}
+	
+	override void DoEffect()
+	{
+		if(activate) super.DoEffect();
+	}
+}
+
+
+class SuperCoolant : PowerupGiver
+{
+	Default
+	{
+		+COUNTITEM
+		+INVENTORY.AUTOACTIVATE
+		+INVENTORY.ALWAYSPICKUP
+		+INVENTORY.BIGPOWERUP
+		Inventory.MaxAmount 0;
+		Powerup.Type "SuperCooled";
+		Powerup.Color "B0 DB E8", 0.154;
+		Inventory.PickupMessage "Heatsink Overclock!";
+	}
+}
+
+class InfraredGiver : PowerupGiver
+{
+	Default
+	{
+		+INVENTORY.AUTOACTIVATE
+		Inventory.MaxAmount 0;
+		Powerup.Type "InfraredAmp";
+		Powerup.Color "DB 35 18", 0.437;
+		Inventory.PickupMessage "Infrared Engaged";
+	}
+}
+
+class SuperCoolant_Pickup : CustomInventory replaces Berserk
+{
+	Default
+	{
+		+COUNTITEM
+		+INVENTORY.ALWAYSPICKUP
+		+INVENTORY.ISHEALTH
+		Inventory.PickupMessage "Heatsink Overclock!";
+		Inventory.PickupSound "misc/p_pkup";
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 0;
+		HSNK A -1;
+		Stop;
+	Pickup:
+		TNT1 A 0 A_GiveInventory("SuperCoolant");
+		HSNK A 0 HealThing(100, 0);
+		Stop;
+	}
+}
