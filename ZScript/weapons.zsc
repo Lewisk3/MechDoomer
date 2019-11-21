@@ -617,36 +617,21 @@ class CrosshairHandler : Weapon
 				{
 					if(plr.boblendir != invoker.bobdir)
 					{
-						// Hurr durr... sound slots.
 						A_FireProjectile("MechFootstepEmitter");
 						invoker.bobdir = plr.boblendir;
 					}
-					if(CVar.FindCVar("mwd_nohud").getBool()) A_SetCrossHair(0);
-					if(!plr.mech_shutdown && !CVar.FindCVar("mwd_nohud").getBool())
+					if(!plr.mech_shutdown)
 					{ 
-						A_SetCrossHair(8); 
-						if(GetPlayerInput(0) & BT_ATTACK) A_SetCrossHair(9);
 						let weap = plr.getSelectedWeapon();
-						if(weap)
+						if(weap) 
 						{
-							if(plr.targetlocked && weap.isHomming)
-							{
-								A_SetCrossHair(12);
-							}
-							else if(plr.locktimer > 25 && weap.isHomming)
-							{
-								A_SetCrossHair(11);
-							}
-							else if(weap.isHomming)
-							{
-								A_SetCrossHair(10);
-							}
+							if(weap.isHomming) 
+								A_SetCrossHair(plr.targetlocked ? 12 : plr.locktimer > 25 ? 11 : 10);
+							else
+								A_SetCrossHair( (weap.cooldown_timer || plr.player.cmd.buttons & BT_ATTACK) ? 9 : 8 ); 
 						}
-					} 
-					else 
-					{ 
-						A_SetCrossHair(0); 
 					}
+					if(CVar.FindCVar("mwd_nohud").getBool() || plr.mech_shutdown) A_SetCrossHair(0);
 				}
 				A_WeaponReady(WRF_NOBOB);
 			}
