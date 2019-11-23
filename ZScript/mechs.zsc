@@ -206,7 +206,8 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.MoveSpeed 81;
 		MechWarriorBase.TwistRange 80;
 		MechWarriorBase.heatEff 0.08;
-		MechWarriorBase.HudCockpit "WOLFHUD";
+		MechWarriorBase.HudCockpit "CTBR"; // WOLFHUD
+		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.EngineWeight 30;
 		MechWarriorBase.HudMech "TWLFICO";
 		MechWarriorBase.Weight 75;

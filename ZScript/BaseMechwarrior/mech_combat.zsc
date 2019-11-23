@@ -179,14 +179,14 @@ void mech_weapons()
 	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER4 ) FireGroup(4);
 	
 	if(countinv("IBTN_NEXTWEAPON"))
-	{
-		A_PlaySound("Mech/NextWeapon",6);
+	{	
+		if(weapons > 1)A_PlaySound("Mech/NextWeapon",6);
 		selectedWeapon++;
 		TakeInventory("IBTN_NEXTWEAPON",1);
 	}		
 	if(countinv("IBTN_PREVWEAPON"))
 	{
-		A_PlaySound("Mech/NextWeapon",6);
+		if(weapons > 1)A_PlaySound("Mech/NextWeapon",6);
 		selectedWeapon--;
 		if(selectedWeapon < 1) selectedWeapon = weapons;
 		TakeInventory("IBTN_PREVWEAPON",1);

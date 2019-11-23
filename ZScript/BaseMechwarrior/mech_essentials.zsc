@@ -9,6 +9,7 @@ HudAlert hAlert;
 SoundQueue mechsounds;
 bool buttonTick;
 bool btn_userfive;
+bool pilotlook;
 int ticks;
 int prevticks;
 float enginesize;
@@ -16,6 +17,7 @@ float mech_tonnage;
 float defaultfov;
 
 // Properties
+bool modelcockpit;
 String hud_cockpit;
 String hud_mech;
 
@@ -107,10 +109,15 @@ override void PostBeginPlay()
 	}
 	setupInventory();
 	
+	if(modelcockpit) 
+	{
+		let chandle = CrossHairHandler(FindInventory("CrosshairHandler"));
+		if(chandle) chandle.cockpit = hud_cockpit;
+	}
+	
 	weapons_fired = false;
 	weapon_groupfire = false;
 	selectedGroup = 1;
-	boblendir = 1;
 	selectedWeapon = 1;
 	mech_jetsfuel = 100;
 	maxgroup = getMaxWeaponGrouping();
@@ -144,7 +151,15 @@ override void tick()
 	}
 	if(!inv_context) setupInventory();		
 	if(health > 0) 
-	{
+	{		
+		// Calculate Bob
+		if(!bobdir) bobdir = 1;
+		if(vel.length() > 0.08)
+		{
+			boboffs += (vel.length()/4) * bobdir;
+		}
+		if(abs(boboffs) > 8) bobdir *= -1;
+	
 		mechsounds.Tick();
 		if(!mech_shutdown)
 		{

@@ -16,8 +16,6 @@ class MechStatusBar : BaseStatusBar
 	bool invalid;
 	int compassoffs;
 	int compassdir;
-	int bobdir;
-	int boboffs;
 	int hpcounter;
 	int scrwidth;
 	int scrheight;
@@ -147,7 +145,6 @@ class MechStatusBar : BaseStatusBar
 		SetSize(32, 320, 200);
 		compassoffs = 0;
 		compassdir = 1;
-		bobdir = 1;
 		hud_alpha = 1.0;
 		compass = TexMan.CheckForTexture("MBEARING",TexMan.TYPE_ANY);
 		tAlign = DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_BOTTOM;
@@ -190,11 +187,6 @@ class MechStatusBar : BaseStatusBar
 				}
 				
 			}
-			if(mech.vel.length() > 0.08)
-			{
-				boboffs += (mech.vel.length()/4) * bobdir;
-			}
-			if(abs(boboffs) > 8) bobdir *= -1;
 		}
 	
 		super.tick();
@@ -464,7 +456,7 @@ class MechStatusBar : BaseStatusBar
 			
 			invalid = false;
 			
-			H_DrawImage(mech.hud_cockpit,(955,940+boboffs),0,(3.2,2.0));
+			if(!mech.modelcockpit) H_DrawImage(mech.hud_cockpit,(955,940+mech.boboffs),0,(3.2,2.0));
 			if(mech.health <= 0) return;
 			
 			if(CVar.FindCVar("mwd_nohud").getBool()) return;

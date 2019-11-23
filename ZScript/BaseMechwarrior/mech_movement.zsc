@@ -26,7 +26,7 @@ bool bInfrared;
 bool manualshutdown;
 
 int Mech_JetCount;
-int boblendir;
+int bobdir;
 int shutdown_timer;
 
 float LegAng;
@@ -41,12 +41,13 @@ float LookVel;
 float LegVel;
 float overfactor;
 float rolloffs;
-float boblength;
+float boboffs;
 float TiltOsc;
 float StepOsc;
 float TiltOffset;
 float StepOffset;
 float CrouchMulti;
+float rolldistort;
 
 // Main
 void mech_movement()
@@ -166,10 +167,10 @@ void mech_movement()
 			if(yaw == 0)TakeInventory("IBTN_CENTERTORSO",1);
 		}
 		
-		A_SetRoll( roll + 
-			   (( (cos( (angle-LegAng)-90  ) * pitch) )
-				- (cos(angle)*(sin( pitch )*10)))
-		);
+		// Roll distortion when looking far up/down at odd leg angle.
+		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*10)) );
+		A_SetRoll( roll + rolldistort );
+		
 		// Move mech by a percentage of throttle.
 		vel = (cos(LegAng)*(throttle*MoveSpeed),sin(LegAng)*(throttle*MoveSpeed),vel.z);
 		LegAng += LegVel;
@@ -267,16 +268,7 @@ void mech_movement()
 		TakeInventory("IBTN_INFRARED",1);
 		bInfrared = !bInfrared;
 	}
-
-	// Stompy boi
-	if(vel.length() > 0.08)
-	{
-		boblength += (vel.length()/4) * boblendir;
-	}
-	if(abs(boblength) > 42)
-	{
-		boblendir *= -1;
-	}
+	
 	if(countStruct("JumpJet") > 0 && mech_jetsfuel < 100 && 
 	 !(GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) &&
 	 !btn_userfive && player.OnGround) mech_jetsfuel += 0.5;
@@ -286,8 +278,8 @@ void process_shutdown()
 {
 	if(!defaultmovement)
 	{	
-		angle = lockangle;
-		pitch = lockpitch;
+		//angle = lockangle;
+		//pitch = lockpitch;
 	}
 	if(!manualshutdown)
 	{	
@@ -330,7 +322,7 @@ void Bobbing() {
 	// Don't bob on voodoos!
 	if(!player || !player.mo || player.mo != self) return;
 	
-	float tiltosc_amp =  10 + (vel.Length()/3);
+	float tiltosc_amp =  10 + (vel.Length()/4);
 	float steposc_amp =  15 + (vel.Length()/2);
 	tiltosc_amp = clamp(tiltosc_amp,0,18);
 	steposc_amp = clamp(steposc_amp,0,24);
@@ -357,7 +349,7 @@ void Bobbing() {
 
 		StepOffset  = sin(StepOsc);
 		StepOffset *= (vel/2) + (LegVel*2);
-		StepOffset *= (1.78 + ((mech_tonnage-40)/100));
+		StepOffset *= (1.78 + ((mech_tonnage-20)/100));
 		StepOffset *= 0.8;
 		if(defaultmovement) StepOffset *= 0.7;
 		StepOffset *= CrouchMulti;

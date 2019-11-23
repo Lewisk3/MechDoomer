@@ -9,6 +9,7 @@ http://www.brickshelf.com/cgi-bin/gallery.cgi?i=5576954
 Lewisk3    (Lead programmer)
 Xaser      (Argents ArgRocketReticle)
 Caligari87 (Mech bobbing code)
+Cherno 	   (Mech cockpit model exports + UV shading)
 
 	- Gutamatics math library -
  https://gitlab.com/Gutawer/gzdoom-gutamatics

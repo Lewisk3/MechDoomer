@@ -140,14 +140,26 @@ class MechDoomerEvents : EventHandler
 	override bool InputProcess(InputEvent e)
 	{
 		int keyscn = (e.Type == e.Type_KeyDown) ? e.KeyScan : 0;
-		if(checkBoundKey(keyscn,"Mech_JumpJets_Fire"))
+		if(e.Type != InputEvent.Type_Mouse)
 		{
-			EventHandler.SendNetworkEvent("+mwd_user5");
-			return true;
-		}
-		else
-		{
-			EventHandler.SendNetworkEvent("-mwd_user5");
+			if(checkBoundKey(keyscn,"Mech_JumpJets_Fire"))
+			{
+				EventHandler.SendNetworkEvent("+mwd_user5");
+				return true;
+			}
+			else
+			{
+				EventHandler.SendNetworkEvent("-mwd_user5");
+			}
+			if(checkBoundKey(keyscn,"Mech_PilotLook"))
+			{
+				EventHandler.SendNetworkEvent("+mwd_pilotlook");
+				return true;
+			}
+			else
+			{
+				EventHandler.SendNetworkEvent("-mwd_pilotlook");
+			}
 		}
 		
 		if(checkBoundKey(keyscn,"Mech_LoadoutUI"))
@@ -193,9 +205,11 @@ class MechDoomerEvents : EventHandler
 				if(witem) plr.adjustMoney(GetDefaultByType(witem).worth);
 				plr.inv_context.weapon_items.delete(e.Args[0]);
 			}
-		
+			
 			if(netcmd == "+mwd_user5")plr.btn_userfive = true;
 			if(netcmd == "-mwd_user5")plr.btn_userfive = false;
+			if(netcmd == "+mwd_pilotlook")plr.pilotlook = true;
+			if(netcmd == "-mwd_pilotlook")plr.pilotlook = false;
 			Array<String> netcmds;
 			netcmds.Clear();
 			netcmd.split(netcmds,":");	

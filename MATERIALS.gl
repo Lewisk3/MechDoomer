@@ -1,0 +1,7 @@
+
+material texture models/Cockpits/tw_head.png {
+	normal models/metal_normal.png
+	specular models/metal.png
+	specularlevel 0.3
+	glossiness 10
+}

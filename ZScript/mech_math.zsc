@@ -60,4 +60,5 @@ class MDMath Abstract
 		return ( pos.y * cos(angle) - pos.x * sin(angle), 
 		         pos.y * sin(angle) + pos.x * cos(angle) );
 	}
+		
 }

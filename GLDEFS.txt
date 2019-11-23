@@ -1,3 +1,5 @@
+#include "materials.gl"
+
 pointlight GreenPointLight
 {
     color 0.0 1.0 0.0
