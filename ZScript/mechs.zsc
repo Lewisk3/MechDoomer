@@ -8,9 +8,9 @@ class MechWarrior : MechWarriorBase
 		Player.SideMove 1.0, 1.0;
 		Player.ViewBob 0;
 		Player.JumpZ 0;
-		Player.StartItem "CrosshairHandler";	
 		Player.SoundClass "MechWarrior";
 
+		MechWarriorBase.SetCockpitHandler "CockpitHandler";
 		MechWarriorBase.heatEff 0.05;
 		MechWarriorBase.HudCockpit "CROW";
 		MechWarriorBase.HudMech "";
@@ -173,6 +173,8 @@ class Stormcrow : MechWarrior
 		MechWarriorBase.TwistRange 100;
 		MechWarriorBase.heatEff 0.08;
 		MechWarriorBase.EngineWeight 30;
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_Stormcrow";
+		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudCockpit "CROWHUD";
 		MechWarriorBase.HudMech "SCRWICO";
 		MechWarriorBase.Weight 55;
@@ -206,7 +208,8 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.MoveSpeed 81;
 		MechWarriorBase.TwistRange 80;
 		MechWarriorBase.heatEff 0.08;
-		MechWarriorBase.HudCockpit "CTBR"; // WOLFHUD
+		MechWarriorBase.HudCockpit "WOLFHUD";
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_Timberwolf";
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.EngineWeight 30;
 		MechWarriorBase.HudMech "TWLFICO";

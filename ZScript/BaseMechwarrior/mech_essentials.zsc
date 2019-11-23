@@ -17,6 +17,7 @@ float mech_tonnage;
 float defaultfov;
 
 // Properties
+class<CockpitHandler> cphandler;
 bool modelcockpit;
 String hud_cockpit;
 String hud_mech;
@@ -24,6 +25,7 @@ String hud_mech;
 // Inventory
 bool setupInventory()
 {
+	if(!FindInventory(cphandler)) GiveInventory(cphandler,1);
 	if(!inv_context)
 	{
 		GiveInventory("mw_InvInfo",1);
@@ -101,6 +103,9 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 
 override void PostBeginPlay()
 {
+	// Spawn pieces (WIP)
+		//MechLegsBase.Create("Legs_TimberWolf", self);
+	
 	// Setup mech support systems.
 	if(checkVoodoo()) 
 	{
@@ -108,12 +113,6 @@ override void PostBeginPlay()
 		return;
 	}
 	setupInventory();
-	
-	if(modelcockpit) 
-	{
-		let chandle = CrossHairHandler(FindInventory("CrosshairHandler"));
-		if(chandle) chandle.cockpit = hud_cockpit;
-	}
 	
 	weapons_fired = false;
 	weapon_groupfire = false;
@@ -139,6 +138,7 @@ override void PostBeginPlay()
 		level.aircontrol = 1;
 		level.airfriction = 0.87;
 	}	
+	
 	super.PostBeginPlay();
 }
 	
@@ -169,7 +169,7 @@ override void tick()
 				let weap = Weapon(w);
 				if(weap)
 				{
-					if(!(weap is "CrosshairHandler")) weap.Destroy();
+					if(!(weap is "CockpitHandler")) weap.Destroy();
 				}
 			}
 		

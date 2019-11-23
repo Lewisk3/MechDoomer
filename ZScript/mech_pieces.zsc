@@ -1,0 +1,69 @@
+class MechLegsBase : Actor
+{
+	MechwarriorBase mechowner;
+	
+	override void tick()
+	{
+		if(mechowner)
+		{
+			angle = mechowner.LegAng;
+			SetOrigin(mechowner.pos,true);
+		}
+		super.tick();
+	}
+	
+	bool isMoving()
+	{
+		return (mechowner && mechowner.vel.length() >= 0.08);
+	}
+	
+	static MechLegsBase Create(class<MechLegsBase> legs, MechWarriorBase torso)
+	{
+		let mwlegs = MechLegsBase(Spawn(legs));
+		if(mwlegs)
+		{
+			mwlegs.mechowner = torso;
+			mwlegs.frame = 0;
+		}
+		return mwlegs;
+	}
+}
+
+class Legs_Timberwolf : MechLegsBase
+{
+	
+	States
+	{
+		Spawn:
+			TLEG "#" 1 A_JumpIf(isMoving(), "WalkCycle");
+		loop;
+		WalkCycle:
+			TLEG BCDEFGHI 5 
+			{
+				if(!isMoving()) return ResolveState("Spawn");
+				return ResolveState(Null);
+			}
+			TLEG J 5 A_JumpIf(!isMoving(), "Spawn"); 
+		loop;
+	}
+}
+
+/*
+	int animtimer;
+	int onframe;
+
+	frame = onframe;
+	if(!animtimer) 
+	{
+		onframe++;
+		animtimer = 4;
+	}
+	else
+	{
+		animtimer--;
+	}	
+	if(onframe > 8) onframe = 1;
+	console.printf("Frame %d", frame);
+	if(!isMoving()) return ResolveState("Spawn");
+	return ResolveState(Null);
+*/

@@ -32,9 +32,11 @@ class HudSpriteInitializer : Actor
 #include "ZScript/eventhandler.zsc"
 #include "ZScript/mechlab.zsc"
 
-// MechBase includes
+// MechBase includes\
 #include "ZScript/mech_powerups.zsc"
 #include "ZScript/mech_base.zsc"
+#include "ZScript/mech_pieces.zsc"
+#include "ZScript/mech_cockpits.zsc"
 #include "ZScript/BaseMechwarrior/mech_misc.zsc"
 #include "ZScript/BaseMechwarrior/mech_essentials.zsc"
 #include "ZScript/BaseMechwarrior/mech_movement.zsc"

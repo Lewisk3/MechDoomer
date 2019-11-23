@@ -159,7 +159,7 @@ void clearWeapons()
 	inv_context.hardpoints.ll.slots = 0;
 	inv_context.hardpoints.rl.slots = 0;
 	inv_context.weapons_tonnage = 0;
-	GiveInventory("CrosshairHandler",1);
+	GiveInventory(cphandler,1);
 	weapons = 0;	
 }
 

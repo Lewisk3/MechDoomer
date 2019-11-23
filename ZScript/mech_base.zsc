@@ -39,6 +39,7 @@ class MechWarriorBase : DoomPlayer
 	Property InfiniteTorsoTwist: uncappedtorso;
 	Property OverTonnage: overtonnage;
 	Property CockpitIsModel: modelcockpit;
+	Property SetCockpitHandler: cphandler;
 	
 	// Clearscope
 	clearscope void sendHudAlert(String str, int c)

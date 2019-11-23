@@ -690,30 +690,30 @@ Model Jenner_3D
    FrameIndex JENN A 0 0
 }
 
-
+// Temporarily not rendering the legs of this mech, waiting on animated legs.
 Model Timberwolf
 {
 	Path "models"
 	Model 0 "timberwolf.md3"
 	//Skin 0 "Stormcrow.png"
-	SurfaceSkin 0 0  "Metal_Dark.png" // RL_LRToe
-	SurfaceSkin 0 1  "weapfront.png" // ???
+	SurfaceSkin 0 0  "blank.png" // RL_LRToe
+	SurfaceSkin 0 1  "blank.png" // RL_BToe
 	SurfaceSkin 0 2  "Cockpit_Glass.png" // Head
-	SurfaceSkin 0 3  "Metal.png" // RL_Lower
-	SurfaceSkin 0 4  "Metal_Dark.png" // RL_FTow
-	SurfaceSkin 0 5  "Metal.png" // RL_Upper
-	SurfaceSkin 0 6  "Metal.png" // LL_Upper
-	SurfaceSkin 0 7  "Metal_Dark.png" // LL_LRToe
-	SurfaceSkin 0 8  "Metal_Dark.png" 	 // LL_FToe
-	SurfaceSkin 0 9  "Metal.png" // LL_Lower
+	SurfaceSkin 0 3  "blank.png" // RL_Lower
+	SurfaceSkin 0 4  "blank.png" // RL_FTow
+	SurfaceSkin 0 5  "blank.png" // RL_Upper
+	SurfaceSkin 0 6  "blank.png" // LL_Upper
+	SurfaceSkin 0 7  "blank.png" // LL_LRToe
+	SurfaceSkin 0 8  "blank.png" // LL_FToe
+	SurfaceSkin 0 9  "blank.png" // LL_Lower
 	SurfaceSkin 0 10 "Metal.png" // RA_Upper
 	SurfaceSkin 0 11 "Metal.png" // LA_Upper
-	SurfaceSkin 0 12 "Metal_Dark.png" 	// MB_Lower
+	SurfaceSkin 0 12 "blank.png" // MB_Lower
 	SurfaceSkin 0 13 "Metal.png" // MB_Upper
 	SurfaceSkin 0 14 "Metal_Dark.png" // WP_Arms
 	SurfaceSkin 0 15 "Missiles.png" // WP_Body
 	SurfaceSkin 0 16 "wolf_metal.png" // WP_Side
-	SurfaceSkin 0 17 "weapfront.png" // WP_Body
+	SurfaceSkin 0 17 "blank.png" // WP_Body
 	Scale 15.0 15.0 15.0
 	ZOffset 0
 	AngleOffset 90
@@ -784,15 +784,46 @@ Model Stormcrow_3D
    FrameIndex MECH A 0 0
 }
 
+Model Legs_Timberwolf
+{
+	Path "models"
+	Model 0 "Cockpits/tw_legs.md3"
+	Scale 0.6 0.6 0.50
+	Skin 0 "Metal.png" // Main
+	//SurfaceSkin 0 1   // Metal
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
+}
 
-Model CrosshairHandler
+Model CockpitHandler_Timberwolf
 {
 	Path "models"
 	Model 0 "Cockpits/tw_head.md3"
 	Scale 0.12 0.10 0.10
-	SurfaceSkin 0 0 "Cockpits/tw_head.png" // Main
+	Skin 0 "Cockpits/tw_head.png" // Main
 	PitchOffset -12
 	Offset 0 10 -8;
 	
-   FrameIndex CTBR A 0 0
+   FrameIndex MODL A 0 0
 } 
+Model CockpitHandler_Stormcrow
+{
+	Path "models"
+	Model 0 "Cockpits/sc_head.md3"
+	Scale 0.12 0.10 0.10
+	Skin 0 "Cockpits/sc_head.png" // Main
+	PitchOffset -8
+	Offset 0 28 -8;
+	
+   FrameIndex MODL A 0 0
+}  
