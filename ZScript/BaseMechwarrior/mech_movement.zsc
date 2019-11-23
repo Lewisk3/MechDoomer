@@ -276,10 +276,10 @@ void mech_movement()
 
 void process_shutdown()
 {
-	if(!defaultmovement)
+	if(!defaultmovement && !modelcockpit)
 	{	
-		//angle = lockangle;
-		//pitch = lockpitch;
+		angle = lockangle;
+		pitch = lockpitch;
 	}
 	if(!manualshutdown)
 	{	
