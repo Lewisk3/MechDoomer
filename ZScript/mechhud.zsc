@@ -348,7 +348,7 @@ class MechStatusBar : BaseStatusBar
 				}
 				
 				// Torso angle
-				if(!mech.uncappedtorso) 
+				if( !mech.uncappedtorso && !mech.pilotlook ) 
 				{
 					H_Fill(Color(int(255*hud_alpha),0,255,0),960,36,-(mech.angle-mech.LegAng)*1.6,8);
 					if( abs(mech.angle-mech.LegAng) <= 1)H_Fill(Color(int(255*hud_alpha),0,255,0),960,36,4,8);

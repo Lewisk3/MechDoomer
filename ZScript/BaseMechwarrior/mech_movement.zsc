@@ -169,17 +169,20 @@ void mech_movement()
 		
 		// Roll distortion when looking far up/down at odd leg angle.
 		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*10)) );
-		A_SetRoll( roll + rolldistort );
+		if( !pilotlook && !mech_shutdown ) A_SetRoll( roll + rolldistort );
 		
 		// Move mech by a percentage of throttle.
 		vel = (cos(LegAng)*(throttle*MoveSpeed),sin(LegAng)*(throttle*MoveSpeed),vel.z);
 		LegAng += LegVel;
 		angle += LookVel;
-		Pitch = clamp(Pitch, -pitchRange, pitchRange);
-		if(MaxYaw < 360 && !uncappedtorso)
+		if( !pilotlook && !mech_shutdown )
 		{
-			if(angle - LegAng > MaxYaw)  angle = LegAng + MaxYaw;
-			if(angle - LegAng < -MaxYaw) angle = LegAng - MaxYaw;
+			Pitch = clamp(Pitch, -pitchRange, pitchRange);
+			if(MaxYaw < 360 && !uncappedtorso)
+			{
+				if(angle - LegAng > MaxYaw)  angle = LegAng + MaxYaw;
+				if(angle - LegAng < -MaxYaw) angle = LegAng - MaxYaw;
+			}
 		}
 	}
 	

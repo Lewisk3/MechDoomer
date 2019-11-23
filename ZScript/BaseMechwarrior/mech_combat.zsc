@@ -70,7 +70,7 @@ void mech_weapons()
 	
 	if(selectedWeapon > weapons)selectedWeapon = 1;
 	if(selectedGroup > 4)selectedGroup = 1;
-	if( (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) && getSelectedWeapon() )
+	if( (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) && getSelectedWeapon() && !pilotlook )
 	{
 		FireWeapons(weapon_groupfire);
 		weapons_fired = true;

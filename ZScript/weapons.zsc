@@ -646,8 +646,8 @@ class CrosshairHandler : Weapon
 					
 					if(plr.mech_shutdown || plr.pilotlook) 
 					{
-						xoffs += plr.LegAng-angle;
-						yoffs += -pitch;
+						xoffs = (plr.LegAng-angle)*2.47;
+						yoffs += -(pitch-sin(90));
 					}
 					else
 					{

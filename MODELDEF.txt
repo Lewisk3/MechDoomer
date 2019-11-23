@@ -753,7 +753,6 @@ Model Timberwolf_3D
 	SurfaceSkin 0 16 "wolf_metal.png" // WP_Side
 	SurfaceSkin 0 17 "weapfront.png" // WP_Body
 	Scale 15.0 15.0 15.0
-	ZOffset 0
 	
    FrameIndex MECH A 0 0
 }
@@ -791,10 +790,8 @@ Model CrosshairHandler
 	Path "models"
 	Model 0 "Cockpits/tw_head.md3"
 	Scale 0.12 0.10 0.10
-	Skin 0 "Cockpits/tw_head.png" // Main
-	AngleOffset 0
+	SurfaceSkin 0 0 "Cockpits/tw_head.png" // Main
 	PitchOffset -12
-	RollOffset 0
 	Offset 0 10 -8;
 	
    FrameIndex CTBR A 0 0
