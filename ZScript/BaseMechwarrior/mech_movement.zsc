@@ -57,19 +57,19 @@ void mech_cockpitbob()
 	if(vel.length() > 0.08 || LegVel)
 	{
 		float bobthrust = clamp(vel.length()*0.18, -7.5, 7.5);
-		boboffs += bobthrust * bobdir;
 		if(stepping) 
 		{
-			bobthrust = abs(bobthrust)*2;
+			bobthrust = abs(bobthrust)*3;
 			bobdir = 1;
 		}
+		boboffs += bobthrust * bobdir;
 	}
 	if(abs(boboffs) > 12) 
 	{
 		bobdir *= -1;		
 		boboffs = clamp(boboffs,-12,12);
 	}
-	if(mech_legs)Player.ViewZ += boboffs*1.1;
+	if(mech_legs)Player.ViewZ -= boboffs;
 }
 
 void mech_movement()

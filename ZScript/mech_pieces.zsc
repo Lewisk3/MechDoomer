@@ -23,7 +23,7 @@ class MechLegsBase : Actor
 	}
 	bool checkStepping(bool idle=false)
 	{
-		mechowner.stepping = idle ? false : (frame == 4 || frame == 8);
+		mechowner.stepping = idle ? false : (frame == 3 || frame == 8);
 		return true;
 	}
 	
