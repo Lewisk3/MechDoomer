@@ -21,9 +21,9 @@ class MechLegsBase : Actor
 	{
 		return (mechowner && (mechowner.vel.xy.length() >= 0.08 || mechowner.LegVel) );
 	}
-	bool checkStepping(bool idle=false, int one=3, int two=8)
+	bool checkStepping(bool idle=false)
 	{
-		mechowner.stepping = idle ? false : (frame == one || frame == two);
+		mechowner.stepping = idle ? false : (frame == 3 || frame == 8);
 		return true;
 	}
 	
@@ -51,7 +51,7 @@ class MechLegsBase : Actor
 				float stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.9, 1.28);
 				//console.printf("--------\nSR: %f\nWR: %f\nFR: %f", spdrating, wrating, stompfriction);
 				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;
-				if(checkStepping(0,2,7) && mechowner.stepping) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if(frame == 2 || frame == 7) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 10);
 				return !isMoving() ? ResolveState("Spawn") : ResolveState(Null); 
 			}
