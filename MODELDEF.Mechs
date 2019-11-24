@@ -47,7 +47,7 @@ Model CockpitHandler_Timberwolf
 	Scale 0.12 0.10 0.10
 	Skin 0 "tw_head.png" // Main
 	PitchOffset -14
-	Offset 0 16 -8;
+	Offset 0 14 -8;
 	
    FrameIndex MODL A 0 0
 } 

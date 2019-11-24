@@ -69,7 +69,7 @@ void mech_cockpitbob()
 		bobdir *= -1;		
 		boboffs = clamp(boboffs,-12,12);
 	}
-	Player.ViewZ += boboffs*1.1;
+	if(mech_legs)Player.ViewZ += boboffs*1.1;
 }
 
 void mech_movement()
