@@ -17,7 +17,7 @@ class MechWarrior : MechWarriorBase
 		MechWarriorBase.LegSpeed 2;
 		MechWarriorBase.MoveSpeed 4;
 		MechWarriorBase.TwistRange 90;
-		MechWarriorBase.PitchRange 30;
+		MechWarriorBase.PitchRange 30,20;
 	}
 	// This may seem like a mistake, it's not.
 	// This somehow makes movement a WHOLE lot smoother, idek, it WAS a mistake at first.
@@ -175,11 +175,12 @@ class Stormcrow : MechWarrior
 		MechWarriorBase.EngineWeight 30;
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Stormcrow";
 		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.LegsModel "Legs_Stormcrow";
 		MechWarriorBase.HudCockpit "CROWHUD";
 		MechWarriorBase.HudMech "SCRWICO";
 		MechWarriorBase.Weight 55;
 		Player.DisplayName "Stormcrow Prime";
-		Player.ViewHeight 85;
+		Player.ViewHeight 95;
 	}
 		
 	override void SetupWeapons()
@@ -211,9 +212,11 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.HudCockpit "WOLFHUD";
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Timberwolf";
 		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.LegsModel "Legs_Timberwolf";
 		MechWarriorBase.EngineWeight 30;
 		MechWarriorBase.HudMech "TWLFICO";
 		MechWarriorBase.Weight 75;
+		MechWarriorBase.PitchRange 40,20;
 		Player.DisplayName "Timberwolf Prime";
 		Player.ViewHeight 90;
 	}

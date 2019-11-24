@@ -14,7 +14,7 @@ class MechLegsBase : Actor
 	
 	bool isMoving()
 	{
-		return (mechowner && mechowner.vel.length() >= 0.08);
+		return (mechowner && (mechowner.vel.xy.length() >= 0.08 || mechowner.LegVel) );
 	}
 	
 	static MechLegsBase Create(class<MechLegsBase> legs, MechWarriorBase torso)
@@ -27,10 +27,6 @@ class MechLegsBase : Actor
 		}
 		return mwlegs;
 	}
-}
-
-class Legs_Timberwolf : MechLegsBase
-{
 	
 	States
 	{
@@ -38,32 +34,18 @@ class Legs_Timberwolf : MechLegsBase
 			TLEG "#" 1 A_JumpIf(isMoving(), "WalkCycle");
 		loop;
 		WalkCycle:
-			TLEG BCDEFGHI 5 
+			TLEG BCDEFGHIJ 4 
 			{
-				if(!isMoving()) return ResolveState("Spawn");
-				return ResolveState(Null);
+				if(frame == 4 || frame == 8) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				
+				//float spdrating = (mechowner.throttle * mechowner.MoveSpeedKPH)/100.;
+				//if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 2, 10);
+				return !isMoving() ? ResolveState("Spawn") : ResolveState(Null); 
 			}
-			TLEG J 5 A_JumpIf(!isMoving(), "Spawn"); 
 		loop;
 	}
 }
 
-/*
-	int animtimer;
-	int onframe;
 
-	frame = onframe;
-	if(!animtimer) 
-	{
-		onframe++;
-		animtimer = 4;
-	}
-	else
-	{
-		animtimer--;
-	}	
-	if(onframe > 8) onframe = 1;
-	console.printf("Frame %d", frame);
-	if(!isMoving()) return ResolveState("Spawn");
-	return ResolveState(Null);
-*/
+class Legs_Timberwolf : MechLegsBase {}
+class Legs_Stormcrow : MechLegsBase {}

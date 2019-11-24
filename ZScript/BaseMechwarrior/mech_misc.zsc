@@ -12,10 +12,10 @@ void startMechbay()
 	if(bay)bay.angle = angle;
 	if(door)door.angle = angle+128;
 	mech_shutdown = true;
-	mechsounds.pushSound("Mech/Betty/SystemsCheck");
-	A_PlaySound("Mech/Power",4);
-	mechsounds.pushSound("Mech/StartupDone");
-	manualshutdown = false;
+	//mechsounds.pushSound("Mech/Betty/SystemsCheck");
+	//A_PlaySound("Mech/Power",4);
+	//mechsounds.pushSound("Mech/StartupDone");
+	manualshutdown = true;
 	prevticks = ticks;
 	lockangle = angle;
 	lockpitch = pitch;

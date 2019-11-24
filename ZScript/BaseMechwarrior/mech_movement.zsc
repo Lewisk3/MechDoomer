@@ -8,11 +8,10 @@ bool defaultmovement;
 bool uncappedtorso;
 bool overtonnage;
 
-float pitchRange;
+float minPitch, maxPitch;
 float LegSpeed;
 float MoveSpeedKPH;
 float MaxYaw;
-float MaxPitch;
 
 // Vars
 bool snd_reactor;
@@ -177,7 +176,7 @@ void mech_movement()
 		angle += LookVel;
 		if( !pilotlook && !mech_shutdown )
 		{
-			Pitch = clamp(Pitch, -pitchRange, pitchRange);
+			Pitch = clamp(Pitch, -minPitch, maxPitch);
 			if(MaxYaw < 360 && !uncappedtorso)
 			{
 				if(angle - LegAng > MaxYaw)  angle = LegAng + MaxYaw;

@@ -40,6 +40,13 @@ class CockpitHandler : Weapon
 				let plr = getPilot();
 				if(plr) 
 				{	
+					// Footsteps when bob is at adequite length.
+					if(!plr.mech_legs && plr.bobdir != invoker.bobdir && plr.vel.length() >= 0.08 )
+					{
+						if(plr.bobdir == 1) A_FireProjectile("MechFootstepEmitter");
+						invoker.bobdir = plr.bobdir;
+					}
+				
 					// Model bob
 					float weapony = getPSprite().y;
 					float xoffs = -plr.rolldistort;
@@ -52,17 +59,11 @@ class CockpitHandler : Weapon
 					}
 					else
 					{
-						xoffs += (plr.LegAng-angle)*0.3;
-						yoffs += -pitch*0.3;
+						xoffs += (plr.LegAng-angle)*0.1;
+						yoffs += pitch*0.24;
 					}
 					A_WeaponOffset(xoffs,yoffs,WOF_INTERPOLATE);
 					
-					// Footsteps when bob is at adequite length.
-					if(plr.bobdir != invoker.bobdir && plr.vel.length() >= 0.08 )
-					{
-						if(plr.bobdir == 1) A_FireProjectile("MechFootstepEmitter");
-						invoker.bobdir = plr.bobdir;
-					}
 					if(!plr.mech_shutdown)
 					{ 
 						let weap = plr.getSelectedWeapon();

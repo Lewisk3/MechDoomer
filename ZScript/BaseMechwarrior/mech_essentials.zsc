@@ -18,6 +18,7 @@ float defaultfov;
 
 // Properties
 class<CockpitHandler> cphandler;
+class<MechLegsBase> mech_legs;
 bool modelcockpit;
 String hud_cockpit;
 String hud_mech;
@@ -104,7 +105,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 override void PostBeginPlay()
 {
 	// Spawn pieces (WIP)
-		//MechLegsBase.Create("Legs_TimberWolf", self);
+	if(mech_legs) MechLegsBase.Create(mech_legs, self);
 	
 	// Setup mech support systems.
 	if(checkVoodoo()) 
@@ -138,7 +139,7 @@ override void PostBeginPlay()
 		level.aircontrol = 1;
 		level.airfriction = 0.87;
 	}	
-	
+	//startMechbay();
 	super.PostBeginPlay();
 }
 	
@@ -149,30 +150,30 @@ override void tick()
 		super.Tick();
 		return;
 	}
-	if(!inv_context) setupInventory();		
+	if(!inv_context) setupInventory();	
+	// Make sure player doesn't have any actual weapons.
+	for(let w = Inv; w != null; w = w.Inv)
+	{
+		let weap = Weapon(w);
+		if(weap)
+		{
+			if(!(weap is "CockpitHandler")) weap.Destroy();
+		}
+	}
+	
 	if(health > 0) 
 	{		
 		// Calculate Bob
 		if(!bobdir) bobdir = 1;
 		if(vel.length() > 0.08)
 		{
-			boboffs += (vel.length()/4) * bobdir;
+			float bobthrust = clamp(vel.length()/4, -8., 8.);
+			boboffs += bobthrust * bobdir;
 		}
-		if(abs(boboffs) > 8) bobdir *= -1;
-	
+		if(abs(boboffs) > 8) bobdir *= -1;		
 		mechsounds.Tick();
 		if(!mech_shutdown)
 		{
-			// Make sure player doesn't have any actual weapons.
-			for(let w = Inv; w != null; w = w.Inv)
-			{
-				let weap = Weapon(w);
-				if(weap)
-				{
-					if(!(weap is "CockpitHandler")) weap.Destroy();
-				}
-			}
-		
 			if(vel.length() > 0) A_Explode(3+(vel.length()*1.5),30,!XF_HURTSOURCE);
 			mech_movement(); 
 			HardpointDamageEffects();

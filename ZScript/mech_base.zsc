@@ -30,7 +30,7 @@ class MechWarriorBase : DoomPlayer
 	Property LegSpeed : LegSpeed;
 	Property TwistRange : MaxYaw;
 	Property MoveSpeed  : MoveSpeedKPH;
-	Property PitchRange : pitchRange;
+	Property PitchRange : minPitch, maxPitch;
 	Property Weight : mech_tonnage;
 	Property HudMech : hud_mech;
 	Property HudCockpit : hud_cockpit;
@@ -40,6 +40,7 @@ class MechWarriorBase : DoomPlayer
 	Property OverTonnage: overtonnage;
 	Property CockpitIsModel: modelcockpit;
 	Property SetCockpitHandler: cphandler;
+	Property LegsModel : mech_legs;
 	
 	// Clearscope
 	clearscope void sendHudAlert(String str, int c)
