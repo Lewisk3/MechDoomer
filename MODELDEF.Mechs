@@ -1,0 +1,277 @@
+
+// Timberwolf
+Model Timberwolf
+{
+	Path "models/Cockpits/Timberwolf"
+	Model 0 "tw_torso.md3"
+	Model 1 "tw_hips.md3"
+	Skin 0 "tw_full_wolf.png"
+	Skin 1 "tw_full_wolf.png"
+	Scale 0.4 0.4 0.4
+	Offset -5 0 60
+	//USEACTORROLL
+	//USEACTORPITCH
+	
+   FrameIndex PLAY A 1 0
+   FrameIndex PLAY B 0 0
+   FrameIndex PLAY C 0 0
+   FrameIndex PLAY D 0 0
+   FrameIndex PLAY E 0 0
+   FrameIndex PLAY F 0 0
+   FrameIndex PLAY G 0 0
+}
+Model Legs_Timberwolf
+{
+	Path "models/Cockpits/Timberwolf"
+	Model 0 "tw_legs.md3"
+	Scale 0.4 0.4 0.4
+	Skin 0 "tw_full_wolf.png" // Main
+	Offset -5 0 0
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
+}
+Model CockpitHandler_Timberwolf
+{
+	Path "models/Cockpits/Timberwolf"
+	Model 0 "tw_head.md3"
+	Scale 0.12 0.10 0.10
+	Skin 0 "tw_head.png" // Main
+	PitchOffset -14
+	Offset 0 16 -8;
+	
+   FrameIndex MODL A 0 0
+} 
+
+// Stormcrow
+Model Stormcrow
+{
+	Path "models/Cockpits/Stormcrow"
+	Model 0 "sc_torso.md3"
+	Model 1 "sc_hips.md3"
+	Skin 0 "sc_full_wolf.png"
+	Skin 1 "sc_full_wolf.png"
+	Scale 0.4 0.4 0.4
+	Offset -5 0 65
+	AngleOffset 0
+	
+   FrameIndex PLAY A 0 0
+   FrameIndex PLAY B 0 0
+   FrameIndex PLAY C 0 0
+   FrameIndex PLAY D 0 0
+   FrameIndex PLAY E 0 0
+   FrameIndex PLAY F 0 0
+   FrameIndex PLAY G 0 0
+}
+Model Legs_Stormcrow
+{
+	Path "models/Cockpits/Stormcrow"
+	Model 0 "sc_legs.md3"
+	Scale 0.4 0.4 0.4
+	Skin 0 "sc_full_wolf.png" // Main
+	Offset -5 0 0 
+	//SurfaceSkin 0 1   // Metal
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
+}
+Model CockpitHandler_Stormcrow
+{
+	Path "models/Cockpits/Stormcrow"
+	Model 0 "sc_head.md3"
+	Scale 0.12 0.10 0.10
+	Skin 0 "sc_head.png" // Main
+	PitchOffset -8
+	Offset 0 28 -8;
+	
+   FrameIndex MODL A 0 0
+}
+
+// Jenner
+Model Jenner
+{
+	Path "models"
+	Model 0 "jenner.md3"
+	//Skin 0 "Stormcrow.png"
+	Scale 28.5 28.5 28.5
+	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
+	SurfaceSkin 0 1  "Metal.png" // Left upper
+	SurfaceSkin 0 2  "metal_dark.png" // Left lower
+	SurfaceSkin 0 3  "metal_dark.png" // Left toe
+	SurfaceSkin 0 4  "Metal.png" // Right upper
+	SurfaceSkin 0 5  "metal_dark.png" // Right lower
+	SurfaceSkin 0 6  "metal_dark.png" // Right leg
+	SurfaceSkin 0 7  "Metal.png" // Left arm
+	SurfaceSkin 0 8  "Metal.png" // Right Arm
+	SurfaceSkin 0 9  "Metal.png"  // Body
+	SurfaceSkin 0 10 "Missiles.png" // Body upper
+	SurfaceSkin 0 11 "Missiles.png" // Arm weapons
+	SurfaceSkin 0 12 "wolf_metal.png"  // Arm logos
+	ZOffset 0
+	AngleOffset 90
+	
+   FrameIndex PLAY A 0 0
+   FrameIndex PLAY B 0 0
+   FrameIndex PLAY C 0 0
+   FrameIndex PLAY D 0 0
+   FrameIndex PLAY E 0 0
+   FrameIndex PLAY F 0 0
+   FrameIndex PLAY G 0 0
+}
+
+// Atlas
+Model Atlas
+{
+	Path "models"
+	Model 0 "atlas.md3"
+	Scale 14.0 14.0 14.0
+	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
+	SurfaceSkin 0 1  "metal.png" // Left upper
+	SurfaceSkin 0 2  "metal.png" // Left lower
+	SurfaceSkin 0 3  "metal.png" // Left toe
+	SurfaceSkin 0 4  "metal.png" // Right upper
+	SurfaceSkin 0 5  "metal.png" // Right lower
+	SurfaceSkin 0 6  "metal.png" // Right leg
+	SurfaceSkin 0 7  "metal.png" // Left arm
+	SurfaceSkin 0 8  "metal.png" // Right Arm
+	SurfaceSkin 0 9  "metal_dark.png"  // Hip
+	SurfaceSkin 0 10 "metal.png" // Body upper
+	SurfaceSkin 0 11 "Missiles.png" // Torso weapons
+	SurfaceSkin 0 12 "metal_dark.png"  // Hands
+	SurfaceSkin 0 13 "wolf_metal.png"  // Shoulders
+	SurfaceSkin 0 14 "wolf_metal.png"  // Knees
+	ZOffset 0
+	AngleOffset 90
+
+   FrameIndex PLAY A 0 0
+   FrameIndex PLAY B 0 0
+   FrameIndex PLAY C 0 0
+   FrameIndex PLAY D 0 0
+   FrameIndex PLAY E 0 0
+   FrameIndex PLAY F 0 0
+   FrameIndex PLAY G 0 0
+}
+
+
+// Base 3D mechs
+Model Jenner_3D
+{
+	Path "models"
+	Model 0 "jenner.md3"
+	//Skin 0 "Stormcrow.png"
+	Scale 28.5 28.5 28.5
+	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
+	SurfaceSkin 0 1  "Metal.png" // Left upper
+	SurfaceSkin 0 2  "metal_dark.png" // Left lower
+	SurfaceSkin 0 3  "metal_dark.png" // Left toe
+	SurfaceSkin 0 4  "Metal.png" // Right upper
+	SurfaceSkin 0 5  "metal_dark.png" // Right lower
+	SurfaceSkin 0 6  "metal_dark.png" // Right leg
+	SurfaceSkin 0 7  "Metal.png" // Left arm
+	SurfaceSkin 0 8  "Metal.png" // Right Arm
+	SurfaceSkin 0 9  "Metal.png"  // Body
+	SurfaceSkin 0 10 "Missiles.png" // Body upper
+	SurfaceSkin 0 11 "Missiles.png" // Arm weapons
+	SurfaceSkin 0 12 "wolf_metal.png"  // Arm logos
+	ZOffset 0
+	AngleOffset 180
+	
+   FrameIndex JENN A 0 0
+}
+Model Atlas_3D
+{
+	Path "models"
+	Model 0 "atlas.md3"
+	Scale 14.0 14.0 14.0
+	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
+	SurfaceSkin 0 1  "metal.png" // Left upper
+	SurfaceSkin 0 2  "metal.png" // Left lower
+	SurfaceSkin 0 3  "metal.png" // Left toe
+	SurfaceSkin 0 4  "metal.png" // Right upper
+	SurfaceSkin 0 5  "metal.png" // Right lower
+	SurfaceSkin 0 6  "metal.png" // Right leg
+	SurfaceSkin 0 7  "metal.png" // Left arm
+	SurfaceSkin 0 8  "metal.png" // Right Arm
+	SurfaceSkin 0 9  "metal_dark.png"  // Hip
+	SurfaceSkin 0 10 "metal.png" // Body upper
+	SurfaceSkin 0 11 "Missiles.png" // Torso weapons
+	SurfaceSkin 0 12 "metal_dark.png"  // Hands
+	SurfaceSkin 0 13 "wolf_metal.png"  // Shoulders
+	SurfaceSkin 0 14 "wolf_metal.png"  // Knees
+	ZOffset 0
+	AngleOffset 90
+
+	FrameIndex ATLS A 0 0
+}
+Model Timberwolf_3D
+{
+	Path "models"
+	Model 0 "timberwolf.md3"
+	//Skin 0 "Stormcrow.png"
+	SurfaceSkin 0 0  "Metal_Dark.png" // RL_LRToe
+	SurfaceSkin 0 1  "weapfront.png" // ???
+	SurfaceSkin 0 2  "Cockpit_Glass.png" // Head
+	SurfaceSkin 0 3  "Metal.png" // RL_Lower
+	SurfaceSkin 0 4  "Metal_Dark.png" // RL_FTow
+	SurfaceSkin 0 5  "Metal.png" // RL_Upper
+	SurfaceSkin 0 6  "Metal.png" // LL_Upper
+	SurfaceSkin 0 7  "Metal_Dark.png" // LL_LRToe
+	SurfaceSkin 0 8  "Metal_Dark.png" 	 // LL_FToe
+	SurfaceSkin 0 9  "Metal.png" // LL_Lower
+	SurfaceSkin 0 10 "Metal.png" // RA_Upper
+	SurfaceSkin 0 11 "Metal.png" // LA_Upper
+	SurfaceSkin 0 12 "Metal_Dark.png" 	// MB_Lower
+	SurfaceSkin 0 13 "Metal.png" // MB_Upper
+	SurfaceSkin 0 14 "Metal_Dark.png" // WP_Arms
+	SurfaceSkin 0 15 "Missiles.png" // WP_Body
+	SurfaceSkin 0 16 "wolf_metal.png" // WP_Side
+	SurfaceSkin 0 17 "weapfront.png" // WP_Body
+	Scale 15.0 15.0 15.0
+	
+   FrameIndex MECH A 0 0
+}
+Model Stormcrow_3D
+{
+	Path "models"
+	Model 0 "stormcrow.md3"
+	//Skin 0 "Stormcrow.png"
+	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
+	SurfaceSkin 0 1  "Metal.png" 	     // Right Arm
+	SurfaceSkin 0 2  "Metal.png" 	     // Right UpperLeg
+	SurfaceSkin 0 3  "Metal.png" 		 // Right LowerLeg
+	SurfaceSkin 0 4  "Metal.png" 		 // Right Toe
+	SurfaceSkin 0 5  "Metal.png" 		 // Right Ankle
+	SurfaceSkin 0 6  "Metal.png" 		 // Left Ankle
+	SurfaceSkin 0 7  "Metal_Dark.png" 	 // Arm Weapons
+	SurfaceSkin 0 8  "Wolf_Metal.png" 	 // Body Upper
+	SurfaceSkin 0 9  "Metal.png"  		 // Body Upper
+	SurfaceSkin 0 10 "Metal.png" 		 // Left UpperLeg
+	SurfaceSkin 0 11 "Metal.png" 		 // Body Hips
+	SurfaceSkin 0 12 "Metal.png" 		 // Left LowerLeg
+	SurfaceSkin 0 13 "Metal.png" 		 // Body Base
+	SurfaceSkin 0 14 "Metal.png" 		 // Left Arm
+	Scale 15.0 15.0 15.0
+	ZOffset 50
+	AngleOffset 90
+	
+   FrameIndex MECH A 0 0
+}
+  

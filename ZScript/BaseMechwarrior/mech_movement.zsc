@@ -23,6 +23,7 @@ bool zoomed_in;
 bool canShutdown;
 bool bInfrared;
 bool manualshutdown;
+bool stepping;
 
 int Mech_JetCount;
 int bobdir;
@@ -49,6 +50,28 @@ float CrouchMulti;
 float rolldistort;
 
 // Main
+void mech_cockpitbob()
+{
+	// Calculate Bob
+	if(!bobdir) bobdir = 1;
+	if(vel.length() > 0.08 || LegVel)
+	{
+		float bobthrust = clamp(vel.length()*0.18, -7.5, 7.5);
+		boboffs += bobthrust * bobdir;
+		if(stepping) 
+		{
+			bobthrust = abs(bobthrust)*2;
+			bobdir = 1;
+		}
+	}
+	if(abs(boboffs) > 12) 
+	{
+		bobdir *= -1;		
+		boboffs = clamp(boboffs,-12,12);
+	}
+	Player.ViewZ += boboffs*1.1;
+}
+
 void mech_movement()
 {
 	if(!player) return;
@@ -171,7 +194,7 @@ void mech_movement()
 		if( !pilotlook && !mech_shutdown ) A_SetRoll( roll + rolldistort );
 		
 		// Move mech by a percentage of throttle.
-		vel = (cos(LegAng)*(throttle*MoveSpeed),sin(LegAng)*(throttle*MoveSpeed),vel.z);
+		if(!stepping) vel = (cos(LegAng)*(throttle*MoveSpeed),sin(LegAng)*(throttle*MoveSpeed),vel.z);
 		LegAng += LegVel;
 		angle += LookVel;
 		if( !pilotlook && !mech_shutdown )
@@ -345,19 +368,19 @@ void Bobbing() {
 	{
 		TiltOffset  = sin(TiltOsc);
 		TiltOffset *= (vel/2) - (LegVel*2);
-		TiltOffset *= 0.15;
-		if(defaultmovement) StepOffset *= 3;
+		TiltOffset *= 0.05;
+		if(defaultmovement) TiltOffset *= 3;
 		TiltOffset *= CrouchMulti;
 
 		StepOffset  = sin(StepOsc);
 		StepOffset *= (vel/2) + (LegVel*2);
-		StepOffset *= (1.78 + ((mech_tonnage-20)/100));
-		StepOffset *= 0.8;
+		StepOffset *= (1.78 + ((mech_tonnage)/100));
+		StepOffset *= 0.65;
 		if(defaultmovement) StepOffset *= 0.7;
 		StepOffset *= CrouchMulti;
 	}
 	
 	A_SetRoll(-TiltOffset);
 	//SetOrigin(Vec3Angle(TiltOffset * 0.5, angle+90, 0, false), true);
-	Player.ViewZ += StepOffset;
+	if(!mech_legs) Player.ViewZ += StepOffset;
 }

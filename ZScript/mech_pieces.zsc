@@ -2,6 +2,11 @@ class MechLegsBase : Actor
 {
 	MechwarriorBase mechowner;
 	
+	Default
+	{
+		+NOGRAVITY;
+	}
+	
 	override void tick()
 	{
 		if(mechowner)
@@ -15,6 +20,11 @@ class MechLegsBase : Actor
 	bool isMoving()
 	{
 		return (mechowner && (mechowner.vel.xy.length() >= 0.08 || mechowner.LegVel) );
+	}
+	bool checkStepping(bool idle=false)
+	{
+		mechowner.stepping = idle ? false : (frame == 4 || frame == 8);
+		return true;
 	}
 	
 	static MechLegsBase Create(class<MechLegsBase> legs, MechWarriorBase torso)
@@ -31,15 +41,21 @@ class MechLegsBase : Actor
 	States
 	{
 		Spawn:
-			TLEG "#" 1 A_JumpIf(isMoving(), "WalkCycle");
+			TLEG "#" 1 A_JumpIf(checkStepping(true) && isMoving(), "WalkCycle");
 		loop;
 		WalkCycle:
 			TLEG BCDEFGHIJ 4 
-			{
-				if(frame == 4 || frame == 8) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
-				
-				//float spdrating = (mechowner.throttle * mechowner.MoveSpeedKPH)/100.;
-				//if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 2, 10);
+			{	
+				float spdrating = (mechowner.throttle * mechowner.MoveSpeedKPH)/140.;
+				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
+				float stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.9, 1.28);
+				//console.printf("--------\nSR: %f\nWR: %f\nFR: %f", spdrating, wrating, stompfriction);
+				if(checkStepping() && mechowner.stepping) 
+				{
+					SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+					mechowner.vel.xy *= stompfriction;
+				}
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 10);
 				return !isMoving() ? ResolveState("Spawn") : ResolveState(Null); 
 			}
 		loop;

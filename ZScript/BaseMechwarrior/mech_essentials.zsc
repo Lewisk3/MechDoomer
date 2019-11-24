@@ -130,7 +130,7 @@ override void PostBeginPlay()
 	LegAng = angle;
 	
 	// Convert KPH to UPT
-	MoveSpeed = ceil((MoveSpeedKPH*15000)/100000);
+	MoveSpeed = ceil((MoveSpeedKPH*15000)/75000);
 	MoveSpeed_Max = MoveSpeed;
 	throttle_max = 1;
 	if(defaultmovement) 
@@ -163,14 +163,7 @@ override void tick()
 	
 	if(health > 0) 
 	{		
-		// Calculate Bob
-		if(!bobdir) bobdir = 1;
-		if(vel.length() > 0.08)
-		{
-			float bobthrust = clamp(vel.length()/4, -8., 8.);
-			boboffs += bobthrust * bobdir;
-		}
-		if(abs(boboffs) > 8) bobdir *= -1;		
+		mech_cockpitbob();
 		mechsounds.Tick();
 		if(!mech_shutdown)
 		{

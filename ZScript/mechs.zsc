@@ -94,7 +94,7 @@ class BattleArmor : MechWarrior
 	{
 		Mass 600;
 		MechWarriorBase.LegSpeed 2;
-		MechWarriorBase.MoveSpeed 75;
+		MechWarriorBase.MoveSpeed 60;
 		MechWarriorBase.TwistRange 130;
 		MechWarriorBase.heatEff 0.20;
 		MechWarriorBase.HudCockpit "WARHHUD";
