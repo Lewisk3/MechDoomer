@@ -513,7 +513,9 @@ class RandomExplosions : MissileExplosion
 			npos.y += sin(angle)*dist;
 			npos.z += zoffs+frandom(-15,15);
 			expl.SetOrigin(npos,false);
-			expl.A_SetScale(frandom(0.5,1.5),frandom(0.5,1.5));
+			float scalemod = frandom(0.5,1.5);
+			expl.A_SetScale(scalemod,scalemod);
+			expl.bSPRITEFLIP = random(0,1);
 		}
 	}
 	

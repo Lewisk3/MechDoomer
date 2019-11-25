@@ -1,3 +1,12 @@
+	- Gutamatics math library -
+ https://gitlab.com/Gutawer/gzdoom-gutamatics
+ 
+	- Main Contributors -
+Lewisk3    (Lead programmer)
+Xaser      (Argents ArgRocketReticle)
+Caligari87 (Mech bobbing code)
+Cherno 	   (Mech model exports + UV shading)
+
 	- Mech sounds/Mech models/Mech Lore -
 Activision/BattleTech/Mechwarrior 2 : 31st Century Combat
 Activision/BattleTech/Mechwarrior 2 : Mercenaries
@@ -5,14 +14,17 @@ Activision/BattleTech/Mechwarrior 2 : Mercenaries
 	- Explosion Sprites -
 http://www.brickshelf.com/cgi-bin/gallery.cgi?i=5576954
 
-	- MechDoomer ZScript -
-Lewisk3    (Lead programmer)
-Xaser      (Argents ArgRocketReticle)
-Caligari87 (Mech bobbing code)
-Cherno 	   (Mech cockpit model exports + UV shading)
-
-	- Gutamatics math library -
- https://gitlab.com/Gutawer/gzdoom-gutamatics
-
 	- Music -
 Timothy Seals ( A New Dawn ) - https://www.youtube.com/watch?v=l1MH3fB4jwY&list=PLqFtbV2G_dq4CIzmzG2UV0ThmhzgNktJq&index=1
+
+	- Special Thanks - 
+Mechwarrior Living Legends Community/Discord:
+*   Thanks for the continuously helpful feedback!
+
+- Afterword -
+--------------------------------
+[https://mechlivinglegends.net/]
+--------------------------------
+I recommend checking out MWLL if you haven't already, it's tons of fun and way 
+more faithful to the original mechwarrior series than whatever PGI is spitting 
+out nowadays. 
