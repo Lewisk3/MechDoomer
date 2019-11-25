@@ -97,7 +97,7 @@ Mech/Damaged/NoArmor MPAINLW
 Mech/Damaged/HardpointDead MPAINME
 Mech/Damaged/Critical MPAINHD
 Mech/Damaged/Explosion MPAINMX
-
+Mech/Damaged/CriticalExplosion MDED
 
 $random Mech/Power { Mech/PowerOne Mech/PowerTwo Mech/PowerThree}
 $random Mech/DeccelToStop { Mech/DeccelToStop1 Mech/DeccelToStop2 Mech/DeccelToStop3}

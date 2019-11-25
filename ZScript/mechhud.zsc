@@ -161,7 +161,7 @@ class MechStatusBar : BaseStatusBar
 		if(CPlayer && CPlayer.mo)
 		{
 			let mech = MechWarrior(CPlayer.mo);	
-			if(!mech) 
+			if(!mech || mech && !mech.inv_context) 
 			{
 				super.tick();
 				return;
@@ -287,6 +287,10 @@ class MechStatusBar : BaseStatusBar
 			if(!mech) 
 			{
 				console.printf("Failed to display HUD, unsupported player class!");
+				return;
+			}
+			else if(!mech.inv_context)
+			{
 				return;
 			}
 		}
@@ -478,8 +482,8 @@ class MechStatusBar : BaseStatusBar
 			H_DrawImage("MWTARGET",(200,836));
 			if(mech.targetenemy)
 			{
-				TexMan.SetCameraToTexture(Actor(mech.targetreticle.cam),"TestCamera",90.0);
-				TextureID targ = TexMan.CheckForTexture("TestCamera",TexMan.TYPE_ANY);
+				TexMan.SetCameraToTexture(Actor(mech.targetreticle.cam),"TargetCamera",90.0);
+				TextureID targ = TexMan.CheckForTexture("TargetCamera",TexMan.TYPE_ANY);
 				H_DrawTexture(targ,(199,826));
 				String dist = mech.Distance3D(mech.targetenemy)/5 .. "";
 				dist.truncate(dist.Length()-6);

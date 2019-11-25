@@ -2,7 +2,7 @@
 class MechDoomerEvents : EventHandler 
 {
 	ui Mechlab_Menu mechlab;
-
+	
 	override void RenderOverlay(RenderEvent e)
 	{
 		CVar target_mode = CVar.GetCVar("mwd_viewport_target",e.camera.player);
@@ -190,6 +190,7 @@ class MechDoomerEvents : EventHandler
 		if(plr)
 		{
 			// Process mechlab netevents
+			if(netcmd == "dronechase" && !plr.isdead) plr.ToggleDrone(200,0);
 			if(netcmd == "kill mech") { plr.inv_context.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
 			if(netcmd == "equip_invweap") plr.equipWeaponInv(e.Args[0]+1,plr.getHardpointPos(e.Args[1]),1);

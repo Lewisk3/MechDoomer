@@ -481,6 +481,68 @@ class MissileExplosion : Actor
 	}
 }
 
+class RandomExplosions : MissileExplosion
+{
+	int expl_count;
+	int wait;
+	float zoffs;
+	vector3 spawnpos;
+	float timer;
+		
+	static void Trigger(vector3 pos, int amt, int tics, float zoffset)
+	{
+		let rexpl = RandomExplosions(Spawn("RandomExplosions",pos));
+		if(rexpl)
+		{
+			rexpl.spawnpos = pos;
+			rexpl.expl_count = amt;
+			rexpl.wait = tics;
+			rexpl.zoffs = zoffset;
+		}
+	}
+	
+	void DoExplosion()
+	{
+		let expl = Spawn("MissileExplosion",spawnpos);
+		if(expl)
+		{
+			float angle = frandom(-180,180);
+			float dist = frandom(-50,50);
+			vector3 npos = expl.pos;
+			npos.x += cos(angle)*dist;
+			npos.y += sin(angle)*dist;
+			npos.z += zoffs+frandom(-15,15);
+			expl.SetOrigin(npos,false);
+			expl.A_SetScale(frandom(0.5,1.5),frandom(0.5,1.5));
+		}
+	}
+	
+	override void Tick()
+	{
+		if(!timer && expl_count > 0) 
+		{
+			timer = wait+random(wait*0.5,wait);
+			DoExplosion();
+			expl_count--;
+		}
+		else
+		{
+			timer--;
+		}
+		super.Tick();
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 1;
+			TNT1 A 0 A_JumpIf(expl_count, "Spawn");
+		Death:
+			TNT1 A 1;
+		stop;
+	}
+}
+
 class AMS_Missile : Mechbase_Actor
 {
 	int projdmg;

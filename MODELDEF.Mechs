@@ -19,6 +19,23 @@ Model Timberwolf
    FrameIndex PLAY E 0 0
    FrameIndex PLAY F 0 0
    FrameIndex PLAY G 0 0
+   FrameIndex PLAY H 0 0
+   FrameIndex PLAY I 0 0
+   FrameIndex PLAY J 0 0
+   FrameIndex PLAY K 0 0
+   FrameIndex PLAY L 0 0
+   FrameIndex PLAY M 0 0
+   FrameIndex PLAY N 0 0
+   FrameIndex PLAY O 0 0
+   FrameIndex PLAY P 0 0
+   FrameIndex PLAY Q 0 0
+   FrameIndex PLAY R 0 0
+   FrameIndex PLAY S 0 0
+   FrameIndex PLAY T 0 0
+   FrameIndex PLAY U 0 0
+   FrameIndex PLAY V 0 0
+   FrameIndex PLAY W 0 0
+   FrameIndex PLAY X 0 0
 }
 Model Legs_Timberwolf
 {
@@ -64,13 +81,30 @@ Model Stormcrow
 	Offset -5 0 65
 	AngleOffset 0
 	
-   FrameIndex PLAY A 0 0
+   FrameIndex PLAY A 1 0
    FrameIndex PLAY B 0 0
    FrameIndex PLAY C 0 0
    FrameIndex PLAY D 0 0
    FrameIndex PLAY E 0 0
    FrameIndex PLAY F 0 0
    FrameIndex PLAY G 0 0
+   FrameIndex PLAY H 0 0
+   FrameIndex PLAY I 0 0
+   FrameIndex PLAY J 0 0
+   FrameIndex PLAY K 0 0
+   FrameIndex PLAY L 0 0
+   FrameIndex PLAY M 0 0
+   FrameIndex PLAY N 0 0
+   FrameIndex PLAY O 0 0
+   FrameIndex PLAY P 0 0
+   FrameIndex PLAY Q 0 0
+   FrameIndex PLAY R 0 0
+   FrameIndex PLAY S 0 0
+   FrameIndex PLAY T 0 0
+   FrameIndex PLAY U 0 0
+   FrameIndex PLAY V 0 0
+   FrameIndex PLAY W 0 0
+   FrameIndex PLAY X 0 0
 }
 Model Legs_Stormcrow
 {

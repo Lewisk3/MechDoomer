@@ -359,6 +359,16 @@ void ProcessHardpointDamage(Name mod, float damage, Actor damager = NULL)
 	if(  inv_context.hardpoints.hd.internalhp <= 0 || inv_context.hardpoints.ct.internalhp <= 0 ||
 		(inv_context.hardpoints.ll.internalhp <= 0 && inv_context.hardpoints.rl.internalhp <= 0)   ) 
 	{
+		throttle = 0;
+		if(modelcockpit)
+		{
+			mechsounds.Empty();
+			for(int i = 0; i < 5; i++) mechsounds.PushSound("Mech/Damaged/CriticalExplosion");
+			RandomExplosions.Trigger(pos,75,15,viewheight);
+			if(!dronecam_active) ToggleDrone(200,0);
+			AdjustDrone(200,1);
+		}
+		isdead = true;
 		Die(NULL,damager);
 		A_SetHealth(0);
 	}

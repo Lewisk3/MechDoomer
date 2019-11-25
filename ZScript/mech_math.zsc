@@ -6,6 +6,15 @@ class MDMath Abstract
 		float result = ((1.f - lerpFactor) * a) + (lerpFactor * b);
 		return result;
 	}
+	static vector3 Lerp3D(vector3 a, vector3 b, float lerpfactor)
+	{
+		vector3 result = a;
+		result.x = Lerp(result.x,b.x,lerpfactor);
+		result.y = Lerp(result.y,b.y,lerpfactor);
+		result.z = Lerp(result.z,b.z,lerpfactor);
+		return result;
+	}
+	
 	// Lerps from angle a to b (both between 0.f and 360.f), taking the shortest path
 	static float LerpDegrees(float a, float b, float lerpFactor) 
 	{

@@ -7,6 +7,8 @@ extend class MechWarriorBase;
 float baseHeatEfficiency;
 
 // Vars
+MechCamera dronecam;
+bool dronecam_active;
 bool heatwarn;
 bool supersink;
 int ams_timer;
@@ -14,6 +16,28 @@ float HeatEfficiency;
 float HeatLevel;
 float prevheat;
 float deltaHeat;
+
+// Drone
+void ToggleDrone(float cdist, float rotspd)
+{
+	if(!dronecam)
+	{
+		dronecam = MechCamera.Create(self, cdist, rotspd);
+		dronecam_active = true;
+	}
+	else
+	{
+		dronecam_active = false;
+	}
+}
+void AdjustDrone(float cdist, float rotspd)
+{
+	if(dronecam && dronecam_active)
+	{
+		dronecam.followdist_desired = cdist;
+		dronecam.rotspd = rotspd;
+	}
+}
 
 // Main
 void mech_weapons()

@@ -56,7 +56,7 @@ void mech_cockpitbob()
 	if(!bobdir) bobdir = 1;
 	if(vel.length() > 0.08 || LegVel)
 	{
-		float bobthrust = clamp(vel.length()*0.18, -7.5, 7.5);
+		float bobthrust = clamp(vel.length()*(0.18*(kph_real/kph_default)), -7.5, 7.5);
 		if(stepping) 
 		{
 			bobthrust = abs(bobthrust)*3;
@@ -69,14 +69,15 @@ void mech_cockpitbob()
 		bobdir *= -1;		
 		boboffs = clamp(boboffs,-12,12);
 	}
-	if(mech_legs)Player.ViewZ -= boboffs;
+	if(mech_legs)
+	{
+		Player.ViewZ -= boboffs*clamp( (1.33*(mech_tonnage/100.0)), 0.5, 1.5);
+	}
 }
 
 void mech_movement()
 {
-	if(!player) return;
-	// Dead boi walkin
-	if(health <= 0) return;
+	if(!player || isdead) return;
 	
 	// Movement Quirks
 	if(defaultmovement)
@@ -368,7 +369,7 @@ void Bobbing() {
 	{
 		TiltOffset  = sin(TiltOsc);
 		TiltOffset *= (vel/2) - (LegVel*2);
-		TiltOffset *= 0.05;
+		TiltOffset *= 0.10;
 		if(defaultmovement) TiltOffset *= 3;
 		TiltOffset *= CrouchMulti;
 

@@ -11,6 +11,22 @@ Model DEBRIS_3D
    FrameIndex DEBR A 0 0
 } 
 
+Model MechCamera
+{
+	Path "models/Cockpits/Timberwolf"
+	Model 0 "tw_torso.md3"
+	Model 1 "tw_hips.md3"
+	Skin 0 "tw_full_wolf.png"
+	Skin 1 "tw_full_wolf.png"
+	Scale 0.1 0.1 0.1
+	Offset -5 0 0
+	//USEACTORROLL
+	USEACTORPITCH
+	
+   FrameIndex MCAM A 0 0
+}
+
+
 Model Mechbay
 {
 	Path "models"
