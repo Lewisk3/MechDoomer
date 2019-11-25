@@ -19,7 +19,7 @@ Model MechCamera
 	Skin 0 "tw_full_wolf.png"
 	Skin 1 "tw_full_wolf.png"
 	Scale 0.1 0.1 0.1
-	Offset -5 0 0
+	Offset 0 0 0
 	//USEACTORROLL
 	USEACTORPITCH
 	

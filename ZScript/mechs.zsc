@@ -96,7 +96,7 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.LegSpeed 2;
 		MechWarriorBase.MoveSpeed 60;
 		MechWarriorBase.TwistRange 130;
-		MechWarriorBase.heatEff 0.20;
+		MechWarriorBase.heatEff 0.18;
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 5;
@@ -171,7 +171,7 @@ class Stormcrow : MechWarrior
 		MechWarriorBase.LegSpeed 1.6;
 		MechWarriorBase.MoveSpeed 81;
 		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.heatEff 0.10;
 		MechWarriorBase.EngineWeight 30;
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Stormcrow";
 		MechWarriorBase.CockpitIsModel true;
@@ -186,7 +186,7 @@ class Stormcrow : MechWarrior
 	override void SetupWeapons()
 	{
 		setupHardpointVitals( 9,26,32,32,18,18,26,26, 3,16,13,13,9,9,13,13 );
-		setupHardpoints( (0,20), (0,-18), (90,-11), (-90,-11), (30,-11), (-30,-11), (80,-70), (-80,-70) );
+		setupHardpoints( (0,20), (0,-18), (30,-11), (-30,-11), (90,-11), (-90,-11), (80,-70), (-80,-70) );
 		setupHardpointSlots();
 		equipStruct("Heatsink",inv_context.hardpoints.ct.pos,3);
 		equipStruct("Heatsink",inv_context.hardpoints.lt.pos,4);
@@ -208,7 +208,7 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.LegSpeed 1.5;
 		MechWarriorBase.MoveSpeed 81; 
 		MechWarriorBase.TwistRange 80;
-		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.heatEff 0.10;
 		MechWarriorBase.HudCockpit "WOLFHUD";
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Timberwolf";
 		MechWarriorBase.CockpitIsModel true;
@@ -224,7 +224,7 @@ class Timberwolf : MechWarrior
 	override void SetupWeapons()
 	{
 		setupHardpointVitals( 9,46,32,32,24,24,32,32, 3,24,16,16,12,12,16,16 );
-		setupHardpoints( (0,20), (0,0), (120,30), (-120,30), (250,-11), (-250,-11), (80,-85), (-80,-85) );
+		setupHardpoints( (0,20), (0,-38), (75,18), (-75,18), (90,-20), (-90,-20), (80,-85), (-80,-85) );
 		setupHardpointSlots();
 		equipStruct("DoubleHeatsink",inv_context.hardpoints.ct.pos,1);
 		equipStruct("DoubleHeatsink",inv_context.hardpoints.lt.pos,2);
@@ -252,7 +252,7 @@ class Jenner : MechWarrior
 		MechWarriorBase.LegSpeed 2;
 		MechWarriorBase.MoveSpeed 120;
 		MechWarriorBase.TwistRange 90;
-		MechWarriorBase.heatEff 0.08;
+		MechWarriorBase.heatEff 0.12;
 		MechWarriorBase.Weight 35;
 		MechWarriorBase.EngineWeight 15.5;
 		MechWarriorBase.HudCockpit "JENNHUD";

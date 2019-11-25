@@ -190,7 +190,8 @@ class MechDoomerEvents : EventHandler
 		if(plr)
 		{
 			// Process mechlab netevents
-			if(netcmd == "dronechase" && !plr.isdead) plr.ToggleDrone(200,0);
+			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook) plr.ToggleDrone(200,0,false);
+			if(netcmd == "droneviewswitch" && !plr.isdead && plr.dronecam) plr.dronecam.frontcam = !plr.dronecam.frontcam;
 			if(netcmd == "kill mech") { plr.inv_context.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
 			if(netcmd == "equip_invweap") plr.equipWeaponInv(e.Args[0]+1,plr.getHardpointPos(e.Args[1]),1);
@@ -209,7 +210,7 @@ class MechDoomerEvents : EventHandler
 			
 			if(netcmd == "+mwd_user5")plr.btn_userfive = true;
 			if(netcmd == "-mwd_user5")plr.btn_userfive = false;
-			if(netcmd == "+mwd_pilotlook" && plr.modelcockpit) plr.pilotlook = true;
+			if(netcmd == "+mwd_pilotlook" && plr.modelcockpit && !plr.dronecam) plr.pilotlook = true;
 			if(netcmd == "-mwd_pilotlook")plr.pilotlook = false;
 			Array<String> netcmds;
 			netcmds.Clear();

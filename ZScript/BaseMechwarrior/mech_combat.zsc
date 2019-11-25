@@ -18,11 +18,11 @@ float prevheat;
 float deltaHeat;
 
 // Drone
-void ToggleDrone(float cdist, float rotspd)
+void ToggleDrone(float cdist, float rotspd, bool front)
 {
 	if(!dronecam)
 	{
-		dronecam = MechCamera.Create(self, cdist, rotspd);
+		dronecam = MechCamera.Create(self, cdist, rotspd, front);
 		dronecam_active = true;
 	}
 	else
@@ -30,12 +30,13 @@ void ToggleDrone(float cdist, float rotspd)
 		dronecam_active = false;
 	}
 }
-void AdjustDrone(float cdist, float rotspd)
+void AdjustDrone(float cdist, float rotspd, bool front)
 {
 	if(dronecam && dronecam_active)
 	{
 		dronecam.followdist_desired = cdist;
 		dronecam.rotspd = rotspd;
+		dronecam.frontcam = front;
 	}
 }
 

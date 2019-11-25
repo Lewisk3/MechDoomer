@@ -2,11 +2,13 @@
 class MechCamera : Actor
 {
 	MechWarriorBase mechowner;
+	vector3 followpos;
 	float followdist;
 	float followdist_desired;
-	vector3 followpos;
 	float rotangle;
 	float rotspd;
+	bool frontcam;
+	
 	Property FollowDistance : followdist;
 	
 	Default
@@ -18,7 +20,7 @@ class MechCamera : Actor
 		MechCamera.FollowDistance 50;
 	}
 		
-	static MechCamera Create(MechWarriorBase torso, float dist, float rotation)
+	static MechCamera Create(MechWarriorBase torso, float dist, float rotation, bool frontfacing=false)
 	{
 		let cam = MechCamera(Spawn("MechCamera"));
 		if(cam) 
@@ -26,6 +28,7 @@ class MechCamera : Actor
 			cam.mechowner = torso;
 			cam.followdist_desired = dist;
 			cam.rotspd = rotation;
+			cam.frontcam = frontfacing;
 		}
 		return cam;
 	}
@@ -36,23 +39,25 @@ class MechCamera : Actor
 		{
 			if(followdist < followdist_desired && mechowner.dronecam_active) 
 				followdist = MDMath.Lerp(followdist,followdist_desired,0.05);
-				
-			if(!mechowner.dronecam_active)
-			{
-				if(followdist <= 20) Destroy();
-				followdist = MDMath.Lerp(followdist,0,0.05);
-			}
-			
+							
 			float zoffs = (mechowner.viewheight);
+			float lerpspd = 0.15;
 			rotangle += rotspd;
 			float trueangle = !rotangle ? mechowner.angle : rotangle;
 			vector3 newfollowpos = (
-				mechowner.pos.x - cos(trueangle)*followdist,
-				mechowner.pos.y - sin(trueangle)*followdist,
+				mechowner.pos.x - cos(trueangle)*followdist*(frontcam ? -1 : 1),
+				mechowner.pos.y - sin(trueangle)*followdist*(frontcam ? -1 : 1),
 				mechowner.pos.z + zoffs+(sin(mechowner.pitch)*followdist)
 			);
 			if(!followpos.length()) followpos = newfollowpos;
-			followpos = MDMath.Lerp3D(followpos, newfollowpos, 0.3);
+			
+			if(!mechowner.dronecam_active)
+			{
+				if(Distance2D(mechowner) <= 24) Destroy();
+				followdist = MDMath.Lerp(followdist,0,0.10);
+				if(followdist <= 10) lerpspd=1;
+			}
+			followpos = MDMath.Lerp3D(followpos, newfollowpos, lerpspd);
 			angle = AngleTo(mechowner);
 			pitch = MDMath.getPitchBetween(pos,(mechowner.pos.x,mechowner.pos.y,mechowner.pos.z+zoffs));
 			SetOrigin(followpos,true);
@@ -90,7 +95,11 @@ class MechLegsBase : Actor
 	
 	bool isMoving()
 	{
-		return (mechowner && !mechowner.checkVoodoo() && (mechowner.vel.xy.length() >= 0.08 || mechowner.LegVel) );
+		return ( 
+			 mechowner && !mechowner.checkVoodoo() && !mechowner.mech_shutdown && 
+		    (mechowner.player && mechowner.player.onground) && 
+			(mechowner.vel.xy.length() >= 0.08 || mechowner.LegVel) 
+		);
 	}
 	bool checkStepping(bool idle=false)
 	{
@@ -119,11 +128,12 @@ class MechLegsBase : Actor
 			{	
 				float spdrating = (mechowner.throttle * mechowner.MoveSpeedKPH)/140.;
 				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
-				float stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.9, 1.28);
-				//console.printf("--------\nSR: %f\nWR: %f\nFR: %f", spdrating, wrating, stompfriction);
+				float stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.87, 1.32);
 				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;
-				if(frame == 2 || frame == 7) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if( (frame == 2 || frame == 7) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
+				// console.printf("--------\nSR: %f\nWR: %f\nFR: %f", spdrating, wrating, stompfriction);
+				
 				return !isMoving() ? ResolveState("Spawn") : ResolveState(Null); 
 			}
 		loop;

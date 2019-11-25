@@ -5,7 +5,7 @@ class SmallLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "SLASER";
 		Mechbase_Weapon.WeaponType "Laser_SML";
-		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.WeaponParams 30,85;
 		Mechbase_Weapon.Tonnage 0.5;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 2400;
@@ -17,7 +17,7 @@ class ERSmallLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "erSLAS";
 		Mechbase_Weapon.WeaponType "Laser_ERSML";
-		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.WeaponParams 30,85;
 		Mechbase_Weapon.Tonnage 0.5;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 2850;
@@ -29,7 +29,7 @@ class SmallPulseLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "SPLAS";
 		Mechbase_Weapon.WeaponType "Laser_SMLP";
-		Mechbase_Weapon.WeaponParams 5,90;
+		Mechbase_Weapon.WeaponParams 30,90;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 3050;
@@ -42,7 +42,7 @@ class MediumLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "MLASER";
 		Mechbase_Weapon.WeaponType "Laser_MED";
-		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.WeaponParams 30,85;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 3200;
@@ -54,7 +54,7 @@ class ERMediumLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "erMLAS";
 		Mechbase_Weapon.WeaponType "Laser_ERMED";
-		Mechbase_Weapon.WeaponParams 20,85;
+		Mechbase_Weapon.WeaponParams 30,85;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 4150;
@@ -66,7 +66,7 @@ class MediumPulseLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "MPLAS";
 		Mechbase_Weapon.WeaponType "Laser_MEDP";
-		Mechbase_Weapon.WeaponParams 20,88;
+		Mechbase_Weapon.WeaponParams 30,88;
 		Mechbase_Weapon.Tonnage 2;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 4300;
@@ -136,7 +136,7 @@ class PPC : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "PPC";
 		Mechbase_Weapon.WeaponType "PPCProjectile";
-		Mechbase_Weapon.WeaponParams 20, 27;
+		Mechbase_Weapon.WeaponParams 30, 27;
 		Mechbase_Weapon.Tonnage 7;
 		Mechbase_Weapon.HardslotSize 3;
 		Mechbase_Weapon.CValue 10375;
@@ -148,7 +148,7 @@ class ERPPC : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "ER PPC";
 		Mechbase_Weapon.WeaponType "ERPPCProjectile";
-		Mechbase_Weapon.WeaponParams 20, 27;
+		Mechbase_Weapon.WeaponParams 30, 27;
 		Mechbase_Weapon.Tonnage 7;
 		Mechbase_Weapon.HardslotSize 3;
 		Mechbase_Weapon.CValue 13250;
@@ -367,7 +367,7 @@ class Autocannon2 : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "xAC2";
 		Mechbase_Weapon.WeaponType "AC_2";
-		Mechbase_Weapon.WeaponParams 20,60;
+		Mechbase_Weapon.WeaponParams 30,60;
 		Mechbase_Weapon.AmmoType "AC2_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_Weapon.AmmoGive 40;

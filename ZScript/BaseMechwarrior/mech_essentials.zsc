@@ -120,7 +120,7 @@ override void PostBeginPlay()
 	setupInventory();
 	
 	kph_default = 75000;
-	kph_real = 75000;
+	kph_real = 75000/MWGAMEPLAY_MECHSPEEDSCALE;
 	
 	weapons_fired = false;
 	weapon_groupfire = false;

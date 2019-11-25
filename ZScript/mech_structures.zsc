@@ -120,7 +120,7 @@ class Heatsink : Mechbase_Utility
 	{
 		Mechbase_Utility.Tonnage 1;
 		Mechbase_Utility.displayName "Heat Sink";
-		Heatsink.Efficiency 0.10;
+		Heatsink.Efficiency 0.12;
 		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 12600;

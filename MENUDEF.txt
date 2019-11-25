@@ -49,6 +49,8 @@ OptionMenu "MechDoomerControlsMenu"
 	Control    "Center Torso to Legs"		 , "netevent \"giveinvbutton:IBTN_CENTERTORSO\""
 	Control    "Jump Jets"             		 , "Mech_JumpJets_Fire"
 	Control    "Cockpit Look"				 , "Mech_PilotLook"
+	Control    "Toggle Drone Camera"		 , "netevent dronebackchase"
+	Control    "Switch Drone View"		 	 , "netevent droneviewswitch"
 	StaticText " "
 	
 	StaticText "Weapons Systems","Yellow"
