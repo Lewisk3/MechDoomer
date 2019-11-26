@@ -52,7 +52,7 @@ int getWeaponSlotsUsed(Vector2 loc)
 		let ww = Mechbase_Weapon(w);
 		if(ww)
 		{
-			if(ww.mount == loc) slots += ww.hardslots;
+			if(ww.hardpoint.pos == loc) slots += ww.hardslots;
 		}
 	}
 	return slots;
@@ -168,7 +168,7 @@ void removeWeapon(Mechbase_Weapon w)
 {
 	// This is need because hardpoints and stuff.
 	inv_context.weapons_tonnage -= w.weight;
-	hardpoints.adjustHardslots(w.mount,-w.hardslots);
+	w.hardpoint.adjustHardslots(-w.hardslots);
 	RemoveInventory(w);
 }
 bool removeWeaponAt(int ind)
@@ -209,7 +209,7 @@ bool swapWeaponToInv(int weap_ind, int inv_ind)
 				weaptype = resolveWeaponName(ww);
 				int prevweaps = weapons;
 				weapons = ww.WeaponID-1;
-				equipWeapon(inv_context.weapon_items[inv_ind],ww.mount,ww.group,false);
+				equipWeapon(inv_context.weapon_items[inv_ind],ww.hardpoint,ww.group,false);
 				weapons = prevweaps;
 				removeWeapon(ww);
 				inv_context.weapon_items[inv_ind] = weaptype;
@@ -239,7 +239,7 @@ bool moveWeaponToInv(int weap_ind)
 }
 
 // Equip or Add
-bool equipWeaponInv(int ind, Vector2 pos, int grp, bool move=true)
+bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 {
 	// Equip weapon from items
 	class<Mechbase_Weapon> weap = inv_context.weapon_items[ind-1];
@@ -250,18 +250,18 @@ bool equipWeaponInv(int ind, Vector2 pos, int grp, bool move=true)
 		sendHudAlert("Cannot equip weapon, over tonnage!", Font.CR_DARKRED);
 		return false;
 	}
-	if( hardpoints.getFreeSlots(pos) < GetDefaultByType(weap).hardslots )
+	if( hp.getFreeSlots() < GetDefaultByType(weap).hardslots )
 	{
 		sendHudAlert("Cannot equip weapon, no freeslots!", Font.CR_DARKRED);
 		return false;	
 	}
 	 
 	 // Equip weapon in inventory, don't give ammo.
-	if(!equipWeapon(inv_context.weapon_items[ind-1],pos,grp,false)) return false;
+	if(!equipWeapon(inv_context.weapon_items[ind-1],hp,grp,false)) return false;
 	if(move)inv_context.weapon_items.delete(ind-1);
 	return true;
 }
-bool equipWeapon(class<Mechbase_Weapon> type, Vector2 vpos, int group, bool giveammo = true)
+bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool giveammo = true)
 {
 	if(checkVoodoo()) return false;
 	GiveInventory(type,1);
@@ -296,8 +296,8 @@ bool equipWeapon(class<Mechbase_Weapon> type, Vector2 vpos, int group, bool give
 				//console.printf("Setting new ID: %d",weapons); 
 				ww.WeaponID = weapons;
 				ww.group = group;
-				ww.mount = vpos;
-				hardpoints.adjustHardslots(ww.mount,ww.hardslots);
+				ww.hardpoint = hp;
+				hp.adjustHardslots(ww.hardslots);
 				inv_context.weapons_tonnage += ww.weight;
 				if(ww.ammotype && giveammo)GiveInventory(ww.ammotype,ww.ammogive);
 				//console.printf("Adding Weapon: %s at %d",ww.displayName,ww.WeaponID);

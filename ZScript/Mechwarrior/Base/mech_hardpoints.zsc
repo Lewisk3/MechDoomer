@@ -4,31 +4,27 @@
 extend class MechWarriorBase;
 	
 // Repair System
-clearscope int CalculateHardpointRepairCost(HardpointVitals hv, int stat)
+clearscope int CalculateHardpointRepairCost(MechHardpoint hp, int stat)
 {
 	int repair_cost = 0;
-	float armor_ratio = 1.0 - (!hv.armor ? 1 : hv.armor)/hv.max_armor;
-	float internalhp_ratio = 1.0 - (!hv.internalhp ? 1 : hv.internalhp)/hv.max_internal;
-	if(stat == 0 && 	 armor_ratio > 0 ) repair_cost = (4750*armor_ratio)+(hv.max_armor*50);
-	if(stat == 1 && internalhp_ratio > 0 ) repair_cost = (1250*internalhp_ratio)+(hv.max_internal*25);
+	float armor_ratio = 1.0 - (!hp.armor ? 1 : hp.armor)/hp.max_armor;
+	float internalhp_ratio = 1.0 - (!hp.internalhp ? 1 : hp.internalhp)/hp.max_internal;
+	if(stat == 0 && 	 armor_ratio > 0 ) repair_cost = (4750*armor_ratio)+(hp.max_armor*50);
+	if(stat == 1 && internalhp_ratio > 0 ) repair_cost = (1250*internalhp_ratio)+(hp.max_internal*25);
 	return repair_cost;
 }
 void RepairHardpointStat(int hindex, int stat)
 {
-	let hv = hardpoints.getVitals(hindex);
-	int cost = CalculateHardpointRepairCost(hv,stat);
+	MechHardpoint hp = hardpoints.FindByIndex(hindex);
+	int cost = CalculateHardpointRepairCost(hp,stat);
 	if(inv_context.money_cbills < cost) 
 	{
 		sendHudAlert("Insufficient funds!",Font.CR_DARKRED);
 	}
 	else
 	{
-		let hp = hardpoints.FindByIndex(hindex);
-		if(hp)
-		{
-			inv_context.money_cbills -= cost;
-			_DoHardpointRepair(hp, stat);
-		}
+		inv_context.money_cbills -= cost;
+		_DoHardpointRepair(hp, stat);
 	}
 }
 void _DoHardpointRepair(MechHardpoint hp, int stats)
@@ -118,23 +114,15 @@ void ProcessHardpointDamage(Name mod, float damage, Actor damager = NULL)
 	if(mod == "MechDamage_LL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.ll,damage,heatdmg&&random(0,1));
 	if(mod == "MechDamage_RL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.rl,damage,heatdmg&&random(0,1));
 	
+	if( inv_context.engine && (inv_context.engine.ltslots+inv_context.engine.rtslots) > 0 )
+	{
+		if((hardpoints.lt.internalhp <= 0 || hardpoints.rt.internalhp <= 0) && !inv_context.engine.clan) ProcessDeath(damager);
+		if((hardpoints.lt.internalhp <= 0 && hardpoints.rt.internalhp <= 0) &&  inv_context.engine.clan) ProcessDeath(damager);
+	}
 	if(  hardpoints.hd.internalhp <= 0 || hardpoints.ct.internalhp <= 0 ||
 		(hardpoints.ll.internalhp <= 0 && hardpoints.rl.internalhp <= 0)   ) 
 	{
-		throttle = 0;
-		if(modelcockpit)
-		{
-			mechsounds.Empty();
-			for(int i = 0; i < 5; i++) mechsounds.PushSound("Mech/Damaged/CriticalExplosion");
-			RandomExplosions.Trigger(pos,75,15,viewheight);
-			if(!dronecam_active) 
-				ToggleDrone(200,1,true);
-			else
-				AdjustDrone(200,1,true);
-		}
-		isdead = true;
-		Die(NULL,damager);
-		A_SetHealth(0);
+		ProcessDeath(damager);
 	}
 }
 void SpreadHardpointDamage(MechHardpoint hp, float dmg)
@@ -151,7 +139,7 @@ void DestroyHardpointItems(MechHardpoint hp, bool recurse=true)
 		let ww = Mechbase_Weapon(w);
 		if(ww)
 		{
-			if(ww.mount == hp.pos) 
+			if(ww.hardpoint == hp) 
 			{
 				removeWeapon(ww);
 				normalizeWeaponsID(1);
@@ -166,10 +154,10 @@ void DestroyHardpointStructs(MechHardpoint hp, bool recurse=true)
 {
 	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 	{
-		Vector2 strucpos = inv_context.mechstructs[i].pos;
+		MechHardpoint sthardpoint = inv_context.mechstructs[i].hardpoint;
 		let ut = GetDefaultByType(utilcast(inv_context.mechstructs[i].Tag));
 		
-		if(strucpos == hp.pos && ut.moveable)
+		if(sthardpoint == hp && ut.moveable)
 		{
 			class<Heatsink> hs = inv_context.mechstructs[i].Tag;
 			if(hs) 
@@ -177,7 +165,7 @@ void DestroyHardpointStructs(MechHardpoint hp, bool recurse=true)
 				mechsounds.pushSound("Mech/Betty/Heatsink");
 				mechsounds.pushSound("Mech/Betty/Destroyed");
 			}
-			hardpoints.adjustHardslots(strucpos,-ut.hardslots);
+			hp.adjustHardslots(-ut.hardslots);
 			inv_context.weapons_tonnage -= ut.weight;
 			inv_context.mechstructs.delete(i);
 			if(recurse) DestroyHardpointStructs(hp,recurse);

@@ -519,7 +519,7 @@ class Mechlab_Menu : GenericMenu
 
 	vector2 DrawCriticalHardpointItems(int ind, int sx, int sy)
 	{
-		Vector2 pos = mechplr.hardpoints.getLocation(ind);
+		MechHardpoint hp = mechplr.hardpoints.FindByIndex(ind);
 		vector2 offs = (0,0);
 		for(int i = 0; i < mechplr.inv_context.mechstructs.Size(); i++)
 		{
@@ -527,7 +527,7 @@ class Mechlab_Menu : GenericMenu
 			if(ut)
 			{
 				let def_ut = GetDefaultByType(ut);
-				if(mechplr.inv_context.mechstructs[i].pos == pos && !def_ut.moveable)
+				if(mechplr.inv_context.mechstructs[i].hardpoint == hp && !def_ut.moveable)
 				{
 					int fcr = Font.CR_DARKRED;
 					for(int s = 0; s < def_ut.hardslots; s++)
@@ -547,17 +547,16 @@ class Mechlab_Menu : GenericMenu
 
 	void DrawHardpointItems(int ind, int sx, int sy)
 	{
-		vector2 pos    = mechplr.hardpoints.getLocation(ind);
-		vector2 hslots = mechplr.hardpoints.getSlots(ind);
+		MechHardpoint hp = mechplr.hardpoints.FindByIndex(ind);
 		vector2 offs = (0,0);
 		
 		int slottranslation = Font.CR_GRAY;
 		
 		// Display slot numbers
-		for(int i = 0; i < hslots.x; i++)
+		for(int i = 0; i < hp.maxslots; i++)
 		{
 			offs.y += 20;
-			if( i < hslots.y) { slottranslation =Font.CR_DARKRED; } else { slottranslation = Font.CR_GRAY; }
+			if( i < hp.slots) { slottranslation =Font.CR_DARKRED; } else { slottranslation = Font.CR_GRAY; }
 			H_DrawString((i+1)..". ", (sx-45,sy+offs.y-35),0,slottranslation);
 		}
 		// Display structures
@@ -568,7 +567,7 @@ class Mechlab_Menu : GenericMenu
 			if(ut)
 			{
 				let def_ut = GetDefaultByType(ut);
-				if(mechplr.inv_context.mechstructs[i].pos == pos && def_ut.moveable)
+				if(mechplr.inv_context.mechstructs[i].hardpoint == hp && def_ut.moveable)
 				{
 					int fcr = Font.CR_DARKGRAY;
 					for(int s = 0; s < def_ut.hardslots; s++)
@@ -596,7 +595,7 @@ class Mechlab_Menu : GenericMenu
 			let ww = Mechbase_Weapon(w);
 			if(ww)
 			{
-				if(ww.mount == pos)
+				if(ww.hardpoint == hp)
 				{
 					wind++;
 					int fcr = Font.CR_WHITE;
@@ -700,16 +699,16 @@ class Mechlab_Menu : GenericMenu
 		string internalpercent = (curinternal/maxinternal * 100).."";
 		armorpercent.truncate(armorpercent.length()-6);
 		internalpercent.truncate(internalpercent.length()-6);
-		HardpointVitals hv = mechplr.hardpoints.getVitals(hardpoint);
-		string armorstr = "ARMOR: ".. int(hv.armor) .. "/" .. int(hv.max_armor);
-		string internalstr = "INTERNALS: ".. int(hv.internalhp) .. "/" .. int(hv.max_internal);
-		uint ArmorFont = (hv.armor < hv.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
-		uint InternalsFont = (hv.internalhp < hv.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
+		MechHardpoint hp = mechplr.hardpoints.FindByIndex(hardpoint);
+		string armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor);
+		string internalstr = "INTERNALS: ".. int(hp.internalhp) .. "/" .. int(hp.max_internal);
+		uint ArmorFont = (hp.armor < hp.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
+		uint InternalsFont = (hp.internalhp < hp.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
 		if(astat_selected == 0) ArmorFont = Font.CR_GREEN;
 		if(astat_selected == 1) InternalsFont = Font.CR_GREEN;
 		
 		int repair_cost = 0;
-		if( astat_selected != -1) repair_cost = mechplr.CalculateHardpointRepairCost(hv,astat_selected);
+		if( astat_selected != -1) repair_cost = mechplr.CalculateHardpointRepairCost(hp,astat_selected);
 		
 		H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
 		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
@@ -784,9 +783,8 @@ class Mechlab_Menu : GenericMenu
 	bool ValidateHardpoint(int ind)
 	{
 		if(ind == -1) return true; // No such hardpoint.
-		
-		let valid = mechplr.hardpoints.getVitals(ind);
-		return (valid.internalhp > 0);
+		MechHardpoint hp = mechplr.hardpoints.FindByIndex(ind);
+		return (hp.internalhp > 0);
 	}
 	
 	void HUD_ChangePageRelative(int offs)

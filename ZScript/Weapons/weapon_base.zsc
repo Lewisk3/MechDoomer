@@ -47,7 +47,7 @@ class Mechbase_Weapon : Inventory
 	int cooldown_timer;
 	int group;
 	int WeaponID;
-	Vector2 mount;
+	MechHardpoint hardpoint;
 	bool dofire;
 	bool isHomming;
 	int volley_amt;
@@ -72,7 +72,6 @@ class Mechbase_Weapon : Inventory
 	
 	Property DisplayName : displayName;
 	Property DefaultGroup : group;
-	Property MountedPos : mount;
 	Property WeaponType : weapType;
 	Property Hitscan : hitscan_dmg, hitscan_distance;
 	Property AmmoType : ammotype;
@@ -94,7 +93,7 @@ class Mechbase_Weapon : Inventory
 		Mechbase_Weapon.WeaponParams 18, 30;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
-		Inventory.maxamount 10; // Each weapon should have atleast 10 available slots.
+		Inventory.maxamount 12; // Each weapon should have atleast 12 available slots.
 	}
 	
 	action bool checkCooldown()
@@ -134,8 +133,8 @@ class Mechbase_Weapon : Inventory
 		}
 		else if(invoker.volley_amt > 0)
 		{
-			if(FireWeapon(invoker.weapType,invoker.mount.x+random(-xspread,xspread),
-						  invoker.mount.y+random(-yspread,yspread),invoker.weapDistance,invoker.weapSpeed)) 
+			if(FireWeapon(invoker.weapType,invoker.hardpoint.pos.x+random(-xspread,xspread),
+						  invoker.hardpoint.pos.y+random(-yspread,yspread),invoker.weapDistance,invoker.weapSpeed)) 
 				invoker.volley_amt--;
 		}
 		if(invoker.volley_amt <= 0 && invoker.dofire)
@@ -257,7 +256,7 @@ class Mechbase_Weapon : Inventory
 		if(ammotype) curammo = Owner.countinv(ammotype);
 		if(weapType)
 		{
-			ret = FireWeapon(weapType,mount.x,mount.y,weapDistance,weapSpeed);
+			ret = FireWeapon(weapType,hardpoint.pos.x,hardpoint.pos.y,weapDistance,weapSpeed);
 		}
 		else
 		{

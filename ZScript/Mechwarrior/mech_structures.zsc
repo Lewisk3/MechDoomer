@@ -49,7 +49,7 @@ class StructEngine : Mechbase_Utility
 	Default
 	{	
 		Mechbase_Utility.displayName "ENGINE";
-		Mechbase_Utility.Criticals 2;
+		Mechbase_Utility.Criticals 1;
 	}
 }
 class StructGyro : Mechbase_Utility
@@ -57,7 +57,7 @@ class StructGyro : Mechbase_Utility
 	Default
 	{	
 		Mechbase_Utility.displayName "Gyro";
-		Mechbase_Utility.Criticals 2;
+		Mechbase_Utility.Criticals 1;
 	}
 }
 class StructLifesupport : Mechbase_Utility

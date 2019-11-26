@@ -15,7 +15,6 @@ bool pilotlook;
 bool isdead;
 int ticks;
 int prevticks;
-float enginesize;
 float mech_tonnage;
 float defaultfov;
 float kph_default;
@@ -24,6 +23,7 @@ float kph_real;
 // Properties
 class<CockpitHandler> cphandler;
 class<MechLegsBase> mech_legs;
+class<Mechbase_Engine> base_engine;
 bool modelcockpit;
 String hud_cockpit;
 String hud_mech;
@@ -38,35 +38,27 @@ bool setupInventory()
 		inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));
 		inv_context.Init();
 		hardpoints = inv_context.hardpoints;
-		inv_context.weapons_tonnage += enginesize;
 		setupWeapons();
-		setupEngineCrits();
+		if(!EquipEngine(base_engine))
+		{
+			console.printf("Pilot Error -> Failed to equip mech's engine, too heavy or not enough free slots!");
+		}
+		setupCriticals();
 	}
 	return inv_context==NULL;
 }
 
-
-void setupEngineCrits()
+void setupCriticals()
 {
 	// Setup criticals
-	if(MoveSpeedKPH > 64)
-	{
-		equipStruct("StructEngine",hardpoints.lt.pos);
-		equipStruct("StructEngine",hardpoints.rt.pos);	
-	}
-	if(MoveSpeedKPH > 81) equipStruct("StructEngine",hardpoints.ct.pos);	
-	equipStruct("StructGyro",hardpoints.hd.pos);
-	equipStruct("StructLifesupport",hardpoints.hd.pos);
-	equipStruct("StructSensors",hardpoints.hd.pos);
-	equipStruct("StructCockpit",hardpoints.hd.pos);
-	equipStruct("StructHip",hardpoints.lt.pos);
-	equipStruct("StructHip",hardpoints.rt.pos);
-	equipStruct("StructActuator",hardpoints.la.pos);
-	equipStruct("StructActuator",hardpoints.ra.pos);
-	equipStruct("StructEngine",hardpoints.ct.pos);
-	equipStruct("StructEngine",hardpoints.ct.pos);
-	equipStruct("StructGyro",hardpoints.ct.pos);
-	equipStruct("StructGyro",hardpoints.ct.pos);
+	equipStruct("StructLifesupport",hardpoints.hd);
+	equipStruct("StructSensors",hardpoints.hd);
+	equipStruct("StructCockpit",hardpoints.hd);
+	equipStruct("StructGyro",hardpoints.hd);
+	equipStruct("StructHip",hardpoints.lt);
+	equipStruct("StructHip",hardpoints.rt);
+	equipStruct("StructActuator",hardpoints.la);
+	equipStruct("StructActuator",hardpoints.ra);
 }
 
 
@@ -148,9 +140,6 @@ override void PostBeginPlay()
 	}
 	setupInventory();
 	
-	kph_default = 75000;
-	kph_real = 75000/MWGAMEPLAY_MECHSPEEDSCALE;
-	
 	weapons_fired = false;
 	weapon_groupfire = false;
 	selectedGroup = 1;
@@ -165,9 +154,6 @@ override void PostBeginPlay()
 	speed = 0; // Stop normal movement;
 	LegAng = angle;
 	
-	// Convert KPH to UPT
-	MoveSpeed = ceil((MoveSpeedKPH*15000)/kph_real);
-	MoveSpeed_Max = MoveSpeed;
 	throttle_max = 1;
 	if(defaultmovement) 
 	{

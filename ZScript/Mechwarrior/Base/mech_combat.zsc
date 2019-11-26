@@ -40,6 +40,25 @@ void AdjustDrone(float cdist, float rotspd, bool front)
 	}
 }
 
+// Death
+void ProcessDeath(Actor killer)
+{
+	throttle = 0;
+	if(modelcockpit)
+	{
+		mechsounds.Empty();
+		for(int i = 0; i < 5; i++) mechsounds.PushSound("Mech/Damaged/CriticalExplosion");
+		RandomExplosions.Trigger(pos,75,15,viewheight);
+		if(!dronecam_active) 
+			ToggleDrone(200,1,true);
+		else
+			AdjustDrone(200,1,true);
+	}
+	isdead = true;
+	Die(NULL,killer);
+	A_SetHealth(0);
+}
+
 // Main
 void mech_weapons()
 {
@@ -230,7 +249,7 @@ void process_antimissilesystem()
 		cname.ToLower();
 		if(cname == "antimissilesystem")
 		{
-			trigger_ams( inv_context.mechstructs[i].pos );
+			trigger_ams( inv_context.mechstructs[i].hardpoint.pos );
 		}
 	}
 	if(ams_timer > 0) ams_timer--;

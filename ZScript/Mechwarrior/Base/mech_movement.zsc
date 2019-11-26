@@ -50,6 +50,15 @@ float CrouchMulti;
 float rolldistort;
 
 // Main
+void setupSpeedKPH(float kph)
+{
+	MoveSpeedKPH = kph;
+	kph_default = 75000;
+	kph_real = 75000/MWGAMEPLAY_MECHSPEEDSCALE;
+	MoveSpeed = ceil((MoveSpeedKPH*15000)/kph_real);
+	MoveSpeed_Max = MoveSpeed;
+}
+
 void mech_cockpitbob()
 {
 	// Calculate Bob
@@ -78,6 +87,11 @@ void mech_cockpitbob()
 void mech_movement()
 {
 	if(!player || isdead) return;
+	if(!inv_context.engine)
+	{
+		if(throttle > 0) throttle = clamp(throttle-3.,0,1.);
+		return;
+	}
 	
 	// Movement Quirks
 	if(defaultmovement)

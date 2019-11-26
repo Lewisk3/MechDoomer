@@ -37,6 +37,7 @@ class HudSpriteInitializer : Actor
 
 // Mechs
 #include "ZScript/Mechwarrior/mech_structures.zsc"
+#include "ZScript/Mechwarrior/mech_engines.zsc"
 #include "ZScript/Mechwarrior/mech_powerups.zsc"
 #include "ZScript/Mechwarrior/mech_base.zsc"
 #include "ZScript/Mechwarrior/mech_pieces.zsc"

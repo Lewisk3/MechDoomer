@@ -25,6 +25,16 @@ class MechHardpoint : Object
 	float internalhp;
 	float max_armor;
 	float max_internal;
+	
+	clearscope int getFreeSlots()
+	{
+		return maxslots-slots;
+	}
+	
+	void adjustHardslots(int amt)
+	{
+		slots += amt;
+	}
 }
 
 class MechHardpoints : Object;
@@ -160,6 +170,17 @@ clearscope int getTotalFreeSlots()
 	slots += (rl.maxslots-rl.slots);
 	return slots;
 }
+clearscope vector2 FindHardpointVitals(int ind)
+{
+	vector2 ffs = ( 0, 0 );
+	MechHardpoint hp = FindByIndex(ind);
+	if(hp) ffs = (hp.armor, hp.internalhp);
+	return ffs;
+}
+
+/*
+
+
 int getFreeSlots(Vector2 pos)
 {
 	int slots = 0;
@@ -245,13 +266,6 @@ clearscope HardpointVitals getVitals(int ind)
 	}
 	return hvital;
 }
-clearscope vector2 FindHardpointVitals(int ind)
-{
-	vector2 ffs = ( 0, 0 );
-	MechHardpoint hp = FindByIndex(ind);
-	if(hp) ffs = (hp.armor, hp.internalhp);
-	return ffs;
-}
 
 // Set
 void adjustHardslots(Vector2 pos, int amt)
@@ -259,3 +273,4 @@ void adjustHardslots(Vector2 pos, int amt)
 	MechHardpoint hp = FindByLocation(pos);
 	if(hp) hp.slots += amt;
 }
+*/

@@ -3,6 +3,55 @@
 	\*************************/
 extend class MechwarriorBase;
 
+// Engines
+bool EquipEngine(class<Mechbase_Engine> engine)
+{
+	inv_context.engine = MechBase_Engine.Create(engine);
+	MechBase_EngineOBJ engobj = inv_context.engine;
+	
+	// Check if enough slots/tons to equip.
+	int slots_ct = hardpoints.ct.getFreeSlots();
+	int slots_lt = hardpoints.lt.getFreeSlots();
+	int slots_rt = hardpoints.rt.getFreeSlots();
+	int ctslots = engobj.ctslots;
+	int ltslots = engobj.ltslots;
+	int rtslots = engobj.rtslots;
+	int gyroslots = engobj.gyroslots;
+	int weight = engobj.weight;
+	
+	if( 
+		 (gyroslots+ctslots > slots_ct || ltslots > slots_lt || rtslots > slots_rt) || 
+		 ((inv_context.weapons_tonnage+weight > mech_tonnage) && !overtonnage)
+	  )
+	{
+		inv_context.engine.Destroy();
+		inv_context.engine = NULL;
+		return false;
+	}
+	
+	equipStruct("StructEngine",hardpoints.lt,ltslots);
+	equipStruct("StructEngine",hardpoints.rt,rtslots);
+	equipStruct("StructEngine",hardpoints.ct,gyroslots);	
+	equipStruct("StructGyro",hardpoints.ct,gyroslots);
+	setupSpeedKPH(EngineGetKPH());
+	console.printf("Weight: %f",weight);
+	inv_context.weapons_tonnage += weight;
+	baseHeatEfficiency += GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
+	baseHeatEfficiency += GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;
+	return true;
+}
+	
+clearscope float EngineGetKPH()
+{
+	if(!inv_context.engine) return 0;
+	return (32.4*(100./mech_tonnage)) / (200./inv_context.engine.enginetype);
+}
+	
+void DequipEngine()
+{
+}
+
+
 // Get
 int countStruct(String type)
 {
@@ -20,7 +69,7 @@ int countStruct(String type)
 }
 
 // Equip or Add
-bool equipStructInv(int ind, Vector2 pos, bool move=true)
+bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 {
 	// Equip struct from items
 	class<Mechbase_Utility> util = inv_context.weapon_items[ind-1];
@@ -31,20 +80,20 @@ bool equipStructInv(int ind, Vector2 pos, bool move=true)
 		sendHudAlert("Cannot equip item, over tonnage!", Font.CR_DARKRED);
 		return false;
 	}
-	if( hardpoints.getFreeSlots(pos) < GetDefaultByType(util).hardslots )
+	if( hp.getFreeSlots() < GetDefaultByType(util).hardslots )
 	{
 		sendHudAlert("Cannot equip item, no freeslots!", Font.CR_DARKRED);
 		return false;	
 	}
 	 
 	 // Equip without giving starting ammunition
-	if(!equipStruct(inv_context.weapon_items[ind-1],pos,1,false)) return false;
+	if(!equipStruct(inv_context.weapon_items[ind-1],hp,1,false)) return false;
 	if(move)inv_context.weapon_items.delete(ind-1);
 	return true;
 }
-bool equipStruct(class<Mechbase_Utility> type, Vector2 pos, int amt = 1,bool giveammo=true)
+bool equipStruct(class<Mechbase_Utility> type, MechHardpoint hp, int amt = 1,bool giveammo=true)
 {
-	if( (hardpoints.getFreeSlots(pos)-(GetDefaultByType(type).hardslots*amt)) < 0)
+	if( (hp.getFreeSlots()-(GetDefaultByType(type).hardslots*amt)) < 0)
 	{
 		if(!GetDefaultByType(type).moveable) console.printf("WARNING: Failed to equip critical item: %s",type.getClassName());
 		return false;
@@ -58,10 +107,10 @@ bool equipStruct(class<Mechbase_Utility> type, Vector2 pos, int amt = 1,bool giv
 	{
 		let st = new("mw_InvStruct");
 		st.Tag = type.getClassName();
-		st.pos = pos;
+		st.hardpoint = hp;
 		inv_context.mechstructs.push(st);
 		inv_context.weapons_tonnage += GetDefaultByType(type).weight;
-		hardpoints.adjustHardslots(pos,GetDefaultByType(type).hardslots);
+		hp.adjustHardslots(GetDefaultByType(type).hardslots);
 	}
 	return true;
 }
@@ -81,6 +130,23 @@ bool moveStructToInv(int struc_ind, bool move=true)
 		{
 			let ut = GetDefaultByType(utilcast(inv_context.mechstructs[i].Tag));
 			if(!ut.moveable) return false;
+			MechHardpoint sthardpoint = inv_context.mechstructs[i].hardpoint;
+			sthardpoint.adjustHardslots(-ut.hardslots);
+			inv_context.weapons_tonnage -= ut.weight;
+			addStructToInv(inv_context.mechstructs[i].Tag);
+			if(move)inv_context.mechstructs.delete(i);
+			return true;
+		}
+	}
+	return false;
+}
+/*
+bool dequipStruct(String tag, MechHardpoint hp)
+{
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		if(tag == inv_context.mechstructs[i].Tag && inv_context.mechstructs[i].pos == hp)
+		{
 			Vector2 strucpos = inv_context.mechstructs[i].pos;
 			hardpoints.adjustHardslots(strucpos,-ut.hardslots);
 			inv_context.weapons_tonnage -= ut.weight;
@@ -91,3 +157,4 @@ bool moveStructToInv(int struc_ind, bool move=true)
 	}
 	return false;
 }
+*/
