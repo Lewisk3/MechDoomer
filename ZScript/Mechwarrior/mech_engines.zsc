@@ -274,7 +274,7 @@ class Engine_STD205 : Engine_STD200
 		Mechbase_Engine.Tonnage 12.5;
 	}
 }
-class Engine_STD210 : Engine_STD175 
+class Engine_STD210 : Engine_STD200 
 {
 	Default
 	{
@@ -283,7 +283,7 @@ class Engine_STD210 : Engine_STD175
 		Mechbase_Engine.Tonnage 13.0;
 	}
 }
-class Engine_STD215 : Engine_STD175 
+class Engine_STD215 : Engine_STD200 
 {
 	Default
 	{
@@ -292,7 +292,7 @@ class Engine_STD215 : Engine_STD175
 		Mechbase_Engine.Tonnage 13.5;
 	}
 }
-class Engine_STD220 : Engine_STD175 
+class Engine_STD220 : Engine_STD200 
 {
 	Default
 	{
@@ -301,7 +301,7 @@ class Engine_STD220 : Engine_STD175
 		Mechbase_Engine.Tonnage 14.0;
 	}
 }
-class Engine_STD225 : Engine_STD175 
+class Engine_STD225 : Engine_STD200 
 {
 	Default
 	{
@@ -312,49 +312,143 @@ class Engine_STD225 : Engine_STD175
 	}
 }
 // 230 - 250
-class Engine_STD230 : Engine_STD200 
+class Engine_STD230 : Engine_STD225 
 {
 	Default
 	{
-		Mechbase_Engine.Tag "STD205 ENGINE";
-		Mechbase_Engine.EngineType 205;
-		Mechbase_Engine.Tonnage 12.5;
+		Mechbase_Engine.Tag "STD230 ENGINE";
+		Mechbase_Engine.EngineType 230;
+		Mechbase_Engine.Tonnage 15.5;
 	}
 }
-class Engine_STD235 : Engine_STD175 
+class Engine_STD235 : Engine_STD225 
 {
 	Default
 	{
-		Mechbase_Engine.Tag "STD210 ENGINE";
-		Mechbase_Engine.EngineType 210;
-		Mechbase_Engine.Tonnage 13.0;
+		Mechbase_Engine.Tag "STD235 ENGINE";
+		Mechbase_Engine.EngineType 235;
+		Mechbase_Engine.Tonnage 16.0;
 	}
 }
-class Engine_STD240 : Engine_STD175 
+class Engine_STD240 : Engine_STD225 
 {
 	Default
 	{
-		Mechbase_Engine.Tag "STD215 ENGINE";
-		Mechbase_Engine.EngineType 215;
-		Mechbase_Engine.Tonnage 13.5;
+		Mechbase_Engine.Tag "STD240 ENGINE";
+		Mechbase_Engine.EngineType 240;
+		Mechbase_Engine.Tonnage 16.5;
 	}
 }
-class Engine_STD245 : Engine_STD175 
+class Engine_STD245 : Engine_STD225 
 {
 	Default
 	{
-		Mechbase_Engine.Tag "STD220 ENGINE";
-		Mechbase_Engine.EngineType 220;
-		Mechbase_Engine.Tonnage 14.0;
+		Mechbase_Engine.Tag "STD245 ENGINE";
+		Mechbase_Engine.EngineType 245;
+		Mechbase_Engine.Tonnage 17.0;
 	}
 }
-class Engine_STD250 : Engine_STD175 
+class Engine_STD250 : Engine_STD225 
 {
 	Default
 	{
-		Mechbase_Engine.Tag "STD225 ENGINE";
-		Mechbase_Engine.EngineType 225;
-		Mechbase_Engine.Tonnage 15.0;
-		Mechbase_Engine.Heatsinks 9, 0;
+		Mechbase_Engine.Tag "STD250 ENGINE";
+		Mechbase_Engine.EngineType 250;
+		Mechbase_Engine.Tonnage 18.5;
+		Mechbase_Engine.Heatsinks 10, 0;
+	}
+}
+// 255 - 275
+class Engine_STD255 : Engine_STD250 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD255 ENGINE";
+		Mechbase_Engine.EngineType 255;
+		Mechbase_Engine.Tonnage 19.0;
+	}
+}
+class Engine_STD260 : Engine_STD250 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD260 ENGINE";
+		Mechbase_Engine.EngineType 260;
+		Mechbase_Engine.Tonnage 19.5;
+	}
+}
+class Engine_STD265 : Engine_STD250 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD265 ENGINE";
+		Mechbase_Engine.EngineType 265;
+		Mechbase_Engine.Tonnage 20.0;
+	}
+}
+class Engine_STD270 : Engine_STD250 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD270 ENGINE";
+		Mechbase_Engine.EngineType 270;
+		Mechbase_Engine.Tonnage 20.5;
+	}
+}
+class Engine_STD275 : Engine_STD250 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD275 ENGINE";
+		Mechbase_Engine.EngineType 275;
+		Mechbase_Engine.Tonnage 21.5;
+		Mechbase_Engine.Heatsinks 11, 0;
+	}
+}
+// 280 - 300
+class Engine_STD280 : Engine_STD275 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD255 ENGINE";
+		Mechbase_Engine.EngineType 280;
+		Mechbase_Engine.Tonnage 22.0;
+	}
+}
+class Engine_STD285 : Engine_STD275 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD260 ENGINE";
+		Mechbase_Engine.EngineType 285;
+		Mechbase_Engine.Tonnage 22.5;
+	}
+}
+class Engine_STD290 : Engine_STD275 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD290 ENGINE";
+		Mechbase_Engine.EngineType 290;
+		Mechbase_Engine.Tonnage 23.5;
+	}
+}
+class Engine_STD295 : Engine_STD275 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD295 ENGINE";
+		Mechbase_Engine.EngineType 295;
+		Mechbase_Engine.Tonnage 24.0;
+	}
+}
+class Engine_STD300 : Engine_STD275 
+{
+	Default
+	{
+		Mechbase_Engine.Tag "STD300 ENGINE";
+		Mechbase_Engine.EngineType 300;
+		Mechbase_Engine.Tonnage 25.0;
+		Mechbase_Engine.Heatsinks 12, 0;
 	}
 }
