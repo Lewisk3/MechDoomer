@@ -12,7 +12,7 @@ class MechWarrior : MechWarriorBase
 
 		MechWarriorBase.Engine "Engine_STD300";
 		MechWarriorBase.SetCockpitHandler "CockpitHandler";
-		MechWarriorBase.heatEff 0.03;
+		MechWarriorBase.heatEff 0.02;
 		MechWarriorBase.HudCockpit "CROW";
 		MechWarriorBase.HudMech "";
 		MechWarriorBase.LegSpeed 2;
@@ -129,7 +129,6 @@ class Warhammer : MechWarrior
 		MechWarriorBase.LegSpeed 1;
 		//MechWarriorBase.MoveSpeed 64.8;
 		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.heatEff 0.08;
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "WARHICO";
 		MechWarriorBase.Weight 80;
@@ -170,7 +169,6 @@ class Stormcrow : MechWarrior
 		MechWarriorBase.LegSpeed 1.6;
 		//MechWarriorBase.MoveSpeed 81;
 		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.heatEff 0.10;
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Stormcrow";
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.LegsModel "Legs_Stormcrow";
@@ -206,7 +204,6 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.LegSpeed 1.5;
 		//MechWarriorBase.MoveSpeed 81; 
 		MechWarriorBase.TwistRange 80;
-		MechWarriorBase.heatEff 0.10;
 		MechWarriorBase.HudCockpit "WOLFHUD";
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Timberwolf";
 		MechWarriorBase.CockpitIsModel true;
@@ -249,7 +246,6 @@ class Jenner : MechWarrior
 		MechWarriorBase.LegSpeed 2;
 		//MechWarriorBase.MoveSpeed 120;
 		MechWarriorBase.TwistRange 90;
-		MechWarriorBase.heatEff 0.12;
 		MechWarriorBase.Weight 35;
 		MechWarriorBase.HudCockpit "JENNHUD";
 		MechWarriorBase.HudMech "JENNICO";
@@ -286,7 +282,6 @@ class Nova : MechWarrior
 		MechWarriorBase.LegSpeed 1.7;
 		//MechWarriorBase.MoveSpeed 86.4;
 		MechWarriorBase.TwistRange 20;
-		MechWarriorBase.heatEff 0.08;
 		MechWarriorBase.Weight 50;
 		MechWarriorBase.HudCockpit "NOVAHUD";
 		MechWarriorBase.HudMech "NOVAICO";
@@ -354,7 +349,6 @@ class Atlas : MechWarrior
 		MechWarriorBase.LegSpeed 1;
 		//MechWarriorBase.MoveSpeed 54;		
 		MechWarriorBase.TwistRange 60;
-		MechWarriorBase.heatEff 0.08;
 		MechWarriorBase.HudCockpit "ATLSHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 100;
@@ -392,7 +386,6 @@ class EbonJaguar : MechWarrior
 		MechWarriorBase.LegSpeed 1.6;
 		//MechWarriorBase.MoveSpeed 86;
 		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.heatEff 0.08;
 		MechWarriorBase.HudCockpit "EBONHUD";
 		
 		MechWarriorBase.HudMech "ATLAICO";

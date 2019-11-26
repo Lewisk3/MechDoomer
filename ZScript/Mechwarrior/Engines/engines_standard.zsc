@@ -1,0 +1,72 @@
+// Standard Engines
+class Engine_STD100 : Mechbase_Engine 
+{
+	Default
+	{
+		Mechbase_Engine.Criticals 2,4,0,0;
+		Mechbase_Engine.BaseHeatsinks 0.04, 0;
+		Mechbase_Engine.ScalarCValue 613.13;
+		Mechbase_Engine.EngineModel EngineDatabase.Type_STD;
+	}
+}
+
+class Engine_STD105 : Engine_STD100 {} 
+class Engine_STD110 : Engine_STD100 {} 
+class Engine_STD115 : Engine_STD100 {} 
+class Engine_STD120 : Engine_STD100 {} 
+class Engine_STD125 : Engine_STD100 {} 
+class Engine_STD130 : Engine_STD100 {} 
+class Engine_STD135 : Engine_STD100 {} 
+class Engine_STD140 : Engine_STD100 {} 
+class Engine_STD145 : Engine_STD100 {} 
+class Engine_STD150 : Engine_STD100 {} 
+class Engine_STD155 : Engine_STD100 {} 
+class Engine_STD160 : Engine_STD100 {} 
+class Engine_STD165 : Engine_STD100 {} 
+class Engine_STD170 : Engine_STD100 {} 
+class Engine_STD175 : Engine_STD100 {} 
+class Engine_STD180 : Engine_STD100 {} 
+class Engine_STD185 : Engine_STD100 {} 
+class Engine_STD190 : Engine_STD100 {} 
+class Engine_STD195 : Engine_STD100 {} 
+class Engine_STD200 : Engine_STD100 {} 
+class Engine_STD205 : Engine_STD100 {} 
+class Engine_STD210 : Engine_STD100 {} 
+class Engine_STD215 : Engine_STD100 {} 
+class Engine_STD220 : Engine_STD100 {} 
+class Engine_STD225 : Engine_STD100 {} 
+class Engine_STD230 : Engine_STD100 {} 
+class Engine_STD235 : Engine_STD100 {} 
+class Engine_STD240 : Engine_STD100 {} 
+class Engine_STD245 : Engine_STD100 {} 
+class Engine_STD250 : Engine_STD100 {} 
+class Engine_STD255 : Engine_STD100 {} 
+class Engine_STD260 : Engine_STD100 {} 
+class Engine_STD265 : Engine_STD100 {} 
+class Engine_STD270 : Engine_STD100 {} 
+class Engine_STD275 : Engine_STD100 {} 
+class Engine_STD280 : Engine_STD100 {} 
+class Engine_STD285 : Engine_STD100 {} 
+class Engine_STD290 : Engine_STD100 {} 
+class Engine_STD295 : Engine_STD100 {} 
+class Engine_STD300 : Engine_STD100 {} 
+class Engine_STD305 : Engine_STD100 {} 
+class Engine_STD310 : Engine_STD100 {} 
+class Engine_STD315 : Engine_STD100 {} 
+class Engine_STD320 : Engine_STD100 {} 
+class Engine_STD325 : Engine_STD100 {} 
+class Engine_STD330 : Engine_STD100 {} 
+class Engine_STD335 : Engine_STD100 {} 
+class Engine_STD340 : Engine_STD100 {} 
+class Engine_STD345 : Engine_STD100 {} 
+class Engine_STD350 : Engine_STD100 {} 
+class Engine_STD355 : Engine_STD100 {} 
+class Engine_STD360 : Engine_STD100 {} 
+class Engine_STD365 : Engine_STD100 {} 
+class Engine_STD370 : Engine_STD100 {} 
+class Engine_STD375 : Engine_STD100 {} 
+class Engine_STD380 : Engine_STD100 {} 
+class Engine_STD385 : Engine_STD100 {} 
+class Engine_STD390 : Engine_STD100 {} 
+class Engine_STD395 : Engine_STD100 {} 
+class Engine_STD400 : Engine_STD100 {} 

@@ -34,7 +34,6 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	equipStruct("StructEngine",hardpoints.ct,gyroslots);	
 	equipStruct("StructGyro",hardpoints.ct,gyroslots);
 	setupSpeedKPH(EngineGetKPH());
-	console.printf("Weight: %f",weight);
 	inv_context.weapons_tonnage += weight;
 	baseHeatEfficiency += GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
 	baseHeatEfficiency += GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;

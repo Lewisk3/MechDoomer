@@ -22,8 +22,8 @@ class HudSpriteInitializer : Actor
 #include "ZScript/eventhandler.zsc"
 
 // UI
-#include "ZScript/UI/mechhud.zsc"
-#include "ZScript/UI/mechlab.zsc"
+#include "ZScript/Huds/mechhud.zsc"
+#include "ZScript/Huds/mechlab.zsc"
 
 // Weapons
 #include "skill.cfg"
@@ -35,9 +35,12 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Weapons/weapon_disp.zsc"
 #include "ZScript/Weapons/ammo_disp.zsc"
 
+// Engines
+#include "ZScript/Mechwarrior/Engines/engine_base.zsc"
+#include "ZScript/Mechwarrior/Engines/engines_standard.zsc"
+
 // Mechs
 #include "ZScript/Mechwarrior/mech_structures.zsc"
-#include "ZScript/Mechwarrior/mech_engines.zsc"
 #include "ZScript/Mechwarrior/mech_powerups.zsc"
 #include "ZScript/Mechwarrior/mech_base.zsc"
 #include "ZScript/Mechwarrior/mech_pieces.zsc"

@@ -1,0 +1,143 @@
+
+// Engine base
+class EngineDatabase Abstract
+{
+	enum EngineType 
+	{
+		Type_STD,
+		Type_Light,
+		Type_XL,
+		Type_XXL,
+		Type_Compact
+	}
+	
+	static float roundTons(float value)
+	{	
+		return ceil(value*2)/2;
+	}
+	
+	static float GetTonnage(int engine, int type)
+	{
+		float std_index_tons[99] =
+		{
+			0.5,0.5,0.5,0.5,1.0,1.0,1.0,1.0,
+			1.5,1.5,1.5,2.0,2.0,2.0,
+			2.5,2.5,3.0,3.0,3.0,
+			3.5,3.5,4.0,4.0,4.0,
+			4.5,4.5,5.0,5.0,
+			5.5,5.5,6.0,6.0,6.0,
+			7.0,7.0,7.5,7.5,8.0,
+			8.5,8.5,9.0,
+			9.5,10.0,10.0,
+			10.5,11.0,
+			11.5,12.0,
+			12.5,13.0,
+			13.5,14.0,
+			14.5,15.5,
+			16.0,16.5,
+			17.5,18.0,
+			19.0,19.5,20.5,
+			21.5,22.5,
+			23.5,24.5,
+			25.5,27.0,
+			28.5,29.5,
+			31.5,33.0,
+			34.5,36.5,
+			38.5,41.0,
+			43.5,46.0,
+			49.0,52.5,
+			56.5,61.0,66.5,72.5,79.5,97.0,
+			107.5,119.5,133.5,150.0,168.5,190.0,
+			214.5,243.0,313.0,356.0,405.5,462.5
+		};
+		float tons = std_index_tons[floor(engine/5)-2];
+		if(type == Type_STD    ) return tons;
+		if(type == Type_Light  ) return roundTons(tons*0.75);
+		if(type == Type_XL	   ) return roundTons(tons*0.50);
+		if(type == Type_XXL    ) return roundTons(tons*0.33);
+		if(type == Type_Compact) return roundTons(tons*1.50);
+		return 200;
+	}
+}
+
+class Mechbase_Engine : Actor
+{
+	int enginetype;
+	int model;
+	float weightmod;
+	float worth;
+	float baseworth;
+	float heatsink_scalar;
+	float dbl_heatsink_scalar;
+	int ctslots;
+	int ltslots;
+	int rtslots;
+	int gyroslots;
+	int intrinsic_heatsinks;
+	int intrinsic_doubleheatsinks;
+	bool clan;
+	
+	Property Type : enginetype;
+	Property Criticals : gyroslots, ctslots, ltslots, rtslots;
+	Property CValue : worth;
+	Property ScalarCValue : baseworth;
+	Property Heatsinks : intrinsic_heatsinks, intrinsic_doubleheatsinks;
+	Property ClanEngine : clan; 
+	Property TonnageMod : weightmod;
+	Property BaseHeatsinks: heatsink_scalar, dbl_heatsink_scalar;
+	Property EngineModel: model;
+	
+	Default
+	{
+		+NOINTERACTION;
+		Mechbase_Engine.ClanEngine false;
+		Mechbase_Engine.TonnageMod 1.0;
+	}
+	
+	
+	static Mechbase_EngineOBJ Create(class<Mechbase_Engine> type)
+	{
+		
+	
+		let engineobj = Mechbase_EngineOBJ(new("Mechbase_EngineOBJ"));
+		let defs = GetDefaultByType(type);
+		string t_prefix = "ERR";
+		if(defs.model == EngineDataBase.Type_STD) t_prefix = "STD";
+		if(defs.model == EngineDataBase.Type_XL)  t_prefix = "XL";
+		if(defs.model == EngineDataBase.Type_XXL) t_prefix = "XXL";
+		if(defs.clan) t_prefix = "CLAN " .. t_prefix;
+		String cname = defs.getClassName();
+		cname = cname.Mid(cname.Length()-3);
+		int cname_type = cname.ToInt();
+		if(engineobj)
+		{
+			engineobj.displayName = t_prefix .. cname_type .. " ENGINE";
+			engineobj.enginetype = defs.enginetype | cname_type;
+			engineobj.weight = EngineDatabase.GetTonnage(engineobj.enginetype,defs.model)*defs.weightmod;
+			engineobj.intrinsic_heatsinks = int(defs.heatsink_scalar*engineobj.enginetype) | defs.intrinsic_heatsinks;
+			engineobj.intrinsic_doubleheatsinks = int(defs.dbl_heatsink_scalar*engineobj.enginetype) | defs.intrinsic_doubleheatsinks;
+			engineobj.worth = defs.baseworth ? defs.baseworth*engineobj.enginetype : defs.worth;
+			engineobj.gyroslots = defs.gyroslots;
+			engineobj.ctslots = defs.ctslots;
+			engineobj.ltslots = defs.ltslots;
+			engineobj.rtslots = defs.rtslots;
+			engineobj.clan = defs.clan;
+			console.printf("Weight of %s :> %f",engineobj.displayName,engineobj.weight);
+		}
+		return engineobj;
+	}
+}
+class Mechbase_EngineOBJ : Object
+{
+	String displayName;
+	int enginetype;
+	float weight;
+	float worth;
+	int ctslots;
+	int ltslots;
+	int rtslots;
+	int gyroslots;
+	int intrinsic_heatsinks;
+	int intrinsic_doubleheatsinks;
+	bool clan;
+}

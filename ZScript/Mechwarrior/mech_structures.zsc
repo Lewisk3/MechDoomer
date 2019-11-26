@@ -120,10 +120,22 @@ class Heatsink : Mechbase_Utility
 	{
 		Mechbase_Utility.Tonnage 1;
 		Mechbase_Utility.displayName "Heat Sink";
-		Heatsink.Efficiency 0.12;
+		Heatsink.Efficiency 0.035625;
 		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 12600;
+	}
+}
+class DoubleHeatsink : Heatsink
+{
+	Default
+	{
+		Mechbase_Utility.Tonnage 1;
+		Mechbase_Utility.displayName "Heat Sink";
+		Heatsink.Efficiency 0.07125;
+		Mechbase_Utility.Criticals 2;
+		Mechbase_Utility.Moveable 1;
+		Mechbase_Utility.CValue 22530;
 	}
 }
 
@@ -142,19 +154,6 @@ class JumpJet : Mechbase_Utility
 		Mechbase_Utility.CValue 8450;
 	}
 	
-}
-
-class DoubleHeatsink : Heatsink
-{
-	Default
-	{
-		Mechbase_Utility.Tonnage 1;
-		Mechbase_Utility.displayName "Heat Sink";
-		Heatsink.Efficiency 0.24;
-		Mechbase_Utility.Criticals 2;
-		Mechbase_Utility.Moveable 1;
-		Mechbase_Utility.CValue 22530;
-	}
 }
 
 class AntiMissileSystem : Mechbase_Utility
