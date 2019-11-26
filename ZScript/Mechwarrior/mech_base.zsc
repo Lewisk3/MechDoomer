@@ -14,10 +14,16 @@ class mw_InvInfo : Inventory
 	MechHardpoints hardpoints;
 	Array<String> weapon_items; // Stores all mech items before they go into the inventory.
 	Array<mw_InvStruct> mechstructs;  // These are equipped structs.
+	//Mechbase_Engine engine;
 	
 	int money_cbills;			// moneys
 	float weapons_tonnage;		// How much weapons weigh.
-		
+	
+	void Init()
+	{
+		hardpoints = MechHardpoints.Create();
+	}	
+	
 	Default
 	{
 		inventory.maxamount 1;

@@ -5,6 +5,7 @@ extend class MechwarriorBase;
 
 // Vars
 mw_InvInfo inv_context;
+MechHardpoints hardpoints;
 HudAlert hAlert;
 SoundQueue mechsounds;
 MechLegsBase legs_reference;
@@ -35,17 +36,45 @@ bool setupInventory()
 	{
 		GiveInventory("mw_InvInfo",1);
 		inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));
+		inv_context.Init();
+		hardpoints = inv_context.hardpoints;
 		inv_context.weapons_tonnage += enginesize;
 		setupWeapons();
+		setupEngineCrits();
 	}
 	return inv_context==NULL;
 }
 
+
+void setupEngineCrits()
+{
+	// Setup criticals
+	if(MoveSpeedKPH > 64)
+	{
+		equipStruct("StructEngine",hardpoints.lt.pos);
+		equipStruct("StructEngine",hardpoints.rt.pos);	
+	}
+	if(MoveSpeedKPH > 81) equipStruct("StructEngine",hardpoints.ct.pos);	
+	equipStruct("StructGyro",hardpoints.hd.pos);
+	equipStruct("StructLifesupport",hardpoints.hd.pos);
+	equipStruct("StructSensors",hardpoints.hd.pos);
+	equipStruct("StructCockpit",hardpoints.hd.pos);
+	equipStruct("StructHip",hardpoints.lt.pos);
+	equipStruct("StructHip",hardpoints.rt.pos);
+	equipStruct("StructActuator",hardpoints.la.pos);
+	equipStruct("StructActuator",hardpoints.ra.pos);
+	equipStruct("StructEngine",hardpoints.ct.pos);
+	equipStruct("StructEngine",hardpoints.ct.pos);
+	equipStruct("StructGyro",hardpoints.ct.pos);
+	equipStruct("StructGyro",hardpoints.ct.pos);
+}
+
+
 // Virtual
 virtual void SetupWeapons() 
 {
-	setupHardpoints( (0,20), (0,0), (-30,-15), (30,-15), (-120,0), (120,0), (-60,-30), (60,-30) );
-	setupHardpointSlots();
+	hardpoints.setupLocations( (0,20), (0,0), (-30,-15), (30,-15), (-120,0), (120,0), (-60,-30), (60,-30) );
+	hardpoints.setupSlots();
 }
 
 // Override

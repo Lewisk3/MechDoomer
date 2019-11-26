@@ -13,47 +13,48 @@ class HudSpriteInitializer : Actor
 // Gutamatics includes
 #include "zscript/Gutamatics/GlobalMaths.zsc"
 #include "zscript/Gutamatics/Matrix.zsc"
-// More math
-#include "ZScript/mech_math.zsc"
 
-// Systems include
-#include "skill.cfg"
-#include "ZScript/soundsys.zsc"
-#include "ZScript/mechhud.zsc"
-#include "ZScript/datastructs.zsc"
-#include "ZScript/mech_structures.zsc"
-#include "ZScript/weapon_base.zsc"
-#include "ZScript/weapon_objects.zsc"
-#include "ZScript/weapon_registry.zsc"
-#include "ZScript/weapons.zsc"
-#include "ZScript/debris.zsc"
-#include "ZScript/weapon_disp.zsc"
-#include "ZScript/ammo_disp.zsc"
+// Base
+#include "ZScript/math.zsc"
+#include "ZScript/hardpoints.zsc"
+#include "ZScript/sound.zsc"
+#include "ZScript/dataobjects.zsc"
 #include "ZScript/eventhandler.zsc"
-#include "ZScript/mechlab.zsc"
 
-// MechBase includes\
-#include "ZScript/mech_powerups.zsc"
-#include "ZScript/mech_base.zsc"
-#include "ZScript/mech_pieces.zsc"
-#include "ZScript/mech_cockpits.zsc"
-#include "ZScript/BaseMechwarrior/mech_misc.zsc"
-#include "ZScript/BaseMechwarrior/mech_essentials.zsc"
-#include "ZScript/BaseMechwarrior/mech_movement.zsc"
-#include "ZScript/BaseMechwarrior/mech_weapons.zsc"
-#include "ZScript/BaseMechwarrior/mech_structs.zsc"
-#include "ZScript/BaseMechwarrior/mech_hardpoints.zsc"
-#include "ZScript/BaseMechwarrior/mech_combat.zsc"
+// UI
+#include "ZScript/UI/mechhud.zsc"
+#include "ZScript/UI/mechlab.zsc"
+
+// Weapons
+#include "skill.cfg"
+#include "ZScript/Weapons/weapon_base.zsc"
+#include "ZScript/Weapons/weapon_objects.zsc"
+#include "ZScript/Weapons/weapon_registry.zsc"
+#include "ZScript/Weapons/weapons.zsc"
+#include "ZScript/Weapons/debris.zsc"
+#include "ZScript/Weapons/weapon_disp.zsc"
+#include "ZScript/Weapons/ammo_disp.zsc"
 
 // Mechs
-#include "ZScript/mechs.zsc"
+#include "ZScript/Mechwarrior/mech_structures.zsc"
+#include "ZScript/Mechwarrior/mech_powerups.zsc"
+#include "ZScript/Mechwarrior/mech_base.zsc"
+#include "ZScript/Mechwarrior/mech_pieces.zsc"
+#include "ZScript/Mechwarrior/mech_cockpits.zsc"
+#include "ZScript/Mechwarrior/Base/mech_misc.zsc"
+#include "ZScript/Mechwarrior/Base/mech_essentials.zsc"
+#include "ZScript/Mechwarrior/Base/mech_movement.zsc"
+#include "ZScript/Mechwarrior/Base/mech_weapons.zsc"
+#include "ZScript/Mechwarrior/Base/mech_structs.zsc"
+#include "ZScript/Mechwarrior/Base/mech_hardpoints.zsc"
+#include "ZScript/Mechwarrior/Base/mech_combat.zsc"
+#include "ZScript/Mechwarrior/mechs.zsc"
 
 
 class IBTN_STOP : I_Boolean {}
 class IBTN_CENTER : I_Boolean {}
 class IBTN_CENTERTORSO : I_Boolean {}
 class IBTN_bFIREMODE : I_Boolean {}
-//class IBTN_JJETS : I_Boolean {}
 class IBTN_OVERRIDE : I_Boolean {}
 class IBTN_INFRARED : I_Boolean {}
 class IBTN_NXTGROUP : I_Boolean {}
@@ -64,5 +65,3 @@ class IBTN_TARGET : I_Boolean {}
 class IBTN_NEXTWEAPON : I_Boolean {}
 class IBTN_PREVWEAPON : I_Boolean {}
 class IBTN_SHOOTALLWEAPONSLIKEAMADLAD : I_Boolean {}
-//class IBTN_FIREGROUP : I_Nine {}
-//class IBTN_CHASECAM : I_Boolean {}

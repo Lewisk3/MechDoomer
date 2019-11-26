@@ -18,47 +18,6 @@ struct UIObject play
 	int key;
 }
 
-struct HardpointData play
-{
-	int hd, ct, lt, rt, la, ra, ll, rl;
-}
-
-class HardpointVitals : Object
-{
-	float armor;
-	float internalhp;
-	float max_armor;
-	float max_internal;
-}
-
-struct MechHardpoint play
-{
-	// Position
-	vector2 pos;
-
-	// Slots
-	int slots;
-	int maxslots;
-	
-	// Vitals
-	float armor;
-	float internalhp;
-	float max_armor;
-	float max_internal;
-}
-
-struct MechHardpoints play
-{	
-	MechHardpoint hd;
-	MechHardpoint ct;
-	MechHardpoint lt;
-	MechHardpoint rt;
-	MechHardpoint la;
-	MechHardpoint ra;
-	MechHardpoint ll;
-	MechHardpoint rl;
-}
-
 class I_Boolean : Inventory
 {
 	Default

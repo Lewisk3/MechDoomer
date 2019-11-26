@@ -326,7 +326,7 @@ class Mechlab_Menu : GenericMenu
 		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
 		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+40));
 		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+60));
-		H_DrawString("Slots free: " .. mechplr.getFreeSlots(),(detailpos.x,detailpos.y+80));
+		H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+80));
 		
 		if(mstats.left_btn && checkCollision(mouse,dequipbtn))
 		{
@@ -517,59 +517,80 @@ class Mechlab_Menu : GenericMenu
 		}
 	}
 
-	void DrawHardpointItems(int ind, int sx, int sy)
+	vector2 DrawCriticalHardpointItems(int ind, int sx, int sy)
 	{
-		Vector2 pos    = mechplr.getHardpointPos(ind);
-		vector2 hslots = mechplr.getHardpointSlots(ind);
-		
-		int offsy = 0;
-		int offsx = 0;
-		int slottranslation = Font.CR_GRAY;
-		
-		// Display slot numbers
-		for(int i = 0; i < hslots.x; i++)
-		{
-			offsy += 20;
-			if( i < hslots.y) { slottranslation =Font.CR_DARKRED; } else { slottranslation = Font.CR_GRAY; }
-			H_DrawString((i+1)..". ", (sx-45,sy+offsy-35),0,slottranslation);
-		}
-		// Display structures
-		offsy = 0;
-		offsx = 0; // Used for hitbox offsets here.
-		int wind = 0;
+		Vector2 pos = mechplr.hardpoints.getLocation(ind);
+		vector2 offs = (0,0);
 		for(int i = 0; i < mechplr.inv_context.mechstructs.Size(); i++)
 		{
 			class<Mechbase_Utility> ut = mechplr.inv_context.mechstructs[i].Tag;
 			if(ut)
 			{
 				let def_ut = GetDefaultByType(ut);
-				if(mechplr.inv_context.mechstructs[i].pos == pos)
+				if(mechplr.inv_context.mechstructs[i].pos == pos && !def_ut.moveable)
+				{
+					int fcr = Font.CR_DARKRED;
+					for(int s = 0; s < def_ut.hardslots; s++)
+					{	
+						Rect checkmouse;
+						initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+3),15);
+						if(!def_ut.moveable)fcr = Font.CR_DARKRED;
+						H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
+						offs.y += 20;
+						offs.x += 23;
+					}
+				}
+			}
+		}
+		return offs;
+	}
+
+	void DrawHardpointItems(int ind, int sx, int sy)
+	{
+		vector2 pos    = mechplr.hardpoints.getLocation(ind);
+		vector2 hslots = mechplr.hardpoints.getSlots(ind);
+		vector2 offs = (0,0);
+		
+		int slottranslation = Font.CR_GRAY;
+		
+		// Display slot numbers
+		for(int i = 0; i < hslots.x; i++)
+		{
+			offs.y += 20;
+			if( i < hslots.y) { slottranslation =Font.CR_DARKRED; } else { slottranslation = Font.CR_GRAY; }
+			H_DrawString((i+1)..". ", (sx-45,sy+offs.y-35),0,slottranslation);
+		}
+		// Display structures
+		offs = DrawCriticalHardpointItems(ind,sx,sy);
+		for(int i = 0; i < mechplr.inv_context.mechstructs.Size(); i++)
+		{
+			class<Mechbase_Utility> ut = mechplr.inv_context.mechstructs[i].Tag;
+			if(ut)
+			{
+				let def_ut = GetDefaultByType(ut);
+				if(mechplr.inv_context.mechstructs[i].pos == pos && def_ut.moveable)
 				{
 					int fcr = Font.CR_DARKGRAY;
 					for(int s = 0; s < def_ut.hardslots; s++)
 					{	
 						if(i == struc_weapselected)fcr = Font.CR_GREEN;
-						String suffix = "";
-						if(def_ut.hardslots > 1 && def_ut.moveable)suffix = " (#" .. s+1 .. ")";
+						String suffix = " (#" .. s+1 .. ")";
 						Rect checkmouse;
-						initRect(checkmouse,sx,sy+offsx+20,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
+						initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
 						if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 						{
-							if(def_ut.moveable)
-							{
-								struc_weapselected=i; 
-								loadm_weapselected=-1;
-							}
+							struc_weapselected=i; 
+							loadm_weapselected=-1;
 						}
-						if(!def_ut.moveable)fcr = Font.CR_DARKRED;
-						H_DrawString(def_ut.displayName .. suffix, (sx,sy+offsy-15),0,fcr);
-						offsy += 20;
-						offsx += 23;
+						H_DrawString(def_ut.displayName .. suffix, (sx,sy+offs.y-15),0,fcr);
+						offs.y += 20;
+						offs.x += 23;
 					}
 				}
 			}
 		}
 		// Display weapons
+		int wind = 0;
 		for(let w = mechplr.Inv; w; w = w.Inv)
 		{
 			let ww = Mechbase_Weapon(w);
@@ -585,12 +606,12 @@ class Mechlab_Menu : GenericMenu
  						String suffix = "";
 						if(ww.hardslots > 1)suffix = " (#" .. i+1 .. ")";
 						Rect checkmouse;
-						initRect(checkmouse,sx,sy+offsx+20,14*(mechplr.resolveWeaponName(ww).Length()+suffix.Length()+4),15);
+						initRect(checkmouse,sx,sy+offs.x+20,14*(mechplr.resolveWeaponName(ww).Length()+suffix.Length()+4),15);
 						//drawRect(checkmouse, debug_color);
 						if(mstats.left_btn && checkCollision(mouse,checkmouse)) { loadm_weapselected=wind-1; struc_weapselected=-1; }
-						H_DrawString(mechplr.resolveWeaponName(ww) .. suffix, (sx,sy+offsy-15),0,fcr);
-						offsy += 20;
-						offsx += 23;
+						H_DrawString(mechplr.resolveWeaponName(ww) .. suffix, (sx,sy+offs.y-15),0,fcr);
+						offs.y += 20;
+						offs.x += 23;
 					}
 				}
 			}
@@ -638,48 +659,48 @@ class Mechlab_Menu : GenericMenu
 		// removed from view.
 		float curarmor, maxarmor, curinternal, maxinternal;
 		{
-			curarmor += mechplr.inv_context.hardpoints.hd.armor;
-			curarmor += mechplr.inv_context.hardpoints.ct.armor;
-			curarmor += mechplr.inv_context.hardpoints.lt.armor;
-			curarmor += mechplr.inv_context.hardpoints.rt.armor;
-			curarmor += mechplr.inv_context.hardpoints.la.armor;
-			curarmor += mechplr.inv_context.hardpoints.ra.armor;
-			curarmor += mechplr.inv_context.hardpoints.ll.armor;
-			curarmor += mechplr.inv_context.hardpoints.rl.armor;
+			curarmor += mechplr.hardpoints.hd.armor;
+			curarmor += mechplr.hardpoints.ct.armor;
+			curarmor += mechplr.hardpoints.lt.armor;
+			curarmor += mechplr.hardpoints.rt.armor;
+			curarmor += mechplr.hardpoints.la.armor;
+			curarmor += mechplr.hardpoints.ra.armor;
+			curarmor += mechplr.hardpoints.ll.armor;
+			curarmor += mechplr.hardpoints.rl.armor;
 			
-			maxarmor += mechplr.inv_context.hardpoints.hd.max_armor;
-			maxarmor += mechplr.inv_context.hardpoints.ct.max_armor;
-			maxarmor += mechplr.inv_context.hardpoints.lt.max_armor;
-			maxarmor += mechplr.inv_context.hardpoints.rt.max_armor;
-			maxarmor += mechplr.inv_context.hardpoints.la.max_armor;
-			maxarmor += mechplr.inv_context.hardpoints.ra.max_armor;
-			maxarmor += mechplr.inv_context.hardpoints.ll.max_armor;
-			maxarmor += mechplr.inv_context.hardpoints.rl.max_armor;
+			maxarmor += mechplr.hardpoints.hd.max_armor;
+			maxarmor += mechplr.hardpoints.ct.max_armor;
+			maxarmor += mechplr.hardpoints.lt.max_armor;
+			maxarmor += mechplr.hardpoints.rt.max_armor;
+			maxarmor += mechplr.hardpoints.la.max_armor;
+			maxarmor += mechplr.hardpoints.ra.max_armor;
+			maxarmor += mechplr.hardpoints.ll.max_armor;
+			maxarmor += mechplr.hardpoints.rl.max_armor;
 			
-			curinternal += mechplr.inv_context.hardpoints.hd.internalhp;
-			curinternal += mechplr.inv_context.hardpoints.ct.internalhp;
-			curinternal += mechplr.inv_context.hardpoints.lt.internalhp;
-			curinternal += mechplr.inv_context.hardpoints.rt.internalhp;
-			curinternal += mechplr.inv_context.hardpoints.la.internalhp;
-			curinternal += mechplr.inv_context.hardpoints.ra.internalhp;
-			curinternal += mechplr.inv_context.hardpoints.ll.internalhp;
-			curinternal += mechplr.inv_context.hardpoints.rl.internalhp;
+			curinternal += mechplr.hardpoints.hd.internalhp;
+			curinternal += mechplr.hardpoints.ct.internalhp;
+			curinternal += mechplr.hardpoints.lt.internalhp;
+			curinternal += mechplr.hardpoints.rt.internalhp;
+			curinternal += mechplr.hardpoints.la.internalhp;
+			curinternal += mechplr.hardpoints.ra.internalhp;
+			curinternal += mechplr.hardpoints.ll.internalhp;
+			curinternal += mechplr.hardpoints.rl.internalhp;
 			
-			maxinternal += mechplr.inv_context.hardpoints.hd.max_internal;
-			maxinternal += mechplr.inv_context.hardpoints.ct.max_internal;
-			maxinternal += mechplr.inv_context.hardpoints.lt.max_internal;
-			maxinternal += mechplr.inv_context.hardpoints.rt.max_internal;
-			maxinternal += mechplr.inv_context.hardpoints.la.max_internal;
-			maxinternal += mechplr.inv_context.hardpoints.ra.max_internal;
-			maxinternal += mechplr.inv_context.hardpoints.ll.max_internal;
-			maxinternal += mechplr.inv_context.hardpoints.rl.max_internal;
+			maxinternal += mechplr.hardpoints.hd.max_internal;
+			maxinternal += mechplr.hardpoints.ct.max_internal;
+			maxinternal += mechplr.hardpoints.lt.max_internal;
+			maxinternal += mechplr.hardpoints.rt.max_internal;
+			maxinternal += mechplr.hardpoints.la.max_internal;
+			maxinternal += mechplr.hardpoints.ra.max_internal;
+			maxinternal += mechplr.hardpoints.ll.max_internal;
+			maxinternal += mechplr.hardpoints.rl.max_internal;
 		}
 		
 		string armorpercent = (curarmor/maxarmor * 100).."";
 		string internalpercent = (curinternal/maxinternal * 100).."";
 		armorpercent.truncate(armorpercent.length()-6);
 		internalpercent.truncate(internalpercent.length()-6);
-		HardpointVitals hv = mechplr.getHardpointVitals(hardpoint);
+		HardpointVitals hv = mechplr.hardpoints.getVitals(hardpoint);
 		string armorstr = "ARMOR: ".. int(hv.armor) .. "/" .. int(hv.max_armor);
 		string internalstr = "INTERNALS: ".. int(hv.internalhp) .. "/" .. int(hv.max_internal);
 		uint ArmorFont = (hv.armor < hv.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
@@ -764,7 +785,7 @@ class Mechlab_Menu : GenericMenu
 	{
 		if(ind == -1) return true; // No such hardpoint.
 		
-		let valid = mechplr.getHardpointVitals(ind);
+		let valid = mechplr.hardpoints.getVitals(ind);
 		return (valid.internalhp > 0);
 	}
 	

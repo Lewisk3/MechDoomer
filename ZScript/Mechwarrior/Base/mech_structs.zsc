@@ -31,7 +31,7 @@ bool equipStructInv(int ind, Vector2 pos, bool move=true)
 		sendHudAlert("Cannot equip item, over tonnage!", Font.CR_DARKRED);
 		return false;
 	}
-	if( checkHardslots(pos) < GetDefaultByType(util).hardslots )
+	if( hardpoints.getFreeSlots(pos) < GetDefaultByType(util).hardslots )
 	{
 		sendHudAlert("Cannot equip item, no freeslots!", Font.CR_DARKRED);
 		return false;	
@@ -44,7 +44,7 @@ bool equipStructInv(int ind, Vector2 pos, bool move=true)
 }
 bool equipStruct(class<Mechbase_Utility> type, Vector2 pos, int amt = 1,bool giveammo=true)
 {
-	if( (checkHardslots(pos)-(GetDefaultByType(type).hardslots*amt)) < 0)
+	if( (hardpoints.getFreeSlots(pos)-(GetDefaultByType(type).hardslots*amt)) < 0)
 	{
 		if(!GetDefaultByType(type).moveable) console.printf("WARNING: Failed to equip critical item: %s",type.getClassName());
 		return false;
@@ -61,7 +61,7 @@ bool equipStruct(class<Mechbase_Utility> type, Vector2 pos, int amt = 1,bool giv
 		st.pos = pos;
 		inv_context.mechstructs.push(st);
 		inv_context.weapons_tonnage += GetDefaultByType(type).weight;
-		adjustHardslots(pos,GetDefaultByType(type).hardslots);
+		hardpoints.adjustHardslots(pos,GetDefaultByType(type).hardslots);
 	}
 	return true;
 }
@@ -82,7 +82,7 @@ bool moveStructToInv(int struc_ind, bool move=true)
 			let ut = GetDefaultByType(utilcast(inv_context.mechstructs[i].Tag));
 			if(!ut.moveable) return false;
 			Vector2 strucpos = inv_context.mechstructs[i].pos;
-			adjustHardslots(strucpos,-ut.hardslots);
+			hardpoints.adjustHardslots(strucpos,-ut.hardslots);
 			inv_context.weapons_tonnage -= ut.weight;
 			addStructToInv(inv_context.mechstructs[i].Tag);
 			if(move)inv_context.mechstructs.delete(i);

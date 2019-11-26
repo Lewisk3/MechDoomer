@@ -150,14 +150,14 @@ bool setWeaponGroupAt(int ind, int group)
 void clearWeapons()
 {
 	ClearInventory();
-	inv_context.hardpoints.hd.slots = 0;
-	inv_context.hardpoints.ct.slots = 0;
-	inv_context.hardpoints.lt.slots = 0;
-	inv_context.hardpoints.rt.slots = 0;
-	inv_context.hardpoints.la.slots = 0;
-	inv_context.hardpoints.ra.slots = 0;
-	inv_context.hardpoints.ll.slots = 0;
-	inv_context.hardpoints.rl.slots = 0;
+	hardpoints.hd.slots = 0;
+	hardpoints.ct.slots = 0;
+	hardpoints.lt.slots = 0;
+	hardpoints.rt.slots = 0;
+	hardpoints.la.slots = 0;
+	hardpoints.ra.slots = 0;
+	hardpoints.ll.slots = 0;
+	hardpoints.rl.slots = 0;
 	inv_context.weapons_tonnage = 0;
 	GiveInventory(cphandler,1);
 	weapons = 0;	
@@ -168,7 +168,7 @@ void removeWeapon(Mechbase_Weapon w)
 {
 	// This is need because hardpoints and stuff.
 	inv_context.weapons_tonnage -= w.weight;
-	adjustHardslots(w.mount,-w.hardslots);
+	hardpoints.adjustHardslots(w.mount,-w.hardslots);
 	RemoveInventory(w);
 }
 bool removeWeaponAt(int ind)
@@ -250,7 +250,7 @@ bool equipWeaponInv(int ind, Vector2 pos, int grp, bool move=true)
 		sendHudAlert("Cannot equip weapon, over tonnage!", Font.CR_DARKRED);
 		return false;
 	}
-	if( checkHardslots(pos) < GetDefaultByType(weap).hardslots )
+	if( hardpoints.getFreeSlots(pos) < GetDefaultByType(weap).hardslots )
 	{
 		sendHudAlert("Cannot equip weapon, no freeslots!", Font.CR_DARKRED);
 		return false;	
@@ -297,7 +297,7 @@ bool equipWeapon(class<Mechbase_Weapon> type, Vector2 vpos, int group, bool give
 				ww.WeaponID = weapons;
 				ww.group = group;
 				ww.mount = vpos;
-				adjustHardslots(ww.mount,ww.hardslots);
+				hardpoints.adjustHardslots(ww.mount,ww.hardslots);
 				inv_context.weapons_tonnage += ww.weight;
 				if(ww.ammotype && giveammo)GiveInventory(ww.ammotype,ww.ammogive);
 				//console.printf("Adding Weapon: %s at %d",ww.displayName,ww.WeaponID);

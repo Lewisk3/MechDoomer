@@ -1,0 +1,261 @@
+struct HardpointData play
+{
+	int hd, ct, lt, rt, la, ra, ll, rl;
+}
+
+class HardpointVitals : Object
+{
+	float armor;
+	float internalhp;
+	float max_armor;
+	float max_internal;
+}
+
+class MechHardpoint : Object
+{
+	// Position
+	vector2 pos;
+
+	// Slots
+	int slots;
+	int maxslots;
+	
+	// Vitals
+	float armor;
+	float internalhp;
+	float max_armor;
+	float max_internal;
+}
+
+class MechHardpoints : Object;
+
+MechHardpoint hd;
+MechHardpoint ct;
+MechHardpoint lt;
+MechHardpoint rt;
+MechHardpoint la;
+MechHardpoint ra;
+MechHardpoint ll;
+MechHardpoint rl;
+
+static MechHardpoints Create()
+{
+	MechHardpoints hps = new("MechHardpoints");
+	if(!hps) return NULL;
+	hps.hd = new("MechHardpoint");
+	hps.ct = new("MechHardpoint");
+	hps.lt = new("MechHardpoint");
+	hps.rt = new("MechHardpoint");
+	hps.la = new("MechHardpoint");
+	hps.ra = new("MechHardpoint");
+	hps.ll = new("MechHardpoint");
+	hps.rl = new("MechHardpoint");
+	return hps;
+}
+MechHardpoint FindByIndex(int ind)
+{
+	if(ind == 0) return hd;
+	if(ind == 1) return ct;
+	if(ind == 2) return lt;
+	if(ind == 3) return rt;
+	if(ind == 4) return la;
+	if(ind == 5) return ra;
+	if(ind == 6) return ll;
+	if(ind == 7) return rl;
+	return NULL;
+}	
+MechHardpoint FindByLocation(vector2 pos=(0,0))
+{
+	if(pos == hd.pos) return hd;
+	if(pos == ct.pos) return ct;
+	if(pos == lt.pos) return lt;
+	if(pos == rt.pos) return rt;
+	if(pos == la.pos) return la;
+	if(pos == ra.pos) return ra;
+	if(pos == ll.pos) return ll;
+	if(pos == rl.pos) return rl;
+	return NULL;
+}
+
+// Setup
+void setupLocations(Vector2 hdp, Vector2 ctp, Vector2 rtp, Vector2 ltp, Vector2 lap, Vector2 rap, Vector2 llp, Vector2 rlp)
+{
+	// Setup weapon location hardpoints and hardpoint slots.
+	hd.pos = hdp;
+	ct.pos = ctp;
+	lt.pos = ltp;
+	rt.pos = rtp;
+	la.pos = lap;
+	ra.pos = rap;
+	ll.pos = llp;
+	rl.pos = rlp;
+}
+void setupVitals(int hda,int cta,int lta,int rta,int laa,int raa,int lla,int rla,int hdi,int cti,int lti,int rti,int lai,int rai,int lli,int rli)
+{
+	// This looks really messy but idk what else i can do.
+	hd.max_armor = hda;
+	ct.max_armor = cta;
+	lt.max_armor = lta;
+	rt.max_armor = rta;
+	la.max_armor = laa;
+	ra.max_armor = raa;
+	ll.max_armor = lla;
+	rl.max_armor = rla;
+	hd.armor = hda;
+	ct.armor = cta;
+	lt.armor = lta;
+	rt.armor = rta;
+	la.armor = laa;
+	ra.armor = raa;
+	ll.armor = lla;
+	rl.armor = rla;
+	hd.max_internal = hdi;
+	ct.max_internal = cti;
+	lt.max_internal = lti;
+	rt.max_internal = rti;
+	la.max_internal = lai;
+	ra.max_internal = rai;
+	ll.max_internal = lli;
+	rl.max_internal = rli;
+	hd.internalhp = hdi;
+	ct.internalhp = cti;
+	lt.internalhp = lti;
+	rt.internalhp = rti;
+	la.internalhp = lai;
+	ra.internalhp = rai;
+	ll.internalhp = lli;
+	rl.internalhp = rli;
+}
+void setupSlots(int hds=10,int cts=12,int rts=12, int lts=12, int las=12,int ras=12, int lls=2,int rls=2)
+{
+	hd.maxslots = hds;
+	hd.slots = 0;
+	ct.maxslots = cts;
+	ct.slots = 0;
+	rt.maxslots = rts;
+	rt.slots = 0;
+	lt.maxslots = lts;
+	lt.slots = 0;
+	la.maxslots= las;
+	la.slots = 0;
+	ra.maxslots = ras;
+	ra.slots = 0;
+	ll.maxslots = lls;
+	ll.slots = 0;
+	rl.maxslots = rls;
+	rl.slots = 0;
+}
+
+// Get
+clearscope int getTotalFreeSlots()
+{
+	int slots = 0;
+	slots += (hd.maxslots-hd.slots);
+	slots += (ct.maxslots-ct.slots);
+	slots += (lt.maxslots-lt.slots);
+	slots += (rt.maxslots-rt.slots);
+	slots += (la.maxslots-la.slots);
+	slots += (ra.maxslots-ra.slots);
+	slots += (ll.maxslots-ll.slots);
+	slots += (rl.maxslots-rl.slots);
+	return slots;
+}
+int getFreeSlots(Vector2 pos)
+{
+	int slots = 0;
+	MechHardpoint hp = FindByLocation(pos);
+	if(hp) slots = hp.maxslots-hp.slots;
+	return slots;
+}
+clearscope vector2 getSlots(int ind)
+{
+	// I have to use internal structures here such as vector2 instead of my own struct
+	// due to pointer issues.
+	vector2 hslots = ( 0, 0 );
+	MechHardpoint hp = FindByIndex(ind);
+	if(hp) hslots = (hp.maxslots, hp.slots);
+	return hslots;
+}
+clearscope vector2 getLocation(int ind)
+{
+	vector2 hpos = ( 0, 0 );
+	if(ind == 0) hpos = hd.pos;
+	if(ind == 1) hpos = ct.pos;
+	if(ind == 2) hpos = lt.pos;
+	if(ind == 3) hpos = rt.pos;
+	if(ind == 4) hpos = la.pos;
+	if(ind == 5) hpos = ra.pos;
+	if(ind == 6) hpos = ll.pos;
+	if(ind == 7) hpos = rl.pos;
+	return hpos;
+}
+clearscope HardpointVitals getVitals(int ind)
+{
+	HardpointVitals hvital = new("HardpointVitals");
+	switch(ind)
+	{
+		case 0:
+			hvital.armor = hd.armor;
+			hvital.max_armor = hd.max_armor;
+			hvital.internalhp = hd.internalhp;
+			hvital.max_internal = hd.max_internal;
+		break;
+		case 1:
+			hvital.armor = ct.armor;
+			hvital.max_armor = ct.max_armor;
+			hvital.internalhp = ct.internalhp;
+			hvital.max_internal = ct.max_internal;
+		break;
+		case 2:
+			hvital.armor = lt.armor;
+			hvital.max_armor = lt.max_armor;
+			hvital.internalhp = lt.internalhp;
+			hvital.max_internal = lt.max_internal;
+		break;
+		case 3:
+			hvital.armor = rt.armor;
+			hvital.max_armor = rt.max_armor;
+			hvital.internalhp = rt.internalhp;
+			hvital.max_internal = rt.max_internal;
+		break;
+		case 4:
+			hvital.armor = la.armor;
+			hvital.max_armor = la.max_armor;
+			hvital.internalhp = la.internalhp;
+			hvital.max_internal = la.max_internal;
+		break;
+		case 5:
+			hvital.armor = ra.armor;
+			hvital.max_armor = ra.max_armor;
+			hvital.internalhp = ra.internalhp;
+			hvital.max_internal = ra.max_internal;
+		break;
+		case 6:
+			hvital.armor = ll.armor;
+			hvital.max_armor = ll.max_armor;
+			hvital.internalhp = ll.internalhp;
+			hvital.max_internal = ll.max_internal;
+		break;
+		case 7:
+			hvital.armor = rl.armor;
+			hvital.max_armor = rl.max_armor;
+			hvital.internalhp = rl.internalhp;
+			hvital.max_internal = rl.max_internal;
+		break;
+	}
+	return hvital;
+}
+clearscope vector2 FindHardpointVitals(int ind)
+{
+	vector2 ffs = ( 0, 0 );
+	MechHardpoint hp = FindByIndex(ind);
+	if(hp) ffs = (hp.armor, hp.internalhp);
+	return ffs;
+}
+
+// Set
+void adjustHardslots(Vector2 pos, int amt)
+{
+	MechHardpoint hp = FindByLocation(pos);
+	if(hp) hp.slots += amt;
+}

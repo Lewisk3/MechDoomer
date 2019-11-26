@@ -52,6 +52,14 @@ class StructEngine : Mechbase_Utility
 		Mechbase_Utility.Criticals 2;
 	}
 }
+class StructGyro : Mechbase_Utility
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "Gyro";
+		Mechbase_Utility.Criticals 2;
+	}
+}
 class StructLifesupport : Mechbase_Utility
 {
 	Default
@@ -74,14 +82,6 @@ class StructCockpit : Mechbase_Utility
 	{	
 		Mechbase_Utility.displayName "Cockpit";
 		Mechbase_Utility.Criticals 1;
-	}
-}
-class StructGyro : Mechbase_Utility
-{
-	Default
-	{	
-		Mechbase_Utility.displayName "Gyro";
-		Mechbase_Utility.Criticals 2;
 	}
 }
 class StructShoulder : Mechbase_Utility

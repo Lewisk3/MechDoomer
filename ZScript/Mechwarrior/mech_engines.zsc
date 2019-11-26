@@ -1,0 +1,57 @@
+class Mechbase_Engine : Object
+{
+	String displayName;
+	int enginetype;
+	float weight;
+	int worth;
+	int ctslots;
+	int ltslots;
+	int rtslots;
+	int gyroslots;
+	int intrinsic_heatsinks;
+	int intrinsic_doubleheatsinks;
+	
+	
+	Property Tag : displayName;
+	Property Criticals : gyroslots, ctslots, ltslots, rtslots;
+	Property CValue : worth;
+	Property Tonnage : weight;
+	Property EngineType : enginetype;
+	Property Heatsinks : instrinsic_heatsinks, intrinsic_doubleheatsinks;
+	
+	void getSpeedKPH(float weight)
+	{
+		return (32.4*(100/weight)) / (200/enginetype);
+	}
+	
+	bool Equip(MechwarriorBase mech)
+	{
+		// Check if enough slots/tons to equip.
+		if(!mech.inv_context) return false;
+		int mechslots_ct = mech.inv_context.hardpoints.ct.getFreeSlots();
+		int mechslots_lt = mech.inv_context.hardpoints.lt.getFreeSlots();
+		int mechslots_rt = mech.inv_context.hardpoints.rt.getFreeSlots();
+		
+		if( gyroslots+ctslots > mechslots_ct ||
+		    ltslots > mechslots_lt || rtslots > mechslots_rt ) 
+			return false;
+	}
+	
+	void Dequip(MechwarriorBase mech)
+	{
+		
+	}
+	
+	Default
+	{
+		Mechbase_Engine.Criticals 2,4,0,0;
+		Mechbase_Engine.Tag "STD200 ENGINE";
+		Mechbase_Engine.EngineType 200;
+		Mechbase_Engine.Heatsinks 8, 0;
+		Mechbase_Engine.Tonnage 11.5;
+		Mechbase_Engine.CValue 54750;
+	}
+}
+
+// Standard Engines
+class MechEngine_STD200 : Mechbase_Engine {}
