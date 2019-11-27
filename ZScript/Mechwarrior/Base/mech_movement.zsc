@@ -131,6 +131,7 @@ void mech_movement()
 			}
 			else if(MoveSpeedKPH > 0)
 			{
+				throttle = 0;
 				setupSpeedKPH(0);
 			}
 			return;

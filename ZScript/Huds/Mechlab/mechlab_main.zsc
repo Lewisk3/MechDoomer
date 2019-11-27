@@ -367,7 +367,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 				for(int s = 0; s < def_ut.hardslots; s++)
 				{	
 					if(i == selected_item.index && selected_item.mUtil && selected_item.location)fcr = Font.CR_GREEN;
-					String suffix = s > 0 ? " (#" .. s+1 .. ")" : "";
+					String suffix = def_ut.hardslots > 1 ? " (#" .. s+1 .. ")" : "";
 					Rect checkmouse;
 					initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
 					if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
