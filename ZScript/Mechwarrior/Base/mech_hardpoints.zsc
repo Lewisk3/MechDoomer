@@ -92,7 +92,7 @@ void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false)
 	}
 	else if(hp.internalhp > 0)
 	{
-		if(random(0,1))
+		if(random(0,2)==2)
 		{
 			if(random(0,1)==1)
 				DamageHardpointWeapons(hp,50*random(1,2));
@@ -138,10 +138,10 @@ void ProcessHardpointDamage(Name mod, float damage, Actor damager = NULL)
 	if(mod == "MechDamage_LL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.ll,damage,heatdmg&&random(0,1));
 	if(mod == "MechDamage_RL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.rl,damage,heatdmg&&random(0,1));
 	
-	if( inv_context.engine && (inv_context.engine.ltslots+inv_context.engine.rtslots) > 0 )
+	if( inv_context.engine && (inv_context.engine.ltslots+inv_context.engine.rtslots) > 2 )
 	{
-		if((hardpoints.lt.internalhp <= 0 || hardpoints.rt.internalhp <= 0) && !inv_context.engine.clan) ProcessDeath(damager);
-		if((hardpoints.lt.internalhp <= 0 && hardpoints.rt.internalhp <= 0) &&  inv_context.engine.clan) ProcessDeath(damager);
+		if((hardpoints.lt.internalhp <= 0 || hardpoints.rt.internalhp <= 0) && (mechtype != MechType_Clan)) ProcessDeath(damager);
+		if((hardpoints.lt.internalhp <= 0 && hardpoints.rt.internalhp <= 0) && (mechtype == MechType_Clan)) ProcessDeath(damager);
 	}
 	if(  hardpoints.hd.internalhp <= 0 || hardpoints.ct.internalhp <= 0 ||
 		(hardpoints.ll.internalhp <= 0 && hardpoints.rl.internalhp <= 0)   ) 

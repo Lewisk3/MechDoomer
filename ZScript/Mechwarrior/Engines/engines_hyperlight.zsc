@@ -1,0 +1,90 @@
+// XXL Engines
+class Engine_XXL : Mechbase_Engine 
+{
+	Default
+	{
+		Mechbase_Engine.Criticals 2,4,4,4;
+		Mechbase_Engine.BaseHeatsinks 0.04, 0;
+		Mechbase_Engine.ScalarCValue 2717.20377;
+	}
+}
+
+class Engine_XXL_10 : Engine_XXL {} 
+class Engine_XXL_15 : Engine_XXL {} 
+class Engine_XXL_20 : Engine_XXL {} 
+class Engine_XXL_25 : Engine_XXL {} 
+class Engine_XXL_30 : Engine_XXL {} 
+class Engine_XXL_35 : Engine_XXL {} 
+class Engine_XXL_40 : Engine_XXL {} 
+class Engine_XXL_45 : Engine_XXL {} 
+class Engine_XXL_50 : Engine_XXL {} 
+class Engine_XXL_55 : Engine_XXL {} 
+class Engine_XXL_60 : Engine_XXL {} 
+class Engine_XXL_65 : Engine_XXL {} 
+class Engine_XXL_70 : Engine_XXL {} 
+class Engine_XXL_75 : Engine_XXL {} 
+class Engine_XXL_80 : Engine_XXL {} 
+class Engine_XXL_85 : Engine_XXL {} 
+class Engine_XXL_90 : Engine_XXL {} 
+class Engine_XXL_95 : Engine_XXL {} 
+class Engine_XXL_100 : Engine_XXL {} 
+class Engine_XXL_105 : Engine_XXL {} 
+class Engine_XXL_110 : Engine_XXL {} 
+class Engine_XXL_115 : Engine_XXL {} 
+class Engine_XXL_120 : Engine_XXL {} 
+class Engine_XXL_125 : Engine_XXL {} 
+class Engine_XXL_130 : Engine_XXL {} 
+class Engine_XXL_135 : Engine_XXL {} 
+class Engine_XXL_140 : Engine_XXL {} 
+class Engine_XXL_145 : Engine_XXL {} 
+class Engine_XXL_150 : Engine_XXL {} 
+class Engine_XXL_155 : Engine_XXL {} 
+class Engine_XXL_160 : Engine_XXL {} 
+class Engine_XXL_165 : Engine_XXL {} 
+class Engine_XXL_170 : Engine_XXL {} 
+class Engine_XXL_175 : Engine_XXL {} 
+class Engine_XXL_180 : Engine_XXL {} 
+class Engine_XXL_185 : Engine_XXL {} 
+class Engine_XXL_190 : Engine_XXL {} 
+class Engine_XXL_195 : Engine_XXL {} 
+class Engine_XXL_200 : Engine_XXL {} 
+class Engine_XXL_205 : Engine_XXL {} 
+class Engine_XXL_210 : Engine_XXL {} 
+class Engine_XXL_215 : Engine_XXL {} 
+class Engine_XXL_220 : Engine_XXL {} 
+class Engine_XXL_225 : Engine_XXL {} 
+class Engine_XXL_230 : Engine_XXL {} 
+class Engine_XXL_235 : Engine_XXL {} 
+class Engine_XXL_240 : Engine_XXL {} 
+class Engine_XXL_245 : Engine_XXL {} 
+class Engine_XXL_250 : Engine_XXL {} 
+class Engine_XXL_255 : Engine_XXL {} 
+class Engine_XXL_260 : Engine_XXL {} 
+class Engine_XXL_265 : Engine_XXL {} 
+class Engine_XXL_270 : Engine_XXL {} 
+class Engine_XXL_275 : Engine_XXL {} 
+class Engine_XXL_280 : Engine_XXL {} 
+class Engine_XXL_285 : Engine_XXL {} 
+class Engine_XXL_290 : Engine_XXL {} 
+class Engine_XXL_295 : Engine_XXL {} 
+class Engine_XXL_300 : Engine_XXL {} 
+class Engine_XXL_305 : Engine_XXL {} 
+class Engine_XXL_310 : Engine_XXL {} 
+class Engine_XXL_315 : Engine_XXL {} 
+class Engine_XXL_320 : Engine_XXL {} 
+class Engine_XXL_325 : Engine_XXL {} 
+class Engine_XXL_330 : Engine_XXL {} 
+class Engine_XXL_335 : Engine_XXL {} 
+class Engine_XXL_340 : Engine_XXL {} 
+class Engine_XXL_345 : Engine_XXL {} 
+class Engine_XXL_350 : Engine_XXL {} 
+class Engine_XXL_355 : Engine_XXL {} 
+class Engine_XXL_360 : Engine_XXL {} 
+class Engine_XXL_365 : Engine_XXL {} 
+class Engine_XXL_370 : Engine_XXL {} 
+class Engine_XXL_375 : Engine_XXL {} 
+class Engine_XXL_380 : Engine_XXL {} 
+class Engine_XXL_385 : Engine_XXL {} 
+class Engine_XXL_390 : Engine_XXL {} 
+class Engine_XXL_395 : Engine_XXL {} 
+class Engine_XXL_400 : Engine_XXL {} 

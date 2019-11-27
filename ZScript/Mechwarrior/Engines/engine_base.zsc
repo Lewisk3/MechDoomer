@@ -64,7 +64,6 @@ class Mechbase_Engine : Actor
 {
 	int enginetype;
 	int model;
-	float weightmod;
 	float worth;
 	float baseworth;
 	float heatsink_scalar;
@@ -75,58 +74,73 @@ class Mechbase_Engine : Actor
 	int gyroslots;
 	int intrinsic_heatsinks;
 	int intrinsic_doubleheatsinks;
-	bool clan;
 	
 	Property Type : enginetype;
 	Property Criticals : gyroslots, ctslots, ltslots, rtslots;
 	Property CValue : worth;
 	Property ScalarCValue : baseworth;
 	Property Heatsinks : intrinsic_heatsinks, intrinsic_doubleheatsinks;
-	Property ClanEngine : clan; 
-	Property TonnageMod : weightmod;
 	Property BaseHeatsinks: heatsink_scalar, dbl_heatsink_scalar;
-	Property EngineModel: model;
 	
 	Default
 	{
 		+NOINTERACTION;
-		Mechbase_Engine.ClanEngine false;
-		Mechbase_Engine.TonnageMod 1.0;
 	}
 	
+	static string, int, int, float, float GetBasics(class<Mechbase_Engine> type)
+	{
+		let defs = GetDefaultByType(type);
+		String cname = defs.getClassName();
+		
+		Array<String> cnametokens;
+		cnametokens.Clear();
+		cname.Split(cnametokens,"_");
+		cname = cnametokens[2];
+		string t_prefix = cnametokens[1];
+		int cname_type = cname.ToInt();
+		uint engmodel = 0;
+		if(cnametokens[1] == "STD") engmodel = EngineDatabase.Type_STD;
+		if(cnametokens[1] ==  "XL") engmodel = EngineDatabase.Type_XL;
+		if(cnametokens[1] == "XXL") engmodel = EngineDatabase.Type_XXL;
+		if(cnametokens[1] ==   "L") engmodel = EngineDatabase.Type_Light;
+		if(cnametokens[1] == "COM") engmodel = EngineDatabase.Type_Compact;
+		
+		string displayname = t_prefix .. cname_type .. " ENGINE";
+		int type = defs.enginetype | cname_type;
+		float weight = EngineDatabase.GetTonnage(cname_type,engmodel);
+		float worth = defs.baseworth ? defs.baseworth*type : defs.worth;
+		
+		int sinks = (int(defs.heatsink_scalar*type) | defs.intrinsic_heatsinks) + 
+					(int(defs.dbl_heatsink_scalar*type) | defs.intrinsic_doubleheatsinks);
+		
+		return displayname, type, sinks, weight, worth;
+	}
 	
 	static Mechbase_EngineOBJ Create(class<Mechbase_Engine> type)
 	{
-		
-	
-		let engineobj = Mechbase_EngineOBJ(new("Mechbase_EngineOBJ"));
 		let defs = GetDefaultByType(type);
-		string t_prefix = "ERR";
-		if(defs.model == EngineDataBase.Type_STD) t_prefix = "STD";
-		if(defs.model == EngineDataBase.Type_XL)  t_prefix = "XL";
-		if(defs.model == EngineDataBase.Type_XXL) t_prefix = "XXL";
-		if(defs.clan) t_prefix = "CLAN " .. t_prefix;
-		String cname = defs.getClassName();
-		cname = cname.Mid(cname.Length()-3);
-		int cname_type = cname.ToInt();
+		let engineobj = Mechbase_EngineOBJ(new("Mechbase_EngineOBJ"));
+		String dName;
+		int etype, sinks;
+		float weight, worth;
+		[dName, etype, sinks, weight, worth] = Mechbase_Engine.GetBasics(type);	
 		if(engineobj)
 		{
-			engineobj.displayName = t_prefix .. cname_type .. " ENGINE";
-			engineobj.enginetype = defs.enginetype | cname_type;
-			engineobj.weight = EngineDatabase.GetTonnage(engineobj.enginetype,defs.model)*defs.weightmod;
+			engineobj.displayName = dName;
+			engineobj.weight = weight;
+			engineobj.worth = worth;
+			engineobj.enginetype = etype;
 			engineobj.intrinsic_heatsinks = int(defs.heatsink_scalar*engineobj.enginetype) | defs.intrinsic_heatsinks;
 			engineobj.intrinsic_doubleheatsinks = int(defs.dbl_heatsink_scalar*engineobj.enginetype) | defs.intrinsic_doubleheatsinks;
-			engineobj.worth = defs.baseworth ? defs.baseworth*engineobj.enginetype : defs.worth;
 			engineobj.gyroslots = defs.gyroslots;
 			engineobj.ctslots = defs.ctslots;
 			engineobj.ltslots = defs.ltslots;
 			engineobj.rtslots = defs.rtslots;
-			engineobj.clan = defs.clan;
-			console.printf("Weight of %s :> %f",engineobj.displayName,engineobj.weight);
 		}
 		return engineobj;
 	}
 }
+
 class Mechbase_EngineOBJ : Object
 {
 	String displayName;
@@ -139,5 +153,4 @@ class Mechbase_EngineOBJ : Object
 	int gyroslots;
 	int intrinsic_heatsinks;
 	int intrinsic_doubleheatsinks;
-	bool clan;
 }

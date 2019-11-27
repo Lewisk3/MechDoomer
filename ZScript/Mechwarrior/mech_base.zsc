@@ -48,6 +48,7 @@ class MechWarriorBase : DoomPlayer
 	Property CockpitIsModel: modelcockpit;
 	Property SetCockpitHandler: cphandler;
 	Property LegsModel : mech_legs;
+	Property Manufacturer : mechtype;
 	
 	// Clearscope
 	clearscope void sendHudAlert(String str, int c)

@@ -1,0 +1,90 @@
+// LIGHT Engines
+class Engine_LIGHT : Mechbase_Engine 
+{
+	Default
+	{
+		Mechbase_Engine.Criticals 2,4,1,1;
+		Mechbase_Engine.BaseHeatsinks 0.04, 0;
+		Mechbase_Engine.ScalarCValue 949.73;
+	}
+}
+
+class Engine_LIGHT_10 : Engine_LIGHT {} 
+class Engine_LIGHT_15 : Engine_LIGHT {} 
+class Engine_LIGHT_20 : Engine_LIGHT {} 
+class Engine_LIGHT_25 : Engine_LIGHT {} 
+class Engine_LIGHT_30 : Engine_LIGHT {} 
+class Engine_LIGHT_35 : Engine_LIGHT {} 
+class Engine_LIGHT_40 : Engine_LIGHT {} 
+class Engine_LIGHT_45 : Engine_LIGHT {} 
+class Engine_LIGHT_50 : Engine_LIGHT {} 
+class Engine_LIGHT_55 : Engine_LIGHT {} 
+class Engine_LIGHT_60 : Engine_LIGHT {} 
+class Engine_LIGHT_65 : Engine_LIGHT {} 
+class Engine_LIGHT_70 : Engine_LIGHT {} 
+class Engine_LIGHT_75 : Engine_LIGHT {} 
+class Engine_LIGHT_80 : Engine_LIGHT {} 
+class Engine_LIGHT_85 : Engine_LIGHT {} 
+class Engine_LIGHT_90 : Engine_LIGHT {} 
+class Engine_LIGHT_95 : Engine_LIGHT {} 
+class Engine_LIGHT_100 : Engine_LIGHT {} 
+class Engine_LIGHT_105 : Engine_LIGHT {} 
+class Engine_LIGHT_110 : Engine_LIGHT {} 
+class Engine_LIGHT_115 : Engine_LIGHT {} 
+class Engine_LIGHT_120 : Engine_LIGHT {} 
+class Engine_LIGHT_125 : Engine_LIGHT {} 
+class Engine_LIGHT_130 : Engine_LIGHT {} 
+class Engine_LIGHT_135 : Engine_LIGHT {} 
+class Engine_LIGHT_140 : Engine_LIGHT {} 
+class Engine_LIGHT_145 : Engine_LIGHT {} 
+class Engine_LIGHT_150 : Engine_LIGHT {} 
+class Engine_LIGHT_155 : Engine_LIGHT {} 
+class Engine_LIGHT_160 : Engine_LIGHT {} 
+class Engine_LIGHT_165 : Engine_LIGHT {} 
+class Engine_LIGHT_170 : Engine_LIGHT {} 
+class Engine_LIGHT_175 : Engine_LIGHT {} 
+class Engine_LIGHT_180 : Engine_LIGHT {} 
+class Engine_LIGHT_185 : Engine_LIGHT {} 
+class Engine_LIGHT_190 : Engine_LIGHT {} 
+class Engine_LIGHT_195 : Engine_LIGHT {} 
+class Engine_LIGHT_200 : Engine_LIGHT {} 
+class Engine_LIGHT_205 : Engine_LIGHT {} 
+class Engine_LIGHT_210 : Engine_LIGHT {} 
+class Engine_LIGHT_215 : Engine_LIGHT {} 
+class Engine_LIGHT_220 : Engine_LIGHT {} 
+class Engine_LIGHT_225 : Engine_LIGHT {} 
+class Engine_LIGHT_230 : Engine_LIGHT {} 
+class Engine_LIGHT_235 : Engine_LIGHT {} 
+class Engine_LIGHT_240 : Engine_LIGHT {} 
+class Engine_LIGHT_245 : Engine_LIGHT {} 
+class Engine_LIGHT_250 : Engine_LIGHT {} 
+class Engine_LIGHT_255 : Engine_LIGHT {} 
+class Engine_LIGHT_260 : Engine_LIGHT {} 
+class Engine_LIGHT_265 : Engine_LIGHT {} 
+class Engine_LIGHT_270 : Engine_LIGHT {} 
+class Engine_LIGHT_275 : Engine_LIGHT {} 
+class Engine_LIGHT_280 : Engine_LIGHT {} 
+class Engine_LIGHT_285 : Engine_LIGHT {} 
+class Engine_LIGHT_290 : Engine_LIGHT {} 
+class Engine_LIGHT_295 : Engine_LIGHT {} 
+class Engine_LIGHT_300 : Engine_LIGHT {} 
+class Engine_LIGHT_305 : Engine_LIGHT {} 
+class Engine_LIGHT_310 : Engine_LIGHT {} 
+class Engine_LIGHT_315 : Engine_LIGHT {} 
+class Engine_LIGHT_320 : Engine_LIGHT {} 
+class Engine_LIGHT_325 : Engine_LIGHT {} 
+class Engine_LIGHT_330 : Engine_LIGHT {} 
+class Engine_LIGHT_335 : Engine_LIGHT {} 
+class Engine_LIGHT_340 : Engine_LIGHT {} 
+class Engine_LIGHT_345 : Engine_LIGHT {} 
+class Engine_LIGHT_350 : Engine_LIGHT {} 
+class Engine_LIGHT_355 : Engine_LIGHT {} 
+class Engine_LIGHT_360 : Engine_LIGHT {} 
+class Engine_LIGHT_365 : Engine_LIGHT {} 
+class Engine_LIGHT_370 : Engine_LIGHT {} 
+class Engine_LIGHT_375 : Engine_LIGHT {} 
+class Engine_LIGHT_380 : Engine_LIGHT {} 
+class Engine_LIGHT_385 : Engine_LIGHT {} 
+class Engine_LIGHT_390 : Engine_LIGHT {} 
+class Engine_LIGHT_395 : Engine_LIGHT {} 
+class Engine_LIGHT_400 : Engine_LIGHT {} 

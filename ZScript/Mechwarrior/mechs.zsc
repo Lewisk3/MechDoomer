@@ -10,7 +10,8 @@ class MechWarrior : MechWarriorBase
 		Player.JumpZ 0;
 		Player.SoundClass "MechWarrior";
 
-		MechWarriorBase.Engine "Engine_STD300";
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Innersphere;
+		MechWarriorBase.Engine "Engine_STD_300";
 		MechWarriorBase.SetCockpitHandler "CockpitHandler";
 		MechWarriorBase.heatEff 0.02;
 		MechWarriorBase.HudCockpit "CROW";
@@ -89,6 +90,92 @@ class MechWarrior : MechWarriorBase
 	
 */
 
+// 3D Mechs
+class Stormcrow : MechWarrior
+{
+	Default
+	{
+		Mass 2200;
+		Player.DisplayName "Stormcrow Prime";
+		Player.ViewHeight 95;
+		
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.LegSpeed 1.6;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.Weight 55;
+		MechWarriorBase.Engine "ENGINE_XL_330";
+		MechWarriorBase.HudCockpit "CROWHUD";
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_Stormcrow";
+		MechWarriorBase.LegsModel "Legs_Stormcrow";
+		MechWarriorBase.HudMech "SCRWICO";
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 9,26,32,32,18,18,26,26, 3,16,13,13,9,9,13,13 );
+		hardpoints.setupLocations( (0,20), (0,-18), (30,-11), (-30,-11), (90,-11), (-90,-11), (80,-70), (-80,-70) );
+		hardpoints.setupSlots();
+		equipStruct("DoubleHeatsink",hardpoints.ct,2);
+		equipStruct("DoubleHeatsink",hardpoints.la,1);
+		equipStruct("DoubleHeatsink",hardpoints.ra,1);
+		equipWeapon("ERMediumLaser",hardpoints.la,1);
+		equipWeapon("ERMediumLaser",hardpoints.ct,1);
+		equipWeapon("ERMediumLaser",hardpoints.ra,1);
+		equipWeapon("ERLargeLaser",hardpoints.la,2);
+		equipWeapon("ERLargeLaser",hardpoints.ra,2);
+	}
+
+}
+
+class Timberwolf : MechWarrior
+{
+	Default
+	{
+		Mass 3000;
+		Player.DisplayName "Timberwolf Prime";
+		Player.ViewHeight 90;
+		
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.LegSpeed 1.5;
+		MechWarriorBase.TwistRange 80;
+		MechWarriorBase.Weight 75;
+		MechWarriorBase.PitchRange 40,20;
+		MechWarriorBase.Engine "ENGINE_XL_375";
+		MechWarriorBase.HudCockpit "WOLFHUD";
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_Timberwolf";
+		MechWarriorBase.LegsModel "Legs_Timberwolf";
+		MechWarriorBase.HudMech "TWLFICO";
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 9,46,32,32,24,24,32,32, 3,24,16,16,12,12,16,16 );
+		hardpoints.setupLocations( (0,20), (0,-38), (75,18), (-75,18), (90,-20), (-90,-20), (80,-85), (-80,-85) );
+		hardpoints.setupSlots();
+		equipWeapon("ERLargeLaser",hardpoints.la,1);
+		equipWeapon("ERLargeLaser",hardpoints.ra,1);
+		equipWeapon("ERMediumLaser",hardpoints.la,2);
+		equipWeapon("ERMediumLaser",hardpoints.ra,2);
+		equipWeapon("MediumPulseLaser",hardpoints.hd,2);
+		equipWeapon("LRM20",hardpoints.lt,3);
+		equipWeapon("LRM20",hardpoints.rt,3);
+		equipWeapon("MachineGun",hardpoints.ct,4);
+		equipWeapon("MachineGun",hardpoints.ct,4);
+		giveWeaponAmmo("LRM_Ammo",200);
+		
+		equipStruct("DoubleHeatsink",hardpoints.ct,1);
+		equipStruct("DoubleHeatsink",hardpoints.lt,1);
+		equipStruct("DoubleHeatsink",hardpoints.rt,1);
+		equipStruct("DoubleHeatsink",hardpoints.la,2);
+		equipStruct("DoubleHeatsink",hardpoints.ra,2);
+	}
+
+}
+
+
+// 2D Mechs
 class BattleArmor : MechWarrior
 {
 	Default
@@ -100,7 +187,7 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 5;
-		MechWarriorBase.Engine "Engine_STD200";
+		MechWarriorBase.Engine "Engine_STD_50";
 		MechWarriorBase.DefaultMovement true;
 		MechWarriorBase.OverTonnage true;
 		Player.DisplayName "BattleArmor (Traditional Doom Movement)";
@@ -159,84 +246,6 @@ class Warhammer : MechWarrior
 
 }
 
-
-class Stormcrow : MechWarrior
-{
-	Default
-	{
-		Health 600;
-		Mass 2200;
-		MechWarriorBase.LegSpeed 1.6;
-		//MechWarriorBase.MoveSpeed 81;
-		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Stormcrow";
-		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.LegsModel "Legs_Stormcrow";
-		MechWarriorBase.HudCockpit "CROWHUD";
-		MechWarriorBase.HudMech "SCRWICO";
-		MechWarriorBase.Weight 55;
-		Player.DisplayName "Stormcrow Prime";
-		Player.ViewHeight 95;
-	}
-		
-	override void SetupWeapons()
-	{
-		hardpoints.setupVitals( 9,26,32,32,18,18,26,26, 3,16,13,13,9,9,13,13 );
-		hardpoints.setupLocations( (0,20), (0,-18), (30,-11), (-30,-11), (90,-11), (-90,-11), (80,-70), (-80,-70) );
-		hardpoints.setupSlots();
-		equipStruct("Heatsink",hardpoints.ct,3);
-		equipStruct("Heatsink",hardpoints.lt,4);
-		equipStruct("Heatsink",hardpoints.rt,4);
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
-		equipWeapon("ERMediumLaser",hardpoints.ct,1);
-		equipWeapon("ERMediumLaser",hardpoints.ra,1);
-		equipWeapon("ERLargeLaser",hardpoints.la,2);
-		equipWeapon("ERLargeLaser",hardpoints.ra,2);
-	}
-
-}
-
-class Timberwolf : MechWarrior
-{
-	Default
-	{
-		Mass 3000;
-		MechWarriorBase.LegSpeed 1.5;
-		//MechWarriorBase.MoveSpeed 81; 
-		MechWarriorBase.TwistRange 80;
-		MechWarriorBase.HudCockpit "WOLFHUD";
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Timberwolf";
-		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.LegsModel "Legs_Timberwolf";
-		MechWarriorBase.HudMech "TWLFICO";
-		MechWarriorBase.Weight 75;
-		MechWarriorBase.PitchRange 40,20;
-		Player.DisplayName "Timberwolf Prime";
-		Player.ViewHeight 90;
-	}
-		
-	override void SetupWeapons()
-	{
-		hardpoints.setupVitals( 9,46,32,32,24,24,32,32, 3,24,16,16,12,12,16,16 );
-		hardpoints.setupLocations( (0,20), (0,-38), (75,18), (-75,18), (90,-20), (-90,-20), (80,-85), (-80,-85) );
-		hardpoints.setupSlots();
-		equipStruct("DoubleHeatsink",hardpoints.ct,1);
-		equipStruct("DoubleHeatsink",hardpoints.lt,2);
-		equipStruct("DoubleHeatsink",hardpoints.rt,2);
-		equipStruct("JumpJet",hardpoints.ll,2);
-		equipStruct("JumpJet",hardpoints.rl,2);
-		giveWeaponAmmo("LRM_Ammo",200);
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
-		equipWeapon("ERMediumLaser",hardpoints.ra,1);
-		equipWeapon("ERLargeLaser",hardpoints.la,2);
-		equipWeapon("ERLargeLaser",hardpoints.ra,2);
-		equipWeapon("LRM20",hardpoints.lt,3);
-		equipWeapon("LRM20",hardpoints.rt,3);
-		equipWeapon("Machinegun",hardpoints.ct,4);
-		equipWeapon("Machinegun",hardpoints.ct,4);
-	}
-
-}
 
 class Jenner : MechWarrior
 {

@@ -3,8 +3,15 @@
 	\*************************/
 extend class MechWarriorBase;
 
+enum MechTypes
+{
+	MechType_Clan,
+	MechType_Innersphere
+}
+
 // Properties
 float baseHeatEfficiency;
+uint mechtype;
 
 // Vars
 MechCamera dronecam;

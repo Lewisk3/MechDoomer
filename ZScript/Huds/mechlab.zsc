@@ -315,18 +315,22 @@ class Mechlab_Menu : GenericMenu
 		String mechston = (mechplr.mech_tonnage .. "");
 		String heateff = mechplr.HeatEfficiency .. "";
 		String maxspd = mechplr.MoveSpeedKPH .. "";
+		string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
+
 		if(mechplr.overtonnage) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
 		
 		maxspd.truncate(maxspd.Length()-4);
 		heateff.truncate(heateff.Length()-3);
 		weapston.truncate(weapston.length()-4);
 		mechston.truncate(mechston.length()-4);
+		enginetype.truncate(enginetype.Length()-7);
 		vector2 detailpos = (330,400);
 		H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
 		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
-		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+40));
-		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+60));
-		H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+80));
+		H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+40));
+		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+60));
+		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+80));
+		H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+100));
 		
 		if(mstats.left_btn && checkCollision(mouse,dequipbtn))
 		{
@@ -695,10 +699,12 @@ class Mechlab_Menu : GenericMenu
 			maxinternal += mechplr.hardpoints.rl.max_internal;
 		}
 		
+		string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
 		string armorpercent = (curarmor/maxarmor * 100).."";
 		string internalpercent = (curinternal/maxinternal * 100).."";
 		armorpercent.truncate(armorpercent.length()-6);
 		internalpercent.truncate(internalpercent.length()-6);
+		enginetype.truncate(enginetype.Length()-7);
 		
 		string armorstr = "";
 		string internalstr = "";
@@ -721,10 +727,11 @@ class Mechlab_Menu : GenericMenu
 		
 		H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
 		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
-		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+40));
-		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+60));
-		H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+100));
-		H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+120));
+		H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+40));
+		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+60));
+		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+80));
+		H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+120));
+		H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+140));
 		
 		float cbills_remain = mechplr.inv_context.money_cbills-repair_cost;
 		if(cbills_remain < 0) cbills_remain = 0;
