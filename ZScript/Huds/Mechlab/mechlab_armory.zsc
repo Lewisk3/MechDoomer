@@ -1,0 +1,187 @@
+extend class Mechlab_Menu;
+
+// Variables
+int autil_selected; 	// Selected armor utility
+int astat_selected;		// Selected armor status (internal, armor)
+
+// Process
+bool ValidateHardpoint(int ind)
+{
+	if(ind == -1) return true; // No such hardpoint.
+	MechHardpoint hp = mechplr.hardpoints.FindByIndex(ind);
+	return (hp.internalhp > 0);
+}
+
+// Graphics
+void DrawArmorUtilites(int sx, int sy)
+{
+	int offsy = 0;
+	for(let w = mechplr.Inv; w; w = w.Inv)
+	{
+		let armorutil = ArmoryUtility(w);
+		if(armorutil)
+		{
+			Rect checkmouse;
+			string itemstr = armorutil.getTag() .. " x" .. mechplr.countinv(armorutil.getClassName());
+			initRect(checkmouse,sx,sy+offsy+20,14*itemstr.length(),10);
+			if( checkCollision(mouse, checkmouse) && mstats.left_btn ) autil_item = armorutil;
+			uint fcr = Font.CR_WHITE;
+			if(armorutil == autil_item) fcr = Font.CR_GREEN;
+			H_DrawString(itemstr, (sx,sy+offsy-15), 0, fcr);
+			offsy += 15;
+		}
+	}
+}
+void drawArmoryInfo()
+{
+	// Draw Utils
+	DrawArmorUtilites(1220,170);
+	
+	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
+	String mechston = (mechplr.mech_tonnage .. "");
+	String heateff = mechplr.HeatEfficiency .. "";
+	String maxspd = mechplr.MoveSpeedKPH .. "";
+	maxspd.truncate(maxspd.Length()-4);
+	heateff.truncate(heateff.Length()-3);
+	weapston.truncate(weapston.length()-4);
+	mechston.truncate(mechston.length()-4);
+	vector2 detailpos = (330,280);
+	vector2 cbillpos  = (330,150);
+	vector2 statuspos = (755,185);
+	
+	// This is surrounded in curly braces so it can be collapsed and temporarily
+	// removed from view.
+	float curarmor, maxarmor, curinternal, maxinternal;
+	{
+		curarmor += mechplr.hardpoints.hd.armor;
+		curarmor += mechplr.hardpoints.ct.armor;
+		curarmor += mechplr.hardpoints.lt.armor;
+		curarmor += mechplr.hardpoints.rt.armor;
+		curarmor += mechplr.hardpoints.la.armor;
+		curarmor += mechplr.hardpoints.ra.armor;
+		curarmor += mechplr.hardpoints.ll.armor;
+		curarmor += mechplr.hardpoints.rl.armor;
+		
+		maxarmor += mechplr.hardpoints.hd.max_armor;
+		maxarmor += mechplr.hardpoints.ct.max_armor;
+		maxarmor += mechplr.hardpoints.lt.max_armor;
+		maxarmor += mechplr.hardpoints.rt.max_armor;
+		maxarmor += mechplr.hardpoints.la.max_armor;
+		maxarmor += mechplr.hardpoints.ra.max_armor;
+		maxarmor += mechplr.hardpoints.ll.max_armor;
+		maxarmor += mechplr.hardpoints.rl.max_armor;
+		
+		curinternal += mechplr.hardpoints.hd.internalhp;
+		curinternal += mechplr.hardpoints.ct.internalhp;
+		curinternal += mechplr.hardpoints.lt.internalhp;
+		curinternal += mechplr.hardpoints.rt.internalhp;
+		curinternal += mechplr.hardpoints.la.internalhp;
+		curinternal += mechplr.hardpoints.ra.internalhp;
+		curinternal += mechplr.hardpoints.ll.internalhp;
+		curinternal += mechplr.hardpoints.rl.internalhp;
+		
+		maxinternal += mechplr.hardpoints.hd.max_internal;
+		maxinternal += mechplr.hardpoints.ct.max_internal;
+		maxinternal += mechplr.hardpoints.lt.max_internal;
+		maxinternal += mechplr.hardpoints.rt.max_internal;
+		maxinternal += mechplr.hardpoints.la.max_internal;
+		maxinternal += mechplr.hardpoints.ra.max_internal;
+		maxinternal += mechplr.hardpoints.ll.max_internal;
+		maxinternal += mechplr.hardpoints.rl.max_internal;
+	}
+	
+	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
+	string armorpercent = (curarmor/maxarmor * 100).."";
+	string internalpercent = (curinternal/maxinternal * 100).."";
+	armorpercent.truncate(armorpercent.length()-6);
+	internalpercent.truncate(internalpercent.length()-6);
+	enginetype.truncate(enginetype.Length()-7);
+	
+	string armorstr = "";
+	string internalstr = "";
+	uint InternalsFont = Font.CR_PURPLE;
+	uint ArmorFont = Font.CR_PURPLE;
+	int repair_cost = 0;
+	MechHardpoint hp;
+	
+	if(hardpoint >= 0)
+	{
+		hp = mechplr.hardpoints.FindByIndex(hardpoint);
+		armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor);
+		internalstr = "INTERNALS: ".. int(hp.internalhp) .. "/" .. int(hp.max_internal);
+		ArmorFont = (hp.armor < hp.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
+		InternalsFont = (hp.internalhp < hp.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
+		if( astat_selected ==  0) ArmorFont = Font.CR_GREEN;
+		if( astat_selected ==  1) InternalsFont = Font.CR_GREEN;
+		if( astat_selected != -1) repair_cost = mechplr.CalculateHardpointRepairCost(hp,astat_selected);
+	}
+	
+	H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
+	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
+	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+40));
+	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+60));
+	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+80));
+	H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+120));
+	H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+140));
+	
+	float cbills_remain = mechplr.inv_context.money_cbills-repair_cost;
+	if(cbills_remain < 0) cbills_remain = 0;
+	
+	H_DrawString("Funds: ".. mechplr.inv_context.money_cbills, cbillpos);
+	H_DrawString("Price: ".. repair_cost, (cbillpos.x, cbillpos.y+20) );
+	H_DrawString("Bal: ".. int(cbills_remain), (cbillpos.x, cbillpos.y+40) );
+	
+	if( mstats.left_btn )
+	{
+		// Armor status selector
+		if(hardpoint >= 0)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				Rect checkmouse;
+				string compare = !i ? armorstr : internalstr;
+				initRect(checkmouse,statuspos.x,statuspos.y+(i*20)+40,14*compare.length(),10);
+				if( checkCollision(mouse, checkmouse) ) astat_selected = i;
+			}
+			
+			if(checkCollision(mouse,autilbtn) && autil_item)
+			{
+				H_DrawTexture(tBtn_Highlight,(1068,368),0,(2.0,0.7));
+				MechDoomerEvents.SendNetworkEvent("autil_useitem:" .. autil_item.getClassName(),hardpoint);
+				mstats.left_btn = false;
+			}
+			
+			if( checkCollision(mouse,repairbtn) )
+			{
+				H_DrawTexture(tBtn_Highlight,(811,368),0,(1.1,0.7));
+				mstats.left_btn = false;
+				
+				if(astat_selected != -1)
+				{
+					if(!repair_cost)  
+					{
+						mechplr.sendHudAlert("Nothing to repair.",Font.CR_ORANGE);	
+						return;
+					}
+					MechDoomerEvents.SendNetworkEvent("repair_hardpoint", hardpoint, astat_selected);
+				}
+				else
+					mechplr.sendHudAlert("You must select a component to repair!",Font.CR_ORANGE);	
+			}
+		}
+		
+		if(checkCollision(mouse,rHD)) {hardpoint = 0; astat_selected=-1;}
+		if(checkCollision(mouse,rCT)) {hardpoint = 1; astat_selected=-1;}
+		if(checkCollision(mouse,rLT)) {hardpoint = 2; astat_selected=-1;}
+		if(checkCollision(mouse,rRT)) {hardpoint = 3; astat_selected=-1;}
+		if(checkCollision(mouse,rLA)) {hardpoint = 4; astat_selected=-1;}
+		if(checkCollision(mouse,rRA)) {hardpoint = 5; astat_selected=-1;}
+		if(checkCollision(mouse,rLL)) {hardpoint = 6; astat_selected=-1;}
+		if(checkCollision(mouse,rRL)) {hardpoint = 7; astat_selected=-1;}
+	}
+	
+	// Draw hardpoint vitals
+	H_DrawString(armorstr, statuspos,0,ArmorFont);
+	H_DrawString(internalstr, (statuspos.x,statuspos.y+20), 0, InternalsFont);
+}
+	

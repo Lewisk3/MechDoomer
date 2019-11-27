@@ -656,6 +656,10 @@ class PPCBall : Mechbase_Actor
 				setDamage(0);
 			}
 		}
+		else 
+		{
+			A_SetRenderStyle(1.0,STYLE_NORMAL);
+		}
 		super.tick();
 	}
 

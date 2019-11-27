@@ -1,0 +1,139 @@
+extend class Mechlab_Menu;
+
+// Scalar functions (All H_ function auto adjust to the screen resolution based on 1080p coords.)	
+vector2, vector2 GetRelativeScale(vector2 pos, vector2 scale=(1,1), float cwidth=0, float cheight=0)
+{
+	cwidth = !cwidth ? defwidth : cwidth; 
+	cheight = !cheight ? defheight : cheight; 
+	vector2 hscale = statusbar.GetHUDScale();
+	hscale = ( int(hscale.x), int(hscale.x) ); // Force even scalar.
+	float rwidth  = (Screen.getWidth()  / float(cwidth) ) / hscale.x;
+	float rheight = (Screen.getHeight() / float(cheight)) / hscale.y;
+	vector2 rscale = (scale.x * rwidth, scale.y * rheight);
+	vector2 rpos = ( (pos.x)*rwidth, (pos.y)*rheight );
+	
+	return rpos, rscale;
+}
+void H_DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1), float alpha=1)
+{
+	vector2 rpos, rscale;
+	[rpos, rscale] = GetRelativeScale(pos, scale);
+	statusbar.DrawTexture(texture, rpos, flags, alpha, (-1, -1), rscale);
+}
+void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=1)
+{
+	vector2 rpos, rscale;
+	[rpos, rscale] = GetRelativeScale(pos);
+	statusbar.DrawString(mHUDFont, str, rpos, flags, translation, alpha);
+}
+void H_DrawLine(int x0, int y0, int x1, int y1, Color color)
+{
+	vector2 pos0, pos1, _;
+	[pos0, _] = GetRelativeScale( (x0,y0) );
+	[pos1, _] = GetRelativeScale( (x1,y1) );
+	Screen.DrawLine(pos0.x, pos0.y, pos1.x, pos1.y, color);
+}
+
+// Rect utilities
+vector2, vector2 GetActualRectPos(Rect r)
+{
+	vector2 pos0, pos1, _;
+	[pos0, _] = GetRelativeScale( (r.x,r.y) );
+	[pos1, _] = GetRelativeScale( (r.w+r.x,r.h+r.y) );
+	return pos0, pos1;
+}
+void initRect(Rect r, double x, double y, double w, double h)
+{
+	r.x = x;
+	r.y = y;
+	r.w = w;
+	r.h = h;
+}
+void drawRect( Rect r, Color c, bool absolute=false )
+{
+	if(!absolute)
+	{
+		H_DrawLine(r.x,     r.y,     r.x+r.w, r.y+r.h, c);  //: \
+		H_DrawLine(r.x,     r.y,     r.x+r.w, r.y,     c);  //: -
+		H_DrawLine(r.x,     r.y+r.h, r.x+r.w, r.y+r.h, c);  //: _
+		H_DrawLine(r.x,     r.y,     r.x,     r.y+r.h, c);  //: |
+		H_DrawLine(r.x+r.w, r.y,     r.x+r.w, r.y+r.h, c);  //:  |
+	}
+	else
+	{
+		Screen.DrawLine(r.x,     r.y,     r.x+r.w, r.y+r.h, c);  //: \
+		Screen.DrawLine(r.x,     r.y,     r.x+r.w, r.y,     c);  //: -
+		Screen.DrawLine(r.x,     r.y+r.h, r.x+r.w, r.y+r.h, c);  //: _
+		Screen.DrawLine(r.x,     r.y,     r.x,     r.y+r.h, c);  //: |
+		Screen.DrawLine(r.x+r.w, r.y,     r.x+r.w, r.y+r.h, c);  //:  |
+	}
+}
+bool checkCollision( Rect one, Rect two )
+{
+	vector2 a0, a1, b0, b1;
+	a0 = (one.x, one.y);
+	a1 = (one.x+one.w, one.y+one.h);
+	[b0, b1] = GetActualRectPos(two);
+	
+	bool collision;
+		
+	collision = (a0.x < b1.x && a1.x > b0.x && a0.y < b1.y && a1.y > b0.y);
+	
+	Color c = collision ? Color(255,255,0,0) : debug_color;
+	
+	//drawRect(one, c, true);
+	//drawRect(two, c);
+
+	return collision;
+}
+
+// Controls
+override bool OnUIEvent(UiEvent ev)
+{
+	int keyscn = (ev.Type == UIEvent.Type_KeyDown) ? ev.KeyChar-65 : 0;
+	if(keyscn > 0){ if(MechDoomerEvents.checkBoundKey(keyscn,"Mech_LoadoutUI")) Close(); }
+	
+	if(ev.Type == UIEvent.Type_MouseMove)
+	{
+		mpos.x = ev.MouseX-5;
+		mpos.y = ev.MouseY-5;
+		mouse.x = mpos.x;
+		mouse.y = mpos.y;
+	}
+	
+	if(ev.Type == UIEvent.Type_RButtonDown) mstats.right_btn = true;
+	if(ev.Type == UIEvent.Type_RButtonUp  ) 
+	{
+		if(mstats.right_btn) mstats.right_pressed = true;
+		mstats.right_btn = false;
+	}
+	if(ev.Type == UIEvent.Type_LButtonDown) mstats.left_btn  = true;
+	if(ev.Type == UIEvent.Type_LButtonUp  ) 
+	{
+		if(mstats.left_btn) mstats.left_pressed  = true;
+		mstats.left_btn = false;
+	}
+	if(ev.Type == UIEvent.Type_WheelUp  ) mstats.scroll = -1;
+	if(ev.Type == UIEvent.Type_WheelDown) mstats.scroll = 1;
+	
+	return false;
+}
+override bool MenuEvent (int mkey, bool fromcontroller)
+{
+	switch (mkey)
+	{
+	case MKEY_Back:
+		Close();
+		return true;
+	}
+	return false;
+}
+
+// Misc
+void HUD_ChangePageRelative(int offs)
+{
+	mstats.left_btn = false;
+	mstats.right_btn = false;
+	hud_page += offs;
+	page_init = false;
+}
