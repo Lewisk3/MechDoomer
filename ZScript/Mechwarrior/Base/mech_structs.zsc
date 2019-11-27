@@ -1,6 +1,12 @@
 	/*************************\
 	|	 Structure Systems    |
 	\*************************/
+class FoundStruct
+{
+	mw_InvStruct obj;
+	int realindex;
+}
+	
 extend class MechwarriorBase;
 
 // Engines
@@ -31,7 +37,7 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	
 	equipStruct("StructEngine",hardpoints.lt,ltslots);
 	equipStruct("StructEngine",hardpoints.rt,rtslots);
-	equipStruct("StructEngine",hardpoints.ct,gyroslots);	
+	equipStruct("StructEngine",hardpoints.ct,ctslots);	
 	equipStruct("StructGyro",hardpoints.ct,gyroslots);
 	setupSpeedKPH(EngineGetKPH());
 	inv_context.weapons_tonnage += weight;
@@ -50,8 +56,63 @@ void DequipEngine()
 {
 }
 
+// Find
+mw_InvStruct FindHealthyStruct(String type, MechHardpoint pos)
+{
+	type.ToLower();
+	if(!inv_context.mechstructs.Size()) inv_context.mechstructs.Clear();
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		if(inv_context.mechstructs[i].hardpoint != pos) continue;
+		if(inv_context.mechstructs[i].broken) continue;
+		String cname = inv_context.mechstructs[i].Tag;
+		cname.ToLower();
+		
+		if(cname == type) return inv_context.mechstructs[i];
+	}
+	return NULL;
+}
+bool FindStructs(String type, MechHardpoint pos, bool healthy, in out Array<FoundStruct> objs)
+{
+	objs.Clear();
+	type.ToLower();
+	if(!inv_context.mechstructs.Size()) inv_context.mechstructs.Clear();
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		if(inv_context.mechstructs[i].hardpoint != pos) continue;
+		if(healthy && inv_context.mechstructs[i].broken) continue;
+		String cname = inv_context.mechstructs[i].Tag;
+		cname.ToLower();
+		
+		if(cname == type) 
+		{
+			FoundStruct fstr = new("FoundStruct");
+			fstr.obj = inv_context.mechstructs[i];
+			fstr.realindex = i;
+			objs.push(fstr);
+		}
+	}
+	return (objs.Size() > 0);
+}
 
 // Get
+bool getStructsIn(MechHardpoint pos, in out Array<FoundStruct> objs)
+{
+	objs.Clear();
+	if(!inv_context.mechstructs.Size()) inv_context.mechstructs.Clear();
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		if(inv_context.mechstructs[i].hardpoint != pos) continue;
+		String cname = inv_context.mechstructs[i].Tag;
+		cname.ToLower();
+		
+		FoundStruct fstr = new("FoundStruct");
+		fstr.obj = inv_context.mechstructs[i];
+		fstr.realindex = i;
+		objs.push(fstr);
+	}
+	return (objs.Size() > 0);
+}
 int countStruct(String type)
 {
 	int count = 0;
@@ -65,6 +126,25 @@ int countStruct(String type)
 		if(cname == type) count++;
 	}
 	return count;
+}
+int countStructDamaged(String type, bool destroyed=false)
+{
+	int dmgcount = 0;
+	type.ToLower();
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		String cname = inv_context.mechstructs[i].Tag;
+		cname.ToLower();
+		
+		if(cname == type) 
+		{
+			if(destroyed && inv_context.mechstructs[i].broken) 
+				dmgcount++;
+			else if(inv_context.mechstructs[i].dmg_taken > 0)
+				dmgcount++;
+		}
+	}
+	return dmgcount;
 }
 
 // Equip or Add

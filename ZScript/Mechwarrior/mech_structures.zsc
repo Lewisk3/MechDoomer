@@ -54,10 +54,13 @@ class StructEngine : Mechbase_Utility
 }
 class StructGyro : Mechbase_Utility
 {
+	float power;
+	Property Effectiveness : power;
 	Default
 	{	
 		Mechbase_Utility.displayName "Gyro";
 		Mechbase_Utility.Criticals 1;
+		StructGyro.Effectiveness 0.28;
 	}
 }
 class StructLifesupport : Mechbase_Utility

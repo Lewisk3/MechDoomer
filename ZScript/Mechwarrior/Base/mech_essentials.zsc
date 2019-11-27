@@ -43,7 +43,7 @@ bool setupInventory()
 		{
 			console.printf("Pilot Error -> Failed to equip mech's engine, too heavy or not enough free slots!");
 		}
-		setupCriticals();
+		setupCriticals();		
 	}
 	return inv_context==NULL;
 }

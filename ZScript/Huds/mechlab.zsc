@@ -534,7 +534,7 @@ class Mechlab_Menu : GenericMenu
 					{	
 						Rect checkmouse;
 						initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+3),15);
-						if(!def_ut.moveable)fcr = Font.CR_DARKRED;
+						if(mechplr.inv_context.mechstructs[i].broken) fcr = Font.CR_RED;
 						H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
 						offs.y += 20;
 						offs.x += 23;
@@ -699,16 +699,25 @@ class Mechlab_Menu : GenericMenu
 		string internalpercent = (curinternal/maxinternal * 100).."";
 		armorpercent.truncate(armorpercent.length()-6);
 		internalpercent.truncate(internalpercent.length()-6);
-		MechHardpoint hp = mechplr.hardpoints.FindByIndex(hardpoint);
-		string armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor);
-		string internalstr = "INTERNALS: ".. int(hp.internalhp) .. "/" .. int(hp.max_internal);
-		uint ArmorFont = (hp.armor < hp.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
-		uint InternalsFont = (hp.internalhp < hp.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
-		if(astat_selected == 0) ArmorFont = Font.CR_GREEN;
-		if(astat_selected == 1) InternalsFont = Font.CR_GREEN;
 		
+		string armorstr = "";
+		string internalstr = "";
+		uint InternalsFont = Font.CR_PURPLE;
+		uint ArmorFont = Font.CR_PURPLE;
 		int repair_cost = 0;
-		if( astat_selected != -1) repair_cost = mechplr.CalculateHardpointRepairCost(hp,astat_selected);
+		MechHardpoint hp;
+		
+		if(hardpoint >= 0)
+		{
+			hp = mechplr.hardpoints.FindByIndex(hardpoint);
+			armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor);
+			internalstr = "INTERNALS: ".. int(hp.internalhp) .. "/" .. int(hp.max_internal);
+			ArmorFont = (hp.armor < hp.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
+			InternalsFont = (hp.internalhp < hp.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
+			if( astat_selected ==  0) ArmorFont = Font.CR_GREEN;
+			if( astat_selected ==  1) InternalsFont = Font.CR_GREEN;
+			if( astat_selected != -1) repair_cost = mechplr.CalculateHardpointRepairCost(hp,astat_selected);
+		}
 		
 		H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
 		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
@@ -774,8 +783,6 @@ class Mechlab_Menu : GenericMenu
 		}
 		
 		// Draw hardpoint vitals
-		if(hardpoint < 0) return;
-		
 		H_DrawString(armorstr, statuspos,0,ArmorFont);
 		H_DrawString(internalstr, (statuspos.x,statuspos.y+20), 0, InternalsFont);
 	}

@@ -7,6 +7,8 @@ class mw_InvStruct
 {
 	string Tag;
 	MechHardpoint hardpoint;
+	bool broken;
+	int dmg_taken;
 }
 class mw_InvInfo : Inventory
 {

@@ -98,7 +98,8 @@ class MechLegsBase : Actor
 		return ( 
 			 mechowner && !mechowner.checkVoodoo() && !mechowner.mech_shutdown && 
 		    (mechowner.player && mechowner.player.onground) && 
-			(mechowner.vel.xy.length() >= 0.08 || mechowner.LegVel) 
+			(mechowner.vel.xy.length() >= 0.08 || mechowner.LegVel) && 
+			!mechowner.isdead
 		);
 	}
 	bool checkStepping(bool idle=false)

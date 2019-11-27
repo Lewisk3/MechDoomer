@@ -59,6 +59,9 @@ Mech/Betty/LeftLeg BETTY_LL
 Mech/Betty/RightLeg BETTY_RL
 Mech/Betty/Heatsink HEATSINK
 Mech/Betty/WeaponDestroyed WDESTRYD
+Mech/Betty/Engine ENGINE
+Mech/Betty/Gyro GYRO
+Mech/Betty/Hip HIP
 
 // Unused betty
 Mech/Betty/NoAmmo AMMODEPL

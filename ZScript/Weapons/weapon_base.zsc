@@ -70,6 +70,7 @@ class Mechbase_Weapon : Inventory
 	class<Ammo> ammotype;
 	Sound atksnd;
 	
+	
 	Property DisplayName : displayName;
 	Property DefaultGroup : group;
 	Property WeaponType : weapType;
@@ -85,6 +86,10 @@ class Mechbase_Weapon : Inventory
 	Property WeaponParams : weapDistance, weapSpeed;
 	Property HardslotSize : hardslots;
 	Property Tonnage : weight;
+	
+	// Hardpoint processing
+	int dmg_taken;
+	bool broken;
 	
 	Default
 	{

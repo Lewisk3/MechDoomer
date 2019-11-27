@@ -30,7 +30,23 @@ void RepairHardpointStat(int hindex, int stat)
 void _DoHardpointRepair(MechHardpoint hp, int stats)
 {
 	if(stats == 0) hp.armor = hp.max_armor;
-	if(stats == 1) hp.internalhp = hp.max_internal;	
+	if(stats == 1) 
+	{
+		// Repair structures and weapons.
+		Array<FoundStruct> items;
+		getStructsIn(hp,items);
+		for(int i = 0; i < items.Size(); i++) 
+		{
+			items[i].obj.broken = false;
+			items[i].obj.dmg_taken = 0;
+		}
+		for(let w = Inv; w != null; w = w.Inv)
+		{	
+			let ww = Mechbase_Weapon(w);
+			if(ww && ww.hardpoint == hp) ww.dmg_taken = 0;
+		}
+		hp.internalhp = hp.max_internal;	
+	}
 	sendHudAlert("Hardpoint repaired!",Font.CR_GREEN);
 }
 void ActivateArmorUtility(class<ArmoryUtility> type, int hindex)
@@ -44,7 +60,20 @@ void ActivateArmorUtility(class<ArmoryUtility> type, int hindex)
 }
 
 // Damage System
-void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false, bool crit=false)
+void DamageCritSounds(MechHardpoint hp)
+{
+	A_PlaySound("Mech/Damaged/Critical",3);
+	mechsounds.pushSound("Mech/Betty/CriticalHit");
+	if(hp == hardpoints.lt) mechsounds.pushSound("Mech/Betty/LeftTorso");
+	if(hp == hardpoints.rt) mechsounds.pushSound("Mech/Betty/RightTorso");
+	if(hp == hardpoints.la) mechsounds.pushSound("Mech/Betty/LeftArm");
+	if(hp == hardpoints.ra) mechsounds.pushSound("Mech/Betty/RightArm");
+	if(hp == hardpoints.ll) mechsounds.pushSound("Mech/Betty/LeftLeg");
+	if(hp == hardpoints.rl) mechsounds.pushSound("Mech/Betty/RightLeg");
+	if(hp == hardpoints.ct) mechsounds.pushSound("Mech/Betty/CenterTorso");
+}
+
+void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false)
 {
 	if(hp.armor > 0 && !noarmor) 
 	{
@@ -63,20 +92,15 @@ void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false, bool crit=
 	}
 	else if(hp.internalhp > 0)
 	{
-		if(random(0,20-dmg)==(20-dmg) || crit) 
+		if(random(0,1))
 		{
-			A_PlaySound("Mech/Damaged/Critical",3);
-			mechsounds.pushSound("Mech/Betty/CriticalHit");
-			if(hp == hardpoints.lt) mechsounds.pushSound("Mech/Betty/LeftTorso");
-			if(hp == hardpoints.rt) mechsounds.pushSound("Mech/Betty/RightTorso");
-			if(hp == hardpoints.la) mechsounds.pushSound("Mech/Betty/LeftArm");
-			if(hp == hardpoints.ra) mechsounds.pushSound("Mech/Betty/RightArm");
-			if(hp == hardpoints.ll) mechsounds.pushSound("Mech/Betty/LeftLeg");
-			if(hp == hardpoints.rl) mechsounds.pushSound("Mech/Betty/RightLeg");
-			if(hp == hardpoints.ct) mechsounds.pushSound("Mech/Betty/CenterTorso");
-			if(random(0,1)==1)DestroyHardpointItems(hp,false);
+			if(random(0,1)==1)
+				DamageHardpointWeapons(hp,50*random(1,2));
+			else
+				DamageHardpointStruct(hp,50*random(1,2));
 		}
-		hp.internalhp -= dmg;
+	
+		hp.internalhp -= dmg/2;
 		if(hp.internalhp <= 0) 
 		{
 			hp.internalhp = 0;
@@ -132,6 +156,77 @@ void SpreadHardpointDamage(MechHardpoint hp, float dmg)
 	if(hp == hardpoints.lt) DamageHardpoint(hardpoints.ct,dmg/4);
 	if(hp == hardpoints.rt) DamageHardpoint(hardpoints.ct,dmg/4);
 }
+void DamageHardpointStruct(MechHardpoint hp, int amt=50)
+{
+	Array<FoundStruct> items;
+	getStructsIn(hp,items);
+	if(!items.Size()) return;
+	for(int i = 0; i < items.Size(); i++)
+	{
+		if(items[i].obj.broken) items.delete(i);
+	}
+	if(!items.Size()) return;
+	
+	let item = items[random(0,items.Size()-1)];
+	//console.printf("Struct damage :> %s :: %d",item.obj.Tag,item.obj.dmg_taken);
+	if(!item.obj.broken) item.obj.dmg_taken+=amt;
+	if(item.obj.dmg_taken >= 100) 
+	{
+		item.obj.broken = true;
+		let ut = GetDefaultByType(utilcast(item.obj.Tag));
+		if(ut.moveable)
+		{
+			DamageCritSounds(hp);
+			class<Heatsink> hs = item.obj.Tag;
+			if(hs) 
+			{
+				mechsounds.pushSound("Mech/Betty/Heatsink");
+				mechsounds.pushSound("Mech/Betty/Destroyed");
+			}
+			hp.adjustHardslots(-ut.hardslots);
+			inv_context.weapons_tonnage -= ut.weight;
+			inv_context.mechstructs.delete(item.realindex);
+		}
+		else 
+		{
+			A_PlaySound("Mech/Damaged/Critical",3);
+			mechsounds.pushSound("Mech/Betty/CriticalHit");
+			
+			class<StructGyro> gyro = item.obj.Tag;
+			class<StructEngine> engine = item.obj.Tag;
+			class<StructHip> hip = item.obj.Tag;
+			if(gyro) mechsounds.pushSound("Mech/Betty/Gyro");
+			if(engine) mechsounds.pushSound("Mech/Betty/Engine");
+			if(hip) mechsounds.pushSound("Mech/Betty/Hip");
+		}
+	}
+}
+void DamageHardpointWeapons(MechHardpoint hp, int amt=50)
+{
+	int index = 0;
+	if(weapons < 1) return;
+	int weapind = random(0,weapons-1);
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww && ww.hardpoint == hp)
+		{
+			if(index == weapind) 
+			{	
+				//console.printf("Weapon damage :> %s ",ww.getClassName());
+				ww.dmg_taken += amt;
+				if(ww.dmg_taken >= 100)
+				{
+					DamageCritSounds(hp);
+					removeWeapon(ww);
+					normalizeWeaponsID(1);
+					mechsounds.pushSound("Mech/Betty/WeaponDestroyed");
+				}
+			}
+			index++;
+		}
+	}
+}
 void DestroyHardpointItems(MechHardpoint hp, bool recurse=true)
 {
 	for(let w = Inv; w != null; w = w.Inv)
@@ -181,13 +276,14 @@ void HardpointDamageEffects()
 		throttle_max = 0.5;
 		LegSpeed = 1;
 	}
-	else if( hardpoints.lt.internalhp < hardpoints.lt.max_internal || 
-			 hardpoints.rt.internalhp < hardpoints.rt.max_internal    )
+	else if(countStructDamaged("StructEngine",true))
 	{
 		throttle_max = 0.8;
+		LegSpeed = default.LegSpeed;
 	}
 	else
 	{
 		throttle_max = 1.0;
+		LegSpeed = default.LegSpeed;
 	}
 }

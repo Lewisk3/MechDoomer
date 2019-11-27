@@ -80,7 +80,11 @@ void mech_cockpitbob()
 	}
 	if(mech_legs)
 	{
-		Player.ViewZ -= boboffs*clamp( (1.33*(mech_tonnage/100.0)), 0.5, 1.5);
+		// Calculate gyroscopics
+		float gfactor = GetDefaultByType("StructGyro").power;
+		float gyros = countStruct("StructGyro") - countStructDamaged("StructGyro",true);
+		float bfactor = 2.08-(gyros*gfactor);
+		Player.ViewZ -= boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 0.3, 2.5);
 	}
 }
 
