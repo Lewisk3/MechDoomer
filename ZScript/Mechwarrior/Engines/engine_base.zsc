@@ -60,11 +60,10 @@ class EngineDatabase Abstract
 	}
 }
 
-class Mechbase_Engine : Actor
+class Mechbase_Engine : Mechbase_Utility
 {
 	int enginetype;
 	int model;
-	float worth;
 	float baseworth;
 	float heatsink_scalar;
 	float dbl_heatsink_scalar;
@@ -84,10 +83,38 @@ class Mechbase_Engine : Actor
 	
 	Default
 	{
+		Mechbase_Utility.Criticals 1; // Not actually equipped in such a way.
+		Mechbase_Utility.Moveable true;
 		+NOINTERACTION;
 	}
 	
-	static string, int, int, float, float GetBasics(class<Mechbase_Engine> type)
+	clearscope static string GetRealName(class<Mechbase_Engine> type)
+	{
+		let defs = GetDefaultByType(type);
+		String cname = defs.getClassName();
+		Array<String> cnametokens;
+		cnametokens.Clear();
+		cname.Split(cnametokens,"_");
+		cname = cnametokens[2];
+		string t_prefix = cnametokens[1];
+		int cname_type = cname.ToInt();
+		return t_prefix .. cname_type .. " ENGINE";
+	}
+	
+	clearscope static float GetRealWorth(class<Mechbase_Engine> type)
+	{
+		let defs = GetDefaultByType(type);
+		String cname = defs.getClassName();
+		Array<String> cnametokens;
+		cnametokens.Clear();
+		cname.Split(cnametokens,"_");
+		cname = cnametokens[2];
+		int cname_type = cname.ToInt();
+		int type = defs.enginetype | cname_type;
+		return defs.baseworth ? defs.baseworth*type : defs.worth;
+	}
+	
+	clearscope static string, int, int, float, float GetBasics(class<Mechbase_Engine> type)
 	{
 		let defs = GetDefaultByType(type);
 		String cname = defs.getClassName();
@@ -116,7 +143,7 @@ class Mechbase_Engine : Actor
 		return displayname, type, sinks, weight, worth;
 	}
 	
-	static Mechbase_EngineOBJ Create(class<Mechbase_Engine> type)
+	clearscope static Mechbase_EngineOBJ Create(class<Mechbase_Engine> type)
 	{
 		let defs = GetDefaultByType(type);
 		let engineobj = Mechbase_EngineOBJ(new("Mechbase_EngineOBJ"));
@@ -126,6 +153,7 @@ class Mechbase_Engine : Actor
 		[dName, etype, sinks, weight, worth] = Mechbase_Engine.GetBasics(type);	
 		if(engineobj)
 		{
+			engineobj.ClassType = defs.getClassName();
 			engineobj.displayName = dName;
 			engineobj.weight = weight;
 			engineobj.worth = worth;
@@ -143,6 +171,7 @@ class Mechbase_Engine : Actor
 
 class Mechbase_EngineOBJ : Object
 {
+	String ClassType;
 	String displayName;
 	int enginetype;
 	float weight;

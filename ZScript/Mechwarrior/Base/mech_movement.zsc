@@ -67,7 +67,7 @@ void mech_cockpitbob()
 	if(vel.z < -0.5) bobdir = -1;
 	if(vel.length() > 0.08 || LegVel)
 	{
-		float bobthrust = clamp(vel.length()*(0.18*(kph_real/kph_default)), -7.5, 7.5);
+		float bobthrust = clamp(vel.length()*(0.12*(kph_real/kph_default)), -7.5, 7.5);
 		if(stepping) 
 		{
 			bobthrust = abs(bobthrust)*3;
@@ -93,15 +93,11 @@ void mech_cockpitbob()
 void mech_movement()
 {
 	if(!player || isdead) return;
-	if(!inv_context.engine)
-	{
-		if(throttle > 0) throttle = clamp(throttle-3.,0,1.);
-		return;
-	}
 	
 	// Movement Quirks
 	if(defaultmovement)
 	{			
+		if(!inv_context.engine) return;
 		// Roll/Sway system
 		uint btns = player.cmd.buttons;
 		bool strafing = (btns & BT_MOVELEFT) | (btns & BT_MOVERIGHT);
@@ -124,6 +120,22 @@ void mech_movement()
 	// Leg Movement
 	if(!defaultmovement)
 	{
+		// Move mech by a percentage of throttle.
+		if(!stepping) vel = (cos(LegAng)*(throttle*MoveSpeed),sin(LegAng)*(throttle*MoveSpeed),vel.z);
+		// Speed decay when engine removed.
+		if(!inv_context.engine)
+		{
+			if(abs(throttle) > 0.05)
+			{
+				throttle *= 0.97;
+			}
+			else if(MoveSpeedKPH > 0)
+			{
+				setupSpeedKPH(0);
+			}
+			return;
+		}
+	
 		if(player.cmd.yaw+player.cmd.pitch != 0 && (abs((angle-LegAng)) < MaxYaw || uncappedtorso) )
 			{ A_PlaySound("Mech/TorsoTwist",4,0.3,1); } else { A_StopSound(4); }
 			
@@ -213,9 +225,7 @@ void mech_movement()
 		// Roll distortion when looking far up/down at odd leg angle.
 		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*10)) );
 		if( !pilotlook && !mech_shutdown ) A_SetRoll( roll + rolldistort );
-		
-		// Move mech by a percentage of throttle.
-		if(!stepping) vel = (cos(LegAng)*(throttle*MoveSpeed),sin(LegAng)*(throttle*MoveSpeed),vel.z);
+	
 		LegAng += LegVel;
 		angle += LookVel;
 		if( !pilotlook && !mech_shutdown )
@@ -347,6 +357,7 @@ void process_shutdown()
 	{
 		if(countinv("IBTN_SHUTDOWN"))
 		{
+			doShutdown = false;
 			mechsounds.pushSound("Mech/Betty/SystemsCheck");
 			A_PlaySound("Mech/Power",2);
 			mechsounds.pushSound("Mech/StartupDone");

@@ -83,7 +83,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 	
 	Actor damager = inflictor;
 	if(mod == "hitscan") damager = source;
-	double shootslope = (source.height/2);
+	double shootslope = (source.height); // * 0.5
 
 	// Preform ray cast to determine where the shooter is aiming.
 	FLineTraceData lt;
@@ -95,7 +95,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 	vector2 dmgpos2D  = ( dmgpos.x, dmgpos.y );
 	mechangle = MDMath.VRotate(mechangle,angle+90);
 	int lrpos = AngleTo(source);
-	float hitangle = abs(atan2(mechangle.x - dmgpos.x , mechangle.y - dmgpos.y)) + frandom(-16,16);
+	float hitangle = abs(atan2(mechangle.x - dmgpos.x , mechangle.y - dmgpos.y)) + frandom(-8,8);
 	
 	// Legs
 	if( dmgpos.z < pos.z+(plrdmgz/4) ) 

@@ -14,7 +14,6 @@ class Mechbase_Utility : Actor
 	}
 
 	int hardslots;
-	Vector2 pos;
 	String displayName;
 	float weight;
 	bool moveable;
@@ -23,7 +22,6 @@ class Mechbase_Utility : Actor
 	class<Ammo> ammotype;
 	
 	
-	Property Hardpos : pos;
 	Property Criticals : hardslots;
 	Property DisplayName : displayName;
 	Property CValue : worth;
@@ -60,7 +58,7 @@ class StructGyro : Mechbase_Utility
 	{	
 		Mechbase_Utility.displayName "Gyro";
 		Mechbase_Utility.Criticals 1;
-		StructGyro.Effectiveness 0.28;
+		StructGyro.Effectiveness 0.36;
 	}
 }
 class StructLifesupport : Mechbase_Utility

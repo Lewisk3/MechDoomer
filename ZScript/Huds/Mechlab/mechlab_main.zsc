@@ -6,12 +6,13 @@ String loadout_invweapon;
 int hardpoint;  			  // Selected mechplr hardpoint
 SelectedObject selected_item; // Selected item
 
-void setSelected(String tag, MechHardpoint location, class<Mechbase_Utility> util, class<Mechbase_Weapon> weap, int index)
+void setSelected(String tag, MechHardpoint location, class<Mechbase_Utility> util, class<Mechbase_Weapon> weap, class<Mechbase_Engine> eng, int index)
 {
 	selected_item.tag = tag;
 	selected_item.location = location;
 	selected_item.mUtil = util;
 	selected_item.mWeapon = weap;
+	selected_item.mEngine = eng;
 	selected_item.index = index;
 }
 void clearSelected(bool test=true)
@@ -22,6 +23,7 @@ void clearSelected(bool test=true)
 	selected_item.location = null;
 	selected_item.mUtil = null;
 	selected_item.mWeapon = null;
+	selected_item.mEngine = null;
 	selected_item.index = -1;
 }
 
@@ -153,14 +155,18 @@ void drawLoadoutItemInfo()
 		{
 			class<Heatsink> hsink = selected_item.Tag;
 			class<JumpJet> jjet = selected_item.Tag;
+			class<Mechbase_Engine> eng = selected_item.Tag;
 			String wtons = GetDefaultByType(selected_item.mUtil).weight.."";
 			int    slots = GetDefaultByType(selected_item.mUtil).hardslots;
 			int    worth = GetDefaultByType(selected_item.mUtil).worth;
 			wtons.truncate(wtons.Length()-4);
-			drawInfoLine("Name: " .. selected_item.Tag, 0);
-			drawInfoLine("Weight: " .. wtons .. " tons", 1);
-			drawInfoLine("Criticals: " .. slots, 2);
-			drawInfoLine("CBill Value: " .. worth, 3);
+			if(!eng)
+			{
+				drawInfoLine("Name: " .. selected_item.Tag, 0);
+				drawInfoLine("Weight: " .. wtons .. " tons", 1);
+				drawInfoLine("Criticals: " .. slots, 2);
+				drawInfoLine("CBill Value: " .. worth, 3);
+			}
 			if(jjet)
 			{
 				String hef = ( (GetDefaultByType(jjet).thrust_power* 1/100) + 2) .. "";
@@ -172,6 +178,21 @@ void drawLoadoutItemInfo()
 				String hef = GetDefaultByType(hsink).cooling .. "";
 				hef.truncate(hef.Length()-3);
 				drawInfoLine("Conductivity: +" .. hef, 4);
+			}
+			if(eng)
+			{
+				let enginfo = Mechbase_Engine.Create(eng);
+				int xlslots = enginfo.ltslots+enginfo.rtslots;
+				int stdslots = enginfo.ctslots+enginfo.gyroslots;
+				string tons = enginfo.weight.."";
+				tons.truncate(tons.Length()-4);
+				string ctext = "Criticals: " .. stdslots;
+				if(xlslots) ctext = ctext .. "(+" .. xlslots .. ") "; 
+				drawInfoLine("Name: " .. enginfo.displayName, 0);
+				drawInfoLine("Weight: " .. tons .. " tons", 1);
+				drawInfoLine(ctext, 2);
+				drawInfoLine("Heatsinks: " .. enginfo.intrinsic_heatsinks+enginfo.intrinsic_doubleheatsinks, 3);
+				drawInfoLine("CBill Value: " .. int(enginfo.worth), 4);
 			}
 		}
 		if(selected_item.mWeapon)
@@ -267,6 +288,7 @@ void drawInventory(int px, int py, int start, int max)
 		String weapname = mechplr.inv_context.weapon_items[i];
 		class<Mechbase_Weapon> mw  = weapname;
 		class<Mechbase_Utility> ut = weapname;
+		class<Mechbase_Engine> eng = weapname;
 		
 		Rect checkmouse;
 		initRect(checkmouse,px-55,py+((i-start)*24)+25,14*(weapname.Length()+3),15);
@@ -274,16 +296,17 @@ void drawInventory(int px, int py, int start, int max)
 		int slots = ut ? GetDefaultByType(ut).hardslots : GetDefaultByType(mw).hardslots;
 		int sely = (i-start)*20;
 
-		int fcr = ut ? Font.CR_DARKGRAY : Font.CR_WHITE;
+		int fcr = eng ? Font.CR_ORANGE : ut ? Font.CR_DARKGRAY : Font.CR_WHITE;
 		if(i == selected_item.index && !selected_item.location) 
 		{
-			fcr = selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
+			fcr = selected_item.mEngine ? Font.CR_GREEN : selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
 		}
 		if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 		{
-			setSelected(weapname, null, ut, mw, i);
+			setSelected(weapname, null, ut, mw, eng, i);
 		}
-		H_DrawString(weapname .. "(#"..slots..")", (px-68,py+sely),0,fcr);
+		string displayName = eng ? MechBase_Engine.GetRealName(eng) : weapname .. "(#"..slots..")";
+		H_DrawString(displayName, (px-68,py+sely),0,fcr);
 		if(ut && !GetDefaultByType(ut).moveable)H_DrawString("ERROR: Immoveable Item!", (px-68,py+sely),0,Font.CR_DARKRED);	
 	}
 }
@@ -344,12 +367,12 @@ void DrawHardpointItems(int ind, int sx, int sy)
 				for(int s = 0; s < def_ut.hardslots; s++)
 				{	
 					if(i == selected_item.index && selected_item.mUtil && selected_item.location)fcr = Font.CR_GREEN;
-					String suffix = " (#" .. s+1 .. ")";
+					String suffix = s > 0 ? " (#" .. s+1 .. ")" : "";
 					Rect checkmouse;
 					initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
 					if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 					{	
-						setSelected(ut.getClassName(), hp, ut, null, i);
+						setSelected(ut.getClassName(), hp, ut, null, null, i);
 					}
 					H_DrawString(def_ut.displayName .. suffix, (sx,sy+offs.y-15),0,fcr);
 					offs.y += 20;
@@ -376,7 +399,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 					initRect(checkmouse,sx,sy+offs.x+20,14*(mechplr.resolveWeaponName(ww).Length()+suffix.Length()+4),15);
 					if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 					{ 
-						setSelected(mechplr.resolveWeaponName(ww), hp, null, ww.getClassName(), wind);
+						setSelected(mechplr.resolveWeaponName(ww), hp, null, ww.getClassName(), null, wind);
 						selected_item.mWeaponOBJ = ww; 
 					}
 					H_DrawString(mechplr.resolveWeaponName(ww) .. suffix, (sx,sy+offs.y-15),0,fcr);

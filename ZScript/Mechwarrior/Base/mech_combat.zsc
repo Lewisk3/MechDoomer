@@ -170,7 +170,7 @@ void mech_weapons()
 		TakeInventory("IBTN_PRVGROUP",1);
 	}
 	
-	if(countinv("IBTN_SHUTDOWN"))
+	if(countinv("IBTN_SHUTDOWN") || (!mech_shutdown && !inv_context.engine) )
 	{
 		A_Print("Shutting down...");
 		mechsounds.pushSound("Mech/Betty/ShuttingDown");

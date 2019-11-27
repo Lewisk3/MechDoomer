@@ -355,45 +355,10 @@ void sortWeaponInv()
 {
 	Array<string> newinv;
 	Array<String> sortedtypes;
-	sortedtypes.Clear();
+	GetSortList(sortedtypes);
 	newinv.Clear();
 	String type;
-	sortedtypes.push("JumpJet");
-	sortedtypes.push("AntiMissileSystem");
-	sortedtypes.push("Heatsink");
-	sortedtypes.push("DoubleHeatsink");
-	sortedtypes.push("MediumLaser");
-	sortedtypes.push("SmallLaser");
-	sortedtypes.push("LargeLaser");
-	sortedtypes.push("ERLargeLaser");
-	sortedtypes.push("ERMediumLaser");
-	sortedtypes.push("ERSmallLaser");
-	sortedtypes.push("SmallPulseLaser");
-	sortedtypes.push("MediumPulseLaser");
-	sortedtypes.push("LargePulseLaser");
-	sortedtypes.push("PPC");
-	sortedtypes.push("ERPPC");
-	sortedtypes.push("Flamer");
-	sortedtypes.push("MachineGun");
-	sortedtypes.push("Autocannon2");
-	sortedtypes.push("Autocannon5");
-	sortedtypes.push("Autocannon10");
-	sortedtypes.push("Autocannon20");
-	sortedtypes.push("UAutocannon2");
-	sortedtypes.push("UAutocannon5");
-	sortedtypes.push("UAutocannon10");
-	sortedtypes.push("UAutocannon20");
-	sortedtypes.push("GaussRifle");
-	sortedtypes.push("SRM2");
-	sortedtypes.push("SRM4");
-	sortedtypes.push("SRM6");
-	sortedtypes.push("SSRM2");
-	sortedtypes.push("SSRM4");
-	sortedtypes.push("SSRM6");
-	sortedtypes.push("LRM5");
-	sortedtypes.push("LRM10");
-	sortedtypes.push("LRM15");
-	sortedtypes.push("LRM20");
+	
 	// Sort all items of unique types.
 	for(int i = 0; i < sortedtypes.Size(); i++)
 	{

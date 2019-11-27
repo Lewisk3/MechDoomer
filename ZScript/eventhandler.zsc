@@ -190,7 +190,8 @@ class MechDoomerEvents : EventHandler
 		if(plr)
 		{
 			// Process mechlab netevents
-			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook) plr.ToggleDrone(200,0,false);
+			if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
+			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(200,0,false);
 			if(netcmd == "droneviewswitch" && !plr.isdead && plr.dronecam) plr.dronecam.frontcam = !plr.dronecam.frontcam;
 			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
@@ -203,8 +204,11 @@ class MechDoomerEvents : EventHandler
 			{
 				class<Mechbase_Weapon>  witem = plr.inv_context.weapon_items[e.Args[0]];
 				class<Mechbase_Utility> uitem = plr.inv_context.weapon_items[e.Args[0]];
+				class<Mechbase_Engine>  eitem = plr.inv_context.weapon_items[e.Args[0]];
+				
 				if(uitem) plr.adjustMoney(GetDefaultByType(uitem).worth);
 				if(witem) plr.adjustMoney(GetDefaultByType(witem).worth);
+				if(eitem) plr.adjustMoney(Mechbase_Engine.GetRealWorth(eitem));
 				plr.inv_context.weapon_items.delete(e.Args[0]);
 			}
 			
