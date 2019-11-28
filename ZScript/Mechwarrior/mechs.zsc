@@ -25,11 +25,10 @@ class MechWarrior : MechWarriorBase
 	// This somehow makes movement a WHOLE lot smoother, idek, it WAS a mistake at first.
 	override void tick()
 	{
-		if(!mech_shutdown && !checkVoodoo())
+		if(!checkVoodoo()) 
 		{
 			mech_movement();
-			// Bob must also be called OUTSIDE of the base class.
-			Bobbing(); 
+			if(!mech_shutdown) Bobbing();
 		}
 		super.tick();
 	}
@@ -219,7 +218,7 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 5;
-		MechWarriorBase.Engine "Engine_STD_60";
+		MechWarriorBase.Engine "Engine_STD_30";
 		MechWarriorBase.DefaultMovement true;
 		MechWarriorBase.OverTonnage true;
 		Player.DisplayName "BattleArmor (Traditional Doom Movement)";

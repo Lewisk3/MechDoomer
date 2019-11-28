@@ -30,7 +30,6 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 		 ((inv_context.weapons_tonnage+weight > mech_tonnage) && !overtonnage)
 	  )
 	{
-		console.printf("Why?");
 		inv_context.engine.Destroy();
 		inv_context.engine = NULL;
 		return false;

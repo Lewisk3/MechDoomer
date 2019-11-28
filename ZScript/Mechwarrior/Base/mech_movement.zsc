@@ -96,11 +96,12 @@ void mech_cockpitbob()
 void mech_movement()
 {
 	if(!player || isdead) return;
+	if(!overtonnage && mech_shutdown) return;
 	
 	// Movement Quirks
 	if(defaultmovement)
 	{			
-		if(!inv_context.engine) return;
+		if(!inv_context.engine && !overtonnage) return;
 		// Roll/Sway system
 		uint btns = player.cmd.buttons;
 		bool strafing = (btns & BT_MOVELEFT) | (btns & BT_MOVERIGHT);
@@ -115,7 +116,16 @@ void mech_movement()
 	// Overtonnage logic
 	if(overtonnage)
 	{
-		float truetonnage = mech_shutdown ? mech_tonnage*0.5 : mech_tonnage;
+		if(!inv_context.engine) 
+		{
+			MoveSpeedKPH = 10;
+			setupSpeedKPH(10);
+		}
+		else
+		{
+			setupSpeedKPH(clamp(EngineGetKPH(),0,200));
+		}
+		float truetonnage = mech_shutdown ? mech_tonnage*0.25 : mech_tonnage;
 		overfactor = clamp(truetonnage/(inv_context.weapons_tonnage*0.35), 0.1, 1.0);
 		A_SetSpeed(MoveSpeed*0.12*overfactor*throttle_max);
 	}
@@ -406,7 +416,7 @@ void Bobbing() {
 		TiltOffset  = sin(TiltOsc);
 		TiltOffset *= (vel/2) - (LegVel*2);
 		TiltOffset *= 0.10;
-		if(defaultmovement) TiltOffset *= 3;
+		if(defaultmovement) TiltOffset *= 1.2;
 		TiltOffset *= CrouchMulti;
 
 		StepOffset  = sin(StepOsc);

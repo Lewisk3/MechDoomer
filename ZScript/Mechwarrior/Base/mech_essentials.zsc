@@ -196,11 +196,14 @@ override void tick()
 	
 	if(!isdead) 
 	{		
+		// Don't hold onto dead target.
+		if(targetenemy && targetenemy.health <= 0) targetenemy = null;
+		
 		mech_cockpitbob();
+		mech_movement(); 
 		if(!mech_shutdown)
 		{
 			if(vel.length() > 0) A_Explode(3+(vel.length()*1.5),30,!XF_HURTSOURCE);
-			mech_movement(); 
 			HardpointDamageEffects();
 			mech_weapons();
 		}

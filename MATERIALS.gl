@@ -18,3 +18,15 @@ material texture models/Cockpits/Jenner/jn_head.png {
 	specularlevel 0.3
 	glossiness 10
 }
+material texture models/Cockpits/Atlas/at_head.png {
+	normal models/metal_normal.png
+	specular models/metal.png
+	specularlevel 0.3
+	glossiness 10
+}
+material texture models/Cockpits/Commando/cm_head.png {
+	normal models/metal_normal.png
+	specular models/metal.png
+	specularlevel 0.3
+	glossiness 10
+}

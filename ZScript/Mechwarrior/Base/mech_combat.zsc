@@ -181,10 +181,7 @@ void mech_weapons()
 		lockangle = angle;
 		TakeInventory("IBTN_SHUTDOWN",1);
 	}
-	
-	// Don't hold onto dead target.
-	if(targetenemy && targetenemy.health <= 0) targetenemy = null;
-	
+		
 	if(!targetenemy && targetreticle)
 	{
 		// Don't hold onto dead/invalid target.

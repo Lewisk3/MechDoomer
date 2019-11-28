@@ -356,7 +356,8 @@ class MechMissile : Mechbase_Actor
 			{
 				if(homming && tracer) 
 				{
-					pitch = getPitchTo(tracer.pos);
+					vector3 corrected_pos = (tracer.pos.x, tracer.pos.y, tracer.pos.z+(tracer.height/2));
+					pitch = getPitchTo(corrected_pos);
 					A_SeekerMissile(20,20,SMF_CURSPEED,maximum_range/64);
 				}
 			}
