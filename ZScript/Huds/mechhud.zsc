@@ -352,9 +352,11 @@ class MechStatusBar : BaseStatusBar
 				}
 				
 				// Torso angle
-				if( !mech.uncappedtorso && !mech.pilotlook ) 
+				if( !mech.pilotlook ) 
 				{
-					H_Fill(Color(int(255*hud_alpha),0,255,0),960,36,-(mech.angle-mech.LegAng)*1.6,8);
+					float angdiff = MDMath.NormalizeAngle(mech.angle-mech.LegAng);
+					float angmax = angdiff/(mech.uncappedtorso ? 180 : mech.MaxYaw);
+					H_Fill(Color(int(255*hud_alpha),0,255,0),960,36,-(angmax*185),8);
 					if( abs(mech.angle-mech.LegAng) <= 1)H_Fill(Color(int(255*hud_alpha),0,255,0),960,36,4,8);
 				}
 			}

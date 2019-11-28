@@ -219,21 +219,23 @@ void mech_movement()
 			snd_accelerate = true;
 			if(abs(throttle) <= 0.1)throttle = 0;
 		}
-		if(countinv("IBTN_CENTER") && !uncappedtorso)
+		if(countinv("IBTN_CENTER"))
 		{
-			int yaw = int(angle-LegAng);
+			float yaw = MDMath.NormalizeAngle(angle-LegAng);
 			if(yaw > 0) LegVel =  2;
 			if(yaw < 0) LegVel = -2;
-			if(yaw == 0)TakeInventory("IBTN_CENTER",1);
+			if(abs(yaw) < 2) LegVel = yaw;
+			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTER",1);
 		}
-		if(countinv("IBTN_CENTERTORSO") && !uncappedtorso)
+		if(countinv("IBTN_CENTERTORSO"))
 		{
-			int yaw = int(angle-LegAng);
+			float yaw = MDMath.NormalizeAngle(angle-LegAng);
 			if(yaw > 0)angle-=2;
 			if(yaw < 0)angle+=2;
 			if(pitch > 0)pitch-=2;
 			if(pitch < 0)pitch+=2;
-			if(yaw == 0)TakeInventory("IBTN_CENTERTORSO",1);
+			if(abs(yaw) < 2) LegVel = yaw;
+			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTERTORSO",1);
 		}
 		
 		// Roll distortion when looking far up/down at odd leg angle.
