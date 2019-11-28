@@ -1,3 +1,72 @@
+// Stormcrow
+Model Commando
+{
+	Path "models/Cockpits/Commando"
+	Model 0 "cm_torso.md3"
+	//Model 1 "cm_hips.md3"
+	Skin 0 "cm_full.png"
+	Scale 0.4 0.4 0.4
+	Offset 0 0 58
+	AngleOffset 0
+	
+   FrameIndex PLAY A 1 0
+   FrameIndex PLAY B 0 0
+   FrameIndex PLAY C 0 0
+   FrameIndex PLAY D 0 0
+   FrameIndex PLAY E 0 0
+   FrameIndex PLAY F 0 0
+   FrameIndex PLAY G 0 0
+   FrameIndex PLAY H 0 0
+   FrameIndex PLAY I 0 0
+   FrameIndex PLAY J 0 0
+   FrameIndex PLAY K 0 0
+   FrameIndex PLAY L 0 0
+   FrameIndex PLAY M 0 0
+   FrameIndex PLAY N 0 0
+   FrameIndex PLAY O 0 0
+   FrameIndex PLAY P 0 0
+   FrameIndex PLAY Q 0 0
+   FrameIndex PLAY R 0 0
+   FrameIndex PLAY S 0 0
+   FrameIndex PLAY T 0 0
+   FrameIndex PLAY U 0 0
+   FrameIndex PLAY V 0 0
+   FrameIndex PLAY W 0 0
+   FrameIndex PLAY X 0 0
+}
+Model Legs_Commando
+{
+	Path "models/Cockpits/Commando"
+	Model 0 "cm_legs.md3"
+	Scale 0.4 0.4 0.4
+	Skin 0 "cm_full" // Main
+	Offset 0 0 0 
+	//SurfaceSkin 0 1   // Metal
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
+}
+Model CockpitHandler_Commando
+{
+	Path "models/Cockpits/Commando"
+	Model 0 "cm_head.md3"
+	Scale 0.15 0.10 0.10
+	Skin 0 "cm_head.png" // Main
+	PitchOffset -8
+	Offset 0.2 5 -12;
+	
+   FrameIndex MODL A 0 0
+}
+
 
 // Timberwolf
 Model Timberwolf
@@ -139,71 +208,122 @@ Model CockpitHandler_Stormcrow
    FrameIndex MODL A 0 0
 }
 
-// Jenner
-Model Jenner
-{
-	Path "models"
-	Model 0 "jenner.md3"
-	//Skin 0 "Stormcrow.png"
-	Scale 28.5 28.5 28.5
-	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
-	SurfaceSkin 0 1  "Metal.png" // Left upper
-	SurfaceSkin 0 2  "metal_dark.png" // Left lower
-	SurfaceSkin 0 3  "metal_dark.png" // Left toe
-	SurfaceSkin 0 4  "Metal.png" // Right upper
-	SurfaceSkin 0 5  "metal_dark.png" // Right lower
-	SurfaceSkin 0 6  "metal_dark.png" // Right leg
-	SurfaceSkin 0 7  "Metal.png" // Left arm
-	SurfaceSkin 0 8  "Metal.png" // Right Arm
-	SurfaceSkin 0 9  "Metal.png"  // Body
-	SurfaceSkin 0 10 "Missiles.png" // Body upper
-	SurfaceSkin 0 11 "Missiles.png" // Arm weapons
-	SurfaceSkin 0 12 "wolf_metal.png"  // Arm logos
-	ZOffset 0
-	AngleOffset 90
-	
-   FrameIndex PLAY A 0 0
-   FrameIndex PLAY B 0 0
-   FrameIndex PLAY C 0 0
-   FrameIndex PLAY D 0 0
-   FrameIndex PLAY E 0 0
-   FrameIndex PLAY F 0 0
-   FrameIndex PLAY G 0 0
-}
-
 // Atlas
 Model Atlas
 {
-	Path "models"
-	Model 0 "atlas.md3"
-	Scale 14.0 14.0 14.0
-	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
-	SurfaceSkin 0 1  "metal.png" // Left upper
-	SurfaceSkin 0 2  "metal.png" // Left lower
-	SurfaceSkin 0 3  "metal.png" // Left toe
-	SurfaceSkin 0 4  "metal.png" // Right upper
-	SurfaceSkin 0 5  "metal.png" // Right lower
-	SurfaceSkin 0 6  "metal.png" // Right leg
-	SurfaceSkin 0 7  "metal.png" // Left arm
-	SurfaceSkin 0 8  "metal.png" // Right Arm
-	SurfaceSkin 0 9  "metal_dark.png"  // Hip
-	SurfaceSkin 0 10 "metal.png" // Body upper
-	SurfaceSkin 0 11 "Missiles.png" // Torso weapons
-	SurfaceSkin 0 12 "metal_dark.png"  // Hands
-	SurfaceSkin 0 13 "wolf_metal.png"  // Shoulders
-	SurfaceSkin 0 14 "wolf_metal.png"  // Knees
-	ZOffset 0
-	AngleOffset 90
+	Path "models/Cockpits/Atlas"
+	Model 0 "at_torso.md3"
+	//Model 1 "sc_hips.md3"
+	Skin 0 "at_full.png"
+	Scale 0.4 0.4 0.4
+	Offset -5 0 80
+	AngleOffset 0
 
-   FrameIndex PLAY A 0 0
+   FrameIndex PLAY A 1 0
    FrameIndex PLAY B 0 0
    FrameIndex PLAY C 0 0
    FrameIndex PLAY D 0 0
    FrameIndex PLAY E 0 0
    FrameIndex PLAY F 0 0
    FrameIndex PLAY G 0 0
+   FrameIndex PLAY H 0 0
+   FrameIndex PLAY I 0 0
+   FrameIndex PLAY J 0 0
+   FrameIndex PLAY K 0 0
+   FrameIndex PLAY L 0 0
+   FrameIndex PLAY M 0 0
+   FrameIndex PLAY N 0 0
+   FrameIndex PLAY O 0 0
+   FrameIndex PLAY P 0 0
+   FrameIndex PLAY Q 0 0
+   FrameIndex PLAY R 0 0
+   FrameIndex PLAY S 0 0
+   FrameIndex PLAY T 0 0
+   FrameIndex PLAY U 0 0
+   FrameIndex PLAY V 0 0
+   FrameIndex PLAY W 0 0
+   FrameIndex PLAY X 0 0
+}
+Model CockpitHandler_Atlas
+{
+	Path "models/Cockpits"
+	Model 0 "Atlas/at_head.md3"
+	Scale 0.15 0.10 0.10
+	Skin 0 "Atlas/at_head.png" // Main
+	PitchOffset -8
+	Offset 0 10 5;
+	
+   FrameIndex MODL A 0 0
+}
+Model Legs_Atlas
+{
+	Path "models/Cockpits/Atlas"
+	Model 0 "at_legs.md3"
+	Scale 0.4 0.4 0.4
+	Skin 0 "at_full.png" // Main
+	Offset -5 0 0 
+	//SurfaceSkin 0 1   // Metal
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
 }
 
+// Jenner
+Model Jenner
+{
+	Path "models/Cockpits"
+	Model 0 "Jenner/jn_torso_hip.md3"
+	Skin 0 "Jenner/jn_full.png"
+	Scale 0.1 0.1 0.1
+	ZOffset 50
+	
+   FrameIndex PLAY A 1 0
+   FrameIndex PLAY B 0 0
+   FrameIndex PLAY C 0 0
+   FrameIndex PLAY D 0 0
+   FrameIndex PLAY E 0 0
+   FrameIndex PLAY F 0 0
+   FrameIndex PLAY G 0 0
+   FrameIndex PLAY H 0 0
+   FrameIndex PLAY I 0 0
+   FrameIndex PLAY J 0 0
+   FrameIndex PLAY K 0 0
+   FrameIndex PLAY L 0 0
+   FrameIndex PLAY M 0 0
+   FrameIndex PLAY N 0 0
+   FrameIndex PLAY O 0 0
+   FrameIndex PLAY P 0 0
+   FrameIndex PLAY Q 0 0
+   FrameIndex PLAY R 0 0
+   FrameIndex PLAY S 0 0
+   FrameIndex PLAY T 0 0
+   FrameIndex PLAY U 0 0
+   FrameIndex PLAY V 0 0
+   FrameIndex PLAY W 0 0
+   FrameIndex PLAY X 0 0
+}
+Model CockpitHandler_Jenner
+{
+	Path "models/Cockpits"
+	Model 0 "Jenner/jn_head2.md3"
+	Scale 0.20 0.15 0.17
+	Skin 0 "Jenner/jn_head.png" // Main
+	//PitchOffset -10
+	RollOffset 8
+	AngleOffset 90
+	Offset 0 45 -2;
+	
+   FrameIndex MODL A 0 0
+}
 
 // Base 3D mechs
 Model Jenner_3D

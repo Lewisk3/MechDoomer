@@ -214,13 +214,17 @@ void drawLoadoutItemInfo()
 			class<Mechbase_Utility> util = selected_item.mUtil;
 			class<Heatsink> hsink = selected_item.Tag;
 			class<JumpJet> jjet = selected_item.Tag;
+			class<Mechbase_Engine> eng = selected_item.mEngine;
 			String wtons = GetDefaultByType(util).weight.."";
 			wtons.truncate(wtons.Length()-4);
 			
-			drawInfoLine("Name: " .. util.getClassName(),0);
-			drawInfoLine("Weight: " .. wtons .. " tons" ,1);
-			drawInfoLine("Criticals: " .. GetDefaultByType(util).hardslots ,2);
-			drawInfoLine("CBill Value: " .. GetDefaultByType(util).worth ,3);
+			if(!eng)
+			{
+				drawInfoLine("Name: " .. util.getClassName(),0);
+				drawInfoLine("Weight: " .. wtons .. " tons" ,1);
+				drawInfoLine("Criticals: " .. GetDefaultByType(util).hardslots ,2);
+				drawInfoLine("CBill Value: " .. GetDefaultByType(util).worth ,3);
+			}
 			if(jjet)
 			{
 				String hef = ( (GetDefaultByType(jjet).thrust_power* 1/100) + 2) .. "";
@@ -232,6 +236,21 @@ void drawLoadoutItemInfo()
 				String hef = GetDefaultByType(hsink).cooling .. "";
 				hef.truncate(hef.Length()-3);
 				drawInfoLine("Conductivity: +" .. hef,4);
+			}
+			if(eng)
+			{
+				let enginfo = Mechbase_Engine.Create(eng);
+				int xlslots = enginfo.ltslots+enginfo.rtslots;
+				int stdslots = enginfo.ctslots+enginfo.gyroslots;
+				string tons = enginfo.weight.."";
+				tons.truncate(tons.Length()-4);
+				string ctext = "Criticals: " .. stdslots;
+				if(xlslots) ctext = ctext .. "(+" .. xlslots .. ") "; 
+				drawInfoLine("Name: " .. enginfo.displayName, 0);
+				drawInfoLine("Weight: " .. tons .. " tons", 1);
+				drawInfoLine(ctext, 2);
+				drawInfoLine("Heatsinks: " .. enginfo.intrinsic_heatsinks+enginfo.intrinsic_doubleheatsinks, 3);
+				drawInfoLine("CBill Value: " .. int(enginfo.worth), 4);
 			}
 		}
 		if(selected_item.mWeapon && selected_item.mWeaponOBJ)
@@ -319,17 +338,24 @@ vector2 DrawCriticalHardpointItems(int ind, int sx, int sy)
 	for(int i = 0; i < mechplr.inv_context.mechstructs.Size(); i++)
 	{
 		class<Mechbase_Utility> ut = mechplr.inv_context.mechstructs[i].Tag;
+		class<StructEngine> eng = mechplr.inv_context.mechstructs[i].Tag;
 		if(ut)
 		{
 			let def_ut = GetDefaultByType(ut);
 			if(mechplr.inv_context.mechstructs[i].hardpoint == hp && !def_ut.moveable)
 			{
-				int fcr = Font.CR_DARKRED;
+				int fcr = eng ? Font.CR_FIRE : Font.CR_DARKRED;
 				for(int s = 0; s < def_ut.hardslots; s++)
 				{	
+					if(selected_item.mEngine && selected_item.location && eng) fcr = Font.CR_BLUE;
 					Rect checkmouse;
 					initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+3),15);
-					if(mechplr.inv_context.mechstructs[i].broken) fcr = Font.CR_RED;
+					if(mstats.left_btn && checkCollision(mouse,checkmouse) && eng) 
+					{	
+						setSelected(ut.getClassName(), hp, ut, null, mechplr.inv_context.engine.ClassType, i);
+					}
+					initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+3),15);
+					if(mechplr.inv_context.mechstructs[i].broken) fcr = Font.CR_TAN;
 					H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
 					offs.y += 20;
 					offs.x += 23;

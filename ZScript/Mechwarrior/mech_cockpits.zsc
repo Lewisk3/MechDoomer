@@ -59,8 +59,8 @@ class CockpitHandler : Weapon
 					}
 					else
 					{
-						xoffs += (plr.LegAng-angle)*0.1;
-						yoffs += pitch*0.24;
+						xoffs += (plr.LegAng-angle)*0.06;
+						yoffs += pitch*0.12;
 					}
 					A_WeaponOffset(xoffs,yoffs,WOF_INTERPOLATE);
 					
@@ -101,3 +101,6 @@ class CockpitHandler : Weapon
 // Registered Cockpits
 class CockpitHandler_Timberwolf : CockpitHandler {}
 class CockpitHandler_Stormcrow : CockpitHandler {}
+class CockpitHandler_Jenner : CockpitHandler {}
+class CockpitHandler_Atlas : CockpitHandler {}
+class CockpitHandler_Commando : CockpitHandler {}

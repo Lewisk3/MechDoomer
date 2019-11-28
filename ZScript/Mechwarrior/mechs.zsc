@@ -91,6 +91,39 @@ class MechWarrior : MechWarriorBase
 */
 
 // 3D Mechs
+class Commando : MechWarrior
+{
+	Default
+	{
+		Mass 200;
+		Player.DisplayName "Commando Prime";
+		Player.ViewHeight 88;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.LegSpeed 1.4;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.Weight 25;
+		MechWarriorBase.Engine "ENGINE_STD_150";
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_Commando";
+		MechWarriorBase.LegsModel "Legs_Commando";
+		MechWarriorBase.HudMech "ATLAICO";
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 7,20,14,14,10,10,14,14, 3,11,8,8,5,5,7,7 );
+		hardpoints.setupLocations( (0,10), (0,0), (0,-25), (0,-25), (80,-30), (-80,-30), (40,-45), (-40,-45) );
+		hardpoints.setupSlots();
+		equipStruct("Heatsink",hardpoints.ct,2);
+		equipStruct("Heatsink",hardpoints.la,1);
+		equipStruct("Heatsink",hardpoints.ra,1);
+		equipWeapon("MediumLaser",hardpoints.ra,1);
+		equipWeapon("SRM6",hardpoints.lt,2);
+		equipWeapon("SRM4",hardpoints.lt,2);
+		giveAmmo("SRM_Ammo",200);
+	}
+
+}
+
 class Stormcrow : MechWarrior
 {
 	Default
@@ -171,7 +204,6 @@ class Timberwolf : MechWarrior
 		equipStruct("DoubleHeatsink",hardpoints.la,2);
 		equipStruct("DoubleHeatsink",hardpoints.ra,2);
 	}
-
 }
 
 
@@ -255,8 +287,11 @@ class Jenner : MechWarrior
 		MechWarriorBase.Engine "ENGINE_STD_245";
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 35;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_Jenner";
 		MechWarriorBase.HudCockpit "JENNHUD";
 		MechWarriorBase.HudMech "JENNICO";
+		MechWarriorBase.LegsModel "Legs_Invisible";
 		Player.DisplayName "Jenner Prime";
 		Player.ViewHeight 70;
 	}
@@ -339,6 +374,9 @@ class Atlas : MechWarrior
 	Default
 	{
 		Mass 4000;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_Atlas";
+		MechWarriorBase.LegsModel "Legs_Atlas";
 		MechWarriorBase.LegSpeed 1;
 		MechWarriorBase.Engine "ENGINE_STD_300";
 		MechWarriorBase.TwistRange 60;

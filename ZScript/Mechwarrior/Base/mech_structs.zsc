@@ -260,11 +260,18 @@ void addStructToInv(String mstruc)
 // Move
 bool moveStructToInv(int struc_ind, bool move=true)
 {
+	
 	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 	{
 		if(i == struc_ind)
 		{
 			let ut = GetDefaultByType(utilcast(inv_context.mechstructs[i].Tag));
+			class<StructEngine> eng = inv_context.mechstructs[i].Tag;
+			if(eng) 
+			{
+				DequipEngine();
+				return true;
+			}
 			if(!ut.moveable) return false;
 			addStructToInv(inv_context.mechstructs[i].Tag);
 			removeStruct(i, move);

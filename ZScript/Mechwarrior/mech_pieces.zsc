@@ -144,3 +144,6 @@ class MechLegsBase : Actor
 
 class Legs_Timberwolf : MechLegsBase {}
 class Legs_Stormcrow : MechLegsBase {}
+class Legs_Atlas : MechLegsBase {}
+class Legs_Commando : MechLegsBase {}
+class Legs_Invisible : MechLegsBase {}

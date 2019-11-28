@@ -1,10 +1,10 @@
 //clearplayerclasses
 addplayerclass "BattleArmor"
-addplayerclass "Stormcrow"
-//addplayerclass "Shadowcat"
-addplayerclass "Timberwolf"
-addplayerclass "Jenner"
-addplayerclass "Atlas"
+addplayerclass "Stormcrow" // 3D
+addplayerclass "Timberwolf" // 3D
+addplayerclass "Jenner" // Partial-3D
+addplayerclass "Commando" // 3D
+addplayerclass "Atlas" // 3D
 addplayerclass "EbonJaguar"
 addplayerclass "Warhammer"
 addplayerclass "Nova"

@@ -41,7 +41,7 @@ class SoundQueue : Object
 	{
 		timer = 0;
 		onsound ++;
-		if(onsound > maxsounds) onsound = 0;
+		if(onsound >= maxsounds) onsound = 0;
 		if(snds[onsound] == " ")onsound = 0;
 	}
 	

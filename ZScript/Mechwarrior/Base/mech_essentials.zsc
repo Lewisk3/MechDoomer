@@ -173,6 +173,9 @@ override void tick()
 		return;
 	}
 	
+	// Clamp viewheight so we don't end up inside our hips when we fall.
+	player.viewheight = clamp(player.viewheight, default.viewheight*0.8, default.viewheight*2.0);
+	
 	// Turns out, we lose our legs when moving to another map, LOL.
 	if(!legs_reference && mech_legs) legs_reference = MechLegsBase.Create(mech_legs, self);
 	if(!inv_context) setupInventory();	

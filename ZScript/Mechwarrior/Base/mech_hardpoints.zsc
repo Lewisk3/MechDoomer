@@ -92,7 +92,7 @@ void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false)
 	}
 	else if(hp.internalhp > 0)
 	{
-		if(random(0,2)==2)
+		if(random(0,1)==1)
 		{
 			if(random(0,1)==1)
 				DamageHardpointWeapons(hp,50*random(1,2));

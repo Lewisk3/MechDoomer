@@ -566,8 +566,8 @@ class AMS_Missile : Mechbase_Actor
 		Radius 3;
 		Speed 9;
 		Scale 0.15;
-		AMS_Missile.Effectiveness 3;
-		AMS_Missile.Efficiency 0.8;
+		AMS_Missile.Effectiveness 12;
+		AMS_Missile.Efficiency 0.5;
 	}
 	
 	override void PostBeginPlay()
@@ -588,7 +588,7 @@ class AMS_Missile : Mechbase_Actor
 				angle = AngleTo(tracer);
 				if(tracer.damage <= 0) 
 				{
-					tracer.Die(tracer,self);
+					tracer.Destroy();
 					return ResolveState(Null);
 				}
 				if(Distance3D(tracer) <= radius*4) 

@@ -62,12 +62,13 @@ void setupSpeedKPH(float kph)
 void mech_cockpitbob()
 {
 	// Calculate Bob
+	float bobmax = 16*(mech_tonnage/100.0);
 	if(!bobdir) bobdir = 1;
 	if(vel.z >  0.5) bobdir = 1;
 	if(vel.z < -0.5) bobdir = -1;
 	if(vel.length() > 0.08 || LegVel)
 	{
-		float bobthrust = clamp(vel.length()*(0.12*(kph_real/kph_default)), -7.5, 7.5);
+		float bobthrust = clamp(vel.length()*(0.12*(kph_real/kph_default)), -(bobmax/3), (bobmax/3));
 		if(stepping) 
 		{
 			bobthrust = abs(bobthrust)*3;
@@ -75,10 +76,10 @@ void mech_cockpitbob()
 		}
 		boboffs += bobthrust * bobdir;
 	}
-	if(abs(boboffs) > 12) 
+	if(abs(boboffs) > bobmax) 
 	{
 		bobdir *= -1;		
-		boboffs = clamp(boboffs,-12,12);
+		boboffs = clamp(boboffs,-bobmax,bobmax);
 	}
 	if(mech_legs)
 	{
@@ -86,7 +87,9 @@ void mech_cockpitbob()
 		float gfactor = GetDefaultByType("StructGyro").power;
 		float gyros = countStruct("StructGyro") - countStructDamaged("StructGyro",true);
 		float bfactor = 2.08-(gyros*gfactor);
-		Player.ViewZ -= boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 0.3, 2.5);
+		float bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 0.8, 2.5);
+		vector3 npos = (pos.x, pos.y, pos.z-bobmod);
+		Player.ViewZ -= bobmod;
 	}
 }
 
@@ -229,13 +232,14 @@ void mech_movement()
 	
 		LegAng += LegVel;
 		angle += LookVel;
-		if( !pilotlook && !mech_shutdown )
+		if( !mech_shutdown )
 		{
-			Pitch = clamp(Pitch, -minPitch, maxPitch);
+			float maxang = pilotlook ? 90 : MaxYaw;
+			if(!pilotlook) Pitch = clamp(Pitch, -minPitch, maxPitch);
 			if(MaxYaw < 360 && !uncappedtorso)
 			{
-				if(angle - LegAng > MaxYaw)  angle = LegAng + MaxYaw;
-				if(angle - LegAng < -MaxYaw) angle = LegAng - MaxYaw;
+				if(angle - LegAng > maxang)  angle = LegAng + maxang;
+				if(angle - LegAng < -maxang) angle = LegAng - maxang;
 			}
 		}
 	}
