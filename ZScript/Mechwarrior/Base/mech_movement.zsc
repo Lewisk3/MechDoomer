@@ -63,6 +63,7 @@ void mech_cockpitbob()
 {
 	// Calculate Bob
 	float bobmax = 16*(mech_tonnage/100.0);
+	if(defaultmovement) bobmax *= 10;
 	if(!bobdir) bobdir = 1;
 	if(vel.z >  0.5) bobdir = 1;
 	if(vel.z < -0.5) bobdir = -1;
@@ -88,7 +89,6 @@ void mech_cockpitbob()
 		float gyros = countStruct("StructGyro") - countStructDamaged("StructGyro",true);
 		float bfactor = 2.08-(gyros*gfactor);
 		float bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 0.8, 2.5);
-		vector3 npos = (pos.x, pos.y, pos.z-bobmod);
 		Player.ViewZ -= bobmod;
 	}
 }
@@ -418,7 +418,7 @@ void Bobbing() {
 		TiltOffset  = sin(TiltOsc);
 		TiltOffset *= (vel/2) - (LegVel*2);
 		TiltOffset *= 0.10;
-		if(defaultmovement) TiltOffset *= 1.2;
+		//if(defaultmovement) TiltOffset *= 1.2;
 		TiltOffset *= CrouchMulti;
 
 		StepOffset  = sin(StepOsc);

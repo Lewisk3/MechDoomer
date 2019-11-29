@@ -1,3 +1,62 @@
+// Battle armor
+Model BattleArmor
+{
+	Path "models/Cockpits/BattleArmor"
+	Model 0 "ba_armor.md3"
+	//Model 1 "cm_hips.md3"
+	Skin 0 "ba_full.png"
+	Scale 0.4 0.4 0.4
+	Offset 0 0 0
+	AngleOffset 0
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
+   FrameIndex PLAY A 1 0
+   FrameIndex PLAY B 0 0
+   FrameIndex PLAY C 0 0
+   FrameIndex PLAY D 0 0
+   FrameIndex PLAY E 0 0
+   FrameIndex PLAY F 0 0
+   FrameIndex PLAY G 0 0
+   FrameIndex PLAY H 0 0
+   FrameIndex PLAY I 0 0
+   FrameIndex PLAY J 0 0
+   FrameIndex PLAY K 0 0
+   FrameIndex PLAY L 0 0
+   FrameIndex PLAY M 0 0
+   FrameIndex PLAY N 0 0
+   FrameIndex PLAY O 0 0
+   FrameIndex PLAY P 0 0
+   FrameIndex PLAY Q 0 0
+   FrameIndex PLAY R 0 0
+   FrameIndex PLAY S 0 0
+   FrameIndex PLAY T 0 0
+   FrameIndex PLAY U 0 0
+   FrameIndex PLAY V 0 0
+   FrameIndex PLAY W 0 0
+   FrameIndex PLAY X 0 0
+}
+Model CockpitHandler_BattleArmor
+{
+	Path "models/Cockpits/BattleArmor"
+	Model 0 "ba_head.md3"
+	Scale 0.13 0.10 0.10
+	Skin 0 "ba_head.png" // Main
+	PitchOffset 0
+	Offset 0 -3 -9;
+	
+   FrameIndex MODL A 0 0
+}
+
 // Commando 
 Model Commando
 {

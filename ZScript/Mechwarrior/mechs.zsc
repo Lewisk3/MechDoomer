@@ -309,9 +309,6 @@ class Urbanmech : MechWarrior
 	}
 }
 
-// Partial 3D
-
-
 // 2D Mechs
 class BattleArmor : MechWarrior
 {
@@ -321,6 +318,8 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.LegSpeed 2;
 		MechWarriorBase.TwistRange 130;
 		MechWarriorBase.heatEff 0.18;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_BattleArmor";
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 5;
@@ -342,6 +341,20 @@ class BattleArmor : MechWarrior
 		equipWeapon("SmallLaser",hardpoints.ra,1);
 		equipWeapon("MachineGun",hardpoints.la,1);
 		equipWeapon("MachineGun",hardpoints.ra,1);
+	}
+	
+	States
+	{
+		See:
+			TLEG ABCDEFGHIJK 2 
+			{
+				if(vel.length() < 4) return ResolveState("SeeHold");
+				return ResolveState(Null);
+			}
+		loop;
+		SeeHold:
+			TLEG "#" 1 A_JumpIf(vel.length()>4,"See");
+		Loop;
 	}
 }
 
