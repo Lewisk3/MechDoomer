@@ -1,4 +1,4 @@
-// Stormcrow
+// Commando 
 Model Commando
 {
 	Path "models/Cockpits/Commando"
@@ -284,7 +284,7 @@ Model Jenner
 	Model 0 "Jenner/jn_torso_hip.md3"
 	Skin 0 "Jenner/jn_full.png"
 	Scale 0.1 0.1 0.1
-	ZOffset 50
+	ZOffset 55
 	
    FrameIndex PLAY A 1 0
    FrameIndex PLAY B 0 0
@@ -311,6 +311,27 @@ Model Jenner
    FrameIndex PLAY W 0 0
    FrameIndex PLAY X 0 0
 }
+Model Legs_Jenner
+{
+	Path "models/Cockpits/Jenner"
+	Model 0 "jn_legs.md3"
+	Scale 0.1 0.1 0.13
+	Skin 0 "jn_full.png" // Main
+	Offset 0 0 56 
+	//SurfaceSkin 0 1   // Metal
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
+}
 Model CockpitHandler_Jenner
 {
 	Path "models/Cockpits"
@@ -325,107 +346,76 @@ Model CockpitHandler_Jenner
    FrameIndex MODL A 0 0
 }
 
-// Base 3D mechs
-Model Jenner_3D
+// Urbanmech
+Model Urbanmech
 {
-	Path "models"
-	Model 0 "jenner.md3"
-	//Skin 0 "Stormcrow.png"
-	Scale 28.5 28.5 28.5
-	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
-	SurfaceSkin 0 1  "Metal.png" // Left upper
-	SurfaceSkin 0 2  "metal_dark.png" // Left lower
-	SurfaceSkin 0 3  "metal_dark.png" // Left toe
-	SurfaceSkin 0 4  "Metal.png" // Right upper
-	SurfaceSkin 0 5  "metal_dark.png" // Right lower
-	SurfaceSkin 0 6  "metal_dark.png" // Right leg
-	SurfaceSkin 0 7  "Metal.png" // Left arm
-	SurfaceSkin 0 8  "Metal.png" // Right Arm
-	SurfaceSkin 0 9  "Metal.png"  // Body
-	SurfaceSkin 0 10 "Missiles.png" // Body upper
-	SurfaceSkin 0 11 "Missiles.png" // Arm weapons
-	SurfaceSkin 0 12 "wolf_metal.png"  // Arm logos
-	ZOffset 0
-	AngleOffset 180
+	Path "models/Cockpits/Urbanmech"
+	Model 0 "ur_torso.md3"
+	//Model 1 "cm_hips.md3"
+	Skin 0 "ur_full.png"
+	Scale 0.1 0.1 0.1
+	Offset 0 0 42 // Urbie is the answer to life/universe and everything :P
+	AngleOffset 0
 	
-   FrameIndex JENN A 0 0
+   FrameIndex PLAY A 1 0
+   FrameIndex PLAY B 0 0
+   FrameIndex PLAY C 0 0
+   FrameIndex PLAY D 0 0
+   FrameIndex PLAY E 0 0
+   FrameIndex PLAY F 0 0
+   FrameIndex PLAY G 0 0
+   FrameIndex PLAY H 0 0
+   FrameIndex PLAY I 0 0
+   FrameIndex PLAY J 0 0
+   FrameIndex PLAY K 0 0
+   FrameIndex PLAY L 0 0
+   FrameIndex PLAY M 0 0
+   FrameIndex PLAY N 0 0
+   FrameIndex PLAY O 0 0
+   FrameIndex PLAY P 0 0
+   FrameIndex PLAY Q 0 0
+   FrameIndex PLAY R 0 0
+   FrameIndex PLAY S 0 0
+   FrameIndex PLAY T 0 0
+   FrameIndex PLAY U 0 0
+   FrameIndex PLAY V 0 0
+   FrameIndex PLAY W 0 0
+   FrameIndex PLAY X 0 0
 }
-Model Atlas_3D
+Model Legs_Urbanmech
 {
-	Path "models"
-	Model 0 "atlas.md3"
-	Scale 14.0 14.0 14.0
-	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
-	SurfaceSkin 0 1  "metal.png" // Left upper
-	SurfaceSkin 0 2  "metal.png" // Left lower
-	SurfaceSkin 0 3  "metal.png" // Left toe
-	SurfaceSkin 0 4  "metal.png" // Right upper
-	SurfaceSkin 0 5  "metal.png" // Right lower
-	SurfaceSkin 0 6  "metal.png" // Right leg
-	SurfaceSkin 0 7  "metal.png" // Left arm
-	SurfaceSkin 0 8  "metal.png" // Right Arm
-	SurfaceSkin 0 9  "metal_dark.png"  // Hip
-	SurfaceSkin 0 10 "metal.png" // Body upper
-	SurfaceSkin 0 11 "Missiles.png" // Torso weapons
-	SurfaceSkin 0 12 "metal_dark.png"  // Hands
-	SurfaceSkin 0 13 "wolf_metal.png"  // Shoulders
-	SurfaceSkin 0 14 "wolf_metal.png"  // Knees
-	ZOffset 0
+	Path "models/Cockpits/Urbanmech"
+	Model 0 "ur_legs.md3"
+	Scale 0.1 0.1 0.1
+	Skin 0 "ur_full.png" // Main
+	Offset 0 0 40 
+	//SurfaceSkin 0 1   // Metal
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
+}
+Model CockpitHandler_Urbanmech
+{
+	Path "models/Cockpits/Urbanmech"
+	Model 0 "ur_head.md3"
+	Model 1 "ur_weaps.md3"
+	Scale 0.15 0.10 0.10
+	Skin 0 "ur_head.png" // Main
+	Path "models/Cockpits"
+	Skin 1 "c_dark.png"
+	PitchOffset 0
 	AngleOffset 90
+	Offset 0 8 -24;
+	
+   FrameIndex MODL A 0 0
+}
 
-	FrameIndex ATLS A 0 0
-}
-Model Timberwolf_3D
-{
-	Path "models"
-	Model 0 "timberwolf.md3"
-	//Skin 0 "Stormcrow.png"
-	SurfaceSkin 0 0  "Metal_Dark.png" // RL_LRToe
-	SurfaceSkin 0 1  "weapfront.png" // ???
-	SurfaceSkin 0 2  "Cockpit_Glass.png" // Head
-	SurfaceSkin 0 3  "Metal.png" // RL_Lower
-	SurfaceSkin 0 4  "Metal_Dark.png" // RL_FTow
-	SurfaceSkin 0 5  "Metal.png" // RL_Upper
-	SurfaceSkin 0 6  "Metal.png" // LL_Upper
-	SurfaceSkin 0 7  "Metal_Dark.png" // LL_LRToe
-	SurfaceSkin 0 8  "Metal_Dark.png" 	 // LL_FToe
-	SurfaceSkin 0 9  "Metal.png" // LL_Lower
-	SurfaceSkin 0 10 "Metal.png" // RA_Upper
-	SurfaceSkin 0 11 "Metal.png" // LA_Upper
-	SurfaceSkin 0 12 "Metal_Dark.png" 	// MB_Lower
-	SurfaceSkin 0 13 "Metal.png" // MB_Upper
-	SurfaceSkin 0 14 "Metal_Dark.png" // WP_Arms
-	SurfaceSkin 0 15 "Missiles.png" // WP_Body
-	SurfaceSkin 0 16 "wolf_metal.png" // WP_Side
-	SurfaceSkin 0 17 "weapfront.png" // WP_Body
-	Scale 15.0 15.0 15.0
-	
-   FrameIndex MECH A 0 0
-}
-Model Stormcrow_3D
-{
-	Path "models"
-	Model 0 "stormcrow.md3"
-	//Skin 0 "Stormcrow.png"
-	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
-	SurfaceSkin 0 1  "Metal.png" 	     // Right Arm
-	SurfaceSkin 0 2  "Metal.png" 	     // Right UpperLeg
-	SurfaceSkin 0 3  "Metal.png" 		 // Right LowerLeg
-	SurfaceSkin 0 4  "Metal.png" 		 // Right Toe
-	SurfaceSkin 0 5  "Metal.png" 		 // Right Ankle
-	SurfaceSkin 0 6  "Metal.png" 		 // Left Ankle
-	SurfaceSkin 0 7  "Metal_Dark.png" 	 // Arm Weapons
-	SurfaceSkin 0 8  "Wolf_Metal.png" 	 // Body Upper
-	SurfaceSkin 0 9  "Metal.png"  		 // Body Upper
-	SurfaceSkin 0 10 "Metal.png" 		 // Left UpperLeg
-	SurfaceSkin 0 11 "Metal.png" 		 // Body Hips
-	SurfaceSkin 0 12 "Metal.png" 		 // Left LowerLeg
-	SurfaceSkin 0 13 "Metal.png" 		 // Body Base
-	SurfaceSkin 0 14 "Metal.png" 		 // Left Arm
-	Scale 15.0 15.0 15.0
-	ZOffset 50
-	AngleOffset 90
-	
-   FrameIndex MECH A 0 0
-}
-  

@@ -104,6 +104,7 @@ class MechLegsBase : Actor
 	}
 	bool checkStepping(bool idle=false)
 	{
+		if(!mechowner) return false;
 		mechowner.stepping = idle ? false : (frame == 3 || frame == 8);
 		return true;
 	}
@@ -146,4 +147,6 @@ class Legs_Timberwolf : MechLegsBase {}
 class Legs_Stormcrow : MechLegsBase {}
 class Legs_Atlas : MechLegsBase {}
 class Legs_Commando : MechLegsBase {}
+class Legs_Urbanmech : MechLegsBase {}
+class Legs_Jenner : MechLegsBase {}
 class Legs_Invisible : MechLegsBase {}

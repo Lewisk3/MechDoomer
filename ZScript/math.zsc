@@ -15,13 +15,15 @@ class MDMath Abstract
 		return result;
 	}
 	
-	// Lerps from angle a to b (both between 0.f and 360.f), taking the shortest path
+	// Normalizes angle between -180, 180 degrees.
 	static float NormalizeAngle(float ang)
 	{
 		while(ang > 180) ang -= 360;
 		while(ang < -180) ang += 360;
 		return ang;
 	}
+	
+	// Lerps from angle a to b (both between 0.f and 360.f), taking the shortest path
 	static float LerpDegrees(float a, float b, float lerpFactor) 
 	{
 		float result;

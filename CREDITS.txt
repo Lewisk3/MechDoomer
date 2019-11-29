@@ -2,10 +2,11 @@
  https://gitlab.com/Gutawer/gzdoom-gutamatics
  
 	- Main Contributors -
-Lewisk3    (Lead programmer)
-Xaser      (Argents ArgRocketReticle)
-Caligari87 (Mech bobbing code)
-Cherno 	   (Mech model exports + UV shading)
+Lewisk3     (Lead programmer)
+Xaser       (Argents ArgRocketReticle)
+Caligari87  (Mech bobbing code)
+Cherno 	    (Mech model exports + UV shading + Walk-cycles)
+'fire-hound (Mech cockpits UV maps/shading)
 
 	- Mech sounds/Mech models/Mech Lore -
 Activision/BattleTech/Mechwarrior 2 : 31st Century Combat

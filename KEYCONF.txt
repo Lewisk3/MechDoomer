@@ -2,10 +2,11 @@
 addplayerclass "BattleArmor"
 addplayerclass "Stormcrow" // 3D
 addplayerclass "Timberwolf" // 3D
-addplayerclass "Jenner" // Partial-3D
 addplayerclass "Commando" // 3D
 addplayerclass "Atlas" // 3D
-addplayerclass "EbonJaguar"
+addplayerclass "Jenner" // 3D
+addplayerclass "Urbanmech" // 3D
+addplayerclass "EbonJaguar" 
 addplayerclass "Warhammer"
 addplayerclass "Nova"
 
