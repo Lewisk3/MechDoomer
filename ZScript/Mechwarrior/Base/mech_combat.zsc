@@ -228,13 +228,13 @@ void mech_weapons()
 	
 	if(countinv("IBTN_NEXTWEAPON"))
 	{	
-		if(weapons > 1)A_PlaySound("Mech/NextWeapon",6);
+		if(weapons > 1)A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
 		selectedWeapon++;
 		TakeInventory("IBTN_NEXTWEAPON",1);
 	}		
 	if(countinv("IBTN_PREVWEAPON"))
 	{
-		if(weapons > 1)A_PlaySound("Mech/NextWeapon",6);
+		if(weapons > 1)A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
 		selectedWeapon--;
 		if(selectedWeapon < 1) selectedWeapon = weapons;
 		TakeInventory("IBTN_PREVWEAPON",1);

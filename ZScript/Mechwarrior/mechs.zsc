@@ -395,6 +395,8 @@ class Warhammer : MechWarrior
 		equipWeapon("SmallLaser",hardpoints.rt,1);
 		equipWeapon("MachineGun",hardpoints.rt,4);
 		equipWeapon("MachineGun",hardpoints.ra,4);
+		equipAmmo("BulletsMGun",hardpoints.ra,1);
+		equipAmmo("SRM_Ammo",hardpoints.lt,1);
 	}
 
 }
@@ -602,3 +604,4 @@ class Timberwolf_3D : Actor
 		loop;
 	}
 }
+
