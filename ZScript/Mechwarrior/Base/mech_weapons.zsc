@@ -190,35 +190,6 @@ bool removeWeaponAt(int ind)
 }
 
 // Swap or Move
-bool swapWeaponToInv(int weap_ind, int inv_ind)
-{
-	String weaptype;
-	inv_ind --;
-	
-	// Make sure our inventory type is a weapon!
-	class<Mechbase_Weapon> invweap = inv_context.weapon_items[inv_ind];
-	if(!invweap) return false;
-	
-	for(let w = Inv; w; w = w.Inv)
-	{	
-		let ww = Mechbase_Weapon(w);
-		if(ww)
-		{
-			if(weap_ind == ww.WeaponID)
-			{
-				weaptype = resolveWeaponName(ww);
-				int prevweaps = weapons;
-				weapons = ww.WeaponID-1;
-				equipWeapon(inv_context.weapon_items[inv_ind],ww.hardpoint,ww.group,false);
-				weapons = prevweaps;
-				removeWeapon(ww);
-				inv_context.weapon_items[inv_ind] = weaptype;
-				return true;
-			}
-		}
-	}
-	return false;
-}
 bool moveWeaponToInv(int weap_ind)
 {
 	for(let w = Inv; w; w = w.Inv)
@@ -242,7 +213,7 @@ bool moveWeaponToInv(int weap_ind)
 bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 {
 	// Equip weapon from items
-	class<Mechbase_Weapon> weap = inv_context.weapon_items[ind-1];
+	class<Mechbase_Weapon> weap = inv_context.weapon_items[ind-1].Tag;
 	if(!weap) return false;
 	
 	if( inv_context.weapons_tonnage+GetDefaultByType(weap).weight > mech_tonnage && !overtonnage)
@@ -257,7 +228,7 @@ bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 	}
 	 
 	 // Equip weapon in inventory, don't give ammo.
-	if(!equipWeapon(inv_context.weapon_items[ind-1],hp,grp,false)) return false;
+	if(!equipWeapon(weap,hp,grp,false)) return false;
 	if(move)inv_context.weapon_items.delete(ind-1);
 	return true;
 }
@@ -299,7 +270,6 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 				ww.hardpoint = hp;
 				hp.adjustHardslots(ww.hardslots);
 				inv_context.weapons_tonnage += ww.weight;
-				if(ww.ammotype && giveammo)GiveInventory(ww.ammotype,ww.ammogive);
 				//console.printf("Adding Weapon: %s at %d",ww.displayName,ww.WeaponID);
 			}
 		}
@@ -311,19 +281,8 @@ void addWeaponToInv(String weapon,int amt=1,bool giveammo = true)
 {
 	if(inv_context.weapon_items.Size() == 0) inv_context.weapon_items.Clear();
 	class<Mechbase_Weapon> weap = weapon;
-	class<Mechbase_Utility> util = weapon;
-	if(weap)
-	{
-		let weapdef = GetDefaultByType(weap);
-		if(weapdef.ammotype && giveammo) A_GiveInventory(weapdef.ammotype,weapdef.ammogive);
-	}
-	if(util)
-	{
-		let utildef = GetDefaultByType(util);
-		if(utildef.ammotype && giveammo) A_GiveInventory(utildef.ammotype,utildef.ammogive);
-	}
-	
-	for(int i = 0; i < amt; i++)inv_context.weapon_items.push(weapon);
+	class<Mechbase_Utility> util = weapon;	
+	for(int i = 0; i < amt; i++)inv_context.GiveItem(weapon);
 }
 
 // Next
@@ -353,7 +312,7 @@ void nextWeapon(bool gcycle=false)
 // Sort
 void sortWeaponInv()
 {
-	Array<string> newinv;
+	Array<mw_InvStruct> newinv;
 	Array<String> sortedtypes;
 	GetSortList(sortedtypes);
 	newinv.Clear();
@@ -366,7 +325,7 @@ void sortWeaponInv()
 		type.toLower();
 		for(int x = 0; x < inv_context.weapon_items.Size(); x++)
 		{
-			String thing = inv_context.weapon_items[x];
+			String thing = inv_context.weapon_items[x].Tag;
 			thing.ToLower();
 			if(thing == type)
 			{
@@ -376,7 +335,7 @@ void sortWeaponInv()
 	}
 	// Re-allocate
 	inv_context.weapon_items.Clear();
-	for(int i = 0; i < newinv.Size(); i++) inv_context.weapon_items.push(newinv[i]);
+	inv_context.weapon_items.Copy(newinv);
 }
 
 // Fire
@@ -414,3 +373,36 @@ void FireWeapons(bool groupfire=true)
 		}
 	}
 }
+
+
+/*
+bool swapWeaponToInv(int weap_ind, int inv_ind)
+{
+	String weaptype;
+	inv_ind --;
+	
+	// Make sure our inventory type is a weapon!
+	class<Mechbase_Weapon> invweap = inv_context.weapon_items[inv_ind].Tag;
+	if(!invweap) return false;
+	
+	for(let w = Inv; w; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(weap_ind == ww.WeaponID)
+			{
+				weaptype = resolveWeaponName(ww);
+				int prevweaps = weapons;
+				weapons = ww.WeaponID-1;
+				equipWeapon(inv_context.weapon_items[inv_ind].Tag,ww.hardpoint,ww.group,false);
+				weapons = prevweaps;
+				removeWeapon(ww);
+				inv_context.weapon_items[inv_ind] = weaptype;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+*/

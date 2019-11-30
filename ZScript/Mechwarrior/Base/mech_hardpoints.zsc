@@ -161,19 +161,16 @@ void DamageHardpointStruct(MechHardpoint hp, int amt=50)
 	Array<FoundStruct> items;
 	getStructsIn(hp,items);
 	if(!items.Size()) return;
-	for(int i = 0; i < items.Size(); i++)
-	{
-		if(items[i].obj.broken) items.delete(i);
-	}
-	if(!items.Size()) return;
-	
 	let item = items[random(0,items.Size()-1)];
+	let ut = GetDefaultByType(utilcast(item.obj.Tag));
+	if(ut.takesnodamage) return;
+	
 	//console.printf("Struct damage :> %s :: %d",item.obj.Tag,item.obj.dmg_taken);
 	if(!item.obj.broken) item.obj.dmg_taken+=amt;
 	if(item.obj.dmg_taken >= 100) 
 	{
+		class<Mechbase_Ammo> am = item.obj.Tag;
 		item.obj.broken = true;
-		let ut = GetDefaultByType(utilcast(item.obj.Tag));
 		if(ut.moveable)
 		{
 			DamageCritSounds(hp);
@@ -182,6 +179,21 @@ void DamageHardpointStruct(MechHardpoint hp, int amt=50)
 			{
 				mechsounds.pushSound("Mech/Betty/Heatsink");
 				mechsounds.pushSound("Mech/Betty/Destroyed");
+			}
+			if(am)
+			{	
+				// INTERNAL AMMO EXPLOSION DETECTED
+				mechsounds.pushSound("Mech/Betty/AmmoExplosion");
+				mw_InvStruct stcase;
+				int stcaseind;
+				[stcase, stcaseind] = FindHealthyStruct("C_A_S_E",hp);
+				if(!stcase)
+				{
+					DamageHardpoint(hp,20,true);
+					if( mechtype != MechType_Clan ) SpreadHardpointDamage(hp,10);
+				}
+				else
+					inv_context.mechstructs.delete(stcaseind);
 			}
 			hp.adjustHardslots(-ut.hardslots);
 			inv_context.weapons_tonnage -= ut.weight;
@@ -199,6 +211,10 @@ void DamageHardpointStruct(MechHardpoint hp, int amt=50)
 			if(engine) mechsounds.pushSound("Mech/Betty/Engine");
 			if(hip) mechsounds.pushSound("Mech/Betty/Hip");
 		}
+	}
+	for(int i = 0; i < items.Size(); i++)
+	{
+		if(items[i].obj.broken) items.delete(i);
 	}
 }
 void DamageHardpointWeapons(MechHardpoint hp, int amt=50)

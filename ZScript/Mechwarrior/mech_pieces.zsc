@@ -44,10 +44,10 @@ class MechCamera : Actor
 			float lerpspd = 0.15;
 			rotangle += rotspd;
 			float trueangle = !rotangle ? mechowner.angle : rotangle;
-			vector3 newfollowpos = (
-				mechowner.pos.x - cos(trueangle)*followdist*(frontcam ? -1 : 1),
-				mechowner.pos.y - sin(trueangle)*followdist*(frontcam ? -1 : 1),
-				mechowner.pos.z + zoffs+(sin(mechowner.pitch)*followdist)
+			vector3 newfollowpos = mechowner.Vec3Offset(
+				-cos(trueangle)*followdist*(frontcam ? -1 : 1),
+				-sin(trueangle)*followdist*(frontcam ? -1 : 1),
+				zoffs+(sin(mechowner.pitch)*followdist)
 			);
 			if(!followpos.length()) followpos = newfollowpos;
 			
@@ -128,9 +128,9 @@ class MechLegsBase : Actor
 		WalkCycle:
 			TLEG BCDEFGHIJ 4 
 			{	
-				float spdrating = (mechowner.throttle * mechowner.MoveSpeedKPH)/140.;
+				float spdrating = (mechowner.throttle * mechowner.MoveSpeedKPH)/160.;
 				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
-				float stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.87, 1.32);
+				float stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.87, 1.05);
 				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;
 				if( (frame == 2 || frame == 7) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);

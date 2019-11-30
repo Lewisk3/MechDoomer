@@ -132,6 +132,7 @@ class Mechlab_Menu : GenericMenu
 		console.printf("W:%d, U:%d, O:%d",selected_item.mWeapon!=NULL,selected_item.mUtil!=NULL,selected_item.mWeaponOBJ!=NULL);
 		*/
 		
+		
 		// Mechlab mode
 		if(hud_page == 0)
 		{

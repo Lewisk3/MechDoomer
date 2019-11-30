@@ -9,12 +9,13 @@ class mw_InvStruct
 	MechHardpoint hardpoint;
 	bool broken;
 	int dmg_taken;
+	int ammunition; // Contains ammo left in structure.
 }
 class mw_InvInfo : Inventory
 {
 	
 	MechHardpoints hardpoints;
-	Array<String> weapon_items; // Stores all mech items before they go into the inventory.
+	Array<mw_InvStruct> weapon_items; // Stores all mech items before they go into the inventory.
 	Array<mw_InvStruct> mechstructs;  // These are equipped structs.
 	Mechbase_EngineOBJ engine;
 	
@@ -25,6 +26,30 @@ class mw_InvInfo : Inventory
 	{
 		hardpoints = MechHardpoints.Create();
 	}	
+
+	
+	mw_InvStruct GiveItem(String type)
+	{
+		class<Mechbase_Ammo> am = type;
+		let item = new("mw_InvStruct");
+		if(item)
+		{
+			item.Tag = type;
+			if(am) item.ammunition = GetDefaultByType(am).ammogive;
+			weapon_items.push(item);
+		}
+		return item;
+	}
+	void GiveItems(String type, int amt)
+	{
+		for(int i = 0; i < amt; i++) GiveItem(type);
+	}
+	void MoveToItems(int ind)
+	{
+		mechstructs[ind].hardpoint = NULL;
+		weapon_items.push(mechstructs[ind]);
+		mechstructs.delete(ind);
+	}
 	
 	Default
 	{

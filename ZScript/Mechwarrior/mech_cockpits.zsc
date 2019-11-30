@@ -52,14 +52,14 @@ class CockpitHandler : Weapon
 					float xoffs = -plr.rolldistort;
 					float yoffs = MDMath.lerp(weapony,32.+plr.boboffs*0.8,0.3);
 					
-					if(plr.mech_shutdown || plr.pilotlook) 
+					if( (plr.mech_shutdown || plr.pilotlook) && !plr.defaultmovement) 
 					{
 						xoffs = (plr.LegAng-angle)*2.47;
 						yoffs += -(pitch-sin(90));
 					}
 					else
 					{
-						if(!plr.uncappedtorso && !plr.defaultmovement) xoffs += (plr.LegAng-angle)*0.08;
+						if(!plr.uncappedtorso && !plr.defaultmovement) xoffs += (plr.LegAng-angle)*0.04;
 						yoffs += pitch*0.12;
 					}
 					A_WeaponOffset(xoffs,yoffs,WOF_INTERPOLATE);

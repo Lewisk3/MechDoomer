@@ -13,7 +13,9 @@ class MechAmmoDispenser : Inventory
 	}
 	override bool TryPickup (in out Actor toucher)
 	{
-		let plr = PlayerPawn(toucher);
+		let plr = MechWarriorBase(toucher);
+		if(!plr || !plr.inv_context) return false;
+
 		// Throw all ammo into dispenser.
 		dispense.Clear();
 		DispenseInit();
@@ -23,7 +25,7 @@ class MechAmmoDispenser : Inventory
 			{
 				console.printf("Ammo pickup: %s, %d",dispense[i] .. "",dispense_amt[i]); 
 				//if(dispense[i] == "heatsink"){ plr.giveHeatsinks(dispense_amt[i]); continue; }
-				plr.GiveInventory(dispense[i],dispense_amt[i]);
+				plr.inv_context.GiveItems(dispense[i],dispense_amt[i]);
 			}
 		}
 		GoAwayAndDie();
@@ -46,6 +48,8 @@ class MechInvDispenser : Inventory
 	override bool TryPickup (in out Actor toucher)
 	{
 		let plr = MechWarrior(toucher);
+		if(!plr || !plr.inv_context) return false;
+		
 		// Throw all ammo into dispenser.
 		dispense.Clear();
 		DispenseInit();
@@ -116,15 +120,15 @@ class MGUNAmmoDisp_Box : MechAmmoDispenser replaces ClipBox
 
 	override void DispenseInit()
 	{	
-		addAmmo("BulletsMGun",250);
-		addAmmo("AC2_Ammo",8);
-		addAmmo("AC5_Ammo",5);
-		addAmmo("AC10_Ammo",4);
-		addAmmo("AC20_Ammo",2);
-		addAmmo("UAC2_Ammo",8);
-		addAmmo("UAC5_Ammo",5);
-		addAmmo("UAC10_Ammo",4);
-		addAmmo("UAC20_Ammo",2);
+		addAmmo("BulletsMGun",1);
+		addAmmo("AC2_Ammo",1);
+		addAmmo("AC5_Ammo",1);
+		addAmmo("AC10_Ammo",1);
+		addAmmo("AC20_Ammo",1);
+		addAmmo("UAC2_Ammo",1);
+		addAmmo("UAC5_Ammo",1);
+		addAmmo("UAC10_Ammo",1);
+		addAmmo("UAC20_Ammo",1);
 	}
 	States
 	{
@@ -147,9 +151,10 @@ class MGUNAmmoDisp_Clip : MechAmmoDispenser replaces Clip
 {
 	override void DispenseInit()
 	{	
-		addAmmo("BulletsMGun",50);
-		addAmmo("AC2_Ammo",1);
-		addAmmo("AC5_Ammo",1);
+		int type = random(0,2);
+		if(type==0)addAmmo("BulletsMGun",1);
+		if(type==1)addAmmo("AC2_Ammo",1);
+		if(type==2)addAmmo("AC5_Ammo",1);
 	}
 	States
 	{
@@ -163,14 +168,15 @@ class ACAmmoDisp : MechAmmoDispenser replaces Shell
 {
   override void DispenseInit()
   {	
-	addAmmo("AC2_Ammo",4);
-	addAmmo("AC5_Ammo",2);
-	addAmmo("AC10_Ammo",1);
+	int type = random(0,2);
+	if(type==0)addAmmo("AC2_Ammo",2);
+	if(type==1)addAmmo("AC5_Ammo",1);
+	if(type==2)addAmmo("AC10_Ammo",1);
 	if(random(1,2)==2)addAmmo("AC20_Ammo",1);
-	if(random(1,2)==2)addAmmo("UAC2_Ammo",6);
-	if(random(1,2)==2)addAmmo("UAC5_Ammo",4);
-	if(random(1,4)==4)addAmmo("UAC10_Ammo",2);
-	if(random(1,4)==4)addAmmo("UAC20_Ammo",2);
+	if(random(1,2)==2)addAmmo("UAC2_Ammo",2);
+	if(random(1,2)==2)addAmmo("UAC5_Ammo",1);
+	if(random(1,4)==4)addAmmo("UAC10_Ammo",1);
+	if(random(1,4)==4)addAmmo("UAC20_Ammo",1);
   }
   States
   {
@@ -185,7 +191,7 @@ class GaussDisp : MechAmmoDispenser replaces ShellBox
 {
   override void DispenseInit()
   {	
-	 addAmmo("GaussRounds",4);
+	 addAmmo("GaussRounds",2);
   }
   States
   {
@@ -207,10 +213,10 @@ class MissileBox : MechAmmoDispenser replaces RocketBox
 	
 	override void DispenseInit()
 	{	
-		addAmmo("SRM_Ammo",120);
-		addAmmo("LRM_Ammo",60);
-		addAmmo("SSRM_Ammo",120);
-		addAmmo("GaussRounds",15);
+		addAmmo("SRM_Ammo",2);
+		addAmmo("LRM_Ammo",1);
+		addAmmo("SSRM_Ammo",2);
+		addAmmo("GaussRounds",2);
 	}
 	States
 	{
@@ -224,10 +230,11 @@ class MissileAmmoDisp : MechAmmoDispenser replaces RocketAmmo
 {
 	override void DispenseInit()
 	{	
-		addAmmo("SRM_Ammo",6);
-		addAmmo("SSRM_Ammo",6);
-		addAmmo("LRM_Ammo",10);
-		if(random(0,1))addAmmo("GaussRounds",2);
+		int type = random(0,2);
+		if(type==0)addAmmo("SRM_Ammo",2);
+		if(type==2)addAmmo("SSRM_Ammo",2);
+		if(type==1)addAmmo("LRM_Ammo",1);
+		if(random(0,1))addAmmo("GaussRounds",1);
 	}
 	States
 	{

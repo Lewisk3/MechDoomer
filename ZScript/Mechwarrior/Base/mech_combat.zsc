@@ -268,9 +268,9 @@ void trigger_ams(vector2 amshardpoint)
 	if(ams_timer <= 0)
 	{	
 		// Check ammunition.
-		if(def_utams.ammotype) 
+		if(def_ams.ammotype) 
 		{
-			if(countinv(def_utams.ammotype) < def_ams.ammouse) return;
+			if(countammo(def_ams.ammotype) < def_ams.ammouse) return;
 		}
 		// Check if a projectile is near us.
 		ThinkerIterator ams_it = ThinkerIterator.Create("Actor");
@@ -305,7 +305,7 @@ void trigger_ams(vector2 amshardpoint)
 								sin(ams.AngleTo(obj))*cos(obj.pitch),
 								-sin(obj.pitch)*5
 								) * obj.speed;
-						if(def_utams.ammotype) TakeInventory(def_utams.ammotype,def_ams.ammouse);
+						if(def_ams.ammotype) TakeAmmo(def_ams.ammotype,def_ams.ammouse);
 					}
 				}
 			}

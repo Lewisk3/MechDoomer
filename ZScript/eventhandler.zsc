@@ -202,9 +202,9 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "sort_inv") plr.sortWeaponInv();
 			if(netcmd == "remove_inv")
 			{
-				class<Mechbase_Weapon>  witem = plr.inv_context.weapon_items[e.Args[0]];
-				class<Mechbase_Utility> uitem = plr.inv_context.weapon_items[e.Args[0]];
-				class<Mechbase_Engine>  eitem = plr.inv_context.weapon_items[e.Args[0]];
+				class<Mechbase_Weapon>  witem = plr.inv_context.weapon_items[e.Args[0]].Tag;
+				class<Mechbase_Utility> uitem = plr.inv_context.weapon_items[e.Args[0]].Tag;
+				class<Mechbase_Engine>  eitem = plr.inv_context.weapon_items[e.Args[0]].Tag;
 				
 				if(uitem) plr.adjustMoney(GetDefaultByType(uitem).worth);
 				if(witem) plr.adjustMoney(GetDefaultByType(witem).worth);

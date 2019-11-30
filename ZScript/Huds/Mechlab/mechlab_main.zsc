@@ -156,11 +156,12 @@ void drawLoadoutItemInfo()
 			class<Heatsink> hsink = selected_item.Tag;
 			class<JumpJet> jjet = selected_item.Tag;
 			class<Mechbase_Engine> eng = selected_item.Tag;
+			class<Mechbase_Ammo> am = selected_item.Tag;
 			String wtons = GetDefaultByType(selected_item.mUtil).weight.."";
 			int    slots = GetDefaultByType(selected_item.mUtil).hardslots;
 			int    worth = GetDefaultByType(selected_item.mUtil).worth;
 			wtons.truncate(wtons.Length()-4);
-			if(!eng)
+			if(!eng && !am)
 			{
 				drawInfoLine("Name: " .. selected_item.Tag, 0);
 				drawInfoLine("Weight: " .. wtons .. " tons", 1);
@@ -194,6 +195,15 @@ void drawLoadoutItemInfo()
 				drawInfoLine("Heatsinks: " .. enginfo.intrinsic_heatsinks+enginfo.intrinsic_doubleheatsinks, 3);
 				drawInfoLine("CBill Value: " .. int(enginfo.worth), 4);
 			}
+			if(am)
+			{
+				int amamt = mechplr.inv_context.weapon_items[selected_item.index].ammunition;
+				drawInfoLine("Name: " .. am.getClassName(),0);
+				drawInfoLine("Contained Ammo: " .. amamt,1);
+				drawInfoLine("Weight: " .. wtons .. " tons" ,2);
+				drawInfoLine("Criticals: " .. GetDefaultByType(am).hardslots ,3);
+				drawInfoLine("CBill Value: " .. GetDefaultByType(am).worth ,4);
+			}
 		}
 		if(selected_item.mWeapon)
 		{
@@ -215,10 +225,11 @@ void drawLoadoutItemInfo()
 			class<Heatsink> hsink = selected_item.Tag;
 			class<JumpJet> jjet = selected_item.Tag;
 			class<Mechbase_Engine> eng = selected_item.mEngine;
+			class<Mechbase_Ammo> am = selected_item.Tag;
 			String wtons = GetDefaultByType(util).weight.."";
 			wtons.truncate(wtons.Length()-4);
 			
-			if(!eng)
+			if(!eng && !am)
 			{
 				drawInfoLine("Name: " .. util.getClassName(),0);
 				drawInfoLine("Weight: " .. wtons .. " tons" ,1);
@@ -251,6 +262,15 @@ void drawLoadoutItemInfo()
 				drawInfoLine(ctext, 2);
 				drawInfoLine("Heatsinks: " .. enginfo.intrinsic_heatsinks+enginfo.intrinsic_doubleheatsinks, 3);
 				drawInfoLine("CBill Value: " .. int(enginfo.worth), 4);
+			}
+			if(am)
+			{
+				int amamt = mechplr.inv_context.mechstructs[selected_item.index].ammunition;
+				drawInfoLine("Name: " .. selected_item.Tag,0);
+				drawInfoLine("Ammo Left: " .. amamt,1);
+				drawInfoLine("Weight: " .. wtons .. " tons" ,2);
+				drawInfoLine("Criticals: " .. GetDefaultByType(am).hardslots ,3);
+				drawInfoLine("CBill Value: " .. GetDefaultByType(am).worth ,4);
 			}
 		}
 		if(selected_item.mWeapon && selected_item.mWeaponOBJ)
@@ -304,7 +324,7 @@ void drawInventory(int px, int py, int start, int max)
 	max = start+max > mechplr.inv_context.weapon_items.Size() ? mechplr.inv_context.weapon_items.Size() : start+max;
 	for(int i = start; i < max; i++)
 	{
-		String weapname = mechplr.inv_context.weapon_items[i];
+		String weapname = mechplr.inv_context.weapon_items[i].Tag;
 		class<Mechbase_Weapon> mw  = weapname;
 		class<Mechbase_Utility> ut = weapname;
 		class<Mechbase_Engine> eng = weapname;
@@ -384,12 +404,14 @@ void DrawHardpointItems(int ind, int sx, int sy)
 	for(int i = 0; i < mechplr.inv_context.mechstructs.Size(); i++)
 	{
 		class<Mechbase_Utility> ut = mechplr.inv_context.mechstructs[i].Tag;
+		class<Mechbase_Ammo> am = mechplr.inv_context.mechstructs[i].Tag;
 		if(ut)
 		{
 			let def_ut = GetDefaultByType(ut);
 			if(mechplr.inv_context.mechstructs[i].hardpoint == hp && def_ut.moveable)
 			{
-				int fcr = Font.CR_DARKGRAY;
+				
+				int fcr = am ? Font.CR_PURPLE : Font.CR_DARKGRAY;
 				for(int s = 0; s < def_ut.hardslots; s++)
 				{	
 					if(i == selected_item.index && selected_item.mUtil && selected_item.location)fcr = Font.CR_GREEN;
@@ -398,6 +420,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 					initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
 					if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 					{	
+						clearSelected();
 						setSelected(ut.getClassName(), hp, ut, null, null, i);
 					}
 					H_DrawString(def_ut.displayName .. suffix, (sx,sy+offs.y-15),0,fcr);

@@ -17,9 +17,8 @@ class Mechbase_Utility : Actor
 	String displayName;
 	float weight;
 	bool moveable;
+	bool takesnodamage;
 	int worth;
-	int ammogive;
-	class<Ammo> ammotype;
 	
 	
 	Property Criticals : hardslots;
@@ -27,21 +26,29 @@ class Mechbase_Utility : Actor
 	Property CValue : worth;
 	Property Tonnage : weight;
 	Property Moveable : moveable;
-	Property AmmoGiveType : ammotype;
-	Property AmmoGiveAmt : ammogive;
+	Property DiamondCasing : takesnodamage; 
 	
 	Default
 	{
 		Mechbase_Utility.Tonnage 0;
 		Mechbase_Utility.Moveable 0;
 		Mechbase_Utility.CValue 0;
-		Mechbase_Utility.AmmoGiveType "";
-		Mechbase_Utility.AmmoGiveAmt 0;
+	}
+}
+
+class Mechbase_Ammo : Mechbase_Utility
+{
+	int ammogive;
+	property Amount : ammogive;
+	
+	Default
+	{
+		Mechbase_Ammo.Amount 1;
+		Mechbase_Utility.Moveable 1;
 	}
 }
 
 // Immovable 
-
 class StructEngine : Mechbase_Utility
 {
 	Default
@@ -111,6 +118,17 @@ class StructActuator : Mechbase_Utility
 }
 
 // Moveable
+class C_A_S_E : Mechbase_Utility
+{	
+	Default
+	{	
+		Mechbase_Utility.Moveable True;
+		Mechbase_Utility.displayName "C.A.S.E";
+		Mechbase_Utility.Criticals 1;
+		Mechbase_Utility.DiamondCasing True;
+		Mechbase_Utility.Tonnage 0.5;
+	}
+}
 
 class Heatsink : Mechbase_Utility
 {
@@ -164,12 +182,14 @@ class AntiMissileSystem : Mechbase_Utility
 	int ammouse;
 	int activerange; // AMS becomes active when another missile enters range.
 	class<AMS_Missile> amstype;
+	class<Mechbase_Ammo> ammotype;
 	
 	Property Cooldown : cooldown;
 	Property Damage : pdamage;
 	Property AmmoUse : ammouse;
 	property ActiveRange : activerange;
 	Property MissileType : amstype;
+	Property AmmoType : ammotype;
 
 	Default
 	{
@@ -182,9 +202,8 @@ class AntiMissileSystem : Mechbase_Utility
 		AntiMissileSystem.Damage 15;
 		AntiMissileSystem.ActiveRange 360;
 		AntiMissileSystem.AmmoUse 1;
+		AntiMissileSystem.AmmoType "AMSAmmo";
 		AntiMissileSystem.MissileType "AntiMissile";
-		Mechbase_Utility.AmmoGiveType "AMSAmmo";
-		Mechbase_Utility.AmmoGiveAmt 600;
 	}
 	
 }

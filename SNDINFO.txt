@@ -62,6 +62,7 @@ Mech/Betty/WeaponDestroyed WDESTRYD
 Mech/Betty/Engine ENGINE
 Mech/Betty/Gyro GYRO
 Mech/Betty/Hip HIP
+Mech/Betty/AmmoExplosion AMOEXPLD
 
 // Unused betty
 Mech/Betty/NoAmmo AMMODEPL

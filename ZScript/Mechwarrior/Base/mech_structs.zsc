@@ -9,6 +9,76 @@ class FoundStruct
 	
 extend class MechwarriorBase;
 
+// Ammo
+clearscope int countammo(class<Mechbase_Ammo> type)
+{
+	int count = 0;
+	String ctype = GetDefaultByType(type).getClassName(); // ffs
+	ctype.ToLower();
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		String cname = inv_context.mechstructs[i].Tag;
+		cname.ToLower();
+		if(cname == ctype) count+=inv_context.mechstructs[i].ammunition;
+	}
+	return count;
+}
+void takeammo(class<Mechbase_Ammo> type, int amt)
+{
+	bool checkdone = false;
+	int left = amt;
+	String ctype = GetDefaultByType(type).getClassName(); // ffs
+	ctype.ToLower();
+	while(!checkdone)
+	{
+		mw_InvStruct ammoobj;
+		int index;
+		for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+		{
+			mw_InvStruct obj = inv_context.mechstructs[i];
+			String cname = obj.Tag;
+			cname.ToLower();
+			if(cname == ctype) 
+			{
+				ammoobj = obj;
+				index = i;
+				break;
+			}
+		}
+		if(ammoobj)
+		{
+			int surplus = ammoobj.ammunition-left;
+			if(surplus > 0) 
+			{
+				ammoobj.ammunition -= left;
+				checkdone = true;
+				break;
+			}
+			else
+			{
+				left -= ammoobj.ammunition;
+				removeStruct(index);
+				break;
+			}
+		}
+		else
+		{
+			checkdone = true;
+		}
+	}
+}
+void EquipAmmo(class<Mechbase_Ammo> type, MechHardpoint hp, int amt = 1)
+{
+	for(int i = 0; i < amt; i++)
+	{
+		if(equipStruct(type,hp,1))
+		{
+			mw_InvStruct ammoobj = inv_context.mechstructs[inv_context.mechstructs.Size()-1];
+			ammoobj.ammunition = GetDefaultByType(type).ammogive;
+		}
+	}
+}
+
 // Engines
 bool EquipEngine(class<Mechbase_Engine> engine)
 {
@@ -85,16 +155,15 @@ void DequipEngine()
 	baseHeatEfficiency -= GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
 	baseHeatEfficiency -= GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;
 	inv_context.weapons_tonnage -= engobj.weight;
-	addStructToInv(engobj.ClassType);
+	inv_context.GiveItem(engobj.ClassType);
 	
 	// RIP
 	engobj.Destroy();
 	inv_context.engine = NULL;
 }
 
-
 // Find
-mw_InvStruct FindHealthyStruct(String type, MechHardpoint pos)
+mw_InvStruct, int FindHealthyStruct(String type, MechHardpoint pos)
 {
 	type.ToLower();
 	if(!inv_context.mechstructs.Size()) inv_context.mechstructs.Clear();
@@ -105,9 +174,9 @@ mw_InvStruct FindHealthyStruct(String type, MechHardpoint pos)
 		String cname = inv_context.mechstructs[i].Tag;
 		cname.ToLower();
 		
-		if(cname == type) return inv_context.mechstructs[i];
+		if(cname ~== type) return inv_context.mechstructs[i], i;
 	}
-	return NULL;
+	return NULL, 0;
 }
 bool FindStructs(String type, MechHardpoint pos, bool healthy, in out Array<FoundStruct> objs)
 {
@@ -188,8 +257,11 @@ int countStructDamaged(String type, bool destroyed=false)
 bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 {
 	// Equip struct from items
-	class<Mechbase_Utility> util = inv_context.weapon_items[ind-1];
-	class<Mechbase_Engine> eng = inv_context.weapon_items[ind-1];
+	let obj = inv_context.weapon_items[ind-1];
+	class<Mechbase_Utility> util = obj.Tag;
+	class<Mechbase_Engine> eng = obj.Tag;
+	let defs = GetDefaultByType(util);
+	
 	if(eng)
 	{
 		if(inv_context.engine) 
@@ -221,22 +293,22 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 		return false;	
 	}
 	 
-	 // Equip without giving starting ammunition
-	if(!equipStruct(inv_context.weapon_items[ind-1],hp,1,false)) return false;
+	 // Move struct to active inventory
+	if(hp.getFreeSlots()-defs.hardslots < 0) return false;
+	obj.hardpoint = hp;
+	inv_context.mechstructs.push(obj);
+	inv_context.weapons_tonnage += defs.weight;
+	hp.adjustHardslots(defs.hardslots);
 	if(move)inv_context.weapon_items.delete(ind-1);
+	
 	return true;
 }
-bool equipStruct(class<Mechbase_Utility> type, MechHardpoint hp, int amt = 1,bool giveammo=true)
+bool equipStruct(class<Mechbase_Utility> type, MechHardpoint hp, int amt = 1)
 {
 	if( (hp.getFreeSlots()-(GetDefaultByType(type).hardslots*amt)) < 0)
 	{
 		if(!GetDefaultByType(type).moveable) console.printf("WARNING: Failed to equip critical item: %s",type.getClassName());
 		return false;
-	}
-	let str_def = GetDefaultByType(type);
-	if(str_def.ammogive > 0 && str_def.ammotype != "" && giveammo) 
-	{
-		A_GiveInventory(str_def.ammotype,str_def.ammogive);
 	}
 	for(int i = 0; i < amt; i++)
 	{
@@ -249,17 +321,10 @@ bool equipStruct(class<Mechbase_Utility> type, MechHardpoint hp, int amt = 1,boo
 	}
 	return true;
 }
-void addStructToInv(String mstruc)
-{
-	class<Mechbase_Utility> util = mstruc;
-	if(!util) return;
-	inv_context.weapon_items.push(mstruc);
-}
 
 // Move
 bool moveStructToInv(int struc_ind, bool move=true)
 {
-	
 	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 	{
 		if(i == struc_ind)
@@ -272,7 +337,7 @@ bool moveStructToInv(int struc_ind, bool move=true)
 				return true;
 			}
 			if(!ut.moveable) return false;
-			addStructToInv(inv_context.mechstructs[i].Tag);
+			inv_context.weapon_items.push(inv_context.mechstructs[i]);
 			removeStruct(i, move);
 			return true;
 		}

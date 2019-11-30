@@ -167,7 +167,6 @@ class SRM2 : Mechbase_Weapon
 		Mechbase_Weapon.WeaponDelay 8;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 120;
 		Mechbase_Weapon.Tonnage 2; // 1
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 3700;
@@ -202,7 +201,6 @@ class SRM4 : Mechbase_Weapon
 		Mechbase_Weapon.WeaponDelay 12;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 200;
 		Mechbase_weapon.HardslotSize 4;
 		Mechbase_Weapon.Tonnage 4;
 		Mechbase_Weapon.HardslotSize 2;
@@ -239,7 +237,6 @@ class SRM6 : Mechbase_Weapon
 		Mechbase_Weapon.WeaponDelay 16;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 200;
 		Mechbase_Weapon.Tonnage 6;
 		Mechbase_Weapon.HardslotSize 3;
 		Mechbase_Weapon.CValue 7280;
@@ -276,7 +273,6 @@ class LRM5: Mechbase_Weapon
 		Mechbase_Weapon.WeaponDelay 7;
 		Mechbase_Weapon.AmmoType "LRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 240;
 		Mechbase_Weapon.Tonnage 4;
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 8200;
@@ -353,7 +349,6 @@ class MachineGun : Mechbase_Weapon
 		//Mechbase_Weapon.WeaponDelay 5;
 		Mechbase_Weapon.WeaponParams 20,50;
 		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 250;
 		Mechbase_Weapon.AttackSound "Ballistics/MGUN";
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
@@ -370,7 +365,6 @@ class Autocannon2 : Mechbase_Weapon
 		Mechbase_Weapon.WeaponParams 30,60;
 		Mechbase_Weapon.AmmoType "AC2_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 40;
 		Mechbase_Weapon.Tonnage 2;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 8800;
@@ -473,7 +467,6 @@ class GaussRifle : Mechbase_Weapon
 		Mechbase_Weapon.AmmoType "GaussRounds";
 		Mechbase_Weapon.WeaponType "Gauss";
 		Mechbase_Weapon.AmmoUse 1;
-		Mechbase_Weapon.AmmoGive 10;
 		Mechbase_Weapon.Tonnage 12;
 		Mechbase_Weapon.HardslotSize 8;
 		Mechbase_Weapon.CValue 14830;
@@ -481,101 +474,125 @@ class GaussRifle : Mechbase_Weapon
 }
 
 // Ammos
-class AMSAmmo : Ammo
+class AMSAmmo : Mechbase_Ammo
 {
 	Default
-	{
-		inventory.maxamount 9999;
+	{	
+		Mechbase_Utility.displayName "AMS AMMO";
+		Mechbase_Utility.Tonnage 1;
+		Mechbase_Utility.Criticals 1;
+		Mechbase_Ammo.Amount 1100;
 	}
 }
-class BulletsMGun : Ammo
+class BulletsMGun : AMSAmmo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "MACHINEGUN AMMO";
+		Mechbase_Utility.CValue 1250;
+		Mechbase_Ammo.Amount 1000;
 	}
 }
-class AC2_Ammo : Ammo
+class AC2_Ammo : AMSAmmo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "AC2 AMMO";
+		Mechbase_Utility.CValue 2750;
+		Mechbase_Ammo.Amount 40;
 	}
 }
-class AC5_Ammo : Ammo
+class AC5_Ammo : AC2_Ammo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "AC5 AMMO";
+		Mechbase_Ammo.Amount 20;
+		Mechbase_Utility.CValue 3200;
 	}
 }
-class AC10_Ammo : Ammo
+class AC10_Ammo : AC5_Ammo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "AC10 AMMO";
+		Mechbase_Ammo.Amount 10;
+		Mechbase_Utility.CValue 3870;
 	}
 }
-class AC20_Ammo : Ammo
+class AC20_Ammo : AC5_Ammo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "AC20 AMMO";
+		Mechbase_Ammo.Amount 5;
+		Mechbase_Utility.CValue 5870;
 	}
 }
-class UAC2_Ammo : Ammo
+class UAC2_Ammo : AC2_Ammo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "UAC2 AMMO";
+		Mechbase_Utility.CValue 2250;
 	}
 }
-class UAC5_Ammo : Ammo
+class UAC5_Ammo : AC5_Ammo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "UAC5 AMMO";
+		Mechbase_Utility.CValue 2650;
 	}
 }
-class UAC10_Ammo : Ammo
+class UAC10_Ammo : AC10_Ammo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "UAC10 AMMO";
+		Mechbase_Utility.CValue 3115;
 	}
 }
-class UAC20_Ammo : Ammo
+class UAC20_Ammo : AC20_Ammo
 {
 	Default
 	{
-		inventory.maxamount 999;
+		Mechbase_Utility.displayName "UAC20 AMMO";
+		Mechbase_Utility.CValue 5790;
 	}
 }
-class GaussRounds : Ammo
+class GaussRounds : AMSAmmo
 {
 	Default
 	{
-		Inventory.maxamount 100;
+		Mechbase_Utility.displayName "GAUSSRIFLE AMMO";
+		Mechbase_Ammo.Amount 10;
+		Mechbase_Utility.CValue 4680;
 	}
 }
-class SRM_Ammo : Ammo
+class SRM_Ammo : AMSAmmo
 {
 	Default
 	{
-		inventory.maxamount 9999;
+		Mechbase_Utility.displayName "SRM AMMO";
+		Mechbase_Ammo.Amount 120;
+		Mechbase_Utility.CValue 2780;
 	}
 }
-class SSRM_Ammo : Ammo
+class SSRM_Ammo : SRM_Ammo
 {
 	Default
 	{
-		inventory.maxamount 9999;
+		Mechbase_Utility.displayName "SSRM AMMO";
+		Mechbase_Utility.CValue 3750;
 	}
 }
-class LRM_Ammo : Ammo
+class LRM_Ammo : AMSAmmo
 {
 	Default
 	{
-		inventory.maxamount 9999;
+		Mechbase_Utility.displayName "LRM AMMO";
+		Mechbase_Ammo.Amount 240;
+		Mechbase_Utility.CValue 2500;
 	}
 }

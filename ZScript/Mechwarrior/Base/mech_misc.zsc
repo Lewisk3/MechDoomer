@@ -25,8 +25,3 @@ void adjustMoney(int amt)
 { 
 	inv_context.money_cbills += amt; 
 }
-
-void giveWeaponAmmo(class<Ammo> type, int amt) 
-{ 
-	GiveInventory(type, amt); 
-}

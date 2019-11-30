@@ -7,14 +7,28 @@ extend class MechWarriorBase;
 void GetSortList(in out Array<String> items)
 {
 	items.Clear();
-	int ssize = 353;
-	string tosort[353] = 
+	int ssize = 370;
+	string tosort[370] = 
 	{ 
 		// Structs
 		"JumpJet",
 		"AntiMissileSystem",
 		"Heatsink",
 		"DoubleHeatsink",
+		// Ammos
+		"AMSAmmo",
+		"BulletsMGun",
+		"AC2_Ammo",
+		"AC5_Ammo",
+		"AC10_Ammo",
+		"AC20_Ammo",
+		"UAC5_Ammo",
+		"UAC10_Ammo",
+		"UAC20_Ammo",
+		"GaussRounds",
+		"SRM_Ammo",
+		"SSRM_Ammo",
+		"LRM_Ammo",
 		// Weapons
 		"MediumLaser",
 		"SmallLaser",

@@ -213,12 +213,12 @@ class MechStatusBar : BaseStatusBar
 					};
 					int grp = clamp(ww.group-1,0,3);
 					ftranslation = group_colors[grp];
-					if(ww.ammotype && ww.ammouse > mech.countinv(ww.ammotype))ftranslation = Font.CR_DARKRED;
+					if(ww.ammotype && ww.ammouse > mech.countammo(ww.ammotype))ftranslation = Font.CR_DARKRED;
 					if( ww.cooldown_timer > 0 )ftranslation = Font.CR_DARKRED;
 					int selx = (ww.WeaponID+1)%2;
 					int sely = (ww.WeaponID+1)/2;
 					if(ww.ammotype)
-						H_DrawString(ww.displayName .. " " .. mech.countinv(ww.ammotype),(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
+						H_DrawString(ww.displayName .. " " .. mech.countammo(ww.ammotype),(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
 					if(!ww.ammotype)
 						H_DrawString(ww.displayName,(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
 					if(lastweap < ww.WeaponID) lastweap = ww.WeaponID;
@@ -237,17 +237,19 @@ class MechStatusBar : BaseStatusBar
 					int nselx = (lastweap+1+amsid)%2;
 					int nsely = (lastweap+1+amsid)/2;
 					class<AntiMissileSystem> defams = "AntiMissileSystem";
-					class<Mechbase_Utility> mutil = "AntiMissileSystem";
 					let ams_def = GetDefaultByType(defams);
-					let util_def = GetDefaultByType(mutil);
-					if(util_def.ammotype && ams_def.ammouse > mech.countinv(util_def.ammotype))ftranslation = Font.CR_DARKRED;
+					if(ams_def.ammotype && ams_def.ammouse > mech.countammo(ams_def.ammotype))ftranslation = Font.CR_DARKRED;
 					if(mech.ams_timer > 0)ftranslation = Font.CR_DARKRED;
-					string prefix = util_def.displayName;
-					if(util_def.ammotype)
-						H_DrawString(prefix .. " " .. mech.countinv(util_def.ammotype),(pos.x+(nselx*scalex),pos.y+(nsely*scaley)),0,ftranslation);
-					if(!util_def.ammotype)
+					string prefix = ams_def.displayName;
+					if(ams_def.ammotype)
+					{
+						H_DrawString(prefix .. " " .. mech.countammo(ams_def.ammotype),(pos.x+(nselx*scalex),pos.y+(nsely*scaley)),0,ftranslation);
+					}
+					else
+					{
 						H_DrawString(prefix,(pos.x+(nselx*scalex),pos.y+(nsely*scaley)),0,ftranslation);
-					amsid++;
+						amsid++;
+					}
 				}
 			}
 			

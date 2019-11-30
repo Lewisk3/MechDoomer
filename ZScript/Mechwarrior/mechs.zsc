@@ -162,7 +162,9 @@ class Timberwolf : MechWarrior
 		equipWeapon("LRM20",hardpoints.rt,3);
 		equipWeapon("MachineGun",hardpoints.ct,4);
 		equipWeapon("MachineGun",hardpoints.ct,4);
-		giveWeaponAmmo("LRM_Ammo",200);
+		equipAmmo("LRM_Ammo",hardpoints.la,2);
+		equipAmmo("BulletsMGun",hardpoints.ll,1);
+		equipAmmo("BulletsMGun",hardpoints.rl,1);
 		
 		equipStruct("DoubleHeatsink",hardpoints.ct,1);
 		equipStruct("DoubleHeatsink",hardpoints.lt,1);
@@ -198,8 +200,9 @@ class Atlas : MechWarrior
 		equipStruct("Heatsink",hardpoints.ct,4);
 		equipStruct("Heatsink",hardpoints.lt,2);
 		equipStruct("Heatsink",hardpoints.rt,2);
-		giveWeaponAmmo("LRM_Ammo",100);
-		giveWeaponAmmo("SRM_Ammo",100);
+		EquipAmmo("LRM_Ammo",hardpoints.ll,1);
+		EquipAmmo("SRM_Ammo",hardpoints.rl,1);
+		EquipAmmo("UAC20_Ammo",hardpoints.rt,2);
 		equipWeapon("MediumLaser",hardpoints.la,1);
 		equipWeapon("MediumLaser",hardpoints.la,1);
 		equipWeapon("MediumLaser",hardpoints.ra,1);
@@ -239,7 +242,7 @@ class Commando : MechWarrior
 		equipWeapon("MediumLaser",hardpoints.ra,1);
 		equipWeapon("SRM6",hardpoints.lt,2);
 		equipWeapon("SRM4",hardpoints.lt,2);
-		giveAmmo("SRM_Ammo",200);
+		EquipAmmo("SRM_Ammo",hardpoints.lt,1);
 	}
 }
 
@@ -274,7 +277,7 @@ class Jenner : MechWarrior
 		equipWeapon("MediumLaser",hardpoints.la,1);
 		equipWeapon("MediumLaser",hardpoints.ra,1);
 		equipWeapon("SRM4",hardpoints.lt,2);
-		giveWeaponAmmo("SRM_Ammo",40);
+		EquipAmmo("SRM_Ammo",hardpoints.lt,1);
 	}
 }
 
@@ -299,13 +302,14 @@ class Urbanmech : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 8,22,14,14,11,11,16,16, 3,11,8,8,5,5,8,8 );
-		hardpoints.setupLocations( (0,10), (0,0), (0,-12), (0,-12), (130,-12), (-130,-12), (40,-45), (-40,-45) );
+		hardpoints.setupLocations( (0,0), (0,18), (0,-12), (0,-12), (130,-12), (-130,-12), (40,-45), (-40,-45) );
 		hardpoints.setupSlots();
 		equipStruct("Heatsink",hardpoints.ct,1);
 		equipStruct("Heatsink",hardpoints.lt,4);
 		equipStruct("Heatsink",hardpoints.rt,4);
 		equipWeapon("Autocannon10",hardpoints.ra,1);
 		equipWeapon("SmallLaser",hardpoints.la,1);
+		equipAmmo("AC10_Ammo",hardpoints.ra,3);
 	}
 }
 
@@ -471,10 +475,10 @@ class EbonJaguar : MechWarrior
 		hardpoints.setupVitals( 9,42,30,30,20,20,30,30, 3,24,15,15,10,10,13,13 );
 		hardpoints.setupLocations( (0,20), (0,-18), (-100,-11), (100,-11), (130,-11), (-130,-11), (80,-60), (-80,-60) );
 		hardpoints.setupSlots();
-		giveWeaponAmmo("SRM_Ammo",30);
-		giveWeaponAmmo("LRM_Ammo",60);
-		giveWeaponAmmo("GaussRounds",15);
-		giveWeaponAmmo("AC5_Ammo",30);
+		EquipAmmo("SRM_Ammo",hardpoints.ll,1);
+		EquipAmmo("LRM_Ammo",hardpoints.rt,1);
+		EquipAmmo("GaussRounds",hardpoints.hd,1);
+		EquipAmmo("AC5_Ammo",hardpoints.rl,2);
 		equipStruct("DoubleHeatsink",hardpoints.ct,1);
 		equipStruct("DoubleHeatsink",hardpoints.la,3);
 		equipStruct("DoubleHeatsink",hardpoints.ra,3);
@@ -513,7 +517,7 @@ class Shadowcat : MechWarrior
 		equipStruct("DoubleHeatsink",hardpoints.lt,1);
 		equipStruct("DoubleHeatsink",hardpoints.rt,1);
 		equipStruct("DoubleHeatsink",hardpoints.hd,1);
-		giveWeaponAmmo("GaussRounds",5);
+		EquipAmmo("GaussRounds",hardpoints.la,2);
 		equipWeapon("GaussRifle",hardpoints.la,2);
 		equipWeapon("MediumPulseLaser",hardpoints.ra,1);
 		equipWeapon("MediumPulseLaser",hardpoints.ra,1);

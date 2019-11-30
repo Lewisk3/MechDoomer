@@ -67,7 +67,7 @@ class Mechbase_Weapon : Inventory
 	float hitscan_distance;
 	//float hitscan_amt;
 	int delay;
-	class<Ammo> ammotype;
+	class<Mechbase_Ammo> ammotype;
 	Sound atksnd;
 	
 	
@@ -112,8 +112,8 @@ class Mechbase_Weapon : Inventory
 		let plr = MechWarrior(invoker.Owner);
 		if(invoker.ammouse > 0)
 		{
-			if(plr.countinv(invoker.ammotype) < invoker.ammouse) return false;
-			plr.TakeInventory(invoker.ammotype,invoker.ammouse);
+			if(plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
+			plr.TakeAmmo(invoker.ammotype,invoker.ammouse);
 		}
 		if(plr)
 		{
@@ -130,7 +130,7 @@ class Mechbase_Weapon : Inventory
 		{
 			let plr = MechWarrior(invoker.Owner);
 			if(!plr) return false;
-			if(invoker.ammouse > 0 && plr.countinv(invoker.ammotype) < invoker.ammouse) return false;
+			if(invoker.ammouse > 0 && plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
 			plr.A_PlaySound(volleysnd,CHAN_WEAPON-1);
 			invoker.dofire = true;
 			invoker.volley_amt = amt;
@@ -158,8 +158,8 @@ class Mechbase_Weapon : Inventory
 			if(!plr)return false;
 			if(invoker.ammouse > 0)
 			{
-				if(plr.countinv(invoker.ammotype) < invoker.ammouse) return false;
-				plr.TakeInventory(invoker.ammotype,invoker.ammouse);
+				if(plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
+				plr.TakeAmmo(invoker.ammotype,invoker.ammouse);
 			}
 			plr.A_PlaySound(invoker.atksnd,CHAN_WEAPON);
 			xoffset += random(-5,5);
@@ -167,7 +167,7 @@ class Mechbase_Weapon : Inventory
 			float xo = (cos(plr.angle+xoffset))*distance;
 			float yo = (sin(plr.angle+xoffset))*distance;
 			//console.printf(": %f, %f",xoffset,yoffset);
-			Vector3 lpos = (plr.pos.x+xo,plr.pos.y+yo,plr.pos.z+(plr.viewheight*plr.player.CrouchFactor)+yoffset);
+			Vector3 lpos = plr.Vec3Offset(xo,yo,(plr.viewheight*plr.player.CrouchFactor)+yoffset);
 			
 			let weap = Mechbase_Actor(Spawn(type,lpos));
 			if(weap)
@@ -256,9 +256,12 @@ class Mechbase_Weapon : Inventory
 
 	virtual bool MWFire()
 	{
+		let plr = MechwarriorBase(Owner);
+		if(!plr) return false;
+		
 		int curammo = 0;
 		bool ret;
-		if(ammotype) curammo = Owner.countinv(ammotype);
+		if(ammotype) curammo = plr.countammo(ammotype);
 		if(weapType)
 		{
 			ret = FireWeapon(weapType,hardpoint.pos.x,hardpoint.pos.y,weapDistance,weapSpeed);
@@ -269,7 +272,7 @@ class Mechbase_Weapon : Inventory
 		}
 		if(curammo > 0)
 		{
-			if(Owner.countinv(ammotype) == 0)
+			if(plr.countammo(ammotype) == 0)
 			{
 				// If you want to make a betty skin, this is just another option.
 				A_PlaySound("Mech/Betty/NoAmmo",CHAN_WEAPON);
