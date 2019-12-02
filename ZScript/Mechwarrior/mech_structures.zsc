@@ -1,4 +1,14 @@
 // Base
+class MechutilDefs
+{
+	int hardslots;
+	String displayName;
+	float weight;
+	bool moveable;
+	bool takesnodamage;
+	int worth;
+}
+
 class Mechbase_Utility : Actor
 {
 	enum Hardpoints
@@ -20,7 +30,6 @@ class Mechbase_Utility : Actor
 	bool takesnodamage;
 	int worth;
 	
-	
 	Property Criticals : hardslots;
 	Property DisplayName : displayName;
 	Property CValue : worth;
@@ -34,6 +43,48 @@ class Mechbase_Utility : Actor
 		Mechbase_Utility.Moveable 0;
 		Mechbase_Utility.CValue 0;
 	}
+	
+	clearscope static string FormatFloat(float num, int pushback=3)
+	{
+		String snum = num.."";
+		snum.truncate(snum.Length()-pushback);	
+		return snum;
+	}
+	
+	static Mechbase_Utility CreateTemp(class<Mechbase_Utility> type="Mechbase_Utility")
+	{
+		let mbu = Mechbase_Utility(Spawn(type,level.PickPlayerStart(0)));
+		return mbu;
+	}
+	
+	// O_O Pretty much just for readability.
+	clearscope static MechutilDefs getDefaults(class<Mechbase_Utility> type="Mechbase_Utility")
+	{
+		let defs = GetDefaultByType(type);
+		let mu = new("MechutilDefs");
+		mu.hardslots = defs.hardslots;
+		mu.displayName = defs.displayName;
+		mu.worth = defs.worth;
+		mu.weight = defs.weight;
+		mu.moveable = defs.moveable;
+		mu.takesnodamage = defs.takesnodamage;
+		return mu;
+	}
+	
+	void GetDefDescription(in out Array<String> desc)
+	{
+		desc.push("Name: " .. displayName);
+		desc.push("Weight: " .. FormatFloat(weight) .. " tons");
+		desc.push("Criticals: " .. hardslots);
+		desc.push("CBill Value: " .. worth);
+	}
+	
+	virtual void SetupItem(mw_InvStruct item)
+	{
+		item.utildefs = getDefaults(item.Tag);
+		GetDefDescription(item.description);
+	}
+	
 }
 
 class Mechbase_Ammo : Mechbase_Utility
@@ -46,6 +97,12 @@ class Mechbase_Ammo : Mechbase_Utility
 		Mechbase_Ammo.Amount 1;
 		Mechbase_Utility.Moveable 1;
 	}
+	
+	override void SetupItem(mw_InvStruct item)
+	{
+		item.ammunition = ammogive;
+		GetDefDescription(item.description);
+	}
 }
 
 // Immovable 
@@ -56,6 +113,7 @@ class StructEngine : Mechbase_Utility
 		Mechbase_Utility.displayName "ENGINE";
 		Mechbase_Utility.Criticals 1;
 	}
+	override void SetupItem(mw_InvStruct item) {}
 }
 class StructGyro : Mechbase_Utility
 {
@@ -128,6 +186,12 @@ class C_A_S_E : Mechbase_Utility
 		Mechbase_Utility.DiamondCasing True;
 		Mechbase_Utility.Tonnage 0.5;
 	}
+
+	override void SetupItem(mw_InvStruct item)
+	{
+		GetDefDescription(item.description);
+		item.description.push("Supresses ammo explosions.");
+	}
 }
 
 class Heatsink : Mechbase_Utility
@@ -143,6 +207,14 @@ class Heatsink : Mechbase_Utility
 		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 12600;
+	}
+	
+	override void SetupItem(mw_InvStruct item)
+	{
+		String hef = cooling .. "";
+		hef.truncate(hef.Length()-3);
+		GetDefDescription(item.description);
+		item.description.Insert(3,"Conductivity: +" .. hef);
 	}
 }
 class DoubleHeatsink : Heatsink
@@ -171,6 +243,14 @@ class JumpJet : Mechbase_Utility
 		JumpJet.thrust MWJJET_THRUST;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 8450;
+	}
+	
+	override void SetupItem(mw_InvStruct item)
+	{
+		String thrust = ((thrust_power* 1/100) + 2) .. "";
+		thrust.truncate(thrust.Length()-3);
+		GetDefDescription(item.description);
+		item.description.Insert(3,"Strength: " .. thrust);
 	}
 	
 }

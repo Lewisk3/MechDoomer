@@ -14,8 +14,8 @@ class MechStatusBar : BaseStatusBar
 	int tAlign;
 	TextureID compass;
 	bool invalid;
-	int compassoffs;
-	int compassdir;
+	float compassoffs;
+	float compassdir;
 	int hpcounter;
 	int scrwidth;
 	int scrheight;
@@ -62,6 +62,13 @@ class MechStatusBar : BaseStatusBar
 		vector2 rpos = ( (pos.x)*rwidth, (pos.y)*rheight );
 		
 		return rpos, rscale;
+	}
+	vector2 H_AdjustCoord(vector2 pos, float cwidth=1920, float cheight=1080)
+	{
+		float rwidth  = (Screen.getWidth() / float(cwidth) );
+		float rheight = (Screen.getHeight() / float(cheight));
+		vector2 rpos = ( (pos.x)*rwidth, (pos.y)*rheight );
+		return rpos;
 	}
 	
 	// All H_ function auto adjust to the screen resolution based on 1080p coords.	
@@ -209,7 +216,7 @@ class MechStatusBar : BaseStatusBar
 						Font.CR_GREEN,
 						Font.CR_WHITE,
 						Font.CR_YELLOW,
-						Font.CR_BROWN
+						Font.CR_LIGHTBLUE
 					};
 					int grp = clamp(ww.group-1,0,3);
 					ftranslation = group_colors[grp];
@@ -252,10 +259,7 @@ class MechStatusBar : BaseStatusBar
 					}
 				}
 			}
-			
-			
 		}
-		
 	}
 	
 	bool checkWeaponBusy(int ind)
@@ -313,7 +317,7 @@ class MechStatusBar : BaseStatusBar
 				invalid = true;
 			}
 		}
-		if(invalid)
+		if(invalid && !automapactive)
 		{
 			console.printf("- HUD is not being displayed properly -");
 			console.printf(" Please do the following to fix it");
@@ -392,6 +396,44 @@ class MechStatusBar : BaseStatusBar
 			
 		}
 	}
+	
+	
+	void Draw_Compass(float xoffs=0, float yoffs=0, float woffs=0)
+	{
+		if(!CPlayer || !CPlayer.mo) return;
+		let mechplr = Mechwarrior(CPlayer.mo);
+		if(!mechplr) return;
+		
+		vector2 offsetpos = (949+xoffs,103+yoffs);
+		vector2 basepos   = (286+woffs,51);
+		vector2 crectxy   = (basepos.x+(offsetpos.x/2)-(woffs*2), basepos.y+offsetpos.y-128);
+		vector2 crectab   = (411+(woffs*2.3), 263);
+		offsetpos = H_AdjustCoord(offsetpos);
+		basepos   = H_AdjustCoord(basepos);
+		crectxy   = H_AdjustCoord(crectxy);
+		crectab   = H_AdjustCoord(crectab);
+		
+		float cang = (mechplr.LegAng%360);
+		float pang = cang-79;
+		vector2 Npos = MDMath.VRotate(basepos,pang)+offsetpos;
+		vector2 Spos = MDMath.VRotate(basepos,pang+180)+offsetpos;
+		vector2 Epos = MDMath.VRotate(basepos,pang+90)+offsetpos;
+		vector2 Wpos = MDMath.VRotate(basepos,pang-90)+offsetpos;
+		
+		SetClipRect(crectxy.x,crectxy.y, crectab.x,crectab.y);
+		if(MDMath.inRange(cang,  90,89)) 
+			DrawString(mHUDFont,"N",(Npos.x,offsetpos.y),0,Font.CR_GREEN);
+		if(MDMath.inRange(cang, 270,89)) 
+			DrawString(mHUDFont,"S",(Spos.x,offsetpos.y),0,Font.CR_GREEN);
+		if(MDMath.inRange(cang,   0,89) ||
+		  (MDMath.inRange(cang, 360,89) && 
+		   MDMath.inRange(cang, 269,89)    ))
+			DrawString(mHUDFont,"E",(Epos.x,offsetpos.y),0,Font.CR_GREEN);
+		if(MDMath.inRange(cang, 180,89)) 
+			DrawString(mHUDFont,"W",(Wpos.x,offsetpos.y),0,Font.CR_GREEN);
+		Screen.ClearClipRect();
+	}
+	
 	
 	void Draw_Radar()
 	{	
@@ -483,6 +525,7 @@ class MechStatusBar : BaseStatusBar
 			
 			if(mech.mech_shutdown)return;
 			Draw_Radar();
+			Draw_Compass(0,-20,-20);
 			H_DrawImage("MWTARGET",(200,836));
 			if(mech.targetenemy)
 			{
@@ -495,7 +538,7 @@ class MechStatusBar : BaseStatusBar
 				H_DrawString("Distance: " .. dist .. "m",(86,856));
 				// Enemy health bar
 				float percenthealth = float(mech.targetenemy.SpawnHealth()-(mech.targetenemy.SpawnHealth()-hpcounter) ) / mech.targetenemy.SpawnHealth();
-				if(mech.targetenemy.health < hpcounter)hpcounter -= 3;
+				if(mech.targetenemy.health < hpcounter)hpcounter -= (hpcounter-mech.targetenemy.health)*0.1;
 				if(hpcounter == 0) hpcounter = mech.targetenemy.health;
 				if(mech.targetenemy.health <= 0) hpcounter = 0;
 				if(prevtarg != mech.targetenemy)
@@ -578,17 +621,16 @@ class MechStatusBar : BaseStatusBar
 			String weapind = "WEAPIND";
 			int selx = (mech.selectedWeapon+1)%2;
 			int sely = (mech.selectedWeapon+1)/2;
-			vector2 weappos = ( 1450 + (selx*240), 65 + (sely*50) );
+			vector2 weappos = ( 1450 + (selx*240), 68 + (sely*50) );
 			if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
 			if(mech.selectedWeapon <= mech.weapons)H_DrawImage(weapind,weappos,0,(0.8,0.6));
 			
-			// Draw "compass" :P
 			// Draw speedometer.
 			if(!mech.defaultmovement)
 			{
 				H_DrawImage("MBEARMID",(960,90));
-				if(mech.LegVel > 0) compassoffs += 1;
-				if(mech.LegVel < 0) compassoffs -= 1;
+				if(mech.LegVel < 0) compassoffs += 0.79*abs(mech.LegVel);
+				if(mech.LegVel > 0) compassoffs -= 0.79*abs(mech.LegVel);
 				H_SetClipRect(780, 0, 360, 256);
 				H_DrawTexture(compass, (1126+compassoffs, 115) );
 				ClearClipRect();

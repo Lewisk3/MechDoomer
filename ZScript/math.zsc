@@ -15,6 +15,13 @@ class MDMath Abstract
 		return result;
 	}
 	
+	// Determine if number v is in range of -r, r relative to t
+	clearscope static bool inRange(float v, float t, float r)
+	{
+		return (v >= t-r && v <= t+r);
+	}
+	
+	
 	// Normalizes angle between -180, 180 degrees.
 	static float NormalizeAngle(float ang)
 	{

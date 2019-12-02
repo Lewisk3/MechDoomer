@@ -3,10 +3,10 @@
  
 	- Main Contributors -
 Lewisk3     (Lead programmer)
-Xaser       (Argents ArgRocketReticle)
-Caligari87  (Mech bobbing code)
+'fire-hound (Mech cockpits UV maps/shading, Font contributions, Mechlab graphics)
 Cherno 	    (Mech model exports + UV shading + Walk-cycles)
-'fire-hound (Mech cockpits UV maps/shading)
+Caligari87  (Mech bobbing code)
+Xaser       (Argents ArgRocketReticle)
 
 	- Mech sounds/Mech models/Mech Lore -
 Activision/BattleTech/Mechwarrior 2 : 31st Century Combat

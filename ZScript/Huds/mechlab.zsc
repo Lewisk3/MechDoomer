@@ -31,7 +31,6 @@ class Mechlab_Menu : GenericMenu
 	// Textures
 	TextureID tMain;
 	TextureID tArmory;
-	TextureID tBtn_Highlight;
 	TextureID tMech_Head;
 	TextureID tMech_RTorso;
 	TextureID tMech_CTorso;
@@ -43,6 +42,18 @@ class Mechlab_Menu : GenericMenu
 	TextureID tInv_ArrowUp;
 	TextureID tInv_ArrowDown;
 	TextureID tMessageBox;
+	TextureID tBtn_Highlight;
+	TextureID tBtn_Sort;
+	TextureID tBtn_Scrap;
+	TextureID tBtn_Equip;
+	TextureID tBtn_Dequip;
+	TextureID tBtn_ArmorAndRepair;
+	TextureID tBtnlit_Sort;
+	TextureID tBtnlit_Scrap;
+	TextureID tBtnlit_Equip;
+	TextureID tBtnlit_Dequip;
+	TextureID tBtnlit_ArmorAndRepair;
+	TextureID tHud_paperdoll;
 	
 	// Bools
 	bool page_init;
@@ -92,33 +103,66 @@ class Mechlab_Menu : GenericMenu
 		tMech_RLeg = TexMan.CheckForTexture("LMHUD_RL", TexMan.Type_Any);
 		tInv_ArrowUp = TexMan.CheckForTexture("HUDARW", TexMan.Type_Any);
 		tInv_ArrowDown = TexMan.CheckForTexture("HUDARWD", TexMan.Type_Any);
-		tBtn_Highlight = TexMan.CheckForTexture("BTNBOX", TexMan.Type_Any);
 		tMessageBox = TexMan.CheckForTexture("HMESSBG", TexMan.Type_Any);
-		
+		tBtn_Highlight = TexMan.CheckForTexture("BTNBOX", TexMan.Type_Any);
+		tBtn_Sort      = TexMan.CheckForTexture("BTSORT", TexMan.Type_Any);
+		tBtn_Scrap     = TexMan.CheckForTexture("BTSCRAP", TexMan.Type_Any);
+		tBtn_Equip     = TexMan.CheckForTexture("BTEQUIP", TexMan.Type_Any);
+		tBtn_Dequip    = TexMan.CheckForTexture("BTDEQUIP", TexMan.Type_Any);
+		tBtn_ArmorAndRepair = TexMan.CheckForTexture("BTPAGE2", TexMan.Type_Any);
+		tBtnlit_Sort   = TexMan.CheckForTexture("BLSORT", TexMan.Type_Any);
+		tBtnlit_Scrap  = TexMan.CheckForTexture("BLSCRAP", TexMan.Type_Any);
+		tBtnlit_Equip  = TexMan.CheckForTexture("BLEQUIP", TexMan.Type_Any);
+		tBtnlit_Dequip = TexMan.CheckForTexture("BLDEQUIP", TexMan.Type_Any);
+		tBtnlit_ArmorAndRepair = TexMan.CheckForTexture("BLPAGE2", TexMan.Type_Any);
+		tHud_paperdoll = TexMan.CheckForTexture(CPlayer.hud_mech.."A", TexMan.Type_Any);
+
 		mHUDFont = HUDFont.Create("MechFont");
 		hardpoint = -1;
 		
 		// mechplr hardpoint rects
-		initRect(rHD,908,458,96,45);
-		initRect(rCT,919,524,76,175);
-		initRect(rLA,770,524,62,182);
-		initRect(rRA,1082,524,62,182);
-		initRect(rLT,850,524,62,162);
-		initRect(rRT,1002,524,62,162);
-		initRect(rLL,843,724,90,172);
-		initRect(rRL,983,724,90,172);
+		initRect(rHD,948,535,36,40);
+		initRect(rCT,925,583,84,114);
+		initRect(rLA,820,524,62,182);
+		initRect(rRA,1055,524,62,182);
+		initRect(rLT,897,524,43,50);
+		initRect(rRT,997,524,43,50);
+		initRect(rLL,833,724,90,192);
+		initRect(rRL,1003,724,90,192);
 		// Border rects
 		initRect(weapbox,750,130,415,790);
 		initRect(invbox,1198,130,375,790);
 		// Action Buttons
-		initRect(sortbtn,1506,143,50,20);
-		initRect(scrapbtn,1491,883,75,25);
-		initRect(dequipbtn,1079,459,75,25);
-		initRect(equipbtn,641,300,75,25);
+		initRect(sortbtn,1445,125,125,50);
+		initRect(scrapbtn,1450,890,125,50);
+		initRect(dequipbtn,1055,450,125,50);
+		initRect(equipbtn,605,305,125,50);
 		initRect(autilbtn,990,407,160,30);
 		initRect(repairbtn,769,407,90,30);
 		
 		initRect(mouse, mpos.x, mpos.y, 8,8);
+	}
+
+	void Debug_DrawAllButtons()
+	{
+		drawRect(rHD, debug_color);
+		drawRect(rCT, debug_color);
+		drawRect(rRT, debug_color);
+		drawRect(rLT, debug_color);
+		drawRect(rLA, debug_color);
+		drawRect(rRA, debug_color);
+		drawRect(rLL, debug_color);
+		drawRect(rRL, debug_color);
+		drawRect(invbox, debug_color);
+		drawRect(weapbox, debug_color);
+		drawRect(equipbtn, debug_color);
+		drawRect(dequipbtn, debug_color);
+		drawRect(scrapbtn, debug_color);
+	 	drawRect(sortbtn, debug_color);
+		drawRect(modebtn, debug_color);
+		drawRect(modebtn, debug_color);
+		drawRect(autilbtn, debug_color);
+		drawRect(repairbtn, debug_color);
 	}
 
 	override void Drawer ()
@@ -139,13 +183,15 @@ class Mechlab_Menu : GenericMenu
 			if(!page_init)
 			{
 				page_offs = 1;
-				initRect(modebtn,463,731,238,35);
+				initRect(modebtn,490,740,240,45);
 				page_init = true;
 			}
 			H_DrawTexture(tMain, (942,807), 0, (0.9,0.7) );
-			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,800,160);
-			drawInventory(1278,150, invoffset, 30);
-			drawLoadoutBody(931,120,hardpoint);
+			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,815,160);
+			// H_DrawTexture(tHud_paperdoll,(675,770),0,(0.45,0.4));
+			maxpageitems = 28;
+			drawInventory(1278,162, invoffset, maxpageitems);
+			drawLoadoutBody(950,120,hardpoint);
 			drawMechlabInfo();
 		} 
 		// Armory mode
@@ -189,7 +235,7 @@ class Mechlab_Menu : GenericMenu
 			H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-24),0,Font.CR_White,plrHudMessage.alpha);
 			if(plrHudMessage.alpha < 1.0) plrHudMessage.alpha += 0.05;
 		}
-		
+		//Debug_DrawAllButtons();		
 	}
 	
 	override void Ticker()

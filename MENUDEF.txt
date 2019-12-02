@@ -1,7 +1,7 @@
 LISTMENU "MainMenu"
 {
 		LineSpacing 13
-		StaticPatchCentered 150,2,"MWLOGO"
+		StaticPatchCentered 150,-60,"MWLOGO"
 		Position 105, 72
 		centermenu
 		Font "BIGFONT", "BLACK"
@@ -14,7 +14,7 @@ LISTMENU "MainMenu"
 		//StaticPatchCentered 160, 154, "RLOGO"
 		Position 1, 1
 		Font "SMALLFONT", "ORANGE"
-		StaticText 68,50,"MechDoomer 2.24a - Alpha."
+		StaticText 68,50,"MechDoomer 2.30a - Alpha."
 }
 
 

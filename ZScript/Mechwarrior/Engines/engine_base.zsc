@@ -167,6 +167,26 @@ class Mechbase_Engine : Mechbase_Utility
 		}
 		return engineobj;
 	}
+	
+	override void SetupItem(mw_InvStruct item) 
+	{
+		GetDescription(item.description);
+	}
+	void GetDescription(in out Array<String> desc)
+	{
+		let enginfo = Mechbase_Engine.Create(GetClassName());
+		int xlslots = enginfo.ltslots+enginfo.rtslots;
+		int stdslots = enginfo.ctslots+enginfo.gyroslots;
+		string tons = enginfo.weight.."";
+		tons.truncate(tons.Length()-4);
+		string ctext = "Criticals: " .. stdslots;
+		if(xlslots) ctext = ctext .. "(+" .. xlslots .. ") "; 
+		desc.push("Name: " .. enginfo.displayName);
+		desc.push("Weight: " .. tons .. " tons");
+		desc.push(ctext);
+		desc.push("Heatsinks: " .. enginfo.intrinsic_heatsinks+enginfo.intrinsic_doubleheatsinks);
+		desc.push("CBill Value: " .. int(enginfo.worth));
+	}
 }
 
 class Mechbase_EngineOBJ : Object

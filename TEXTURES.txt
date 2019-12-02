@@ -1,7 +1,53 @@
-sprite MWLOGO, 664, 180
+/*
+sprite CROWA0, 640, 480
 {
-	xscale 3
-	yscale 3
+	xscale 1.5
+	yscale 2.0
+	offset 80, 90
+	patch CROWA0, 0, 0
+}
+*/
+
+sprite XHAIRB8, 145, 145
+{
+	xscale 1
+	yscale 1
+	offset 70, 70
+	patch XHAIRB8, 0, 0
+}
+sprite XHAIRB9, 145, 145
+{
+	xscale 1
+	yscale 1
+	offset 70, 70
+	patch XHAIRB9, 0, 0
+}
+sprite XHAIRB10, 145, 145
+{
+	xscale 1
+	yscale 1
+	offset 70, 70
+	patch XHAIRB10, 0, 0
+}
+sprite XHAIRB11, 145, 145
+{
+	xscale 1
+	yscale 1
+	offset 70, 70
+	patch XHAIRB11, 0, 0
+}
+sprite XHAIRB12, 145, 145
+{
+	xscale 1
+	yscale 1
+	offset 70, 70
+	patch XHAIRB12, 0, 0
+}
+
+sprite MWLOGO, 964, 288
+{
+	xscale 4
+	yscale 4
 	offset -90, 0
 	patch MWLOGO, 0, 0 
 }

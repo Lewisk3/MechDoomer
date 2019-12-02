@@ -6,10 +6,19 @@ struct HudAlert
 class mw_InvStruct
 {
 	string Tag;
+	Array<String> description;
+	class<Mechbase_Utility> utiltype;
+	MechutilDefs utildefs;
 	MechHardpoint hardpoint;
 	bool broken;
 	int dmg_taken;
 	int ammunition; // Contains ammo left in structure.
+	int hardslots;
+	String displayName;
+	float weight;
+	bool moveable;
+	bool takesnodamage;
+	int worth;
 }
 class mw_InvInfo : Inventory
 {
@@ -18,6 +27,7 @@ class mw_InvInfo : Inventory
 	Array<mw_InvStruct> weapon_items; // Stores all mech items before they go into the inventory.
 	Array<mw_InvStruct> mechstructs;  // These are equipped structs.
 	Mechbase_EngineOBJ engine;
+	Array<String> engine_description;
 	
 	int money_cbills;			// moneys
 	float weapons_tonnage;		// How much weapons weigh.
@@ -30,14 +40,25 @@ class mw_InvInfo : Inventory
 	
 	mw_InvStruct GiveItem(String type)
 	{
-		class<Mechbase_Ammo> am = type;
+		let item = NewItem(type);
+		if(item) weapon_items.push(item);
+		return item;
+	}
+	mw_InvStruct NewItem(String type)
+	{
+		class<Mechbase_Utility> util = type;
+		let typeobj = util==NULL ? NULL : Mechbase_Utility.CreateTemp(util);
 		let item = new("mw_InvStruct");
 		if(item)
 		{
 			item.Tag = type;
-			if(am) item.ammunition = GetDefaultByType(am).ammogive;
-			weapon_items.push(item);
+			if(typeobj) 
+			{
+				item.utiltype = type;
+				typeobj.SetupItem(item);
+			}
 		}
+		if(typeobj) typeobj.Destroy();
 		return item;
 	}
 	void GiveItems(String type, int amt)
