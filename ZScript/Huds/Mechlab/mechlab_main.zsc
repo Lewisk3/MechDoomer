@@ -202,11 +202,9 @@ void drawLoadoutItemInfo()
 		for(i = 0; i < item.description.Size(); i++) drawInfoLine(item.description[i],i);
 		
 		// Engines
-		if(selected_item.mEngine)
-		{
-			for(i = 0; i < mechplr.inv_context.engine_description.Size(); i++)
-				drawInfoLine(mechplr.inv_context.engine_description[i],i);
-		}
+		let eng = mechplr.inv_context.engine;
+		if(selected_item.mEngine && eng)
+			for(i = 0; i < eng.description.Size(); i++) drawInfoLine(eng.description[i],i);
 		
 		// Real-Time Descriptions
 		class<Mechbase_Ammo> am = item.Tag;

@@ -220,8 +220,8 @@ void DamageHardpointStruct(MechHardpoint hp, int amt=50)
 void DamageHardpointWeapons(MechHardpoint hp, int amt=50)
 {
 	int index = 0;
-	if(weapons < 1) return;
-	int weapind = random(0,weapons-1);
+	if(inv_context.weapons_count < 1) return;
+	int weapind = random(0,inv_context.weapons_count-1);
 	for(let w = Inv; w != null; w = w.Inv)
 	{	
 		let ww = Mechbase_Weapon(w);

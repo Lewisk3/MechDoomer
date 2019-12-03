@@ -31,6 +31,22 @@ class MechHardpoint : Object
 		return maxslots-slots;
 	}
 	
+	MechHardpoint Copy()
+	{
+		let hp = MechHardpoint(new("MechHardpoint"));
+		if(hp)
+		{
+			hp.pos = pos;
+			hp.slots = slots;
+			hp.maxslots = maxslots;
+			hp.armor = armor;
+			hp.internalhp = internalhp;
+			hp.max_armor = max_armor;
+			hp.max_internal = max_internal;
+		}
+		return hp;
+	}
+	
 	void adjustHardslots(int amt)
 	{
 		slots += amt;
@@ -60,6 +76,20 @@ static MechHardpoints Create()
 	hps.ra = new("MechHardpoint");
 	hps.ll = new("MechHardpoint");
 	hps.rl = new("MechHardpoint");
+	return hps;
+}
+MechHardpoints Copy()
+{
+	MechHardpoints hps = new("MechHardpoints");
+	if(!hps) return NULL;
+	hps.hd = hd.Copy();
+	hps.ct = ct.Copy();
+	hps.lt = lt.Copy();
+	hps.rt = rt.Copy();
+	hps.la = la.Copy();
+	hps.ra = ra.Copy();
+	hps.ll = ll.Copy();
+	hps.rl = rl.Copy();
 	return hps;
 }
 MechHardpoint FindByIndex(int ind)

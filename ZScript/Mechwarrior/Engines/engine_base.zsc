@@ -202,4 +202,5 @@ class Mechbase_EngineOBJ : Object
 	int gyroslots;
 	int intrinsic_heatsinks;
 	int intrinsic_doubleheatsinks;
+	Array<String> description;
 }

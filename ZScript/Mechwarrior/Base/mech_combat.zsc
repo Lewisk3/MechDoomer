@@ -81,8 +81,8 @@ void mech_weapons()
 	class<Heatsink> dhs = "DoubleHeatsink";
 	process_antimissilesystem();
 	
-	HeatEfficiency = baseHeatEfficiency+( countStruct("Heatsink")*GetDefaultByType(hs).cooling );
-	HeatEfficiency += baseHeatEfficiency+( countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling );
+	float HSinkEff = (countStruct("Heatsink")*GetDefaultByType(hs).cooling)+(countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling);
+	HeatEfficiency = inv_context.heateff+baseHeatEfficiency+HSinkEff; 
 	Mech_HasJets = (countStruct("JumpJet") > 0);
 	Mech_JetCount = countStruct("JumpJet");
 	if(supersink) HeatEfficiency *= 2;
@@ -119,7 +119,7 @@ void mech_weapons()
 	}
 	if(HeatLevel > 200) HeatLevel = 200;
 	
-	if(selectedWeapon > weapons)selectedWeapon = 1;
+	if(selectedWeapon > inv_context.weapons_count)selectedWeapon = 1;
 	if(selectedGroup > 4)selectedGroup = 1;
 	if( (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) && getSelectedWeapon() && !pilotlook )
 	{
@@ -143,13 +143,14 @@ void mech_weapons()
 		else
 		{
 			setWeaponGroupAt(selectedWeapon,countinv("IBTN_SETWEAPGRP"));
-			maxgroup = getMaxWeaponGrouping();
+			inv_context.weapons_count = getMaxWeaponGrouping();
 		}
 		TakeInventory("IBTN_SETWEAPGRP",999);
 	}
 	
 	if(countinv("IBTN_SHOOTALLWEAPONSLIKEAMADLAD"))
 	{
+		//ChangeMech(CreateStoredMech("Atlas")); // Debug
 		FireGroup(0,true); // pew pew pew, whoosh, whoosh, whoosh, pow, pow, po.. *explodes*
 		TakeInventory("IBTN_SHOOTALLWEAPONSLIKEAMADLAD",1);
 	}
@@ -157,7 +158,7 @@ void mech_weapons()
 	if(countinv("IBTN_NXTGROUP"))
 	{
 		int grp = getWeaponGroupAt(selectedWeapon)+1;
-		if(grp > maxgroup)grp = 1;
+		if(grp > inv_context.weapons_count)grp = 1;
 		selectedWeapon = getNearestWeaponAt(grp);
 		TakeInventory("IBTN_NXTGROUP",1);
 	}
@@ -165,7 +166,7 @@ void mech_weapons()
 	if(countinv("IBTN_PRVGROUP"))
 	{
 		int grp = getWeaponGroupAt(selectedWeapon)-1;
-		if(grp < 1)grp = maxgroup;
+		if(grp < 1)grp = inv_context.weapons_count;
 		selectedWeapon = getNearestWeaponAt(grp);
 		TakeInventory("IBTN_PRVGROUP",1);
 	}
@@ -228,15 +229,15 @@ void mech_weapons()
 	
 	if(countinv("IBTN_NEXTWEAPON"))
 	{	
-		if(weapons > 1)A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+		if(inv_context.weapons_count > 1)A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
 		selectedWeapon++;
 		TakeInventory("IBTN_NEXTWEAPON",1);
 	}		
 	if(countinv("IBTN_PREVWEAPON"))
 	{
-		if(weapons > 1)A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+		if(inv_context.weapons_count > 1)A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
 		selectedWeapon--;
-		if(selectedWeapon < 1) selectedWeapon = weapons;
+		if(selectedWeapon < 1) selectedWeapon = inv_context.weapons_count;
 		TakeInventory("IBTN_PREVWEAPON",1);
 	}
 	

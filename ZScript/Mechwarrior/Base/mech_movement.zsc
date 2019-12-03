@@ -24,6 +24,7 @@ bool canShutdown;
 bool bInfrared;
 bool manualshutdown;
 bool stepping;
+bool nofirstpersonlegs;
 
 int Mech_JetCount;
 int bobdir;
@@ -78,6 +79,11 @@ void mech_cockpitbob()
 			bobdir = 1;
 		}
 		boboffs += bobthrust * bobdir;
+	}
+	if(mech_shutdown)
+	{
+		bobdir = 1;
+		bobthrust = bobmax;
 	}
 	if(abs(boboffs) > bobmax) 
 	{

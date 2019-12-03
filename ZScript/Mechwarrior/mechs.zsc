@@ -28,7 +28,7 @@ class MechWarrior : MechWarriorBase
 		if(!checkVoodoo()) 
 		{
 			mech_movement();
-			if(!mech_shutdown) Bobbing();
+			Bobbing();
 		}
 		super.tick();
 	}
@@ -229,6 +229,7 @@ class Commando : MechWarrior
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Commando";
 		MechWarriorBase.LegsModel "Legs_Commando";
 		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.HideLegsPerspective true;
 	}
 		
 	override void SetupWeapons()

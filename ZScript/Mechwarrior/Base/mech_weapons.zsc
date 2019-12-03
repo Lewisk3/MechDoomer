@@ -12,15 +12,13 @@ bool targetlocked;
 bool weapons_fired;
 int selectedGroup;
 int selectedWeapon;
-int weapons;
-int maxgroup;
 float locktimer;
 
 // Normalize
 void normalizeWeaponsID(int offs)
 {
-	int weapsid = weapons-offs;
-	weapons -= offs;
+	int weapsid = inv_context.weapons_count-offs;
+	inv_context.weapons_count -= offs;
 	for(let w = Inv; w; w = w.Inv)
 	{	
 		let ww = Mechbase_Weapon(w);
@@ -115,7 +113,7 @@ bool, int getNextWeaponIn(int ind, int grp)
 }
 int getNearestWeaponAt(int group, bool markactive=false)
 {
-	int prevind = weapons;
+	int prevind = inv_context.weapons_count;
 	for(let w = Inv; w != null; w = w.Inv)
 	{	
 		let ww = Mechbase_Weapon(w);
@@ -160,7 +158,7 @@ void clearWeapons()
 	hardpoints.rl.slots = 0;
 	inv_context.weapons_tonnage = 0;
 	GiveInventory(cphandler,1);
-	weapons = 0;	
+	inv_context.weapons_count = 0;	
 }
 
 // Remove
@@ -256,7 +254,7 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 		GiveInventory(ntype,1);
 		//console.printf("Obtaining another %s; slot #%d",(Name(ntype) .. ""),slotcheck);
 	}
-	weapons++;
+	inv_context.weapons_count++;
 	for(let w = Inv; w != null; w = w.Inv)
 	{	
 		let ww = Mechbase_Weapon(w);
@@ -264,8 +262,8 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 		{
 			if(ww.WeaponID == 0)
 			{
-				//console.printf("Setting new ID: %d",weapons); 
-				ww.WeaponID = weapons;
+				//console.printf("Setting new ID: %d",inv_context.weapons_count); 
+				ww.WeaponID = inv_context.weapons_count;
 				ww.group = group;
 				ww.hardpoint = hp;
 				hp.adjustHardslots(ww.hardslots);
@@ -274,7 +272,7 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 			}
 		}
 	}
-	maxgroup = getMaxWeaponGrouping();
+	inv_context.maxgroup = getMaxWeaponGrouping();
 	return true;
 }
 void addWeaponToInv(String weapon,int amt=1,bool giveammo = true)
@@ -393,10 +391,10 @@ bool swapWeaponToInv(int weap_ind, int inv_ind)
 			if(weap_ind == ww.WeaponID)
 			{
 				weaptype = resolveWeaponName(ww);
-				int prevweaps = weapons;
-				weapons = ww.WeaponID-1;
+				int prevweaps = inv_context.weapons_count;
+				inv_context.weapons_count = ww.WeaponID-1;
 				equipWeapon(inv_context.weapon_items[inv_ind].Tag,ww.hardpoint,ww.group,false);
-				weapons = prevweaps;
+				inv_context.weapons_count = prevweaps;
 				removeWeapon(ww);
 				inv_context.weapon_items[inv_ind] = weaptype;
 				return true;

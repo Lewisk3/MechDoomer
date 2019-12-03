@@ -426,8 +426,8 @@ class MechStatusBar : BaseStatusBar
 		if(MDMath.inRange(cang, 270,89)) 
 			DrawString(mHUDFont,"S",(Spos.x,offsetpos.y),0,Font.CR_GREEN);
 		if(MDMath.inRange(cang,   0,89) ||
-		  (MDMath.inRange(cang, 360,89) && 
-		   MDMath.inRange(cang, 269,89)    ))
+		  (MDMath.inRange(cang, 359,89) && 
+		   MDMath.inRange(cang, 270,89)    ))
 			DrawString(mHUDFont,"E",(Epos.x,offsetpos.y),0,Font.CR_GREEN);
 		if(MDMath.inRange(cang, 180,89)) 
 			DrawString(mHUDFont,"W",(Wpos.x,offsetpos.y),0,Font.CR_GREEN);
@@ -623,7 +623,7 @@ class MechStatusBar : BaseStatusBar
 			int sely = (mech.selectedWeapon+1)/2;
 			vector2 weappos = ( 1450 + (selx*240), 68 + (sely*50) );
 			if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
-			if(mech.selectedWeapon <= mech.weapons)H_DrawImage(weapind,weappos,0,(0.8,0.6));
+			if(mech.selectedWeapon <= mech.inv_context.weapons_count)H_DrawImage(weapind,weappos,0,(0.8,0.6));
 			
 			// Draw speedometer.
 			if(!mech.defaultmovement)
@@ -637,7 +637,7 @@ class MechStatusBar : BaseStatusBar
 				if(compassoffs > 239)compassoffs = -234;
 				if(compassoffs < -239)compassoffs = 234;
 				
-				H_DrawString(int(mech.MoveSpeedKPH*mech.throttle) .. "Kph" ,(820+795,100+720));
+				H_DrawString(int(mech.MoveSpeedKPH*mech.throttle) .. "Kph" ,(820+765,100+720));
 			}
 			DrawBars();
 		}

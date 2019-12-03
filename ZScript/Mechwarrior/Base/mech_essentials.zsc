@@ -13,6 +13,7 @@ bool buttonTick;
 bool btn_userfive;
 bool pilotlook;
 bool isdead;
+bool docopy_novoodoo;
 int ticks;
 int prevticks;
 float mech_tonnage;
@@ -27,6 +28,86 @@ class<Mechbase_Engine> base_engine;
 bool modelcockpit;
 String hud_cockpit;
 String hud_mech;
+
+
+mw_StoredMech ChangeMech(mw_StoredMech source)
+{
+	mw_StoredMech curmech = new("mw_StoredMech");
+	
+	// New inventory instance.
+	let act = Spawn("Actor"); // Spawn dummy to create inv on.
+	if(!act || !curmech) return NULL;
+	act.GiveInventory("mw_InvInfo",1);
+	let ainv = mw_InvInfo(act.FindInventory("mw_InvInfo"));
+	if(!ainv) return NULL;
+	ainv.Init();
+	// Inventory transfer
+	curmech.baseclass = GetClassName();
+	curmech.inv_context = ainv;
+	curmech.active_inventory = Inv;
+	inv_context.Swap(curmech.inv_context,source.inv_context);
+	hardpoints = inv_context.hardpoints;
+	Inv = source.active_inventory;
+	// Take ownership of new inventory.
+	for (let item = Inv; item != null; item = item.Inv)
+		item.Owner = self;
+	act.Inv = NULL;
+	act.Destroy();
+	
+	// Assign defaults...
+	let defs = MechWarriorBase(GetDefaultByType(source.baseclass));
+	ViewHeight = defs.ViewHeight;
+	baseHeatEfficiency = defs.baseHeatEfficiency;
+	LegSpeed = defs.LegSpeed;
+	MaxYaw = defs.MaxYaw;
+	minPitch = defs.minPitch;
+	maxPitch = defs.maxPitch;
+	mech_tonnage = defs.mech_tonnage;
+	hud_mech = defs.hud_mech;
+	hud_cockpit = defs.hud_cockpit;
+	base_engine = defs.base_engine;
+	defaultmovement = defs.defaultmovement;
+	uncappedtorso = defs.uncappedtorso;
+	overtonnage = defs.overtonnage;
+	modelcockpit = defs.modelcockpit;
+	cphandler = defs.cphandler;
+	mech_legs = defs.mech_legs;
+	mechtype = defs.mechtype;
+	nofirstpersonlegs = defs.nofirstpersonlegs;
+	player.viewheight = defs.ViewHeight;
+	
+	// Update vars
+	player.PendingWeapon = Weapon(FindInventory(cphandler));
+	DropWeapon();
+	BringUpWeapon();
+	legs_reference = NULL;
+	setupSpeedKPH(EngineGetKPH());
+	console.printf("Completed?");
+	
+	// Finish
+	return curmech;
+}
+
+mw_StoredMech CreateStoredMech(class<MechwarriorBase> type)
+{
+	let mechobj = new("mw_StoredMech");
+	let mechact = MechwarriorBase(Spawn(type));
+	if(mechobj && mechact)
+	{
+		mechact.GiveInventory(mechact.cphandler,1);
+		mechact.docopy_novoodoo = true;
+		mechact.setupInventory();
+		mechobj.baseclass = type;
+		mechobj.inv_context = mechact.inv_context;
+		mechobj.active_inventory = mechact.Inv;
+		
+		// Prevent deletion of critical data structures.
+		mechact.inv_context = NULL;
+		mechact.Inv = NULL;
+		mechact.Destroy();
+	}
+	return mechobj;
+}
 
 // Inventory
 bool setupInventory()
@@ -145,7 +226,7 @@ override void PostBeginPlay()
 	selectedGroup = 1;
 	selectedWeapon = 1;
 	mech_jetsfuel = 100;
-	maxgroup = getMaxWeaponGrouping();
+	inv_context.maxgroup = getMaxWeaponGrouping();
 	defaultfov = player.desiredFOV;
 			
 	// SoundQueue 
@@ -172,7 +253,7 @@ override void tick()
 		super.Tick();
 		return;
 	}
-	
+		
 	// Clamp viewheight so we don't end up inside our hips when we fall.
 	player.viewheight = clamp(player.viewheight, default.viewheight*0.8, default.viewheight*2.0);
 	

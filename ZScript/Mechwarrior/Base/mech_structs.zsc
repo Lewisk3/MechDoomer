@@ -70,14 +70,14 @@ void takeammo(class<Mechbase_Ammo> type, int amt)
 bool EquipEngine(class<Mechbase_Engine> engine)
 {	
 	let tengine = Mechbase_Engine(Mechbase_Utility.CreateTemp(engine));
+	inv_context.engine = MechBase_Engine.Create(engine);
+	MechBase_EngineOBJ engobj = inv_context.engine;	
 	if(tengine) 
 	{	
-		tengine.GetDescription(inv_context.engine_description);
+		tengine.GetDescription(engobj.description);
 		tengine.Destroy();
 	}
-	inv_context.engine = MechBase_Engine.Create(engine);
-	MechBase_EngineOBJ engobj = inv_context.engine;
-	
+
 	// Check if enough slots/tons to equip.
 	int slots_ct = hardpoints.ct.getFreeSlots();
 	int slots_lt = hardpoints.lt.getFreeSlots();
@@ -104,8 +104,8 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	equipStruct("StructGyro",hardpoints.ct,gyroslots);
 	setupSpeedKPH(EngineGetKPH());
 	inv_context.weapons_tonnage += weight;
-	baseHeatEfficiency += GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
-	baseHeatEfficiency += GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;
+	inv_context.heateff += GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
+	inv_context.heateff += GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;
 	return true;
 }
 	
@@ -145,8 +145,8 @@ void DequipEngine()
 		if(!eng && !gyro) engstruct = false;
 	}
 	
-	baseHeatEfficiency -= GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
-	baseHeatEfficiency -= GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;
+	inv_context.heateff -= GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
+	inv_context.heateff -= GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;
 	inv_context.weapons_tonnage -= engobj.weight;
 	inv_context.GiveItem(engobj.ClassType);
 	

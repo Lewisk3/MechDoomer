@@ -89,6 +89,10 @@ class MechLegsBase : Actor
 		{
 			angle = mechowner.LegAng;
 			SetOrigin(mechowner.pos,true);
+			if(!mechowner.dronecam && mechowner.nofirstpersonlegs) 
+				Sprite = GetSpriteIndex("TNT1A0");
+			else
+				Sprite = GetSpriteIndex("TLEGA0");
 		}
 		super.tick();
 	}
@@ -123,7 +127,9 @@ class MechLegsBase : Actor
 	States
 	{
 		Spawn:
-			TLEG "#" 1 A_JumpIf(checkStepping(true) && isMoving(), "WalkCycle");
+			TLEG A 1;
+		SpawnIdle:
+			"####" "#" 1 A_JumpIf(checkStepping(true) && isMoving(), "WalkCycle");
 		loop;
 		WalkCycle:
 			TLEG BCDEFGHIJ 4 
@@ -136,7 +142,7 @@ class MechLegsBase : Actor
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
 				// console.printf("--------\nSR: %f\nWR: %f\nFR: %f", spdrating, wrating, stompfriction);
 				
-				return !isMoving() ? ResolveState("Spawn") : ResolveState(Null); 
+				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null); 
 			}
 		loop;
 	}
