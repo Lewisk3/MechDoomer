@@ -37,17 +37,10 @@ class MechCamera : Actor
 	
 	vector3 GetFollowPos()
 	{
-		if(!mechowner) return (0,0,0);
-		FLineTraceData lndata;
 		float zoffs = (mechowner.viewheight);
 		float trueangle = !rotangle ? mechowner.angle : rotangle;
 		float dmul = followdist*(frontcam ? -1 : 1);
-		vector3 newfollowpos = mechowner.Vec3Offset(
-			-cos(trueangle),
-			-sin(trueangle),
-			zoffs+sin(mechowner.pitch)
-		);
-		if(!followpos.length()) followpos = newfollowpos;
+		FLineTraceData lndata;
 		mechowner.LineTrace(angle+180,followdist_max,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,zoffs+sin(mechowner.pitch),0,0,lndata);
 		if( lndata.HitType == lndata.TRACE_HitWall    || 
 		    lndata.HitType == lndata.TRACE_HitCeiling || 
@@ -60,13 +53,24 @@ class MechCamera : Actor
 		{	
 			followdist_desired = followdist_max;
 		}
-		// For some dumb reason i can't do a vec3*=dmul here, doesn't work right.
-		vector3 corrpos = mechowner.Vec3Offset(
+		
+		// Backwards interpolate from player center to new pos.
+		// This makes clipping out of walls a bit less noticable
+		// because, instead of going from inside the wall in, we're going
+		// from inside the player out to the wall.
+		
+		vector3 origpos = mechowner.Vec3Offset(
+			-cos(trueangle),
+			-sin(trueangle),
+			zoffs+sin(mechowner.pitch)
+		);
+		vector3 newfollowpos = mechowner.Vec3Offset(
 			-cos(trueangle)*dmul,
 			-sin(trueangle)*dmul,
 			zoffs+sin(mechowner.pitch)*dmul
 		);
-		newfollowpos = MDMath.Lerp3D(newfollowpos, corrpos, 0.6);
+		if(!followpos.length()) followpos = newfollowpos;
+		newfollowpos = MDMath.Lerp3D(origpos, newfollowpos, 0.6);
 		return newfollowpos;
 	}
 	

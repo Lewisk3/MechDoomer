@@ -83,17 +83,12 @@ class MechDoomerEvents : EventHandler
 					cornerDirs[2] = (-1, -1);
 					cornerDirs[3] = ( 1, -1);
 					
-					// double frac = (gametic + e.fracTic) / 35.0;
 					for (int i = 0; i < 4; i++) 
 					{
 						Vector2 viewportPos = mwd_GlobalMaths.ndcToViewPort(corners[i]);
-						viewportPos.y -= 15;
-						// viewportPos += (2 * abs(2 * (frac - floor(frac + 0.5))) - 1) * 6 * cornerDirs[i];
-						
+						viewportPos.y -= 15;	
 						Screen.drawTexture(TexMan.checkForTexture(cornerTextures[i], TexMan.Type_Any), false, viewportPos.x, viewportPos.y);
 					}
-					// Vector2 tlCornerPos = mwd_GlobalMaths.ndcToViewPort(corners[2]) + (2 * abs(2 * (frac - floor(frac + 0.5))) - 1) * 6 * cornerDirs[2];
-					// Screen.drawText(smallfont, Font.CR_WHITE, tlCornerPos.x + 8, tlCornerPos.y + 8, projActor.getTag());
 				}
 			}
 		}
@@ -191,7 +186,7 @@ class MechDoomerEvents : EventHandler
 		{
 			// Process mechlab netevents
 			if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
-			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(200,0,false);
+			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(350,0,false);
 			if(netcmd == "droneviewswitch" && !plr.isdead && plr.dronecam) plr.dronecam.frontcam = !plr.dronecam.frontcam;
 			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
