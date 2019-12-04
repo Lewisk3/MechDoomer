@@ -45,9 +45,9 @@ void drawArmoryInfo()
 	heateff.truncate(heateff.Length()-3);
 	weapston.truncate(weapston.length()-4);
 	mechston.truncate(mechston.length()-4);
-	vector2 detailpos = (330,280);
+	vector2 detailpos = (330,300);
 	vector2 cbillpos  = (330,150);
-	vector2 statuspos = (755,185);
+	vector2 statuspos = (777,185);
 	
 	// This is surrounded in curly braces so it can be collapsed and temporarily
 	// removed from view.
@@ -116,7 +116,7 @@ void drawArmoryInfo()
 		if( astat_selected != -1) repair_cost = mechplr.CalculateHardpointRepairCost(hp,astat_selected);
 	}
 	
-	H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
+	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);
 	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
 	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+40));
 	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+60));
@@ -130,6 +130,14 @@ void drawArmoryInfo()
 	H_DrawString("Funds: ".. mechplr.inv_context.money_cbills, cbillpos);
 	H_DrawString("Price: ".. repair_cost, (cbillpos.x, cbillpos.y+20) );
 	H_DrawString("Bal: ".. int(cbills_remain), (cbillpos.x, cbillpos.y+40) );
+	
+	// Draw Buttons
+	TextureID repair = (checkCollision(mouse,repairbtn)&&repair_cost) ? tBtnlit_Repair : tBtn_Repair;
+	TextureID util = (checkCollision(mouse,autilbtn)&&autil_item) ? tBtnlit_EquipUtil : tBtn_EquipUtil;
+	TextureID mode = checkCollision(mouse,modebtn) ?  tBtnlit_WeaponsLab : tBtn_WeaponsLab;
+	H_DrawTexture(repair,(840,417),0,(0.9,0.7));
+	H_DrawTexture(util,(1050,417),0,(0.9,0.7));
+	H_DrawTexture(mode,(608,561),0,(0.9,0.7));
 	
 	if( mstats.left_btn )
 	{
@@ -146,14 +154,12 @@ void drawArmoryInfo()
 			
 			if(checkCollision(mouse,autilbtn) && autil_item)
 			{
-				H_DrawTexture(tBtn_Highlight,(1068,368),0,(2.0,0.7));
 				MechDoomerEvents.SendNetworkEvent("autil_useitem:" .. autil_item.getClassName(),hardpoint);
 				mstats.left_btn = false;
 			}
 			
 			if( checkCollision(mouse,repairbtn) )
 			{
-				H_DrawTexture(tBtn_Highlight,(811,368),0,(1.1,0.7));
 				mstats.left_btn = false;
 				
 				if(astat_selected != -1)
@@ -170,6 +176,7 @@ void drawArmoryInfo()
 			}
 		}
 		
+		int php = hardpoint;
 		if(checkCollision(mouse,rHD)) {hardpoint = 0; astat_selected=-1;}
 		if(checkCollision(mouse,rCT)) {hardpoint = 1; astat_selected=-1;}
 		if(checkCollision(mouse,rLT)) {hardpoint = 2; astat_selected=-1;}
@@ -178,6 +185,7 @@ void drawArmoryInfo()
 		if(checkCollision(mouse,rRA)) {hardpoint = 5; astat_selected=-1;}
 		if(checkCollision(mouse,rLL)) {hardpoint = 6; astat_selected=-1;}
 		if(checkCollision(mouse,rRL)) {hardpoint = 7; astat_selected=-1;}
+		if(php != hardpoint) mechplr.A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
 	}
 	
 	// Draw hardpoint vitals

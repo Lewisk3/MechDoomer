@@ -188,6 +188,7 @@ class Atlas : MechWarrior
 		MechWarriorBase.HudCockpit "ATLSHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 100;
+		MechWarriorBase.HideLegsPerspective true;
 		Player.DisplayName "Atlas Prime";
 		Player.ViewHeight 130;
 	}

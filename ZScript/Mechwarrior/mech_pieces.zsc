@@ -5,6 +5,7 @@ class MechCamera : Actor
 	vector3 followpos;
 	float followdist;
 	float followdist_desired;
+	float followdist_max;
 	float rotangle;
 	float rotspd;
 	bool frontcam;
@@ -14,7 +15,6 @@ class MechCamera : Actor
 	Default
 	{
 		+NOGRAVITY;
-		+SOLID;
 		Radius 1;
 		Height 1;
 		MechCamera.FollowDistance 50;
@@ -27,10 +27,47 @@ class MechCamera : Actor
 		{
 			cam.mechowner = torso;
 			cam.followdist_desired = dist;
+			cam.followdist_max = dist;
 			cam.rotspd = rotation;
 			cam.frontcam = frontfacing;
+			torso.player.camera = cam;
 		}
 		return cam;
+	}
+	
+	vector3 GetFollowPos()
+	{
+		if(!mechowner) return (0,0,0);
+		FLineTraceData lndata;
+		float zoffs = (mechowner.viewheight);
+		float trueangle = !rotangle ? mechowner.angle : rotangle;
+		float dmul = followdist*(frontcam ? -1 : 1);
+		vector3 newfollowpos = mechowner.Vec3Offset(
+			-cos(trueangle),
+			-sin(trueangle),
+			zoffs+sin(mechowner.pitch)
+		);
+		if(!followpos.length()) followpos = newfollowpos;
+		mechowner.LineTrace(angle+180,followdist_max,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,zoffs+sin(mechowner.pitch),0,0,lndata);
+		if( lndata.HitType == lndata.TRACE_HitWall    || 
+		    lndata.HitType == lndata.TRACE_HitCeiling || 
+			lndata.HitType == TRACE_HitFloor			  ) 
+		{
+			followdist_desired = lndata.Distance;
+			if(followdist > followdist_desired) followdist = followdist_desired;
+		}
+		else
+		{	
+			followdist_desired = followdist_max;
+		}
+		// For some dumb reason i can't do a vec3*=dmul here, doesn't work right.
+		vector3 corrpos = mechowner.Vec3Offset(
+			-cos(trueangle)*dmul,
+			-sin(trueangle)*dmul,
+			zoffs+sin(mechowner.pitch)*dmul
+		);
+		newfollowpos = MDMath.Lerp3D(newfollowpos, corrpos, 0.6);
+		return newfollowpos;
 	}
 	
 	override void tick()
@@ -39,17 +76,10 @@ class MechCamera : Actor
 		{
 			if(followdist < followdist_desired && mechowner.dronecam_active) 
 				followdist = MDMath.Lerp(followdist,followdist_desired,0.05);
-							
-			float zoffs = (mechowner.viewheight);
+				
 			float lerpspd = 0.15;
 			rotangle += rotspd;
-			float trueangle = !rotangle ? mechowner.angle : rotangle;
-			vector3 newfollowpos = mechowner.Vec3Offset(
-				-cos(trueangle)*followdist*(frontcam ? -1 : 1),
-				-sin(trueangle)*followdist*(frontcam ? -1 : 1),
-				zoffs+(sin(mechowner.pitch)*followdist)
-			);
-			if(!followpos.length()) followpos = newfollowpos;
+			vector3 newfollowpos = GetFollowPos();
 			
 			if(!mechowner.dronecam_active)
 			{
@@ -59,7 +89,7 @@ class MechCamera : Actor
 			}
 			followpos = MDMath.Lerp3D(followpos, newfollowpos, lerpspd);
 			angle = AngleTo(mechowner);
-			pitch = MDMath.getPitchBetween(pos,(mechowner.pos.x,mechowner.pos.y,mechowner.pos.z+zoffs));
+			pitch = MDMath.getPitchBetween(pos,(mechowner.pos.x,mechowner.pos.y,mechowner.pos.z+mechowner.viewheight));
 			SetOrigin(followpos,true);
 		}
 	}	
@@ -141,7 +171,6 @@ class MechLegsBase : Actor
 				if( (frame == 2 || frame == 7) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
 				// console.printf("--------\nSR: %f\nWR: %f\nFR: %f", spdrating, wrating, stompfriction);
-				
 				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null); 
 			}
 		loop;

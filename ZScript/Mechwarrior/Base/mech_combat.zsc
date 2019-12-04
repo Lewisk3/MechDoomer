@@ -143,14 +143,13 @@ void mech_weapons()
 		else
 		{
 			setWeaponGroupAt(selectedWeapon,countinv("IBTN_SETWEAPGRP"));
-			inv_context.weapons_count = getMaxWeaponGrouping();
+			inv_context.maxgroup = getMaxWeaponGrouping();
 		}
 		TakeInventory("IBTN_SETWEAPGRP",999);
 	}
 	
 	if(countinv("IBTN_SHOOTALLWEAPONSLIKEAMADLAD"))
 	{
-		//ChangeMech(CreateStoredMech("Atlas")); // Debug
 		FireGroup(0,true); // pew pew pew, whoosh, whoosh, whoosh, pow, pow, po.. *explodes*
 		TakeInventory("IBTN_SHOOTALLWEAPONSLIKEAMADLAD",1);
 	}

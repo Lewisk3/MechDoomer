@@ -4,6 +4,7 @@
 extend class MechwarriorBase;
 
 // Vars
+class<MechwarriorBase> baseclass;
 mw_InvInfo inv_context;
 MechHardpoints hardpoints;
 HudAlert hAlert;
@@ -30,19 +31,20 @@ String hud_cockpit;
 String hud_mech;
 
 
-mw_StoredMech ChangeMech(mw_StoredMech source)
+void ChangeMech(int invmech)
 {
 	mw_StoredMech curmech = new("mw_StoredMech");
+	mw_StoredMech source = inv_context.mechs[invmech];
 	
 	// New inventory instance.
 	let act = Spawn("Actor"); // Spawn dummy to create inv on.
-	if(!act || !curmech) return NULL;
+	if(!act || !curmech) return;
 	act.GiveInventory("mw_InvInfo",1);
 	let ainv = mw_InvInfo(act.FindInventory("mw_InvInfo"));
-	if(!ainv) return NULL;
+	if(!ainv) return;
 	ainv.Init();
 	// Inventory transfer
-	curmech.baseclass = GetClassName();
+	curmech.baseclass = baseclass;
 	curmech.inv_context = ainv;
 	curmech.active_inventory = Inv;
 	inv_context.Swap(curmech.inv_context,source.inv_context);
@@ -55,7 +57,9 @@ mw_StoredMech ChangeMech(mw_StoredMech source)
 	act.Destroy();
 	
 	// Assign defaults...
+	console.printf("Changing to: %s",source.baseclass.getClassName());
 	let defs = MechWarriorBase(GetDefaultByType(source.baseclass));
+	baseclass = source.baseclass;
 	ViewHeight = defs.ViewHeight;
 	baseHeatEfficiency = defs.baseHeatEfficiency;
 	LegSpeed = defs.LegSpeed;
@@ -76,16 +80,16 @@ mw_StoredMech ChangeMech(mw_StoredMech source)
 	nofirstpersonlegs = defs.nofirstpersonlegs;
 	player.viewheight = defs.ViewHeight;
 	
+	inv_context.mechs.Delete(invmech);
+	inv_context.mechs.Insert(invmech,curmech);
+	
 	// Update vars
 	player.PendingWeapon = Weapon(FindInventory(cphandler));
 	DropWeapon();
 	BringUpWeapon();
+	if(legs_reference) legs_reference.Destroy();
 	legs_reference = NULL;
 	setupSpeedKPH(EngineGetKPH());
-	console.printf("Completed?");
-	
-	// Finish
-	return curmech;
 }
 
 mw_StoredMech CreateStoredMech(class<MechwarriorBase> type)
@@ -221,6 +225,7 @@ override void PostBeginPlay()
 	}
 	setupInventory();
 	
+	baseclass = GetClassName();
 	weapons_fired = false;
 	weapon_groupfire = false;
 	selectedGroup = 1;
@@ -242,6 +247,8 @@ override void PostBeginPlay()
 		level.aircontrol = 1;
 		level.airfriction = 0.87;
 	}	
+	
+	//inv_context.mechs.Push(CreateStoredMech("Atlas"));
 	//startMechbay();
 	super.PostBeginPlay();
 }
@@ -260,10 +267,7 @@ override void tick()
 	// Turns out, we lose our legs when moving to another map, LOL.
 	if(!legs_reference && mech_legs) legs_reference = MechLegsBase.Create(mech_legs, self);
 	if(!inv_context) setupInventory();	
-	if(dronecam) 
-		player.camera = dronecam;
-	else
-		player.camera = self;
+	if(!dronecam) player.camera = self;
 	
 	// Make sure player doesn't have any actual weapons.
 	for(let w = Inv; w != null; w = w.Inv)

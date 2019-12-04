@@ -40,8 +40,8 @@ void ProcessLoadoutButtons()
 	if(mstats.left_btn && checkCollision(mouse,  equipbtn)) H_DrawTexture(tBtnlit_Equip,  ( equipbtn.x+62, equipbtn.y),0,(0.9,0.7));
 	if(mstats.left_btn && checkCollision(mouse,  scrapbtn)) H_DrawTexture(tBtnlit_Scrap,  ( scrapbtn.x+62, scrapbtn.y-97),0,(0.9,0.7));
 	if(mstats.left_btn && checkCollision(mouse,   sortbtn)) H_DrawTexture(tBtnlit_Sort,   (  sortbtn.x+63,  sortbtn.y+31),0,(0.9,0.7));
-	if(mstats.left_btn && checkCollision(mouse,   modebtn))
-		H_DrawTexture(tBtnlit_ArmorAndRepair, (  modebtn.x+120,  modebtn.y-71),0,(0.9,0.7));
+	if( checkCollision(mouse,   modebtn) )
+		H_DrawTexture(tBtnlit_ArmorAndRepair, (  modebtn.x+120,  modebtn.y-72),0,(0.9,0.7));
 	
 	// Scroll
 	if(mstats.scroll == -1 && invoffset-1 > -1){ mstats.scroll = 0;  invoffset--; }
@@ -198,14 +198,18 @@ void drawLoadoutItemInfo()
 	
 	if(item && !selected_item.mWeapon)
 	{
+		// Engine Descriptions
+		let eng = mechplr.inv_context.engine;
+		if(selected_item.mEngine && eng && selected_item.location)
+		{
+			for(int i = 0; i < eng.description.Size(); i++) drawInfoLine(eng.description[i],i);
+			return;
+		}
+		
+		// Standard Descriptions
 		int i = 0;
 		for(i = 0; i < item.description.Size(); i++) drawInfoLine(item.description[i],i);
-		
-		// Engines
-		let eng = mechplr.inv_context.engine;
-		if(selected_item.mEngine && eng)
-			for(i = 0; i < eng.description.Size(); i++) drawInfoLine(eng.description[i],i);
-		
+	
 		// Real-Time Descriptions
 		class<Mechbase_Ammo> am = item.Tag;
 		if(am) drawInfoLine("Ammunition: "..item.ammunition,i);
@@ -229,7 +233,7 @@ void drawMechlabInfo()
 	mechston.truncate(mechston.length()-4);
 	enginetype.truncate(enginetype.Length()-7);
 	vector2 detailpos = (330,400);
-	H_DrawString("Chassis: " .. mechplr.getClassName(),detailpos);
+	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);
 	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
 	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+40));
 	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+60));
@@ -267,6 +271,7 @@ void drawInventory(int px, int py, int start, int max)
 		}
 		if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 		{
+			clearSelected();
 			setSelected(weapname, null, ut, mw, eng, i);
 		}
 		string displayName = eng ? MechBase_Engine.GetRealName(eng) : weapname .. "(#"..slots..")";
@@ -373,6 +378,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 					initRect(checkmouse,sx,sy+offs.x+20,14*(mechplr.resolveWeaponName(ww).Length()+suffix.Length()+4),15);
 					if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 					{ 
+						clearSelected();
 						setSelected(mechplr.resolveWeaponName(ww), hp, null, ww.getClassName(), null, wind);
 						selected_item.mWeaponOBJ = ww; 
 					}

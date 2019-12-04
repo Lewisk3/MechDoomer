@@ -51,7 +51,7 @@ class mw_InvInfo : Inventory
 	{	
 		dest.weapon_items.Copy(weapon_items);
 		dest.mechstructs.Copy(mechstructs);
-		dest.hardpoints = hardpoints.Copy();
+		dest.hardpoints = hardpoints;
 		dest.engine = engine;
 		dest.weapons_count = weapons_count;
 		dest.maxgroup = maxgroup;
@@ -153,5 +153,10 @@ class MechWarriorBase : DoomPlayer
 	clearscope bool checkVoodoo() 
 	{ 
 		return docopy_novoodoo ? false : (!player || !player.mo || player.mo != self); 
+	}
+	clearscope String getChassisName()
+	{
+		if(!baseclass) return "???";
+		return GetDefaultByType(baseclass).getClassName();
 	}
 }

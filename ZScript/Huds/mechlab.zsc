@@ -42,12 +42,18 @@ class Mechlab_Menu : GenericMenu
 	TextureID tInv_ArrowUp;
 	TextureID tInv_ArrowDown;
 	TextureID tMessageBox;
+	TextureID tBtn_Repair;
+	TextureID tBtn_EquipUtil;
+	TextureID tBtn_WeaponsLab;
 	TextureID tBtn_Highlight;
 	TextureID tBtn_Sort;
 	TextureID tBtn_Scrap;
 	TextureID tBtn_Equip;
 	TextureID tBtn_Dequip;
 	TextureID tBtn_ArmorAndRepair;
+	TextureID tBtnlit_Repair;
+	TextureID tBtnlit_EquipUtil;
+	TextureID tBtnlit_WeaponsLab;
 	TextureID tBtnlit_Sort;
 	TextureID tBtnlit_Scrap;
 	TextureID tBtnlit_Equip;
@@ -91,29 +97,35 @@ class Mechlab_Menu : GenericMenu
 		
 		hud_page = 0;  // Mechlab Page or Armory Page
 		
-		tMain = TexMan.CheckForTexture("LOADMHUD", TexMan.Type_Any);
+		tMain   = TexMan.CheckForTexture("LOADMHUD", TexMan.Type_Any);
 		tArmory = TexMan.CheckForTexture("LOADRHUD", TexMan.Type_Any);
-		tMech_Head = TexMan.CheckForTexture("LMHUD_HD", TexMan.Type_Any);
-		tMech_LTorso = TexMan.CheckForTexture("LMHUD_LT", TexMan.Type_Any);
-		tMech_CTorso = TexMan.CheckForTexture("LMHUD_CT", TexMan.Type_Any);
-		tMech_RTorso = TexMan.CheckForTexture("LMHUD_RT", TexMan.Type_Any);
-		tMech_LArm = TexMan.CheckForTexture("LMHUD_LA", TexMan.Type_Any);
-		tMech_RArm = TexMan.CheckForTexture("LMHUD_RA", TexMan.Type_Any);
-		tMech_LLeg = TexMan.CheckForTexture("LMHUD_LL", TexMan.Type_Any);
-		tMech_RLeg = TexMan.CheckForTexture("LMHUD_RL", TexMan.Type_Any);
-		tInv_ArrowUp = TexMan.CheckForTexture("HUDARW", TexMan.Type_Any);
+		tMech_Head     = TexMan.CheckForTexture("LMHUD_HD", TexMan.Type_Any);
+		tMech_LTorso   = TexMan.CheckForTexture("LMHUD_LT", TexMan.Type_Any);
+		tMech_CTorso   = TexMan.CheckForTexture("LMHUD_CT", TexMan.Type_Any);
+		tMech_RTorso   = TexMan.CheckForTexture("LMHUD_RT", TexMan.Type_Any);
+		tMech_LArm     = TexMan.CheckForTexture("LMHUD_LA", TexMan.Type_Any);
+		tMech_RArm     = TexMan.CheckForTexture("LMHUD_RA", TexMan.Type_Any);
+		tMech_LLeg     = TexMan.CheckForTexture("LMHUD_LL", TexMan.Type_Any);
+		tMech_RLeg     = TexMan.CheckForTexture("LMHUD_RL", TexMan.Type_Any);
+		tInv_ArrowUp   = TexMan.CheckForTexture("HUDARW", TexMan.Type_Any);
 		tInv_ArrowDown = TexMan.CheckForTexture("HUDARWD", TexMan.Type_Any);
-		tMessageBox = TexMan.CheckForTexture("HMESSBG", TexMan.Type_Any);
-		tBtn_Highlight = TexMan.CheckForTexture("BTNBOX", TexMan.Type_Any);
-		tBtn_Sort      = TexMan.CheckForTexture("BTSORT", TexMan.Type_Any);
-		tBtn_Scrap     = TexMan.CheckForTexture("BTSCRAP", TexMan.Type_Any);
-		tBtn_Equip     = TexMan.CheckForTexture("BTEQUIP", TexMan.Type_Any);
-		tBtn_Dequip    = TexMan.CheckForTexture("BTDEQUIP", TexMan.Type_Any);
+		tMessageBox    = TexMan.CheckForTexture("HMESSBG", TexMan.Type_Any);
+		tBtn_Repair   	 	= TexMan.CheckForTexture("BTREP", TexMan.Type_Any);
+		tBtn_EquipUtil 	    = TexMan.CheckForTexture("BTUTIL", TexMan.Type_Any);
+		tBtn_WeaponsLab 	= TexMan.CheckForTexture("BTWEAPL", TexMan.Type_Any);
+		tBtn_Highlight  	= TexMan.CheckForTexture("BTNBOX", TexMan.Type_Any);
+		tBtn_Sort      		= TexMan.CheckForTexture("BTSORT", TexMan.Type_Any);
+		tBtn_Scrap     	    = TexMan.CheckForTexture("BTSCRAP", TexMan.Type_Any);
+		tBtn_Equip     	    = TexMan.CheckForTexture("BTEQUIP", TexMan.Type_Any);
+		tBtn_Dequip    	    = TexMan.CheckForTexture("BTDEQUIP", TexMan.Type_Any);
 		tBtn_ArmorAndRepair = TexMan.CheckForTexture("BTPAGE2", TexMan.Type_Any);
-		tBtnlit_Sort   = TexMan.CheckForTexture("BLSORT", TexMan.Type_Any);
-		tBtnlit_Scrap  = TexMan.CheckForTexture("BLSCRAP", TexMan.Type_Any);
-		tBtnlit_Equip  = TexMan.CheckForTexture("BLEQUIP", TexMan.Type_Any);
-		tBtnlit_Dequip = TexMan.CheckForTexture("BLDEQUIP", TexMan.Type_Any);
+		tBtnlit_Repair	       = TexMan.CheckForTexture("BLREP", TexMan.Type_Any);
+		tBtnlit_EquipUtil      = TexMan.CheckForTexture("BLUTIL", TexMan.Type_Any);
+		tBtnlit_WeaponsLab     = TexMan.CheckForTexture("BLWEAPL", TexMan.Type_Any);
+		tBtnlit_Sort   	   	   = TexMan.CheckForTexture("BLSORT", TexMan.Type_Any);
+		tBtnlit_Scrap      	   = TexMan.CheckForTexture("BLSCRAP", TexMan.Type_Any);
+		tBtnlit_Equip  		   = TexMan.CheckForTexture("BLEQUIP", TexMan.Type_Any);
+		tBtnlit_Dequip 		   = TexMan.CheckForTexture("BLDEQUIP", TexMan.Type_Any);
 		tBtnlit_ArmorAndRepair = TexMan.CheckForTexture("BLPAGE2", TexMan.Type_Any);
 		tHud_paperdoll = TexMan.CheckForTexture(CPlayer.hud_mech.."A", TexMan.Type_Any);
 
@@ -137,29 +149,29 @@ class Mechlab_Menu : GenericMenu
 		initRect(scrapbtn,1450,890,125,50);
 		initRect(dequipbtn,1055,450,125,50);
 		initRect(equipbtn,605,305,125,50);
-		initRect(autilbtn,990,407,160,30);
-		initRect(repairbtn,769,407,90,30);
+		initRect(autilbtn,940,440,220,45);
+		initRect(repairbtn,780,440,125,45);
 		
 		initRect(mouse, mpos.x, mpos.y, 8,8);
 	}
 
 	void Debug_DrawAllButtons()
 	{
-		drawRect(rHD, debug_color);
-		drawRect(rCT, debug_color);
-		drawRect(rRT, debug_color);
-		drawRect(rLT, debug_color);
-		drawRect(rLA, debug_color);
-		drawRect(rRA, debug_color);
-		drawRect(rLL, debug_color);
-		drawRect(rRL, debug_color);
-		drawRect(invbox, debug_color);
-		drawRect(weapbox, debug_color);
-		drawRect(equipbtn, debug_color);
-		drawRect(dequipbtn, debug_color);
-		drawRect(scrapbtn, debug_color);
-	 	drawRect(sortbtn, debug_color);
-		drawRect(modebtn, debug_color);
+		//drawRect(rHD, debug_color);
+		//drawRect(rCT, debug_color);
+		//drawRect(rRT, debug_color);
+		//drawRect(rLT, debug_color);
+		//drawRect(rLA, debug_color);
+		//drawRect(rRA, debug_color);
+		//drawRect(rLL, debug_color);
+		//drawRect(rRL, debug_color);
+		//drawRect(invbox, debug_color);
+		//drawRect(weapbox, debug_color);
+		//drawRect(equipbtn, debug_color);
+		//drawRect(dequipbtn, debug_color);
+		//drawRect(scrapbtn, debug_color);
+	 	//drawRect(sortbtn, debug_color);
+		//drawRect(modebtn, debug_color);
 		drawRect(modebtn, debug_color);
 		drawRect(autilbtn, debug_color);
 		drawRect(repairbtn, debug_color);
@@ -200,11 +212,11 @@ class Mechlab_Menu : GenericMenu
 			if(!page_init)
 			{
 				page_offs = -1;
-				initRect(modebtn,475,600,238,35);
+				initRect(modebtn,490,620,238,35);
 				page_init = true;
 			}
 			H_DrawTexture(tArmory, (942,807), 0, (0.9,0.7) );
-			drawLoadoutBody(931,120,hardpoint);
+			drawLoadoutBody(950,120,hardpoint);
 			drawArmoryInfo();
 		}
 			
