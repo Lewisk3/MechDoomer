@@ -260,7 +260,7 @@ void drawInventory(int px, int py, int start, int max)
 		class<Mechbase_Engine> eng = weapname;
 		
 		Rect checkmouse;
-		initRect(checkmouse,px-55,py+((i-start)*24)+25,14*(weapname.Length()+3),15);
+		initRect(checkmouse,px-55,py+((i-start)*24)+35,16*(weapname.Length()+3),17);
 		
 		int slots = ut ? GetDefaultByType(ut).hardslots : GetDefaultByType(mw).hardslots;
 		int sely = (i-start)*20;
