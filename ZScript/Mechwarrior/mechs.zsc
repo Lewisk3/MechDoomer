@@ -112,17 +112,17 @@ class Stormcrow : MechWarrior
 		
 	override void SetupWeapons()
 	{
-		hardpoints.setupVitals( 9,26,32,32,18,18,26,26, 3,16,13,13,9,9,13,13 );
+		hardpoints.setupVitals( 9,36,26,26,18,18,26,26, 4,18,13,13,9,9,13,13 );
 		hardpoints.setupLocations( (0,20), (0,-18), (30,-11), (-30,-11), (90,-11), (-90,-11), (80,-70), (-80,-70) );
 		hardpoints.setupSlots();
-		equipStruct("DoubleHeatsink",hardpoints.ct,2);
-		equipStruct("DoubleHeatsink",hardpoints.la,1);
-		equipStruct("DoubleHeatsink",hardpoints.ra,1);
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
+		equipStruct("DoubleHeatsink",hardpoints.ra,3);
+		equipStruct("DoubleHeatsink",hardpoints.rt,3);	
+		equipStruct("DoubleHeatsink",hardpoints.lt,3);	
 		equipWeapon("ERMediumLaser",hardpoints.ct,1);
-		equipWeapon("ERMediumLaser",hardpoints.ra,1);
 		equipWeapon("ERLargeLaser",hardpoints.la,2);
+		equipWeapon("ERMediumLaser",hardpoints.la,1);
 		equipWeapon("ERLargeLaser",hardpoints.ra,2);
+		equipWeapon("ERMediumLaser",hardpoints.ra,1);
 	}
 
 }
@@ -150,27 +150,24 @@ class Timberwolf : MechWarrior
 		
 	override void SetupWeapons()
 	{
-		hardpoints.setupVitals( 9,46,32,32,24,24,32,32, 3,24,16,16,12,12,16,16 );
+		hardpoints.setupVitals( 9,46,32,32,24,24,32,32, 4,23,16,16,12,12,16,16 );
 		hardpoints.setupLocations( (0,20), (0,-38), (75,18), (-75,18), (90,-20), (-90,-20), (80,-85), (-80,-85) );
 		hardpoints.setupSlots();
-		equipWeapon("ERLargeLaser",hardpoints.la,1);
 		equipWeapon("ERLargeLaser",hardpoints.ra,1);
-		equipWeapon("ERMediumLaser",hardpoints.la,2);
 		equipWeapon("ERMediumLaser",hardpoints.ra,2);
-		equipWeapon("MediumPulseLaser",hardpoints.hd,2);
-		equipWeapon("LRM20",hardpoints.lt,3);
+		equipWeapon("ERLargeLaser",hardpoints.la,1);
+		equipWeapon("ERMediumLaser",hardpoints.la,2);
+		equipWeapon("ERSmallLaser",hardpoints.lt,2);
+		equipWeapon("MediumPulseLaser",hardpoints.lt,2);
 		equipWeapon("LRM20",hardpoints.rt,3);
+		equipWeapon("LRM20",hardpoints.lt,3);
+		equipWeapon("MachineGun",hardpoints.rt,4);
 		equipWeapon("MachineGun",hardpoints.ct,4);
-		equipWeapon("MachineGun",hardpoints.ct,4);
-		equipStruct("LRM_Ammo",hardpoints.la,2);
-		equipStruct("BulletsMGun",hardpoints.ll,1);
-		equipStruct("BulletsMGun",hardpoints.rl,1);
-		
-		equipStruct("DoubleHeatsink",hardpoints.ct,1);
-		equipStruct("DoubleHeatsink",hardpoints.lt,1);
-		equipStruct("DoubleHeatsink",hardpoints.rt,1);
-		equipStruct("DoubleHeatsink",hardpoints.la,2);
-		equipStruct("DoubleHeatsink",hardpoints.ra,2);
+		equipStruct("BulletsMGun",hardpoints.ra,1);
+		equipStruct("BulletsMGun",hardpoints.rt,1);
+		equipStruct("LRM_Ammo",hardpoints.rt,1);
+		equipStruct("LRM_Ammo",hardpoints.lt,1);
+		equipStruct("DoubleHeatsink",hardpoints.la,1);
 	}
 }
 
@@ -268,18 +265,18 @@ class Jenner : MechWarrior
 		
 	override void SetupWeapons()
 	{
-		hardpoints.setupVitals( 9,22,16,16,12,12,16,16, 3,12,8,8,6,6,8,8 );
+		hardpoints.setupVitals( 9,22,16,16,12,12,16,16, 4,11,8,8,6,6,8,8 );
 		hardpoints.setupLocations( (0,10), (0,0), (-90,15), (90,15), (100,-11), (-100,-11), (80,-45), (-80,-45) );
 		hardpoints.setupSlots();
-		equipStruct("JumpJet",hardpoints.ll,1);
-		equipStruct("JumpJet",hardpoints.rl,1);
-		equipStruct("Heatsink",hardpoints.ct,1);
-		equipWeapon("MediumLaser",hardpoints.la,1);
-		equipWeapon("MediumLaser",hardpoints.ra,1);
-		equipWeapon("MediumLaser",hardpoints.la,1);
-		equipWeapon("MediumLaser",hardpoints.ra,1);
-		equipWeapon("SRM4",hardpoints.lt,2);
+		equipWeapon("SRM6",hardpoints.la,1);
+		equipWeapon("SRM6",hardpoints.ra,1);
+		equipWeapon("SSRM4",hardpoints.ct,2);
 		equipStruct("SRM_Ammo",hardpoints.lt,1);
+		equipStruct("SSRM_Ammo",hardpoints.rt,1);
+		equipStruct("JumpJet",hardpoints.lt,2);
+		equipStruct("JumpJet",hardpoints.rt,2);
+		equipStruct("JumpJet",hardpoints.ll,2);
+		equipStruct("JumpJet",hardpoints.rl,1);
 	}
 }
 
@@ -417,7 +414,7 @@ class Nova : MechWarrior
 		Mass 2000;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.LegSpeed 2.3;
-		MechWarriorBase.Engine "ENGINE_XL_250";
+		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.TwistRange 20;
 		MechWarriorBase.Weight 50;
 		MechWarriorBase.HudCockpit "NOVAHUD";
@@ -428,28 +425,28 @@ class Nova : MechWarrior
 		
 	override void SetupWeapons()
 	{
-		hardpoints.setupVitals( 9,32,24,24,16,16,24,24, 3,16,12,12,8,8,12,12 );
+		hardpoints.setupVitals( 9,32,24,24,16,16,24,24, 4,16,12,12,8,8,12,12 );
 		hardpoints.setupLocations( (0,-5), (0,0), (130,-15), (-130,-15), (130,-18), (-130,-18), (130,-45), (-130,-45) );
 		hardpoints.setupSlots();
-		
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
-		equipWeapon("ERMediumLaser",hardpoints.la,1);
-		equipWeapon("ERMediumLaser",hardpoints.ra,2);
-		equipWeapon("ERMediumLaser",hardpoints.ra,2);
-		equipWeapon("ERMediumLaser",hardpoints.ra,2);
-		equipWeapon("ERMediumLaser",hardpoints.ra,2);
-		equipWeapon("ERMediumLaser",hardpoints.ra,2);
-		equipWeapon("ERMediumLaser",hardpoints.ra,2);
-		equipStruct("JumpJet",hardpoints.ll,1);
-		equipStruct("JumpJet",hardpoints.rl,1);
-		equipStruct("DoubleHeatsink",hardpoints.ct,2);
-		equipStruct("DoubleHeatsink",hardpoints.lt,1);
-		equipStruct("DoubleHeatsink",hardpoints.rt,1);
-		
+	
+		equipWeapon("ERMediumLaser",hardpoints.rt,1);
+		equipWeapon("ERMediumLaser",hardpoints.rt,1);
+		equipWeapon("ERMediumLaser",hardpoints.rt,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,1);
+		equipWeapon("ERSmallLaser",hardpoints.hd,2);
+		equipWeapon("MediumPulseLaser",hardpoints.rt,2);
+		equipWeapon("MediumPulseLaser",hardpoints.rt,2);
+		equipStruct("JumpJet",hardpoints.ct,1);
+		equipStruct("JumpJet",hardpoints.ll,2);
+		equipStruct("JumpJet",hardpoints.rl,2);
+		equipStruct("DoubleHeatsink",hardpoints.la,1);
+		equipStruct("DoubleHeatsink",hardpoints.ra,1);
+		equipStruct("DoubleHeatsink",hardpoints.rt,2);
+		equipStruct("DoubleHeatsink",hardpoints.lt,2);
+		equipStruct("DoubleHeatsink",hardpoints.ra,1);
 		/*
 		equipStruct("Heatsink",hardpoints.ct,2);
 		equipStruct("Heatsink",hardpoints.lt,4);
@@ -613,4 +610,6 @@ class Timberwolf_3D : Actor
 		loop;
 	}
 }
+
+
 

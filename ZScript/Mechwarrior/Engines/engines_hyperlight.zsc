@@ -3,7 +3,7 @@ class Engine_XXL : Mechbase_Engine
 {
 	Default
 	{
-		Mechbase_Engine.Criticals 2,4,4,4;
+		Mechbase_Engine.Criticals 4,6,4,4;
 		Mechbase_Engine.BaseHeatsinks 0.04, 0;
 		Mechbase_Engine.ScalarCValue 2717.20377;
 	}

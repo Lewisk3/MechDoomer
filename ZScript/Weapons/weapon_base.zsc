@@ -26,7 +26,7 @@ class Mechbase_Actor : Actor
 	}
 	void adjustHeatLevel(double amt)
 	{
-		if(mechplayer) mechplayer.HeatLevel += amt;
+		if(mechplayer) mechplayer.HeatLevel += amt*MWHEAT_MOD;
 	}
 	void setCooldown(float val)
 	{
