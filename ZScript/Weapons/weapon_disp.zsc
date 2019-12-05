@@ -109,10 +109,11 @@ class SRMWeaponDispenser : MechWeaponDispenser
 		weapons.push("SRM2");
 		weapons.push("SRM4");
 		weapons.push("SRM6");
-		if(random(1,2)==6)weapons.push("SSRM2");
-		if(random(1,4)==8)weapons.push("SSRM4");
-		if(random(1,4)==4)weapons.push("SSRM6");
+		if(random(1,2)==2)weapons.push("SSRM2");
+		if(random(1,2)==2)weapons.push("SSRM4");
+		if(random(1,2)==2)weapons.push("SSRM6");
 		items.push("AntiMissileSystem");
+		items.push("AMSAmmo");
 		
 		int weap = random(0,weapons.Size()+2);
 		int item = random(0,items.Size()-1);

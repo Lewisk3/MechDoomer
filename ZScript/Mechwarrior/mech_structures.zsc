@@ -282,7 +282,7 @@ class AntiMissileSystem : Mechbase_Utility
 		Mechbase_Utility.CValue 27050;
 		AntiMissileSystem.Cooldown 3;
 		AntiMissileSystem.Damage 15;
-		AntiMissileSystem.ActiveRange 360;
+		AntiMissileSystem.ActiveRange 800;
 		AntiMissileSystem.AmmoUse 1;
 		AntiMissileSystem.AmmoType "AMSAmmo";
 		AntiMissileSystem.MissileType "AntiMissile";
