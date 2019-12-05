@@ -115,7 +115,7 @@ class SRMWeaponDispenser : MechWeaponDispenser
 		items.push("AntiMissileSystem");
 		items.push("AMSAmmo");
 		
-		int weap = random(0,weapons.Size()+2);
+		int weap = random(0,weapons.Size()-1);
 		int item = random(0,items.Size()-1);
 		
 		if(weap > weapons.Size()-1 && items.Size() > 0) 
@@ -124,7 +124,7 @@ class SRMWeaponDispenser : MechWeaponDispenser
 			addStruct(items[item],amt);
 			realmsg = "Picked up " .. items[item] .. " x" ..amt;
 		}
-		else if(weap <= weapons.Size()-1)
+		if(weap <= weapons.Size()-1)
 		{
 			addWeapon(weapons[weap]);
 			realmsg = "Picked up " .. weapons[weap];

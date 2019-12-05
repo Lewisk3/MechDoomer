@@ -70,8 +70,10 @@ void ProcessLoadoutButtons()
 		{
 			if(selected_item.index > -1)
 			{
+				int amt = mechplr.inv_context.weapon_items[selected_item.index].amt;
 				MechDoomerEvents.SendNetworkEvent("remove_inv",selected_item.index);
-				clearSelected();
+				if(amt-1 < 0) clearSelected();
+				mstats.left_btn = false;
 			}
 		}
 		
@@ -101,9 +103,11 @@ void ProcessLoadoutButtons()
 		{
 			if(selected_item.index > -1)
 			{
+				int amt = mechplr.inv_context.weapon_items[selected_item.index].amt;
 				if(selected_item.mWeapon) MechDoomerEvents.SendNetworkEvent("equip_invweap",selected_item.index,hardpoint);
 				if(selected_item.mUtil  ) MechDoomerEvents.SendNetworkEvent("equip_structinvweap",selected_item.index,hardpoint);
-				clearSelected();
+				if(amt-1 < 0) clearSelected();
+				mstats.left_btn = false;
 			}
 		}
 	}
