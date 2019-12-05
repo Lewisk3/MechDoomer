@@ -375,24 +375,26 @@ class MechStatusBar : BaseStatusBar
 			}
 			H_DrawString("Heat",(-38+795,125+720));
 			H_Fill(Color(int(255*hud_alpha),206,206,0),heatpos.x-147,heatpos.y,290,16);
-			if(mech.HeatLevel > 50)
+			double heatmid = MWHEAT_MAX*0.25;
+			double sizemul = (200/MWHEAT_MAX)*3;
+			if(mech.HeatLevel > heatmid)
 			{
-				float hmin = clamp(mech.HeatLevel-50,0,48);
-				float hmax = clamp(-(mech.HeatLevel-50),-50,0);
-				H_Fill(Color(int(255*hud_alpha),255,0,0),heatpos.x,heatpos.y,hmin*3,16);
-				H_Fill(Color(int(255*hud_alpha),255,0,0),heatpos.x,heatpos.y,hmax*3,16);
+				float hmin = clamp(mech.HeatLevel-heatmid,0,heatmid);
+				float hmax = clamp(-(mech.HeatLevel-heatmid),-heatmid,0);
+				H_Fill(Color(int(255*hud_alpha),255,0,0),heatpos.x,heatpos.y,hmin*sizemul,16);
+				H_Fill(Color(int(255*hud_alpha),255,0,0),heatpos.x,heatpos.y,hmax*sizemul,16);
 			}
 			else
 			{
-				float hmin = clamp(mech.HeatLevel,0,50);
-				float hmax = clamp(-(mech.HeatLevel),-50,0);
-				H_Fill(Color(int(255*hud_alpha),2,30,216),heatpos.x,heatpos.y,143-(hmin)*3,16);
-				H_Fill(Color(int(255*hud_alpha),2,30,216),heatpos.x,heatpos.y,-(148+((hmax)*3)),16);
+				float hmin = clamp(mech.HeatLevel,0,heatmid);
+				float hmax = clamp(-(mech.HeatLevel),-heatmid,0);
+				H_Fill(Color(int(255*hud_alpha),2,30,216),heatpos.x,heatpos.y,143-(hmin)*sizemul,16);
+				H_Fill(Color(int(255*hud_alpha),2,30,216),heatpos.x,heatpos.y,-(148+((hmax)*sizemul)),16);
 			}
 			H_DrawString("dH/dT",(285+795,125+720));
 			H_Fill(Color(int(255*hud_alpha),206,206,0),deltapos.x-128,deltapos.y,125,16);
-			float hmax = clamp(-(mech.deltaHeat),-50,0);
-			H_Fill(Color(int(255*hud_alpha),2,30,216),deltapos.x,deltapos.y,-(130+((hmax)*3)),16);
+			float hmax = clamp(-(mech.deltaHeat),-heatmid,0);
+			H_Fill(Color(int(255*hud_alpha),2,30,216),deltapos.x,deltapos.y,-(130+((hmax)*sizemul)),16);
 			
 		}
 	}

@@ -2,7 +2,7 @@
 
 class Mechbase_Actor : Actor
 {
-	int heatgen;
+	double heatgen;
 	float cooldown;
 	vector3 spawnpos;
 	double basedamage;
@@ -24,7 +24,7 @@ class Mechbase_Actor : Actor
 	{	
 		return MDMath.getPitchBetween(pos, topos);
 	}
-	void adjustHeatLevel(int amt)
+	void adjustHeatLevel(double amt)
 	{
 		if(mechplayer) mechplayer.HeatLevel += amt;
 	}
@@ -36,7 +36,7 @@ class Mechbase_Actor : Actor
 	{
 		basedamage = damage;
 	}
-	void setHeat(float val)
+	void setHeat(double val)
 	{
 		heatgen=val;
 	}

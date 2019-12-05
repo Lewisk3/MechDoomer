@@ -221,7 +221,7 @@ void drawMechlabInfo()
 	ProcessLoadoutButtons();
 	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
 	String mechston = (mechplr.mech_tonnage .. "");
-	String heateff = mechplr.HeatEfficiency .. "";
+	String heateff = mechplr.HeatEfficiency*35 .. "";
 	String maxspd = mechplr.MoveSpeedKPH .. "";
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
 

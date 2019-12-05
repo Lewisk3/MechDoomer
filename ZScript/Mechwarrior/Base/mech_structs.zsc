@@ -104,8 +104,8 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	equipStruct("StructGyro",hardpoints.ct,gyroslots);
 	setupSpeedKPH(EngineGetKPH());
 	inv_context.weapons_tonnage += weight;
-	inv_context.heateff += GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
-	inv_context.heateff += GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;
+	inv_context.heateff += (GetDefaultByType("Heatsink").cooling/35)*engobj.intrinsic_heatsinks;
+	inv_context.heateff += (GetDefaultByType("DoubleHeatsink").cooling/35)*engobj.intrinsic_doubleheatsinks;
 	return true;
 }
 	
@@ -145,8 +145,8 @@ void DequipEngine()
 		if(!eng && !gyro) engstruct = false;
 	}
 	
-	inv_context.heateff -= GetDefaultByType("Heatsink").cooling*engobj.intrinsic_heatsinks;
-	inv_context.heateff -= GetDefaultByType("DoubleHeatsink").cooling*engobj.intrinsic_doubleheatsinks;
+	inv_context.heateff -= (GetDefaultByType("Heatsink").cooling/35)*engobj.intrinsic_heatsinks;
+	inv_context.heateff -= (GetDefaultByType("DoubleHeatsink").cooling/35)*engobj.intrinsic_doubleheatsinks;
 	inv_context.weapons_tonnage -= engobj.weight;
 	inv_context.GiveItem(engobj.ClassType);
 	

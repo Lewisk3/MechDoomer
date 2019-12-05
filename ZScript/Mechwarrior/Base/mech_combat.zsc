@@ -81,22 +81,22 @@ void mech_weapons()
 	class<Heatsink> dhs = "DoubleHeatsink";
 	process_antimissilesystem();
 	
-	float HSinkEff = (countStruct("Heatsink")*GetDefaultByType(hs).cooling)+(countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling);
+	float HSinkEff = (countStruct("Heatsink")*GetDefaultByType(hs).cooling/35)+(countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling/35);
 	HeatEfficiency = inv_context.heateff+baseHeatEfficiency+HSinkEff; 
 	Mech_HasJets = (countStruct("JumpJet") > 0);
 	Mech_JetCount = countStruct("JumpJet");
 	if(supersink) HeatEfficiency *= 2;
 	if(HeatLevel > 0) HeatLevel -= HeatEfficiency;
 	if(HeatLevel < 0) HeatLevel = 0;
-	if(HeatLevel > 120) DamageMobj(self,null,random(6,12),"overheating",DMG_NO_ARMOR | DMG_NO_FACTOR);
-	if(HeatLevel <= 30) heatwarn = false;
-	if(HeatLevel > 55 && !heatwarn)
+	if(HeatLevel > MWHEAT_MAX*0.6) DamageMobj(self,null,random(6,12),"overheating",DMG_NO_ARMOR | DMG_NO_FACTOR);
+	if(HeatLevel <= MWHEAT_MAX*0.15) heatwarn = false;
+	if(HeatLevel > MWHEAT_MAX*0.275 && !heatwarn)
 	{
 		A_PlaySound("Mech/HeatWarn",1,1);
 		mechsounds.pushSound("Mech/Betty/HeatCritical");
 		heatwarn = true;
 	}
-	if(HeatLevel >= 85 && !doShutdown && canShutdown) 
+	if(HeatLevel >= MWHEAT_MAX*0.42 && !doShutdown && canShutdown) 
 	{
 		A_Print("Shutdown sequence initiated!");
 		mechsounds.pushSound("Mech/Betty/ShutdownInit");
@@ -104,8 +104,8 @@ void mech_weapons()
 		canShutdown = false;
 		shutdown_timer = ticks;
 	}
-	if(HeatLevel <= 65) canShutdown = true;
-	if( ((ticks - shutdown_timer) > 105) && doShutdown )
+	if(HeatLevel <= MWHEAT_MAX*0.32) canShutdown = true;
+	if( ((ticks - shutdown_timer) > MWHEAT_MAX) && doShutdown )
 	{
 		A_StopSound(1);
 		A_Print("Shutting down...");
@@ -117,7 +117,7 @@ void mech_weapons()
 		shutdown_timer = ticks;
 		A_PlaySound("Mech/Shutdown",2);
 	}
-	if(HeatLevel > 200) HeatLevel = 200;
+	if(HeatLevel > MWHEAT_MAX) HeatLevel = MWHEAT_MAX;
 	
 	if(selectedWeapon > inv_context.weapons_count)selectedWeapon = 1;
 	if(selectedGroup > 4)selectedGroup = 1;
