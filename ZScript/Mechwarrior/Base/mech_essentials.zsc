@@ -210,16 +210,16 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 
 	// Preform ray cast to determine where the shooter is aiming.
 	FLineTraceData lt;
-	damager.LineTrace(inflictor.angle+90,2048,source.pitch+random(-8,16),0,shootslope-random(0,source.height/4),0,0,lt);
+	damager.LineTrace(inflictor.angle,2048,source.pitch+random(-8,16),TRF_ABSOFFSET,shootslope-random(0,source.height/4),0,0,lt);
 	vector3 dmgpos = lt.HitLocation;
 	double plrdmgz = (viewheight*Player.crouchfactor);
 
 	vector2 mechangle = ( pos.x, pos.y );
 	vector2 dmgpos2D  = ( dmgpos.x, dmgpos.y );
-	mechangle = MDMath.VRotate(mechangle,angle+90);
-	int lrpos = AngleTo(source);
-	float hitangle = abs(atan2(mechangle.x - dmgpos.x , mechangle.y - dmgpos.y)) + frandom(-8,8);
-	
+	mechangle = MDMath.VRotate(mechangle,self.angle);
+	float lrpos = atan2(source.y - mechangle.y , source.x - mechangle.x);
+	float hitangle = abs((atan2(pos.x - dmgpos.x , pos.y - dmgpos.y))) + frandom(-8,8);
+	hitangle = abs(hitangle-((self.angle-90)%180));
 	// Legs
 	if( dmgpos.z < pos.z+(plrdmgz/4) ) 
 	{ 
@@ -229,7 +229,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 	else // Torso
 	{	
 		// left/right torsos
-		if( hitangle > 60 && hitangle < 100)
+		if( hitangle > 40 && hitangle < 100)
 		{
 			if(lrpos < 0) ProcessHardpointDamage("MechDamage_RT",newdmg,damager);
 			if(lrpos > 0) ProcessHardpointDamage("MechDamage_LT",newdmg,damager);
