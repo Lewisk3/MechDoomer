@@ -58,7 +58,7 @@ Model CockpitHandler_BattleArmor
 }
 
 // Commando 
-Model Commando
+Model Torso_Commando
 {
 	Path "models/Cockpits/Commando"
 	Model 0 "cm_torso.md3"
@@ -68,30 +68,7 @@ Model Commando
 	Offset 0 0 58
 	AngleOffset 0
 	
-   FrameIndex PLAY A 1 0
-   FrameIndex PLAY B 0 0
-   FrameIndex PLAY C 0 0
-   FrameIndex PLAY D 0 0
-   FrameIndex PLAY E 0 0
-   FrameIndex PLAY F 0 0
-   FrameIndex PLAY G 0 0
-   FrameIndex PLAY H 0 0
-   FrameIndex PLAY I 0 0
-   FrameIndex PLAY J 0 0
-   FrameIndex PLAY K 0 0
-   FrameIndex PLAY L 0 0
-   FrameIndex PLAY M 0 0
-   FrameIndex PLAY N 0 0
-   FrameIndex PLAY O 0 0
-   FrameIndex PLAY P 0 0
-   FrameIndex PLAY Q 0 0
-   FrameIndex PLAY R 0 0
-   FrameIndex PLAY S 0 0
-   FrameIndex PLAY T 0 0
-   FrameIndex PLAY U 0 0
-   FrameIndex PLAY V 0 0
-   FrameIndex PLAY W 0 0
-   FrameIndex PLAY X 0 0
+   FrameIndex TRSO A 0 0
 }
 Model Legs_Commando
 {
@@ -128,7 +105,7 @@ Model CockpitHandler_Commando
 
 
 // Timberwolf
-Model Timberwolf
+Model Torso_Timberwolf
 {
 	Path "models/Cockpits/Timberwolf"
 	Model 0 "tw_torso.md3"
@@ -140,30 +117,7 @@ Model Timberwolf
 	//USEACTORROLL
 	//USEACTORPITCH
 	
-   FrameIndex PLAY A 1 0
-   FrameIndex PLAY B 0 0
-   FrameIndex PLAY C 0 0
-   FrameIndex PLAY D 0 0
-   FrameIndex PLAY E 0 0
-   FrameIndex PLAY F 0 0
-   FrameIndex PLAY G 0 0
-   FrameIndex PLAY H 0 0
-   FrameIndex PLAY I 0 0
-   FrameIndex PLAY J 0 0
-   FrameIndex PLAY K 0 0
-   FrameIndex PLAY L 0 0
-   FrameIndex PLAY M 0 0
-   FrameIndex PLAY N 0 0
-   FrameIndex PLAY O 0 0
-   FrameIndex PLAY P 0 0
-   FrameIndex PLAY Q 0 0
-   FrameIndex PLAY R 0 0
-   FrameIndex PLAY S 0 0
-   FrameIndex PLAY T 0 0
-   FrameIndex PLAY U 0 0
-   FrameIndex PLAY V 0 0
-   FrameIndex PLAY W 0 0
-   FrameIndex PLAY X 0 0
+   FrameIndex TRSO A 0 0
 }
 Model Legs_Timberwolf
 {
@@ -201,7 +155,7 @@ Model CockpitHandler_Timberwolf
 } 
 
 // Stormcrow
-Model Stormcrow
+Model Torso_Stormcrow
 {
 	Path "models/Cockpits/Stormcrow"
 	Model 0 "sc_torso.md3"
@@ -212,30 +166,7 @@ Model Stormcrow
 	Offset -5 0 65
 	AngleOffset 0
 	
-   FrameIndex PLAY A 1 0
-   FrameIndex PLAY B 0 0
-   FrameIndex PLAY C 0 0
-   FrameIndex PLAY D 0 0
-   FrameIndex PLAY E 0 0
-   FrameIndex PLAY F 0 0
-   FrameIndex PLAY G 0 0
-   FrameIndex PLAY H 0 0
-   FrameIndex PLAY I 0 0
-   FrameIndex PLAY J 0 0
-   FrameIndex PLAY K 0 0
-   FrameIndex PLAY L 0 0
-   FrameIndex PLAY M 0 0
-   FrameIndex PLAY N 0 0
-   FrameIndex PLAY O 0 0
-   FrameIndex PLAY P 0 0
-   FrameIndex PLAY Q 0 0
-   FrameIndex PLAY R 0 0
-   FrameIndex PLAY S 0 0
-   FrameIndex PLAY T 0 0
-   FrameIndex PLAY U 0 0
-   FrameIndex PLAY V 0 0
-   FrameIndex PLAY W 0 0
-   FrameIndex PLAY X 0 0
+   FrameIndex TRSO A 0 0
 }
 Model Legs_Stormcrow
 {
@@ -271,7 +202,7 @@ Model CockpitHandler_Stormcrow
 }
 
 // Atlas
-Model Atlas
+Model Torso_Atlas
 {
 	Path "models/Cockpits/Atlas"
 	Model 0 "at_torso.md3"
@@ -281,30 +212,7 @@ Model Atlas
 	Offset -5 0 80
 	AngleOffset 0
 
-   FrameIndex PLAY A 1 0
-   FrameIndex PLAY B 0 0
-   FrameIndex PLAY C 0 0
-   FrameIndex PLAY D 0 0
-   FrameIndex PLAY E 0 0
-   FrameIndex PLAY F 0 0
-   FrameIndex PLAY G 0 0
-   FrameIndex PLAY H 0 0
-   FrameIndex PLAY I 0 0
-   FrameIndex PLAY J 0 0
-   FrameIndex PLAY K 0 0
-   FrameIndex PLAY L 0 0
-   FrameIndex PLAY M 0 0
-   FrameIndex PLAY N 0 0
-   FrameIndex PLAY O 0 0
-   FrameIndex PLAY P 0 0
-   FrameIndex PLAY Q 0 0
-   FrameIndex PLAY R 0 0
-   FrameIndex PLAY S 0 0
-   FrameIndex PLAY T 0 0
-   FrameIndex PLAY U 0 0
-   FrameIndex PLAY V 0 0
-   FrameIndex PLAY W 0 0
-   FrameIndex PLAY X 0 0
+   FrameIndex TRSO A 0 0
 }
 Model CockpitHandler_Atlas
 {
@@ -340,7 +248,7 @@ Model Legs_Atlas
 }
 
 // Jenner
-Model Jenner
+Model Torso_Jenner
 {
 	Path "models/Cockpits"
 	Model 0 "Jenner/jn_torso_hip.md3"
@@ -348,30 +256,7 @@ Model Jenner
 	Scale 0.1 0.1 0.1
 	Offset 0 0 55
 	
-   FrameIndex PLAY A 1 0
-   FrameIndex PLAY B 0 0
-   FrameIndex PLAY C 0 0
-   FrameIndex PLAY D 0 0
-   FrameIndex PLAY E 0 0
-   FrameIndex PLAY F 0 0
-   FrameIndex PLAY G 0 0
-   FrameIndex PLAY H 0 0
-   FrameIndex PLAY I 0 0
-   FrameIndex PLAY J 0 0
-   FrameIndex PLAY K 0 0
-   FrameIndex PLAY L 0 0
-   FrameIndex PLAY M 0 0
-   FrameIndex PLAY N 0 0
-   FrameIndex PLAY O 0 0
-   FrameIndex PLAY P 0 0
-   FrameIndex PLAY Q 0 0
-   FrameIndex PLAY R 0 0
-   FrameIndex PLAY S 0 0
-   FrameIndex PLAY T 0 0
-   FrameIndex PLAY U 0 0
-   FrameIndex PLAY V 0 0
-   FrameIndex PLAY W 0 0
-   FrameIndex PLAY X 0 0
+   FrameIndex TRSO A 0 0
 }
 Model Legs_Jenner
 {
@@ -409,7 +294,7 @@ Model CockpitHandler_Jenner
 }
 
 // Urbanmech
-Model Urbanmech
+Model Torso_Urbanmech
 {
 	Path "models/Cockpits/Urbanmech"
 	Model 0 "ur_torso.md3"
@@ -419,30 +304,7 @@ Model Urbanmech
 	Offset 0 0 42 // Urbie is the answer to life/universe and everything :P
 	AngleOffset 0
 	
-   FrameIndex PLAY A 1 0
-   FrameIndex PLAY B 0 0
-   FrameIndex PLAY C 0 0
-   FrameIndex PLAY D 0 0
-   FrameIndex PLAY E 0 0
-   FrameIndex PLAY F 0 0
-   FrameIndex PLAY G 0 0
-   FrameIndex PLAY H 0 0
-   FrameIndex PLAY I 0 0
-   FrameIndex PLAY J 0 0
-   FrameIndex PLAY K 0 0
-   FrameIndex PLAY L 0 0
-   FrameIndex PLAY M 0 0
-   FrameIndex PLAY N 0 0
-   FrameIndex PLAY O 0 0
-   FrameIndex PLAY P 0 0
-   FrameIndex PLAY Q 0 0
-   FrameIndex PLAY R 0 0
-   FrameIndex PLAY S 0 0
-   FrameIndex PLAY T 0 0
-   FrameIndex PLAY U 0 0
-   FrameIndex PLAY V 0 0
-   FrameIndex PLAY W 0 0
-   FrameIndex PLAY X 0 0
+   FrameIndex TRSO A 0 0
 }
 Model Legs_Urbanmech
 {

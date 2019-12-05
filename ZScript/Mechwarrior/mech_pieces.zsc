@@ -106,9 +106,8 @@ class MechCamera : Actor
 	}
 }
 
-
-// Legs
-class MechLegsBase : Actor
+// Parts base
+class MechPartsBase : Actor
 {
 	MechwarriorBase mechowner;
 	
@@ -117,6 +116,58 @@ class MechLegsBase : Actor
 		+NOGRAVITY;
 	}
 	
+	static MechTorsoBase CreateTorso(class<MechTorsoBase> torso, MechWarriorBase base)
+	{
+		let mwtorso = MechTorsoBase(Spawn(torso));
+		if(mwtorso)
+		{
+			mwtorso.mechowner = base;
+			mwtorso.frame = 0;
+		}
+		return mwtorso;
+	}
+	
+	static MechLegsBase CreateLegs(class<MechLegsBase> legs, MechWarriorBase torso)
+	{
+		let mwlegs = MechLegsBase(Spawn(legs));
+		if(mwlegs)
+		{
+			mwlegs.mechowner = torso;
+			mwlegs.frame = 0;
+		}
+		return mwlegs;
+	}
+}
+
+// Torsos
+class MechTorsoBase : MechPartsBase
+{
+	override void tick()
+	{
+		if(mechowner)
+		{
+			pitch = mechowner.pitch*0.5;
+			roll = mechowner.roll*0.3;
+			angle = mechowner.angle;
+			SetOrigin(mechowner.pos,true);
+			if(!mechowner.dronecam) 
+				Sprite = GetSpriteIndex("TNT1A0");
+			else
+				Sprite = GetSpriteIndex("TRSOA0");
+		}
+		super.tick();
+	}
+	States
+	{
+		Spawn:
+			TRSO A 1;
+		loop;
+	}
+}
+
+// Legs
+class MechLegsBase : MechPartsBase
+{
 	override void tick()
 	{
 		if(mechowner)
@@ -130,7 +181,6 @@ class MechLegsBase : Actor
 		}
 		super.tick();
 	}
-	
 	bool isMoving()
 	{
 		return ( 
@@ -146,18 +196,6 @@ class MechLegsBase : Actor
 		mechowner.stepping = idle ? false : (frame == 3 || frame == 8);
 		return true;
 	}
-	
-	static MechLegsBase Create(class<MechLegsBase> legs, MechWarriorBase torso)
-	{
-		let mwlegs = MechLegsBase(Spawn(legs));
-		if(mwlegs)
-		{
-			mwlegs.mechowner = torso;
-			mwlegs.frame = 0;
-		}
-		return mwlegs;
-	}
-	
 	States
 	{
 		Spawn:
@@ -182,10 +220,20 @@ class MechLegsBase : Actor
 }
 
 
+// All mech parts \\
+// Legs
 class Legs_Timberwolf : MechLegsBase {}
-class Legs_Stormcrow : MechLegsBase {}
-class Legs_Atlas : MechLegsBase {}
-class Legs_Commando : MechLegsBase {}
-class Legs_Urbanmech : MechLegsBase {}
-class Legs_Jenner : MechLegsBase {}
-class Legs_Invisible : MechLegsBase {}
+class Legs_Stormcrow  : MechLegsBase {}
+class Legs_Atlas      : MechLegsBase {}
+class Legs_Commando   : MechLegsBase {}
+class Legs_Urbanmech  : MechLegsBase {}
+class Legs_Jenner     : MechLegsBase {}
+class Legs_Invisible  : MechLegsBase {}
+// Torsos
+class Torso_Timberwolf : MechTorsoBase {}
+class Torso_Stormcrow  : MechTorsoBase {}
+class Torso_Atlas 	   : MechTorsoBase {}
+class Torso_Commando   : MechTorsoBase {}
+class Torso_Urbanmech  : MechTorsoBase {}
+class Torso_Jenner     : MechTorsoBase {}
+class Torso_Invisible  : MechTorsoBase {}

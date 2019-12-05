@@ -188,7 +188,7 @@ class Laser_MED : Laser
 		StencilColor "Green";
 		Laser.MaxRange 540;
 		Laser.FireSound "Lasers/Medium";
-		Mechbase_Actor.Heat MWDMG_MLASER;
+		Mechbase_Actor.Heat MWHEAT_MLASER;
 		Mechbase_Actor.Cooldown 18;
 	}
 }

@@ -1,4 +1,3 @@
-
 class MechDoomerEvents : EventHandler 
 {
 	ui Mechlab_Menu mechlab;
@@ -185,6 +184,7 @@ class MechDoomerEvents : EventHandler
 		if(plr)
 		{
 			// Process mechlab netevents
+			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.ChangeMech(e.Args[0]);
 			if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
 			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(350,0,false);
 			if(netcmd == "droneviewswitch" && !plr.isdead && plr.dronecam) plr.dronecam.frontcam = !plr.dronecam.frontcam;
@@ -214,6 +214,19 @@ class MechDoomerEvents : EventHandler
 			Array<String> netcmds;
 			netcmds.Clear();
 			netcmd.split(netcmds,":");	
+			if(netcmds[0] == "givemech")
+			{
+				class<MechWarrior> mech = netcmds[1];
+				if(mech)
+				{
+					plr.inv_context.mechs.Push(plr.CreateStoredMech(mech));
+					console.printf("Obtained: %s [MECHBAY#%d]", netcmds[1], plr.inv_context.mechs.Size()-1);
+				}
+				else
+				{
+					console.printf("Unknown mech type \"%s\"", netcmds[1]);
+				}
+			}
 			if(netcmds[0] == "autil_useitem") plr.ActivateArmorUtility(netcmds[1],e.Args[0]);
 			if(netcmds[0] == "debug_dmg")
 			{

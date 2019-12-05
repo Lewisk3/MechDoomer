@@ -10,6 +10,7 @@ MechHardpoints hardpoints;
 HudAlert hAlert;
 SoundQueue mechsounds;
 MechLegsBase legs_reference;
+MechTorsoBase torso_reference;
 bool buttonTick;
 bool btn_userfive;
 bool pilotlook;
@@ -25,6 +26,7 @@ float kph_real;
 // Properties
 class<CockpitHandler> cphandler;
 class<MechLegsBase> mech_legs;
+class<MechTorsoBase> mech_torso;
 class<Mechbase_Engine> base_engine;
 bool modelcockpit;
 String hud_cockpit;
@@ -36,27 +38,39 @@ void ChangeMech(int invmech)
 	mw_StoredMech curmech = new("mw_StoredMech");
 	mw_StoredMech source = inv_context.mechs[invmech];
 	
-	// New inventory instance.
-	let act = Spawn("Actor"); // Spawn dummy to create inv on.
-	if(!act || !curmech) return;
-	act.GiveInventory("mw_InvInfo",1);
-	let ainv = mw_InvInfo(act.FindInventory("mw_InvInfo"));
-	if(!ainv) return;
-	ainv.Init();
-	// Inventory transfer
-	curmech.baseclass = baseclass;
-	curmech.inv_context = ainv;
-	curmech.active_inventory = Inv;
-	inv_context.Swap(curmech.inv_context,source.inv_context);
-	hardpoints = inv_context.hardpoints;
-	Inv = source.active_inventory;
-	// Take ownership of new inventory.
-	for (let item = Inv; item != null; item = item.Inv)
-		item.Owner = self;
-	act.Inv = NULL;
-	act.Destroy();
+	if(!source) 
+	{	
+		curmech.Destroy();
+		console.printf("[Failed to deploy mech] -> Source mech doesn't exist!");
+		return;
+	}
 	
-	// Assign defaults...
+	curmech.baseclass = baseclass;
+	curmech.inv_context = inv_context;
+	inv_context.Swap(source.inv_context);
+	inv_context = source.inv_context;
+	hardpoints = inv_context.hardpoints;
+	GetStoredWeapons(curmech.active_weapons);
+	
+	for(int i = source.active_weapons.Size()-1; i >= 0; i--)
+	{
+		let ww = source.active_weapons[i];
+		if(ww) 
+		{	
+			let weap = Mechbase_Weapon(Spawn(ww.baseclass));
+			if(weap)
+			{
+				weap.group = ww.group;
+				weap.WeaponID = ww.WeaponID;
+				weap.hardpoint = ww.hardpoint;
+				AddInventory(weap);
+			}
+		}
+	}
+	normalizeWeaponsID(0);
+	
+	// Setup Class Defaults
+	A_TakeInventory(cphandler,1);
 	console.printf("Changing to: %s",source.baseclass.getClassName());
 	let defs = MechWarriorBase(GetDefaultByType(source.baseclass));
 	baseclass = source.baseclass;
@@ -76,20 +90,24 @@ void ChangeMech(int invmech)
 	modelcockpit = defs.modelcockpit;
 	cphandler = defs.cphandler;
 	mech_legs = defs.mech_legs;
+	mech_torso = defs.mech_torso;
 	mechtype = defs.mechtype;
 	nofirstpersonlegs = defs.nofirstpersonlegs;
 	player.viewheight = defs.ViewHeight;
 	
-	inv_context.mechs.Delete(invmech);
-	inv_context.mechs.Insert(invmech,curmech);
-	
 	// Update vars
+	A_GiveInventory(cphandler,1);	
 	player.PendingWeapon = Weapon(FindInventory(cphandler));
 	DropWeapon();
 	BringUpWeapon();
-	if(legs_reference) legs_reference.Destroy();
-	legs_reference = NULL;
+	if(legs_reference)  legs_reference.Destroy();
+	if(torso_reference) torso_reference.Destroy();
 	setupSpeedKPH(EngineGetKPH());
+	
+	inv_context.mechs.Delete(invmech);
+	inv_context.mechs.Insert(invmech, curmech);
+	return;
+	
 }
 
 mw_StoredMech CreateStoredMech(class<MechwarriorBase> type)
@@ -98,20 +116,37 @@ mw_StoredMech CreateStoredMech(class<MechwarriorBase> type)
 	let mechact = MechwarriorBase(Spawn(type));
 	if(mechobj && mechact)
 	{
-		mechact.GiveInventory(mechact.cphandler,1);
 		mechact.docopy_novoodoo = true;
 		mechact.setupInventory();
+			
 		mechobj.baseclass = type;
 		mechobj.inv_context = mechact.inv_context;
-		mechobj.active_inventory = mechact.Inv;
+		mechact.inv_context.active = false;
+		AddInventory(mechobj.inv_context);
+		mechact.GetStoredWeapons(mechobj.active_weapons);
 		
 		// Prevent deletion of critical data structures.
 		mechact.inv_context = NULL;
-		mechact.Inv = NULL;
 		mechact.Destroy();
 	}
 	return mechobj;
 }
+void GetStoredWeapons(in out Array<mw_StoredWeapon> weaps)
+{
+	while(true)
+	{
+		let ww = Mechbase_Weapon(FindInventory("Mechbase_Weapon",true));
+		if(!ww) break;
+		let sweap = new("mw_StoredWeapon");
+		sweap.baseclass = ww.GetClassName();
+		sweap.group = ww.group;
+		sweap.WeaponID = ww.WeaponID;
+		sweap.hardpoint = ww.hardpoint;
+		weaps.Push(sweap);
+		RemoveInventory(ww);
+	}
+}
+
 
 // Inventory
 bool setupInventory()
@@ -215,7 +250,8 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 override void PostBeginPlay()
 {
 	// Spawn pieces (WIP)
-	if(mech_legs) legs_reference = MechLegsBase.Create(mech_legs, self);
+	if(mech_legs)  legs_reference = MechPartsBase.CreateLegs(mech_legs, self);
+	if(mech_torso) torso_reference = MechPartsBase.CreateTorso(mech_torso, self);
 	
 	// Setup mech support systems.
 	if(checkVoodoo()) 
@@ -260,12 +296,17 @@ override void tick()
 		super.Tick();
 		return;
 	}
-		
+	
+	// Do not render player sprite if we're using a torso model.
+	if(mech_torso) Sprite = GetSpriteIndex("TNT1A0"); 
+	
 	// Clamp viewheight so we don't end up inside our hips when we fall.
 	player.viewheight = clamp(player.viewheight, default.viewheight*0.8, default.viewheight*2.0);
 	
 	// Turns out, we lose our legs when moving to another map, LOL.
-	if(!legs_reference && mech_legs) legs_reference = MechLegsBase.Create(mech_legs, self);
+	if(!legs_reference && mech_legs) legs_reference = MechPartsBase.CreateLegs(mech_legs, self);
+	if(!torso_reference && mech_torso) torso_reference = MechPartsBase.CreateTorso(mech_torso, self);
+	
 	if(!inv_context) setupInventory();	
 	if(!dronecam) player.camera = self;
 	

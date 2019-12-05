@@ -20,15 +20,23 @@ class mw_InvStruct
 	bool takesnodamage;
 	int worth;
 }
-class mw_StoredMech
+
+// Create Stored weapon, Array<Mechbase_Weapon> does NOT persist!
+class mw_StoredWeapon : Object
+{
+	class<Mechbase_Weapon> baseclass;
+	int group;
+	int WeaponID;
+	MechHardpoint hardpoint;
+}
+class mw_StoredMech : Object
 {
 	mw_InvInfo inv_context;
-	Inventory active_inventory;
+	Array<mw_StoredWeapon> active_weapons;
 	class<MechWarriorBase> baseclass;
 }
 class mw_InvInfo : Inventory
 {
-	
 	MechHardpoints hardpoints;
 	Array<mw_InvStruct> weapon_items; // Stores all mech items before they go into the inventory.
 	Array<mw_InvStruct> mechstructs;  // These are equipped structs.
@@ -37,6 +45,7 @@ class mw_InvInfo : Inventory
 	int weapons_count;
 	int maxgroup;
 	float heateff;
+	bool active;
 	
 	int money_cbills;			// moneys
 	float weapons_tonnage;		// How much weapons weigh.
@@ -47,28 +56,18 @@ class mw_InvInfo : Inventory
 	}	
 
 	// Moves source to local mw_InvInfo, moves old info to dest.
-	void Swap(mw_InvInfo dest, mw_InvInfo source)
+	void Swap(mw_InvInfo source)
 	{	
-		dest.weapon_items.Copy(weapon_items);
-		dest.mechstructs.Copy(mechstructs);
-		dest.hardpoints = hardpoints;
-		dest.engine = engine;
-		dest.weapons_count = weapons_count;
-		dest.maxgroup = maxgroup;
-		dest.money_cbills = money_cbills;
-		dest.weapons_tonnage = weapons_tonnage;
-		dest.heateff = heateff;
-		dest.mechs.Clear();
-		dest.mechs.Copy(mechs);
+		// All new lists are added to the inventory, 
+		// they're just toggled in how active they are.
+		source.mechs.Clear();
+		source.mechs.Copy(mechs);
+		source.money_cbills = money_cbills;
+		source.weapon_items.Clear();
+		source.weapon_items.Copy(weapon_items);
 		
-		mechstructs.Clear();
-		mechstructs.Copy(source.mechstructs);
-		hardpoints = source.hardpoints;
-		engine = source.engine;
-		weapons_count = source.weapons_count;
-		maxgroup = source.maxgroup;
-		weapons_tonnage = source.weapons_tonnage;
-		heateff = source.heateff;
+		source.active = true;
+		active = false;
 	}
 	
 	mw_InvStruct GiveItem(String type)
@@ -126,7 +125,7 @@ class MechWarriorBase : DoomPlayer
 	Property OverTonnage: overtonnage;
 	Property CockpitIsModel: modelcockpit;
 	Property SetCockpitHandler: cphandler;
-	Property LegsModel : mech_legs;
+	Property MechPieces : mech_torso, mech_legs;
 	Property Manufacturer : mechtype;
 	Property HideLegsPerspective : nofirstpersonlegs;
 	

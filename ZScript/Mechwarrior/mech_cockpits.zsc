@@ -2,7 +2,7 @@
 // Cockpit/crosshair handler(s)
 class CockpitHandler : Weapon
 {
-	int bobdir;	
+	int bobdir;
 	
 	Default
 	{
@@ -23,6 +23,7 @@ class CockpitHandler : Weapon
 		let plr = MechWarrior(Self);
 		return plr;
 	}
+	
 	
 	action PSprite getPSprite()
 	{

@@ -203,7 +203,7 @@ class Heatsink : Mechbase_Utility
 	{
 		Mechbase_Utility.Tonnage 1;
 		Mechbase_Utility.displayName "Heat Sink";
-		Heatsink.Efficiency 0.036;
+		Heatsink.Efficiency MWHS_EFF;
 		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 12600;
@@ -223,7 +223,7 @@ class DoubleHeatsink : Heatsink
 	{
 		Mechbase_Utility.Tonnage 1;
 		Mechbase_Utility.displayName "Heat Sink";
-		Heatsink.Efficiency 0.048;
+		Heatsink.Efficiency MWDBLHS_EFF;
 		Mechbase_Utility.Criticals 2;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 22530;
