@@ -204,7 +204,7 @@ class MechDoomerEvents : EventHandler
 				if(uitem) plr.adjustMoney(GetDefaultByType(uitem).worth);
 				if(witem) plr.adjustMoney(GetDefaultByType(witem).worth);
 				if(eitem) plr.adjustMoney(Mechbase_Engine.GetRealWorth(eitem));
-				plr.inv_context.weapon_items.delete(e.Args[0]);
+				plr.inv_context.RemoveItem(e.Args[0],1);
 			}
 			
 			if(netcmd == "+mwd_user5")plr.btn_userfive = true;
