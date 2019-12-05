@@ -9,8 +9,7 @@ mw_InvInfo inv_context;
 MechHardpoints hardpoints;
 HudAlert hAlert;
 SoundQueue mechsounds;
-MechLegsBase legs_reference;
-MechTorsoBase torso_reference;
+MechTorsoBase models_reference;
 bool buttonTick;
 bool btn_userfive;
 bool pilotlook;
@@ -25,8 +24,7 @@ float kph_real;
 
 // Properties
 class<CockpitHandler> cphandler;
-class<MechLegsBase> mech_legs;
-class<MechTorsoBase> mech_torso;
+class<MechTorsoBase> mech_models;
 class<Mechbase_Engine> base_engine;
 bool modelcockpit;
 String hud_cockpit;
@@ -89,19 +87,18 @@ void ChangeMech(int invmech)
 	overtonnage = defs.overtonnage;
 	modelcockpit = defs.modelcockpit;
 	cphandler = defs.cphandler;
-	mech_legs = defs.mech_legs;
-	mech_torso = defs.mech_torso;
+	mech_models = defs.mech_models;
 	mechtype = defs.mechtype;
 	nofirstpersonlegs = defs.nofirstpersonlegs;
 	player.viewheight = defs.ViewHeight;
 	
 	// Update vars
+	A_SetSpeed(0);
 	A_GiveInventory(cphandler,1);	
 	player.PendingWeapon = Weapon(FindInventory(cphandler));
 	DropWeapon();
 	BringUpWeapon();
-	if(legs_reference)  legs_reference.Destroy();
-	if(torso_reference) torso_reference.Destroy();
+	if(models_reference) models_reference.Destroy();
 	setupSpeedKPH(EngineGetKPH());
 	
 	inv_context.mechs.Delete(invmech);
@@ -182,6 +179,12 @@ void setupCriticals()
 }
 
 
+// Setup models
+void TrySetupModels()
+{
+	if(mech_models && !models_reference) models_reference = MechTorsoBase(MechPartsBase.Create(mech_models, self));
+}
+
 // Virtual
 virtual void SetupWeapons() 
 {
@@ -250,8 +253,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 override void PostBeginPlay()
 {
 	// Spawn pieces (WIP)
-	if(mech_legs)  legs_reference = MechPartsBase.CreateLegs(mech_legs, self);
-	if(mech_torso) torso_reference = MechPartsBase.CreateTorso(mech_torso, self);
+	TrySetupModels();
 	
 	// Setup mech support systems.
 	if(checkVoodoo()) 
@@ -298,14 +300,13 @@ override void tick()
 	}
 	
 	// Do not render player sprite if we're using a torso model.
-	if(mech_torso) Sprite = GetSpriteIndex("TNT1A0"); 
+	if(mech_models) Sprite = GetSpriteIndex("TNT1A0"); 
 	
 	// Clamp viewheight so we don't end up inside our hips when we fall.
 	player.viewheight = clamp(player.viewheight, default.viewheight*0.8, default.viewheight*2.0);
 	
-	// Turns out, we lose our legs when moving to another map, LOL.
-	if(!legs_reference && mech_legs) legs_reference = MechPartsBase.CreateLegs(mech_legs, self);
-	if(!torso_reference && mech_torso) torso_reference = MechPartsBase.CreateTorso(mech_torso, self);
+	// Turns out, we lose our models when moving to another map.
+	TrySetupModels();
 	
 	if(!inv_context) setupInventory();	
 	if(!dronecam) player.camera = self;

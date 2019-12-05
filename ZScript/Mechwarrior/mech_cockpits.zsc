@@ -42,7 +42,7 @@ class CockpitHandler : Weapon
 				if(plr) 
 				{	
 					// Footsteps when bob is at adequite length.
-					if(!plr.mech_legs && plr.bobdir != invoker.bobdir && plr.vel.length() >= 0.08 )
+					if(!plr.mech_models && plr.bobdir != invoker.bobdir && plr.vel.length() >= 0.08 )
 					{
 						if(plr.bobdir == 1) A_FireProjectile("MechFootstepEmitter");
 						invoker.bobdir = plr.bobdir;

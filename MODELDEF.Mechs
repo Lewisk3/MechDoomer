@@ -65,7 +65,7 @@ Model Torso_Commando
 	//Model 1 "cm_hips.md3"
 	Skin 0 "cm_full.png"
 	Scale 0.4 0.4 0.4
-	Offset 0 0 58
+	Offset 0 0 0
 	AngleOffset 0
 	
    FrameIndex TRSO A 0 0
@@ -113,7 +113,7 @@ Model Torso_Timberwolf
 	Skin 0 "tw_full_wolf.png"
 	Skin 1 "tw_full_wolf.png"
 	Scale 0.4 0.4 0.4
-	Offset -5 0 60
+	Offset -5 0 0
 	//USEACTORROLL
 	//USEACTORPITCH
 	
@@ -163,7 +163,7 @@ Model Torso_Stormcrow
 	Skin 0 "sc_full_wolf.png"
 	Skin 1 "sc_full_wolf.png"
 	Scale 0.4 0.4 0.4
-	Offset -5 0 65
+	Offset -5 0 0
 	AngleOffset 0
 	
    FrameIndex TRSO A 0 0
@@ -209,7 +209,7 @@ Model Torso_Atlas
 	//Model 1 "sc_hips.md3"
 	Skin 0 "at_full.png"
 	Scale 0.4 0.4 0.4
-	Offset -5 0 80
+	Offset -5 0 0
 	AngleOffset 0
 
    FrameIndex TRSO A 0 0
@@ -251,12 +251,23 @@ Model Legs_Atlas
 Model Torso_Jenner
 {
 	Path "models/Cockpits"
-	Model 0 "Jenner/jn_torso_hip.md3"
-	Skin 0 "Jenner/jn_full.png"
+	Model 0 "Jenner/jn_torso.md3"
+	SurfaceSkin 0 0 "Jenner/jn_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
 	Scale 0.1 0.1 0.1
-	Offset 0 0 55
+	Offset 0 0 0
 	
    FrameIndex TRSO A 0 0
+}
+Model Hips_Jenner
+{
+	Path "models/Cockpits"
+	Model 0 "Jenner/jn_hips.md3"
+	Skin 0 "Jenner/jn_full.png"
+	Scale 0.1 0.1 0.1
+	Offset 0 0 0
+	
+   FrameIndex MODL A 0 0
 }
 Model Legs_Jenner
 {
@@ -264,8 +275,7 @@ Model Legs_Jenner
 	Model 0 "jn_legs.md3"
 	Scale 0.1 0.1 0.13
 	Skin 0 "jn_full.png" // Main
-	Offset 0 0 56 
-	//SurfaceSkin 0 1   // Metal
+	Offset 0 0 0 
 	
    FrameIndex TLEG A 0 0
    FrameIndex TLEG B 0 1
@@ -296,15 +306,25 @@ Model CockpitHandler_Jenner
 // Urbanmech
 Model Torso_Urbanmech
 {
-	Path "models/Cockpits/Urbanmech"
-	Model 0 "ur_torso.md3"
-	//Model 1 "cm_hips.md3"
-	Skin 0 "ur_full.png"
-	Scale 0.1 0.1 0.1
-	Offset 0 0 42 // Urbie is the answer to life/universe and everything :P
+	Path "models/Cockpits"
+	Model 0 "Urbanmech/ur_torso.md3"
+	SurfaceSkin 0 0 "Urbanmech/ur_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 0.1 -0.1 0.1
+	Offset 0 0 0 
 	AngleOffset 0
 	
    FrameIndex TRSO A 0 0
+}
+Model Hips_Urbanmech
+{
+	Path "models/Cockpits"
+	Model 0 "Urbanmech/ur_hips.md3"
+	Skin 0 "Urbanmech/ur_full.png"
+	Scale 0.1 0.1 0.1
+	Offset 0 0 0
+	
+   FrameIndex MODL A 0 0
 }
 Model Legs_Urbanmech
 {
@@ -312,7 +332,7 @@ Model Legs_Urbanmech
 	Model 0 "ur_legs.md3"
 	Scale 0.1 0.1 0.1
 	Skin 0 "ur_full.png" // Main
-	Offset 0 0 40 
+	Offset 0 0 0 
 	//SurfaceSkin 0 1   // Metal
 	
    FrameIndex TLEG A 0 0

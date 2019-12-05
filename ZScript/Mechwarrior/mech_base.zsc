@@ -76,7 +76,7 @@ class MechWarriorBase : DoomPlayer
 	Property OverTonnage: overtonnage;
 	Property CockpitIsModel: modelcockpit;
 	Property SetCockpitHandler: cphandler;
-	Property MechPieces : mech_torso, mech_legs;
+	Property MechPieces : mech_models;
 	Property Manufacturer : mechtype;
 	Property HideLegsPerspective : nofirstpersonlegs;
 	

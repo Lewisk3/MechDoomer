@@ -403,6 +403,17 @@ class MechStatusBar : BaseStatusBar
 		if(!CPlayer || !CPlayer.mo) return;
 		let mechplr = Mechwarrior(CPlayer.mo);
 		if(!mechplr) return;
+		if(!mechplr.defaultmovement)
+		{
+			H_DrawImage("MBEARMID",(960,90));
+			if(mechplr.LegVel < 0) compassoffs += 0.79*abs(mechplr.LegVel);
+			if(mechplr.LegVel > 0) compassoffs -= 0.79*abs(mechplr.LegVel);
+			H_SetClipRect(780, 0, 360, 256);
+			H_DrawTexture(compass, (1126+compassoffs, 115) );
+			ClearClipRect();
+			if(compassoffs > 239)compassoffs = -234;
+			if(compassoffs < -239)compassoffs = 234;
+		}
 		
 		vector2 offsetpos = (949+xoffs,103+yoffs);
 		vector2 basepos   = (286+woffs,51);
@@ -413,7 +424,7 @@ class MechStatusBar : BaseStatusBar
 		crectxy   = H_AdjustCoord(crectxy);
 		crectab   = H_AdjustCoord(crectab);
 		
-		float cang = (mechplr.LegAng%360);
+		float cang = mechplr.defaultmovement ? (mechplr.angle%360) : (mechplr.LegAng%360);
 		float pang = cang-79;
 		vector2 Npos = MDMath.VRotate(basepos,pang)+offsetpos;
 		vector2 Spos = MDMath.VRotate(basepos,pang+180)+offsetpos;
@@ -626,19 +637,7 @@ class MechStatusBar : BaseStatusBar
 			if(mech.selectedWeapon <= mech.inv_context.weapons_count)H_DrawImage(weapind,weappos,0,(0.8,0.6));
 			
 			// Draw speedometer.
-			if(!mech.defaultmovement)
-			{
-				H_DrawImage("MBEARMID",(960,90));
-				if(mech.LegVel < 0) compassoffs += 0.79*abs(mech.LegVel);
-				if(mech.LegVel > 0) compassoffs -= 0.79*abs(mech.LegVel);
-				H_SetClipRect(780, 0, 360, 256);
-				H_DrawTexture(compass, (1126+compassoffs, 115) );
-				ClearClipRect();
-				if(compassoffs > 239)compassoffs = -234;
-				if(compassoffs < -239)compassoffs = 234;
-				
-				H_DrawString(int(mech.MoveSpeedKPH*mech.throttle) .. "Kph" ,(820+765,100+720));
-			}
+			if(!mech.defaultmovement) H_DrawString(int(mech.MoveSpeedKPH*mech.throttle) .. "Kph" ,(820+765,100+720));
 			DrawBars();
 		}
 		

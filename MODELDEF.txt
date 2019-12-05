@@ -34,7 +34,7 @@ Model Mechbay
 	Scale 4.4 5.2 4.4
 	USEACTORPITCH
 	SurfaceSkin 0 0  "metal.png" // Base
-	SurfaceSkin 0 1  "Cockpit_Glass.png"  // Floor 2
+	SurfaceSkin 0 1  "Cockpits/c_glass.png"  // Floor 2
 	AngleOffset 90
 	
    FrameIndex MBAY A 0 0
@@ -48,12 +48,12 @@ Model Mechbay_3D
 	USEACTORPITCH
 	SurfaceSkin 0 0  "metal.png" // Base
 	SurfaceSkin 0 1  "metal_dark.png"  // Floor 2
-	SurfaceSkin 0 2  "Cockpit_Glass.png"
+	SurfaceSkin 0 2  "Cockpits/c_glass.png"
 	SurfaceSkin 0 3  "metal_dark.png" // Right handles
 	SurfaceSkin 0 4  "metal_dark.png" // Left handles
 	SurfaceSkin 0 5  "metal_dark.png" // Back handles
 	SurfaceSkin 0 6  "metal.png" // Roof
-	SurfaceSkin 0 7  "Cockpit_Glass.png" // Roof light
+	SurfaceSkin 0 7  "Cockpits/c_glass.png" // Roof light
 	AngleOffset 90
 	
    FrameIndex MBAY A 0 0
@@ -392,7 +392,7 @@ Model MassiveWeaponDisp
 	//Skin 0 "Stormcrow.png"
 	SurfaceSkin 0 0  "Metal_Dark.png" // RL_LRToe
 	SurfaceSkin 0 1  "weapfront.png" // ???
-	SurfaceSkin 0 2  "Cockpit_Glass.png" // Head
+	SurfaceSkin 0 2  "Cockpits/c_glass.png" // Head
 	SurfaceSkin 0 3  "Metal.png" // RL_Lower
 	SurfaceSkin 0 4  "Metal_Dark.png" // RL_FTow
 	SurfaceSkin 0 5  "Metal.png" // RL_Upper
@@ -567,7 +567,7 @@ Model Jenner_3D
 	Model 0 "jenner.md3"
 	//Skin 0 "Stormcrow.png"
 	Scale 28.5 28.5 28.5
-	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
+	SurfaceSkin 0 0  "Cockpits/c_glass.png" // Window
 	SurfaceSkin 0 1  "Metal.png" // Left upper
 	SurfaceSkin 0 2  "metal_dark.png" // Left lower
 	SurfaceSkin 0 3  "metal_dark.png" // Left toe
@@ -590,7 +590,7 @@ Model Atlas_3D
 	Path "models"
 	Model 0 "atlas.md3"
 	Scale 14.0 14.0 14.0
-	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
+	SurfaceSkin 0 0  "Cockpits/c_glass.png" // Window
 	SurfaceSkin 0 1  "metal.png" // Left upper
 	SurfaceSkin 0 2  "metal.png" // Left lower
 	SurfaceSkin 0 3  "metal.png" // Left toe
@@ -617,7 +617,7 @@ Model Timberwolf_3D
 	//Skin 0 "Stormcrow.png"
 	SurfaceSkin 0 0  "Metal_Dark.png" // RL_LRToe
 	SurfaceSkin 0 1  "weapfront.png" // ???
-	SurfaceSkin 0 2  "Cockpit_Glass.png" // Head
+	SurfaceSkin 0 2  "Cockpits/c_glass.png" // Head
 	SurfaceSkin 0 3  "Metal.png" // RL_Lower
 	SurfaceSkin 0 4  "Metal_Dark.png" // RL_FTow
 	SurfaceSkin 0 5  "Metal.png" // RL_Upper
@@ -642,7 +642,7 @@ Model Stormcrow_3D
 	Path "models"
 	Model 0 "stormcrow.md3"
 	//Skin 0 "Stormcrow.png"
-	SurfaceSkin 0 0  "Cockpit_Glass.png" // Window
+	SurfaceSkin 0 0  "Cockpits/c_glass.png" // Window
 	SurfaceSkin 0 1  "Metal.png" 	     // Right Arm
 	SurfaceSkin 0 2  "Metal.png" 	     // Right UpperLeg
 	SurfaceSkin 0 3  "Metal.png" 		 // Right LowerLeg

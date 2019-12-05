@@ -92,7 +92,7 @@ void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false)
 	}
 	else if(hp.internalhp > 0)
 	{
-		if(random(0,1)==1)
+		if(random(0,5)==5)
 		{
 			if(random(0,1)==1)
 				DamageHardpointWeapons(hp,50*random(1,2));
@@ -189,8 +189,8 @@ void DamageHardpointStruct(MechHardpoint hp, int amt=50)
 				[stcase, stcaseind] = FindHealthyStruct("C_A_S_E",hp);
 				if(!stcase)
 				{
-					DamageHardpoint(hp,20,true);
-					if( mechtype != MechType_Clan ) SpreadHardpointDamage(hp,10);
+					DamageHardpoint(hp,30,true);
+					if( mechtype != MechType_Clan ) SpreadHardpointDamage(hp,20);
 				}
 				else
 					inv_context.mechstructs.delete(stcaseind);

@@ -90,13 +90,13 @@ void mech_cockpitbob()
 		bobdir *= -1;	
 		boboffs = clamp(boboffs,-bobmax,bobmax);
 	}
-	if(mech_legs)
+	if(mech_models)
 	{
 		// Calculate gyroscopics
 		float gfactor = GetDefaultByType("StructGyro").power;
 		float gyros = countStruct("StructGyro") - countStructDamaged("StructGyro",true);
-		float bfactor = 2.08-(gyros*gfactor);
-		float bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 0.8, 2.5);
+		float bfactor = 2.76-(gyros*gfactor);
+		float bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 1.2, 3.15);
 		Player.ViewZ -= bobmod;
 	}
 }
@@ -438,5 +438,5 @@ void Bobbing() {
 	
 	A_SetRoll(-TiltOffset);
 	//SetOrigin(Vec3Angle(TiltOffset * 0.5, angle+90, 0, false), true);
-	if(!mech_legs) Player.ViewZ += StepOffset;
+	if(!mech_models) Player.ViewZ += StepOffset;
 }
