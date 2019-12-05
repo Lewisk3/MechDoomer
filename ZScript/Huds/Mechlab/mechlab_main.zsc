@@ -253,7 +253,8 @@ void drawInventory(int px, int py, int start, int max)
 	max = start+max > mechplr.inv_context.weapon_items.Size() ? mechplr.inv_context.weapon_items.Size() : start+max;
 	for(int i = start; i < max; i++)
 	{
-		String weapname = mechplr.inv_context.weapon_items[i].Tag;
+		let item = mechplr.inv_context.weapon_items[i];
+		String weapname = item.Tag;
 		class<Mechbase_Weapon> mw  = weapname;
 		class<Mechbase_Utility> ut = weapname;
 		class<Mechbase_Engine> eng = weapname;
@@ -275,6 +276,7 @@ void drawInventory(int px, int py, int start, int max)
 			setSelected(weapname, null, ut, mw, eng, i);
 		}
 		string displayName = eng ? MechBase_Engine.GetRealName(eng) : weapname .. "(#"..slots..")";
+		if(item.amt > 0) displayName = displayName .. " x" .. item.amt+1;
 		H_DrawString(displayName, (px-68,py+sely),0,fcr);
 		if(ut && !GetDefaultByType(ut).moveable)H_DrawString("ERROR: Immoveable Item!", (px-68,py+sely),0,Font.CR_DARKRED);	
 	}

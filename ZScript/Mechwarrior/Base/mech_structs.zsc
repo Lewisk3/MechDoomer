@@ -250,7 +250,8 @@ int countStructDamaged(String type, bool destroyed=false)
 bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 {
 	// Equip struct from items
-	let obj = inv_context.weapon_items[ind-1];
+	let obj = inv_context.CopyItem(inv_context.weapon_items[ind-1]);
+	// Need to make item obj copy.
 	class<Mechbase_Utility> util = obj.Tag;
 	class<Mechbase_Engine> eng = obj.Tag;
 	let defs = GetDefaultByType(util);
@@ -269,7 +270,7 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 		}
 		else
 		{
-			inv_context.weapon_items.delete(ind-1);
+			inv_context.RemoveItem(ind-1, 1);
 			return true;
 		}
 	}
@@ -292,7 +293,7 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 	inv_context.mechstructs.push(obj);
 	inv_context.weapons_tonnage += defs.weight;
 	hp.adjustHardslots(defs.hardslots);
-	if(move)inv_context.weapon_items.delete(ind-1);
+	if(move) inv_context.RemoveItem(ind-1, 1);
 	
 	return true;
 }
@@ -329,7 +330,7 @@ bool moveStructToInv(int struc_ind, bool move=true)
 				return true;
 			}
 			if(!ut.moveable) return false;
-			inv_context.weapon_items.push(inv_context.mechstructs[i]);
+			inv_context.AddItem(inv_context.mechstructs[i]);
 			removeStruct(i, move);
 			return true;
 		}

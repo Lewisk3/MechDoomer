@@ -226,7 +226,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 	else // Torso
 	{	
 		// left/right torsos
-		if( hitangle > 40 && hitangle < 100)
+		if( hitangle > 60 && hitangle < 100)
 		{
 			if(lrpos < 0) ProcessHardpointDamage("MechDamage_RT",newdmg,damager);
 			if(lrpos > 0) ProcessHardpointDamage("MechDamage_LT",newdmg,damager);

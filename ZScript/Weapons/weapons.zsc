@@ -490,7 +490,7 @@ class BulletsMGun : AMSAmmo
 	{
 		Mechbase_Utility.displayName "MACHINEGUN AMMO";
 		Mechbase_Utility.CValue 1250;
-		Mechbase_Ammo.Amount 1000;
+		Mechbase_Ammo.Amount 200;
 	}
 }
 class AC2_Ammo : AMSAmmo

@@ -1,0 +1,112 @@
+
+extend class mw_InvInfo;
+
+// Swap inventories
+void Swap(mw_InvInfo source)
+{	
+	// All new lists are added to the inventory, 
+	source.mechs.Clear();
+	source.mechs.Copy(mechs);
+	source.money_cbills = money_cbills;
+	source.weapon_items.Clear();
+	source.weapon_items.Copy(weapon_items);
+	
+	source.active = true;
+	active = false;
+}
+
+// Give or Add
+mw_InvStruct GiveItem(String type)
+{
+	let newitem = NewItem(type);
+	if(!newitem) return NULL;
+	AddItem(newitem);
+	return newitem;
+}
+void GiveItems(String type, int amt)
+{
+	for(int i = 0; i < amt; i++) GiveItem(type);
+}
+
+void AddItem(mw_InvStruct source)
+{
+	let item = FindItem(source.Tag, source.ammunition);
+	if(item) 
+		item.amt++;
+	else
+		weapon_items.push(source);
+}
+
+// Remove
+void RemoveItem(int ind, int amt=0)
+{
+	let item = weapon_items[ind];
+	item.amt-=amt;
+	bool do_delete = (amt <= 0) ? true : (item.amt < 0);
+	if(do_delete) weapon_items.delete(ind);
+}
+
+// Create
+mw_InvStruct NewItem(String type)
+{
+	class<Mechbase_Utility> util = type;
+	let typeobj = util==NULL ? NULL : Mechbase_Utility.CreateTemp(util);
+	let item = new("mw_InvStruct");
+	if(item)
+	{
+		item.Tag = type;
+		if(typeobj) 
+		{
+			item.utiltype = type;
+			typeobj.SetupItem(item);
+		}
+	}
+	if(typeobj) typeobj.Destroy();
+	return item;
+}
+
+// Copy
+mw_InvStruct CopyItem(mw_InvStruct item)
+{
+	let newitem = NewItem(item.Tag);
+	if(newitem)
+	{
+		newitem.Tag = item.Tag;
+		newitem.description.Copy(item.description);
+		newitem.utiltype = item.utiltype;
+		newitem.utildefs = item.utildefs;
+		newitem.hardpoint = item.hardpoint;
+		newitem.ammunition = item.ammunition;
+		newitem.hardslots = item.hardslots;
+		newitem.displayName = item.displayName;
+		newitem.weight = item.weight;
+		newitem.moveable = item.moveable;
+		newitem.takesnodamage = item.takesnodamage;
+		newitem.worth = item.worth;
+	}
+	return newitem;
+}
+
+
+// Move
+void MoveToItems(int ind)
+{
+	mechstructs[ind].hardpoint = NULL;
+	mechstructs[ind].dmg_taken = 0;
+	mechstructs[ind].broken = false;
+	AddItem(mechstructs[ind]);
+	mechstructs.delete(ind);
+}
+	
+// Find
+mw_InvStruct FindItem(String type, int ammoreq=0)
+{
+	for(int i = 0; i < weapon_items.Size(); i++)
+	{
+		if(weapon_items[i].Tag ~== type && weapon_items[i].ammunition == ammoreq)
+		{	
+			return weapon_items[i];
+		}
+	}
+	return NULL;
+}

@@ -19,9 +19,9 @@ class mw_InvStruct
 	bool moveable;
 	bool takesnodamage;
 	int worth;
+	int amt; // Stackable items, horray!
 }
 
-// Create Stored weapon, Array<Mechbase_Weapon> does NOT persist!
 class mw_StoredWeapon : Object
 {
 	class<Mechbase_Weapon> baseclass;
@@ -54,55 +54,6 @@ class mw_InvInfo : Inventory
 	{
 		hardpoints = MechHardpoints.Create();
 	}	
-
-	// Moves source to local mw_InvInfo, moves old info to dest.
-	void Swap(mw_InvInfo source)
-	{	
-		// All new lists are added to the inventory, 
-		// they're just toggled in how active they are.
-		source.mechs.Clear();
-		source.mechs.Copy(mechs);
-		source.money_cbills = money_cbills;
-		source.weapon_items.Clear();
-		source.weapon_items.Copy(weapon_items);
-		
-		source.active = true;
-		active = false;
-	}
-	
-	mw_InvStruct GiveItem(String type)
-	{
-		let item = NewItem(type);
-		if(item) weapon_items.push(item);
-		return item;
-	}
-	mw_InvStruct NewItem(String type)
-	{
-		class<Mechbase_Utility> util = type;
-		let typeobj = util==NULL ? NULL : Mechbase_Utility.CreateTemp(util);
-		let item = new("mw_InvStruct");
-		if(item)
-		{
-			item.Tag = type;
-			if(typeobj) 
-			{
-				item.utiltype = type;
-				typeobj.SetupItem(item);
-			}
-		}
-		if(typeobj) typeobj.Destroy();
-		return item;
-	}
-	void GiveItems(String type, int amt)
-	{
-		for(int i = 0; i < amt; i++) GiveItem(type);
-	}
-	void MoveToItems(int ind)
-	{
-		mechstructs[ind].hardpoint = NULL;
-		weapon_items.push(mechstructs[ind]);
-		mechstructs.delete(ind);
-	}
 	
 	Default
 	{

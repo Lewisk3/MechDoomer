@@ -227,7 +227,7 @@ bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 	 
 	 // Equip weapon in inventory, don't give ammo.
 	if(!equipWeapon(weap,hp,grp,false)) return false;
-	if(move)inv_context.weapon_items.delete(ind-1);
+	if(move)inv_context.RemoveItem(ind-1, 1);
 	return true;
 }
 bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool giveammo = true)
