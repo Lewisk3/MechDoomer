@@ -217,7 +217,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 	vector2 mechangle = ( pos.x, pos.y );
 	vector2 dmgpos2D  = ( dmgpos.x, dmgpos.y );
 	mechangle = MDMath.VRotate(mechangle,self.angle);
-	float lrpos = atan2(source.y - mechangle.y , source.x - mechangle.x);
+	float lrpos = atan2(source.pos.y - mechangle.y , source.pos.x - mechangle.x);
 	float hitangle = abs((atan2(pos.x - dmgpos.x , pos.y - dmgpos.y))) + frandom(-8,8);
 	hitangle = abs(hitangle-((self.angle-90)%180));
 	// Legs
