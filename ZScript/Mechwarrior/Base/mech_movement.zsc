@@ -64,7 +64,7 @@ void mech_cockpitbob()
 {
 	// Calculate Bob
 	float bobthrust = 0;
-	float bobmax = 12*(mech_tonnage/100.0);
+	float bobmax = MW_BOBRANGE*(mech_tonnage/100.0);
 	if(defaultmovement) bobmax *= 10;
 	if(!bobdir) bobdir = 1;
 	if(vel.z >  0.5) bobdir = 1;
