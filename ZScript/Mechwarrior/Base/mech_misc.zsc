@@ -1,6 +1,45 @@
 	/*****************************\
 	|	 Miscellaneous Systems    |
 	\*****************************/
+
+// Mechbay Stuff
+class Door_3D : Actor
+{
+	int up;
+
+	Default
+	{
+		+NOBLOCKMAP;
+	}
+	
+	override void tick()
+	{
+		vel.z = 1.2;
+		up++;
+		if(up > 155) 
+		{
+			Die(self,self);
+		}
+		super.tick();
+	}
+
+	States
+	{
+		Spawn:
+			DOOR A 1;
+		loop;
+	}
+}
+class Mechbay_3D : Actor
+{
+	States
+	{
+		Spawn:
+			MBAY A 1;
+		loop;
+	}
+}	
+
 extend class MechwarriorBase;
 
 void startMechbay()

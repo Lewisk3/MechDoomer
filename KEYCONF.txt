@@ -1,12 +1,14 @@
 //clearplayerclasses
-addplayerclass "BattleArmor"
-addplayerclass "Stormcrow" // 3D
-addplayerclass "Timberwolf" // 3D
-addplayerclass "Commando" // 3D
-addplayerclass "Atlas" // 3D
-addplayerclass "Jenner" // 3D
-addplayerclass "Urbanmech" // 3D
-addplayerclass "EbonJaguar" 
-addplayerclass "Warhammer"
-addplayerclass "Nova"
+addplayerclass "BattleArmor" // 3D
+addplayerclass "Stormcrow"   // 3D
+addplayerclass "Timberwolf"  // 3D
+addplayerclass "Commando"    // 3D
+addplayerclass "Atlas" 	     // 3D
+addplayerclass "Jenner" 	 // 3D
+addplayerclass "Urbanmech"	 // 3D
+addplayerclass "Nova" 	     // 2D
 
+
+
+//addplayerclass "EbonJaguar" 
+//addplayerclass "Warhammer"

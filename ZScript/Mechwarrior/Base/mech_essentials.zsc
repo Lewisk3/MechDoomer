@@ -292,15 +292,16 @@ override void PostBeginPlay()
 }
 	
 override void tick()
-{	
+{
+
+	// Do not render player sprite if we're using a torso model.
+	if(mech_models) Sprite = GetSpriteIndex("TNT1A0"); 
+	
 	if(checkVoodoo()) 
 	{
 		super.Tick();
 		return;
 	}
-	
-	// Do not render player sprite if we're using a torso model.
-	if(mech_models) Sprite = GetSpriteIndex("TNT1A0"); 
 	
 	// Clamp viewheight so we don't end up inside our hips when we fall.
 	player.viewheight = clamp(player.viewheight, default.viewheight*0.8, default.viewheight*2.0);

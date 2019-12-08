@@ -60,24 +60,29 @@ Model CockpitHandler_BattleArmor
 // Commando 
 Model Torso_Commando
 {
-	Path "models/Cockpits/Commando"
-	Model 0 "cm_torso.md3"
-	//Model 1 "cm_hips.md3"
-	Skin 0 "cm_full.png"
-	Scale 0.4 0.4 0.4
-	Offset 0 0 0
-	AngleOffset 0
+	Path "models/Cockpits"
+	Model 0 "Commando/cm_torso.md3"
+	SurfaceSkin 0 0 "Commando/cm_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
 	
    FrameIndex TRSO A 0 0
+}
+Model Hips_Commando
+{
+	Path "models/Cockpits/Commando"
+	Model 0 "cm_hips.md3"
+	Skin 0 "cm_full" // Main
+	Scale 1.0 1.0 1.0
+	
+   FrameIndex MODL A 0 0
 }
 Model Legs_Commando
 {
 	Path "models/Cockpits/Commando"
 	Model 0 "cm_legs.md3"
-	Scale 0.4 0.4 0.4
+	Scale 1.0 1.0 1.0
 	Skin 0 "cm_full" // Main
-	Offset 0 0 0 
-	//SurfaceSkin 0 1   // Metal
 	
    FrameIndex TLEG A 0 0
    FrameIndex TLEG B 0 1
@@ -107,23 +112,30 @@ Model CockpitHandler_Commando
 // Timberwolf
 Model Torso_Timberwolf
 {
-	Path "models/Cockpits/Timberwolf"
-	Model 0 "tw_torso.md3"
-	Model 1 "tw_hips.md3"
-	Skin 0 "tw_full_wolf.png"
-	Skin 1 "tw_full_wolf.png"
-	Scale 0.4 0.4 0.4
+	Path "models/Cockpits"
+	Model 0 "Timberwolf/tw_torso.md3"
+	SurfaceSkin 0 0 "Timberwolf/tw_full_wolf.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
 	Offset -5 0 0
-	//USEACTORROLL
-	//USEACTORPITCH
 	
    FrameIndex TRSO A 0 0
+}
+Model Hips_Timberwolf
+{
+	Path "models/Cockpits/Timberwolf"
+	Model 0 "tw_hips.md3"
+	Scale 1.0 1.0 1.0
+	SurfaceSkin 0 0 "tw_full_wolf.png" // Main
+	Offset -5 0 0
+	
+   FrameIndex MODL A 0 0
 }
 Model Legs_Timberwolf
 {
 	Path "models/Cockpits/Timberwolf"
 	Model 0 "tw_legs.md3"
-	Scale 0.4 0.4 0.4
+	Scale 1.0 1.0 1.0
 	Skin 0 "tw_full_wolf.png" // Main
 	Offset -5 0 0
 	
@@ -157,22 +169,31 @@ Model CockpitHandler_Timberwolf
 // Stormcrow
 Model Torso_Stormcrow
 {
-	Path "models/Cockpits/Stormcrow"
-	Model 0 "sc_torso.md3"
-	Model 1 "sc_hips.md3"
-	Skin 0 "sc_full_wolf.png"
-	Skin 1 "sc_full_wolf.png"
-	Scale 0.4 0.4 0.4
+	Path "models/Cockpits"
+	Model 0 "Stormcrow/sc_torso.md3"
+	SurfaceSkin 0 0 "Stormcrow/sc_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
 	Offset -5 0 0
 	AngleOffset 0
 	
    FrameIndex TRSO A 0 0
 }
+Model Hips_Stormcrow
+{
+	Path "models/Cockpits/Stormcrow"
+	Model 0 "sc_hips.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "sc_full_wolf.png" // Main
+	Offset -5 0 0 
+	
+    FrameIndex MODL A 0 0
+}
 Model Legs_Stormcrow
 {
 	Path "models/Cockpits/Stormcrow"
 	Model 0 "sc_legs.md3"
-	Scale 0.4 0.4 0.4
+	Scale 1.0 1.0 1.0
 	Skin 0 "sc_full_wolf.png" // Main
 	Offset -5 0 0 
 	//SurfaceSkin 0 1   // Metal
@@ -204,24 +225,23 @@ Model CockpitHandler_Stormcrow
 // Atlas
 Model Torso_Atlas
 {
-	Path "models/Cockpits/Atlas"
-	Model 0 "at_torso.md3"
-	//Model 1 "sc_hips.md3"
-	Skin 0 "at_full.png"
-	Scale 0.4 0.4 0.4
+	Path "models/Cockpits/"
+	Model 0 "Atlas/at_torso.md3"
+	SurfaceSkin 0 0 "Atlas/at_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
 	Offset -5 0 0
 	AngleOffset 0
 
    FrameIndex TRSO A 0 0
 }
-Model CockpitHandler_Atlas
+Model Hips_Atlas
 {
 	Path "models/Cockpits"
-	Model 0 "Atlas/at_head.md3"
-	Scale 0.15 0.10 0.10
-	Skin 0 "Atlas/at_head.png" // Main
-	PitchOffset -8
-	Offset 0 10 5;
+	Model 0 "Atlas/at_hips.md3"
+	Skin 0 "Atlas/at_full.png"
+	Scale 1.0 1.0 1.0
+	Offset -5 0 0
 	
    FrameIndex MODL A 0 0
 }
@@ -229,10 +249,9 @@ Model Legs_Atlas
 {
 	Path "models/Cockpits/Atlas"
 	Model 0 "at_legs.md3"
-	Scale 0.4 0.4 0.4
+	Scale 1.0 1.0 1.0
 	Skin 0 "at_full.png" // Main
 	Offset -5 0 0 
-	//SurfaceSkin 0 1   // Metal
 	
    FrameIndex TLEG A 0 0
    FrameIndex TLEG B 0 1
@@ -246,6 +265,17 @@ Model Legs_Atlas
    FrameIndex TLEG J 0 9
    FrameIndex TLEG K 0 10
 }
+Model CockpitHandler_Atlas
+{
+	Path "models/Cockpits"
+	Model 0 "Atlas/at_head.md3"
+	Scale 0.15 0.10 0.10
+	Skin 0 "Atlas/at_head.png" // Main
+	PitchOffset -8
+	Offset 0 10 5;
+	
+   FrameIndex MODL A 0 0
+}
 
 // Jenner
 Model Torso_Jenner
@@ -254,7 +284,7 @@ Model Torso_Jenner
 	Model 0 "Jenner/jn_torso.md3"
 	SurfaceSkin 0 0 "Jenner/jn_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
-	Scale 0.1 0.1 0.1
+	Scale 1.0 1.0 1.0
 	Offset 0 0 0
 	
    FrameIndex TRSO A 0 0
@@ -264,7 +294,7 @@ Model Hips_Jenner
 	Path "models/Cockpits"
 	Model 0 "Jenner/jn_hips.md3"
 	Skin 0 "Jenner/jn_full.png"
-	Scale 0.1 0.1 0.1
+	Scale 1.0 1.0 1.0
 	Offset 0 0 0
 	
    FrameIndex MODL A 0 0
@@ -273,7 +303,7 @@ Model Legs_Jenner
 {
 	Path "models/Cockpits/Jenner"
 	Model 0 "jn_legs.md3"
-	Scale 0.1 0.1 0.13
+	Scale 1.0 1.0 1.0
 	Skin 0 "jn_full.png" // Main
 	Offset 0 0 0 
 	
@@ -288,7 +318,7 @@ Model Legs_Jenner
    FrameIndex TLEG I 0 8
    FrameIndex TLEG J 0 9
    FrameIndex TLEG K 0 10
-}
+} 
 Model CockpitHandler_Jenner
 {
 	Path "models/Cockpits"
@@ -303,6 +333,7 @@ Model CockpitHandler_Jenner
    FrameIndex MODL A 0 0
 }
 
+
 // Urbanmech
 Model Torso_Urbanmech
 {
@@ -310,7 +341,7 @@ Model Torso_Urbanmech
 	Model 0 "Urbanmech/ur_torso.md3"
 	SurfaceSkin 0 0 "Urbanmech/ur_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
-	Scale 0.1 -0.1 0.1
+	Scale 1.0 -1.0 1.0
 	Offset 0 0 0 
 	AngleOffset 0
 	
@@ -321,7 +352,7 @@ Model Hips_Urbanmech
 	Path "models/Cockpits"
 	Model 0 "Urbanmech/ur_hips.md3"
 	Skin 0 "Urbanmech/ur_full.png"
-	Scale 0.1 0.1 0.1
+	Scale 1.0 1.0 1.0
 	Offset 0 0 0
 	
    FrameIndex MODL A 0 0
@@ -330,7 +361,7 @@ Model Legs_Urbanmech
 {
 	Path "models/Cockpits/Urbanmech"
 	Model 0 "ur_legs.md3"
-	Scale 0.1 0.1 0.1
+	Scale 1.0 1.0 1.0
 	Skin 0 "ur_full.png" // Main
 	Offset 0 0 0 
 	//SurfaceSkin 0 1   // Metal

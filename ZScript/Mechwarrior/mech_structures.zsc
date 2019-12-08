@@ -57,7 +57,6 @@ class Mechbase_Utility : Actor
 		return mbu;
 	}
 	
-	// O_O Pretty much just for readability.
 	clearscope static MechutilDefs getDefaults(class<Mechbase_Utility> type="Mechbase_Utility")
 	{
 		let defs = GetDefaultByType(type);

@@ -54,10 +54,12 @@ float rolldistort;
 void setupSpeedKPH(float kph)
 {
 	MoveSpeedKPH = kph;
-	kph_default = 75000;
-	kph_real = 75000/MWGAMEPLAY_MECHSPEEDSCALE;
-	MoveSpeed = ceil((MoveSpeedKPH*15000)/kph_real);
+	MoveSpeed = ((kph*(10.0/36.0))/35.0) * (34*MWGAMEPLAY_MECHSPEEDSCALE);
 	MoveSpeed_Max = MoveSpeed;
+	
+	//kph_default = 25000; //75000
+	//kph_real = 25000/MWGAMEPLAY_MECHSPEEDSCALE;
+	//MoveSpeed = ceil((MoveSpeedKPH*15000)/kph_real);
 }
 
 void mech_cockpitbob()
@@ -72,7 +74,7 @@ void mech_cockpitbob()
 	if(vel.length() > 0.08 || LegVel)
 	{
 		// 0.12
-		bobthrust = clamp(vel.length()*(0.08*(kph_real/kph_default)), -(bobmax/3), (bobmax/3));
+		bobthrust = clamp(vel.length()*(0.008*MoveSpeed), -(bobmax/3), (bobmax/3));
 		if(stepping) 
 		{ 
 			bobthrust = abs(bobthrust)*2;

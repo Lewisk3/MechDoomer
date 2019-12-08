@@ -174,7 +174,7 @@ class MechTorsoBase : MechPartsBase
 			pitch = mechowner.pitch*0.5;
 			roll = mechowner.roll*0.3;
 			angle = mechowner.angle;
-			if(!mechowner.dronecam) 
+			if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
 				Sprite = GetSpriteIndex("TNT1A0");
 			else
 				Sprite = GetSpriteIndex("TRSOA0");
@@ -202,7 +202,7 @@ class MechHipsBase : MechPartsBase
 		if(mechowner)
 		{
 			angle = mechowner.LegAng;
-			if(!mechowner.dronecam) 
+			if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
 				Sprite = GetSpriteIndex("TNT1A0");
 			else
 				Sprite = GetSpriteIndex("MODLA0");
@@ -219,7 +219,7 @@ class MechLegsBase : MechPartsBase
 		if(mechowner)
 		{
 			angle = mechowner.LegAng;
-			if(!mechowner.dronecam && mechowner.nofirstpersonlegs) 
+			if((!mechowner.dronecam && mechowner.nofirstpersonlegs) && !mechowner.CheckVoodoo()) 
 				Sprite = GetSpriteIndex("TNT1A0");
 			else
 				Sprite = GetSpriteIndex("TLEGA0");
@@ -267,9 +267,13 @@ class MechLegsBase : MechPartsBase
 // All mech parts \\
 
 // Hips
-class Hips_Invisible : MechHipsBase {}
-class Hips_Jenner 	 : MechHipsBase {}
-class Hips_Urbanmech : MechHipsBase {}
+class Hips_Invisible  : MechHipsBase {}
+class Hips_Jenner 	  : MechHipsBase {}
+class Hips_Urbanmech  : MechHipsBase {}
+class Hips_Timberwolf : MechHipsBase {}
+class Hips_Stormcrow  : MechHipsBase {}
+class Hips_Atlas      : MechHipsBase {}
+class Hips_Commando   : MechHipsBase {}
 // Legs
 class Legs_Invisible  : MechLegsBase {}
 class Legs_Timberwolf : MechLegsBase {}
@@ -281,26 +285,26 @@ class Legs_Urbanmech  : MechLegsBase {}
 // Torsos
 class Torso_Timberwolf : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Invisible", "Legs_Timberwolf";
-		MechPartsBase.ZOffset 60;
+		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf";
+		MechPartsBase.ZOffset 50;
 	}
 }
 class Torso_Stormcrow : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Invisible", "Legs_Stormcrow";
-		MechPartsBase.ZOffset 65;
+		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow";
+		MechPartsBase.ZOffset 60;
 	}
 }
 class Torso_Atlas : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Invisible", "Legs_Atlas";
-		MechPartsBase.ZOffset 80;
+		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas";
+		MechPartsBase.ZOffset 60;
 	}
 }
 class Torso_Commando : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Invisible", "Legs_Commando";
-		MechPartsBase.ZOffset 58;
+		MechTorsoBase.Pieces "Hips_Commando", "Legs_Commando";
+		MechPartsBase.ZOffset 40;
 	}
 }
 class Torso_Urbanmech : MechTorsoBase {
@@ -312,7 +316,7 @@ class Torso_Urbanmech : MechTorsoBase {
 class Torso_Jenner : MechTorsoBase {
 	Default {
 		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner";
-		MechPartsBase.ZOffset 55;
+		MechPartsBase.ZOffset 42;
 	}
 }
 class Torso_Invisible : MechTorsoBase {

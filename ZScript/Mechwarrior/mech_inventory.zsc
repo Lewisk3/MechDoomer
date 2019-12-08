@@ -47,7 +47,7 @@ void RemoveItem(int ind, int amt=0)
 }
 
 // Create
-mw_InvStruct NewItem(String type)
+static mw_InvStruct NewItem(String type)
 {
 	class<Mechbase_Utility> util = type;
 	let typeobj = util==NULL ? NULL : Mechbase_Utility.CreateTemp(util);
