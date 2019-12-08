@@ -95,6 +95,7 @@ class MechDoomerEvents : EventHandler
 
 	override void WorldThingDamaged(WorldEvent e)
 	{
+		if(!e || !e.Thing || !e.DamageSource) return;
 		String ThingHit = e.Thing.GetClassName();
 		String SourceName = "UNDEFINED";
 	
@@ -110,7 +111,7 @@ class MechDoomerEvents : EventHandler
 		int gibhealth = -Thinghealth;
 		if (e.Thing.Health <= 0) 
 		{
-			if(SourceName != "undefined")
+			if(SourceName != "undefined" && e.DamageSource)
 			{
 				if(MechWarrior(e.DamageSource))
 				{

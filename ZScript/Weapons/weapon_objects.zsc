@@ -133,7 +133,7 @@ class LRM : MechMissile
 	Default
 	{
 		Damage MWDMG_LRM;
-		MechMissile.MinimumRange 180;
+		MechMissile.MinimumRange 100; // 180 is a bit too high for Doom scale.
 		MechMissile.MaximumRange 1000;
 		MechMissile.Homming true;
 		Mechbase_Actor.Heat MWHEAT_LRM;
@@ -161,6 +161,7 @@ class Laser_ERSML : Laser_SML
 {
 	Default
 	{
+		Damage MWDMG_ERSLAS;
 		Laser.FireSound "ERLasers/Small";
 		Mechbase_Actor.Heat MWHEAT_ERSLAS;
 		Laser.MaxRange 370;
@@ -196,6 +197,7 @@ class Laser_ERMED : Laser_MED
 {
 	Default
 	{
+		Damage MWDMG_ERMLAS;
 		Laser.FireSound "ERLasers/Medium";
 		Laser.MaxRange 750;
 		Mechbase_Actor.Heat MWHEAT_ERMLAS;
@@ -233,6 +235,7 @@ class Laser_ERLRG : Laser_LRG
 {
 	Default
 	{
+		Damage MWDMG_ERLLAS;
 		Laser.FireSound "ERLasers/Large";
 		Mechbase_Actor.Heat MWHEAT_ERLLAS;
 		Laser.MaxRange 1350;

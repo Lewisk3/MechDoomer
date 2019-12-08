@@ -12,6 +12,27 @@ bool ValidateHardpoint(int ind)
 	return (hp.internalhp > 0);
 }
 
+double GetEntireRepairCost()
+{
+	double cost = 0;
+	for(int i = 0; i <= 7; i++)
+	{
+		MechHardpoint hp = mechplr.hardpoints.FindByIndex(i);
+		cost += mechplr.CalculateHardpointRepairCost(hp,0);
+		cost += mechplr.CalculateHardpointRepairCost(hp,1);
+	}
+	return cost;
+}
+
+void RepairAllHardpoints()
+{
+	for(int i = 0; i <= 7; i++)
+	{
+		MechDoomerEvents.SendNetworkEvent("repair_hardpoint", i, 0);
+		MechDoomerEvents.SendNetworkEvent("repair_hardpoint", i, 1);
+	}
+}
+
 // Graphics
 void DrawArmorUtilites(int sx, int sy)
 {
@@ -99,8 +120,10 @@ void drawArmoryInfo()
 	
 	string armorstr = "";
 	string internalstr = "";
+	string selectallstr = "";
 	uint InternalsFont = Font.CR_PURPLE;
 	uint ArmorFont = Font.CR_PURPLE;
+	uint SelectFont = Font.CR_WHITE;
 	int repair_cost = 0;
 	MechHardpoint hp;
 	
@@ -109,11 +132,19 @@ void drawArmoryInfo()
 		hp = mechplr.hardpoints.FindByIndex(hardpoint);
 		armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor);
 		internalstr = "INTERNALS: ".. int(hp.internalhp) .. "/" .. int(hp.max_internal);
+		selectallstr = "Select All";
 		ArmorFont = (hp.armor < hp.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
 		InternalsFont = (hp.internalhp < hp.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
 		if( astat_selected ==  0) ArmorFont = Font.CR_GREEN;
 		if( astat_selected ==  1) InternalsFont = Font.CR_GREEN;
-		if( astat_selected != -1) repair_cost = mechplr.CalculateHardpointRepairCost(hp,astat_selected);
+		if( astat_selected ==  2) SelectFont = Font.CR_GREEN;
+		if( astat_selected != -1)
+		{	
+			if(astat_selected < 2)
+				repair_cost = mechplr.CalculateHardpointRepairCost(hp,astat_selected);	
+			else
+				repair_cost = GetEntireRepairCost();
+		}
 	}
 	
 	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);
@@ -144,11 +175,11 @@ void drawArmoryInfo()
 		// Armor status selector
 		if(hardpoint >= 0)
 		{
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				Rect checkmouse;
-				string compare = !i ? armorstr : internalstr;
-				initRect(checkmouse,statuspos.x,statuspos.y+(i*20)+40,14*compare.length(),10);
+				string compare = (i==0) ? armorstr : (i==1) ? internalstr : selectallstr;
+				initRect(checkmouse,statuspos.x,statuspos.y+(i*20)+40,14*compare.length(),20);
 				if( checkCollision(mouse, checkmouse) ) astat_selected = i;
 			}
 			
@@ -169,7 +200,10 @@ void drawArmoryInfo()
 						mechplr.sendHudAlert("Nothing to repair.",Font.CR_ORANGE);	
 						return;
 					}
-					MechDoomerEvents.SendNetworkEvent("repair_hardpoint", hardpoint, astat_selected);
+					if(astat_selected < 2) 
+						MechDoomerEvents.SendNetworkEvent("repair_hardpoint", hardpoint, astat_selected);
+					else
+						RepairAllHardpoints();
 				}
 				else
 					mechplr.sendHudAlert("You must select a component to repair!",Font.CR_ORANGE);	
@@ -191,5 +225,6 @@ void drawArmoryInfo()
 	// Draw hardpoint vitals
 	H_DrawString(armorstr, statuspos,0,ArmorFont);
 	H_DrawString(internalstr, (statuspos.x,statuspos.y+20), 0, InternalsFont);
+	H_DrawString(selectallstr, (statuspos.x,statuspos.y+40), 0, SelectFont);
 }
 	

@@ -117,7 +117,7 @@ class Mechbase_Weapon : Inventory
 		}
 		if(plr)
 		{
-			plr.A_PlaySound(invoker.atksnd,CHAN_WEAPON);
+			SoundEmitter.SE_Trigger(invoker.atksnd,plr.pos);
 			plr.LineAttack(plr.angle,distance,plr.pitch,damage,"Ballistic","BulletPuff");
 			//(double angle, double distance, double pitch, int damage, Name damageType, class<Actor> pufftype, int flags = 0, out FTranslatedLineTarget victim = null, double offsetz = 0., double offsetforward = 0., double offsetside = 0.);
 		}
@@ -131,7 +131,7 @@ class Mechbase_Weapon : Inventory
 			let plr = MechWarrior(invoker.Owner);
 			if(!plr) return false;
 			if(invoker.ammouse > 0 && plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
-			plr.A_PlaySound(volleysnd,CHAN_WEAPON-1);
+			SoundEmitter.SE_Trigger(volleysnd,plr.pos);
 			invoker.dofire = true;
 			invoker.volley_amt = amt;
 			invoker.volley_inital = amt;
@@ -161,7 +161,7 @@ class Mechbase_Weapon : Inventory
 				if(plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
 				plr.TakeAmmo(invoker.ammotype,invoker.ammouse);
 			}
-			plr.A_PlaySound(invoker.atksnd,CHAN_WEAPON);
+			SoundEmitter.SE_Trigger(invoker.atksnd,plr.pos);
 			xoffset += random(-5,5);
 			yoffset += random(-5,5);
 			float xo = (cos(plr.angle+xoffset))*distance;
@@ -639,6 +639,7 @@ class PPCBall : Mechbase_Actor
 		PPCBall.FireSound "Energy/PPC";
 		Alpha 0.75;
 		RenderStyle "Add";
+		DamageType "Lightning";
 		+PUFFGETSOWNER
 		XScale 0.25;
 		YScale 0.2;

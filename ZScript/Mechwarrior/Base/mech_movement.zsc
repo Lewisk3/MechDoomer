@@ -65,6 +65,7 @@ void setupSpeedKPH(float kph)
 void mech_cockpitbob()
 {
 	// Calculate Bob
+	float movebobpart = MW_VELBOBFRAC;
 	float bobthrust = 0;
 	float bobmax = MW_BOBRANGE*(mech_tonnage/100.0);
 	if(defaultmovement) bobmax *= 10;
@@ -74,7 +75,7 @@ void mech_cockpitbob()
 	if(vel.length() > 0.08 || LegVel)
 	{
 		// 0.12
-		bobthrust = clamp(vel.length()*(0.008*MoveSpeed), -(bobmax/3), (bobmax/3));
+		bobthrust = clamp(vel.length()*(movebobpart*MoveSpeed), -(bobmax/3), (bobmax/3));
 		if(stepping) 
 		{ 
 			bobthrust = abs(bobthrust)*2;
@@ -193,12 +194,12 @@ void mech_movement()
 		
 		if(throttle > 0.5 && !snd_reactor)
 		{
-			A_PlaySound("Mech/ReactorHum",5,1.0,1);
+			A_PlaySound("Mech/ReactorHum",CHAN_AUTO,0.3,1);
 			snd_reactor = true;
 		}
 		else if(throttle < 0.5 && snd_reactor)
 		{
-			A_StopSound(5);
+			A_StopSound(CHAN_AUTO);
 			snd_reactor = false;
 		}
 		

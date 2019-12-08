@@ -169,11 +169,11 @@ class ACAmmoDisp : MechAmmoDispenser replaces Shell
   override void DispenseInit()
   {	
 	int type = random(0,2);
-	if(type==0)addAmmo("AC2_Ammo",2);
+	if(type==0)addAmmo("AC2_Ammo",1);
 	if(type==1)addAmmo("AC5_Ammo",1);
 	if(type==2)addAmmo("AC10_Ammo",1);
 	if(random(1,2)==2)addAmmo("AC20_Ammo",1);
-	if(random(1,2)==2)addAmmo("UAC2_Ammo",2);
+	if(random(1,2)==2)addAmmo("UAC2_Ammo",1);
 	if(random(1,2)==2)addAmmo("UAC5_Ammo",1);
 	if(random(1,4)==4)addAmmo("UAC10_Ammo",1);
 	if(random(1,4)==4)addAmmo("UAC20_Ammo",1);
@@ -191,7 +191,7 @@ class GaussDisp : MechAmmoDispenser replaces ShellBox
 {
   override void DispenseInit()
   {	
-	 addAmmo("GaussRounds",2);
+	 addAmmo("GaussRounds",1);
   }
   States
   {
@@ -213,10 +213,10 @@ class MissileBox : MechAmmoDispenser replaces RocketBox
 	
 	override void DispenseInit()
 	{	
-		addAmmo("SRM_Ammo",2);
+		addAmmo("SRM_Ammo",1);
 		addAmmo("LRM_Ammo",1);
-		addAmmo("SSRM_Ammo",2);
-		addAmmo("GaussRounds",2);
+		addAmmo("SSRM_Ammo",1);
+		addAmmo("GaussRounds",1);
 	}
 	States
 	{
@@ -231,8 +231,8 @@ class MissileAmmoDisp : MechAmmoDispenser replaces RocketAmmo
 	override void DispenseInit()
 	{	
 		int type = random(0,2);
-		if(type==0)addAmmo("SRM_Ammo",2);
-		if(type==2)addAmmo("SSRM_Ammo",2);
+		if(type==0)addAmmo("SRM_Ammo",1);
+		if(type==2)addAmmo("SSRM_Ammo",1);
 		if(type==1)addAmmo("LRM_Ammo",1);
 		if(random(0,1))addAmmo("GaussRounds",1);
 	}

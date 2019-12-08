@@ -299,7 +299,7 @@ class ArmoryUtility : Inventory
 	
 	Default
 	{
-		Inventory.maxamount 999;
+		Inventory.maxamount 100; // 999
 		+INVENTORY.ALWAYSPICKUP
 	}
 	
@@ -361,7 +361,7 @@ class EndoGreen : EndosteelBonus replaces GreenArmor
 {
 	Default
 	{
-		ArmoryUtility.Setup "EndosteelBonus", 25;
+		ArmoryUtility.Setup "EndosteelBonus", 10;
 		Inventory.PickupMessage "Picked up a medium Endosteel component";
 	}
 
@@ -370,7 +370,7 @@ class EndoBlue : EndosteelBonus replaces BlueArmor
 {
 	Default
 	{
-		ArmoryUtility.Setup "EndosteelBonus", 60;
+		ArmoryUtility.Setup "EndosteelBonus", 20;
 		Inventory.PickupMessage "Picked up a large Endosteel component";
 	}
 }

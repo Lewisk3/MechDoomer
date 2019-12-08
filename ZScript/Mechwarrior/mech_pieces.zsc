@@ -214,6 +214,9 @@ class MechHipsBase : MechPartsBase
 // Legs
 class MechLegsBase : MechPartsBase
 {
+	float spdrating;
+	float stompfriction;
+	
 	override void tick()
 	{
 		if(mechowner)
@@ -223,6 +226,10 @@ class MechLegsBase : MechPartsBase
 				Sprite = GetSpriteIndex("TNT1A0");
 			else
 				Sprite = GetSpriteIndex("TLEGA0");
+				
+			float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
+			stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.87, 1.05);
+			spdrating = (abs(mechowner.throttle) * mechowner.MoveSpeedKPH)/160.;
 		}
 		super.tick();
 	}
@@ -235,10 +242,10 @@ class MechLegsBase : MechPartsBase
 			!mechowner.isdead
 		);
 	}
-	bool checkStepping(bool idle=false)
+	bool checkStepping(bool idle=false, int frameoffs=0)
 	{
 		if(!mechowner) return false;
-		mechowner.stepping = idle ? false : (frame == 3 || frame == 8);
+		mechowner.stepping = idle ? false : (frame == 3+frameoffs || frame == 8+frameoffs);
 		return true;
 	}
 	States
@@ -251,14 +258,19 @@ class MechLegsBase : MechPartsBase
 		WalkCycle:
 			TLEG BCDEFGHIJ 4 
 			{	
-				float spdrating = (mechowner.throttle * mechowner.MoveSpeedKPH)/160.;
-				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
-				float stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.87, 1.05);
-				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;
 				if( (frame == 2 || frame == 7) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
-				// console.printf("--------\nSR: %f\nWR: %f\nFR: %f", spdrating, wrating, stompfriction);
-				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null); 
+				return !isMoving() ? ResolveState("SpawnIdle") : (tics <= 5 && frame >= 7) ? ResolveState("RunCycle") : ResolveState(Null); 
+			}
+		loop;
+		RunCycle:
+			TLEG KLMNOPQRS 4 
+			{	
+				if( (frame == 10 || frame == 15) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if(checkStepping(false, 8) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 4, 10);
+				return !isMoving() ? ResolveState("WalkCycle") : (tics > 5 && frame <= 10) ? ResolveState("WalkCycle") : ResolveState(Null); 
 			}
 		loop;
 	}

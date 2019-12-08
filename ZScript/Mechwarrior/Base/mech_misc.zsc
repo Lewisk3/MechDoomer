@@ -62,5 +62,5 @@ void startMechbay()
 
 void adjustMoney(int amt) 
 { 
-	inv_context.money_cbills += amt; 
+	if(!CheckVoodoo()) inv_context.money_cbills += amt; 
 }
