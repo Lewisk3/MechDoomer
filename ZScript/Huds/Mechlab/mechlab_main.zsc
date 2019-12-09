@@ -176,12 +176,16 @@ void drawLoadoutItemInfo()
 		{
 			class<Mechbase_Weapon> invweap = selected_item.mWeapon;
 			String wtons = GetDefaultByType(invweap).weight.."";
+			let weaptypedefs = GetDefaultByType(GetDefaultByType(invweap).weapType);
+			String wheat = weaptypedefs.heatgen .. "";
 			wtons.truncate(wtons.Length()-4);
 			drawInfoLine("Name: " .. selected_item.Tag, 0);
-			drawInfoLine("Nickname: " .. GetDefaultByType(invweap).displayName, 1);
-			drawInfoLine("Weight: " .. wtons .. " tons", 2);
-			drawInfoLine("Criticals: " .. GetDefaultByType(invweap).hardslots, 3);
+			drawInfoLine("Damage: " .. weaptypedefs.damage,1);
+			drawInfoLine("Heat: " .. wheat,2);
+			drawInfoLine("Nickname: " .. GetDefaultByType(invweap).displayName, 3);
 			drawInfoLine("CBill Value: " .. GetDefaultByType(invweap).worth, 4);
+			drawInfoLine("Weight: " .. wtons .. " tons", 5);
+			drawInfoLine("Criticals: " .. GetDefaultByType(invweap).hardslots, 6);
 		}
 	}
 	else
@@ -190,13 +194,18 @@ void drawLoadoutItemInfo()
 		if(selected_item.mWeapon && selected_item.mWeaponOBJ)
 		{
 			Mechbase_Weapon weap = selected_item.mWeaponOBJ;
+			let weaptypedefs = GetDefaultByType(weap.weapType);
+			String wheat = weaptypedefs.heatgen .. "";
 			String wtons = weap.weight .. "";
 			wtons.truncate(wtons.Length()-4);
+			wheat.truncate(wheat.Length()-4);
 			drawInfoLine("Name: " .. mechplr.resolveWeaponName(weap),0);
-			drawInfoLine("Nickname: " .. weap.displayName,1); 
-			drawInfoLine("Weight: " .. wtons .. " tons",2);
-			drawInfoLine("Criticals: " .. weap.hardslots,3);
+			drawInfoLine("Damage: " .. weaptypedefs.damage,1);
+			drawInfoLine("Heat: " .. wheat,2);
+			drawInfoLine("Nickname: " .. weap.displayName,3); 
 			drawInfoLine("CBill Value: " .. weap.worth,4);
+			drawInfoLine("Weight: " .. wtons .. " tons",5);
+			drawInfoLine("Criticals: " .. weap.hardslots,6);
 		}
 	}
 	
