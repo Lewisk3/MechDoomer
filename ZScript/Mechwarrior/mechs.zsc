@@ -298,12 +298,11 @@ class Urbanmech : MechWarrior
 		
 	override void SetupWeapons()
 	{
-		hardpoints.setupVitals( 8,22,14,14,11,11,16,16, 3,11,8,8,5,5,8,8 );
+		hardpoints.setupVitals( 8,20,14,14,11,11,16,16, 3,11,8,8,5,5,8,8 );
 		hardpoints.setupLocations( (0,0), (0,18), (0,-12), (0,-12), (130,-12), (-130,-12), (40,-45), (-40,-45) );
 		hardpoints.setupSlots();
-		equipStruct("Heatsink",hardpoints.ct,1);
-		equipStruct("Heatsink",hardpoints.lt,4);
-		equipStruct("Heatsink",hardpoints.rt,4);
+		equipStruct("Heatsink",hardpoints.lt,2);
+		equipStruct("Heatsink",hardpoints.rt,2);
 		equipWeapon("Autocannon10",hardpoints.ra,1);
 		equipWeapon("SmallLaser",hardpoints.la,1);
 		equipStruct("AC10_Ammo",hardpoints.ra,3);
