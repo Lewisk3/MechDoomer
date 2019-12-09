@@ -156,6 +156,7 @@ bool setupInventory()
 		inv_context.Init();
 		hardpoints = inv_context.hardpoints;
 		setupWeapons();
+		CalculateArmorWeight();
 		if(!EquipEngine(base_engine))
 		{
 			console.printf("Pilot Error -> Failed to equip mech's engine, too heavy or not enough free slots!");

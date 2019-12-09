@@ -49,6 +49,7 @@ class mw_InvInfo : Inventory
 	
 	int money_cbills;			// moneys
 	float weapons_tonnage;		// How much weapons weigh.
+	float armor_tonnage;		// How much armor weighs.
 	
 	void Init()
 	{

@@ -588,7 +588,7 @@ class MechStatusBar : BaseStatusBar
 			String concat = "B";
 			
 			// Center torso
-			if(mech.inv_context.hardpoints.hd.internalhp+mech.inv_context.hardpoints.ct.internalhp <= 0) concat = "C";
+			if(mech.inv_context.hardpoints.ct.internalhp+mech.inv_context.hardpoints.ct.internalhp <= 0) concat = "C";
 			H_SetClipRect(1450+hudmech_size.x/3, 645, hudmech_size.x/7,hudmech_size.y/2);
 			H_DrawImage(mech.hud_mech..concat,(750+795,90+720),0,(1,0.8),(-1,-1),hd_dmg+ct_dmg);
 			ClearClipRect();

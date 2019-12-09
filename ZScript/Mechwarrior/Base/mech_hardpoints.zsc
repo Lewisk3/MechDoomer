@@ -3,11 +3,55 @@
 	\*************************/
 extend class MechWarriorBase;
 	
+// Armor Systems
+float CalculateArmorWeight(bool update=true)
+{
+	float apweight = GetDefaultByType("EndosteelBonus").weight;
+	float aw;
+	aw += hardpoints.hd.max_armor*apweight;
+	aw += hardpoints.ct.max_armor*apweight;
+	aw += hardpoints.lt.max_armor*apweight;
+	aw += hardpoints.rt.max_armor*apweight;
+	aw += hardpoints.la.max_armor*apweight;
+	aw += hardpoints.ra.max_armor*apweight;
+	aw += hardpoints.ll.max_armor*apweight;
+	aw += hardpoints.rl.max_armor*apweight;
+	
+	if(update) 
+	{
+		inv_context.weapons_tonnage -= inv_context.armor_tonnage;
+		inv_context.armor_tonnage = aw;
+		inv_context.weapons_tonnage += inv_context.armor_tonnage;
+	}
+	
+	return aw;
+}
+
+bool AdjustArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
+{
+	if(hp.max_armor+amt < 0) return false;
+	if(hp.max_armor+amt > hp.defmax_armor && clampmaxarmor) return false;
+	if(hp.max_armor+amt < hp.armor) 
+	{
+		int diff = hp.armor-hp.max_armor;
+		A_GiveInventory("EndoSteelBonus",diff);
+		hp.armor = hp.max_armor+amt;
+	}
+	
+	float addtons = GetDefaultByType("EndosteelBonus").weight*amt;
+	if(inv_context.weapons_tonnage+addtons > mech_tonnage) return false;
+	hp.max_armor += amt;
+	inv_context.weapons_tonnage -= inv_context.armor_tonnage;
+	inv_context.armor_tonnage += addtons;
+	inv_context.weapons_tonnage += inv_context.armor_tonnage;
+	return true;
+}
+	
 // Repair System
 clearscope int CalculateHardpointRepairCost(MechHardpoint hp, int stat)
 {
 	int repair_cost = 0;
-	float armor_ratio = 1.0 - (!hp.armor ? 1 : hp.armor)/hp.max_armor;
+	float armor_ratio = hp.max_armor <= 0 ? 0 : 1.0 - (!hp.armor ? 1 : hp.armor)/hp.max_armor;
 	float internalhp_ratio = 1.0 - (!hp.internalhp ? 1 : hp.internalhp)/hp.max_internal;
 	if(stat == 0 && 	 armor_ratio > 0 ) repair_cost = (4750*armor_ratio)+(hp.max_armor*50);
 	if(stat == 1 && internalhp_ratio > 0 ) repair_cost = (1250*internalhp_ratio)+(hp.max_internal*25);
@@ -75,6 +119,13 @@ void DamageCritSounds(MechHardpoint hp)
 
 void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false)
 {
+	// Update for over-max armor, via EndosteelBonuses.
+	if(hp.max_armor > hp.defmax_armor)
+	{
+		if(hp.armor <= hp.defmax_armor) hp.max_armor = hp.defmax_armor;
+		CalculateArmorWeight();
+	}
+
 	if(hp.armor > 0 && !noarmor) 
 	{
 		if(hp.armor-dmg <= 0) A_PlaySound("Mech/Damaged/NoArmor",1);

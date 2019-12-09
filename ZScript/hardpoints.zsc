@@ -26,6 +26,8 @@ class MechHardpoint : Object
 	float max_armor;
 	float max_internal;
 	
+	float defmax_armor;
+	
 	clearscope int getFreeSlots()
 	{
 		return maxslots-slots;
@@ -141,6 +143,14 @@ void setupVitals(int hda,int cta,int lta,int rta,int laa,int raa,int lla,int rla
 	ra.max_armor = raa;
 	ll.max_armor = lla;
 	rl.max_armor = rla;
+	hd.defmax_armor = hd.max_armor;
+	ct.defmax_armor = ct.max_armor;
+	lt.defmax_armor = lt.max_armor;
+	rt.defmax_armor = rt.max_armor;
+	la.defmax_armor = la.max_armor;
+	ra.defmax_armor = ra.max_armor;
+	rl.defmax_armor = rl.max_armor;
+	ll.defmax_armor = ll.max_armor;
 	hd.armor = hda;
 	ct.armor = cta;
 	lt.armor = lta;

@@ -51,6 +51,8 @@ class Mechlab_Menu : GenericMenu
 	TextureID tBtn_Equip;
 	TextureID tBtn_Dequip;
 	TextureID tBtn_ArmorAndRepair;
+	TextureID tBtn_Plus;
+	TextureID tBtn_Minus;
 	TextureID tBtnlit_Repair;
 	TextureID tBtnlit_EquipUtil;
 	TextureID tBtnlit_WeaponsLab;
@@ -59,6 +61,8 @@ class Mechlab_Menu : GenericMenu
 	TextureID tBtnlit_Equip;
 	TextureID tBtnlit_Dequip;
 	TextureID tBtnlit_ArmorAndRepair;
+	TextureID tBtnlit_Plus;
+	TextureID tBtnlit_Minus;
 	TextureID tHud_paperdoll;
 	
 	// Bools
@@ -75,7 +79,9 @@ class Mechlab_Menu : GenericMenu
 	
 	// Rectangles
 	Color debug_color;
-	Rect mouse, rHD, rCT, rLT, rRT, rLA, rRA, rLL, rRL, weapbox, invbox, equipbtn, dequipbtn, scrapbtn, sortbtn, modebtn, autilbtn, repairbtn;
+	Rect mouse, rHD, rCT, rLT, rRT, rLA, rRA, rLL, rRL, weapbox, invbox, 
+		 equipbtn, dequipbtn, scrapbtn, sortbtn, modebtn, autilbtn, repairbtn,
+		 plusbtn, minusbtn;
 	
 	// Fonts
 	HUDFont mHUDFont;
@@ -119,6 +125,8 @@ class Mechlab_Menu : GenericMenu
 		tBtn_Equip     	    = TexMan.CheckForTexture("BTEQUIP", TexMan.Type_Any);
 		tBtn_Dequip    	    = TexMan.CheckForTexture("BTDEQUIP", TexMan.Type_Any);
 		tBtn_ArmorAndRepair = TexMan.CheckForTexture("BTPAGE2", TexMan.Type_Any);
+		tBtn_Plus  = TexMan.CheckForTexture("BTPLUS", TexMan.Type_Any);
+		tBtn_Minus = TexMan.CheckForTexture("BTMINUS", TexMan.Type_Any);
 		tBtnlit_Repair	       = TexMan.CheckForTexture("BLREP", TexMan.Type_Any);
 		tBtnlit_EquipUtil      = TexMan.CheckForTexture("BLUTIL", TexMan.Type_Any);
 		tBtnlit_WeaponsLab     = TexMan.CheckForTexture("BLWEAPL", TexMan.Type_Any);
@@ -127,6 +135,8 @@ class Mechlab_Menu : GenericMenu
 		tBtnlit_Equip  		   = TexMan.CheckForTexture("BLEQUIP", TexMan.Type_Any);
 		tBtnlit_Dequip 		   = TexMan.CheckForTexture("BLDEQUIP", TexMan.Type_Any);
 		tBtnlit_ArmorAndRepair = TexMan.CheckForTexture("BLPAGE2", TexMan.Type_Any);
+		tBtnlit_Plus  = TexMan.CheckForTexture("BLPLUS", TexMan.Type_Any);
+		tBtnlit_Minus = TexMan.CheckForTexture("BLMINUS", TexMan.Type_Any);
 		tHud_paperdoll = TexMan.CheckForTexture(CPlayer.hud_mech.."A", TexMan.Type_Any);
 
 		mHUDFont = HUDFont.Create("MechFont");
@@ -151,6 +161,8 @@ class Mechlab_Menu : GenericMenu
 		initRect(equipbtn,605,305,125,50);
 		initRect(autilbtn,940,440,220,45);
 		initRect(repairbtn,780,440,125,45);
+		initRect(plusbtn,1105,220,25,25);
+		initRect(minusbtn,1070,220,25,25);
 		
 		initRect(mouse, mpos.x, mpos.y, 8,8);
 	}
@@ -175,6 +187,8 @@ class Mechlab_Menu : GenericMenu
 		drawRect(modebtn, debug_color);
 		drawRect(autilbtn, debug_color);
 		drawRect(repairbtn, debug_color);
+		drawRect(plusbtn, debug_color);
+		drawRect(minusbtn, debug_color);
 	}
 
 	override void Drawer ()

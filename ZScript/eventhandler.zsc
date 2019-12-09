@@ -191,6 +191,7 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "droneviewswitch" && !plr.isdead && plr.dronecam) plr.dronecam.frontcam = !plr.dronecam.frontcam;
 			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
+			if(netcmd == "adjust_armor") plr.AdjustArmor(plr.hardpoints.FindByIndex(e.Args[0]),e.Args[1], true);
 			if(netcmd == "equip_invweap") plr.equipWeaponInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);
 			if(netcmd == "move_weapinv" ) plr.moveWeaponToInv(e.Args[0]);
 			if(netcmd == "equip_structinvweap") plr.equipStructInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);

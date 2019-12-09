@@ -123,7 +123,7 @@ class StructGyro : Mechbase_Utility
 		Mechbase_Utility.displayName "Gyro";
 		Mechbase_Utility.Criticals 1;
 		StructGyro.Effectiveness 0.36;
-		Mechbase_Utility.Tonnage 0.75;
+		Mechbase_Utility.Tonnage 1;
 	}
 }
 class StructLifesupport : Mechbase_Utility
@@ -294,8 +294,10 @@ class ArmoryUtility : Inventory
 {
 	class<Inventory> type;
 	int amt;
+	float weight;
 	
 	Property Setup : type, amt;
+	Property ArmorPointWeight : weight;
 	
 	Default
 	{
@@ -331,6 +333,7 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		Inventory.Icon "ENDOA0";
 		XScale 0.3;
 		YScale 0.3;
+		ArmoryUtility.ArmorPointWeight 0.05;
 	}
 	States
 	{
@@ -353,8 +356,16 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 			plr.sendHUDAlert("Hardpoint must be repaired first!",Font.CR_RED);
 			return;
 		}
+		bool success = true;
 		hpoint.armor++;
-		plr.TakeInventory(getClassName(),1);
+		if(hpoint.armor > hpoint.max_armor) success = plr.AdjustArmor(hpoint,1);
+		if(success)
+			plr.TakeInventory(getClassName(),1);
+		else
+		{
+			plr.sendHUDAlert("Cannot add armor, over-tonnage!",Font.CR_RED);
+			hpoint.armor--;
+		}
 	}
 }
 class EndoGreen : EndosteelBonus replaces GreenArmor 

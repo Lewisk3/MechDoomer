@@ -130,7 +130,7 @@ void drawArmoryInfo()
 	if(hardpoint >= 0)
 	{
 		hp = mechplr.hardpoints.FindByIndex(hardpoint);
-		armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor);
+		armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor) .. " ("..int(hp.defmax_armor)..")";
 		internalstr = "INTERNALS: ".. int(hp.internalhp) .. "/" .. int(hp.max_internal);
 		selectallstr = "Select All";
 		ArmorFont = (hp.armor < hp.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
@@ -166,6 +166,8 @@ void drawArmoryInfo()
 	TextureID repair = (checkCollision(mouse,repairbtn)&&repair_cost) ? tBtnlit_Repair : tBtn_Repair;
 	TextureID util = (checkCollision(mouse,autilbtn)&&autil_item) ? tBtnlit_EquipUtil : tBtn_EquipUtil;
 	TextureID mode = checkCollision(mouse,modebtn) ?  tBtnlit_WeaponsLab : tBtn_WeaponsLab;
+	TextureID plus = tBtn_Plus;
+	TextureID minus = tBtn_Minus;
 	H_DrawTexture(repair,(840,417),0,(0.9,0.7));
 	H_DrawTexture(util,(1050,417),0,(0.9,0.7));
 	H_DrawTexture(mode,(608,561),0,(0.9,0.7));
@@ -208,7 +210,20 @@ void drawArmoryInfo()
 				else
 					mechplr.sendHudAlert("You must select a component to repair!",Font.CR_ORANGE);	
 			}
-		}
+			
+			if(checkCollision(mouse,plusbtn))
+			{
+				MechDoomerEvents.SendNetworkEvent("adjust_armor", hardpoint, 1);
+				plus = tBtnlit_Plus;
+				 mstats.left_btn = false;
+			}
+			if(checkCollision(mouse,minusbtn))
+			{
+				MechDoomerEvents.SendNetworkEvent("adjust_armor", hardpoint, -1);
+				minus = tBtnlit_Minus;
+				mstats.left_btn = false;
+			}	
+		}	
 		
 		int php = hardpoint;
 		if(checkCollision(mouse,rHD)) {hardpoint = 0; astat_selected=-1;}
@@ -220,6 +235,12 @@ void drawArmoryInfo()
 		if(checkCollision(mouse,rLL)) {hardpoint = 6; astat_selected=-1;}
 		if(checkCollision(mouse,rRL)) {hardpoint = 7; astat_selected=-1;}
 		if(php != hardpoint) mechplr.A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+	}
+	
+	if(hardpoint > 0)
+	{
+		H_DrawTexture(plus,(1115,205),0,(0.9,0.7));
+		H_DrawTexture(minus,(1080,205),0,(0.9,0.7));
 	}
 	
 	// Draw hardpoint vitals

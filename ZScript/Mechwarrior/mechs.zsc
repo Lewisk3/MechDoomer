@@ -236,8 +236,6 @@ class Commando : MechWarrior
 		hardpoints.setupLocations( (0,10), (0,0), (0,-25), (0,-25), (80,-30), (-80,-30), (40,-45), (-40,-45) );
 		hardpoints.setupSlots();
 		equipStruct("Heatsink",hardpoints.ct,2);
-		equipStruct("Heatsink",hardpoints.la,1);
-		equipStruct("Heatsink",hardpoints.ra,1);
 		equipWeapon("MediumLaser",hardpoints.ra,1);
 		equipWeapon("SRM6",hardpoints.lt,2);
 		equipWeapon("SRM4",hardpoints.lt,2);
@@ -251,7 +249,7 @@ class Jenner : MechWarrior
 	{
 		Mass 1400;
 		MechWarriorBase.LegSpeed 2;
-		MechWarriorBase.Engine "ENGINE_STD_245";
+		MechWarriorBase.Engine "ENGINE_XL_315";
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 35;
 		MechWarriorBase.CockpitIsModel true;
