@@ -237,7 +237,7 @@ void drawArmoryInfo()
 		if(php != hardpoint) mechplr.A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
 	}
 	
-	if(hardpoint > 0)
+	if(hardpoint >= 0)
 	{
 		H_DrawTexture(plus,(1115,205),0,(0.9,0.7));
 		H_DrawTexture(minus,(1080,205),0,(0.9,0.7));
