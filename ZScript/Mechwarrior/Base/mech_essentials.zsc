@@ -197,7 +197,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 {	
 	if(checkVoodoo()) return super.DamageMobj(inflictor,source,damage,mod,flags,angle);
 	
-	float newdmg = float(damage)/10;
+	float newdmg = float(damage)*MWGAMEPLAY_DAMAGESCALE;
 	if( !source ) 
 	{
 		ProcessHardpointDamage(mod,newdmg);

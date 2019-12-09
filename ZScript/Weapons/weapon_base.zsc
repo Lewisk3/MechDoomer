@@ -371,7 +371,7 @@ class MechMissile : Mechbase_Actor
 				if(inrange) 
 				{
 					A_PlaySound("weapons/rocklx");
-					A_Explode(damage/2,256); 
+					A_Explode(damage/2,256,0); 
 					Spawn("MissileExplosion",pos); 
 				}
 				else

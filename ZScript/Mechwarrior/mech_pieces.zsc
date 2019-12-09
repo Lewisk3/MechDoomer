@@ -227,9 +227,12 @@ class MechLegsBase : MechPartsBase
 			else
 				Sprite = GetSpriteIndex("TLEGA0");
 				
-			float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
-			stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.87, 1.05);
-			spdrating = (abs(mechowner.throttle) * mechowner.MoveSpeedKPH)/160.;
+			if(!mechowner.CheckVoodoo())
+			{
+				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
+				stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.87, 1.05);
+				spdrating = (abs(mechowner.throttle) * mechowner.MoveSpeedKPH)/160.;
+			}
 		}
 		super.tick();
 	}

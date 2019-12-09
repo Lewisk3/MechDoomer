@@ -149,7 +149,7 @@ class MechStatusBar : BaseStatusBar
 		defheight = 1080;
 		hud_xoffs = 800;
 		hud_yoffs = 860;
-		SetSize(32, 320, 200);
+		SetSize(0, 320, 200);
 		compassoffs = 0;
 		compassdir = 1;
 		hud_alpha = 1.0;
@@ -284,7 +284,7 @@ class MechStatusBar : BaseStatusBar
 
 	override void Draw (int state, double TicFrac)
 	{
-		Super.Draw (state, TicFrac);
+		if(!automapactive) Super.Draw (state, TicFrac);
 		
 		if(inMenu)H_DrawString("HUD is in menu.",(100,-500));
 		if(CPlayer && CPlayer.mo)
@@ -302,8 +302,8 @@ class MechStatusBar : BaseStatusBar
 		}
 		if (state == HUD_StatusBar)
 		{
-			BeginStatusBar();
-			DrawFullScreenStuff (TicFrac);
+			//BeginStatusBar();
+			//DrawFullScreenStuff (TicFrac);
 		}
 		else if (state == HUD_Fullscreen)
 		{
