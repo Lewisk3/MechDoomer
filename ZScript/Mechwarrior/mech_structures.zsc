@@ -294,14 +294,14 @@ class ArmoryUtility : Inventory
 {
 	class<Inventory> type;
 	int amt;
-	float weight;
+	double weight;
 	
 	Property Setup : type, amt;
 	Property ArmorPointWeight : weight;
 	
 	Default
 	{
-		Inventory.maxamount 100; // 999
+		Inventory.maxamount 500; // 999
 		+INVENTORY.ALWAYSPICKUP
 	}
 	

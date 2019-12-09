@@ -38,8 +38,9 @@ bool AdjustArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
 		hp.armor = hp.max_armor+amt;
 	}
 	
-	float addtons = GetDefaultByType("EndosteelBonus").weight*amt;
-	if(inv_context.weapons_tonnage+addtons > mech_tonnage) return false;
+	double addtons = GetDefaultByType("EndosteelBonus").weight*amt;
+	float correctedtons = floor((inv_context.weapons_tonnage+addtons)*100.)/100.;
+	if(correctedtons > mech_tonnage) return false;
 	hp.max_armor += amt;
 	inv_context.weapons_tonnage -= inv_context.armor_tonnage;
 	inv_context.armor_tonnage += addtons;

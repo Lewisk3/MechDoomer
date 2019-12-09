@@ -112,7 +112,8 @@ void drawArmoryInfo()
 	}
 	
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
-	string armorpercent = (curarmor/maxarmor * 100).."";
+	string armorpercent = "100";
+	if(maxarmor > 0) armorpercent = (curarmor/maxarmor * 100).."";
 	string internalpercent = (curinternal/maxinternal * 100).."";
 	armorpercent.truncate(armorpercent.length()-6);
 	internalpercent.truncate(internalpercent.length()-6);
