@@ -202,7 +202,7 @@ class SRM4 : Mechbase_Weapon
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_weapon.HardslotSize 4;
-		Mechbase_Weapon.Tonnage 4;
+		Mechbase_Weapon.Tonnage 2;
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 5500;
 	}
