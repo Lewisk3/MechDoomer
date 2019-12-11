@@ -84,6 +84,7 @@ void ProcessLoadoutButtons()
 		{
 			if(selected_item.index > -1)
 			{
+				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				int amt = mechplr.inv_context.weapon_items[selected_item.index].amt;
 				MechDoomerEvents.SendNetworkEvent("remove_inv",selected_item.index);
 				if(amt-1 < 0) clearSelected();

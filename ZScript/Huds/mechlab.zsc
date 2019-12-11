@@ -297,7 +297,7 @@ class Mechlab_Menu : GenericMenu
 			mechplr.hAlert.text = "";
 			messagebox_active = true; 
 		}
-		if(mstats.left_btn && messagebox_active && plrHudMessage.alpha >= 1.0) 
+		if(mstats.left_btn && messagebox_active && plrHudMessage.alpha >= 0.8) 
 		{
 			messagebox_active = false;
 			mstats.left_btn = false;
@@ -306,7 +306,7 @@ class Mechlab_Menu : GenericMenu
 		if(!messagebox_active && plrHudMessage.alpha > 0)
 		{
 			plrHudMessage.alpha -= 0.002;
-			messagepos_yscale = MDMath.Lerp(messagepos_yscale,0.0,0.01);
+			messagepos_yscale = MDMath.Lerp(messagepos_yscale,0.0,0.05);
 			if(plrHudMessage.alpha <= 0) plrHudMessage.txt = "";
 		}
 							
@@ -328,8 +328,8 @@ class Mechlab_Menu : GenericMenu
 			}
 			if(messagebox_active)
 			{
-				if(plrHudMessage.alpha < 1.0) plrHudMessage.alpha += 0.005;
-				messagepos_yscale = MDMath.Lerp(messagepos_yscale,1.0,0.01);
+				if(plrHudMessage.alpha < 1.0) plrHudMessage.alpha += 0.01;
+				messagepos_yscale = MDMath.Lerp(messagepos_yscale,1.0,0.08);
 			}
 		}
 		Debug_DrawAllButtons();		
