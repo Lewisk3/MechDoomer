@@ -481,6 +481,7 @@ class AMSAmmo : Mechbase_Ammo
 		Mechbase_Utility.displayName "AMS AMMO";
 		Mechbase_Utility.Tonnage 1;
 		Mechbase_Utility.Criticals 1;
+		Mechbase_Utility.CValue 1850;
 		Mechbase_Ammo.Amount 1100;
 	}
 }

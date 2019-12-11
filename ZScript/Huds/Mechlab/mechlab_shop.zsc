@@ -1,0 +1,253 @@
+extend class Mechlab_Menu;
+
+struct ShopOffsets
+{
+	int energyoffs, ballisticoffs, missileoffs, ammooffs, engineoffs;
+	int energymax, ballisticmax, missilemax, ammomax, enginemax;
+	bool btn_energy, btn_ballistic, btn_missile, btn_ammo, btn_engine;
+}
+ShopOffsets shopstate;
+
+int forcemaxitems;
+int forceminitems;
+int item_cost;
+
+int GetMaxShopItems()
+{
+	return forcemaxitems ? forcemaxitems : mechplr.shopitems.Size();
+}
+
+void XORBtns(int btnnum)
+{
+	shopstate.btn_energy    = (btnnum == 0) ? !shopstate.btn_energy    : false;
+	shopstate.btn_ballistic = (btnnum == 1) ? !shopstate.btn_ballistic : false;
+	shopstate.btn_missile   = (btnnum == 2) ? !shopstate.btn_missile   : false;
+	shopstate.btn_ammo      = (btnnum == 3) ? !shopstate.btn_ammo      : false;
+	shopstate.btn_engine    = (btnnum == 4) ? !shopstate.btn_engine    : false;
+}
+
+void ProcessShopButtons()
+{
+	bool pricevalid = item_cost && (mechplr.inv_context.money_cbills-item_cost >= 0);
+
+	// Textures
+	H_DrawTexture(shopstate.btn_energy ? tBtnlit_Energy : tBtn_Energy,(energybtn.x+61,energybtn.y+31),0,(0.9,0.7));
+	H_DrawTexture(shopstate.btn_ballistic ? tBtnlit_Ballistic : tBtn_Ballistic,(ballisticbtn.x+59,ballisticbtn.y+31),0,(0.9,0.7));
+	H_DrawTexture(shopstate.btn_missile ? tBtnlit_Missiles : tBtn_Missiles,(missilesbtn.x+59,missilesbtn.y+31),0,(0.9,0.7));
+    H_DrawTexture(shopstate.btn_ammo ? tBtnlit_Ammo : tBtn_Ammo,(ammobtn.x+59,ammobtn.y+22),0,(0.9,0.7));
+	H_DrawTexture(shopstate.btn_engine ? tBtnlit_Engines : tBtn_Engines,(enginesbtn.x+59,enginesbtn.y+22),0,(0.9,0.7));
+	H_DrawTexture( (checkCollision(mouse, buyitembtn)&&pricevalid) ? tBtnlit_BuyItem : tBtn_BuyItem,(buyitembtn.x+61,buyitembtn.y-32),0,(0.9,0.7));
+
+	// Scroll
+	if(mstats.scroll == -1)
+	{
+		invoffset -= mstats.right_btn ? maxpageitems : 1;
+		if(invoffset < forceminitems) invoffset = forceminitems;
+		mstats.scroll = 0;
+	}
+	if(mstats.scroll == 1)
+	{
+		invoffset += mstats.right_btn ? maxpageitems : 1;
+		if(invoffset+maxpageitems > GetMaxShopItems()) 
+			invoffset = clamp(GetMaxShopItems()-maxpageitems, forceminitems, GetMaxShopItems()); 
+		mstats.scroll = 0;
+	}
+	
+	if( mstats.left_btn && !messagebox_active )
+	{
+		if( checkCollision(mouse, buyitembtn) && pricevalid && selected_item.index >= 0)
+		{
+			MechDoomerEvents.SendNetworkEvent("shop_buyitem",selected_item.index,item_cost);
+			mstats.left_btn = false;
+			mechplr.sendHudAlert("Item purchased: \n"..selected_item.Tag,Font.CR_GREEN);
+		}
+		if( checkCollision(mouse, energybtn) )
+		{
+			XORBtns(0);
+			if(shopstate.btn_energy) 
+				ChangeShop(shopstate.energyoffs, shopstate.energymax);
+			else
+				ChangeShop(0, 0);
+			mstats.left_btn = false;
+		}
+		if( checkCollision(mouse, ballisticbtn) )
+		{
+			XORBtns(1);
+			if(shopstate.btn_ballistic) 
+				ChangeShop(shopstate.ballisticoffs, shopstate.ballisticmax);
+			else
+				ChangeShop(0, 0);
+			mstats.left_btn = false;
+		}
+		if( checkCollision(mouse, missilesbtn) )
+		{
+			XORBtns(2);
+			if(shopstate.btn_missile) 
+				ChangeShop(shopstate.missileoffs, shopstate.missilemax);
+			else
+				ChangeShop(0, 0);
+			mstats.left_btn = false;
+		}
+		if( checkCollision(mouse, ammobtn) )
+		{
+			XORBtns(3);
+			if(shopstate.btn_ammo) 
+				ChangeShop(shopstate.ammooffs, shopstate.ammomax);
+			else
+				ChangeShop(0, 0);
+			mstats.left_btn = false;
+		}
+		if( checkCollision(mouse, enginesbtn) )
+		{
+			XORBtns(4);
+			if(shopstate.btn_engine) 
+				ChangeShop(shopstate.engineoffs, shopstate.enginemax);
+			else
+				ChangeShop(0, 0);
+			mstats.left_btn = false;
+		}
+	}
+}
+
+void ChangeShop(int newoffs, int newmax)
+{
+	invoffset = newoffs;
+	forceminitems = newoffs;
+	forcemaxitems = newmax ? newoffs+newmax : 0;
+}
+
+void ShopInit()
+{
+	shopstate.energyoffs    = 0;
+	shopstate.ballisticoffs = 12;
+	shopstate.missileoffs   = 21;
+	shopstate.ammooffs      = 32;
+	shopstate.engineoffs    = 46;
+	shopstate.energymax    = 12;
+	shopstate.ballisticmax = 10;
+	shopstate.missilemax   = 11;
+	shopstate.ammomax      = 14;
+	shopstate.enginemax    = 0;
+	
+	forcemaxitems = 0;
+	maxpageitems = 25;
+}
+
+void drawShopInfo()
+{
+	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
+	String mechston = (mechplr.mech_tonnage .. "");
+	String heateff = mechplr.HeatEfficiency*35 .. "";
+	String maxspd = mechplr.MoveSpeedKPH .. "";
+	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
+
+	if(mechplr.overtonnage) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
+	
+	maxspd.truncate(maxspd.Length()-4);
+	heateff.truncate(heateff.Length()-3);
+	weapston.truncate(weapston.length()-4);
+	mechston.truncate(mechston.length()-4);
+	enginetype.truncate(enginetype.Length()-7);
+	vector2 detailpos = (330,300);
+	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);
+	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
+	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+40));
+	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+60));
+	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+80));
+	H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+100));
+	
+	vector2 cbillpos  = (330,150);
+	float cbills_remain = mechplr.inv_context.money_cbills-item_cost;
+	String balstr = (cbills_remain < 0) ? "INVALID" : int(cbills_remain).."";
+	H_DrawString("Funds: ".. mechplr.inv_context.money_cbills, cbillpos);
+	H_DrawString("Price: ".. item_cost, (cbillpos.x, cbillpos.y+20) );
+	H_DrawString("Bal: ".. balstr, (cbillpos.x, cbillpos.y+40) );
+	
+	if(invoffset > forceminitems)H_DrawTexture(tInv_ArrowUp,(1255,-688),0,(0.9,0.7));
+	if(invoffset+maxpageitems < GetMaxShopItems())H_DrawTexture(tInv_ArrowDown,(1255,762),0,(0.9,0.7));
+
+	TextureID mode = checkCollision(mouse,modebtn) ?  tBtnlit_WeaponsLab : tBtn_WeaponsLab;
+	H_DrawTexture(mode,(608,645),0,(0.9,0.7));
+
+	drawShopInventory(1280,235, invoffset, maxpageitems);
+	ProcessShopButtons();
+	drawShopItemInfo();
+}
+
+
+void drawShopInfoLine(String txt, int inline, int linesize=20, vector2 detailpos=(787,160))
+{
+	drawInfoLine(txt,inline,linesize,detailpos);
+}
+void drawShopItemInfo()
+{	
+	if(selected_item.index < 0) return;
+	mw_InvStruct item;
+	item = mechplr.shopitems[selected_item.index];
+	
+	if(!item && !selected_item.mWeapon) item_cost = 0; 
+	
+	if(selected_item.mWeapon)
+	{
+		class<Mechbase_Weapon> invweap = selected_item.mWeapon;
+		String wtons = GetDefaultByType(invweap).weight.."";
+		let weaptypedefs = GetDefaultByType(GetDefaultByType(invweap).weapType);
+		String wheat = weaptypedefs.heatgen .. "";
+		wtons.truncate(wtons.Length()-4);
+		drawShopInfoLine("Name: " .. selected_item.Tag, 0);
+		drawShopInfoLine("Damage: " .. weaptypedefs.damage,1);
+		drawShopInfoLine("Heat: " .. wheat,2);
+		drawShopInfoLine("Nickname: " .. GetDefaultByType(invweap).displayName, 3);
+		drawShopInfoLine("Sell Value: " .. GetDefaultByType(invweap).worth, 4);
+		drawShopInfoLine("Weight: " .. wtons .. " tons", 5);
+		drawShopInfoLine("Criticals: " .. GetDefaultByType(invweap).hardslots, 6);
+		item_cost = GetDefaultByType(invweap).worth*2;
+	}
+	
+	if(item && !selected_item.mWeapon)
+	{
+		item_cost = item.worth*2;
+
+		// Standard Descriptions
+		int i = 0;
+		for(i = 0; i < item.description.Size(); i++) drawShopInfoLine(item.description[i],i);
+	
+		// Real-Time Descriptions
+		class<Mechbase_Ammo> am = item.Tag;
+		if(am) drawShopInfoLine("Ammunition: "..item.ammunition,i);
+	}
+}
+
+// Inventory
+void drawShopInventory(int px, int py, int start, int max)
+{
+	int itemcount = GetMaxShopItems();
+	max = start+max > itemcount ? itemcount : start+max;
+	for(int i = start; i < max; i++)
+	{
+		let item = mechplr.shopitems[i];
+		String weapname = item.Tag;
+		class<Mechbase_Weapon> mw  = weapname;
+		class<Mechbase_Utility> ut = weapname;
+		class<Mechbase_Engine> eng = weapname;
+		
+		Rect checkmouse;
+		initRect(checkmouse,px-65,py+((i-start)*24)+45,16*(weapname.Length()+3),17);
+		int sely = (i-start)*20;
+		
+		//DrawRect(checkmouse, debug_color);
+		
+		int fcr = eng ? Font.CR_ORANGE : ut ? Font.CR_DARKGRAY : Font.CR_WHITE;
+		if(i == selected_item.index && !selected_item.location) 
+		{
+			fcr = selected_item.mEngine ? Font.CR_GREEN : selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
+		}
+		if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
+		{
+			clearSelected();
+			setSelected(weapname, null, ut, mw, eng, i);
+		}
+		string displayName = eng ? MechBase_Engine.GetRealName(eng) : weapname;
+		H_DrawString(displayName, (px-68,py+sely),0,fcr);
+	}
+}

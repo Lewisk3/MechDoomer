@@ -3,33 +3,25 @@
 	\***********************************/
 extend class MechWarriorBase;
 
+
+void GetAllItems(in out Array<mw_InvStruct> items)
+{
+	Array<String> itemtypes;
+	GetSortList(itemtypes);
+	items.Clear();
+	for(int i = 0; i < itemtypes.Size(); i++) 
+	{
+		items.push(mw_InvInfo.NewItem(itemtypes[i]));
+	}
+}
+
 // HUGE sort list
-void GetSortList(in out Array<String> items)
+clearscope void GetSortList(in out Array<String> items)
 {
 	items.Clear();
 	int ssize = 371;
 	string tosort[371] = 
 	{ 
-		// Structs
-		"JumpJet",
-		"AntiMissileSystem",
-		"Heatsink",
-		"DoubleHeatsink",
-		// Ammos
-		"AMSAmmo",
-		"BulletsMGun",
-		"AC2_Ammo",
-		"AC5_Ammo",
-		"AC10_Ammo",
-		"AC20_Ammo",
-		"UAC2_Ammo",
-		"UAC5_Ammo",
-		"UAC10_Ammo",
-		"UAC20_Ammo",
-		"GaussRounds",
-		"SRM_Ammo",
-		"SSRM_Ammo",
-		"LRM_Ammo",
 		// Weapons
 		"MediumLaser",
 		"SmallLaser",
@@ -63,6 +55,26 @@ void GetSortList(in out Array<String> items)
 		"LRM10",
 		"LRM15",
 		"LRM20",
+		// Ammos
+		"AMSAmmo",
+		"BulletsMGun",
+		"AC2_Ammo",
+		"AC5_Ammo",
+		"AC10_Ammo",
+		"AC20_Ammo",
+		"UAC2_Ammo",
+		"UAC5_Ammo",
+		"UAC10_Ammo",
+		"UAC20_Ammo",
+		"GaussRounds",
+		"SRM_Ammo",
+		"SSRM_Ammo",
+		"LRM_Ammo",
+		// Structs
+		"JumpJet",
+		"AntiMissileSystem",
+		"Heatsink",
+		"DoubleHeatsink",
 		// Engines
 		"Engine_STD_10",
 		"Engine_STD_15",

@@ -272,7 +272,7 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 		}
 		if(!EquipEngine(eng))
 		{
-			sendHudAlert("Failed to equip engine, overtonnage or too big!", Font.CR_DARKRED);
+			sendHudAlert("Failed to equip engine\novertonnage or too big!", Font.CR_DARKRED);
 			return false;
 		}
 		else

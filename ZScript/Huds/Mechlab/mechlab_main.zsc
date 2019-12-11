@@ -183,7 +183,7 @@ void drawLoadoutItemInfo()
 			drawInfoLine("Damage: " .. weaptypedefs.damage,1);
 			drawInfoLine("Heat: " .. wheat,2);
 			drawInfoLine("Nickname: " .. GetDefaultByType(invweap).displayName, 3);
-			drawInfoLine("CBill Value: " .. GetDefaultByType(invweap).worth, 4);
+			drawInfoLine("Sell Value: " .. GetDefaultByType(invweap).worth, 4);
 			drawInfoLine("Weight: " .. wtons .. " tons", 5);
 			drawInfoLine("Criticals: " .. GetDefaultByType(invweap).hardslots, 6);
 		}
@@ -203,7 +203,7 @@ void drawLoadoutItemInfo()
 			drawInfoLine("Damage: " .. weaptypedefs.damage,1);
 			drawInfoLine("Heat: " .. wheat,2);
 			drawInfoLine("Nickname: " .. weap.displayName,3); 
-			drawInfoLine("CBill Value: " .. weap.worth,4);
+			drawInfoLine("Sell Value: " .. weap.worth,4);
 			drawInfoLine("Weight: " .. wtons .. " tons",5);
 			drawInfoLine("Criticals: " .. weap.hardslots,6);
 		}

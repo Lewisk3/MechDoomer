@@ -115,7 +115,7 @@ class MechDoomerEvents : EventHandler
 			{
 				if(MechWarrior(e.DamageSource))
 				{
-					int amt = max(Thinghealth * 3.27,1);
+					int amt = max(Thinghealth * 10.27,1);
 					MechWarrior(e.DamageSource).adjustMoney(amt);
 				}
 			}
@@ -196,7 +196,17 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "move_weapinv" ) plr.moveWeaponToInv(e.Args[0]);
 			if(netcmd == "equip_structinvweap") plr.equipStructInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);
 			if(netcmd == "movestruct_weapinv") plr.moveStructToInv(e.Args[0],1);
+			if(netcmd == "items_getlist") plr.GetAllItems(plr.shopitems);
 			if(netcmd == "sort_inv") plr.sortWeaponInv();
+			if(netcmd == "shop_buyitem" ) 
+			{
+				let item = plr.shopitems[e.Args[0]];
+				if(item) 
+				{
+					plr.adjustMoney(-e.Args[1]);
+					plr.addWeaponToInv(item.Tag);
+				}
+			}
 			if(netcmd == "remove_inv")
 			{
 				class<Mechbase_Weapon>  witem = plr.inv_context.weapon_items[e.Args[0]].Tag;

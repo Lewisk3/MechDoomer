@@ -5,7 +5,7 @@ class Engine_LIGHT : Mechbase_Engine
 	{
 		Mechbase_Engine.Criticals 2,4,1,1;
 		Mechbase_Engine.BaseHeatsinks 0.04, 0;
-		Mechbase_Engine.ScalarCValue 949.73;
+		Mechbase_Engine.ScalarCValue 549.73;
 	}
 }
 

@@ -53,7 +53,7 @@ class Mechbase_Utility : Actor
 	
 	static Mechbase_Utility CreateTemp(class<Mechbase_Utility> type="Mechbase_Utility")
 	{
-		let mbu = Mechbase_Utility(Spawn(type,level.PickPlayerStart(0)));
+		let mbu = Mechbase_Utility(Spawn(type));
 		return mbu;
 	}
 	
@@ -75,13 +75,14 @@ class Mechbase_Utility : Actor
 		desc.push("Name: " .. displayName);
 		desc.push("Weight: " .. FormatFloat(weight) .. " tons");
 		desc.push("Criticals: " .. hardslots);
-		desc.push("CBill Value: " .. worth);
+		desc.push("Sell Value: " .. worth);
 	}
 	
 	virtual void SetupItem(mw_InvStruct item)
 	{
 		item.utildefs = getDefaults(item.Tag);
 		GetDefDescription(item.description);
+		item.worth = worth;
 	}
 	
 }
@@ -100,6 +101,7 @@ class Mechbase_Ammo : Mechbase_Utility
 	override void SetupItem(mw_InvStruct item)
 	{
 		item.ammunition = ammogive;
+		item.worth = worth;
 		GetDefDescription(item.description);
 	}
 }
@@ -123,7 +125,7 @@ class StructGyro : Mechbase_Utility
 		Mechbase_Utility.displayName "Gyro";
 		Mechbase_Utility.Criticals 1;
 		StructGyro.Effectiveness 0.36;
-		Mechbase_Utility.Tonnage 1;
+		// Mechbase_Utility.Tonnage 1;
 	}
 }
 class StructLifesupport : Mechbase_Utility
@@ -186,12 +188,14 @@ class C_A_S_E : Mechbase_Utility
 		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.DiamondCasing True;
 		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 2500;
 	}
 
 	override void SetupItem(mw_InvStruct item)
 	{
 		GetDefDescription(item.description);
 		item.description.push("Supresses ammo explosions.");
+		item.worth = worth;
 	}
 }
 
@@ -207,7 +211,7 @@ class Heatsink : Mechbase_Utility
 		Heatsink.Efficiency MWHS_EFF;
 		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.Moveable 1;
-		Mechbase_Utility.CValue 12600;
+		Mechbase_Utility.CValue 3200;
 	}
 	
 	override void SetupItem(mw_InvStruct item)
@@ -216,6 +220,7 @@ class Heatsink : Mechbase_Utility
 		hef.truncate(hef.Length()-3);
 		GetDefDescription(item.description);
 		item.description.Insert(3,"Conductivity: +" .. hef);
+		item.worth = worth;
 	}
 }
 class DoubleHeatsink : Heatsink
@@ -227,7 +232,7 @@ class DoubleHeatsink : Heatsink
 		Heatsink.Efficiency MWDBLHS_EFF;
 		Mechbase_Utility.Criticals 2;
 		Mechbase_Utility.Moveable 1;
-		Mechbase_Utility.CValue 22530;
+		Mechbase_Utility.CValue 4800;
 	}
 }
 
@@ -243,7 +248,7 @@ class JumpJet : Mechbase_Utility
 		Mechbase_Utility.Criticals 1;
 		JumpJet.thrust MWJJET_THRUST;
 		Mechbase_Utility.Moveable 1;
-		Mechbase_Utility.CValue 8450;
+		Mechbase_Utility.CValue 3200;
 	}
 	
 	override void SetupItem(mw_InvStruct item)
@@ -252,6 +257,7 @@ class JumpJet : Mechbase_Utility
 		thrust.truncate(thrust.Length()-3);
 		GetDefDescription(item.description);
 		item.description.Insert(3,"Strength: " .. thrust);
+		item.worth = worth;
 	}
 	
 }
@@ -278,7 +284,7 @@ class AntiMissileSystem : Mechbase_Utility
 		Mechbase_Utility.displayName "AMS";
 		Mechbase_Utility.Criticals 2;
 		Mechbase_Utility.Moveable 1;
-		Mechbase_Utility.CValue 27050;
+		Mechbase_Utility.CValue 9800;
 		AntiMissileSystem.Cooldown 3;
 		AntiMissileSystem.Damage 15;
 		AntiMissileSystem.ActiveRange 800;
@@ -358,7 +364,10 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		}
 		bool success = true;
 		hpoint.armor++;
-		if(hpoint.armor > hpoint.max_armor) success = plr.AdjustArmor(hpoint,1);
+		
+		// Int cast because oddball floating point issues, that'll sometimes 
+		// result in armor being adjusted one point too soon.
+		if(int(hpoint.armor) > int(hpoint.max_armor)) success = plr.AdjustArmor(hpoint,1);
 		if(success)
 			plr.TakeInventory(getClassName(),1);
 		else

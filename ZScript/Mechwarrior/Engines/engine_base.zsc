@@ -170,7 +170,9 @@ class Mechbase_Engine : Mechbase_Utility
 	
 	override void SetupItem(mw_InvStruct item) 
 	{
+		let enginfo = Mechbase_Engine.Create(GetClassName());
 		GetDescription(item.description);
+		item.worth = int(enginfo.worth);
 	}
 	void GetDescription(in out Array<String> desc)
 	{
@@ -185,7 +187,7 @@ class Mechbase_Engine : Mechbase_Utility
 		desc.push("Weight: " .. tons .. " tons");
 		desc.push(ctext);
 		desc.push("Heatsinks: " .. enginfo.intrinsic_heatsinks+enginfo.intrinsic_doubleheatsinks);
-		desc.push("CBill Value: " .. int(enginfo.worth));
+		desc.push("Sell Value: " .. int(enginfo.worth));
 	}
 }
 

@@ -27,6 +27,7 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Huds/Mechlab/mechlab_base.zsc"
 #include "ZScript/Huds/Mechlab/mechlab_main.zsc"
 #include "ZScript/Huds/Mechlab/mechlab_armory.zsc"
+#include "ZScript/Huds/Mechlab/mechlab_shop.zsc"
 
 // Weapons
 #include "skill.cfg"

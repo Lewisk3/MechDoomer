@@ -21,6 +21,7 @@ float mech_tonnage;
 float defaultfov;
 float kph_default;
 float kph_real;
+Array<mw_InvStruct> shopitems;
 
 // Properties
 class<CockpitHandler> cphandler;
