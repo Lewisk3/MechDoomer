@@ -132,6 +132,7 @@ override bool MenuEvent (int mkey, bool fromcontroller)
 // Misc
 void HUD_ChangePageRelative(int offs)
 {
+	mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 	mstats.left_btn = false;
 	mstats.right_btn = false;
 	hud_page += offs;

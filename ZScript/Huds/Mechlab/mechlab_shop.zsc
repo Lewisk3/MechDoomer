@@ -19,6 +19,7 @@ int GetMaxShopItems()
 
 void XORBtns(int btnnum)
 {
+	mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 	shopstate.btn_energy    = (btnnum == 0) ? !shopstate.btn_energy    : false;
 	shopstate.btn_ballistic = (btnnum == 1) ? !shopstate.btn_ballistic : false;
 	shopstate.btn_missile   = (btnnum == 2) ? !shopstate.btn_missile   : false;
@@ -57,6 +58,7 @@ void ProcessShopButtons()
 	{
 		if( checkCollision(mouse, buyitembtn) && pricevalid && selected_item.index >= 0)
 		{
+			mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 			MechDoomerEvents.SendNetworkEvent("shop_buyitem",selected_item.index,item_cost);
 			mstats.left_btn = false;
 			mechplr.sendHudAlert("Item purchased: \n"..selected_item.Tag,Font.CR_GREEN);

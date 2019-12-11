@@ -96,6 +96,10 @@ Mech/Target/Get 	  TARGGET
 Mech/Target/BeginLock TARLOCKP
 Mech/Target/Locked    TARLOCKD
 
+// HUD Sounds
+UI/PressButton BTNPRESS
+UI/Error  	   BUZZ
+
 // Hit sounds
 Mech/Damaged/NoArmor MPAINLW
 Mech/Damaged/HardpointDead MPAINME

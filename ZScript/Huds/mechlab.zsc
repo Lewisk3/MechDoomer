@@ -32,11 +32,15 @@ class Mechlab_Menu : GenericMenu
 	TextureID tMain;
 	TextureID tMech_Head, tMech_RTorso, tMech_CTorso, tMech_LTorso, tMech_RArm,
 			  tMech_LArm, tMech_RLeg, tMech_LLeg;
+			  
 	TextureID tInv_ArrowUp, tInv_ArrowDown;
 	TextureID tBtn_Sort, tBtn_Scrap, tBtn_Equip, tBtn_Dequip,
-			  tBtnlit_Sort, tBtnlit_Scrap, tBtnlit_Equip, tBtnlit_Dequip;
+			  tBtnlit_Sort, tBtnlit_Scrap, tBtnlit_Equip, tBtnlit_Dequip,
+			  tBtn_Shop, tBtnlit_Shop;
+			  
 	TextureID tBtn_WeaponsLab, tBtn_ArmorAndRepair, tBtnlit_WeaponsLab,
 			  tBtnlit_ArmorAndRepair;
+			  
 	TextureID tBtn_Highlight;
 	TextureID tMessageBox;
 	TextureID tHud_paperdoll;
@@ -72,7 +76,7 @@ class Mechlab_Menu : GenericMenu
 	Rect mouse, rHD, rCT, rLT, rRT, rLA, rRA, rLL, rRL, weapbox, invbox, 
 		 equipbtn, dequipbtn, scrapbtn, sortbtn, modebtn, autilbtn, repairbtn,
 		 plusbtn, minusbtn, buyitembtn, buymechbtn, energybtn, ballisticbtn,
-		 missilesbtn, ammobtn, enginesbtn, mechsmodebtn;
+		 missilesbtn, ammobtn, enginesbtn, mechsmodebtn, shopbtn;
 	
 	// Fonts
 	HUDFont mHUDFont;
@@ -114,6 +118,8 @@ class Mechlab_Menu : GenericMenu
 		tMech_RArm    	       = TexMan.CheckForTexture("LMHUD_RA", TexMan.Type_Any);
 		tMech_LLeg     		   = TexMan.CheckForTexture("LMHUD_LL", TexMan.Type_Any);
 		tMech_RLeg     		   = TexMan.CheckForTexture("LMHUD_RL", TexMan.Type_Any);
+		tBtn_Shop			   = TexMan.CheckForTexture("BTSHOP", TexMan.Type_Any);
+		tBtnlit_Shop		   = TexMan.CheckForTexture("BLSHOP", TexMan.Type_Any);
 		tBtn_Sort      		   = TexMan.CheckForTexture("BTSORT", TexMan.Type_Any);
 		tBtn_Scrap     	   	   = TexMan.CheckForTexture("BTSCRAP", TexMan.Type_Any);
 		tBtn_Equip     	   	   = TexMan.CheckForTexture("BTEQUIP", TexMan.Type_Any);
@@ -175,6 +181,7 @@ class Mechlab_Menu : GenericMenu
 		initRect(repairbtn,780,440,125,45);
 		initRect(plusbtn,1105,220,25,25);
 		initRect(minusbtn,1070,220,25,25);
+		initRect(shopbtn,332,740,120,45);
 		// Shop Buttons
 		initRect(energybtn,1205,133,125,50);
 		initRect(ballisticbtn,1335,133,125,50);
@@ -219,19 +226,12 @@ class Mechlab_Menu : GenericMenu
 		//drawRect(buymechbtn, debug_color);
 		//drawRect(mechsmodebtn, debug_color);
 		//drawRect(mechsmodebtn, debug_color);
+		//drawRect(shopbtn, debug_color);
 	}
 
 	override void Drawer ()
 	{
 		statusbar.BeginHUD();
-		
-		/*
-		console.printf("Tag: %s",selected_item.tag.." ");
-		console.printf("Index: %d",selected_item.index);
-		console.printf("Location?: %d", selected_item.location!=NULL);
-		console.printf("W:%d, U:%d, O:%d",selected_item.mWeapon!=NULL,selected_item.mUtil!=NULL,selected_item.mWeaponOBJ!=NULL);
-		*/
-		
 		
 		// Mechlab mode
 		if(hud_page == 0)

@@ -188,18 +188,21 @@ void drawArmoryInfo()
 			
 			if(checkCollision(mouse,autilbtn) && autil_item)
 			{
+				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				MechDoomerEvents.SendNetworkEvent("autil_useitem:" .. autil_item.getClassName(),hardpoint);
 				mstats.left_btn = false;
 			}
 			
 			if( checkCollision(mouse,repairbtn) )
 			{
+				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				mstats.left_btn = false;
 				
 				if(astat_selected != -1)
 				{
 					if(!repair_cost)  
 					{
+						mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
 						mechplr.sendHudAlert("Nothing to repair.",Font.CR_ORANGE);	
 						return;
 					}
@@ -209,17 +212,22 @@ void drawArmoryInfo()
 						RepairAllHardpoints();
 				}
 				else
+				{
+					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
 					mechplr.sendHudAlert("You must select a component to repair!",Font.CR_ORANGE);	
+				}
 			}
 			
 			if(checkCollision(mouse,plusbtn))
-			{
+			{	
+				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				MechDoomerEvents.SendNetworkEvent("adjust_armor", hardpoint, 1);
 				plus = tBtnlit_Plus;
 				 mstats.left_btn = false;
 			}
 			if(checkCollision(mouse,minusbtn))
 			{
+				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				MechDoomerEvents.SendNetworkEvent("adjust_armor", hardpoint, -1);
 				minus = tBtnlit_Minus;
 				mstats.left_btn = false;

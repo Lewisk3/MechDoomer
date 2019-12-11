@@ -35,13 +35,16 @@ void ProcessLoadoutButtons()
 	H_DrawTexture(tBtn_Equip,  ( equipbtn.x+61, equipbtn.y+1),0,(0.9,0.7));
 	H_DrawTexture(tBtn_Scrap,  ( scrapbtn.x+61, scrapbtn.y-98),0,(0.9,0.7));
     H_DrawTexture(tBtn_Sort,   (  sortbtn.x+64,  sortbtn.y+32),0,(0.9,0.7));
-	H_DrawTexture(tBtn_ArmorAndRepair, (  modebtn.x+120,  modebtn.y-72),0,(0.9,0.7));
+	H_DrawTexture(tBtn_Shop, (shopbtn.x+59,shopbtn.y-71),0,(0.9,0.7));
+	H_DrawTexture(tBtn_ArmorAndRepair, (  modebtn.x+117,  modebtn.y-72),0,(0.9,0.7));
 	if(mstats.left_btn && checkCollision(mouse, dequipbtn)) H_DrawTexture(tBtnlit_Dequip, (dequipbtn.x+62,dequipbtn.y-23),0,(0.9,0.7));
 	if(mstats.left_btn && checkCollision(mouse,  equipbtn)) H_DrawTexture(tBtnlit_Equip,  ( equipbtn.x+62, equipbtn.y),0,(0.9,0.7));
 	if(mstats.left_btn && checkCollision(mouse,  scrapbtn)) H_DrawTexture(tBtnlit_Scrap,  ( scrapbtn.x+62, scrapbtn.y-97),0,(0.9,0.7));
 	if(mstats.left_btn && checkCollision(mouse,   sortbtn)) H_DrawTexture(tBtnlit_Sort,   (  sortbtn.x+63,  sortbtn.y+31),0,(0.9,0.7));
 	if( checkCollision(mouse,   modebtn) )
-		H_DrawTexture(tBtnlit_ArmorAndRepair, (  modebtn.x+120,  modebtn.y-72),0,(0.9,0.7));
+		H_DrawTexture(tBtnlit_ArmorAndRepair, (  modebtn.x+117,  modebtn.y-72),0,(0.9,0.7));
+	if( checkCollision(mouse,   shopbtn) )
+		H_DrawTexture(tBtnlit_Shop, (shopbtn.x+59,shopbtn.y-71),0,(0.9,0.7));
 	
 	// Scroll
 	if(mstats.scroll == -1 && invoffset-1 > -1){ mstats.scroll = 0;  invoffset--; }
@@ -62,8 +65,19 @@ void ProcessLoadoutButtons()
 		if(checkCollision(mouse,rRL)) {hardpoint = 7; clearSelected(doclear);}
 		if(hardpoint != php) mechplr.A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
 		
+		// Shop
+		if(checkCollision(mouse,shopbtn)) 
+		{
+			HUD_ChangePageRelative(2);
+			mstats.left_btn = false;
+		}
+		
 		// Sort
-		if(checkCollision(mouse,sortbtn)) MechDoomerEvents.SendNetworkEvent("sort_inv");
+		if(checkCollision(mouse,sortbtn)) 
+		{
+			mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+			MechDoomerEvents.SendNetworkEvent("sort_inv");
+		}
 		
 		// Scrap
 		if(checkCollision(mouse,scrapbtn) && !selected_item.location )
@@ -83,6 +97,7 @@ void ProcessLoadoutButtons()
 		// Hardpoint safe check
 		if( !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
 		{
+			mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
 			mechplr.sendHudAlert("Hardpoint is destroyed!", Font.CR_DARKRED);
 			return;
 		}
@@ -92,6 +107,7 @@ void ProcessLoadoutButtons()
 		{
 			if(selected_item.index > -1)
 			{
+				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				if(selected_item.mWeaponOBJ) MechDoomerEvents.SendNetworkEvent("move_weapinv",selected_item.mWeaponOBJ.WeaponID);
 				if(selected_item.mUtil     ) MechDoomerEvents.SendNetworkEvent("movestruct_weapinv",selected_item.index);
 				clearSelected();
@@ -103,6 +119,7 @@ void ProcessLoadoutButtons()
 		{
 			if(selected_item.index > -1)
 			{
+				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				int amt = mechplr.inv_context.weapon_items[selected_item.index].amt;
 				if(selected_item.mWeapon) MechDoomerEvents.SendNetworkEvent("equip_invweap",selected_item.index,hardpoint);
 				if(selected_item.mUtil  ) MechDoomerEvents.SendNetworkEvent("equip_structinvweap",selected_item.index,hardpoint);
