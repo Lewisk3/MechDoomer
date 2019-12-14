@@ -1,4 +1,78 @@
 // Powerups and Cockpit Effects
+class MechExchange_Animator : Powerup
+{
+	MechWarriorBase mech;
+	int mechbaynum;
+	int fadeto;
+	bool activate;
+	bool fadeout;
+	bool done;
+	int clock;
+	
+	Default
+	{
+		Powerup.Duration 0x7FFFFFFD; // lasts about 2 years;
+		Powerup.Color "00 00 00", 1.0;
+	}
+	
+	override void PostBeginPlay()
+	{
+		fadeto = 255;
+		BlendColor.a = 0;
+	}
+	
+	override void tick()
+	{		
+		if(clock) clock--;
+		if(BlendColor.a < fadeto && !fadeout)
+		{
+			BlendColor.a += (fadeto) / (35 * 1.5);
+			clock = 35*2;
+			Colormap = ((BlendColor & 0xFFFF0000) == SPECIALCOLORMAP_MASK)? BlendColor & 0xffff : PlayerInfo.NOFIXEDCOLORMAP;
+		}
+		else if(fadeout && !clock)
+		{
+			BlendColor.a -= (fadeto) / (35 * 1.5);
+			Colormap = ((BlendColor & 0xFFFF0000) == SPECIALCOLORMAP_MASK)? BlendColor & 0xffff : PlayerInfo.NOFIXEDCOLORMAP;
+		}
+		
+		if(abs(BlendColor.a-fadeto) <= 5 && !fadeout) 
+			activate = true;
+		else if(BlendColor.a <= 5 && fadeout) 
+			done = true;
+	}
+	
+	static MechExchange_Animator Setup(MechWarriorBase curmech, int swapmechbay)
+	{
+		curmech.GiveInventory("MechExchange_Animator",1);
+		let mea = MechExchange_Animator(curmech.FindInventory("MechExchange_Animator"));
+		if(mea) 
+		{
+			mea.mechbaynum = swapmechbay;
+			mea.mech = curmech;
+		}
+		return mea;
+	}
+
+	override void DoEffect()
+	{
+		if(mech && activate)
+		{
+			mech.ChangeMech(mechbaynum);
+			fadeout = true;
+			activate = false;
+		}
+		if(done)
+		{
+			mech.RemoveInventory(self);
+			mech.doShutdown = true;
+			mech.forceshutdown = false;
+			mech.manualshutdown = false;
+		}
+		super.DoEffect();
+	}
+}
+
 class SuperCooled : Powerup
 {
 	Default
@@ -66,7 +140,6 @@ class InfraredAmp : PowerLightAmp
 		if(activate) super.DoEffect();
 	}
 }
-
 
 class SuperCoolant : PowerupGiver
 {

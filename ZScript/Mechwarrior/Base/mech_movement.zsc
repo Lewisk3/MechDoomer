@@ -195,12 +195,12 @@ void mech_movement()
 		
 		if(throttle > 0.5 && !snd_reactor)
 		{
-			A_PlaySound("Mech/ReactorHum",CHAN_AUTO,0.3,1);
+			A_PlaySound("Mech/ReactorHum",CHAN_ITEM,0.3,1);
 			snd_reactor = true;
 		}
 		else if(throttle < 0.5 && snd_reactor)
 		{
-			A_StopSound(CHAN_AUTO);
+			A_StopSound(CHAN_ITEM);
 			snd_reactor = false;
 		}
 		
@@ -234,9 +234,9 @@ void mech_movement()
 		if(countinv("IBTN_CENTER"))
 		{
 			float yaw = MDMath.NormalizeAngle(angle-LegAng);
-			if(yaw > 0) LegVel =  2;
-			if(yaw < 0) LegVel = -2;
-			if(abs(yaw) < 2) LegVel = yaw;
+			if(yaw > 0) LegVel =  LegSpeed;
+			if(yaw < 0) LegVel = -LegSpeed;
+			if(abs(yaw) < LegSpeed*2) LegAng = angle;
 			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTER",1);
 		}
 		if(countinv("IBTN_CENTERTORSO"))
@@ -246,7 +246,7 @@ void mech_movement()
 			if(yaw < 0)angle+=2;
 			if(pitch > 0)pitch-=2;
 			if(pitch < 0)pitch+=2;
-			if(abs(yaw) < 2) LegVel = yaw;
+			if(abs(yaw) < 2) angle = LegAng;
 			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTERTORSO",1);
 		}
 		
@@ -386,7 +386,7 @@ void process_shutdown()
 	}
 	else
 	{
-		if(countinv("IBTN_SHUTDOWN"))
+		if(countinv("IBTN_SHUTDOWN") && !forceshutdown)
 		{
 			doShutdown = false;
 			mechsounds.pushSound("Mech/Betty/SystemsCheck");

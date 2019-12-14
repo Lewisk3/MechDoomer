@@ -4,6 +4,7 @@
 extend class MechwarriorBase;
 
 // Vars
+bool forceshutdown;
 class<MechwarriorBase> baseclass;
 mw_InvInfo inv_context;
 MechHardpoints hardpoints;
@@ -31,6 +32,19 @@ bool modelcockpit;
 String hud_cockpit;
 String hud_mech;
 
+
+void StartMechChange(int invmech)
+{
+	if(!mech_shutdown)
+	{
+		mechsounds.pushSound("Mech/Betty/ShuttingDown");
+		A_PlaySound("Mech/Shutdown",1);
+	}
+	mech_shutdown = true; 
+	manualshutdown = true;
+	forceshutdown = true;
+    MechExchange_Animator.Setup(self, invmech);
+}
 
 void ChangeMech(int invmech)
 {
