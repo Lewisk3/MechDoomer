@@ -17,7 +17,6 @@ class MGunBullet : MechBullet
 		xscale 1.2;
 		yscale 1.2;
 		Mechbase_Actor.Heat MWHEAT_MGUN;
-		Mechbase_Actor.Cooldown 5;
 	}
 }
 
@@ -27,7 +26,6 @@ class AC_2 : AutocannonBall
 	{
 		Damage MWDMG_AC2;
 		Mechbase_Actor.Heat MWHEAT_AC2;
-		Mechbase_Actor.Cooldown 10;
 	}
 }
 class UAC_2 : AC_2
@@ -36,7 +34,6 @@ class UAC_2 : AC_2
 	{
 		Damage MWDMG_UAC2;
 		Mechbase_Actor.Heat MWHEAT_UAC2;
-		Mechbase_Actor.Cooldown 6;
 	}
 }
 
@@ -46,7 +43,6 @@ class AC_5 : AutocannonBall
 	{
 		Damage MWDMG_AC5;
 		Mechbase_Actor.Heat MWHEAT_AC5;
-		Mechbase_Actor.Cooldown 25;
 	}
 }
 class UAC_5 : AC_5
@@ -55,7 +51,6 @@ class UAC_5 : AC_5
 	{
 		Damage MWDMG_UAC5;
 		Mechbase_Actor.Heat MWHEAT_UAC5;
-		Mechbase_Actor.Cooldown 10;
 	}
 }
 
@@ -65,7 +60,6 @@ class AC_10 : AutocannonBall
 	{
 		Damage MWDMG_AC10;
 		Mechbase_Actor.Heat MWHEAT_UAC10;
-		Mechbase_Actor.Cooldown 33;
 	}
 }
 class UAC_10 : AC_10
@@ -74,7 +68,6 @@ class UAC_10 : AC_10
 	{
 		Damage MWDMG_UAC10;
 		Mechbase_Actor.Heat MWHEAT_UAC10;
-		Mechbase_Actor.Cooldown 15;
 	}
 }
 
@@ -84,7 +77,6 @@ class AC_20 : AutocannonBall
 	{
 		Damage MWDMG_AC20;
 		Mechbase_Actor.Heat MWHEAT_AC20;
-		Mechbase_Actor.Cooldown 35;
 	}
 }
 class UAC_20 : AC_20
@@ -93,7 +85,6 @@ class UAC_20 : AC_20
 	{
 		Damage MWDMG_UAC20;
 		Mechbase_Actor.Heat MWHEAT_UAC20;
-		Mechbase_Actor.Cooldown 15;
 	}
 }
 
@@ -102,9 +93,7 @@ class Gauss : GaussBall
 	Default
 	{
 		Damage MWDMG_GAUSS;
-		Speed 40;
 		Mechbase_Actor.Heat MWHEAT_GAUSS;
-		Mechbase_Actor.Cooldown 60;
 	}
 }
 
@@ -117,7 +106,6 @@ class SRM : MechMissile
 		MechMissile.MaximumRange 260;
 		MechMissile.Homming false;
 		Mechbase_Actor.Heat MWHEAT_SRM;
-		Mechbase_Actor.Cooldown 8;
 	}
 }
 class SSRM : SRM
@@ -137,7 +125,6 @@ class LRM : MechMissile
 		MechMissile.MaximumRange 1000;
 		MechMissile.Homming true;
 		Mechbase_Actor.Heat MWHEAT_LRM;
-		Mechbase_Actor.Cooldown 3;
 	}
 }
 
@@ -154,7 +141,6 @@ class Laser_SML : Laser
 		Laser.MaxRange 200;
 		Laser.FireSound "Lasers/Small";
 		Mechbase_Actor.Heat MWHEAT_SLASER;
-		Mechbase_Actor.Cooldown 10;
 	}
 }
 class Laser_ERSML : Laser_SML
@@ -165,7 +151,6 @@ class Laser_ERSML : Laser_SML
 		Laser.FireSound "ERLasers/Small";
 		Mechbase_Actor.Heat MWHEAT_ERSLAS;
 		Laser.MaxRange 370;
-		Mechbase_Actor.Cooldown 10;
 	}
 }
 class Laser_SMLP : Laser_SML
@@ -175,7 +160,6 @@ class Laser_SMLP : Laser_SML
 		Damage MWDMG_SPLAS;
 		Laser.FireSound "PulseLasers/Small";
 		Mechbase_Actor.Heat MWHEAT_SPLAS;
-		Mechbase_Actor.Cooldown 8;
 	}
 }
 
@@ -190,7 +174,6 @@ class Laser_MED : Laser
 		Laser.MaxRange 540;
 		Laser.FireSound "Lasers/Medium";
 		Mechbase_Actor.Heat MWHEAT_MLASER;
-		Mechbase_Actor.Cooldown 18;
 	}
 }
 class Laser_ERMED : Laser_MED
@@ -201,7 +184,6 @@ class Laser_ERMED : Laser_MED
 		Laser.FireSound "ERLasers/Medium";
 		Laser.MaxRange 750;
 		Mechbase_Actor.Heat MWHEAT_ERMLAS;
-		Mechbase_Actor.Cooldown 18;
 	}
 }
 class Laser_MEDP : Laser_MED
@@ -212,7 +194,6 @@ class Laser_MEDP : Laser_MED
 		Laser.MaxRange 440;
 		Laser.FireSound "PulseLasers/Medium";
 		Mechbase_Actor.Heat MWHEAT_MPLAS;
-		Mechbase_Actor.Cooldown 13;
 	}
 }
 
@@ -228,7 +209,6 @@ class Laser_LRG : Laser
 		Laser.MaxRange 900;
 		Laser.FireSound "Lasers/Large";
 		Mechbase_Actor.Heat MWHEAT_LLASER;
-		Mechbase_Actor.Cooldown 30;
 	}
 }
 class Laser_ERLRG : Laser_LRG
@@ -239,7 +219,6 @@ class Laser_ERLRG : Laser_LRG
 		Laser.FireSound "ERLasers/Large";
 		Mechbase_Actor.Heat MWHEAT_ERLLAS;
 		Laser.MaxRange 1350;
-		Mechbase_Actor.Cooldown 30;
 	}
 }
 class Laser_LRGP : Laser_LRG
@@ -250,7 +229,6 @@ class Laser_LRGP : Laser_LRG
 		Laser.FireSound "PulseLasers/Large";
 		Laser.MaxRange 700;
 		Mechbase_Actor.Heat MWHEAT_LPLAS;
-		Mechbase_Actor.Cooldown 20;
 	}
 }
 
@@ -261,7 +239,6 @@ class FlameProjectile : Flame
 	{
 		Damage MWDMG_FLAMER;
 		Mechbase_Actor.Heat MWHEAT_FLAMER;
-		Mechbase_Actor.Cooldown 3;
 	}
 }
 
@@ -271,7 +248,6 @@ class PPCProjectile : PPCBall
 	{
 		Damage MWDMG_PPC;
 		Mechbase_Actor.Heat MWHEAT_PPC;
-		Mechbase_Actor.Cooldown 42;
 		PPCBall.MinimumRange 90;
 	}
 }
@@ -281,6 +257,5 @@ class ERPPCProjectile : PPCBall
 	{
 		Damage MWDMG_ERPPC;
 		Mechbase_Actor.Heat MWHEAT_ERPPC;
-		Mechbase_Actor.Cooldown 42;
 	}
 }

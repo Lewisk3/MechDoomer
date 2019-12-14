@@ -107,3 +107,4 @@ class CockpitHandler_Atlas : CockpitHandler {}
 class CockpitHandler_Commando : CockpitHandler {}
 class CockpitHandler_Urbanmech : CockpitHandler {}
 class CockpitHandler_BattleArmor : CockpitHandler {}
+class CockpitHandler_Nova : CockpitHandler {}

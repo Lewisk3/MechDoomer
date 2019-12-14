@@ -43,6 +43,7 @@ float LegVel;
 float overfactor;
 float rolloffs;
 float boboffs;
+float desiredbob;
 float TiltOsc;
 float StepOsc;
 float TiltOffset;
@@ -253,8 +254,11 @@ void mech_movement()
 		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*5)) )*0.5;
 		if( !pilotlook && !mech_shutdown ) A_SetRoll( roll + rolldistort );
 	
-		LegAng += LegVel;
-		angle += LookVel;
+		float curspd = MoveSpeedKPH*throttle;
+		float turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
+		float spdmod = 1.0 - (abs(curspd)/2)*0.01;
+		LegAng += (LegVel*turnmod) * spdmod;
+		angle += (LookVel*turnmod) * spdmod;
 		if( !mech_shutdown )
 		{
 			if(!pilotlook) Pitch = clamp(Pitch, -minPitch, maxPitch);
@@ -368,7 +372,7 @@ void process_shutdown()
 	{	
 		if(throttle > 0)throttle -= 0.1;
 		if(throttle < 0)throttle += 0.1;
-		if( ((ticks - shutdown_timer) > 125) && HeatLevel <= 0 && doShutdown)
+		if( ((ticks - shutdown_timer) > 35*2) && HeatLevel <= 0 && doShutdown)
 		{
 			// If we are very efficiently cooled, powerup early
 			prevticks = ticks;
@@ -377,8 +381,8 @@ void process_shutdown()
 			mechsounds.pushSound("Mech/StartupDone");
 			doShutdown = false;
 		}
-		if(!doShutdown && (ticks-prevticks) > 250)powerup();
-		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*1.5;
+		if(!doShutdown && (ticks-prevticks) > 35*5)powerup();
+		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*3.0;
 	}
 	else
 	{

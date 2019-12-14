@@ -16,7 +16,7 @@ class MechWarrior : MechWarriorBase
 		MechWarriorBase.heatEff 0.02;
 		MechWarriorBase.HudCockpit "CROW";
 		MechWarriorBase.HudMech "";
-		MechWarriorBase.LegSpeed 2;
+		MechWarriorBase.LegSpeed 1;
 		//MechWarriorBase.MoveSpeed 4;
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.PitchRange 30,20;
@@ -97,10 +97,8 @@ class Stormcrow : MechWarrior
 		Mass 2200;
 		Player.DisplayName "Stormcrow Prime";
 		Player.ViewHeight 75;
-		
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.LegSpeed 1.6;
 		MechWarriorBase.TwistRange 100;
 		MechWarriorBase.Weight 55;
 		MechWarriorBase.Engine "ENGINE_XL_330";
@@ -113,7 +111,7 @@ class Stormcrow : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 9,36,26,26,18,18,26,26, 4,18,13,13,9,9,13,13 );
-		hardpoints.setupLocations( (0,20), (0,-18), (30,-11), (-30,-11), (90,-11), (-90,-11), (80,-70), (-80,-70) );
+		hardpoints.setupLocations( (0,20), (0,-18), (20,-11), (-20,-11), (50,-7), (-50,-7), (40,-70), (-40,-70) );
 		hardpoints.setupSlots();
 		equipStruct("DoubleHeatsink",hardpoints.ra,3);
 		equipStruct("DoubleHeatsink",hardpoints.rt,3);	
@@ -134,10 +132,8 @@ class Timberwolf : MechWarrior
 		Mass 3000;
 		Player.DisplayName "Timberwolf Prime";
 		Player.ViewHeight 70;
-		
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.LegSpeed 1.5;
 		MechWarriorBase.TwistRange 80;
 		MechWarriorBase.Weight 75;
 		MechWarriorBase.PitchRange 40,20;
@@ -151,7 +147,7 @@ class Timberwolf : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 9,46,32,32,24,24,32,32, 4,23,16,16,12,12,16,16 );
-		hardpoints.setupLocations( (0,20), (0,-38), (75,18), (-75,18), (90,-20), (-90,-20), (80,-85), (-80,-85) );
+		hardpoints.setupLocations( (0,20), (0,-38), (25,18), (-25,18), (40,-25), (-40,-25), (30,-85), (-30,-85) );
 		hardpoints.setupSlots();
 		equipWeapon("ERLargeLaser",hardpoints.ra,1);
 		equipWeapon("ERMediumLaser",hardpoints.ra,2);
@@ -179,7 +175,6 @@ class Atlas : MechWarrior
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Atlas";
 		MechWarriorBase.MechPieces "Torso_Atlas";
-		MechWarriorBase.LegSpeed 1;
 		MechWarriorBase.Engine "ENGINE_STD_300";
 		MechWarriorBase.TwistRange 60;
 		MechWarriorBase.HudCockpit "ATLSHUD";
@@ -193,7 +188,7 @@ class Atlas : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 9,62,42,42,34,34,42,42, 6,32,23,23,17,17,20,20 );
-		hardpoints.setupLocations( (0,20), (0,0), (-60,-20), (60,-20), (100,-15), (-100,-15), (45,-111), (-45,-111) );
+		hardpoints.setupLocations( (0,20), (0,0), (-30,-40), (30,-40), (60,-30), (-60,-30), (45,-111), (-45,-111) );
 		hardpoints.setupSlots();
 		equipStruct("Heatsink",hardpoints.ct,4);
 		equipStruct("Heatsink",hardpoints.lt,2);
@@ -220,7 +215,6 @@ class Commando : MechWarrior
 		Player.DisplayName "Commando Prime";
 		Player.ViewHeight 73;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.LegSpeed 1.4;
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 25;
 		MechWarriorBase.Engine "ENGINE_STD_150";
@@ -233,7 +227,7 @@ class Commando : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 7,20,14,14,10,10,14,14, 3,11,8,8,5,5,7,7 );
-		hardpoints.setupLocations( (0,10), (0,0), (0,-25), (0,-25), (80,-30), (-80,-30), (40,-45), (-40,-45) );
+		hardpoints.setupLocations( (0,10), (0,0), (0,-25), (0,-25), (20,-25), (-20,-25), (10,-45), (-10,-45) );
 		hardpoints.setupSlots();
 		equipStruct("Heatsink",hardpoints.ct,2);
 		equipWeapon("MediumLaser",hardpoints.ra,1);
@@ -248,7 +242,6 @@ class Jenner : MechWarrior
 	Default
 	{
 		Mass 1400;
-		MechWarriorBase.LegSpeed 2;
 		MechWarriorBase.Engine "ENGINE_XL_315";
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 35;
@@ -264,7 +257,7 @@ class Jenner : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 9,22,16,16,12,12,16,16, 4,11,8,8,6,6,8,8 );
-		hardpoints.setupLocations( (0,10), (0,0), (-90,15), (90,15), (100,-11), (-100,-11), (80,-45), (-80,-45) );
+		hardpoints.setupLocations( (0,-10), (0,0), (5,-5), (-5,-5), (40,-11), (-40,-11), (30,-45), (-30,-45) );
 		hardpoints.setupSlots();
 		equipWeapon("SRM6",hardpoints.la,1);
 		equipWeapon("SRM6",hardpoints.ra,1);
@@ -286,7 +279,6 @@ class Urbanmech : MechWarrior
 		Player.DisplayName "Urbanmech Prime";
 		Player.ViewHeight 62;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.LegSpeed 1.0;
 		MechWarriorBase.TwistRange 9001; // Over 9000 :P
 		MechWarriorBase.InfiniteTorsoTwist true;
 		MechWarriorBase.Weight 30;
@@ -299,7 +291,7 @@ class Urbanmech : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 8,20,14,14,11,11,16,16, 3,11,8,8,5,5,8,8 );
-		hardpoints.setupLocations( (0,0), (0,18), (0,-12), (0,-12), (130,-12), (-130,-12), (40,-45), (-40,-45) );
+		hardpoints.setupLocations( (0,0), (0,18), (0,-12), (0,-12), (35,-12), (-35,-12), (40,-45), (-40,-45) );
 		hardpoints.setupSlots();
 		equipStruct("Heatsink",hardpoints.lt,2);
 		equipStruct("Heatsink",hardpoints.rt,2);
@@ -314,7 +306,6 @@ class BattleArmor : MechWarrior
 	Default
 	{
 		Mass 600;
-		MechWarriorBase.LegSpeed 2;
 		MechWarriorBase.TwistRange 130;
 		MechWarriorBase.heatEff 0.18;
 		MechWarriorBase.CockpitIsModel true;
@@ -332,7 +323,7 @@ class BattleArmor : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 4,8,6,6,5,5,4,4, 4,8,6,6,5,5,4,4 );
-		hardpoints.setupLocations( (0,20), (0,-10), (-40,-8), (40,-8), (60,-9), (-60,-9), (-40,-30), (40,-30) );
+		hardpoints.setupLocations( (0,20), (0,-10), (-20,-8), (20,-8), (35,-9), (-35,-9), (-30,-30), (30,-30) );
 		hardpoints.setupSlots(8,11,12,12,10,10,2,2);
 		equipStruct("Heatsink",hardpoints.hd,1);
 		equipStruct("JumpJet",hardpoints.ct,1);
@@ -371,12 +362,15 @@ class Nova : MechWarrior
 	{
 		Mass 2000;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
-		MechWarriorBase.LegSpeed 2.3;
+		MechWarriorBase.LegSpeed 2;
 		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.TwistRange 20;
 		MechWarriorBase.Weight 50;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.SetCockpitHandler "CockpitHandler_Nova";
 		MechWarriorBase.HudCockpit "NOVAHUD";
 		MechWarriorBase.HudMech "NOVAICO";
+		MechWarriorBase.MechPieces "Torso_Invisible";
 		Player.DisplayName "Nova Prime";
 		Player.ViewHeight 70;
 	}
@@ -384,7 +378,7 @@ class Nova : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 9,32,24,24,16,16,24,24, 4,16,12,12,8,8,12,12 );
-		hardpoints.setupLocations( (0,-5), (0,0), (130,-15), (-130,-15), (130,-18), (-130,-18), (130,-45), (-130,-45) );
+		hardpoints.setupLocations( (0,-5), (0,0), (60,-15), (-60,-15), (60,-18), (-60,-18), (60,-45), (-60,-45) );
 		hardpoints.setupSlots();
 	
 		equipWeapon("ERMediumLaser",hardpoints.rt,1);
@@ -430,7 +424,6 @@ class Shadowcat : MechWarrior
 	{
 		Mass 2400;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
-		MechWarriorBase.LegSpeed 1.8;
 		MechWarriorBase.Engine "ENGINE_XL_270";
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 45;

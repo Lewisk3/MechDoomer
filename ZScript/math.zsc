@@ -84,5 +84,10 @@ class MDMath Abstract
 		return ( pos.y * cos(angle) - pos.x * sin(angle), 
 		         pos.y * sin(angle) + pos.x * cos(angle) );
 	}
+	static Vector2 VOffset(double angle, double xoffs, double yoffs, double dist)
+	{
+		return ( xoffs * cos(angle) - yoffs * sin(angle),
+				 yoffs * cos(angle) + xoffs * sin(angle) )*dist;
+	}
 		
 }

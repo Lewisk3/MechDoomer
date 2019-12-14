@@ -442,3 +442,15 @@ Model CockpitHandler_Urbanmech
    FrameIndex MODL A 0 0
 }
 
+// Nova
+Model CockpitHandler_Nova
+{
+	Path "models/Cockpits/Nova"
+	Model 0 "nv_head.md3"
+	Scale 0.10 0.10 0.10
+	Skin 0 "nv_head.png" // Main
+	PitchOffset 0
+	Offset 0 25 0;
+	
+   FrameIndex MODL A 0 0
+}

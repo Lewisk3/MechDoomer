@@ -3,13 +3,11 @@
 class Mechbase_Actor : Actor
 {
 	double heatgen;
-	float cooldown;
 	vector3 spawnpos;
 	double basedamage;
 	MechWarrior mechplayer;
 	
 	Property Heat : heatgen;
-	Property Cooldown : cooldown;
 	
 	void BaseInit()
 	{
@@ -28,10 +26,6 @@ class Mechbase_Actor : Actor
 	{
 		if(mechplayer) mechplayer.HeatLevel += amt*MWHEAT_MOD;
 	}
-	void setCooldown(float val)
-	{
-		cooldown=val;
-	}
 	void _SetBaseDamage()
 	{
 		basedamage = damage;
@@ -45,6 +39,8 @@ class Mechbase_Actor : Actor
 class Mechbase_Weapon : Inventory
 {
 	int cooldown_timer;
+	float volleycooldown;
+	float cooldown;
 	int group;
 	int WeaponID;
 	MechHardpoint hardpoint;
@@ -86,12 +82,14 @@ class Mechbase_Weapon : Inventory
 	Property WeaponParams : weapDistance, weapSpeed;
 	Property HardslotSize : hardslots;
 	Property Tonnage : weight;
+	Property Cooldown : cooldown, volleycooldown;
 	
 	// Hardpoint processing
 	int dmg_taken;
 	bool broken;
 	
 	Default
+	
 	{
 		Mechbase_Weapon.DisplayName "Base Weapon";
 		Mechbase_Weapon.DefaultGroup 1;
@@ -139,13 +137,16 @@ class Mechbase_Weapon : Inventory
 		else if(invoker.volley_amt > 0)
 		{
 			if(FireWeapon(invoker.weapType,invoker.hardpoint.pos.x+random(-xspread,xspread),
-						  invoker.hardpoint.pos.y+random(-yspread,yspread),invoker.weapDistance,invoker.weapSpeed)) 
+						  invoker.hardpoint.pos.y+random(-yspread,yspread),invoker.weapDistance,invoker.weapSpeed))
+			{
 				invoker.volley_amt--;
+				invoker.cooldown_timer = invoker.volleycooldown*35.0;
+			}
 		}
 		if(invoker.volley_amt <= 0 && invoker.dofire)
 		{
 			invoker.dofire = false;
-			invoker.cooldown_timer = invoker.delay * invoker.volley_inital;
+			invoker.cooldown_timer = invoker.cooldown*35.0;
 			return false;
 		}
 		return true;
@@ -164,15 +165,16 @@ class Mechbase_Weapon : Inventory
 			SoundEmitter.SE_Trigger(invoker.atksnd,plr.pos);
 			xoffset += random(-5,5);
 			yoffset += random(-5,5);
-			float xo = (cos(plr.angle+xoffset))*distance;
-			float yo = (sin(plr.angle+xoffset))*distance;
+			//float xo = (cos(plr.angle+xoffset))*distance;
+			//float yo = (sin(plr.angle+xoffset))*distance;
+			vector2 offs = MDMath.VOffset(plr.angle, distance, xoffset, 1);
 			//console.printf(": %f, %f",xoffset,yoffset);
-			Vector3 lpos = plr.Vec3Offset(xo,yo,(plr.viewheight*plr.player.CrouchFactor)+yoffset);
+			Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,(plr.viewheight*plr.player.CrouchFactor)+yoffset);
 			
 			let weap = Mechbase_Actor(Spawn(type,lpos));
 			if(weap)
 			{
-				invoker.cooldown_timer = weap.cooldown;
+				invoker.cooldown_timer = invoker.cooldown*35.0;
 				weap.target = invoker.Owner;
 				weap.mechplayer = MechWarrior(invoker.Owner);
 				weap.pitch = plr.pitch;

@@ -230,7 +230,7 @@ class MechLegsBase : MechPartsBase
 			if(!mechowner.CheckVoodoo())
 			{
 				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
-				stompfriction = clamp((0.77) + (wrating*(spdrating)), 0.87, 1.05);
+				stompfriction = clamp((0.65) + (wrating*(spdrating)), 0.75, 1.05);
 				spdrating = (abs(mechowner.throttle) * mechowner.MoveSpeedKPH)/160.;
 			}
 		}
@@ -263,7 +263,7 @@ class MechLegsBase : MechPartsBase
 			{	
 				if( (frame == 2 || frame == 7) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;
-				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 4, 10);
 				return !isMoving() ? ResolveState("SpawnIdle") : (tics <= 5 && frame >= 7) ? ResolveState("RunCycle") : ResolveState(Null); 
 			}
 		loop;
@@ -272,7 +272,7 @@ class MechLegsBase : MechPartsBase
 			{	
 				if( (frame == 10 || frame == 15) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 8) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
-				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 4, 10);
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
 				return !isMoving() ? ResolveState("WalkCycle") : (tics > 5 && frame <= 10) ? ResolveState("WalkCycle") : ResolveState(Null); 
 			}
 		loop;

@@ -108,7 +108,7 @@ void ChangeMech(int invmech)
 	
 }
 
-mw_StoredMech CreateStoredMech(class<MechwarriorBase> type)
+mw_StoredMech CreateStoredMech(class<MechwarriorBase> type, bool attachtomech=true)
 {
 	let mechobj = new("mw_StoredMech");
 	let mechact = MechwarriorBase(Spawn(type));
@@ -120,7 +120,7 @@ mw_StoredMech CreateStoredMech(class<MechwarriorBase> type)
 		mechobj.baseclass = type;
 		mechobj.inv_context = mechact.inv_context;
 		mechact.inv_context.active = false;
-		AddInventory(mechobj.inv_context);
+		if(attachtomech) AddInventory(mechobj.inv_context);
 		mechact.GetStoredWeapons(mechobj.active_weapons);
 		
 		// Prevent deletion of critical data structures.
