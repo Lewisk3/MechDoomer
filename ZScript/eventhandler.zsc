@@ -92,7 +92,7 @@ class MechDoomerEvents : EventHandler
 			}
 		}
 	}
-
+	
 	override void WorldThingDamaged(WorldEvent e)
 	{
 		if(!e || !e.Thing || !e.DamageSource) return;
@@ -197,6 +197,7 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "equip_structinvweap") plr.equipStructInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);
 			if(netcmd == "movestruct_weapinv") plr.moveStructToInv(e.Args[0],1);
 			if(netcmd == "items_getlist") plr.GetAllItems(plr.shopitems);
+			if(netcmd == "mechs_getlist") plr.GetAllMechs(plr.shopmechs);
 			if(netcmd == "sort_inv") plr.sortWeaponInv();
 			if(netcmd == "throttledecay_toggle") 
 			{
@@ -211,6 +212,18 @@ class MechDoomerEvents : EventHandler
 					plr.adjustMoney(-e.Args[1]);
 					plr.addWeaponToInv(item.Tag);
 				}
+			}
+			if(netcmd == "shop_buymech" ) 
+			{
+				let mech = plr.shopmechs[e.Args[0]];
+				if(mech)
+				{
+					let defs = GetDefaultByType(mech.baseclass);
+					plr.inv_context.mechs.Push(plr.CreateStoredMech(mech.baseclass));
+					console.printf("Obtained: %s [MECHBAY#%d]", defs.getClassName(), plr.inv_context.mechs.Size()-1);
+					plr.adjustMoney(-e.Args[1]);
+				}
+				
 			}
 			if(netcmd == "remove_inv")
 			{

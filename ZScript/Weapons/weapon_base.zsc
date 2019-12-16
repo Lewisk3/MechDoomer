@@ -14,7 +14,7 @@ class Mechbase_Actor : Actor
 		spawnpos = pos;
 		_SetBaseDamage();
 	}
-	void Converge(float spd=15.0)
+	void Converge(float spd=18.0)
 	{
 		if(mechplayer)
 		{

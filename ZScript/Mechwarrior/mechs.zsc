@@ -9,7 +9,9 @@ class MechWarrior : MechWarriorBase
 		Player.ViewBob 0;
 		Player.JumpZ 0;
 		Player.SoundClass "MechWarrior";
-
+		Player.DisplayName "";
+	
+		MechWarriorBase.CValue 1000000;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Innersphere;
 		MechWarriorBase.Engine "Engine_STD_300";
 		MechWarriorBase.SetCockpitHandler "CockpitHandler";
@@ -31,6 +33,57 @@ class MechWarrior : MechWarriorBase
 			Bobbing();
 		}
 		super.tick();
+	}
+	
+	States
+	{
+	  Spawn:
+		TNT1 A -1;
+		Loop;
+	  See:
+		TNT1 ABCD 4;
+		Loop;
+	  Missile:
+		TNT1 E 12;
+		Goto Spawn;
+	  Melee:
+		TNT1 F 6 BRIGHT;
+		Goto Missile;
+	  Pain:
+		TNT1 G 4;
+		TNT1 G 4 A_Pain();
+		Goto Spawn;
+	  Death:
+	  Death1:
+		TNT1 H 10;
+		TNT1 I 10 A_Scream();
+		TNT1 J 10 A_NoBlocking();
+		TNT1 KLM 10;
+		TNT1 N -1;
+		Stop;
+	  XDeath:
+	  XDeath1:
+		TNT1 O 5;
+		TNT1 P 5 A_XScream();
+		TNT1 Q 5 A_NoBlocking();
+		TNT1 RSTUV 5;
+		TNT1 W -1;
+		Stop;
+	  AltSkinDeath:
+		TNT1 H 6;
+		TNT1 I 6 A_PlayerScream();
+		TNT1 JK 6;
+		TNT1 L 6 A_NoBlocking();
+		TNT1 MNO 6;
+		TNT1 P -1;
+		Stop;
+	  AltSkinXDeath:
+		TNT1 Q 5 A_PlayerScream();
+		TNT1 R 0 A_NoBlocking();
+		TNT1 R 5 A_SkullPop();
+		TNT1 STUVWX 5;
+		TNT1 Y -1;
+		Stop;
 	}
 }
 
@@ -106,6 +159,7 @@ class Stormcrow : MechWarrior
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Stormcrow";
 		MechWarriorBase.MechPieces "Torso_Stormcrow";
 		MechWarriorBase.HudMech "SCRWICO";
+		MechWarriorBase.CValue 8771112;
 	}
 		
 	override void SetupWeapons()
@@ -142,6 +196,7 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Timberwolf";
 		MechWarriorBase.MechPieces "Torso_Timberwolf";
 		MechWarriorBase.HudMech "TWLFICO";
+		MechWarriorBase.CValue 11233124;
 	}
 		
 	override void SetupWeapons()
@@ -183,6 +238,7 @@ class Atlas : MechWarrior
 		MechWarriorBase.HideLegsPerspective true;
 		Player.DisplayName "Atlas Prime";
 		Player.ViewHeight 110;
+		MechWarriorBase.CValue 9626000;
 	}
 		
 	override void SetupWeapons()
@@ -222,6 +278,7 @@ class Commando : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Commando";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.HideLegsPerspective true;
+		MechWarriorBase.CValue 1823750;
 	}
 		
 	override void SetupWeapons()
@@ -252,6 +309,7 @@ class Jenner : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Jenner";
 		Player.DisplayName "Jenner Prime";
 		Player.ViewHeight 60; // 52 maligned
+		MechWarriorBase.CValue 3198375;
 	}
 		
 	override void SetupWeapons()
@@ -286,6 +344,7 @@ class Urbanmech : MechWarrior
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_Urbanmech";
 		MechWarriorBase.MechPieces "Torso_Urbanmech";
 		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.CValue 1471925;
 	}
 		
 	override void SetupWeapons()
@@ -306,6 +365,8 @@ class BattleArmor : MechWarrior
 	Default
 	{
 		Mass 600;
+		Player.DisplayName "BattleArmor"; // (Traditional Doom Movement)
+		Player.ViewHeight 51;
 		MechWarriorBase.TwistRange 130;
 		MechWarriorBase.heatEff 0.18;
 		MechWarriorBase.CockpitIsModel true;
@@ -314,10 +375,11 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 10;
 		MechWarriorBase.Engine "Engine_STD_50";
+		MechWarriorBase.MechPieces "Model_BattleArmor";
 		MechWarriorBase.DefaultMovement true;
 		MechWarriorBase.OverTonnage true;
-		Player.DisplayName "BattleArmor (Traditional Doom Movement)";
-		Player.ViewHeight 51;
+		MechWarriorBase.HideLegsPerspective true;
+		MechWarriorBase.CValue 500000;
 	}
 	
 	override void SetupWeapons()
@@ -332,26 +394,6 @@ class BattleArmor : MechWarrior
 		equipWeapon("MachineGun",hardpoints.la,1);
 		equipWeapon("MachineGun",hardpoints.ra,1);
 		equipStruct("BulletsMGun",hardpoints.ct,1);
-	}
-	
-	States
-	{
-		// This is a bit odd, basically, the battle armor animates pretty differently.
-		// So, i need to switch off its animations if we switch to a mech.
-		See:
-			TNT1 A 1 A_JumpIf(baseclass == getClassName(), "SeeLoop");
-		loop;
-		SeeLoop:
-			TLEG ABCDEFGHIJK 2 
-			{
-				if(baseclass != getClassName()) return ResolveState("See");
-				if(vel.length() < 4) return ResolveState("SeeHold");
-				return ResolveState(Null);
-			}
-		loop;
-		SeeHold:
-			TLEG "#" 1 A_JumpIf(vel.length()>4,"See");
-		Loop;
 	}
 }
 
@@ -373,6 +415,7 @@ class Nova : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Invisible";
 		Player.DisplayName "Nova Prime";
 		Player.ViewHeight 70;
+		MechWarriorBase.CValue 6586250;
 	}
 		
 	override void SetupWeapons()
@@ -417,7 +460,7 @@ class Nova : MechWarrior
 
 // -- Unimplemented -- \\
 
-// Mercs
+/* Mercs 
 class Shadowcat : MechWarrior
 {
 	Default
@@ -521,8 +564,7 @@ class Warhammer : MechWarrior
 	}
 
 }
-
-
+*/
 
 // 3D models
 class Jenner_3D : Actor

@@ -53,7 +53,9 @@ class Mechlab_Menu : GenericMenu
 			  tBtn_BuyMech, tBtnlit_BuyMech, tBtn_Energy, tBtnlit_Energy,
 			  tBtn_Ballistic, tBtnlit_Ballistic, tBtn_Missiles, tBtnlit_Missiles,
 			  tBtn_Ammo, tBtnlit_Ammo, tBtn_Engines, tBtnlit_Engines, 
-			  tBtn_MechsMode, tBtnlit_MechsMode;
+			  tBtn_MechsMode, tBtnlit_MechsMode, tBtn_All, tBtnlit_All, tBtn_Light, 
+			  tBtnlit_Light, tBtn_Medium, tBtnlit_Medium, tBtn_Heavy, tBtnlit_Heavy,
+			  tBtn_Assault, tBtnlit_Assault;
 	
 	// Bools
 	bool page_init;
@@ -147,6 +149,11 @@ class Mechlab_Menu : GenericMenu
 		tBtn_Missiles	  = TexMan.CheckForTexture("BTMSLS", TexMan.Type_Any);
 		tBtn_Ammo 		  = TexMan.CheckForTexture("BTAMMO", TexMan.Type_Any);
 		tBtn_Engines 	  = TexMan.CheckForTexture("BTENG", TexMan.Type_Any);
+		tBtn_All	 	  = TexMan.CheckForTexture("BTALL", TexMan.Type_Any);
+		tBtn_Light 	  	  = TexMan.CheckForTexture("BTLIGHT", TexMan.Type_Any);
+		tBtn_Medium		  = TexMan.CheckForTexture("BTMED", TexMan.Type_Any);
+		tBtn_Heavy 		  = TexMan.CheckForTexture("BTHEAVY", TexMan.Type_Any);
+		tBtn_Assault 	  = TexMan.CheckForTexture("BTASLT", TexMan.Type_Any);
 		tBtn_MechsMode 	  = TexMan.CheckForTexture("BTMODE", TexMan.Type_Any);
 		tBtnlit_BuyItem   = TexMan.CheckForTexture("BLBUYIT", TexMan.Type_Any);
 		tBtnlit_BuyMech   = TexMan.CheckForTexture("BLBUYMH", TexMan.Type_Any);
@@ -156,6 +163,12 @@ class Mechlab_Menu : GenericMenu
 		tBtnlit_Ammo      = TexMan.CheckForTexture("BLAMMO", TexMan.Type_Any);
 		tBtnlit_Engines   = TexMan.CheckForTexture("BLENG", TexMan.Type_Any);
 		tBtnlit_MechsMode = TexMan.CheckForTexture("BLMODE", TexMan.Type_Any);
+		tBtnlit_All	 	  = TexMan.CheckForTexture("BLALL", TexMan.Type_Any);
+		tBtnlit_Light 	  = TexMan.CheckForTexture("BLLIGHT", TexMan.Type_Any);
+		tBtnlit_Medium	  = TexMan.CheckForTexture("BLMED", TexMan.Type_Any);
+		tBtnlit_Heavy 	  = TexMan.CheckForTexture("BLHEAVY", TexMan.Type_Any);
+		tBtnlit_Assault   = TexMan.CheckForTexture("BLASLT", TexMan.Type_Any);
+		
 		
 		mHUDFont = HUDFont.Create("MechFont");
 		hardpoint = -1;

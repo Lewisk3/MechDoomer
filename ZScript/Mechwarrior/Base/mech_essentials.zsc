@@ -23,6 +23,8 @@ float defaultfov;
 float kph_default;
 float kph_real;
 Array<mw_InvStruct> shopitems;
+Array<mw_StoredMech> shopmechs;
+float worth;
 
 // Properties
 class<CockpitHandler> cphandler;
@@ -130,9 +132,17 @@ mw_StoredMech CreateStoredMech(class<MechwarriorBase> type, bool attachtomech=tr
 	{
 		mechact.docopy_novoodoo = true;
 		mechact.setupInventory();
+		mechact.mech_weapons();
 			
 		mechobj.baseclass = type;
 		mechobj.inv_context = mechact.inv_context;
+		mechobj.inv_defs = new("mw_MechInvDefaults");
+		mechobj.inv_defs.weapons_tonnage = mechact.inv_context.weapons_tonnage;
+		mechobj.inv_defs.heateff = mechact.HeatEfficiency;
+		mechobj.inv_defs.weapons_count = mechact.inv_context.weapons_count;
+		mechobj.inv_defs.armor_tonnage = mechact.inv_context.armor_tonnage;
+		mechobj.inv_defs.engine = mechact.inv_context.engine;
+		mechobj.inv_defs.MoveSpeedKPH = mechact.MoveSpeedKPH;
 		mechact.inv_context.active = false;
 		if(attachtomech) AddInventory(mechobj.inv_context);
 		mechact.GetStoredWeapons(mechobj.active_weapons);
@@ -150,6 +160,7 @@ void GetStoredWeapons(in out Array<mw_StoredWeapon> weaps)
 		let ww = Mechbase_Weapon(FindInventory("Mechbase_Weapon",true));
 		if(!ww) break;
 		let sweap = new("mw_StoredWeapon");
+		sweap.Tag = resolveWeaponName(ww);
 		sweap.baseclass = ww.GetClassName();
 		sweap.group = ww.group;
 		sweap.WeaponID = ww.WeaponID;
@@ -309,8 +320,8 @@ override void PostBeginPlay()
 	
 override void tick()
 {
-	// Do not render player sprite if we're using a torso model.
-	if(mech_models) Sprite = GetSpriteIndex("TNT1A0");
+	// Hold onto reference of all mechs for shop
+	if(!shopmechs.Size()) GetAllMechs(shopmechs);
 	
 	if(checkVoodoo()) 
 	{

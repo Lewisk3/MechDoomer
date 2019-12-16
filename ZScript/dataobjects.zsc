@@ -3,6 +3,12 @@ struct Rect
 	float x,y,w,h;
 }
 
+class TempItems : Object
+{
+	String Tag;
+	int amt;
+}
+
 struct UIObject play
 {
 	bool inloadout;

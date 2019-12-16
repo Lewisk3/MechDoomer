@@ -24,13 +24,24 @@ class mw_InvStruct
 
 class mw_StoredWeapon : Object
 {
+	String Tag;
 	class<Mechbase_Weapon> baseclass;
 	int group;
 	int WeaponID;
 	MechHardpoint hardpoint;
 }
+class mw_MechInvDefaults : Object
+{
+	Mechbase_EngineOBJ engine;
+	float weapons_tonnage;
+	float armor_tonnage; 
+	float MoveSpeedKPH;
+	float heateff;
+	int weapons_count;
+}
 class mw_StoredMech : Object
 {
+	mw_MechInvDefaults inv_defs;
 	mw_InvInfo inv_context;
 	Array<mw_StoredWeapon> active_weapons;
 	class<MechWarriorBase> baseclass;
@@ -80,6 +91,7 @@ class MechWarriorBase : DoomPlayer
 	Property MechPieces : mech_models;
 	Property Manufacturer : mechtype;
 	Property HideLegsPerspective : nofirstpersonlegs;
+	property CValue : worth;
 	
 	// Clearscope
 	clearscope void sendHudAlert(String str, int c)
