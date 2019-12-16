@@ -60,6 +60,13 @@ void startMechbay()
 	lockpitch = pitch;
 }
 
+bool adjustTonnage(float amt, bool force=false)
+{
+	if(MDMath.RoundFloat(inv_context.weapons_tonnage+amt) > mech_tonnage && !force) return false;
+	inv_context.weapons_tonnage += amt;
+	return true;
+}
+
 void adjustMoney(int amt) 
 { 
 	if(!CheckVoodoo()) inv_context.money_cbills += amt; 

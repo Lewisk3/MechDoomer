@@ -309,9 +309,8 @@ override void PostBeginPlay()
 	
 override void tick()
 {
-
 	// Do not render player sprite if we're using a torso model.
-	if(mech_models) Sprite = GetSpriteIndex("TNT1A0"); 
+	if(mech_models) Sprite = GetSpriteIndex("TNT1A0");
 	
 	if(checkVoodoo()) 
 	{

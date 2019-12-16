@@ -1,6 +1,11 @@
 // Credits: https://gist.github.com/itsmrpeck/be41d72e9d4c72d2236de687f6f53974
 class MDMath Abstract
 {	
+	static float RoundFloat(float input, float place=100.)
+	{
+		return floor(input*place)/place;
+	}
+
 	static float Lerp(float a, float b, float lerpFactor)
 	{
 		float result = ((1.f - lerpFactor) * a) + (lerpFactor * b);

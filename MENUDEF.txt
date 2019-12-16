@@ -45,6 +45,7 @@ OptionMenu "MechDoomerControlsMenu"
 	StaticText " "
 	
 	StaticText "Movement Systems","Yellow"
+	Control    "Toggle throttle decay"		 , "netevent throttledecay_toggle"
 	Control    "Stop Mech"           		 , "netevent \"giveinvbutton:IBTN_STOP\""
 	Control    "Center Legs to Torso"        , "netevent \"giveinvbutton:IBTN_CENTER\""
 	Control    "Center Torso to Legs"		 , "netevent \"giveinvbutton:IBTN_CENTERTORSO\""

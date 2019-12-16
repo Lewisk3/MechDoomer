@@ -261,8 +261,8 @@ void drawMechlabInfo()
 	
 	maxspd.truncate(maxspd.Length()-4);
 	heateff.truncate(heateff.Length()-3);
-	weapston.truncate(weapston.length()-4);
-	mechston.truncate(mechston.length()-4);
+	weapston.truncate(weapston.length()-3);
+	mechston.truncate(mechston.length()-3);
 	enginetype.truncate(enginetype.Length()-7);
 	vector2 detailpos = (330,400);
 	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);

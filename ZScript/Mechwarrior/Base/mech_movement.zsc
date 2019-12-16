@@ -79,7 +79,7 @@ void mech_cockpitbob()
 		bobthrust = clamp(vel.length()*(movebobpart*MoveSpeed), -(bobmax/3), (bobmax/3));
 		if(stepping) 
 		{ 
-			bobthrust = abs(bobthrust)*2;
+			bobthrust = abs(bobthrust)*4;
 			bobdir = 1;
 		}
 		boboffs += bobthrust * bobdir;
@@ -236,7 +236,12 @@ void mech_movement()
 			float yaw = MDMath.NormalizeAngle(angle-LegAng);
 			if(yaw > 0) LegVel =  LegSpeed;
 			if(yaw < 0) LegVel = -LegSpeed;
-			if(abs(yaw) < LegSpeed*2) LegAng = angle;
+			if(abs(yaw) < LegSpeed*2) 
+			{	
+				LegAng = angle;
+				LegVel = 0;
+				TakeInventory("IBTN_CENTER",1);
+			}
 			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTER",1);
 		}
 		if(countinv("IBTN_CENTERTORSO"))
@@ -246,7 +251,11 @@ void mech_movement()
 			if(yaw < 0)angle+=2;
 			if(pitch > 0)pitch-=2;
 			if(pitch < 0)pitch+=2;
-			if(abs(yaw) < 2) angle = LegAng;
+			if(abs(yaw) < 2)
+			{
+				angle = LegAng;
+				TakeInventory("IBTN_CENTERTORSO",1);
+			}
 			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTERTORSO",1);
 		}
 		
@@ -256,9 +265,12 @@ void mech_movement()
 	
 		float curspd = MoveSpeedKPH*throttle;
 		float turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
-		float spdmod = 1.0 - (abs(curspd)/2)*0.01;
-		LegAng += (LegVel*turnmod) * spdmod;
-		angle += (LookVel*turnmod) * spdmod;
+		float spdmod = 1.0 - (abs(curspd)/2)*0.007;	
+		float finalmod = turnmod*spdmod;
+		if(!CVar.GetCVar("mwd_relativelegspeed",player).getBool()) finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
+		LegAng += LegVel*finalmod;
+		angle += LookVel*finalmod;
+		
 		if( !mech_shutdown )
 		{
 			if(!pilotlook) Pitch = clamp(Pitch, -minPitch, maxPitch);

@@ -84,7 +84,7 @@ class Mechlab_Menu : GenericMenu
 	// Actual Menu
 	void Init(Menu parent, Mechwarrior CPlayer)
 	{
-		statusbar.SetSize(32, 320, 200);
+		//statusbar.SetSize(32, 320, 200);
 		menuactive = OnNoPause;
 		mParentMenu = parent;
 		mechplr = CPlayer;
@@ -282,34 +282,7 @@ class Mechlab_Menu : GenericMenu
 			drawShopInfo();
 		}
 			
-		// Global Actions
-		if(mstats.left_btn && checkCollision(mouse,modebtn) && page_init) 
-		{
-			HUD_ChangePageRelative(page_offs);
-		}		
 		// Player produced HUD message.
-		if(mechplr.hAlert.text != "")
-		{
-			plrHudMessage.txt = mechplr.hAlert.text;
-			plrHudMessage.alpha = 0.2;
-			messagepos_yscale = 0;
-			plrHudMessage.col = mechplr.hAlert.col;
-			mechplr.hAlert.text = "";
-			messagebox_active = true; 
-		}
-		if(mstats.left_btn && messagebox_active && plrHudMessage.alpha >= 0.8) 
-		{
-			messagebox_active = false;
-			mstats.left_btn = false;
-		}
-		
-		if(!messagebox_active && plrHudMessage.alpha > 0)
-		{
-			plrHudMessage.alpha -= 0.002;
-			messagepos_yscale = MDMath.Lerp(messagepos_yscale,0.0,0.05);
-			if(plrHudMessage.alpha <= 0) plrHudMessage.txt = "";
-		}
-							
 		if(plrHudMessage.txt != "" && plrHudMessage.alpha > 0) 
 		{
 			vector2 messagepos = (960, 450*messagepos_yscale);
@@ -326,12 +299,13 @@ class Mechlab_Menu : GenericMenu
 				}
 				H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-24),0,Font.CR_White,plrHudMessage.alpha);
 			}
-			if(messagebox_active)
-			{
-				if(plrHudMessage.alpha < 1.0) plrHudMessage.alpha += 0.01;
-				messagepos_yscale = MDMath.Lerp(messagepos_yscale,1.0,0.08);
-			}
 		}
+			
+		// Global Actions
+		if(mstats.left_btn && checkCollision(mouse,modebtn) && page_init) 
+		{
+			HUD_ChangePageRelative(page_offs);
+		}		
 		Debug_DrawAllButtons();		
 	}
 	
@@ -345,6 +319,35 @@ class Mechlab_Menu : GenericMenu
 			inputclear = 12;
 		}
 		if(inputclear > 0) inputclear --;
+		
+		// Player produced HUD message.
+		if(mechplr.hAlert.text != "")
+		{
+			plrHudMessage.txt = mechplr.hAlert.text;
+			plrHudMessage.alpha = 0.2;
+			messagepos_yscale = 0;
+			plrHudMessage.col = mechplr.hAlert.col;
+			mechplr.hAlert.text = "";
+			messagebox_active = true; 
+		}
+		if(mstats.left_btn && messagebox_active && plrHudMessage.alpha >= 0.6) 
+		{
+			messagebox_active = false;
+			mstats.left_btn = false;
+		}
+		
+		if(!messagebox_active && plrHudMessage.alpha > 0)
+		{
+			plrHudMessage.alpha -= 0.004;
+			messagepos_yscale = MDMath.Lerp(messagepos_yscale,0.0,0.1);
+			if(plrHudMessage.alpha <= 0) plrHudMessage.txt = "";
+		}
+		
+		if(plrHudMessage.txt != "" && plrHudMessage.alpha > 0 && messagebox_active)
+		{
+			if(plrHudMessage.alpha < 1.0) plrHudMessage.alpha += 0.04;
+			messagepos_yscale = MDMath.Lerp(messagepos_yscale,1.0,0.16);
+		}
 	}
 }
 

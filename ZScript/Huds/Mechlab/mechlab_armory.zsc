@@ -64,8 +64,8 @@ void drawArmoryInfo()
 	String maxspd = mechplr.MoveSpeedKPH .. "";
 	maxspd.truncate(maxspd.Length()-4);
 	heateff.truncate(heateff.Length()-3);
-	weapston.truncate(weapston.length()-4);
-	mechston.truncate(mechston.length()-4);
+	weapston.truncate(weapston.length()-3);
+	mechston.truncate(mechston.length()-3);
 	vector2 detailpos = (330,300);
 	vector2 cbillpos  = (330,150);
 	vector2 statuspos = (777,185);

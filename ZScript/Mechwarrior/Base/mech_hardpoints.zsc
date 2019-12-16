@@ -19,9 +19,9 @@ float CalculateArmorWeight(bool update=true)
 	
 	if(update) 
 	{
-		inv_context.weapons_tonnage -= inv_context.armor_tonnage;
+		adjustTonnage(-inv_context.armor_tonnage);
 		inv_context.armor_tonnage = aw;
-		inv_context.weapons_tonnage += inv_context.armor_tonnage;
+		adjustTonnage(inv_context.armor_tonnage);
 	}
 	
 	return aw;
@@ -39,12 +39,12 @@ bool AdjustArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
 	}
 	
 	double addtons = GetDefaultByType("EndosteelBonus").weight*amt;
-	float correctedtons = floor((inv_context.weapons_tonnage+addtons)*100.)/100.;
+	float correctedtons = MDMath.RoundFloat(inv_context.weapons_tonnage+addtons);
 	if(correctedtons > mech_tonnage) return false;
 	hp.max_armor += amt;
-	inv_context.weapons_tonnage -= inv_context.armor_tonnage;
+	adjustTonnage(-inv_context.armor_tonnage);
 	inv_context.armor_tonnage += addtons;
-	inv_context.weapons_tonnage += inv_context.armor_tonnage;
+	adjustTonnage(inv_context.armor_tonnage);
 	return true;
 }
 	
@@ -248,7 +248,7 @@ void DamageHardpointStruct(MechHardpoint hp, int amt=50)
 					inv_context.mechstructs.delete(stcaseind);
 			}
 			hp.adjustHardslots(-ut.hardslots);
-			inv_context.weapons_tonnage -= ut.weight;
+			adjustTonnage(-ut.weight);
 			inv_context.mechstructs.delete(item.realindex);
 		}
 		else 
@@ -329,7 +329,7 @@ void DestroyHardpointStructs(MechHardpoint hp, bool recurse=true)
 				mechsounds.pushSound("Mech/Betty/Destroyed");
 			}
 			hp.adjustHardslots(-ut.hardslots);
-			inv_context.weapons_tonnage -= ut.weight;
+			adjustTonnage(-ut.weight);
 			inv_context.mechstructs.delete(i);
 			if(recurse) DestroyHardpointStructs(hp,recurse);
 		}

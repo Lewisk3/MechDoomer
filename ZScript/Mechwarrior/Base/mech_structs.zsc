@@ -90,7 +90,7 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	
 	if( 
 		 (gyroslots+ctslots > slots_ct || ltslots > slots_lt || rtslots > slots_rt) || 
-		 ((inv_context.weapons_tonnage+weight > mech_tonnage) && !overtonnage)
+		 (MDMath.RoundFloat(inv_context.weapons_tonnage+weight > mech_tonnage) && !overtonnage)
 	  )
 	{
 		inv_context.engine.Destroy();
@@ -103,7 +103,7 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	equipStruct("StructEngine",hardpoints.ct,ctslots);	
 	equipStruct("StructGyro",hardpoints.ct,gyroslots);
 	setupSpeedKPH(EngineGetKPH());
-	inv_context.weapons_tonnage += weight;
+	adjustTonnage(weight);
 	inv_context.heateff += (GetDefaultByType("Heatsink").cooling/35)*engobj.intrinsic_heatsinks;
 	inv_context.heateff += (GetDefaultByType("DoubleHeatsink").cooling/35)*engobj.intrinsic_doubleheatsinks;
 	return true;
@@ -147,7 +147,7 @@ void DequipEngine()
 	
 	inv_context.heateff -= (GetDefaultByType("Heatsink").cooling/35)*engobj.intrinsic_heatsinks;
 	inv_context.heateff -= (GetDefaultByType("DoubleHeatsink").cooling/35)*engobj.intrinsic_doubleheatsinks;
-	inv_context.weapons_tonnage -= engobj.weight;
+	adjustTonnage(-engobj.weight);
 	inv_context.GiveItem(engobj.ClassType);
 	
 	// RIP
@@ -267,11 +267,13 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 	{
 		if(inv_context.engine) 
 		{
+			A_PlaySound("UI/Error",CHAN_WEAPON);
 			sendHudAlert("Engine already equipped!", Font.CR_DARKRED);
 			return false;
 		}
 		if(!EquipEngine(eng))
 		{
+			A_PlaySound("UI/Error",CHAN_WEAPON);
 			sendHudAlert("Failed to equip engine\novertonnage or too big!", Font.CR_DARKRED);
 			return false;
 		}
@@ -282,14 +284,16 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 		}
 	}
 	if(!util) return false;
-	
-	if( inv_context.weapons_tonnage+GetDefaultByType(util).weight > mech_tonnage && !overtonnage)
+
+	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(util).weight) > mech_tonnage && !overtonnage)
 	{
+		A_PlaySound("UI/Error",CHAN_WEAPON);
 		sendHudAlert("Cannot equip item, over tonnage!", Font.CR_DARKRED);
 		return false;
 	}
 	if( hp.getFreeSlots() < GetDefaultByType(util).hardslots )
 	{
+		A_PlaySound("UI/Error",CHAN_WEAPON);
 		sendHudAlert("Cannot equip item, no freeslots!", Font.CR_DARKRED);
 		return false;	
 	}
@@ -298,7 +302,7 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 	if(hp.getFreeSlots()-defs.hardslots < 0) return false;
 	obj.hardpoint = hp;
 	inv_context.mechstructs.push(obj);
-	inv_context.weapons_tonnage += defs.weight;
+	adjustTonnage(defs.weight);
 	hp.adjustHardslots(defs.hardslots);
 	if(move) inv_context.RemoveItem(ind-1, 1);
 	
@@ -316,7 +320,7 @@ bool equipStruct(class<Mechbase_Utility> type, MechHardpoint hp, int amt = 1)
 		mw_InvStruct st = inv_context.NewItem(GetDefaultByType(type).getClassName());
 		st.hardpoint = hp;
 		inv_context.mechstructs.push(st);
-		inv_context.weapons_tonnage += GetDefaultByType(type).weight;
+		adjustTonnage(GetDefaultByType(type).weight);
 		hp.adjustHardslots(GetDefaultByType(type).hardslots);
 	}
 	return true;
@@ -351,6 +355,6 @@ void removeStruct(int ind, bool delete=true)
 	let ut = GetDefaultByType(utilcast(mstruct.Tag));
 	MechHardpoint hp = mstruct.hardpoint;
 	hp.adjustHardslots(-ut.hardslots);
-	inv_context.weapons_tonnage -= ut.weight;
+	adjustTonnage(-ut.weight);
 	if(delete) inv_context.mechstructs.delete(ind);
 }

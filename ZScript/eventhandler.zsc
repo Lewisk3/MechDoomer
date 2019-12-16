@@ -198,6 +198,11 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "movestruct_weapinv") plr.moveStructToInv(e.Args[0],1);
 			if(netcmd == "items_getlist") plr.GetAllItems(plr.shopitems);
 			if(netcmd == "sort_inv") plr.sortWeaponInv();
+			if(netcmd == "throttledecay_toggle") 
+			{
+				CVar throtd = CVar.FindCVar("mwd_throttledecay");
+				throtd.SetBool(!throtd.GetBool());
+			}
 			if(netcmd == "shop_buyitem" ) 
 			{
 				let item = plr.shopitems[e.Args[0]];

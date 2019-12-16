@@ -362,7 +362,7 @@ class Nova : MechWarrior
 	{
 		Mass 2000;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
-		MechWarriorBase.LegSpeed 2;
+		MechWarriorBase.LegSpeed 1.2;
 		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.TwistRange 20;
 		MechWarriorBase.Weight 50;

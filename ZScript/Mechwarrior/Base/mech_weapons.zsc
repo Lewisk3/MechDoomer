@@ -165,7 +165,7 @@ void clearWeapons()
 void removeWeapon(Mechbase_Weapon w)
 {
 	// This is need because hardpoints and stuff.
-	inv_context.weapons_tonnage -= w.weight;
+	adjustTonnage(-w.weight);
 	w.hardpoint.adjustHardslots(-w.hardslots);
 	RemoveInventory(w);
 }
@@ -214,13 +214,15 @@ bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 	class<Mechbase_Weapon> weap = inv_context.weapon_items[ind-1].Tag;
 	if(!weap) return false;
 	
-	if( inv_context.weapons_tonnage+GetDefaultByType(weap).weight > mech_tonnage && !overtonnage)
+	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(weap).weight) > mech_tonnage && !overtonnage)
 	{
+		A_PlaySound("UI/Error",CHAN_WEAPON);
 		sendHudAlert("Cannot equip weapon, over tonnage!", Font.CR_DARKRED);
 		return false;
 	}
 	if( hp.getFreeSlots() < GetDefaultByType(weap).hardslots )
 	{
+		A_PlaySound("UI/Error",CHAN_WEAPON);
 		sendHudAlert("Cannot equip weapon, no freeslots!", Font.CR_DARKRED);
 		return false;	
 	}
@@ -247,6 +249,7 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 		}
 		if(!ntype)
 		{
+			A_PlaySound("UI/Error",CHAN_WEAPON);
 			sendHudAlert("Weapon Systems Error. Buffer overloaded!", Font.CR_DARKRED);
 			//console.printf("No free slot found for: %s",(Name(type) .. ""));
 			return false;
@@ -267,7 +270,7 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 				ww.group = group;
 				ww.hardpoint = hp;
 				hp.adjustHardslots(ww.hardslots);
-				inv_context.weapons_tonnage += ww.weight;
+				adjustTonnage(ww.weight);
 				//console.printf("Adding Weapon: %s at %d",ww.displayName,ww.WeaponID);
 			}
 		}
