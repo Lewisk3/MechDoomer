@@ -208,9 +208,6 @@ class Mechbase_Weapon : Inventory
 			plr.targetlocked = false;
 		}
 		
-		if(cooldown_timer > 0)cooldown_timer--;
-		if(dofire)FireVolley();
-		
 		if(isHomming && Owner)
 		{
 			// If this weapon is selected.
@@ -242,9 +239,12 @@ class Mechbase_Weapon : Inventory
 					plr.locktimer = 0;
 				}
 				
-				//console.printf("[Missile Status]\n LOS: %i\n Lock Process: %i%\n Has Lock: %i", aimtarget, locktimer, plr.targetlocked);
+				//console.printf("[Missile Status]\n LOS: %i\n Lock Process: %i%\n Has Lock: %i", aimtarget, plr.locktimer, plr.targetlocked);
 			}
 		}
+		
+		if(cooldown_timer > 0)cooldown_timer--;
+		if(dofire)FireVolley();
 	}
 	
 	override void PostBeginPlay()
@@ -423,7 +423,6 @@ class Laser : Mechbase_Actor
 
 	override void tick()
 	{
-		Converge();
 		if(!basedamage) BaseInit();
 		realdamage = basedamage * (1.0-(getTravelDistance()/(range*6)));
 		realdamage = clamp(realdamage,0,basedamage);

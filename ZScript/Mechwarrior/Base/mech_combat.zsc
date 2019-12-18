@@ -127,7 +127,7 @@ void mech_weapons()
 		weapons_fired = true;
 		if(buttonTick)buttonTick = false;
 	}
-	else if(weapons_fired) 
+	else if(weapons_fired && getSelectedWeapon() && !getSelectedWeapon().dofire) 
 	{	
 		nextWeapon(true);
 		weapons_fired = false;

@@ -343,7 +343,7 @@ class Mechlab_Menu : GenericMenu
 			mechplr.hAlert.text = "";
 			messagebox_active = true; 
 		}
-		if(mstats.left_btn && messagebox_active && plrHudMessage.alpha >= 0.6) 
+		if(mstats.left_btn && messagebox_active && plrHudMessage.alpha >= 0.4) 
 		{
 			messagebox_active = false;
 			mstats.left_btn = false;
@@ -359,7 +359,7 @@ class Mechlab_Menu : GenericMenu
 		if(plrHudMessage.txt != "" && plrHudMessage.alpha > 0 && messagebox_active)
 		{
 			if(plrHudMessage.alpha < 1.0) plrHudMessage.alpha += 0.04;
-			messagepos_yscale = MDMath.Lerp(messagepos_yscale,1.0,0.16);
+			messagepos_yscale = MDMath.Lerp(messagepos_yscale,1.0,0.22);
 		}
 	}
 }

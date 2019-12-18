@@ -3,10 +3,11 @@
  
 	- Main Contributors -
 Lewisk3     (Lead programmer)
-'fire-hound (Mech cockpits UV maps/shading, Font contributions, Mechlab graphics)
-Cherno 	    (Mech model exports + UV shading + Walk-cycles)
-Caligari87  (Mech bobbing code)
-Xaser       (Argents ArgRocketReticle)
+'fire-hound (Mech cockpits UV maps/shading, Font contributions, All UI graphics)
+Skyfaller   (Author of MechVM, used to export MW2 assets)
+Cherno 	    (Mech model exports + UV shading + Walk/Run-cycles)
+Caligari87  (Original mech bobbing code)
+Xaser       (Argents ArgRocketReticle used for non-projected targeting graphics)
 
 	- Mech sounds/Mech models/Mech Lore -
 Activision/BattleTech/Mechwarrior 2 : 31st Century Combat

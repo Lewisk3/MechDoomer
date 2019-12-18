@@ -198,6 +198,13 @@ void drawArmoryInfo()
 				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				mstats.left_btn = false;
 				
+				if(!mechplr.mech_shutdown)
+				{
+					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
+					mechplr.sendHudAlert("Mech must be shutdown to initiate \nrepairs.",Font.CR_ORANGE);	
+					return;
+				}
+				
 				if(astat_selected != -1)
 				{
 					if(!repair_cost)  

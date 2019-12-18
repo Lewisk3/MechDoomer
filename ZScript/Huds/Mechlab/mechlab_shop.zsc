@@ -330,6 +330,16 @@ void drawShopItemInfo()
 			for(i = 0; i < item.description.Size(); i++) drawShopInfoLine(item.description[i],i);
 		
 			// Real-Time Descriptions
+			class<Mechbase_Engine> eng = item.Tag;
+			if(eng)
+			{
+				String dname;
+				int non, type;
+				[dname, type, non, non, non] = Mechbase_Engine.GetBasics(eng);
+				string spd = ""..mechplr.EngineGetKPH(type);
+				spd.truncate(spd.Length()-4);
+				drawShopInfoLine("Run Speed: "..spd.."KPH",i);
+			}
 			class<Mechbase_Ammo> am = item.Tag;
 			if(am) drawShopInfoLine("Ammunition: "..item.ammunition,i);
 		}

@@ -109,11 +109,13 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	return true;
 }
 	
-clearscope float EngineGetKPH()
+clearscope float EngineGetKPH(int enginetype=0)
 {
-	if(!inv_context.engine) return 0;
-	return (32.4*(100./mech_tonnage)) / (200./inv_context.engine.enginetype);
+	if(!inv_context.engine && !enginetype) return 0;
+	int engine = enginetype ? enginetype : inv_context.engine.enginetype;
+	return (32.4*(100./mech_tonnage)) / (200./engine);
 }
+
 	
 void DequipEngine()
 {
