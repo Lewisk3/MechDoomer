@@ -37,6 +37,7 @@ float MoveSpeed;
 float MoveSpeed_Max;
 float throttle;
 float throttle_max;
+float move_throttle;
 float mech_jetsfuel;
 float LookVel;
 float LegVel;
@@ -147,7 +148,12 @@ void mech_movement()
 	if(!defaultmovement)
 	{
 		// Move mech by a percentage of throttle.
-		if(!stepping) vel = (cos(LegAng)*(throttle*MoveSpeed),sin(LegAng)*(throttle*MoveSpeed),vel.z);
+		
+		if(!stepping) 
+		{
+			move_throttle = MDMath.Lerp(move_throttle, throttle, clamp(((1000/mech_tonnage)/100)*0.25,0.01,0.1));
+			vel = (cos(LegAng)*(move_throttle*MoveSpeed),sin(LegAng)*(move_throttle*MoveSpeed),vel.z);
+		}
 		// Speed decay when engine removed.
 		if(!inv_context.engine)
 		{
@@ -264,7 +270,7 @@ void mech_movement()
 		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*5)) )*0.5;
 		if( !pilotlook && !mech_shutdown ) A_SetRoll( roll + rolldistort );
 	
-		float curspd = MoveSpeedKPH*throttle;
+		float curspd = MoveSpeedKPH*move_throttle;
 		float turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
 		float spdmod = 1.0 - (abs(curspd)/2)*0.007;	
 		float finalmod = turnmod*spdmod;

@@ -221,9 +221,17 @@ void ShopInit()
 	shopstate.ammomax      = 14;
 	shopstate.enginemax    = 0;
 	
+	ClearSelected();
 	invoffset = 0;
+	forceminitems = 0;
 	forcemaxitems = 0;
 	maxpageitems = 25;
+	
+	shopstate.btn_energy    = false;
+	shopstate.btn_ballistic = false;
+	shopstate.btn_missile   = false;
+	shopstate.btn_ammo      = false;
+	shopstate.btn_engine    = false;
 }
 
 void MechsInit()
@@ -242,14 +250,23 @@ void MechsInit()
 	shopstate.ammomax      = h-m;
 	shopstate.enginemax    = 0;
 	
+	ClearSelected();
 	invoffset = 0;
+	forceminitems = 0;
 	forcemaxitems = 0;
 	maxpageitems = 25;
+	
+	shopstate.btn_energy    =  true;   // All
+	shopstate.btn_ballistic = false;
+	shopstate.btn_missile   = false;
+	shopstate.btn_ammo      = false;
+	shopstate.btn_engine    = false;
 }
 
 void drawShopInfo()
 {
 	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
+	String armston = (mechplr.inv_context.armor_tonnage .. "");
 	String mechston = (mechplr.mech_tonnage .. "");
 	String heateff = mechplr.HeatEfficiency*35 .. "";
 	String maxspd = mechplr.MoveSpeedKPH .. "";
@@ -260,15 +277,17 @@ void drawShopInfo()
 	maxspd.truncate(maxspd.Length()-4);
 	heateff.truncate(heateff.Length()-3);
 	weapston.truncate(weapston.length()-3);
+	armston.truncate(armston.length()-3);
 	mechston.truncate(mechston.length()-3);
 	enginetype.truncate(enginetype.Length()-7);
-	vector2 detailpos = (330,300);
-	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);
-	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
-	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+40));
-	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+60));
-	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+80));
-	H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+100));
+	vector2 detailpos = (330,280);
+	H_DrawString("- Current Mech -",detailpos);
+	H_DrawString("Chassis: " .. mechplr.getChassisName(),(detailpos.x,detailpos.y+20));
+	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+40));
+	H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+60));
+	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+80));
+	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+100));
+	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+120));
 	
 	vector2 cbillpos  = (330,150);
 	float cbills_remain = mechplr.inv_context.money_cbills-item_cost;
@@ -351,6 +370,7 @@ void drawShopItemInfo()
 		if(!mech) return;
 	
 		String weapston = (mech.inv_defs.weapons_tonnage .. "");
+		String armston = (mech.inv_defs.armor_tonnage .. "");
 		String mechston = (mechdefs.mech_tonnage .. "");
 		String heateff = mech.inv_defs.heateff*35 .. "";
 		String maxspd = mech.inv_defs.MoveSpeedKPH .. "";
@@ -358,20 +378,25 @@ void drawShopItemInfo()
 		
 		maxspd.truncate(maxspd.Length()-4);
 		weapston.truncate(weapston.length()-3);
+		armston.truncate(armston.length()-3);
 		heateff.truncate(heateff.Length()-3);
 		mechston.truncate(mechston.length()-3);
 		enginetype.truncate(enginetype.Length()-7);
 		
-		drawShopInfoLine("Chassis: " .. mechdefs.getClassName(),17); 
-		drawShopInfoLine("Tonnage: " .. weapston .. "/" .. mechston,18);
-		drawShopInfoLine("Engine: " .. enginetype,19);
-		drawShopInfoLine("Heat Efficiency: " .. heateff,20);
-		drawShopInfoLine("Max Speed: " .. maxspd .. "Kph",21);
+		vector2 detailpos = (330,340);
+		H_DrawString("- Selected Mech -", (detailpos.x,detailpos.y+100));
+		H_DrawString("Chassis: " .. mechdefs.getClassName(),(detailpos.x,detailpos.y+120));
+		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+140));
+		H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+160));
+		H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+180));
+		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+200));
+		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+220));
+		drawShopInfoLine("Weapons: ",17);
 		for(int i = 0; i < selmechweaps.Size(); i++)
 		{
 			String disp = selmechweaps[i].Tag;
 			if(selmechweaps[i].amt) disp = disp .. " x" .. selmechweaps[i].amt+1;
-			drawShopInfoLine(disp,22+i);
+			drawShopInfoLine(disp,18+i);
 		}
 	}
 }

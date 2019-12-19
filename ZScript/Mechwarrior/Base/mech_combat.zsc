@@ -286,9 +286,8 @@ void trigger_ams(vector2 amshardpoint)
 					SoundEmitter.SE_Trigger("Missiles/AMS");
 					amshardpoint.x += random(-5,5);
 					amshardpoint.y += random(-5,5);
-					float xo = (cos(AngleTo(obj)+amshardpoint.x))*25;
-					float yo = (sin(AngleTo(obj)+amshardpoint.x))*25;
-					Vector3 lpos = (pos.x+xo,pos.y+yo,pos.z+(viewheight*player.crouchFactor)+amshardpoint.y);		
+					vector2 offs = MDMath.VOffset(angle, 25, amshardpoint.x, 1);	
+					vector3 lpos = Vec3Offset(offs.x,offs.y,(viewheight*player.crouchFactor)+amshardpoint.y);
 					obj.bSHOOTABLE = true;
 					let ams = AMS_Missile(Spawn(def_ams.amstype,lpos));
 					if(ams)
