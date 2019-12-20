@@ -157,7 +157,7 @@ void mech_weapons()
 	if(countinv("IBTN_NXTGROUP"))
 	{
 		int grp = getWeaponGroupAt(selectedWeapon)+1;
-		if(grp > inv_context.weapons_count)grp = 1;
+		if(grp > inv_context.maxgroup) grp = 1;
 		selectedWeapon = getNearestWeaponAt(grp);
 		TakeInventory("IBTN_NXTGROUP",1);
 	}

@@ -273,10 +273,13 @@ void mech_movement()
 		float curspd = MoveSpeedKPH*move_throttle;
 		float turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
 		float spdmod = 1.0 - (abs(curspd)/2)*0.007;	
-		float finalmod = turnmod*spdmod;
+		
+		// If we're in the air we can move our legs freely of friction.
+		float finalmod = (player.onground ? turnmod*spdmod : 2);
 		if(!CVar.GetCVar("mwd_relativelegspeed",player).getBool()) finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
+		
 		LegAng += LegVel*finalmod;
-		angle += LookVel*finalmod;
+		angle  += LookVel*finalmod;
 		
 		if( !mech_shutdown )
 		{

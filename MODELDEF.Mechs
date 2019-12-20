@@ -419,6 +419,57 @@ Model CockpitHandler_Urbanmech
 }
 
 // Nova
+Model Torso_Nova
+{
+	Path "models/Cockpits"
+	Model 0 "Nova/nv_torso.md3"
+	SurfaceSkin 0 0 "Nova/nv_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0 
+	AngleOffset 0
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Nova
+{
+	Path "models/Cockpits/Nova"
+	Model 0 "nv_hips.md3"
+	Skin 0 "nv_full.png"
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	
+   FrameIndex MODL A 0 0
+}
+Model Legs_Nova
+{
+	Path "models/Cockpits/Nova"
+	Model 0 "nv_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "nv_full.png" // Main
+	Offset 0 0 0 
+	//SurfaceSkin 0 1   // Metal
+	
+   FrameIndex TLEG A 0 0
+   FrameIndex TLEG B 0 1
+   FrameIndex TLEG C 0 2
+   FrameIndex TLEG D 0 3
+   FrameIndex TLEG E 0 4
+   FrameIndex TLEG F 0 5
+   FrameIndex TLEG G 0 6
+   FrameIndex TLEG H 0 7
+   FrameIndex TLEG I 0 8
+   FrameIndex TLEG J 0 9
+   FrameIndex TLEG K 0 10
+   FrameIndex TLEG L 0 11
+   FrameIndex TLEG M 0 12
+   FrameIndex TLEG N 0 13
+   FrameIndex TLEG O 0 14
+   FrameIndex TLEG P 0 15
+   FrameIndex TLEG Q 0 16
+   FrameIndex TLEG R 0 17
+   FrameIndex TLEG S 0 18
+}
 Model CockpitHandler_Nova
 {
 	Path "models/Cockpits/Nova"

@@ -1,0 +1,120 @@
+	/*
+		equipStruct("Heatsink",hardpoints.ct,2);
+		equipStruct("Heatsink",hardpoints.lt,4);
+		equipStruct("Heatsink",hardpoints.rt,4);
+
+		equipWeapon("Flamer",hardpoints.la,1);
+		equipWeapon("Flamer",hardpoints.ra,1);
+		equipWeapon("Flamer",hardpoints.lt,1);
+		equipWeapon("Flamer",hardpoints.rt,1);
+		equipWeapon("MachineGun",hardpoints.lt,2);
+		equipWeapon("MachineGun",hardpoints.rt,2);
+	*/
+
+// -- Unimplemented -- \\
+
+/* Mercs 
+class Shadowcat : MechWarrior
+{
+	Default
+	{
+		Mass 2400;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.Engine "ENGINE_XL_270";
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.Weight 45;
+		Player.DisplayName "ShadowCat Prime";
+		Player.ViewHeight 70;
+	}
+		
+	override void SetupWeapons()
+	{	
+		hardpoints.setupVitals( 9,36,26,26,18,18,28,28, 3,20,16,16,10,10,14,14 );
+		hardpoints.setupLocations( (0,-5), (0,0), (70,-15), (-70,-15), (130,-18), (-130,-18), (70,-45), (-70,-45) );
+		hardpoints.setupSlots();
+		equipStruct("DoubleHeatsink",hardpoints.ct,2);
+		equipStruct("DoubleHeatsink",hardpoints.lt,1);
+		equipStruct("DoubleHeatsink",hardpoints.rt,1);
+		equipStruct("DoubleHeatsink",hardpoints.hd,1);
+		equipStruct("GaussRounds",hardpoints.la,2);
+		equipWeapon("GaussRifle",hardpoints.la,2);
+		equipWeapon("MediumPulseLaser",hardpoints.ra,1);
+		equipWeapon("MediumPulseLaser",hardpoints.ra,1);
+	}
+}
+
+class EbonJaguar : MechWarrior
+{
+	Default
+	{		
+		MechWarriorBase.LegSpeed 1.6;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.Weight 65;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.Engine "ENGINE_XL_325";
+		MechWarriorBase.HudCockpit "EBONHUD";
+		MechWarriorBase.HudMech "ATLAICO";
+		Player.DisplayName "EbonJaguar Prime";
+		Player.ViewHeight 86;
+	} 
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 9,42,30,30,20,20,30,30, 3,24,15,15,10,10,13,13 );
+		hardpoints.setupLocations( (0,20), (0,-18), (-100,-11), (100,-11), (130,-11), (-130,-11), (80,-60), (-80,-60) );
+		hardpoints.setupSlots();
+		equipStruct("SRM_Ammo",hardpoints.ll,1);
+		equipStruct("LRM_Ammo",hardpoints.rt,1);
+		equipStruct("GaussRounds",hardpoints.hd,1);
+		equipStruct("AC5_Ammo",hardpoints.rl,2);
+		equipStruct("DoubleHeatsink",hardpoints.ct,1);
+		equipStruct("DoubleHeatsink",hardpoints.la,3);
+		equipStruct("DoubleHeatsink",hardpoints.ra,3);
+		equipWeapon("ERMediumLaser",hardpoints.la,1);
+		equipWeapon("LRM10",hardpoints.rt,4);
+		equipWeapon("SRM2",hardpoints.rt,3);
+		equipWeapon("Autocannon5",hardpoints.rt,2);
+		equipWeapon("GaussRifle",hardpoints.lt,2);
+	}
+	
+}
+
+class Warhammer : MechWarrior
+{
+	Default
+	{
+		Mass 3200;
+		MechWarriorBase.LegSpeed 1;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.Engine "ENGINE_STD_280";
+		MechWarriorBase.HudCockpit "WARHHUD";
+		MechWarriorBase.HudMech "WARHICO";
+		MechWarriorBase.Weight 70;
+		Player.DisplayName "Warhammer Prime";
+		Player.ViewHeight 88;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 9,50,34,34,26,26,34,34, 3,25,17,17,13,13,17,17 );
+		hardpoints.setupLocations( (0,30), (0,-20), (-80,-11), (80,-11), (100,-18), (-100,-18), (-80,-70), (80,-70) );
+		hardpoints.setupSlots();
+		equipStruct("Heatsink",hardpoints.ct,2);
+		equipStruct("Heatsink",hardpoints.lt,2);
+		equipStruct("Heatsink",hardpoints.rt,2);
+		equipStruct("Heatsink",hardpoints.hd,1);
+		equipWeapon("ERPPC",hardpoints.la,2);
+		equipWeapon("ERPPC",hardpoints.ra,2);
+		equipWeapon("SRM6",hardpoints.lt,3);
+		equipWeapon("MediumLaser",hardpoints.lt,1);
+		equipWeapon("MediumLaser",hardpoints.lt,1);
+		equipWeapon("SmallLaser",hardpoints.rt,1);
+		equipWeapon("SmallLaser",hardpoints.rt,1);
+		equipWeapon("MachineGun",hardpoints.rt,4);
+		equipWeapon("MachineGun",hardpoints.ra,4);
+		equipStruct("BulletsMGun",hardpoints.ra,1);
+		equipStruct("SRM_Ammo",hardpoints.lt,1);
+	}
+
+}
+*/

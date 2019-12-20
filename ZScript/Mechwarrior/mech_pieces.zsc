@@ -151,12 +151,14 @@ class MechPartsBase : Actor
 // Torsos
 class MechTorsoBase : MechPartsBase
 {
+	bool notwist;
 	bool setup;
 	MechPartsBase hips;
 	MechPartsBase legs;
 	class<MechPartsBase> hips_type;
 	class<MechPartsBase> legs_type;
 	Property Pieces : hips_type, legs_type;
+	Property DoNotTwist : notwist;
 	
 	void SetupParts(class<MechPartsBase> phips, class<MechPartsBase> plegs)
 	{
@@ -171,9 +173,16 @@ class MechTorsoBase : MechPartsBase
 		if(mechowner)
 		{
 			if(!setup) SetupParts(hips_type, legs_type);
-			pitch = mechowner.pitch*0.5;
-			roll = mechowner.roll*0.3;
-			angle = mechowner.angle;
+			if(!notwist)
+			{
+				pitch = mechowner.pitch*0.5;
+				roll = mechowner.roll*0.3;
+				angle = mechowner.angle;
+			}
+			else
+			{
+				angle = mechowner.LegAng;
+			}
 			if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
 				Sprite = GetSpriteIndex("TNT1A0");
 			else
@@ -336,7 +345,8 @@ class Hips_Timberwolf  : MechHipsBase {}
 class Hips_Stormcrow   : MechHipsBase {}
 class Hips_Atlas       : MechHipsBase {}
 class Hips_Commando    : MechHipsBase {}
-// Legs
+class Hips_Nova    	   : MechHipsBase {}
+// Legs	
 class Legs_Invisible   : MechLegsBase {}
 class Legs_Timberwolf  : MechLegsBase {}
 class Legs_Stormcrow   : MechLegsBase {}
@@ -344,6 +354,7 @@ class Legs_Atlas       : MechLegsBase {}
 class Legs_Commando    : MechLegsBase {}
 class Legs_Jenner      : MechLegsBase {}
 class Legs_Urbanmech   : MechLegsBase {}
+class Legs_Nova    	   : MechLegsBase {}
 // Torsos
 class Model_BattleArmor : MechTorsoBase
 {
@@ -386,6 +397,13 @@ class Torso_Jenner : MechTorsoBase {
 	Default {
 		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner";
 		MechPartsBase.ZOffset 42;
+	}
+}
+class Torso_Nova : MechTorsoBase {
+	Default {
+		MechTorsoBase.DoNotTwist true;
+		MechTorsoBase.Pieces "Hips_Nova", "Legs_Nova";
+		MechPartsBase.ZOffset 60;
 	}
 }
 class Torso_Invisible : MechTorsoBase {
