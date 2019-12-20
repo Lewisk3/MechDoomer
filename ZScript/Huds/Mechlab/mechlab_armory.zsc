@@ -132,7 +132,7 @@ void drawArmoryInfo()
 	{
 		hp = mechplr.hardpoints.FindByIndex(hardpoint);
 		armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor) .. " ("..int(hp.defmax_armor)..")";
-		internalstr = "INTERNALS: ".. ceil(hp.internalhp) .. "/" .. int(hp.max_internal);
+		internalstr = "INTERNALS: ".. int(ceil(hp.internalhp)) .. "/" .. int(hp.max_internal);
 		selectallstr = "Select All";
 		ArmorFont = (hp.armor < hp.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
 		InternalsFont = (hp.internalhp < hp.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;

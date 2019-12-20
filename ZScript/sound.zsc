@@ -156,7 +156,7 @@ class SoundEmitter : Actor
 	{
 		Spawn:
 			TNT1 A 0;
-			TNT1 A 1 A_PlaySound(audio,CHAN_BODY,1.0,false,0);
+			TNT1 A 1 A_PlaySound(audio,CHAN_BODY,1.0,false,ATTN_NORM);
 		stop;
 	}
 }

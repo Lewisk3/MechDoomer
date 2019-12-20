@@ -86,7 +86,7 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	int ltslots = engobj.ltslots;
 	int rtslots = engobj.rtslots;
 	int gyroslots = engobj.gyroslots;
-	int weight = engobj.weight;
+	float weight = engobj.weight;
 	
 	if( 
 		 (gyroslots+ctslots > slots_ct || ltslots > slots_lt || rtslots > slots_rt) || 

@@ -5,8 +5,8 @@ Model Legs_BattleArmor
 	Model 0 "ba_armor.md3"
 	//Model 1 "cm_hips.md3"
 	Skin 0 "ba_full.png"
-	Scale 0.4 0.4 0.4
-	Offset -12 0 0
+	Scale 1.5 1.5 1.5
+	Offset -5 0 0
 	AngleOffset 0
 	
    FrameIndex TLEG A 0 0
@@ -20,6 +20,13 @@ Model Legs_BattleArmor
    FrameIndex TLEG I 0 8
    FrameIndex TLEG J 0 9
    FrameIndex TLEG K 0 10
+   FrameIndex TLEG L 0 11
+   FrameIndex TLEG M 0 12
+   FrameIndex TLEG N 0 13
+   FrameIndex TLEG O 0 14
+   FrameIndex TLEG P 0 15
+   FrameIndex TLEG Q 0 16
+   FrameIndex TLEG R 0 17
 }
 Model CockpitHandler_BattleArmor
 {
@@ -152,7 +159,7 @@ Model CockpitHandler_Timberwolf
 	//PitchOffset -14
 	//Offset 0 14 -8;
 	RollOffset 14
-	Offset -0.6 30 -10
+	Offset 0.6 30 -10
 	AngleOffset 90
 	
    FrameIndex MODL A 0 0

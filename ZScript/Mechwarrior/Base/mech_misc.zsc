@@ -62,7 +62,7 @@ void startMechbay()
 
 bool adjustTonnage(float amt, bool force=false)
 {
-	if(MDMath.RoundFloat(inv_context.weapons_tonnage+amt) > mech_tonnage && !force) return false;
+	if(MDMath.RoundFloat(inv_context.weapons_tonnage+amt) > mech_tonnage && !force && !overtonnage) return false;
 	inv_context.weapons_tonnage += amt;
 	return true;
 }

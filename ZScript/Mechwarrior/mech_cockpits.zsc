@@ -55,8 +55,8 @@ class CockpitHandler : Weapon
 					
 					if( (plr.mech_shutdown || plr.pilotlook) && !plr.defaultmovement) 
 					{
-						xoffs = (plr.LegAng-angle)*2.47;
-						yoffs += -(pitch-sin(90));
+						xoffs = (plr.LegAng-angle)*0.47;
+						yoffs += -(pitch-sin(90))*0.3;
 					}
 					else
 					{

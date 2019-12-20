@@ -315,6 +315,7 @@ class Legs_BattleArmor : MechLegsBase
 	
 	bool isMoving()
 	{
+		if(!mechowner) return false;
 		return mechowner.vel.xy.length() >= 4;
 	}
 	
@@ -323,14 +324,38 @@ class Legs_BattleArmor : MechLegsBase
 		Spawn:
 			TLEG A 1;
 		SpawnIdle:
-			"####" "#" 1 A_JumpIf(isMoving(), "WalkCycle");
+			"####" "#" 1 
+			{
+				if(mechowner && mechowner.player)
+				{
+					if(isMoving()) return ResolveState("WalkCycle");
+					if(mechowner.weapons_fired) return ResolveState("Shoot");
+					if(!mechowner.player.onground) return ResolveState("Flying");
+					if(mechowner.isdead) return ResolveState("Die");
+				}
+				return ResolveState(Null);
+			}
 		loop;
 		WalkCycle:
-			TLEG BCDEFGHIJK 4 
+			TLEG BCDEFGHI 3 
 			{	
-				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 4, 10);
+				if(mechowner.player.cmd.buttons & BT_ATTACK) return ResolveState("Shoot");
+				if(!mechowner.player.onground) return ResolveState("Flying");
+				if(mechowner.isdead) return ResolveState("Die");
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 2, 8);
 				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null); 
 			}
+		loop;
+		Shoot:
+			TLEG K 4;
+		goto SpawnIdle;
+		Flying:
+			TLEG L 2;
+		goto SpawnIdle;
+		Die:
+			TLEG MNOPQ 8;
+		DeathDone:
+			TLEG R 1;
 		loop;
 	}
 }
