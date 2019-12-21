@@ -194,7 +194,8 @@ class C_A_S_E : Mechbase_Utility
 	override void SetupItem(mw_InvStruct item)
 	{
 		GetDefDescription(item.description);
-		item.description.push("Supresses ammo explosions.");
+		item.description.push("Supresses ammo");
+		item.description.push("explosions.");	
 		item.worth = worth;
 	}
 }

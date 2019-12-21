@@ -3,6 +3,7 @@ class MechAmmoDispenser : Inventory
 
 	Array<String> dispense;
 	Array<Int> dispense_amt;
+	string realmsg;
 	
 	virtual void DispenseInit() {}
 	
@@ -21,9 +22,11 @@ class MechAmmoDispenser : Inventory
 		DispenseInit();
 		if(plr)
 		{
+			realmsg = "";
 			for(int i = 0; i < dispense.Size(); i++)
 			{
-				console.printf("Ammo pickup: %s, %d",dispense[i] .. "",dispense_amt[i]); 
+				String suffix = i+1 >= dispense.Size() ? "" : "\n";
+				realmsg = realmsg .. String.Format("Ammo pickup: %s, %d%s",dispense[i] .. "",dispense_amt[i],suffix); 
 				//if(dispense[i] == "heatsink"){ plr.giveHeatsinks(dispense_amt[i]); continue; }
 				plr.inv_context.GiveItems(dispense[i],dispense_amt[i]);
 			}
@@ -31,12 +34,14 @@ class MechAmmoDispenser : Inventory
 		GoAwayAndDie();
 		return true;
 	}
+	override String PickupMessage () { return realmsg; }
 }
 class MechInvDispenser : Inventory
 {
 
 	Array<String> dispense;
 	Array<Int> dispense_amt;
+	string realmsg;
 	
 	virtual void DispenseInit() {}
 	
@@ -55,9 +60,11 @@ class MechInvDispenser : Inventory
 		DispenseInit();
 		if(plr)
 		{
+			realmsg = "";
 			for(int i = 0; i < dispense.Size(); i++)
 			{
-				console.printf("Item pickup: %s, %d",dispense[i] .. "",dispense_amt[i]); 
+				String suffix = i+1 >= dispense.Size() ? "" : "\n";
+				realmsg = realmsg .. String.Format("Item pickup: %s, %d%s",dispense[i] .. "",dispense_amt[i],suffix); 
 				//if(dispense[i] == "heatsink"){ plr.giveHeatsinks(dispense_amt[i]); continue; }
 				plr.addWeaponToInv(dispense[i],dispense_amt[i]);
 			}
@@ -65,6 +72,7 @@ class MechInvDispenser : Inventory
 		GoAwayAndDie();
 		return true;
 	}
+	override String PickupMessage () { return realmsg; }
 }
 
 // Heatsinks

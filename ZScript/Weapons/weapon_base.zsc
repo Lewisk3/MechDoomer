@@ -46,7 +46,11 @@ class Mechbase_Actor : Actor
 	{
 		if(truedamage && hitactor && hitactor.bSHOOTABLE)
 		{
-			if(hitactor != mechplayer) hitactor.DamageMobJ(mechplayer,self,truedamage,damagetype,0,mechplayer.angle);
+			if(hitactor != mechplayer) 
+			{
+				hitactor.DamageMobJ(self,mechplayer,truedamage,damagetype,0,mechplayer.angle);
+				SetState(ResolveState("Death"));
+			}
 			hitactor = NULL;
 		}
 		if(mechplayer && CVar.GetCVar("mwd_weaponsconverge",mechplayer.player).getBool())

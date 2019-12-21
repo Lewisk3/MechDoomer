@@ -98,8 +98,8 @@ clearscope int, int, int, int GetMechSortIndexes()
 clearscope void GetSortList(in out Array<String> items)
 {
 	items.Clear();
-	int ssize = 371;
-	string tosort[371] = 
+	int ssize = 372;
+	string tosort[372] = 
 	{ 
 		// Weapons
 		"MediumLaser",
@@ -150,6 +150,7 @@ clearscope void GetSortList(in out Array<String> items)
 		"SSRM_Ammo",
 		"LRM_Ammo",
 		// Structs
+		"C_A_S_E",
 		"JumpJet",
 		"AntiMissileSystem",
 		"Heatsink",
