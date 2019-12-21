@@ -331,7 +331,7 @@ void drawShopItemInfo()
 			wtons.truncate(wtons.Length()-4);
 			wheat.truncate(wheat.Length()-4);
 			drawShopInfoLine("Name: " .. selected_item.Tag, 0);
-			drawShopInfoLine("Damage: " .. weaptypedefs.damage,1);
+			drawShopInfoLine("Damage: " .. weaptypedefs.truedamage,1);
 			drawShopInfoLine("Heat: " .. wheat,2);
 			drawShopInfoLine("Nickname: " .. GetDefaultByType(invweap).displayName, 3);
 			drawShopInfoLine("Sell Value: " .. GetDefaultByType(invweap).worth, 4);

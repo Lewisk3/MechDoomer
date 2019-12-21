@@ -27,6 +27,17 @@ void clearSelected(bool test=true)
 	selected_item.mEngine = null;
 	selected_item.index = -1;
 }
+void updateSelected()
+{
+	if(selected_item.index >= mechplr.inv_context.weapon_items.Size()-1) clearSelected();
+	if(selected_item.index < 0) return;
+	let item = mechplr.inv_context.weapon_items[selected_item.index];
+	String weapname = item.Tag;
+	class<Mechbase_Weapon> mw  = weapname;
+	class<Mechbase_Utility> ut = weapname;
+	class<Mechbase_Engine> eng = weapname;
+	setSelected(weapname, null, ut, mw, eng, selected_item.index);
+}
 
 void ProcessLoadoutButtons()
 {
@@ -125,7 +136,10 @@ void ProcessLoadoutButtons()
 				int amt = mechplr.inv_context.weapon_items[selected_item.index].amt;
 				if(selected_item.mWeapon) MechDoomerEvents.SendNetworkEvent("equip_invweap",selected_item.index,hardpoint);
 				if(selected_item.mUtil  ) MechDoomerEvents.SendNetworkEvent("equip_structinvweap",selected_item.index,hardpoint);
-				if(amt-1 < 0) clearSelected();
+				if(amt-1 < 0) 
+				{
+					updateSelected();
+				}
 				mstats.left_btn = false;
 			}
 		}
@@ -200,7 +214,7 @@ void drawLoadoutItemInfo()
 			wtons.truncate(wtons.Length()-4);
 			wheat.truncate(wheat.Length()-4);
 			drawInfoLine("Name: " .. selected_item.Tag, 0);
-			drawInfoLine("Damage: " .. weaptypedefs.damage,1);
+			drawInfoLine("Damage: " .. weaptypedefs.truedamage,1);
 			drawInfoLine("Heat: " .. wheat,2);
 			drawInfoLine("Nickname: " .. GetDefaultByType(invweap).displayName, 3);
 			drawInfoLine("Sell Value: " .. GetDefaultByType(invweap).worth, 4);
@@ -220,7 +234,7 @@ void drawLoadoutItemInfo()
 			wtons.truncate(wtons.Length()-4);
 			wheat.truncate(wheat.Length()-4);
 			drawInfoLine("Name: " .. mechplr.resolveWeaponName(weap),0);
-			drawInfoLine("Damage: " .. weaptypedefs.damage,1);
+			drawInfoLine("Damage: " .. weaptypedefs.truedamage,1);
 			drawInfoLine("Heat: " .. wheat,2);
 			drawInfoLine("Nickname: " .. weap.displayName,3); 
 			drawInfoLine("Sell Value: " .. weap.worth,4);

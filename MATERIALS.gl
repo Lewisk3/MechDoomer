@@ -42,3 +42,9 @@ material texture models/Cockpits/Urbanmech/ur_head.png {
 	specularlevel 0.3
 	glossiness 10
 }
+material texture models/Cockpits/Nova/nv_head.png {
+	normal models/metal_normal.png
+	specular models/metal.png
+	specularlevel 0.3
+	glossiness 10
+}

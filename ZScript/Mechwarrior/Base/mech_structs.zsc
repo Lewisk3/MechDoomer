@@ -57,6 +57,18 @@ void takeammo(class<Mechbase_Ammo> type, int amt)
 			{
 				left -= ammoobj.ammunition;
 				removeStruct(index);
+				// Search for more ammo
+				if(CVar.GetCVar("mwd_autoreload",player).getBool())
+				{
+					for(int x = 0; x < inv_context.weapon_items.Size(); x++)
+					{
+						if(inv_context.weapon_items[x].Tag == ammoobj.Tag)
+						{
+							equipStructInv(x+1,ammoobj.hardpoint);
+							console.printf("Reloading...");
+						}
+					}
+				}
 			}
 		}
 		else

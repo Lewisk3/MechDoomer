@@ -148,12 +148,12 @@ void mech_movement()
 	if(!defaultmovement)
 	{
 		// Move mech by a percentage of throttle.
-		
 		if(!stepping) 
 		{
-			move_throttle = MDMath.Lerp(move_throttle, throttle, clamp(((1000/mech_tonnage)/100)*0.25,0.01,0.1));
+			move_throttle = MDMath.Lerp(move_throttle, throttle, clamp(((1000/mech_tonnage)/100)*0.12,0.01,0.1));
 			vel = (cos(LegAng)*(move_throttle*MoveSpeed),sin(LegAng)*(move_throttle*MoveSpeed),vel.z);
 		}
+		
 		// Speed decay when engine removed.
 		if(!inv_context.engine)
 		{

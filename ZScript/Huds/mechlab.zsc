@@ -252,6 +252,7 @@ class Mechlab_Menu : GenericMenu
 			if(!page_init)
 			{
 				clearSelected();
+				if(hardpoint < 0) hardpoint = 1;
 				page_offs = 1;
 				invoffset = 0;
 				initRect(modebtn,490,740,240,45);
@@ -271,6 +272,7 @@ class Mechlab_Menu : GenericMenu
 			if(!page_init)
 			{
 				page_offs = -1;
+				if(hardpoint < 0) hardpoint = 1;
 				initRect(modebtn,490,620,238,35);
 				page_init = true;
 			}

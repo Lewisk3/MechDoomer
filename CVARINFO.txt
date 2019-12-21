@@ -1,5 +1,6 @@
 user bool mwd_throttledecay = false;
 user bool mwd_nohud = false;
+user bool mwd_autoreload = false;
 user bool mwd_hudwarn = true;
 user bool mwd_viewport_target = true;
 user bool mwd_relativelegspeed = true;

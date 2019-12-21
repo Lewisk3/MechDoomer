@@ -2,16 +2,20 @@
 
 class Mechbase_Actor : Actor
 {
+	actor hitactor;
 	double heatgen;
 	vector3 spawnpos;
 	double basedamage;
+	int truedamage;
 	MechWarrior mechplayer;
 	
 	Property Heat : heatgen;
+	Property ConstDamage: truedamage;
 	
 	void BaseInit()
 	{
 		spawnpos = pos;
+		// SetDamage(truedamage);
 		_SetBaseDamage();
 	}
 	void Converge(float spd=0.30)
@@ -31,8 +35,20 @@ class Mechbase_Actor : Actor
 			SetOrigin(npos,true);
 		}
 	}
+	
+	override bool CanCollideWith(Actor other, bool passive)
+	{
+		hitactor = other;
+		return super.CanCollideWith(other, passive);
+	}
+	
 	override void Tick()
 	{
+		if(truedamage && hitactor && hitactor.bSHOOTABLE)
+		{
+			if(hitactor != mechplayer) hitactor.DamageMobJ(mechplayer,self,truedamage,damagetype,0,mechplayer.angle);
+			hitactor = NULL;
+		}
 		if(mechplayer && CVar.GetCVar("mwd_weaponsconverge",mechplayer.player).getBool())
 			Converge();
 			
@@ -50,9 +66,13 @@ class Mechbase_Actor : Actor
 	{
 		if(mechplayer) mechplayer.HeatLevel += amt*MWHEAT_MOD;
 	}
+	void SetConstDamage(int newdamage)
+	{
+		truedamage = newdamage;
+	}
 	void _SetBaseDamage()
 	{
-		basedamage = damage;
+		basedamage = !truedamage ? GetMissileDamage(0,1) : truedamage;
 	}
 	void setHeat(double val)
 	{
@@ -336,7 +356,7 @@ class MechMissile : Mechbase_Actor
 		if(minimum_range > 0) 
 		{
 			inrange = false;
-			SetDamage(0);
+			SetConstDamage(0);
 			realdamage = 0; 
 		}
 		else
@@ -353,13 +373,13 @@ class MechMissile : Mechbase_Actor
 		{
 			realdamage = basedamage * (1.0-(distance/(maximum_range*4.5)));
 			realdamage = clamp(realdamage,0,basedamage);
-			setDamage(floor(realdamage));
+			SetConstDamage(floor(realdamage));
 			if(distance > maximum_range*4.5) inrange = false;
 		}
 		else if( distance >= (minimum_range*4.5) && distance < (maximum_range*4.5) )
 		{
 			inrange = true; 
-			setDamage(basedamage); 
+			SetConstDamage(basedamage); 
 		}
 		super.tick();
 	}
@@ -445,7 +465,7 @@ class Laser : Mechbase_Actor
 		if(!basedamage) BaseInit();
 		realdamage = basedamage * (1.0-(getTravelDistance()/(range*6)));
 		realdamage = clamp(realdamage,0,basedamage);
-		setDamage(floor(realdamage));
+		SetConstDamage(floor(realdamage));
 		super.tick();
 	}
 
@@ -674,11 +694,11 @@ class PPCBall : Mechbase_Actor
 			if( getTravelDistance() >= (minimum_range*3) ) 
 			{
 				A_SetRenderStyle(1.0,STYLE_NORMAL);
-				setDamage(basedamage);
+				SetConstDamage(basedamage);
 			}
 			else
 			{
-				setDamage(0);
+				SetConstDamage(0);
 			}
 		}
 		else 
