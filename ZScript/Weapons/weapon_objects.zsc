@@ -103,7 +103,7 @@ class SRM : MechMissile
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_SRM*MWGAMEPLAY_WEAPDMGSCALE));
-		MechMissile.MaximumRange 260;
+		Mechbase_Actor.MaximumRange 260;
 		MechMissile.Homming false;
 		Mechbase_Actor.Heat MWHEAT_SRM;
 	}
@@ -121,8 +121,8 @@ class LRM : MechMissile
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_LRM*MWGAMEPLAY_WEAPDMGSCALE));
-		MechMissile.MinimumRange 100; // 180 is a bit too high for Doom scale.
-		MechMissile.MaximumRange 1000;
+		Mechbase_Actor.MinimumRange 100; // 180 is a bit too high for Doom scale.
+		Mechbase_Actor.MaximumRange 1000;
 		MechMissile.Homming true;
 		Mechbase_Actor.Heat MWHEAT_LRM;
 	}
@@ -138,7 +138,7 @@ class Laser_SML : Laser
 		Decal "RedLaserDecal";
 		Laser.FXColor "Red";
 		StencilColor "f9 16 16";
-		Laser.MaxRange 200;
+		Mechbase_Actor.MaximumRange 200;
 		Laser.FireSound "Lasers/Small";
 		Mechbase_Actor.Heat MWHEAT_SLASER;
 	}
@@ -150,7 +150,7 @@ class Laser_ERSML : Laser_SML
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_ERSLAS*MWGAMEPLAY_WEAPDMGSCALE));
 		Laser.FireSound "ERLasers/Small";
 		Mechbase_Actor.Heat MWHEAT_ERSLAS;
-		Laser.MaxRange 370;
+		Mechbase_Actor.MaximumRange 370;
 	}
 }
 class Laser_SMLP : Laser_SML
@@ -171,7 +171,7 @@ class Laser_MED : Laser
 		Decal "GreenLaserDecal";
 		Laser.FXColor "Green";
 		StencilColor "Green";
-		Laser.MaxRange 540;
+		Mechbase_Actor.MaximumRange 540;
 		Laser.FireSound "Lasers/Medium";
 		Mechbase_Actor.Heat MWHEAT_MLASER;
 	}
@@ -182,7 +182,7 @@ class Laser_ERMED : Laser_MED
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_ERMLAS*MWGAMEPLAY_WEAPDMGSCALE));
 		Laser.FireSound "ERLasers/Medium";
-		Laser.MaxRange 750;
+		Mechbase_Actor.MaximumRange 750;
 		Mechbase_Actor.Heat MWHEAT_ERMLAS;
 	}
 }
@@ -191,7 +191,7 @@ class Laser_MEDP : Laser_MED
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_MPLAS*MWGAMEPLAY_WEAPDMGSCALE));
-		Laser.MaxRange 440;
+		Mechbase_Actor.MaximumRange 440;
 		Laser.FireSound "PulseLasers/Medium";
 		Mechbase_Actor.Heat MWHEAT_MPLAS;
 	}
@@ -206,7 +206,7 @@ class Laser_LRG : Laser
 		StencilColor "Blue";
 		Alpha 1.0;
 		Laser.FXColor "Blue";
-		Laser.MaxRange 900;
+		Mechbase_Actor.MaximumRange 900;
 		Laser.FireSound "Lasers/Large";
 		Mechbase_Actor.Heat MWHEAT_LLASER;
 	}
@@ -218,7 +218,7 @@ class Laser_ERLRG : Laser_LRG
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_ERLLAS*MWGAMEPLAY_WEAPDMGSCALE));
 		Laser.FireSound "ERLasers/Large";
 		Mechbase_Actor.Heat MWHEAT_ERLLAS;
-		Laser.MaxRange 1350;
+		Mechbase_Actor.MaximumRange 1350;
 	}
 }
 class Laser_LRGP : Laser_LRG
@@ -227,7 +227,7 @@ class Laser_LRGP : Laser_LRG
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_LPLAS*MWGAMEPLAY_WEAPDMGSCALE));
 		Laser.FireSound "PulseLasers/Large";
-		Laser.MaxRange 700;
+		Mechbase_Actor.MaximumRange 700;
 		Mechbase_Actor.Heat MWHEAT_LPLAS;
 	}
 }
@@ -248,7 +248,7 @@ class PPCProjectile : PPCBall
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_PPC*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_PPC;
-		PPCBall.MinimumRange 90;
+		Mechbase_Actor.MinimumRange 90;
 	}
 }
 class ERPPCProjectile : PPCBall 

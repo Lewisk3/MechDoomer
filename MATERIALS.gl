@@ -1,50 +1,92 @@
 
-// Some PBR stuff for the mech Cockpits.
-material texture models/Cockpits/Timberwolf/tw_head.png {
-	normal models/metal_normal.png
-	specular models/metal.png
+// Some PBR stuff for cockpits/models.
+material texture models/Mechs/c_dark.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
 	specularlevel 0.3
 	glossiness 10
 }
-material texture models/Cockpits/Stormcrow/sc_head.png {
-	normal models/metal_normal.png
-	specular models/metal.png
+material texture models/Mechs/Timberwolf/tw_head.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
 	specularlevel 0.3
 	glossiness 10
 }
-material texture models/Cockpits/Jenner/jn_head.png {
-	normal models/metal_normal.png
-	specular models/metal.png
+material texture models/Mechs/Timberwolf/tw_full.png { 
+	shader "shaders/simsun.fp" 
+}
+material texture models/Mechs/Stormcrow/sc_head.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
 	specularlevel 0.3
 	glossiness 10
 }
-material texture models/Cockpits/Atlas/at_head.png {
-	normal models/metal_normal.png
-	specular models/metal.png
+material texture models/Mechs/Stormcrow/sc_full.png { 
+	shader "shaders/simsun.fp" 
+}
+material texture models/Mechs/Jenner/jn_head.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
 	specularlevel 0.3
 	glossiness 10
 }
-material texture models/Cockpits/Commando/cm_head.png {
-	normal models/metal_normal.png
-	specular models/metal.png
+material texture models/Mechs/Jenner/jn_full.png { 
+	shader "shaders/simsun.fp" 
+}
+material texture models/Mechs/Atlas/at_head.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
 	specularlevel 0.3
 	glossiness 10
 }
-material texture models/Cockpits/BattleArmor/ba_head.png {
-	normal models/metal_normal.png
-	specular models/metal.png
+material texture models/Mechs/Atlas/at_full.png { 
+	shader "shaders/simsun.fp" 
+}
+material texture models/Mechs/Commando/cm_head.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
 	specularlevel 0.3
 	glossiness 10
 }
-material texture models/Cockpits/Urbanmech/ur_head.png {
-	normal models/metal_normal.png
-	specular models/metal.png
+material texture models/Mechs/Commando/cm_full.png { 
+	shader "shaders/simsun.fp" 
+}
+material texture models/Mechs/BattleArmor/ba_head.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
 	specularlevel 0.3
 	glossiness 10
 }
-material texture models/Cockpits/Nova/nv_head.png {
-	normal models/metal_normal.png
-	specular models/metal.png
+material texture models/Mechs/BattleArmor/ba_full.png { 
+	shader "shaders/simsun.fp" 
+}
+material texture models/Mechs/Urbanmech/ur_head.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
 	specularlevel 0.3
 	glossiness 10
+}
+material texture models/Mechs/Urbanmech/ur_full.png { 
+	shader "shaders/simsun.fp" 
+}
+material texture models/Mechs/Nova/nv_head.png {
+	shader "shaders/simsun.fp"
+	normal models/Textures/metal_normal.png
+	specular models/Textures/metal.png
+	specularlevel 0.3
+	glossiness 10
+}
+material texture models/Mechs/Nova/nv_full.png { 
+	shader "shaders/simsun.fp" 
+}
+material texture models/Mechs/Tarantula/tr_full.png {
+	shader "shaders/simsun.fp"
 }

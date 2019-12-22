@@ -279,6 +279,7 @@ void drawLoadoutItemInfo()
 
 void drawMechlabInfo()
 {
+	H_DrawTexture(tMain, (942,807), 0, (0.9,0.7) );
 	ProcessLoadoutButtons();
 	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
 	String mechston = (mechplr.mech_tonnage .. "");

@@ -6,7 +6,8 @@ addplayerclass "Commando"    // 3D
 addplayerclass "Atlas" 	     // 3D
 addplayerclass "Jenner" 	 // 3D
 addplayerclass "Urbanmech"	 // 3D
-addplayerclass "Nova" 	     // 2D
+addplayerclass "Nova" 	     // 3D
+addplayerclass "Tarantula"	 // 3D
 
 
 

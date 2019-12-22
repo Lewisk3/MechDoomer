@@ -2,10 +2,10 @@
 Model DEBRIS_3D
 {
 	Path "models"
-	Model 0 "debris.md3"
+	Model 0 "Weapons/debris.md3"
 	Scale -0.6 0.6 0.6
 	USEACTORPITCH
-	SurfaceSkin 0 0  "metal_dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/metal_dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex DEBR A 0 0
@@ -13,7 +13,7 @@ Model DEBRIS_3D
 
 Model MechCamera
 {
-	Path "models/Cockpits/Timberwolf"
+	Path "models/Mechs/Timberwolf"
 	Model 0 "tw_torso.md3"
 	Model 1 "tw_hips.md3"
 	Skin 0 "tw_full_wolf.png"
@@ -30,11 +30,11 @@ Model MechCamera
 Model Mechbay
 {
 	Path "models"
-	Model 0 "mechbay_base.md3"
+	Model 0 "Misc/mechbay_base.md3"
 	Scale 4.4 5.2 4.4
 	USEACTORPITCH
-	SurfaceSkin 0 0  "metal.png" // Base
-	SurfaceSkin 0 1  "Cockpits/c_glass.png"  // Floor 2
+	SurfaceSkin 0 0  "Textures/metal.png" // Base
+	SurfaceSkin 0 1  "Mechs/c_glass.png"  // Floor 2
 	AngleOffset 90
 	
    FrameIndex MBAY A 0 0
@@ -43,17 +43,17 @@ Model Mechbay
 Model Mechbay_3D
 {	
 	Path "models"
-	Model 0 "mechbay.md3"
+	Model 0 "Misc/mechbay.md3"
 	Scale 5.4 6.4 7.4
 	USEACTORPITCH
-	SurfaceSkin 0 0  "metal.png" // Base
-	SurfaceSkin 0 1  "metal_dark.png"  // Floor 2
-	SurfaceSkin 0 2  "Cockpits/c_glass.png"
-	SurfaceSkin 0 3  "metal_dark.png" // Right handles
-	SurfaceSkin 0 4  "metal_dark.png" // Left handles
-	SurfaceSkin 0 5  "metal_dark.png" // Back handles
-	SurfaceSkin 0 6  "metal.png" // Roof
-	SurfaceSkin 0 7  "Cockpits/c_glass.png" // Roof light
+	SurfaceSkin 0 0  "Textures/metal.png" // Base
+	SurfaceSkin 0 1  "Textures/metal_dark.png"  // Floor 2
+	SurfaceSkin 0 2  "Mechs/c_glass.png"
+	SurfaceSkin 0 3  "Textures/metal_dark.png" // Right handles
+	SurfaceSkin 0 4  "Textures/metal_dark.png" // Left handles
+	SurfaceSkin 0 5  "Textures/metal_dark.png" // Back handles
+	SurfaceSkin 0 6  "Textures/metal.png" // Roof
+	SurfaceSkin 0 7  "Mechs/c_glass.png" // Roof light
 	AngleOffset 90
 	
    FrameIndex MBAY A 0 0
@@ -62,10 +62,10 @@ Model Mechbay_3D
 Model Door_3D
 {
 	Path "models"
-	Model 0 "metaldoor.md3"
+	Model 0 "Misc/metaldoor.md3"
 	Scale 8.5 6.6 6.6
 	USEACTORPITCH
-	SurfaceSkin 0 0  "metal_door.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/metal_door.png" // Full mesh
 	AngleOffset -45
 	
    FrameIndex DOOR A 0 0
@@ -74,10 +74,10 @@ Model Door_3D
 Model Gauss
 {
 	Path "models"
-	Model 0 "gauss_ball.md3"
+	Model 0 "Weapons/gauss_ball.md3"
 	Scale 0.6 0.6 0.6
 	USEACTORPITCH
-	SurfaceSkin 0 0  "gauss.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/gauss.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex GAUS A 0 0
@@ -86,10 +86,10 @@ Model Gauss
 Model GaussDisp
 {	
 	Path "models"
-	Model 0 "gauss_ball.md3"
+	Model 0 "Weapons/gauss_ball.md3"
 	Scale 1.4 1.4 1.4
 	USEACTORPITCH
-	SurfaceSkin 0 0  "gauss.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/gauss.png" // Full mesh
 	ZOffset 8
 	AngleOffset 90
 	
@@ -99,10 +99,10 @@ Model GaussDisp
 Model AC_2
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 1.2 1.2 1.2
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -111,11 +111,10 @@ Model AC_2
 Model MGunBullet
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
-	Scale 0.3 0.3 0.3
+	Model 0 "Weapons/bullet.md3"
+	Scale -0.2 0.2 0.2
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
-	AngleOffset 90
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	
    FrameIndex AUTO A 0 0
 } 
@@ -123,10 +122,10 @@ Model MGunBullet
 Model UAC_2
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 0.6 0.6 0.6
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -135,10 +134,10 @@ Model UAC_2
 Model AC_5
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 1.8 1.8 1.8
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -146,10 +145,10 @@ Model AC_5
 Model UAC_5
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 1.8 1.8 1.8
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -158,10 +157,10 @@ Model UAC_5
 Model AC_10
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 2.2 2.2 2.2
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -169,10 +168,10 @@ Model AC_10
 Model UAC_10
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 2.2 2.2 2.2
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -181,10 +180,10 @@ Model UAC_10
 Model AC_20
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 2.6 2.6 2.6
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -192,10 +191,10 @@ Model AC_20
 Model UAC_20
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 2.6 2.6 2.6
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -204,26 +203,24 @@ Model UAC_20
 Model SRM
 {
 	Path "models"
-	Model 0 "missile.md3"
-	Scale -1.0 2.5 2.5
+	Model 0 "Weapons/missile_srm.md3"
+	Scale 0.3 0.3 0.3
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Wings
-	SurfaceSkin 0 1  "metal.png" // Body
-	SurfaceSkin 0 2  "rocketthrust.png" // Thrustor
-	AngleOffset 90
+	SurfaceSkin 0 0  "Textures/missile.png" // Wings
 	
    FrameIndex MISS A 0 0
+   FrameIndex MISS B 0 1
 }
 
 Model MissileDebris
 {
 	Path "models"
-	Model 0 "missile.md3"
+	Model 0 "Weapons/missile.md3"
 	Scale -1.0 2.5 2.5
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Wings
-	SurfaceSkin 0 1  "metal.png" // Body
-	SurfaceSkin 0 2  "rocketthrust.png" // Thrustor
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Wings
+	SurfaceSkin 0 1  "Textures/metal.png" // Body
+	SurfaceSkin 0 2  "Textures/rocketthrust.png" // Thrustor
 	AngleOffset 90
 	
    FrameIndex MISS A 0 0
@@ -232,27 +229,22 @@ Model MissileDebris
 Model SSRM
 {
 	Path "models"
-	Model 0 "missile.md3"
-	Scale -1.0 2.5 2.5
+	Model 0 "Weapons/missile_srm.md3"
+	Scale 0.3 0.3 0.3
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Wings
-	SurfaceSkin 0 1  "metal.png" // Body
-	SurfaceSkin 0 2  "rocketthrust.png" // Thrustor
-	AngleOffset 90
+	SurfaceSkin 0 0  "Textures/missile.png" // Wings
 	
    FrameIndex MISS A 0 0
+   FrameIndex MISS B 0 1
 }
 
 Model AntiMissile
 {
 	Path "models"
-	Model 0 "missile.md3"
-	Scale -3.0 2.0 2.0
+	Model 0 "Weapons/missile_srm.md3"
+	Scale 0.2 0.1 0.1
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Wings
-	SurfaceSkin 0 1  "metal.png" // Body
-	SurfaceSkin 0 2  "rocketthrust.png" // Thrustor
-	AngleOffset 90
+	SurfaceSkin 0 0  "Textures/missile.png" // Wings
 	
    FrameIndex AMSL A 0 0
 }
@@ -260,12 +252,12 @@ Model AntiMissile
 Model MissileAmmoDisp
 {
 	Path "models"
-	Model 0 "missile.md3"
+	Model 0 "Weapons/missile.md3"
 	Scale -4.0 3.5 3.5
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Wings
-	SurfaceSkin 0 1  "metal.png" // Body
-	SurfaceSkin 0 2  "rocketthrust.png" // Thrustor
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Wings
+	SurfaceSkin 0 1  "Textures/metal.png" // Body
+	SurfaceSkin 0 2  "Textures/rocketthrust.png" // Thrustor
 	AngleOffset 90
 	RollOffset 90
 	ZOffset 20;
@@ -274,24 +266,22 @@ Model MissileAmmoDisp
 }
 
 Model LRM
-{
+{	
 	Path "models"
-	Model 0 "missile.md3"
-	Scale -3.0 2.3 2.3
+	Model 0 "Weapons/missile_lrm.md3"
+	Scale 0.5 0.5 0.5
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Wings
-	SurfaceSkin 0 1  "metal.png" // Body
-	SurfaceSkin 0 2  "rocketthrust.png" // Thrustor
-	AngleOffset 90
+	SurfaceSkin 0 0  "Textures/missile.png" // Wings
 	
    FrameIndex MISS A 0 0
+   FrameIndex MISS B 0 1
 }
 
 Model EnergyWeaponDisp
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "greenlaser.png"
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/greenlaser.png"
 	Scale -4.0 3.0 3.0
 	USEACTORPITCH
 	AngleOffset 90
@@ -303,10 +293,10 @@ Model EnergyWeaponDisp
 Model ACWeaponDisp
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 3.0 3.0 3.0
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	ZOffset 30
 	
@@ -316,8 +306,8 @@ Model ACWeaponDisp
 Model PlasmaWeaponDisp
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "bluelaser.png"
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/bluelaser.png"
 	Scale -8.2 3.2 3.2
 	USEACTORPITCH
 	AngleOffset 90
@@ -330,13 +320,10 @@ Model PlasmaWeaponDisp
 Model SRMWeaponDisp
 {
 	Path "models"
-	Model 0 "missile.md3"
-	Scale -3.0 5.0 5.0
+	Model 0 "Weapons/missile_srm.md3"
+	Scale 0.3 0.3 0.3
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Wings
-	SurfaceSkin 0 1  "metal.png" // Body
-	SurfaceSkin 0 2  "rocketthrust.png" // Thrustor
-	AngleOffset 90
+	SurfaceSkin 0 0  "Textures/missile.png" // Wings
 	ZOffset 30
 	
    FrameIndex MISS A 0 0
@@ -345,10 +332,10 @@ Model SRMWeaponDisp
 Model ACAmmoDisp
 {
 	Path "models"
-	Model 0 "autocannon_round.md3"
+	Model 0 "Weapons/autocannon_round.md3"
 	Scale 3.0 3.0 3.0
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
 	
    FrameIndex AUTO A 0 0
@@ -357,13 +344,10 @@ Model ACAmmoDisp
 Model LRMWeaponDisp
 {
 	Path "models"
-	Model 0 "missile.md3"
-	Scale -4.0 3.5 3.5
+	Model 0 "Weapons/missile_lrm.md3"
+	Scale 0.5 0.5 0.5
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Metal_Dark.png" // Wings
-	SurfaceSkin 0 1  "metal.png" // Body
-	SurfaceSkin 0 2  "rocketthrust.png" // Thrustor
-	AngleOffset 90
+	SurfaceSkin 0 0  "Textures/missile.png" // Wings
 	ZOffset 30
 	
    FrameIndex MISS A 0 0
@@ -372,10 +356,10 @@ Model LRMWeaponDisp
 Model GaussWeaponDisp
 {
 	Path "models"
-	Model 0 "gauss_ball.md3"
+	Model 0 "Weapons/gauss_ball.md3"
 	Scale 0.6 0.6 0.6
 	USEACTORPITCH
-	SurfaceSkin 0 0  "gauss.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/gauss.png" // Full mesh
 	AngleOffset 90
 	ZOffset 30
 	
@@ -386,28 +370,28 @@ Model GaussWeaponDisp
 Model MassiveWeaponDisp
 {
 	Path "models"
-	Model 0 "timberwolf.md3"
+	Model 0 "Mechs/Timberwolf/timberwolf.md3"
 	//Model 0 "Cockpits/tw_head.md3"
 	//SurfaceSkin 0 0  "tw_head.png" // Main
 	//Skin 0 "Stormcrow.png"
-	SurfaceSkin 0 0  "Metal_Dark.png" // RL_LRToe
-	SurfaceSkin 0 1  "weapfront.png" // ???
-	SurfaceSkin 0 2  "Cockpits/c_glass.png" // Head
-	SurfaceSkin 0 3  "Metal.png" // RL_Lower
-	SurfaceSkin 0 4  "Metal_Dark.png" // RL_FTow
-	SurfaceSkin 0 5  "Metal.png" // RL_Upper
-	SurfaceSkin 0 6  "Metal.png" // LL_Upper
-	SurfaceSkin 0 7  "Metal_Dark.png" // LL_LRToe
-	SurfaceSkin 0 8  "Metal_Dark.png" 	 // LL_FToe
-	SurfaceSkin 0 9  "Metal.png" // LL_Lower
-	SurfaceSkin 0 10 "Metal.png" // RA_Upper
-	SurfaceSkin 0 11 "Metal.png" // LA_Upper
-	SurfaceSkin 0 12 "Metal_Dark.png" 	// MB_Lower
-	SurfaceSkin 0 13 "Metal.png" // MB_Upper
-	SurfaceSkin 0 14 "Metal_Dark.png" // WP_Arms
-	SurfaceSkin 0 15 "Missiles.png" // WP_Body
-	SurfaceSkin 0 16 "wolf_metal.png" // WP_Side
-	SurfaceSkin 0 17 "weapfront.png" // WP_Body
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // RL_LRToe
+	SurfaceSkin 0 1  "Textures/weapfront.png" // ???
+	SurfaceSkin 0 2  "Mechs/c_glass.png" // Head
+	SurfaceSkin 0 3  "Textures/Metal.png" // RL_Lower
+	SurfaceSkin 0 4  "Textures/Metal_Dark.png" // RL_FTow
+	SurfaceSkin 0 5  "Textures/Metal.png" // RL_Upper
+	SurfaceSkin 0 6  "Textures/Metal.png" // LL_Upper
+	SurfaceSkin 0 7  "Textures/Metal_Dark.png" // LL_LRToe
+	SurfaceSkin 0 8  "Textures/Metal_Dark.png" 	 // LL_FToe
+	SurfaceSkin 0 9  "Textures/Metal.png" // LL_Lower
+	SurfaceSkin 0 10 "Textures/Metal.png" // RA_Upper
+	SurfaceSkin 0 11 "Textures/Metal.png" // LA_Upper
+	SurfaceSkin 0 12 "Textures/Metal_Dark.png" 	// MB_Lower
+	SurfaceSkin 0 13 "Textures/Metal.png" // MB_Upper
+	SurfaceSkin 0 14 "Textures/Metal_Dark.png" // WP_Arms
+	SurfaceSkin 0 15 "Textures/Missiles.png" // WP_Body
+	SurfaceSkin 0 16 "Textures/wolf_metal.png" // WP_Side
+	SurfaceSkin 0 17 "Textures/weapfront.png" // WP_Body
 	Scale 3.0 3.0 3.0
 	ZOffset 30
 	AngleOffset 90
@@ -420,33 +404,30 @@ Model MassiveWeaponDisp
 Model Laser_MED
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "greenlaser.png"
-	Scale -8.0 1.0 1.0
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/greenlaser.png"
+	Scale 1.5 0.6 0.6
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
 Model Laser_ERMED
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "greenlaser.png"
-	Scale -9.0 1.0 1.0
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/greenlaser.png"
+	Scale 1.5 0.6 0.6
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
 Model Laser_MEDP
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "greenlaser.png"
-	Scale -8.0 1.0 1.0
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/greenlaser.png"
+	Scale 1.5 0.6 0.6
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
@@ -454,33 +435,30 @@ Model Laser_MEDP
 Model Laser_LRG
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "bluelaser.png"
-	Scale -12.2 1.2 1.2
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/bluelaser.png"
+	Scale 2.0 0.7 0.7
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
 Model Laser_ERLRG
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "bluelaser.png"
-	Scale -12.2 1.2 1.2
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/bluelaser.png"
+	Scale 2.0 0.7 0.7
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
 Model Laser_LRGP
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "bluelaser.png"
-	Scale -12.2 1.2 1.2
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/bluelaser.png"
+	Scale 2.0 0.7 0.7
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
@@ -488,33 +466,30 @@ Model Laser_LRGP
 Model Laser_SML
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "redlaser.png"
-	Scale -6.0 1.0 1.0
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/redlaser.png"
+	Scale 1.0 0.2 0.2
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
 Model Laser_ERSML
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "redlaser.png"
-	Scale -6.0 1.0 1.0
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/redlaser.png"
+	Scale 1.0 0.2 0.2
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
 Model Laser_SMLP
 {
 	Path "models"
-	Model 0 "laser.md3"
-	Skin 0 "redlaser.png"
-	Scale -6.0 1.0 1.0
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/redlaser.png"
+	Scale 1.0 0.2 0.2
 	USEACTORPITCH
-	AngleOffset 90
 	
    FrameIndex LASR A 0 0
 }
@@ -522,10 +497,10 @@ Model Laser_SMLP
 Model SuperCoolant_Pickup
 {
 	Path "models"
-	Model 0 "heatsink_coolant.md3"
+	Model 0 "Misc/heatsink_coolant.md3"
 	Scale 3.0 3.0 3.0
-	SurfaceSkin 0 0  "heatsink_tex.png" // Base
-	SurfaceSkin 0 1  "metal.png" // Top
+	SurfaceSkin 0 0  "Textures/heatsink_tex.png" // Base
+	SurfaceSkin 0 1  "Textures/metal.png" // Top
 	AngleOffset 90
 
    FrameIndex HSNK A 0 0
@@ -535,10 +510,10 @@ Model SuperCoolant_Pickup
 Model Heatsink_Pickup
 {
 	Path "models"
-	Model 0 "heatsink.md3"
+	Model 0 "Weapons/heatsink.md3"
 	Scale 3.0 3.0 3.0
 	//SurfaceSkin 0 0  "Cockpit_Glass.png" // Base
-	SurfaceSkin 0 1  "metal.png" // Top
+	SurfaceSkin 0 1  "Textures/metal.png" // Top
 	AngleOffset 90
 
    FrameIndex HSNK A 0 0
@@ -547,39 +522,36 @@ Model Heatsink_Pickup
 Model BigHeatsink_Pickup
 {
 	Path "models"
-	Model 0 "heatsink.md3"
+	Model 0 "Weapons/heatsink.md3"
 	Scale 3.0 6.0 3.0
 	//SurfaceSkin 0 0  "Cockpit_Glass.png" // Base
-	SurfaceSkin 0 1  "metal.png" // Top
+	SurfaceSkin 0 1  "Textures/metal.png" // Top
 	AngleOffset 90
 
    FrameIndex HSNK A 0 0
 }
 
 
-
-
-
 // Base 3D mechs
 Model Jenner_3D
 {
 	Path "models"
-	Model 0 "jenner.md3"
+	Model 0 "Mechs/Jenner/jenner.md3"
 	//Skin 0 "Stormcrow.png"
 	Scale 28.5 28.5 28.5
-	SurfaceSkin 0 0  "Cockpits/c_glass.png" // Window
-	SurfaceSkin 0 1  "Metal.png" // Left upper
-	SurfaceSkin 0 2  "metal_dark.png" // Left lower
-	SurfaceSkin 0 3  "metal_dark.png" // Left toe
-	SurfaceSkin 0 4  "Metal.png" // Right upper
-	SurfaceSkin 0 5  "metal_dark.png" // Right lower
-	SurfaceSkin 0 6  "metal_dark.png" // Right leg
-	SurfaceSkin 0 7  "Metal.png" // Left arm
-	SurfaceSkin 0 8  "Metal.png" // Right Arm
-	SurfaceSkin 0 9  "Metal.png"  // Body
-	SurfaceSkin 0 10 "Missiles.png" // Body upper
-	SurfaceSkin 0 11 "Missiles.png" // Arm weapons
-	SurfaceSkin 0 12 "wolf_metal.png"  // Arm logos
+	SurfaceSkin 0 0  "Mechs/c_glass.png" // Window
+	SurfaceSkin 0 1  "Textures/Metal.png" // Left upper
+	SurfaceSkin 0 2  "Textures/metal_dark.png" // Left lower
+	SurfaceSkin 0 3  "Textures/metal_dark.png" // Left toe
+	SurfaceSkin 0 4  "Textures/Metal.png" // Right upper
+	SurfaceSkin 0 5  "Textures/metal_dark.png" // Right lower
+	SurfaceSkin 0 6  "Textures/metal_dark.png" // Right leg
+	SurfaceSkin 0 7  "Textures/Metal.png" // Left arm
+	SurfaceSkin 0 8  "Textures/Metal.png" // Right Arm
+	SurfaceSkin 0 9  "Textures/Metal.png"  // Body
+	SurfaceSkin 0 10 "Textures/Missiles.png" // Body upper
+	SurfaceSkin 0 11 "Textures/Missiles.png" // Arm weapons
+	SurfaceSkin 0 12 "Textures/wolf_metal.png"  // Arm logos
 	ZOffset 0
 	AngleOffset 180
 	
@@ -588,23 +560,23 @@ Model Jenner_3D
 Model Atlas_3D
 {
 	Path "models"
-	Model 0 "atlas.md3"
+	Model 0 "Mechs/Atlas/atlas.md3"
 	Scale 14.0 14.0 14.0
-	SurfaceSkin 0 0  "Cockpits/c_glass.png" // Window
-	SurfaceSkin 0 1  "metal.png" // Left upper
-	SurfaceSkin 0 2  "metal.png" // Left lower
-	SurfaceSkin 0 3  "metal.png" // Left toe
-	SurfaceSkin 0 4  "metal.png" // Right upper
-	SurfaceSkin 0 5  "metal.png" // Right lower
-	SurfaceSkin 0 6  "metal.png" // Right leg
-	SurfaceSkin 0 7  "metal.png" // Left arm
-	SurfaceSkin 0 8  "metal.png" // Right Arm
-	SurfaceSkin 0 9  "metal_dark.png"  // Hip
-	SurfaceSkin 0 10 "metal.png" // Body upper
-	SurfaceSkin 0 11 "Missiles.png" // Torso weapons
-	SurfaceSkin 0 12 "metal_dark.png"  // Hands
-	SurfaceSkin 0 13 "wolf_metal.png"  // Shoulders
-	SurfaceSkin 0 14 "wolf_metal.png"  // Knees
+	SurfaceSkin 0 0  "Mechs/c_glass.png" // Window
+	SurfaceSkin 0 1  "Textures/metal.png" // Left upper
+	SurfaceSkin 0 2  "Textures/metal.png" // Left lower
+	SurfaceSkin 0 3  "Textures/metal.png" // Left toe
+	SurfaceSkin 0 4  "Textures/metal.png" // Right upper
+	SurfaceSkin 0 5  "Textures/metal.png" // Right lower
+	SurfaceSkin 0 6  "Textures/metal.png" // Right leg
+	SurfaceSkin 0 7  "Textures/metal.png" // Left arm
+	SurfaceSkin 0 8  "Textures/metal.png" // Right Arm
+	SurfaceSkin 0 9  "Textures/metal_dark.png"  // Hip
+	SurfaceSkin 0 10 "Textures/metal.png" // Body upper
+	SurfaceSkin 0 11 "Textures/Missiles.png" // Torso weapons
+	SurfaceSkin 0 12 "Textures/metal_dark.png"  // Hands
+	SurfaceSkin 0 13 "Textures/wolf_metal.png"  // Shoulders
+	SurfaceSkin 0 14 "Textures/wolf_metal.png"  // Knees
 	ZOffset 0
 	AngleOffset 90
 
@@ -613,26 +585,26 @@ Model Atlas_3D
 Model Timberwolf_3D
 {
 	Path "models"
-	Model 0 "timberwolf.md3"
+	Model 0 "Mechs/Timberwolf/timberwolf.md3"
 	//Skin 0 "Stormcrow.png"
-	SurfaceSkin 0 0  "Metal_Dark.png" // RL_LRToe
-	SurfaceSkin 0 1  "weapfront.png" // ???
-	SurfaceSkin 0 2  "Cockpits/c_glass.png" // Head
-	SurfaceSkin 0 3  "Metal.png" // RL_Lower
-	SurfaceSkin 0 4  "Metal_Dark.png" // RL_FTow
-	SurfaceSkin 0 5  "Metal.png" // RL_Upper
-	SurfaceSkin 0 6  "Metal.png" // LL_Upper
-	SurfaceSkin 0 7  "Metal_Dark.png" // LL_LRToe
-	SurfaceSkin 0 8  "Metal_Dark.png" 	 // LL_FToe
-	SurfaceSkin 0 9  "Metal.png" // LL_Lower
-	SurfaceSkin 0 10 "Metal.png" // RA_Upper
-	SurfaceSkin 0 11 "Metal.png" // LA_Upper
-	SurfaceSkin 0 12 "Metal_Dark.png" 	// MB_Lower
-	SurfaceSkin 0 13 "Metal.png" // MB_Upper
-	SurfaceSkin 0 14 "Metal_Dark.png" // WP_Arms
-	SurfaceSkin 0 15 "Missiles.png" // WP_Body
-	SurfaceSkin 0 16 "wolf_metal.png" // WP_Side
-	SurfaceSkin 0 17 "weapfront.png" // WP_Body
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // RL_LRToe
+	SurfaceSkin 0 1  "Textures/weapfront.png" // ???
+	SurfaceSkin 0 2  "Mechs/c_glass.png" // Head
+	SurfaceSkin 0 3  "Textures/Metal.png" // RL_Lower
+	SurfaceSkin 0 4  "Textures/Metal_Dark.png" // RL_FTow
+	SurfaceSkin 0 5  "Textures/Metal.png" // RL_Upper
+	SurfaceSkin 0 6  "Textures/Metal.png" // LL_Upper
+	SurfaceSkin 0 7  "Textures/Metal_Dark.png" // LL_LRToe
+	SurfaceSkin 0 8  "Textures/Metal_Dark.png" 	 // LL_FToe
+	SurfaceSkin 0 9  "Textures/Metal.png" // LL_Lower
+	SurfaceSkin 0 10 "Textures/Metal.png" // RA_Upper
+	SurfaceSkin 0 11 "Textures/Metal.png" // LA_Upper
+	SurfaceSkin 0 12 "Textures/Metal_Dark.png" 	// MB_Lower
+	SurfaceSkin 0 13 "Textures/Metal.png" // MB_Upper
+	SurfaceSkin 0 14 "Textures/Metal_Dark.png" // WP_Arms
+	SurfaceSkin 0 15 "Textures/Missiles.png" // WP_Body
+	SurfaceSkin 0 16 "Textures/wolf_metal.png" // WP_Side
+	SurfaceSkin 0 17 "Textures/weapfront.png" // WP_Body
 	Scale 15.0 15.0 15.0
 	
    FrameIndex MECH A 0 0
@@ -640,23 +612,23 @@ Model Timberwolf_3D
 Model Stormcrow_3D
 {
 	Path "models"
-	Model 0 "stormcrow.md3"
+	Model 0 "Mechs/Stormcrow/stormcrow.md3"
 	//Skin 0 "Stormcrow.png"
-	SurfaceSkin 0 0  "Cockpits/c_glass.png" // Window
-	SurfaceSkin 0 1  "Metal.png" 	     // Right Arm
-	SurfaceSkin 0 2  "Metal.png" 	     // Right UpperLeg
-	SurfaceSkin 0 3  "Metal.png" 		 // Right LowerLeg
-	SurfaceSkin 0 4  "Metal.png" 		 // Right Toe
-	SurfaceSkin 0 5  "Metal.png" 		 // Right Ankle
-	SurfaceSkin 0 6  "Metal.png" 		 // Left Ankle
-	SurfaceSkin 0 7  "Metal_Dark.png" 	 // Arm Weapons
-	SurfaceSkin 0 8  "Wolf_Metal.png" 	 // Body Upper
-	SurfaceSkin 0 9  "Metal.png"  		 // Body Upper
-	SurfaceSkin 0 10 "Metal.png" 		 // Left UpperLeg
-	SurfaceSkin 0 11 "Metal.png" 		 // Body Hips
-	SurfaceSkin 0 12 "Metal.png" 		 // Left LowerLeg
-	SurfaceSkin 0 13 "Metal.png" 		 // Body Base
-	SurfaceSkin 0 14 "Metal.png" 		 // Left Arm
+	SurfaceSkin 0 0  "Mechs/c_glass.png" // Window
+	SurfaceSkin 0 1  "Textures/Metal.png" 	     // Right Arm
+	SurfaceSkin 0 2  "Textures/Metal.png" 	     // Right UpperLeg
+	SurfaceSkin 0 3  "Textures/Metal.png" 		 // Right LowerLeg
+	SurfaceSkin 0 4  "Textures/Metal.png" 		 // Right Toe
+	SurfaceSkin 0 5  "Textures/Metal.png" 		 // Right Ankle
+	SurfaceSkin 0 6  "Textures/Metal.png" 		 // Left Ankle
+	SurfaceSkin 0 7  "Textures/Metal_Dark.png" 	 // Arm Weapons
+	SurfaceSkin 0 8  "Textures/Wolf_Metal.png" 	 // Body Upper
+	SurfaceSkin 0 9  "Textures/Metal.png"  		 // Body Upper
+	SurfaceSkin 0 10 "Textures/Metal.png" 		 // Left UpperLeg
+	SurfaceSkin 0 11 "Textures/Metal.png" 		 // Body Hips
+	SurfaceSkin 0 12 "Textures/Metal.png" 		 // Left LowerLeg
+	SurfaceSkin 0 13 "Textures/Metal.png" 		 // Body Base
+	SurfaceSkin 0 14 "Textures/Metal.png" 		 // Left Arm
 	Scale 15.0 15.0 15.0
 	ZOffset 50
 	AngleOffset 90

@@ -258,13 +258,12 @@ class Mechlab_Menu : GenericMenu
 				initRect(modebtn,490,740,240,45);
 				page_init = true;
 			}
-			H_DrawTexture(tMain, (942,807), 0, (0.9,0.7) );
-			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,815,160);
 			// H_DrawTexture(tHud_paperdoll,(675,770),0,(0.45,0.4));
 			maxpageitems = 28;
-			drawInventory(1278,162, invoffset, maxpageitems);
-			drawLoadoutBody(950,120,hardpoint);
 			drawMechlabInfo();
+			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,815,160);
+			drawLoadoutBody(950,120,hardpoint);
+			drawInventory(1278,162, invoffset, maxpageitems);
 		} 
 		// Armory mode
 		else if(hud_page == 1)

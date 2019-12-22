@@ -38,6 +38,7 @@ float MoveSpeed_Max;
 float throttle;
 float throttle_max;
 float move_throttle;
+float move_accel;
 float mech_jetsfuel;
 float LookVel;
 float LegVel;
@@ -150,7 +151,8 @@ void mech_movement()
 		// Move mech by a percentage of throttle.
 		if(!stepping) 
 		{
-			move_throttle = MDMath.Lerp(move_throttle, throttle, clamp(((1000/mech_tonnage)/100)*0.12,0.01,0.1));
+			float accel = ((1000/mech_tonnage)/100) * (0.12*move_accel);
+			move_throttle = MDMath.Lerp( move_throttle, throttle, clamp(accel,0.008,0.4) );
 			vel = (cos(LegAng)*(move_throttle*MoveSpeed),sin(LegAng)*(move_throttle*MoveSpeed),vel.z);
 		}
 		

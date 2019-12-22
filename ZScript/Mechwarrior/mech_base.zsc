@@ -77,6 +77,7 @@ class MechWarriorBase : DoomPlayer
 	// Chassis properties
 	Property heatEff  : baseHeatEfficiency;
 	Property LegSpeed : LegSpeed;
+	Property Acceleration : move_accel;
 	Property TwistRange : MaxYaw;
 	Property PitchRange : minPitch, maxPitch;
 	Property Weight : mech_tonnage;
@@ -121,5 +122,132 @@ class MechWarriorBase : DoomPlayer
 	{
 		if(!baseclass) return "???";
 		return GetDefaultByType(baseclass).getClassName();
+	}
+}
+
+// Mechs template
+class MechWarrior : MechWarriorBase
+{
+	Default
+	{
+		Speed 1.0;
+		Player.AttackZOffset 52;
+		Player.ForwardMove 0.7, 0.9;
+		Player.SideMove 1.0, 1.0;
+		Player.ViewBob 0;
+		Player.JumpZ 0;
+		Player.SoundClass "MechWarrior";
+		Player.DisplayName "";
+	
+		MechWarriorBase.CValue 1000000;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Innersphere;
+		MechWarriorBase.Engine "Engine_STD_300";
+		MechWarriorBase.SetCockpitHandler "CockpitHandler";
+		MechWarriorBase.heatEff 0.02;
+		MechWarriorBase.HudCockpit "CROW";
+		MechWarriorBase.HudMech "";
+		MechWarriorBase.LegSpeed 0.8;
+		MechWarriorBase.Acceleration 1.0;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.PitchRange 30,20;
+	}
+	// This may seem like a mistake, it's not.
+	// This somehow makes movement a WHOLE lot smoother, idek, it WAS a mistake at first.
+	override void tick()
+	{
+		if(!checkVoodoo()) 
+		{
+			mech_movement();
+			Bobbing();
+		}
+		super.tick();
+	}
+	
+	States
+	{
+	  Spawn:
+		TNT1 A -1;
+		Loop;
+	  See:
+		TNT1 ABCD 4;
+		Loop;
+	  Missile:
+		TNT1 E 12;
+		Goto Spawn;
+	  Melee:
+		TNT1 F 6 BRIGHT;
+		Goto Missile;
+	  Pain:
+		TNT1 G 4;
+		TNT1 G 4 A_Pain();
+		Goto Spawn;
+	  Death:
+	  Death1:
+		TNT1 H 10;
+		TNT1 I 10 A_Scream();
+		TNT1 J 10 A_NoBlocking();
+		TNT1 KLM 10;
+		TNT1 N -1;
+		Stop;
+	  XDeath:
+	  XDeath1:
+		TNT1 O 5;
+		TNT1 P 5 A_XScream();
+		TNT1 Q 5 A_NoBlocking();
+		TNT1 RSTUV 5;
+		TNT1 W -1;
+		Stop;
+	  AltSkinDeath:
+		TNT1 H 6;
+		TNT1 I 6 A_PlayerScream();
+		TNT1 JK 6;
+		TNT1 L 6 A_NoBlocking();
+		TNT1 MNO 6;
+		TNT1 P -1;
+		Stop;
+	  AltSkinXDeath:
+		TNT1 Q 5 A_PlayerScream();
+		TNT1 R 0 A_NoBlocking();
+		TNT1 R 5 A_SkullPop();
+		TNT1 STUVWX 5;
+		TNT1 Y -1;
+		Stop;
+	}
+}
+// 3D models (sample models)
+class Jenner_3D : Actor
+{
+	States
+	{
+		Spawn:
+			JENN A 1;
+		loop;
+	}
+}
+class Atlas_3D : Actor
+{
+	States
+	{
+		Spawn:
+			ATLS A 1;
+		loop;
+	}
+}
+class Stormcrow_3D : Actor
+{
+	States
+	{
+		Spawn:
+			MECH A 1;
+		loop;
+	}
+}
+class Timberwolf_3D : Actor
+{
+	States
+	{
+		Spawn:
+			MECH A 1;
+		loop;
 	}
 }

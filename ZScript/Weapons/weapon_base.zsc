@@ -8,9 +8,13 @@ class Mechbase_Actor : Actor
 	double basedamage;
 	int truedamage;
 	MechWarrior mechplayer;
+	float minimum_range;
+	float maximum_range;
 	
 	Property Heat : heatgen;
 	Property ConstDamage: truedamage;
+	Property MinimumRange : minimum_range;
+	Property MaximumRange : maximum_range;
 	
 	void BaseInit()
 	{
@@ -330,13 +334,9 @@ class Mechbase_Weapon : Inventory
 class MechMissile : Mechbase_Actor
 {
 	float realdamage;
-	float minimum_range;
-	float maximum_range;
 	bool homming;
 	bool inrange;
 	
-	Property MinimumRange : minimum_range;
-	Property MaximumRange : maximum_range;
 	Property Homming : homming;
 	
 	Default
@@ -385,19 +385,21 @@ class MechMissile : Mechbase_Actor
 			inrange = true; 
 			SetConstDamage(basedamage); 
 		}
+		
+		Spawn("MissileLight", Vec3Offset(cos(angle)*-10,sin(angle)*-10,0));
 		super.tick();
 	}
 	
 	  States
 	  {
 		  Spawn:
-			MISS A 1;
-			MISS A 3 adjustHeatLevel(heatgen);
+			MISS B 1;
+			MISS AB 1 adjustHeatLevel(heatgen);
 		  SpawnLoop:
-			MISS A 1 Bright A_JumpIfTargetInLOS("Seek");
+			MISS AB 1 Bright A_JumpIfTargetInLOS("Seek");
 			Loop;
 		  Seek:
-			MISS AAAA 1 Bright 
+			MISS ABAB 1 Bright 
 			{
 				if(homming && tracer) 
 				{
@@ -427,18 +429,30 @@ class MechMissile : Mechbase_Actor
 			Stop;
 	  }
 }
+class MissileLight : Actor
+{
+	Default
+	{
+		+NOINTERACTION;
+	}
+	States
+	{
+		Spawn:
+			TNT1 A 1;
+		stop;
+	}
+}
+
 
 // Lasers
 class Laser : Mechbase_Actor
 {
 	Sound lasersound;
 	Color gfx_color;
-	int range;
 	double realdamage;
 	
 	Property FireSound : lasersound;
 	Property FXColor : gfx_color;
-	Property MaxRange : range;
 	
 	Default
 	{
@@ -451,7 +465,6 @@ class Laser : Mechbase_Actor
 		+PUFFGETSOWNER
 		Laser.FireSound "";
 		Laser.FXColor "FF FF FF";
-		Laser.MaxRange 60;
 		Mechbase_Actor.Heat 1;
 		Speed 0.1;
 		//RenderStyle "Add";
@@ -467,7 +480,7 @@ class Laser : Mechbase_Actor
 	override void tick()
 	{
 		if(!basedamage) BaseInit();
-		realdamage = basedamage * (1.0-(getTravelDistance()/(range*6)));
+		realdamage = basedamage * (1.0-(getTravelDistance()/(maximum_range*6)));
 		realdamage = clamp(realdamage,0,basedamage);
 		SetConstDamage(floor(realdamage));
 		super.tick();
@@ -669,9 +682,6 @@ class PPCBall : Mechbase_Actor
 {
 	Sound firesound;
 	Property FireSound : firesound;
-	int minimum_range;
-
-	Property MinimumRange : minimum_range;
 	
 	Default
 	{
@@ -879,7 +889,7 @@ class MechBullet : Mechbase_Actor
 	States
 	{
 		Spawn:
-			AUTO A 12;
+			AUTO A 6;
 		stop;
 		
 		Death:

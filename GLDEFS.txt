@@ -5,10 +5,12 @@ pointlight GreenPointLight
     color 0.0 1.0 0.0
     size 45
 }
-pointlight YellowLight
+pulselight YellowLight
 {
 	color 0.96 0.92 0
-	size 30
+	size 30    
+	secondarySize 16
+    interval 0.5
 }
 pointlight DarkRedPointLight
 {
@@ -24,6 +26,11 @@ pointlight BluePointLight
 {
     color 0.0 0.0 1.0
     size 45
+}
+pointlight YellowPointLight
+{
+    color 5.0 5.0 0.0
+    size 65
 }
 
 pointlight BlueBrightLight
@@ -90,6 +97,14 @@ object MissileExplosion
 object PPCExplosion
 {
 	Frame PEXP { light BlueBrightLight }
+}
+Object MissileLight
+{
+	Frame TNT1 { light YellowPointLight }
+}
+object MGunBullet 
+{
+	Frame AUTO { light YellowLight }
 }
 object SRM 
 {

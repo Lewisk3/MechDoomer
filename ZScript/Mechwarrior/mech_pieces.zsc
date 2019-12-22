@@ -254,7 +254,7 @@ class MechLegsBase : MechPartsBase
 			!mechowner.isdead
 		);
 	}
-	bool checkStepping(bool idle=false, int frameoffs=0)
+	virtual bool checkStepping(bool idle=false, int frameoffs=0)
 	{
 		if(!mechowner) return false;
 		mechowner.stepping = idle ? false : (frame == 3+frameoffs || frame == 8+frameoffs);
@@ -360,6 +360,16 @@ class Legs_BattleArmor : MechLegsBase
 	}
 }
 
+class Legs_Tarantula  : MechLegsBase 
+{
+	override bool checkStepping(bool idle, int frameoffs)
+	{
+		if(!mechowner) return false;
+		mechowner.stepping = idle ? false : (frame == 0+frameoffs || frame == 2+frameoffs || frame == 6+frameoffs || frame == 8+frameoffs);
+		return true;
+	}
+}
+
 // All mech parts \\
 
 // Hips
@@ -371,6 +381,7 @@ class Hips_Stormcrow   : MechHipsBase {}
 class Hips_Atlas       : MechHipsBase {}
 class Hips_Commando    : MechHipsBase {}
 class Hips_Nova    	   : MechHipsBase {}
+class Hips_Tarantula   : MechHipsBase {}
 // Legs	
 class Legs_Invisible   : MechLegsBase {}
 class Legs_Timberwolf  : MechLegsBase {}
@@ -428,6 +439,12 @@ class Torso_Nova : MechTorsoBase {
 	Default {
 		MechTorsoBase.DoNotTwist true;
 		MechTorsoBase.Pieces "Hips_Nova", "Legs_Nova";
+		MechPartsBase.ZOffset 60;
+	}
+}
+class Torso_Tarantula : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Tarantula", "Legs_Tarantula";
 		MechPartsBase.ZOffset 60;
 	}
 }

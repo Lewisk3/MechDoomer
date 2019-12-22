@@ -325,7 +325,8 @@ void drawShopItemInfo()
 		if(selected_item.mWeapon)
 		{
 			class<Mechbase_Weapon> invweap = selected_item.mWeapon;
-			String wtons = GetDefaultByType(invweap).weight.."";
+			let weapdefs = GetDefaultByType(invweap);
+			String wtons = weapdefs.weight.."";
 			let weaptypedefs = GetDefaultByType(GetDefaultByType(invweap).weapType);
 			String wheat = weaptypedefs.heatgen .. "";
 			wtons.truncate(wtons.Length()-4);
@@ -333,10 +334,13 @@ void drawShopItemInfo()
 			drawShopInfoLine("Name: " .. selected_item.Tag, 0);
 			drawShopInfoLine("Damage: " .. weaptypedefs.truedamage,1);
 			drawShopInfoLine("Heat: " .. wheat,2);
-			drawShopInfoLine("Nickname: " .. GetDefaultByType(invweap).displayName, 3);
-			drawShopInfoLine("Sell Value: " .. GetDefaultByType(invweap).worth, 4);
+			drawShopInfoLine("Nickname: " .. weapdefs.displayName, 3);
+			drawShopInfoLine("Sell Value: " .. weapdefs.worth, 4);
 			drawShopInfoLine("Weight: " .. wtons .. " tons", 5);
-			drawShopInfoLine("Criticals: " .. GetDefaultByType(invweap).hardslots, 6);
+			drawShopInfoLine("Criticals: " .. weapdefs.hardslots, 6);
+			int shopline = 6;
+			if(weaptypedefs.minimum_range) drawShopInfoLine("Min Range: " .. int(weaptypedefs.minimum_range),++shopline);
+			if(weaptypedefs.maximum_range) drawShopInfoLine("Max Range: " .. int(weaptypedefs.maximum_range),++shopline);
 			item_cost = GetDefaultByType(invweap).worth*2;
 		}
 		
