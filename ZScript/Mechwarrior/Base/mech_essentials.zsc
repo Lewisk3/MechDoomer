@@ -94,7 +94,7 @@ void ChangeMech(int invmech)
 	
 	// Setup Class Defaults
 	A_TakeInventory(cphandler,1);
-	console.printf("Changing to: %s",source.baseclass.getClassName());
+	//console.printf("Changing to: %s",source.baseclass.getClassName());
 	let defs = MechWarriorBase(GetDefaultByType(source.baseclass));
 	baseclass = source.baseclass;
 	ViewHeight = defs.ViewHeight;

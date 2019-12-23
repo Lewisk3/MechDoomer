@@ -221,7 +221,7 @@ class MechDoomerEvents : EventHandler
 				{
 					let defs = GetDefaultByType(mech.baseclass);
 					plr.inv_context.mechs.Push(plr.CreateStoredMech(mech.baseclass));
-					console.printf("Obtained: %s [MECHBAY#%d]", defs.getClassName(), plr.inv_context.mechs.Size()-1);
+					// console.printf("Obtained: %s [MECHBAY#%d]", defs.getClassName(), plr.inv_context.mechs.Size()-1);
 					plr.adjustMoney(-e.Args[1]);
 				}
 				
