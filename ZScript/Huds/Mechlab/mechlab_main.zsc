@@ -169,6 +169,8 @@ void ProcessLoadoutButtons()
 			if(selected_item.index > -1)
 			{
 				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+				mstats.left_btn = false;
+				
 				if(!mechmode && selected_item.location)
 				{
 					if(selected_item.mWeaponOBJ) MechDoomerEvents.SendNetworkEvent("move_weapinv",selected_item.mWeaponOBJ.WeaponID);
