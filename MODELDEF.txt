@@ -282,7 +282,7 @@ Model EnergyWeaponDisp
 	Path "models"
 	Model 0 "Weapons/laser.md3"
 	Skin 0 "Textures/greenlaser.png"
-	Scale -4.0 3.0 3.0
+	Scale -0.7 0.5 0.5
 	USEACTORPITCH
 	AngleOffset 90
 	ZOffset 30;

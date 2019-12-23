@@ -8,7 +8,7 @@ int astat_selected;		// Selected armor status (internal, armor)
 bool ValidateHardpoint(int ind)
 {
 	if(ind == -1) return true; // No such hardpoint.
-	MechHardpoint hp = mechplr.hardpoints.FindByIndex(ind);
+	MechHardpoint hp = valid_hardpoints.FindByIndex(ind);
 	return (hp.internalhp > 0);
 }
 
@@ -32,6 +32,56 @@ void RepairAllHardpoints()
 		MechDoomerEvents.SendNetworkEvent("repair_hardpoint", i, 1);
 	}
 }
+
+double, double GetHardpointHealthPerc(MechHardpoints hps)
+{
+	// This is surrounded in curly braces so it can be collapsed and temporarily
+	// removed from view.
+	float curarmor, maxarmor, curinternal, maxinternal;
+	{
+		curarmor += hps.hd.armor;
+		curarmor += hps.ct.armor;
+		curarmor += hps.lt.armor;
+		curarmor += hps.rt.armor;
+		curarmor += hps.la.armor;
+		curarmor += hps.ra.armor;
+		curarmor += hps.ll.armor;
+		curarmor += hps.rl.armor;
+		
+		maxarmor += hps.hd.max_armor;
+		maxarmor += hps.ct.max_armor;
+		maxarmor += hps.lt.max_armor;
+		maxarmor += hps.rt.max_armor;
+		maxarmor += hps.la.max_armor;
+		maxarmor += hps.ra.max_armor;
+		maxarmor += hps.ll.max_armor;
+		maxarmor += hps.rl.max_armor;
+		
+		curinternal += hps.hd.internalhp;
+		curinternal += hps.ct.internalhp;
+		curinternal += hps.lt.internalhp;
+		curinternal += hps.rt.internalhp;
+		curinternal += hps.la.internalhp;
+		curinternal += hps.ra.internalhp;
+		curinternal += hps.ll.internalhp;
+		curinternal += hps.rl.internalhp;
+		
+		maxinternal += hps.hd.max_internal;
+		maxinternal += hps.ct.max_internal;
+		maxinternal += hps.lt.max_internal;
+		maxinternal += hps.rt.max_internal;
+		maxinternal += hps.la.max_internal;
+		maxinternal += hps.ra.max_internal;
+		maxinternal += hps.ll.max_internal;
+		maxinternal += hps.rl.max_internal;
+	}
+	
+	float armorp = maxarmor <= 0 ? 100 : (curarmor/maxarmor * 100);
+	float internalp = (curinternal/maxinternal * 100);
+	
+	return armorp, internalp;
+}
+
 
 // Graphics
 void DrawArmorUtilites(int sx, int sy)
@@ -58,6 +108,7 @@ void drawArmoryInfo()
 	// Draw Utils
 	DrawArmorUtilites(1220,170);
 	
+	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
 	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
 	String mechston = (mechplr.mech_tonnage .. "");
 	String heateff = mechplr.HeatEfficiency*35 .. "";
@@ -66,58 +117,10 @@ void drawArmoryInfo()
 	heateff.truncate(heateff.Length()-3);
 	weapston.truncate(weapston.length()-3);
 	mechston.truncate(mechston.length()-3);
+	enginetype.truncate(enginetype.Length()-7);
 	vector2 detailpos = (330,300);
 	vector2 cbillpos  = (330,150);
 	vector2 statuspos = (777,185);
-	
-	// This is surrounded in curly braces so it can be collapsed and temporarily
-	// removed from view.
-	float curarmor, maxarmor, curinternal, maxinternal;
-	{
-		curarmor += mechplr.hardpoints.hd.armor;
-		curarmor += mechplr.hardpoints.ct.armor;
-		curarmor += mechplr.hardpoints.lt.armor;
-		curarmor += mechplr.hardpoints.rt.armor;
-		curarmor += mechplr.hardpoints.la.armor;
-		curarmor += mechplr.hardpoints.ra.armor;
-		curarmor += mechplr.hardpoints.ll.armor;
-		curarmor += mechplr.hardpoints.rl.armor;
-		
-		maxarmor += mechplr.hardpoints.hd.max_armor;
-		maxarmor += mechplr.hardpoints.ct.max_armor;
-		maxarmor += mechplr.hardpoints.lt.max_armor;
-		maxarmor += mechplr.hardpoints.rt.max_armor;
-		maxarmor += mechplr.hardpoints.la.max_armor;
-		maxarmor += mechplr.hardpoints.ra.max_armor;
-		maxarmor += mechplr.hardpoints.ll.max_armor;
-		maxarmor += mechplr.hardpoints.rl.max_armor;
-		
-		curinternal += mechplr.hardpoints.hd.internalhp;
-		curinternal += mechplr.hardpoints.ct.internalhp;
-		curinternal += mechplr.hardpoints.lt.internalhp;
-		curinternal += mechplr.hardpoints.rt.internalhp;
-		curinternal += mechplr.hardpoints.la.internalhp;
-		curinternal += mechplr.hardpoints.ra.internalhp;
-		curinternal += mechplr.hardpoints.ll.internalhp;
-		curinternal += mechplr.hardpoints.rl.internalhp;
-		
-		maxinternal += mechplr.hardpoints.hd.max_internal;
-		maxinternal += mechplr.hardpoints.ct.max_internal;
-		maxinternal += mechplr.hardpoints.lt.max_internal;
-		maxinternal += mechplr.hardpoints.rt.max_internal;
-		maxinternal += mechplr.hardpoints.la.max_internal;
-		maxinternal += mechplr.hardpoints.ra.max_internal;
-		maxinternal += mechplr.hardpoints.ll.max_internal;
-		maxinternal += mechplr.hardpoints.rl.max_internal;
-	}
-	
-	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
-	string armorpercent = "100";
-	if(maxarmor > 0) armorpercent = (curarmor/maxarmor * 100).."";
-	string internalpercent = (curinternal/maxinternal * 100).."";
-	armorpercent.truncate(armorpercent.length()-6);
-	internalpercent.truncate(internalpercent.length()-6);
-	enginetype.truncate(enginetype.Length()-7);
 	
 	string armorstr = "";
 	string internalstr = "";
@@ -147,6 +150,13 @@ void drawArmoryInfo()
 				repair_cost = GetEntireRepairCost();
 		}
 	}
+	
+	float ap, ip;
+	[ap, ip] = GetHardpointHealthPerc(mechplr.hardpoints);
+	string armorpercent = ap.."";
+	string internalpercent = ip.."";
+	armorpercent.truncate(armorpercent.length()-6);
+	internalpercent.truncate(internalpercent.length()-6);
 	
 	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);
 	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));

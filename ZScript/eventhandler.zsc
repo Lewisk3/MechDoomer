@@ -199,6 +199,7 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "items_getlist") plr.GetAllItems(plr.shopitems);
 			if(netcmd == "mechs_getlist") plr.GetAllMechs(plr.shopmechs);
 			if(netcmd == "sort_inv") plr.sortWeaponInv();
+			if(netcmd == "sort_mechs") plr.SortMechs(plr.inv_context.mechs);
 			if(netcmd == "throttledecay_toggle") 
 			{
 				CVar throtd = CVar.FindCVar("mwd_throttledecay");
@@ -236,6 +237,18 @@ class MechDoomerEvents : EventHandler
 				if(eitem) plr.adjustMoney(Mechbase_Engine.GetRealWorth(eitem));
 				plr.inv_context.RemoveItem(e.Args[0],1);
 			}
+			if(netcmd == "sell_mech")
+			{
+				let mech = plr.inv_context.mechs[e.Args[0]];
+				if(mech) 
+				{
+					float value = GetDefaultByType(mech.baseclass).worth/2;
+					plr.RemoveInventory(mech.inv_context);
+					plr.inv_context.mechs.delete(e.Args[0]);
+					plr.adjustMoney(value);
+				}
+			}
+			
 			if(netcmd == "iamspaceatandt") 
 			{
 				plr.adjustMoney(e.Args[0]);

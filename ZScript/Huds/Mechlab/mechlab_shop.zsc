@@ -281,7 +281,7 @@ void drawShopInfo()
 	mechston.truncate(mechston.length()-3);
 	enginetype.truncate(enginetype.Length()-7);
 	vector2 detailpos = (330,280);
-	H_DrawString("- Current Mech -",detailpos);
+	H_DrawString("- Active Mech -",detailpos);
 	H_DrawString("Chassis: " .. mechplr.getChassisName(),(detailpos.x,detailpos.y+20));
 	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+40));
 	H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+60));

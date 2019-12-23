@@ -52,6 +52,7 @@ float TiltOffset;
 float StepOffset;
 float CrouchMulti;
 float rolldistort;
+float defviewz;
 
 // Main
 void setupSpeedKPH(float kph)

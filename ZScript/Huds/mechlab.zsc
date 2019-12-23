@@ -29,14 +29,15 @@ class Mechlab_Menu : GenericMenu
 	ArmoryUtility autil_item;
 	
 	// Textures
-	TextureID tMain;
+	TextureID tMain, tMainMechs;
 	TextureID tMech_Head, tMech_RTorso, tMech_CTorso, tMech_LTorso, tMech_RArm,
 			  tMech_LArm, tMech_RLeg, tMech_LLeg;
 			  
 	TextureID tInv_ArrowUp, tInv_ArrowDown;
 	TextureID tBtn_Sort, tBtn_Scrap, tBtn_Equip, tBtn_Dequip,
 			  tBtnlit_Sort, tBtnlit_Scrap, tBtnlit_Equip, tBtnlit_Dequip,
-			  tBtn_Shop, tBtnlit_Shop;
+			  tBtn_Shop, tBtnlit_Shop, tBtn_Items, tBtnlit_Items,
+			  tBtn_Mechs, tBtnlit_Mechs, tBtn_Deploy, tBtnlit_Deploy;
 			  
 	TextureID tBtn_WeaponsLab, tBtn_ArmorAndRepair, tBtnlit_WeaponsLab,
 			  tBtnlit_ArmorAndRepair;
@@ -78,7 +79,7 @@ class Mechlab_Menu : GenericMenu
 	Rect mouse, rHD, rCT, rLT, rRT, rLA, rRA, rLL, rRL, weapbox, invbox, 
 		 equipbtn, dequipbtn, scrapbtn, sortbtn, modebtn, autilbtn, repairbtn,
 		 plusbtn, minusbtn, buyitembtn, buymechbtn, energybtn, ballisticbtn,
-		 missilesbtn, ammobtn, enginesbtn, mechsmodebtn, shopbtn;
+		 missilesbtn, ammobtn, enginesbtn, mechsmodebtn, shopbtn, invmodebtn;
 	
 	// Fonts
 	HUDFont mHUDFont;
@@ -98,6 +99,9 @@ class Mechlab_Menu : GenericMenu
 		defheight = 1080;
 		clearSelected();
 		
+		valid_hardpoints = mechplr.hardpoints;
+		valid_inv_context = mechplr.inv_context;
+		
 		hud_page = 0;  // Mechlab Page, Armory Page or Shop Page
 		
 		// Multi-purpose
@@ -111,7 +115,8 @@ class Mechlab_Menu : GenericMenu
 		tBtnlit_ArmorAndRepair = TexMan.CheckForTexture("BLPAGE2", TexMan.Type_Any);
 		tBtnlit_WeaponsLab     = TexMan.CheckForTexture("BLWEAPL", TexMan.Type_Any);
 		// Main
-		tMain = TexMan.CheckForTexture("LOADMHUD", TexMan.Type_Any);
+		tMain      = TexMan.CheckForTexture("LOADMHUD", TexMan.Type_Any);
+		tMainMechs = TexMan.CheckForTexture("LOADHUD2", TexMan.Type_Any);
 		tMech_Head             = TexMan.CheckForTexture("LMHUD_HD", TexMan.Type_Any);
 		tMech_LTorso  	       = TexMan.CheckForTexture("LMHUD_LT", TexMan.Type_Any);
 		tMech_CTorso 	       = TexMan.CheckForTexture("LMHUD_CT", TexMan.Type_Any);
@@ -126,10 +131,16 @@ class Mechlab_Menu : GenericMenu
 		tBtn_Scrap     	   	   = TexMan.CheckForTexture("BTSCRAP", TexMan.Type_Any);
 		tBtn_Equip     	   	   = TexMan.CheckForTexture("BTEQUIP", TexMan.Type_Any);
 		tBtn_Dequip    	   	   = TexMan.CheckForTexture("BTDEQUIP", TexMan.Type_Any);
+		tBtn_Items     	   	   = TexMan.CheckForTexture("BTITEMS", TexMan.Type_Any);
+		tBtn_Mechs     	   	   = TexMan.CheckForTexture("BTMECHS", TexMan.Type_Any);
+		tBtn_Deploy    	   	   = TexMan.CheckForTexture("BTDEPLOY", TexMan.Type_Any);
 		tBtnlit_Sort   	   	   = TexMan.CheckForTexture("BLSORT", TexMan.Type_Any);
 		tBtnlit_Scrap      	   = TexMan.CheckForTexture("BLSCRAP", TexMan.Type_Any);
 		tBtnlit_Equip  		   = TexMan.CheckForTexture("BLEQUIP", TexMan.Type_Any);
 		tBtnlit_Dequip 		   = TexMan.CheckForTexture("BLDEQUIP", TexMan.Type_Any);
+		tBtnlit_Items     	   = TexMan.CheckForTexture("BLITEMS", TexMan.Type_Any);
+		tBtnlit_Mechs     	   = TexMan.CheckForTexture("BLMECHS", TexMan.Type_Any);
+		tBtnlit_Deploy    	   = TexMan.CheckForTexture("BLDEPLOY", TexMan.Type_Any);
 		// Armory
 		tArmory = TexMan.CheckForTexture("LOADRHUD", TexMan.Type_Any);
 		tBtn_Repair   	  = TexMan.CheckForTexture("BTREP", TexMan.Type_Any);
@@ -186,7 +197,7 @@ class Mechlab_Menu : GenericMenu
 		initRect(weapbox,750,130,415,790);
 		initRect(invbox,1198,130,375,790);
 		// Action Buttons
-		initRect(sortbtn,1445,125,125,50);
+		initRect(sortbtn,1445,195,125,50);
 		initRect(scrapbtn,1450,890,125,50);
 		initRect(dequipbtn,1055,450,125,50);
 		initRect(equipbtn,605,305,125,50);
@@ -195,6 +206,7 @@ class Mechlab_Menu : GenericMenu
 		initRect(plusbtn,1105,220,25,25);
 		initRect(minusbtn,1070,220,25,25);
 		initRect(shopbtn,332,740,120,45);
+		initRect(invmodebtn,1445,135,125,50);
 		// Shop Buttons
 		initRect(energybtn,1205,133,125,50);
 		initRect(ballisticbtn,1335,133,125,50);
@@ -224,7 +236,7 @@ class Mechlab_Menu : GenericMenu
 		//drawRect(dequipbtn, debug_color);
 		//drawRect(scrapbtn, debug_color);
 	 	//drawRect(sortbtn, debug_color);
-		//drawRect(modebtn, debug_color);
+		//drawRect(invmodebtn, debug_color);
 		//drawRect(modebtn, debug_color);
 		//drawRect(autilbtn, debug_color);
 		//drawRect(repairbtn, debug_color);
@@ -259,17 +271,19 @@ class Mechlab_Menu : GenericMenu
 				page_init = true;
 			}
 			// H_DrawTexture(tHud_paperdoll,(675,770),0,(0.45,0.4));
-			maxpageitems = 28;
+			maxpageitems = 25;
 			drawMechlabInfo();
 			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,815,160);
 			drawLoadoutBody(950,120,hardpoint);
-			drawInventory(1278,162, invoffset, maxpageitems);
+			drawInventory(1278,225, invoffset, maxpageitems);
 		} 
 		// Armory mode
 		else if(hud_page == 1)
 		{
 			if(!page_init)
 			{
+				valid_hardpoints = mechplr.hardpoints;
+				valid_inv_context = mechplr.inv_context;
 				page_offs = -1;
 				if(hardpoint < 0) hardpoint = 1;
 				initRect(modebtn,490,620,238,35);
@@ -289,6 +303,7 @@ class Mechlab_Menu : GenericMenu
 				page_offs = -2;
 				invoffset = 0;
 				initRect(modebtn,490,712,238,50);
+				mechmode = false;
 				page_init = true;
 				ShopInit();
 			}

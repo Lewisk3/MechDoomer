@@ -190,7 +190,7 @@ class Tarantula : MechWarrior
 	Default
 	{
 		Player.DisplayName "Tarantula Prime";
-		Player.ViewHeight 95;
+		Player.ViewHeight 80;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 25;

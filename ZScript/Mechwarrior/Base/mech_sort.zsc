@@ -33,33 +33,34 @@ void GetAllMechs(in out Array<mw_StoredMech> items)
 		}
 	}
 	// Sort by weight
+	SortMechs(items);
+}
+
+void SortMechs(in out Array<mw_StoredMech> items)
+{
 	Array<mw_StoredMech> newitems;
 	while(true)
 	{
-		int lightest = 0;
-		int lighttons = 0;
+		int lightest = -1;
+		double lighttons = double.infinity;
 		for (int i = 0; i < items.Size(); i++)
 		{
 			let defs = GetDefaultByType(items[i].baseclass);
 			float tons = defs.mech_tonnage;
-			if(!lightest) 
-			{	
-				lightest = i;
-				lighttons = tons;
-			}
 			if(tons < lighttons)
 			{
 				lightest = i;
 				lighttons = tons;
 			}
 		}
-		if(!lightest) break;
-		if(lightest)
+		if(lightest >= 0)
 		{
 			let defs = GetDefaultByType(items[lightest].baseclass);
 			newitems.push(items[lightest]);
 			items.delete(lightest);
 		}
+		else
+			break;
 	}
 	items.Clear();
 	items.Copy(newitems);
