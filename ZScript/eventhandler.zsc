@@ -181,10 +181,10 @@ class MechDoomerEvents : EventHandler
 	{
 		String netcmd = e.Name;
 		let plr = MechWarrior(players[e.Player].mo);
-		netcmd.ToLower();
 		if(plr)
 		{
 			// Process mechlab netevents
+			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);
 			if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
 			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(350,0,false);
@@ -261,7 +261,33 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "-mwd_pilotlook")plr.pilotlook = false;
 			Array<String> netcmds;
 			netcmds.Clear();
-			netcmd.split(netcmds,":");	
+			netcmd.split(netcmds,":");
+			// Objective netevents
+			if(netcmds[0] == "objective")
+			{
+				if(netcmds[1] == "add")
+				{
+					if(e.IsManual) console.printf("Objective added : \"%s\"",netcmds[2]);
+					plr.AddObjective(netcmds[2],netcmds[3].ToInt(),netcmds[4].ToInt());
+				}
+				if(netcmds[1] == "clear") 
+					plr.ClearObjectives();
+					
+				if(netcmds[1] == "complete") 
+				{
+					let obj = plr.GetObjective(netcmds[2].ToInt());
+					if(obj) obj.completed = true;
+				}
+				if(netcmds[1] == "fail") 
+				{
+					let obj = plr.GetObjective(netcmds[2].ToInt());
+					if(obj)
+					{
+						obj.completed = false;
+						obj.failed = true;
+					}
+				}
+			}
 			if(netcmds[0] == "givemech")
 			{
 				class<MechWarrior> mech = netcmds[1];

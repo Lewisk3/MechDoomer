@@ -61,7 +61,7 @@ class BattleArmor : MechWarrior
 		Player.DisplayName "BattleArmor"; // (Traditional Doom Movement)
 		Player.ViewHeight 35;
 		MechWarriorBase.TwistRange 130;
-		MechWarriorBase.heatEff 0.18;
+		MechWarriorBase.heatEff 0.1;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.SetCockpitHandler "CockpitHandler_BattleArmor";
 		MechWarriorBase.HudCockpit "WARHHUD";

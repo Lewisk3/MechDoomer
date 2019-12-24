@@ -643,7 +643,45 @@ class MechStatusBar : BaseStatusBar
 			DrawBars();
 		}
 		
+		DrawObjectives();
 		//if(inHUDLoadout) drawLoadoutHUD();
+	}
+
+	void DrawObjectives()
+	{
+		string pstrs[4] = 
+		{
+			"Primary",
+			"Secondary",
+			"Tertiary",
+			"Quaternary"
+		};
+		
+		let mech = MechWarriorBase(CPlayer.mo); 
+		if(!mech) return;
+		if(!mech.display_objectives) return;
+		vector2 objpos = (450,280);
+		H_DrawString("MISSION OBJECTIVES",objpos,0,Font.CR_SAPPHIRE);
+		
+		int yoffs = 50;
+		for(int i = 0; i < mech.objectives.Size(); i++)
+		{
+			let objt = mech.objectives[i];
+			String prefix = pstrs[objt.priority] .. ":";
+			String main   = objt.description;
+			String suffix = objt.completed ? "Completed" : "In Progress";
+			uint scol = objt.completed ? Font.CR_SAPPHIRE : Font.CR_GREEN;
+			if(objt.failed) 
+			{
+				suffix = "Failed";
+				scol = Font.CR_BRICK;
+			}
+			float xoffs = prefix.length()*17;
+			H_DrawString(prefix,(objpos.x,objpos.y+yoffs),0,Font.CR_SAPPHIRE);
+			H_DrawString(main,(objpos.x+xoffs,objpos.y+yoffs),0,Font.CR_GREEN);
+			H_DrawString(suffix,(objpos.x+940,objpos.y+yoffs),0,scol);
+			yoffs+=30;
+		}
 	}
 
 	void DrawKeys()

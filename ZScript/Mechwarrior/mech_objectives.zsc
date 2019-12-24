@@ -1,0 +1,63 @@
+class Mechwarrior_Objectives Abstract
+{
+	static void Clear(Actor activator)
+	{
+		MechDoomerEvents.SendNetworkEvent("objective:clear");
+	}
+	static void Add(Actor activator, String text, int priority=1, int id=0)
+	{
+		MechDoomerEvents.SendNetworkEvent("objective:add:"..text..":"..priority..":"..id);
+	}
+	static void Betty(Actor activator, Sound snd = "")
+	{
+		let mech = MechWarriorBase(Activator);
+		if(mech) mech.mechsounds.pushSound(snd);
+	}
+	static void Complete(Actor activator, int id, Sound snd = "")
+	{
+		let mech = MechWarriorBase(Activator);
+		if(mech) mech.mechsounds.pushSound(snd);
+		MechDoomerEvents.SendNetworkEvent("objective:complete:"..id);
+	}
+	static void Fail(Actor activator, int id, Sound snd = "")
+	{
+		let mech = MechWarriorBase(Activator);
+		if(mech) mech.mechsounds.pushSound(snd);
+		MechDoomerEvents.SendNetworkEvent("objective:fail:"..id);
+	}
+	static bool Check(Actor activator, int id)
+	{
+		let mech = MechWarriorBase(Activator);
+		if(mech)
+		{
+			let obj = mech.GetObjective(id);
+			return (obj && obj.completed);
+		}
+		return false;
+	}
+}
+
+extend class MechWarriorBase;
+
+// Combat Objectives
+void ClearObjectives()
+{
+	objectives.Clear();
+}
+void AddObjective(String text, int priority=1, int id=0)
+{
+	let objective = new("mw_CombatObjective");
+	objective.priority = priority;
+	objective.description = text;
+	objective.completed = false;
+	objective.id = id ? id : objectives.Size()+1;
+	objectives.push(objective);
+}
+clearscope mw_CombatObjective GetObjective(int id)
+{
+	for(int i = 0; i < objectives.Size(); i++)
+	{
+		if(id == objectives[i].id) return objectives[i];
+	}
+	return NULL;
+}

@@ -878,7 +878,6 @@ class AutocannonBall : Mechbase_Actor
 }
 class MechBullet : Mechbase_Actor
 {
-
 	Default
 	{
 		Damage 5;
@@ -886,11 +885,21 @@ class MechBullet : Mechbase_Actor
 		Projectile;
 	}
 	
+	override void tick()
+	{
+		if(!basedamage) BaseInit();
+		if(maximum_range > 0)
+		{
+			if( getTravelDistance() >= (maximum_range*3) ) Destroy();
+		}
+		super.tick();
+	}
+	
 	States
 	{
 		Spawn:
-			AUTO A 6;
-		stop;
+			AUTO A 1;
+		loop;
 		
 		Death:
 			PUFF ABCD 2;

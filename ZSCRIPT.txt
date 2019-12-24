@@ -53,6 +53,7 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Mechwarrior/mech_inventory.zsc"
 #include "ZScript/Mechwarrior/mech_pieces.zsc"
 #include "ZScript/Mechwarrior/mech_cockpits.zsc"
+#include "ZScript/Mechwarrior/mech_objectives.zsc"
 #include "ZScript/Mechwarrior/Base/mech_sort.zsc"
 #include "ZScript/Mechwarrior/Base/mech_misc.zsc"
 #include "ZScript/Mechwarrior/Base/mech_essentials.zsc"

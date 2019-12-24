@@ -22,6 +22,15 @@ class mw_InvStruct
 	int amt; // Stackable items, horray!
 }
 
+class mw_CombatObjective : Object
+{
+	int priority;
+	String description;
+	bool completed;
+	bool failed;
+	int id;
+}
+
 class mw_StoredWeapon : Object
 {
 	String Tag;

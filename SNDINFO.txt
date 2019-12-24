@@ -63,6 +63,12 @@ Mech/Betty/Engine ENGINE
 Mech/Betty/Gyro GYRO
 Mech/Betty/Hip HIP
 Mech/Betty/AmmoExplosion AMOEXPLD
+Mech/Betty/PrimarySuccessful OBJTIVE1
+Mech/Betty/SecondarySuccessful OBJTIVE2
+Mech/Betty/TertiarySuccessful OBJTIVE3
+Mech/Betty/MissionSuccess SUCCESS
+Mech/Betty/MissionFail  FAILED
+Mech/Betty/LeavingMission LEAVING
 
 // Unused betty
 Mech/Betty/NoAmmo AMMODEPL

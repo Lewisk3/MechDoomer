@@ -14,6 +14,8 @@ float baseHeatEfficiency;
 uint mechtype;
 
 // Vars
+Array<mw_CombatObjective> objectives;
+bool display_objectives;
 MechCamera dronecam;
 bool dronecam_active;
 bool heatwarn;
@@ -23,6 +25,7 @@ float HeatEfficiency;
 float HeatLevel;
 float prevheat;
 float deltaHeat;
+
 
 // Drone
 void ToggleDrone(float cdist, float rotspd, bool front)

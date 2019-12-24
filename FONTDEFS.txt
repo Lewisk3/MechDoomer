@@ -3,3 +3,9 @@ MechFont
 	Template FURR%03d
 	DONTTRANSLATE
 }
+
+BattleTechFont
+{
+	Template BTLP%03d
+	DONTTRANSLATE
+}

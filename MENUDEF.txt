@@ -1,23 +1,101 @@
 LISTMENU "MainMenu"
 {
-		LineSpacing 13
+		LineSpacing 25
 		StaticPatchCentered 150,-60,"MWLOGO"
 		Position 105, 72
 		centermenu
-		Font "BIGFONT", "BLACK"
-		TextItem "New Game","n", "PlayerclassMenu"
-		TextItem "Load Game","l", "LoadGameMenu"
-		TextItem "Save Game","s", "SaveGameMenu"
-		Font "BIGFONT", "BLACK"
-		TextItem "Options","o", "OptionsMenu"
-		TextItem "Quit Game","q", "QuitMenu"
+		Font "BattleTechFont", "Gray"
+		TextItem "NEW MERCENARY","n", "PlayerclassMenu"
+		TextItem "LOAD GAME","l", "LoadGameMenu"
+		TextItem "SAVE GAME","s", "SaveGameMenu"
+		Font "BattleTechFont", "Gray"
+		TextItem "COMBAT VARIABLES","o", "OptionsMenu"
+		TextItem "COCKPIT CONTROLS","o", "MechDoomerControlsMenu"
+		TextItem "THE FIRST CIRCUIT","c", "CreditsMenu"
+		TextItem "FLEE TO DOS","q", "QuitMenu"
 		//StaticPatchCentered 160, 154, "RLOGO"
 		Position 1, 1
 		Font "SMALLFONT", "ORANGE"
 		StaticText 68,50,"MechDoomer 2.30a - Alpha."
 }
 
+AddOptionMenu "OptionsMenu"
+{
+	Submenu    "MechDoomer Options"      , "MechDoomerMenu"
+}
 
+OptionMenu "MechDoomerMenu"
+{
+	Title "MechDoomer Options"
+	StaticText " "
+	Option "Enable throttle decay", "mwd_throttledecay", "YesNo"
+	StaticText "Throttle moves to neutral position when", "Black"
+	StaticText "not pressing move forward/backwards", "Black"
+	Option "Enable weapon convergence", "mwd_weaponsconverge", "YesNo"
+	StaticText "Weapons will converge to point of aim", "Black"
+	StaticText "when fired", "Black"
+	Option "Disable HUD", "mwd_nohud", "YesNo"
+	StaticText "Toggles HUD on/off", "Black"
+	Option "Targetting graphics mode", "mwd_viewport_target", "2D3D"
+	StaticText "Changes targetting reticle graphics", "Black"
+	StaticText "2D is more accurate to MW2", "Black"
+	StaticText "3D places targeting graphics in the game world", "Black"
+	Option "Enable Automatic Reload", "mwd_autoreload", "YesNo"
+	StaticText "DISHONORABLE", "Red"
+	StaticText "When ammunition is depleted, will attempt", "Black"
+	StaticText "to find fresh ammo and replace it automatically", "Black"
+	Option "Constant turn-rate", "mwd_relativelegspeed", "NoYes"
+	StaticText "DISHONORABLE", "Red"
+	StaticText "Mech turning speed isn't affected by", "Black"
+	StaticText "its current speed", "Black"
+	
+	StaticText " "
+	Option "Debug - Warn on faulty HUD", "mwd_hudwarn", "YesNo"
+	StaticText "Disables warning message when HUD isn't", "Black"
+	StaticText "being properly displayed.", "Black"
+	StaticText " "
+	
+	Submenu "Controls", "MechDoomerControlsMenu"
+}
+
+OptionMenu "CreditsMenu"
+{
+	Title "MechDoomer Credits"
+	StaticText " "
+	StaticText "Lead Programmer","Sapphire"
+	StaticText "Lewisk3 (Redxone)", "Black"
+	StaticText " "
+	StaticText "UI Graphics","Sapphire"
+	StaticText "fire-hound", "Black"
+	StaticText " "
+	StaticText "Models and Textures","Sapphire"
+	StaticText "Cherno", "Black"
+	StaticText " "
+	StaticText "Mechwarrior 2 export tool (MechVM)","Sapphire"
+	StaticText "Skyfaller", "Black"
+	StaticText " "
+	StaticText "Code Contributors","Sapphire"
+	StaticText "Caligari87", "Black"
+	StaticText "Xaser", "Black"
+	StaticText " "
+}
+
+
+OptionValue "YesNo"
+{
+	0,"No"
+	1,"Yes"
+}
+OptionValue "NoYes"
+{
+	0,"Yes"
+	1,"No"
+}
+OptionValue "2D3D"
+{
+	0,"3D (In-Game)"
+	1,"2D (HUD-Space)"
+}
 
 AddOptionMenu "CustomizeControls"
 {
@@ -42,6 +120,7 @@ OptionMenu "MechDoomerControlsMenu"
 	Control    "Target Enemy"				 , "netevent \"giveinvbutton:IBTN_TARGET\""
 	Control    "Open Mechlab"				 , "Mech_LoadoutUI"
 	Control    "Toggle Infrared"			 , "netevent \"giveinvbutton:IBTN_INFRARED\""
+	Control    "Display Objectives"			 , "netevent toggle_objectives" 
 	StaticText " "
 	
 	StaticText "Movement Systems","Yellow"
