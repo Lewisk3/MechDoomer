@@ -10,6 +10,7 @@ class Mechbase_Actor : Actor
 	MechWarrior mechplayer;
 	float minimum_range;
 	float maximum_range;
+	bool cosmetic;
 	
 	Property Heat : heatgen;
 	Property ConstDamage: truedamage;
@@ -50,7 +51,7 @@ class Mechbase_Actor : Actor
 	{
 		if(truedamage && hitactor && hitactor.bSHOOTABLE)
 		{
-			if(hitactor != mechplayer) 
+			if(hitactor != mechplayer && !cosmetic) 
 			{
 				hitactor.DamageMobJ(self,mechplayer,truedamage,damagetype,0,mechplayer.angle);
 				SetState(ResolveState("Death"));
@@ -72,7 +73,7 @@ class Mechbase_Actor : Actor
 	}
 	void adjustHeatLevel(double amt)
 	{
-		if(mechplayer) mechplayer.HeatLevel += amt*MWHEAT_MOD;
+		if(mechplayer && !cosmetic) mechplayer.HeatLevel += amt*MWHEAT_MOD;
 	}
 	void SetConstDamage(int newdamage)
 	{
@@ -100,6 +101,7 @@ class Mechbase_Weapon : Inventory
 	bool isHomming;
 	int volley_amt;
 	int volley_inital;
+	bool volley_cosmetic;
 	int hardslots;
 	float weight;
 	Name displayName;
@@ -172,7 +174,7 @@ class Mechbase_Weapon : Inventory
 		invoker.cooldown_timer = invoker.delay;
 		return true;
 	}
-	action bool FireVolley(int amt=0, int xspread=5, int yspread=5, Sound volleysnd="")
+	action bool FireVolley(int amt=0, int xspread=5, int yspread=5, Sound volleysnd="", bool extra_cosmetic=false)
 	{
 		if(!invoker.dofire && checkCooldown())
 		{
@@ -183,11 +185,14 @@ class Mechbase_Weapon : Inventory
 			invoker.dofire = true;
 			invoker.volley_amt = amt;
 			invoker.volley_inital = amt;
+			invoker.volley_cosmetic = extra_cosmetic;
 		}
 		else if(invoker.volley_amt > 0)
 		{
+			// Extra_Cosmetic will make only the first object fired deal damage/generate heat.
+			bool cosmetic = invoker.volley_cosmetic ? (invoker.volley_amt < invoker.volley_inital) : false;
 			if(FireWeapon(invoker.weapType,invoker.hardpoint.pos.x+random(-xspread,xspread),
-						  invoker.hardpoint.pos.y+random(-yspread,yspread),invoker.weapDistance,invoker.weapSpeed))
+						  invoker.hardpoint.pos.y+random(-yspread,yspread),invoker.weapDistance,invoker.weapSpeed,false,cosmetic))
 			{
 				invoker.volley_amt--;
 				invoker.cooldown_timer = invoker.volleycooldown*35.0;
@@ -201,7 +206,7 @@ class Mechbase_Weapon : Inventory
 		}
 		return true;
 	}
-	action bool FireWeapon(class<Mechbase_Actor> type, int xoffset, int yoffset, int distance, int spd, bool instant=false)
+	action bool FireWeapon(class<Mechbase_Actor> type, int xoffset, int yoffset, int distance, int spd, bool instant=false, bool cosmetic=false)
 	{	
 		if(checkCooldown() || instant)
 		{
@@ -231,6 +236,7 @@ class Mechbase_Weapon : Inventory
 						sin(plr.angle)*cos(plr.pitch),
 						-sin(plr.pitch)
 						) * spd;
+				weap.cosmetic = cosmetic;
 				return true;
 			}
 		}

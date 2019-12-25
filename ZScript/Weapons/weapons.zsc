@@ -38,7 +38,8 @@ class SmallPulseLaser : Mechbase_Weapon
 	}	
 	override bool MWFire()
 	{
-		return FireVolley(2,0,0,"");
+		// Only the first laser will deal damage/generate heat.
+		return FireVolley(2,0,0,"",true);
 	}
 }
 

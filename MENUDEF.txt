@@ -4,11 +4,10 @@ LISTMENU "MainMenu"
 		StaticPatchCentered 150,-60,"MWLOGO"
 		Position 105, 72
 		centermenu
-		Font "BattleTechFont", "Gray"
+		Font "BattleTechFont", "DarkGray"
 		TextItem "NEW MERCENARY","n", "PlayerclassMenu"
 		TextItem "LOAD GAME","l", "LoadGameMenu"
 		TextItem "SAVE GAME","s", "SaveGameMenu"
-		Font "BattleTechFont", "Gray"
 		TextItem "COMBAT VARIABLES","o", "OptionsMenu"
 		TextItem "COCKPIT CONTROLS","o", "MechDoomerControlsMenu"
 		TextItem "THE FIRST CIRCUIT","c", "CreditsMenu"

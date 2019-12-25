@@ -212,12 +212,12 @@ void ShopInit()
 {
 	shopstate.energyoffs    = 0;
 	shopstate.ballisticoffs = 12;
-	shopstate.missileoffs   = 21;
+	shopstate.missileoffs   = 22;
 	shopstate.ammooffs      = 32;
 	shopstate.engineoffs    = 46;
 	shopstate.energymax    = 12;
 	shopstate.ballisticmax = 10;
-	shopstate.missilemax   = 11;
+	shopstate.missilemax   = 10;
 	shopstate.ammomax      = 14;
 	shopstate.enginemax    = 0;
 	
