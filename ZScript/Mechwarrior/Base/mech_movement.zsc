@@ -53,6 +53,7 @@ float StepOffset;
 float CrouchMulti;
 float rolldistort;
 float defviewz;
+float viewzoffs;  // Bob modifier for actual viewz.
 
 // Main
 void setupSpeedKPH(float kph)
@@ -106,6 +107,7 @@ void mech_cockpitbob()
 		float bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 1.2, 3.15);
 		if(defaultmovement) bobmod *= 0.55;
 		Player.ViewZ -= bobmod;
+		viewzoffs = (Player.ViewZ-pos.z)-defviewz;
 	}
 }
 

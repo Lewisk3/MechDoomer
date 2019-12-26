@@ -305,6 +305,7 @@ override void PostBeginPlay()
 	selectedGroup = 1;
 	selectedWeapon = 1;
 	mech_jetsfuel = 100;
+	defviewz = Player.ViewHeight;
 	inv_context.maxgroup = getMaxWeaponGrouping();
 	defaultfov = player.desiredFOV;
 			
@@ -338,7 +339,6 @@ override void tick()
 		return;
 	}
 	
-	if(!defviewz) defviewz = player.viewz;
 	// Clamp viewheight so we don't end up inside our hips when we fall.
 	player.viewheight = clamp(player.viewheight, default.viewheight*0.8, default.viewheight*2.0);
 	

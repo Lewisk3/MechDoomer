@@ -77,6 +77,12 @@ void mech_weapons()
 		buttonTick = true;
 		prevticks = ticks;
 	}
+	
+	bool firing = (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) || 
+				  (GetPlayerInput(INPUT_BUTTONS) & BT_USER1 ) ||
+				  (GetPlayerInput(INPUT_BUTTONS) & BT_USER2 ) ||
+				  (GetPlayerInput(INPUT_BUTTONS) & BT_USER3 ) ||
+				  (GetPlayerInput(INPUT_BUTTONS) & BT_USER4 );
 
 	// Process Heat levels and struct functionality.
 	deltaHeat = HeatLevel-prevheat;
@@ -130,7 +136,7 @@ void mech_weapons()
 		weapons_fired = true;
 		if(buttonTick)buttonTick = false;
 	}
-	else if(weapons_fired && getSelectedWeapon() && !getSelectedWeapon().dofire) 
+	if(!firing && weapons_fired && getSelectedWeapon() && !getSelectedWeapon().dofire) 
 	{	
 		nextWeapon(true);
 		weapons_fired = false;
@@ -153,7 +159,7 @@ void mech_weapons()
 	
 	if(countinv("IBTN_SHOOTALLWEAPONSLIKEAMADLAD"))
 	{
-		FireGroup(0,true); // pew pew pew, whoosh, whoosh, whoosh, pow, pow, po.. *explodes*
+		FireGroup(0,true,true); // pew pew pew, whoosh, whoosh, whoosh, pow, pow, po.. *explodes*
 		TakeInventory("IBTN_SHOOTALLWEAPONSLIKEAMADLAD",1);
 	}
 	
@@ -224,10 +230,26 @@ void mech_weapons()
 		TakeInventory("IBTN_bFIREMODE",1);
 	}
 	
-	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER1 ) FireGroup(1);
-	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER2 ) FireGroup(2);
-	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER3 ) FireGroup(3);
-	if( GetPlayerInput(INPUT_BUTTONS) & BT_USER4 ) FireGroup(4);
+	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER1)
+	{
+		FireGroup(1);
+		weapons_fired = true;
+	}
+	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER2)
+	{
+		FireGroup(2);
+		weapons_fired = true;
+	}
+	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER3)
+	{
+		FireGroup(3);
+		weapons_fired = true;
+	}
+	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER4)
+	{
+		FireGroup(4);
+		weapons_fired = true;
+	}
 	
 	if(countinv("IBTN_NEXTWEAPON"))
 	{	

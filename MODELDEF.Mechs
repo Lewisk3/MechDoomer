@@ -361,6 +361,25 @@ Model CockpitHandler_Jenner
    FrameIndex MODL A 0 0
 }
 
+/*
+Model Cockpit_Invisible
+{
+	Path "models/Mechs"
+	Model 0 "Jenner/jn_head2.md3"
+	Scale 0.20 0.20 0.20
+	Skin 0 "Jenner/jn_head.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	
+	//PitchOffset -10
+	RollOffset 8
+	AngleOffset 90
+	Offset -65 0 9;
+	
+   FrameIndex MODL A 0 0
+}
+*/
+
 
 // Urbanmech
 Model Torso_Urbanmech

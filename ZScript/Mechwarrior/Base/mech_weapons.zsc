@@ -111,7 +111,7 @@ bool, int getNextWeaponIn(int ind, int grp)
 	}
 	return found, mxgrp;
 }
-int getNearestWeaponAt(int group, bool markactive=false)
+int getNearestWeaponAt(int group)
 {
 	int prevind = inv_context.weapons_count;
 	for(let w = Inv; w != null; w = w.Inv)
@@ -340,16 +340,25 @@ void sortWeaponInv()
 }
 
 // Fire
-void FireGroup(int group, bool alpha=false)
+void FireGroup(int group, bool alpha=false, bool forcegroup=false)
 {
 	if(checkVoodoo()) return;
-	for(let w = Inv; w != null; w = w.Inv)
-	{	
-		let ww = Mechbase_Weapon(w);
-		if(ww)
+	if(weapon_groupfire || forcegroup)
+	{
+		for(let w = Inv; w != null; w = w.Inv)
 		{	
-			if( (ww.group == group) || alpha) ww.MWFire();
+			let ww = Mechbase_Weapon(w);
+			if(ww)
+			{	
+				if( (ww.group == group) || alpha) ww.MWFire();
+			}
 		}
+	}
+	else
+	{
+		int curgrp = getWeaponGroupAt(selectedWeapon);
+		if(curgrp != group) selectedWeapon = getNearestWeaponAt(group);
+		getSelectedWeapon().MWFire();
 	}
 }
 void FireWeapons(bool groupfire=true)
