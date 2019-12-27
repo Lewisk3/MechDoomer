@@ -4,8 +4,14 @@ class MechDoomerEvents : EventHandler
 	
 	override void RenderOverlay(RenderEvent e)
 	{
-		CVar target_mode = CVar.GetCVar("mwd_viewport_target",e.camera.player);
 		let plr = Mechwarrior(e.Camera);
+		CVar target_mode;
+		if(!plr) 
+		{
+			let cam = MechCockpitCamera(e.Camera);
+			if(cam) plr = Mechwarrior(cam.mechowner);
+		}
+		if(plr) target_mode = CVar.GetCVar("mwd_viewport_target",plr.player);	
 		
 		// https://forum.zdoom.org/viewtopic.php?f=122&t=61330#p1064117
 		if(!automapactive && plr && plr.targetenemy && target_mode.getBool())
@@ -129,6 +135,16 @@ class MechDoomerEvents : EventHandler
 		btntwo = (btntwo == 0) ? btnone : btntwo;
 		if(!btnone && !btntwo) return false;
 		return (keycode == btnone || keycode == btntwo);
+	}
+	
+	clearscope static bool checkBoundKeyName(int keychar, String binding)
+	{
+		int btnone, btntwo;
+		[btnone, btntwo] = Bindings.GetKeysForCommand(binding);
+		btntwo = (btntwo == 0) ? btnone : btntwo;
+		if(!btnone && !btntwo) return false;
+		String btns = KeyBindings.NameKeys(btnone, btntwo);
+		return (keychar == btns.ByteAt(0)) || (keychar == btns.ByteAt(1));
 	}
 	
 	// Returns: True if command on key is valid, false if it is not.

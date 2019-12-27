@@ -27,7 +27,6 @@ Array<mw_InvStruct> shopitems;
 Array<mw_StoredMech> shopmechs;
 
 // Properties
-class<CockpitHandler> cphandler;
 class<MechTorsoBase> mech_models;
 class<Mechbase_Engine> base_engine;
 bool modelcockpit;
@@ -93,7 +92,6 @@ void ChangeMech(int invmech)
 	normalizeWeaponsID(0);
 	
 	// Setup Class Defaults
-	A_TakeInventory(cphandler,1);
 	//console.printf("Changing to: %s",source.baseclass.getClassName());
 	let defs = MechWarriorBase(GetDefaultByType(source.baseclass));
 	baseclass = source.baseclass;
@@ -111,7 +109,6 @@ void ChangeMech(int invmech)
 	uncappedtorso = defs.uncappedtorso;
 	overtonnage = defs.overtonnage;
 	modelcockpit = defs.modelcockpit;
-	cphandler = defs.cphandler;
 	mech_models = defs.mech_models;
 	mechtype = defs.mechtype;
 	nofirstpersonlegs = defs.nofirstpersonlegs;
@@ -120,10 +117,6 @@ void ChangeMech(int invmech)
 	
 	// Update vars
 	A_SetSpeed(0);
-	A_GiveInventory(cphandler,1);	
-	player.PendingWeapon = Weapon(FindInventory(cphandler));
-	DropWeapon();
-	BringUpWeapon();
 	if(models_reference) models_reference.Destroy();
 	setupSpeedKPH(EngineGetKPH());
 	
@@ -183,7 +176,7 @@ void GetStoredWeapons(in out Array<mw_StoredWeapon> weaps)
 // Inventory
 bool setupInventory()
 {
-	if(!FindInventory(cphandler)) GiveInventory(cphandler,1);
+	if(!FindInventory("WeaponsHandler")) GiveInventory("WeaponsHandler",1);
 	if(!inv_context)
 	{
 		GiveInventory("mw_InvInfo",1);
@@ -354,7 +347,7 @@ override void tick()
 		let weap = Weapon(w);
 		if(weap)
 		{
-			if(!(weap is "CockpitHandler")) weap.Destroy();
+			if(!(weap is "WeaponsHandler")) weap.Destroy();
 		}
 	}
 	

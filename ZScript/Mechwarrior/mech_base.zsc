@@ -97,7 +97,6 @@ class MechWarriorBase : DoomPlayer
 	Property InfiniteTorsoTwist: uncappedtorso;
 	Property OverTonnage: overtonnage;
 	Property CockpitIsModel: modelcockpit;
-	Property SetCockpitHandler: cphandler;
 	Property MechPieces : mech_models;
 	Property Manufacturer : mechtype;
 	Property HideLegsPerspective : nofirstpersonlegs;
@@ -151,7 +150,6 @@ class MechWarrior : MechWarriorBase
 		MechWarriorBase.CValue 1000000;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Innersphere;
 		MechWarriorBase.Engine "Engine_STD_300";
-		MechWarriorBase.SetCockpitHandler "CockpitHandler";
 		MechWarriorBase.heatEff 0.02;
 		MechWarriorBase.HudCockpit "CROW";
 		MechWarriorBase.HudMech "";

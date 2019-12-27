@@ -90,8 +90,10 @@ bool checkCollision( Rect one, Rect two )
 // Controls
 override bool OnUIEvent(UiEvent ev)
 {
-	int keyscn = (ev.Type == UIEvent.Type_KeyDown) ? ev.KeyChar-65 : 0;
-	if(keyscn > 0){ if(MechDoomerEvents.checkBoundKey(keyscn,"Mech_LoadoutUI")) Close(); }
+	if(ev.Type == UIEvent.Type_KeyDown)
+	{
+		if(MechDoomerEvents.checkBoundKeyName(ev.KeyChar,"Mech_LoadoutUI")) Close();
+	}
 	
 	if(ev.Type == UIEvent.Type_MouseMove)
 	{

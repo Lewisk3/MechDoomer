@@ -80,7 +80,8 @@ void mech_cockpitbob()
 	if(vel.length() > 0.08 || LegVel)
 	{
 		// 0.12
-		bobthrust = clamp(vel.length()*(movebobpart*MoveSpeed), -(bobmax/3), (bobmax/3));
+		float realvel = vel.length()+(LegVel**2);
+		bobthrust = clamp(realvel*(movebobpart*MoveSpeed), -(bobmax/3), (bobmax/3));
 		if(stepping) 
 		{ 
 			bobthrust = abs(bobthrust)*4;
@@ -183,24 +184,24 @@ void mech_movement()
 			throttle += 0.02;
 			// If stop is pressed and we continue moving, we don't want the two "forces" to fight.
 			TakeInventory("IBTN_STOP",1);
-			if(snd_accelerate){A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false;}
+			if(snd_accelerate){ A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false; }
 		}
 		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle > 0.02)
 		{
 			throttle -= 0.02;
-			if(!snd_accelerate){A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true;}
+			if(!snd_accelerate){ A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true; }
 		}
 		
 		if(GetPlayerInput(INPUT_BUTTONS) & BT_BACK) 
 		{
 			throttle -= 0.02;
 			TakeInventory("IBTN_STOP",1);
-			if(!snd_accelerate){A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true;}
+			if(!snd_accelerate){ A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true; }
 		}
 		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle < 0)
 		{
 			throttle += 0.02;
-			if(snd_accelerate){A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false;}
+			if(snd_accelerate){ A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false; }
 		}
 		
 		throttle = clamp(throttle,-(throttle_max/2),throttle_max);
@@ -240,7 +241,7 @@ void mech_movement()
 			if(abs(throttle) <= 0.1)TakeInventory("IBTN_STOP",1);
 			if(throttle < 0)throttle += 0.02;
 			if(throttle > 0)throttle -= 0.02;
-			snd_accelerate = true;
+			if(!snd_accelerate){A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true;}
 			if(abs(throttle) <= 0.1)throttle = 0;
 		}
 		if(countinv("IBTN_CENTER"))
@@ -289,7 +290,7 @@ void mech_movement()
 		if( !mech_shutdown )
 		{
 			if(!pilotlook) Pitch = clamp(Pitch, -minPitch, maxPitch);
-			if(MaxYaw < 360 && !uncappedtorso)
+			if(MaxYaw < 360 && !uncappedtorso && !pilotlook)
 			{
 				if(angle - LegAng > MaxYaw)  angle = LegAng + MaxYaw;
 				if(angle - LegAng < -MaxYaw) angle = LegAng - MaxYaw;

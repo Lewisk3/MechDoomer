@@ -28,14 +28,18 @@ Model Legs_BattleArmor
    FrameIndex TLEG Q 0 16
    FrameIndex TLEG R 0 17
 }
-Model CockpitHandler_BattleArmor
+Model Cockpit_BattleArmor
 {
 	Path "models/Mechs/BattleArmor"
 	Model 0 "ba_head.md3"
-	Scale 0.13 0.10 0.10
+	Scale 0.20 0.20 0.20
 	Skin 0 "ba_head.png" // Main
-	PitchOffset 0
-	Offset 0 -3 -9;
+	USEACTORPITCH
+	USEACTORROLL 
+	USEROTATIONCENTER
+	RollOffset 0
+	AngleOffset 0
+	Offset 1 0 -7;
 	
    FrameIndex MODL A 0 0
 }
@@ -88,17 +92,19 @@ Model Legs_Commando
    FrameIndex TLEG R 0 17
    FrameIndex TLEG S 0 18
 }
-Model CockpitHandler_Commando
+Model Cockpit_Commando
 {
 	Path "models/Mechs/Commando"
 	Model 0 "cm_head.md3"
-	Scale 0.15 0.10 0.10
+	Scale 0.20 0.20 0.17
 	Skin 0 "cm_head.png" // Main
-	PitchOffset -8
-	Offset 0.2 5 -12;
+	USEACTORPITCH
+	USEACTORROLL 
+	Offset -7 0 -12;
 	
    FrameIndex MODL A 0 0
 }
+
 
 
 // Timberwolf
@@ -152,20 +158,20 @@ Model Legs_Timberwolf
    FrameIndex TLEG R 0 17
    FrameIndex TLEG S 0 18
 }
-Model CockpitHandler_Timberwolf
+Model Cockpit_Timberwolf
 {
 	Path "models/Mechs/Timberwolf"
 	Model 0 "tw_head.md3"
-	Scale -0.15 0.12 0.12
+	Scale 0.20 0.20 0.17
 	Skin 0 "tw_head.png" // Main
-	//PitchOffset -14
-	//Offset 0 14 -8;
-	RollOffset 14
-	Offset 0.6 30 -10
+	USEACTORPITCH
+	USEACTORROLL 
+	RollOffset 8
 	AngleOffset 90
+	Offset -48 0 -8;
 	
    FrameIndex MODL A 0 0
-} 
+}
 
 // Stormcrow
 Model Torso_Stormcrow
@@ -220,14 +226,15 @@ Model Legs_Stormcrow
    FrameIndex TLEG R 0 17
    FrameIndex TLEG S 0 18
 }
-Model CockpitHandler_Stormcrow
+Model Cockpit_Stormcrow
 {
 	Path "models/Mechs/Stormcrow"
 	Model 0 "sc_head.md3"
-	Scale 0.12 0.10 0.10
+	Scale 0.20 0.20 0.17
 	Skin 0 "sc_head.png" // Main
-	PitchOffset -8
-	Offset 0 28 -8;
+	USEACTORPITCH
+	USEACTORROLL 
+	Offset -56 0 -14;
 	
    FrameIndex MODL A 0 0
 }
@@ -284,14 +291,15 @@ Model Legs_Atlas
    FrameIndex TLEG R 0 17
    FrameIndex TLEG S 0 18
 }
-Model CockpitHandler_Atlas
+Model Cockpit_Atlas
 {
 	Path "models/Mechs"
 	Model 0 "Atlas/at_head.md3"
-	Scale 0.15 0.10 0.10
+	Scale 0.20 0.20 0.17
 	Skin 0 "Atlas/at_head.png" // Main
-	PitchOffset -8
-	Offset 0 10 5;
+	USEACTORPITCH
+	USEACTORROLL 
+	Offset -18 0 8;
 	
    FrameIndex MODL A 0 0
 }
@@ -306,6 +314,7 @@ Model Torso_Jenner
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -347,22 +356,7 @@ Model Legs_Jenner
    FrameIndex TLEG R 0 17
    FrameIndex TLEG S 0 18
 } 
-Model CockpitHandler_Jenner
-{
-	Path "models/Mechs"
-	Model 0 "Jenner/jn_head2.md3"
-	Scale 0.20 0.15 0.17
-	Skin 0 "Jenner/jn_head.png" // Main
-	//PitchOffset -10
-	RollOffset 8
-	AngleOffset 90
-	Offset 0 45 -2;
-	
-   FrameIndex MODL A 0 0
-}
-
-/*
-Model Cockpit_Invisible
+Model Cockpit_Jenner
 {
 	Path "models/Mechs"
 	Model 0 "Jenner/jn_head2.md3"
@@ -378,7 +372,7 @@ Model Cockpit_Invisible
 	
    FrameIndex MODL A 0 0
 }
-*/
+
 
 
 // Urbanmech
@@ -434,21 +428,23 @@ Model Legs_Urbanmech
    FrameIndex TLEG R 0 17
    FrameIndex TLEG S 0 18
 }
-Model CockpitHandler_Urbanmech
+Model Cockpit_Urbanmech
 {
 	Path "models/Mechs/Urbanmech"
 	Model 0 "ur_head.md3"
 	Model 1 "ur_weaps.md3"
-	Scale 0.15 0.10 0.10
+	Scale 0.20 -0.20 0.17
 	Skin 0 "ur_head.png" // Main
 	Path "models/Mechs"
 	Skin 1 "c_dark.png"
-	PitchOffset 0
+	USEACTORPITCH
+	USEACTORROLL 
 	AngleOffset 90
-	Offset 0 8 -24;
+	Offset -25 0 -23;
 	
    FrameIndex MODL A 0 0
 }
+
 
 // Nova
 Model Torso_Nova
@@ -502,14 +498,15 @@ Model Legs_Nova
    FrameIndex TLEG R 0 17
    FrameIndex TLEG S 0 18
 }
-Model CockpitHandler_Nova
+Model Cockpit_Nova
 {
 	Path "models/Mechs/Nova"
 	Model 0 "nv_head.md3"
-	Scale 0.10 0.10 0.10
+	Scale 0.20 0.20 0.20
 	Skin 0 "nv_head.png" // Main
-	PitchOffset 0
-	Offset 0 25 0;
+	USEACTORPITCH
+	USEACTORROLL 
+	Offset -45 0 8;
 	
    FrameIndex MODL A 0 0
 }
@@ -562,15 +559,16 @@ Model Legs_Tarantula
    FrameIndex TLEG R 0 17
    FrameIndex TLEG S 0 18
 }
-Model CockpitHandler_Tarantula 
+Model Cockpit_Tarantula 
 {
 	Path "models/Mechs/"
 	Model 0 "Tarantula/tr_head.obj"
-	Scale 0.10 0.10 0.10
+	Scale 0.0005 0.0005 0.0005
 	Skin 0 "c_dark.png" // Main
-	RollOffset 12
+	USEACTORPITCH
+	USEACTORROLL 
 	AngleOffset 90
-	Offset 0 1000 0;
+	Offset -8 0 2;
 	
    FrameIndex MODL A 0 0
 }

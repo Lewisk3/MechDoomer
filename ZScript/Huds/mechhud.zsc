@@ -641,9 +641,11 @@ class MechStatusBar : BaseStatusBar
 			// Draw speedometer.
 			if(!mech.defaultmovement) H_DrawString(int(mech.MoveSpeedKPH*mech.throttle) .. "Kph" ,(820+765,100+720));
 			DrawBars();
+			
+			DrawObjectives();
+			// Crosshair
+			H_DrawImage(mech.crosshair_sprite,(952,520),0,(1.35,1.0));
 		}
-		
-		DrawObjectives();
 		//if(inHUDLoadout) drawLoadoutHUD();
 	}
 

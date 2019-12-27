@@ -111,28 +111,23 @@ class MechPartsBase : Actor
 {
 	MechwarriorBase mechowner;
 	float zoffs;
-	float cxoffs;
-	float czoffs;
 	Property ZOffset : zoffs;
-	Property CockpitOffset : cxoffs, czoffs;
 	
 	Default
 	{
 		+NOGRAVITY;
 		MechPartsBase.ZOffset 0;
-		MechPartsBase.CockpitOffset 0, 60;
 	}
 	
-	virtual vector3 getMechPos()
+	vector3 getMechPos()
 	{
-		vector3 basepos = mechowner.Vec3Offset(0,0,zoffs);
-		return basepos;
+		return (mechowner.pos.x,mechowner.pos.y,mechowner.pos.z+zoffs);
 	}
 	
 	override void tick()
 	{
-		super.Tick();
 		if(mechowner) SetOrigin(getMechPos(),true);
+		super.Tick();
 	}	
 	
 	static MechPartsBase Create(class<MechPartsBase> part, MechWarriorBase base)
@@ -153,67 +148,6 @@ class MechPartsBase : Actor
 	}
 }
 
-// Cockpit cameras
-class MechCockpitCamera : MechPartsBase
-{
-	float defz;	
-	override vector3 getMechPos()
-	{
-		vector3 basepos = mechowner.Vec3Offset(cos(mechowner.angle)*cxoffs,sin(mechowner.angle)*cxoffs,czoffs);
-		return basepos;
-	}
-	override void tick()
-	{
-		if(!defz) defz = czoffs;
-		if(mechowner) 
-		{
-			CameraFOV = mechowner.player.FOV;
-			angle = mechowner.angle;
-			pitch = mechowner.pitch;
-			roll = mechowner.roll;
-			czoffs = defz+mechowner.viewzoffs;
-		}
-		super.tick();
-	}
-}
-class MechCockpitModel : MechPartsBase
-{
-	float defz;	
-	float mxoffs;
-	float mzoffs;
-	Property Offset: mxoffs, mzoffs;
-	MechPartsBase cockpitcam;
-	
-	override vector3 getMechPos()
-	{
-		float fxoffs = cockpitcam.cxoffs+mxoffs;
-		float fzoffs = cockpitcam.czoffs+mzoffs;
-		vector3 basepos = mechowner.Vec3Offset(cos(mechowner.angle)*fxoffs,sin(mechowner.angle)*fxoffs,fzoffs);
-		return basepos;
-	}
-	
-	override void tick()
-	{
-		if(!cockpitcam)
-		{
-			Destroy();
-			return;
-		}
-		if(!defz) defz = mzoffs;
-		if(mechowner) 
-		{
-			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
-			{
-				A_SetAngle(mechowner.angle,SPF_INTERPOLATE);
-				A_SetPitch(mechowner.pitch,SPF_INTERPOLATE);
-				A_SetRoll (mechowner.roll ,SPF_INTERPOLATE);
-			}
-			mzoffs = defz+mechowner.viewzoffs*0.05;
-		}
-		super.Tick();
-	}
-}
-
 // Torsos
 class MechTorsoBase : MechPartsBase
 {
@@ -221,29 +155,16 @@ class MechTorsoBase : MechPartsBase
 	bool setup;
 	MechPartsBase hips;
 	MechPartsBase legs;
-	MechPartsbase cockpit_camera;
 	class<MechPartsBase> hips_type;
 	class<MechPartsBase> legs_type;
-	class<MechCockpitModel> cockpit_type;
-	Property Pieces : hips_type, legs_type, cockpit_type;
+	Property Pieces : hips_type, legs_type;
 	Property DoNotTwist : notwist;
-		
-	void SetupParts(class<MechPartsBase> phips, class<MechPartsBase> plegs, class<MechCockpitModel> cpit)
+	
+	void SetupParts(class<MechPartsBase> phips, class<MechPartsBase> plegs)
 	{
-		cockpit_camera = MechPartsBase.Create("MechCockpitCamera", mechowner);
 		if(phips) hips = MechPartsBase.Create(phips, mechowner);
 		if(plegs) legs = MechPartsBase.Create(plegs, mechowner);
-		if(hips) hips.zoffs = zoffs;
-		if(cockpit_camera) 
-		{
-			cockpit_camera.cxoffs = cxoffs;
-			cockpit_camera.czoffs = czoffs;
-		}
-		if(cpit) 
-		{
-			let cockpitmdl = MechCockpitModel(MechPartsBase.Create(cpit, mechowner));
-			if(cockpitmdl) cockpitmdl.cockpitcam = cockpit_camera;
-		}
+		if(hips)hips.zoffs = zoffs;
 		setup = true;
 	}
 	
@@ -251,10 +172,7 @@ class MechTorsoBase : MechPartsBase
 	{
 		if(mechowner)
 		{
-			if(!mechowner.dronecam && !mechowner.dronecam_active && mechowner.player) 
-				mechowner.player.camera = cockpit_camera;
-			
-			if(!setup) SetupParts(hips_type, legs_type, cockpit_type);
+			if(!setup) SetupParts(hips_type, legs_type);
 			if(!notwist)
 			{
 				pitch = mechowner.pitch*0.5;
@@ -276,7 +194,6 @@ class MechTorsoBase : MechPartsBase
 	{
 		if(hips) hips.Destroy();
 		if(legs) legs.Destroy();
-		if(cockpit_camera) cockpit_camera.Destroy();
 	}
 	States
 	{
@@ -357,7 +274,7 @@ class MechLegsBase : MechPartsBase
 				if(checkStepping() && mechowner.stepping)
 				{
 					mechowner.vel.xy *= stompfriction;	
-				//	A_Quake(2,3,0,250,"");
+					A_Quake(2,3,0,250,"");
 				};
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 4, 10);
 				return !isMoving() ? ResolveState("SpawnIdle") : (tics <= 5 && frame >= 7) ? ResolveState("RunCycle") : ResolveState(Null); 
@@ -370,7 +287,7 @@ class MechLegsBase : MechPartsBase
 				if(checkStepping(false, 8) && mechowner.stepping) 
 				{
 					mechowner.vel.xy *= stompfriction;	
-				//	A_Quake(2,3,0,250,"");
+					A_Quake(2,3,0,250,"");
 				}
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
 				return !isMoving() ? ResolveState("WalkCycle") : (tics > 5 && frame <= 10) ? ResolveState("WalkCycle") : ResolveState(Null); 
@@ -456,7 +373,7 @@ class Legs_Tarantula  : MechLegsBase
 // All mech parts \\
 
 // Cockpits
-class Cockpit_Invisible : MechCockpitModel {}
+class Cockpit_Invisible : MechPartsBase {}
 
 // Hips
 class Hips_Invisible   : MechHipsBase {}
@@ -481,62 +398,61 @@ class Legs_Nova    	   : MechLegsBase {}
 class Model_BattleArmor : MechTorsoBase
 {
 	Default {
-		MechTorsoBase.Pieces "Hips_Invisible", "Legs_BattleArmor", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Invisible", "Legs_BattleArmor";
 		MechPartsBase.ZOffset 0;
 	}
 }
 class Torso_Timberwolf : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf";
 		MechPartsBase.ZOffset 50;
 	}
 }
 class Torso_Stormcrow : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow";
 		MechPartsBase.ZOffset 60;
 	}
 }
 class Torso_Atlas : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas";
 		MechPartsBase.ZOffset 60;
 	}
 }
 class Torso_Commando : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Commando", "Legs_Commando", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Commando", "Legs_Commando";
 		MechPartsBase.ZOffset 40;
 	}
 }
 class Torso_Urbanmech : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Urbanmech", "Legs_Urbanmech", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Urbanmech", "Legs_Urbanmech";
 		MechPartsBase.ZOffset 35;
 	}
 }
 class Torso_Jenner : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner";
 		MechPartsBase.ZOffset 42;
-		MechPartsBase.CockpitOffset 25, 42;
 	}
 }
 class Torso_Nova : MechTorsoBase {
 	Default {
 		MechTorsoBase.DoNotTwist true;
-		MechTorsoBase.Pieces "Hips_Nova", "Legs_Nova", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Nova", "Legs_Nova";
 		MechPartsBase.ZOffset 60;
 	}
 }
 class Torso_Tarantula : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Tarantula", "Legs_Tarantula", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Tarantula", "Legs_Tarantula";
 		MechPartsBase.ZOffset 60;
 	}
 }
 class Torso_Invisible : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Invisible", "Legs_Invisible", "Cockpit_Invisible";
+		MechTorsoBase.Pieces "Hips_Invisible", "Legs_Invisible";
 	}
 }

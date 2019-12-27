@@ -63,7 +63,6 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.TwistRange 130;
 		MechWarriorBase.heatEff 0.1;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_BattleArmor";
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 10;
@@ -97,12 +96,11 @@ class Commando : MechWarrior
 	{
 		Mass 200;
 		Player.DisplayName "Commando Prime";
-		Player.ViewHeight 73;
+		Player.ViewHeight 65;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 25;
 		MechWarriorBase.Engine "ENGINE_STD_150";
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Commando";
 		MechWarriorBase.MechPieces "Torso_Commando";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.HideLegsPerspective true;
@@ -112,7 +110,7 @@ class Commando : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 8,20,14,14,10,10,14,14, 3,11,8,8,5,5,7,7 );
-		hardpoints.setupLocations( (0,10), (0,0), (0,-25), (0,-25), (20,-25), (-20,-25), (10,-45), (-10,-45) );
+		hardpoints.setupLocations( (0,10), (0,0), (0,-25), (0,-25), (30,-25), (-30,-25), (10,-45), (-10,-45) );
 		hardpoints.setupSlots();
 		equipStruct("Heatsink",hardpoints.ct,2);
 		equipWeapon("MediumLaser",hardpoints.ra,1);
@@ -130,7 +128,6 @@ class Jenner : MechWarrior
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 35;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Jenner";
 		MechWarriorBase.HudCockpit "JENNHUD";
 		MechWarriorBase.HudMech "JENNICO";
 		MechWarriorBase.MechPieces "Torso_Jenner";
@@ -167,7 +164,6 @@ class Urbanmech : MechWarrior
 		MechWarriorBase.InfiniteTorsoTwist true;
 		MechWarriorBase.Weight 30;
 		MechWarriorBase.Engine "ENGINE_STD_60";
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Urbanmech";
 		MechWarriorBase.MechPieces "Torso_Urbanmech";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.CValue 1471925;
@@ -195,7 +191,6 @@ class Tarantula : MechWarrior
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 25;
 		MechWarriorBase.Engine "ENGINE_XL_200";
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Tarantula";
 		MechWarriorBase.MechPieces "Torso_Tarantula";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Acceleration 2.0;
@@ -229,14 +224,13 @@ class Stormcrow : MechWarrior
 	{
 		Mass 2200;
 		Player.DisplayName "Stormcrow Prime";
-		Player.ViewHeight 75;
+		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 100;
 		MechWarriorBase.Weight 55;
 		MechWarriorBase.Engine "ENGINE_XL_330";
 		MechWarriorBase.HudCockpit "CROWHUD";
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Stormcrow";
 		MechWarriorBase.MechPieces "Torso_Stormcrow";
 		MechWarriorBase.HudMech "SCRWICO";
 		MechWarriorBase.CValue 8771112;
@@ -268,19 +262,18 @@ class Nova : MechWarrior
 		MechWarriorBase.TwistRange 20;
 		MechWarriorBase.Weight 50;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Nova";
 		MechWarriorBase.HudCockpit "NOVAHUD";
 		MechWarriorBase.HudMech "NOVAICO";
 		MechWarriorBase.MechPieces "Torso_Nova";
 		Player.DisplayName "Nova Prime";
-		Player.ViewHeight 70;
+		Player.ViewHeight 55;
 		MechWarriorBase.CValue 6586250;
 	}
 		
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 8,34,24,24,16,16,24,24, 4,16,12,12,8,8,12,12 );
-		hardpoints.setupLocations( (0,-5), (0,0), (60,-15), (-60,-15), (60,-18), (-60,-18), (60,-45), (-60,-45) );
+		hardpoints.setupLocations( (0,-5), (0,0), (60,-15), (-60,-15), (60,-24), (-60,-24), (60,-45), (-60,-45) );
 		hardpoints.setupSlots();
 	
 		equipWeapon("ERMediumLaser",hardpoints.rt,1);
@@ -319,7 +312,6 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.PitchRange 40,20;
 		MechWarriorBase.Engine "ENGINE_XL_375";
 		MechWarriorBase.HudCockpit "WOLFHUD";
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Timberwolf";
 		MechWarriorBase.MechPieces "Torso_Timberwolf";
 		MechWarriorBase.HudMech "TWLFICO";
 		MechWarriorBase.CValue 11233124;
@@ -355,7 +347,6 @@ class Atlas : MechWarrior
 	{
 		Mass 4000;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.SetCockpitHandler "CockpitHandler_Atlas";
 		MechWarriorBase.MechPieces "Torso_Atlas";
 		MechWarriorBase.Engine "ENGINE_STD_300";
 		MechWarriorBase.TwistRange 60;
@@ -364,7 +355,7 @@ class Atlas : MechWarrior
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.HideLegsPerspective true;
 		Player.DisplayName "Atlas Prime";
-		Player.ViewHeight 110;
+		Player.ViewHeight 90;
 		MechWarriorBase.CValue 9626000;
 	}
 		

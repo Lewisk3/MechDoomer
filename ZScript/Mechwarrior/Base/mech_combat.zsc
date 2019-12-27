@@ -25,7 +25,15 @@ float HeatEfficiency;
 float HeatLevel;
 float prevheat;
 float deltaHeat;
+String crosshair_sprite;
 
+// Crosshair(s)
+void SetCrosshair(int ind)
+{
+	string cx = "";
+	if(ind) cx = "XHAIRB"..ind;
+	crosshair_sprite = cx;
+}
 
 // Drone
 void ToggleDrone(float cdist, float rotspd, bool front)

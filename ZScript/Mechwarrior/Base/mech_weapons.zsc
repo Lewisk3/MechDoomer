@@ -157,7 +157,7 @@ void clearWeapons()
 	hardpoints.ll.slots = 0;
 	hardpoints.rl.slots = 0;
 	inv_context.weapons_tonnage = 0;
-	GiveInventory(cphandler,1);
+	GiveInventory("WeaponsHandler",1);
 	inv_context.weapons_count = 0;	
 }
 

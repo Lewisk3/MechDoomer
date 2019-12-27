@@ -10,6 +10,5 @@ addplayerclass "Nova" 	     // 3D
 addplayerclass "Tarantula"	 // 3D
 
 
-
 //addplayerclass "EbonJaguar" 
 //addplayerclass "Warhammer"
