@@ -1,6 +1,6 @@
 LISTMENU "MainMenu"
 {
-		LineSpacing 25
+		LineSpacing 15
 		StaticPatchCentered 150,-60,"MWLOGO"
 		Position 105, 72
 		centermenu

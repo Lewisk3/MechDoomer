@@ -182,19 +182,14 @@ class MechCockpitCamera : MechPartsBase
 		if(!defz) defz = czoffs;
 		if(mechowner) 
 		{
+			float fovdiff = mechowner.player.FOV/mechowner.defaultfov*0.5;
 			CameraFOV = mechowner.player.FOV;
-			angle = mechowner.angle;
-			pitch = mechowner.pitch;
+			angle = MDMath.Lerp(angle,mechowner.angle,0.8*fovdiff);
+			pitch = MDMath.Lerp(pitch,mechowner.pitch,0.8*fovdiff);
 			roll = mechowner.roll;
 			czoffs = defz+mechowner.viewzoffs;
 		}
 		super.tick();
-	}
-	States
-	{
-		Spawn:
-			PLSS A 1;
-		loop;
 	}
 }
 class MechCockpitModel : MechPartsBase
@@ -243,8 +238,8 @@ class MechCockpitModel : MechPartsBase
 		{
 			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
 			{
-				A_SetAngle(MDMath.Lerp(angle,mechowner.angle,0.5),SPF_INTERPOLATE);
-				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch,0.5),SPF_INTERPOLATE);
+				A_SetAngle(MDMath.Lerp(angle,mechowner.angle,0.2),SPF_INTERPOLATE);
+				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch,0.2),SPF_INTERPOLATE);
 				A_SetRoll (mechowner.roll ,SPF_INTERPOLATE);
 			}
 			mzoffs = defz+mechowner.viewzoffs*0.05;

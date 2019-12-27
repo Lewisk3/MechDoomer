@@ -56,7 +56,7 @@ class WeaponsHandler : Weapon
 							if(weap.isHomming) 
 								crosshair = plr.targetlocked ? 12 : plr.locktimer > 25 ? 11 : 10;
 							else
-								crosshair = (weap.cooldown_timer || plr.player.cmd.buttons & BT_ATTACK) ? 9 : 8;
+								crosshair = (weap.cooldown_timer || plr.weapons_fired) ? 9 : 8;
 							
 							A_SetCrossHair(crosshair);
 							plr.SetCrosshair(crosshair);
