@@ -41,8 +41,11 @@ class MechExchange_Animator : Powerup
 	{
 		if(mech && activate)
 		{
-			mech.SetOrigin(mech.SpawnPoint, false);
-			mech.angle = SpawnAngle+90;
+			vector3 spawnpos;
+			double spawnangle;
+			[spawnpos, spawnangle] = level.PickPlayerStart(0);
+			mech.SetOrigin(spawnpos, false);
+			mech.angle = spawnangle;
 			mech.LegAng = mech.angle;
 			mech.ChangeMech(mechbaynum);
 			fadeout = true;

@@ -74,6 +74,17 @@ void ChangeMech(int invmech)
 	hardpoints = inv_context.hardpoints;
 	GetStoredWeapons(curmech.active_weapons);
 	
+	// Destroy current weapons.
+	for(let w = Inv; w != null; w = w.Inv)
+	{
+		let weap = Weapon(w);
+		if(weap)
+		{
+			if(weap is "Mechbase_Weapon") RemoveInventory(weap);
+		}
+	}
+	
+	// Load new weapons
 	for(int i = source.active_weapons.Size()-1; i >= 0; i--)
 	{
 		let ww = source.active_weapons[i];
@@ -113,6 +124,7 @@ void ChangeMech(int invmech)
 	mechtype = defs.mechtype;
 	nofirstpersonlegs = defs.nofirstpersonlegs;
 	player.viewheight = defs.ViewHeight;
+	player.ViewZ = pos.z+defs.ViewHeight;
 	defviewz = defs.ViewHeight;
 	
 	// Update vars

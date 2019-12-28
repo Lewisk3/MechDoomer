@@ -299,7 +299,7 @@ Model Cockpit_Atlas
 	Skin 0 "Atlas/at_head.png" // Main
 	USEACTORPITCH
 	USEACTORROLL 
-	Offset -18 0 8;
+	Offset -18 0 10;
 	
    FrameIndex MODL A 0 0
 }

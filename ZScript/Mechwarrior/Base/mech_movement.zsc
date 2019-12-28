@@ -118,7 +118,7 @@ void mech_movement()
 	if(!overtonnage && mech_shutdown) return;
 	
 	// Movement Quirks
-	if(defaultmovement)
+	if(defaultmovement && inv_context)
 	{			
 		if(!inv_context.engine && !overtonnage) return;
 		// Roll/Sway system
@@ -161,7 +161,7 @@ void mech_movement()
 		}
 		
 		// Speed decay when engine removed.
-		if(!inv_context.engine)
+		if(!inv_context || !inv_context.engine)
 		{
 			if(abs(throttle) > 0.05)
 			{

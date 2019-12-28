@@ -59,7 +59,7 @@ class BattleArmor : MechWarrior
 	{
 		Mass 600;
 		Player.DisplayName "BattleArmor"; // (Traditional Doom Movement)
-		Player.ViewHeight 20;
+		Player.ViewHeight 25;
 		MechWarriorBase.TwistRange 130;
 		MechWarriorBase.heatEff 0.1;
 		MechWarriorBase.CockpitIsModel true;
@@ -77,7 +77,7 @@ class BattleArmor : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 4,8,5,5,5,5,4,4, 4,8,6,6,5,5,4,4 );
-		hardpoints.setupLocations( (0,5), (0,-7), (-6,-7), (6,-7), (12,-9), (-12,-9), (-3,-14), (3,-14) );
+		hardpoints.setupLocations( (0,5), (0,-2), (-6,-2), (6,-2), (12,-5), (-12,-5), (-3,-10), (3,-10) );
 		hardpoints.setupSlots(8,11,12,12,10,10,2,2);
 		equipStruct("Heatsink",hardpoints.hd,1);
 		equipStruct("JumpJet",hardpoints.ct,1);
