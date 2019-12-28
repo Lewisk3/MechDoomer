@@ -51,10 +51,13 @@ class Mechbase_Actor : Actor
 	{
 		if(truedamage && hitactor && hitactor.bSHOOTABLE)
 		{
-			if(hitactor != mechplayer && !cosmetic) 
+			if(pos.z >= hitactor.pos.z && pos.z <= hitactor.pos.z+hitactor.height)
 			{
-				hitactor.DamageMobJ(self,mechplayer,truedamage,damagetype,0,mechplayer.angle);
-				SetState(ResolveState("Death"));
+				if(hitactor != mechplayer && !cosmetic) 
+				{
+					hitactor.DamageMobJ(self,mechplayer,truedamage,damagetype,0,mechplayer.angle);
+					SetState(ResolveState("Death"));
+				}
 			}
 			hitactor = NULL;
 		}
@@ -114,6 +117,7 @@ class Mechbase_Weapon : Inventory
 	float lockonspeed;
 	float hitscan_dmg;
 	bool aimtarget;
+	bool target_inview;
 	float hitscan_distance;
 	//float hitscan_amt;
 	int delay;
@@ -260,14 +264,8 @@ class Mechbase_Weapon : Inventory
 			// If this weapon is selected.
 			if(plr.selectedWeapon == WeaponID)
 			{	
-				// Target locked logic.
-				LookExParams visview;
-				visview.FOV = plr.player.FOV * 0.8;
-				visview.maxDist = double.infinity;
-				visview.flags = LOF_NOSIGHTCHECK;
-				bool inview = plr.IsVisible(plr.targetenemy, true, visview); 				
-				
-				aimtarget = ( plr.targetenemy && plr.targetreticle && inview);
+				// Target locked logic.		
+				aimtarget = (plr.targetenemy && plr.targetreticle && target_inview);
 
 				if(plr.locktimer == 0 && aimtarget)SoundEmitter.SE_Trigger("Mech/Target/BeginLock",Owner.pos);
 				if(plr.locktimer < 100 && aimtarget) plr.locktimer += lockonspeed;
@@ -278,16 +276,24 @@ class Mechbase_Weapon : Inventory
 					SoundEmitter.SE_Trigger("Mech/Target/Locked",Owner.pos);
 				}
 				if(!aimtarget && plr.locktimer > 0) plr.locktimer -= lockonspeed*2;
-				if(plr.locktimer < 100) plr.targetlocked = false;
-				
+				if(plr.locktimer < 100) plr.targetlocked = false;				
 				if(plr.targetenemy && !plr.prevlock) plr.prevlock = plr.targetenemy;
 				if(plr.targetlocked && plr.targetenemy != plr.prevlock) 
 				{
 					plr.locktimer = 0;
+					plr.prevlock = NULL;
 				}
-				
 				//console.printf("[Missile Status]\n LOS: %i\n Lock Process: %i%\n Has Lock: %i", aimtarget, plr.locktimer, plr.targetlocked);
+				
+				// Note: IsVisible appears to need an entire tic to work properly,
+				// this is why it's cached to target_inview.
+				LookExParams visview;
+				visview.FOV = plr.player.FOV;
+				visview.maxDist = double.infinity;
+				visview.flags = LOF_NOSIGHTCHECK;	
+				target_inview = plr.IsVisible(plr.targetenemy, true, visview); 	
 			}
+			
 		}
 		
 		if(cooldown_timer > 0)cooldown_timer--;
@@ -411,7 +417,7 @@ class MechMissile : Mechbase_Actor
 				{
 					vector3 corrected_pos = (tracer.pos.x, tracer.pos.y, tracer.pos.z+(tracer.height/2));
 					pitch = getPitchTo(corrected_pos);
-					A_SeekerMissile(20,20,SMF_CURSPEED,maximum_range/64);
+					A_SeekerMissile(20,20,SMF_CURSPEED,0,maximum_range/64);
 				}
 			}
 		  goto SpawnLoop;

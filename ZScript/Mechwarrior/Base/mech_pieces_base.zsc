@@ -156,6 +156,11 @@ class MechPartsBase : Actor
 // Cockpit cameras
 class MechCockpitCamera : MechPartsBase
 {
+	Default
+	{
+		+NOINTERACTION;
+	}
+
 	float defz;	
 	float cur_viewz;
 	override vector3 getMechPos()
@@ -185,10 +190,10 @@ class MechCockpitCamera : MechPartsBase
 		{
 			float fovdiff = mechowner.player.FOV/mechowner.defaultfov*0.5;
 			CameraFOV = mechowner.player.FOV;
-			angle = MDMath.Lerp(angle,mechowner.angle,0.8*fovdiff);
-			pitch = MDMath.Lerp(pitch,mechowner.pitch,0.8*fovdiff)+(mechowner.viewzoffs*0.03);
+			angle = MDMath.Lerp(angle,mechowner.angle,0.6*fovdiff);
+			pitch = MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.065),0.6*fovdiff);
 			roll = mechowner.roll;
-			czoffs = defz+(mechowner.viewzoffs*0.8);
+			czoffs = defz+(mechowner.viewzoffs);
 		}
 		super.tick();
 	}
@@ -204,6 +209,7 @@ class MechCockpitModel : MechPartsBase
 	Default
 	{
 		+INTERPOLATEANGLES
+		+NOINTERACTION
 	}
 	
 	override vector3 getMechPos()
@@ -239,11 +245,11 @@ class MechCockpitModel : MechPartsBase
 		{
 			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
 			{
-				A_SetAngle(MDMath.Lerp(angle,mechowner.angle,0.2),SPF_INTERPOLATE);
-				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch,0.2),SPF_INTERPOLATE);
-				A_SetRoll (mechowner.roll ,SPF_INTERPOLATE);
+				A_SetAngle(MDMath.Lerp(angle,mechowner.angle,0.1),SPF_INTERPOLATE);
+				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
+				A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
 			}
-			mzoffs = defz+mechowner.viewzoffs*0.05;
+			mzoffs = defz+mechowner.viewzoffs*0.12;
 		}
 		
 		if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
