@@ -1,17 +1,43 @@
 class MechDoomerEvents : EventHandler 
 {
 	ui Mechlab_Menu mechlab;
+	ui CVar rendermode;
+	ui CVar target_mode;
+	
+	ui void PrintException(String fmt, int xoffs=0, int yoffs=0)
+	{	
+		int stroffs = (fmt.Length()/2)*13;
+		vector2 mid = (Screen.GetWidth()/2, Screen.GetHeight()/2);
+		mid.x += -stroffs+(xoffs*13);
+		mid.y += yoffs*20;
+		Screen.DrawText("BigFont",Font.CR_RED,mid.x,mid.y, fmt);
+	}
 	
 	override void RenderOverlay(RenderEvent e)
 	{
+		if(!rendermode) 
+			rendermode = CVar.FindCVar("vid_rendermode");
+		else
+		{
+			if(rendermode.GetInt() != 4)
+			{
+				Color dimcol = Color(0,0,0,0);
+				Screen.Dim(dimcol,1.0,0,0,Screen.GetWidth(),Screen.GetHeight());
+				PrintException("Please switch Render modes!");
+				PrintException("The only render mode supported currently is Hardware Accelerated.",0,1);
+				PrintException("Open the console and type vid_rendermode 4 or set it in \"Set Video Mode\"",0,2);
+				return;
+			}
+		}
+		
 		let plr = Mechwarrior(e.Camera);
-		CVar target_mode;
+		
 		if(!plr) 
 		{
 			let cam = MechCockpitCamera(e.Camera);
 			if(cam) plr = Mechwarrior(cam.mechowner);
 		}
-		if(plr) target_mode = CVar.GetCVar("mwd_viewport_target",plr.player);	
+		if(plr && !target_mode) target_mode = CVar.GetCVar("mwd_viewport_target",plr.player);	
 		
 		// https://forum.zdoom.org/viewtopic.php?f=122&t=61330#p1064117
 		if(!automapactive && plr && plr.targetenemy && target_mode.getBool())

@@ -180,7 +180,7 @@ class MechCockpitCamera : MechPartsBase
 	override void tick()
 	{
 		if(!defz) defz = czoffs;
-		if(mechowner) 
+		if(mechowner && !mechowner.CheckVoodoo()) 
 		{
 			float fovdiff = mechowner.player.FOV/mechowner.defaultfov*0.5;
 			CameraFOV = mechowner.player.FOV;
@@ -234,7 +234,7 @@ class MechCockpitModel : MechPartsBase
 			return;
 		}
 		if(!defz) defz = mzoffs;
-		if(mechowner) 
+		if(mechowner && !mechowner.CheckVoodoo()) 
 		{
 			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
 			{
@@ -290,7 +290,7 @@ class MechTorsoBase : MechPartsBase
 	
 	override void tick()
 	{
-		if(mechowner)
+		if(mechowner && !mechowner.CheckVoodoo())
 		{
 			if( !mechowner.dronecam && !mechowner.dronecam_active &&
 				 mechowner.player && mechowner.player.camera == mechowner ) 
@@ -353,7 +353,7 @@ class MechLegsBase : MechPartsBase
 	
 	override void tick()
 	{
-		if(mechowner)
+		if(mechowner && !mechowner.CheckVoodoo())
 		{
 			angle = mechowner.LegAng;
 			if((!mechowner.dronecam && mechowner.nofirstpersonlegs) && !mechowner.CheckVoodoo()) 
