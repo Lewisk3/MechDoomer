@@ -186,9 +186,9 @@ class MechCockpitCamera : MechPartsBase
 			float fovdiff = mechowner.player.FOV/mechowner.defaultfov*0.5;
 			CameraFOV = mechowner.player.FOV;
 			angle = MDMath.Lerp(angle,mechowner.angle,0.8*fovdiff);
-			pitch = MDMath.Lerp(pitch,mechowner.pitch,0.8*fovdiff);
+			pitch = MDMath.Lerp(pitch,mechowner.pitch,0.8*fovdiff)+(mechowner.viewzoffs*0.03);
 			roll = mechowner.roll;
-			czoffs = defz+mechowner.viewzoffs;
+			czoffs = defz+(mechowner.viewzoffs*0.8);
 		}
 		super.tick();
 	}
