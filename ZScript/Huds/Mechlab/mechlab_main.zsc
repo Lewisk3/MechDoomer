@@ -31,9 +31,9 @@ void clearSelected(bool test=true)
 }
 void updateSelected()
 {
-	if(selected_item.index >= valid_inv_context.weapon_items.Size()-1) clearSelected();
+	if(selected_item.index+1 >= valid_inv_context.weapon_items.Size()) clearSelected();
 	if(selected_item.index < 0) return;
-	let item = valid_inv_context.weapon_items[selected_item.index];
+	let item = valid_inv_context.weapon_items[selected_item.index+1];
 	String weapname = item.Tag;
 	class<Mechbase_Weapon> mw  = weapname;
 	class<Mechbase_Utility> ut = weapname;
