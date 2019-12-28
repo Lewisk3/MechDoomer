@@ -113,7 +113,7 @@ void ChangeMech(int invmech)
 	mechtype = defs.mechtype;
 	nofirstpersonlegs = defs.nofirstpersonlegs;
 	player.viewheight = defs.ViewHeight;
-	defviewz = 0;
+	defviewz = defs.ViewHeight;
 	
 	// Update vars
 	A_SetSpeed(0);

@@ -61,3 +61,4 @@ clearscope mw_CombatObjective GetObjective(int id)
 	}
 	return NULL;
 }
+

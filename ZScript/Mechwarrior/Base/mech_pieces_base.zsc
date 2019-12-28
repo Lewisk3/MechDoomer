@@ -157,6 +157,7 @@ class MechPartsBase : Actor
 class MechCockpitCamera : MechPartsBase
 {
 	float defz;	
+	float cur_viewz;
 	override vector3 getMechPos()
 	{
 		float distoffs = cxoffs;
@@ -176,7 +177,7 @@ class MechCockpitCamera : MechPartsBase
 		vector3 basepos = mechowner.Vec3Offset(cos(mechowner.angle)*distoffs,sin(mechowner.angle)*distoffs,czoffs);
 		return basepos;
 	}
-	
+
 	override void tick()
 	{
 		if(!defz) defz = czoffs;
@@ -283,7 +284,11 @@ class MechTorsoBase : MechPartsBase
 		if(cpit) 
 		{
 			let cockpitmdl = MechCockpitModel(MechPartsBase.Create(cpit, mechowner));
-			if(cockpitmdl) cockpitmdl.cockpitcam = cockpit_camera;
+			if(cockpitmdl) 
+			{
+				cockpitmdl.cockpitcam = cockpit_camera;
+				cockpitmdl.angle = mechowner.angle;
+			}
 		}
 		setup = true;
 	}
