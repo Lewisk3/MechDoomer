@@ -417,7 +417,7 @@ class MechMissile : Mechbase_Actor
 				{
 					vector3 corrected_pos = (tracer.pos.x, tracer.pos.y, tracer.pos.z+(tracer.height/2));
 					pitch = getPitchTo(corrected_pos);
-					A_SeekerMissile(20,20,SMF_CURSPEED,0,maximum_range/64);
+					A_SeekerMissile(20,20,SMF_CURSPEED|SMF_PRECISE,0,maximum_range/64);
 				}
 			}
 		  goto SpawnLoop;

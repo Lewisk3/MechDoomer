@@ -459,7 +459,7 @@ void Bobbing() {
 	{
 		TiltOffset  = sin(TiltOsc);
 		TiltOffset *= (vel/2) - (LegVel*2);
-		TiltOffset *= 0.37;
+		TiltOffset *= 0.21;
 		if(defaultmovement) TiltOffset *= 0.6;
 		TiltOffset *= CrouchMulti;
 
