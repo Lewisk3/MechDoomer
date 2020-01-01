@@ -49,8 +49,8 @@ class CustomMenuBase : ListMenu
 		mMouse.Update(ev);
 		if(ev.Type == UIEvent.Type_MouseMove) 
 		{
+			if(btn_selected > -1)mMouse.left_pressed = false;
 			btn_selected = -1;
-			mMouse.left_pressed = false;
 		}
 		return false;
 	}

@@ -67,11 +67,15 @@ class Button ui
 		if(btntext) btntext.txt = txt;
 	}
 
+	void DrawDebug()
+	{
+		 graphics.DrawString("Hovered: " .. int(hovered), (50,50));
+		 graphics.DrawString("Pressed: " .. int(pressed), (50,100));
+		 graphics.DrawString("Clicked: " .. int(clicked), (50,150));
+	}
+	
 	void Draw()
 	{
-		// graphics.DrawString("Hovered: " .. int(hovered), (50,50));
-		// graphics.DrawString("Pressed: " .. int(pressed), (50,100));
-		// graphics.DrawString("Clicked: " .. int(clicked), (50,150));
 		graphics.DrawTexture(cur_tex,btnrect.pos,0,btnrect.size);
 		if(btntext)
 		{
@@ -129,6 +133,14 @@ class Mouse ui
 	{
 		collider.pos.x = pos.x;
 		collider.pos.y = pos.y;
+	}
+	
+	void DrawDebug()
+	{
+		 graphics.DrawString("LPressed: " .. int(left_pressed), (50,300));
+		 graphics.DrawString("LClicked: " .. int(left_clicked), (50,350));
+		 graphics.DrawString("RPressed: " .. int(right_pressed), (50,450));
+		 graphics.DrawString("RClicked: " .. int(right_clicked), (50,500));
 	}
 	
 	void Update(UIEvent ev)
