@@ -1,4 +1,15 @@
 
+// Shaders
+HardwareShader PostProcess Scene
+{
+	Name "ColorTint"
+	Shader "shaders/ColorTint.fp" 330
+	Uniform float timer
+	Uniform vec3 tintColor
+	Uniform vec3 tintColor2
+	Enabled
+}
+
 // Some PBR stuff for cockpits/models.
 material texture models/Mechs/c_dark.png {
 	shader "shaders/simsun.fp"

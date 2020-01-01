@@ -1,0 +1,174 @@
+class Mech_TitleMenu : CustomMenuBase
+{
+	override TextElement newBtnText(String txt)
+	{
+		return TextElement.Create(graphics,txt, (0,0), (1.35,2.0), Font.CR_BRICK);
+	}
+
+	override void Init(Menu parent, ListMenuDescriptor desc)
+	{
+		Super.Init(parent, desc);
+		
+		graphics = MenuDrawer.Create("MechFont", 1920,1080);
+		MainBG = MenuTexture.Create(graphics,"mTITLE",(0,0),(1.0,1.0));
+		mMouse = Mouse.Create(graphics,0,0,32,32);
+		
+		TextElement btntxt = newBtnText("NEW MERCENARY");
+		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450, 60,0.2,0.1,btntxt));
+		
+		btntxt = newBtnText("LOAD GAME");
+		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450,260,0.2,0.1,btntxt));
+		
+		btntxt = newBtnText("COMBAT VARIABLES");
+		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450,460,0.2,0.1,btntxt));
+		
+		btntxt = newBtnText("FLEE TO DOS");
+		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450,660,0.2,0.1,btntxt));
+		
+		for(int i = 0; i < buttons.Size(); i++)
+		{
+			 buttons[i].SetupCollider(buttons[i].btnrect.pos.x, buttons[i].btnrect.pos.y,390,110);
+		}
+		DontDim = true;
+	}
+	override void Drawer()
+	{
+		if(gamestate == GS_LEVEL) 
+		{
+			Close();
+			Menu.SetMenu('MainMenu_InGame');
+			return;
+		}
+		
+		graphics.Dim(Color(255,0,0,0), 1.0);
+		super.Drawer();
+	}
+	
+	override void Ticker()
+	{
+		if(btn_selected != -1) mMouse.left_pressed = true;
+	
+		for(int i = 0; i < buttons.Size(); i++)
+		{
+			buttons[i].Update(mMouse);
+			
+			if(buttons[i].pressed)
+				buttons[i].btntext.font_color = Font.CR_BLACK;
+			else
+				buttons[i].btntext.font_color = Font.CR_BRICK;
+				
+			if(buttons[i].clicked)
+			{
+				MenuSound("UI/PressButton");
+				buttons[i].clicked = false;
+				
+				Switch(i)
+				{
+					case 0:	 	// New Game
+						Menu.SetMenu('PlayerclassMenu');
+					break;
+					case 1:		// Load Game
+						Menu.SetMenu('LoadGameMenu');
+					break;
+					case 2:     // Options
+						Menu.SetMenu('OptionsMenu');
+					break;
+					case 3:		// Exit
+						Menu.SetMenu("QuitMenu");
+					break;
+					default:
+					break;
+				}
+			}
+		}
+	}
+}
+
+// In-Game menu system
+class Mech_InGameMenu : CustomMenuBase
+{	
+	override TextElement newBtnText(String txt)
+	{
+		return TextElement.Create(graphics,txt, (0,0), (2.3,1.8), Font.CR_GRAY);
+	}
+
+	override void Init(Menu parent, ListMenuDescriptor desc)
+	{
+		Super.Init(parent, desc);
+		graphics = MenuDrawer.Create("MechFont", 1920,1080);
+		MainBG = MenuTexture.Create(graphics,"mTITLE2",(650,180),(0.35,0.65));
+		mMouse = Mouse.Create(graphics,0,0,32,32);
+		TextElement btntxt = newBtnText("NEW MERCENARY");
+		buttons.push(Button.Create(graphics,"","",760,280,0.2,0.1,btntxt));
+		
+		btntxt = newBtnText("LOAD GAME");
+		buttons.push(Button.Create(graphics,"","",820,380,0.2,0.1,btntxt));
+		
+		btntxt = newBtnText("SAVE GAME");
+		buttons.push(Button.Create(graphics,"","",820,480,0.2,0.1,btntxt));
+		
+		btntxt = newBtnText("COMBAT VARIABLES");
+		buttons.push(Button.Create(graphics,"","",710,580,0.2,0.1,btntxt));
+		
+		btntxt = newBtnText("FLEE TO DOS");
+		buttons.push(Button.Create(graphics,"","",800,700,0.2,0.1,btntxt));
+		
+		for(int i = 0; i < buttons.Size(); i++)
+		{
+			 buttons[i].SetupCollider(buttons[i].btnrect.pos.x+30, buttons[i].btnrect.pos.y+25,480,60);
+		}
+		
+		DontBlur = true;
+		DontDim = true;
+	}
+	
+	override void Ticker()
+	{
+		if(btn_selected != -1) mMouse.left_pressed = true;
+	
+		for(int i = 0; i < buttons.Size(); i++)
+		{
+			buttons[i].Update(mMouse);
+			
+			if(buttons[i].pressed)
+			{
+				buttons[i].btntext.font_color = Font.CR_RED;
+			}
+			else
+				buttons[i].btntext.font_color = Font.CR_GRAY;
+			
+			if(buttons[i].clicked)
+			{
+				if(i != 2) MenuSound("UI/PressButton");
+				buttons[i].clicked = false;
+				
+				Switch(i)
+				{
+					case 0:	 	// New Game
+						Menu.SetMenu('PlayerclassMenu');
+					break;
+					case 1:		// Load Game
+						Menu.SetMenu('LoadGameMenu');
+					break;
+					case 2:		// Save Game
+						if(CanSave()) 
+						{
+							MenuSound("UI/PressButton");
+							Menu.SetMenu('SaveGameMenu');
+						}
+						else
+							MenuSound("UI/Error");
+					break;
+					case 3:     // Options
+						Menu.SetMenu('OptionsMenu');
+					break;
+					case 4:		// Exit
+						Menu.SetMenu("QuitMenu");
+					break;
+					default:
+					break;
+				}
+			}
+		}
+	}
+}

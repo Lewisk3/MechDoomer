@@ -21,7 +21,6 @@ bool doShutdown;
 bool mech_shutdown;
 bool zoomed_in;
 bool canShutdown;
-bool bInfrared;
 bool manualshutdown;
 bool stepping;
 bool nofirstpersonlegs;
@@ -367,21 +366,6 @@ void mech_movement()
 			mechsounds.pushSound("Mech/Betty/ShutdownOverride");
 			TakeInventory("IBTN_OVERRIDE",1);
 		}
-	}
-
-	if(countinv("IBTN_INFRARED"))
-	{	
-		if(bInfrared)
-		{
-			TakeInventory("InfraredAmp",1);
-		}
-		else
-		{
-			A_PlaySound("Mech/Infrared",CHAN_WEAPON);
-			GiveInventory("InfraredGiver",1);
-		}
-		TakeInventory("IBTN_INFRARED",1);
-		bInfrared = !bInfrared;
 	}
 	
 	if(countStruct("JumpJet") > 0 && mech_jetsfuel < 100 && 

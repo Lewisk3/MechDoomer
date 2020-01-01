@@ -29,6 +29,11 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Huds/Mechlab/mechlab_armory.zsc"
 #include "ZScript/Huds/Mechlab/mechlab_shop.zsc"
 
+// Mainmenu(s)
+#include "ZScript/Mainmenu/Base/titlemenu_base.zsc"
+#include "ZScript/Mainmenu/Base/titlemenu_elements.zsc"
+#include "ZScript/Mainmenu/titlemenu.zsc"
+
 // Weapons
 #include "skill.cfg"
 #include "ZScript/Weapons/weapon_base.zsc"
@@ -71,7 +76,6 @@ class IBTN_CENTER : I_Boolean {}
 class IBTN_CENTERTORSO : I_Boolean {}
 class IBTN_bFIREMODE : I_Boolean {}
 class IBTN_OVERRIDE : I_Boolean {}
-class IBTN_INFRARED : I_Boolean {}
 class IBTN_NXTGROUP : I_Boolean {}
 class IBTN_PRVGROUP : I_Boolean {}
 class IBTN_SHUTDOWN : I_Boolean {}

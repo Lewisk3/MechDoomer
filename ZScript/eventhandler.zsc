@@ -1,6 +1,7 @@
 
 class MechDoomerEvents : EventHandler 
 {
+	ColorTintShaderManager ShaderManager;
 	ui Mechlab_Menu mechlab;
 	float screenfade;
 	Color screenfadecolor;
@@ -218,7 +219,22 @@ class MechDoomerEvents : EventHandler
 		return false;
 	}
 
-	
+	override void WorldTick()
+	{
+		let plr = MechWarrior(players[consoleplayer].mo);
+		if(!ShaderManager)
+			ShaderManager = ColorTintShaderManager(StaticEventHandler.Find("ColorTintShaderManager"));
+		else if(plr)
+		{
+			if(ShaderManager.resetInfrared)
+			{
+				plr.InfraredActive = false;
+				ShaderManager.resetInfrared = false;
+			}
+			ShaderManager.imageEnhancementOn = plr.InfraredActive;
+		}
+	}
+		
 	override void NetworkProcess(ConsoleEvent e)
 	{
 		String netcmd = e.Name;
@@ -230,6 +246,15 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "screen_setfade") 
 			{
 				screenfade = e.Args[0]/255.0;
+			}
+			if(netcmd == "screen_toggleinfrared") 
+			{
+				if(ShaderManager)
+				{
+					plr.InfraredActive = !plr.InfraredActive;
+					ShaderManager.imageEnhancementOn = plr.InfraredActive;
+					if(plr.InfraredActive) plr.A_PlaySound("Mech/Infrared",CHAN_WEAPON);
+				}
 			}
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);
@@ -388,4 +413,73 @@ class MechDoomerEvents : EventHandler
 	}	
 }
 
+// Real-Time/Shader EventHandler (By Cherno)
+class ColorTintShaderManager : StaticEventHandler
+{
+	//map running time. 
+	//We use a custom variable instead of relying on level.time
+	//because we only want the timer to increasewhen the game is not paused
+	int timer;
+	
+	//keeps track to the time that has passed since starting a transition,
+	//either from 0 to transTimerMax when activing Image Enhancement,
+	//or from transTimerMax to 0 when deactivating.
+	int transTimer;
+	
+	//the speed of the transition in tics. may never be 0 or we get a divide by zero error!
+	const transTimerMax = 20;
+	
+	//is image enhancement activated (on)? when sweitched from on to off, or vice versa, the transitioning will start
+	int imageEnhancementOn;
+	bool resetInfrared;
+	
+	//the transitioning progress, normalized between 0.0 and 1.0
+	double transFrac;
+	
+	//since we can't have Vector3 constants, these are the red, green and blue color values for the image enhancement effect.
+	const imageEnhancementColorR = 10.0;
+	const imageEnhancementColorG = 3.0;
+	const imageEnhancementColorB = 0.0;
+	
+	override void WorldTick()
+	{
+		//Update the ColorTint shader so it gets the current map time
+		Shader.SetUniform1f(players[consoleplayer], "ColorTint", "timer", timer);
+		transFrac = double(transTimer) / transTimerMax;
+		if(imageEnhancementOn == true && transTimer <= transTimerMax)
+		{
+			Vector3 tintColor2 = (imageEnhancementColorR,imageEnhancementColorG,imageEnhancementColorB) * transFrac;
+			Shader.SetUniform3f( players[consoleplayer], "ColorTint", "tintColor2", tintColor2 );
+			transTimer++;	
+		}
+		else if(imageEnhancementOn == false && transTimer >= 0)
+		{
+			Vector3 tintColor2 = (imageEnhancementColorR,imageEnhancementColorG,imageEnhancementColorB) * transFrac;
+			Shader.SetUniform3f( players[consoleplayer], "ColorTint", "tintColor2", tintColor2 );
+			transTimer--;
+		}	
+		timer++;
+	}
+
+	//reset the image enhancement effect when existing or starting a map
+	override void WorldLoaded(WorldEvent e)
+	{
+		timer = 0;
+		if(!e.IsSaveGame) 
+			resetInfrared = true;
+		else
+			transTimer = 0;
+		Shader.SetUniform3f( players[consoleplayer], "ColorTint", "tintColor2", (0.0,0.0,0.0) );
+	}
+	
+	override void WorldUnloaded(WorldEvent e)
+	{
+		timer = 0;
+		if(!e.IsSaveGame) 
+			resetInfrared = true;
+		else
+			transTimer = 0;
+		Shader.SetUniform3f( players[consoleplayer], "ColorTint", "tintColor2", (0.0,0.0,0.0) );
+	}
+}
 

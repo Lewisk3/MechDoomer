@@ -1,0 +1,262 @@
+
+class TextElement ui
+{
+	MenuDrawer graphics;
+	String txt;
+	vector2 pos;
+	vector2 scale;
+	uint font_color;
+	
+	static TextElement Create(MenuDrawer gpu, string text, vector2 pos, vector2 scale=(1.0,1.0), uint translation=0)
+	{
+		let txt = new("TextElement");
+		if(txt)
+		{
+			txt.graphics = gpu;
+			txt.txt = text;
+			txt.pos = pos;
+			txt.scale = scale;
+			txt.font_color = translation;
+		}
+		return txt;
+	}
+	
+	void Draw()
+	{
+		graphics.DrawString(txt,pos,0,font_color,(1./scale.x,1./scale.y));
+	}
+}
+
+
+class Button ui
+{
+	MenuDrawer graphics;
+	bool pressed;
+	bool clicked;
+	bool hovered;
+	TextureID off_tex;
+	TextureID on_tex;
+	TextureID cur_tex;
+	MenuRect collider;
+	MenuRect btnrect;
+	TextElement btntext;
+	
+	static Button Create(MenuDrawer gpu, String offtex, String ontex, 
+						 float x, float y, float sw, float sh, TextElement txt=NULL)
+	{
+		let btn = new("Button");
+		if(btn)
+		{
+			btn.off_tex = TexMan.CheckForTexture(offtex,TexMan.Type_Any);
+			btn.on_tex  = TexMan.CheckForTexture(ontex,TexMan.Type_Any);
+			btn.btnrect = MenuRect.Create(x,y,sw,sh,gpu);
+			btn.cur_tex = btn.off_tex;
+			btn.graphics = gpu;
+			btn.btntext = txt;
+		}
+		return btn;
+	}
+	
+	void SetupCollider(float x, float y, float w, float h)
+	{
+		collider = MenuRect.Create(x,y,w,h,graphics);
+	}
+	
+	void SetText(String txt)
+	{
+		if(btntext) btntext.txt = txt;
+	}
+
+	void Draw()
+	{
+		// graphics.DrawString("Hovered: " .. int(hovered), (50,50));
+		// graphics.DrawString("Pressed: " .. int(pressed), (50,100));
+		// graphics.DrawString("Clicked: " .. int(clicked), (50,150));
+		graphics.DrawTexture(cur_tex,btnrect.pos,0,btnrect.size);
+		if(btntext)
+		{
+			vector2 tscale = (1/btntext.scale.x, 1/btntext.scale.y);
+			float xoffs = (btnrect.pos.x*tscale.x)+10; 
+			float yoffs = (btnrect.pos.y*tscale.y)+(btnrect.size.y*200);
+			graphics.DrawString(btntext.txt,(xoffs,yoffs),0,btntext.font_color,tscale);
+		}
+	}
+	void DrawCollider()
+	{
+		graphics.DrawRect(collider,Color(255,0,127,127));
+	}
+	
+	void Update(Mouse mcheck)
+	{
+		hovered = collider.checkCollision(mcheck.collider);
+		if(mcheck.left_pressed) pressed = hovered;
+		if(pressed && !hovered) pressed = false;
+		
+		if(mcheck.left_clicked && pressed)
+		{
+			mcheck.left_clicked = false;
+			pressed = false;
+			if(hovered) clicked = true;
+		}
+		
+		cur_tex = pressed ? on_tex : off_tex;
+	}
+}
+
+
+class Mouse ui
+{
+	MenuDrawer graphics;
+	MenuRect collider;
+	bool left_pressed;
+	bool right_pressed;
+	bool left_clicked;
+	bool right_clicked;
+	int scroll;
+	
+	static Mouse Create(MenuDrawer gpu, float x, float y, float w, float h)
+	{
+		let ms = new("Mouse");
+		if(ms) 
+		{
+			ms.collider = MenuRect.Create(x,y,w,h, NULL);
+			ms.graphics = gpu;
+		}
+		return ms;
+	}
+	
+	void SetPos(vector2 pos)
+	{
+		collider.pos.x = pos.x;
+		collider.pos.y = pos.y;
+	}
+	
+	void Update(UIEvent ev)
+	{
+		if(ev.Type == UIEvent.Type_MouseMove)
+		{
+			collider.pos.x = ev.MouseX-5;
+			collider.pos.y = ev.MouseY-5;
+		}
+		if(ev.Type == UIEvent.Type_RButtonDown) 
+		{
+			right_pressed = true;
+			right_clicked = false;
+		}
+		if(ev.Type == UIEvent.Type_RButtonUp  ) 
+		{
+			if(right_pressed) right_clicked = true;
+			right_pressed = false;
+		}
+		if(ev.Type == UIEvent.Type_LButtonDown) 
+		{
+			left_pressed = true;
+			left_clicked = false;
+		}
+		if(ev.Type == UIEvent.Type_LButtonUp  ) 
+		{
+			if(left_pressed) left_clicked  = true;
+			left_pressed = false;
+		}
+		if(ev.Type == UIEvent.Type_WheelUp  ) scroll = -1;
+		if(ev.Type == UIEvent.Type_WheelDown) scroll = 1;
+	}
+}
+
+
+class MenuRect ui
+{
+	MenuDrawer graphics;
+	vector2 pos;
+	vector2 size;
+	
+	static MenuRect Create(float x, float y, float w, float h, MenuDrawer gscalar)
+	{
+		let nr = new("MenuRect");
+		if(nr)
+		{
+			nr.pos.x = x;
+			nr.pos.y = y;
+			nr.size.x = w;
+			nr.size.y = h;
+			nr.graphics = gscalar;
+		}
+		return nr;
+	}
+	
+	vector2, vector2 GetRelativeCollider()
+	{
+		vector2 retpos = pos;
+		vector2 retsize = (pos.x+size.x,pos.y+size.y);
+		if(graphics)
+		{
+			vector2 rpos, rsize, _;
+			[rpos,  _] = graphics.GetRelativeScale( (pos.x,pos.y) );
+			[rsize, _] = graphics.GetRelativeScale( (size.x+pos.x,size.y+pos.y) );
+			retpos = rpos;
+			retsize = rsize;
+		}
+		return retpos, retsize;
+	}
+	
+	bool CheckCollision(MenuRect r)
+	{
+		vector2 onepos, onesize;
+		[onepos, onesize] = GetRelativeCollider();
+		vector2 twopos, twosize;
+		[twopos, twosize] = r.GetRelativeCollider();
+		
+		bool collision = ( onepos.x < twosize.x && onesize.x > twopos.x && 
+		                   onepos.y < twosize.y && onesize.y > twopos.y    );
+		return collision;
+	}
+	void Move(vector2 npos, bool relative=false)
+	{
+		if(relative)
+			pos += npos;
+		else
+			pos = npos;
+	}
+}
+
+class MenuTexture ui
+{
+	TextureID tex;
+	MenuDrawer graphics;
+	vector2 scale;
+	vector2 pos;
+	
+	static MenuTexture Create(MenuDrawer gpu, String tex, vector2 pos, vector2 scale=(1,1))
+	{
+		let mtex = new("MenuTexture");
+		if(mtex)
+		{
+			mtex.tex = TexMan.CheckForTexture(tex,TexMan.Type_Any);
+			mtex.graphics = gpu;
+			mtex.scale = scale;
+			mtex.pos = pos;
+		}
+		return mtex;
+	}
+	
+	void Draw(float alpha=1.0)
+	{
+		graphics.DrawTexture(tex,pos,0,scale, alpha);
+	}
+	void DrawEx(vector2 rpos, vector2 rscale, float alpha)
+	{
+		graphics.DrawTexture(tex,rpos,0,rscale,alpha);
+	}
+	void Move(float xoffs, float yoffs, bool relative=true)
+	{
+		xoffs = relative ? pos.x+xoffs : xoffs;
+		xoffs = relative ? pos.y+yoffs : yoffs;
+		pos.x = xoffs;
+		pos.y = yoffs;
+	}
+	void SetScale(float xscale, float yscale)
+	{
+		scale.x = xscale;
+		scale.y = yscale;
+	}
+}

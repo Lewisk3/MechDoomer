@@ -138,7 +138,7 @@ class Flamer : Mechbase_Weapon
 	
 	override bool MWFire()
 	{
-		return FireVolley(4,16,16,"Energy/Flamer");
+		return FireVolley(6,16,16,"Energy/Flamer",false);
 	}
 }
 

@@ -416,11 +416,7 @@ class MechLegsBase : MechPartsBase
 			TLEG BCDEFGHI 4 
 			{	
 				if( (frame == 2 || frame == 7) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
-				if(checkStepping() && mechowner.stepping)
-				{
-					mechowner.vel.xy *= stompfriction;	
-				//	A_Quake(2,3,0,250,"");
-				};
+				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 4, 10);
 				return !isMoving() ? ResolveState("SpawnIdle") : (tics <= 5 && frame >= 7) ? ResolveState("RunCycle") : ResolveState(Null); 
 			}
@@ -429,13 +425,54 @@ class MechLegsBase : MechPartsBase
 			TLEG KLMNOPQRS 4 
 			{	
 				if( (frame == 10 || frame == 15) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
-				if(checkStepping(false, 11, 16) && mechowner.stepping) 
-				{
-					mechowner.vel.xy *= stompfriction;	
-				//	A_Quake(2,3,0,250,"");
-				}
+				if(checkStepping(false, 11, 16) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
 				return !isMoving() ? ResolveState("WalkCycle") : (tics > 5 && frame <= 10) ? ResolveState("WalkCycle") : ResolveState(Null); 
+			}
+		loop;
+	}
+}
+
+class Legs_Smooth  : MechLegsBase 
+{
+	States
+	{
+		Spawn:
+			TLE1 A 1;
+		SpawnIdle:
+			"####" "#" 1 A_JumpIf(checkStepping(true) && isMoving(), "WalkCycle");
+		loop;
+		WalkCycle:
+			TLE1 BCDEFGHIJKLMNOPQRSTUVWXYZ 2 
+			{	
+				if(frame == 21) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if(checkStepping(false, 22, 22) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);
+				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null);
+			}
+			TLE2 ABCDEFG 2
+			{
+				if(frame == 6) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if(checkStepping(false, 7, 7) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);
+				return !isMoving() ? ResolveState("SpawnIdle") : (tics <= 1 && frame >= 5) ? ResolveState("RunCycle") : ResolveState(Null);
+			}
+		loop;
+		RunCycle:
+			TLE3 HIJKLMNOPQRSTUVWXYZ 2 
+			{	
+				
+				if(frame == 22) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if(checkStepping(false, 24, 24) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);
+				return !isMoving() ? ResolveState("SpawnIdle") : (tics >= 3 && frame >= 18) ? ResolveState("WalkCycle") : ResolveState(Null);
+			}
+			TLE4 ABCDEFGHIJKLMNOP 2
+			{
+				if(frame == 12) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if(checkStepping(false, 14, 14) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);
+				return !isMoving() ? ResolveState("SpawnIdle") : (tics >= 3 && frame >= 7) ? ResolveState("WalkCycle") : ResolveState(Null);
 			}
 		loop;
 	}

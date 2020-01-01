@@ -20,6 +20,7 @@ MechCamera dronecam;
 bool dronecam_active;
 bool heatwarn;
 bool supersink;
+bool InfraredActive;
 int ams_timer;
 float HeatEfficiency;
 float HeatLevel;
@@ -173,17 +174,23 @@ void mech_weapons()
 	
 	if(countinv("IBTN_NXTGROUP"))
 	{
-		int grp = getWeaponGroupAt(selectedWeapon)+1;
-		if(grp > inv_context.maxgroup) grp = 1;
-		selectedWeapon = getNearestWeaponAt(grp);
+		if(inv_context.weapons_count > 1)
+		{
+			int grp = getWeaponGroupAt(selectedWeapon)+1;
+			if(grp > inv_context.maxgroup) grp = 1;
+			selectedWeapon = getNearestWeaponAt(grp);
+		}
 		TakeInventory("IBTN_NXTGROUP",1);
 	}
 	
 	if(countinv("IBTN_PRVGROUP"))
 	{
-		int grp = getWeaponGroupAt(selectedWeapon)-1;
-		if(grp < 1)grp = inv_context.weapons_count;
-		selectedWeapon = getNearestWeaponAt(grp);
+		if(inv_context.weapons_count > 1)
+		{
+			int grp = getWeaponGroupAt(selectedWeapon)-1;
+			if(grp < 1)grp = inv_context.weapons_count;
+			selectedWeapon = getNearestWeaponAt(grp);
+		}
 		TakeInventory("IBTN_PRVGROUP",1);
 	}
 	
@@ -240,35 +247,38 @@ void mech_weapons()
 	
 	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER1)
 	{
-		FireGroup(1);
-		weapons_fired = true;
+		if(FireGroup(1)) weapons_fired = true;
 	}
 	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER2)
 	{
-		FireGroup(2);
-		weapons_fired = true;
+		if(FireGroup(2)) weapons_fired = true;
 	}
 	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER3)
 	{
-		FireGroup(3);
-		weapons_fired = true;
+		if(FireGroup(3)) weapons_fired = true;
 	}
 	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER4)
 	{
-		FireGroup(4);
-		weapons_fired = true;
+		if(FireGroup(4)) weapons_fired = true;	
 	}
 	
 	if(countinv("IBTN_NEXTWEAPON"))
 	{	
-		if(inv_context.weapons_count > 1)A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
-		selectedWeapon++;
+		if(inv_context.weapons_count > 1)
+		{
+			A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+			selectedWeapon++;
+		}
+		if(selectedWeapon > inv_context.weapons_count) selectedWeapon = 1;
 		TakeInventory("IBTN_NEXTWEAPON",1);
 	}		
 	if(countinv("IBTN_PREVWEAPON"))
 	{
-		if(inv_context.weapons_count > 1)A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
-		selectedWeapon--;
+		if(inv_context.weapons_count > 1)
+		{
+			A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+			selectedWeapon--;
+		}
 		if(selectedWeapon < 1) selectedWeapon = inv_context.weapons_count;
 		TakeInventory("IBTN_PREVWEAPON",1);
 	}

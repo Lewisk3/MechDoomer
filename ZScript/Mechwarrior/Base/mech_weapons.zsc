@@ -340,9 +340,11 @@ void sortWeaponInv()
 }
 
 // Fire
-void FireGroup(int group, bool alpha=false, bool forcegroup=false)
+bool FireGroup(int group, bool alpha=false, bool forcegroup=false)
 {
-	if(checkVoodoo()) return;
+	if(checkVoodoo()) return false;
+	if(group > getMaxWeaponGrouping()) return false;
+	
 	if(weapon_groupfire || forcegroup)
 	{
 		for(let w = Inv; w != null; w = w.Inv)
@@ -358,8 +360,10 @@ void FireGroup(int group, bool alpha=false, bool forcegroup=false)
 	{
 		int curgrp = getWeaponGroupAt(selectedWeapon);
 		if(curgrp != group) selectedWeapon = getNearestWeaponAt(group);
-		getSelectedWeapon().MWFire();
+		let weap = getSelectedWeapon();
+		if(weap) weap.MWFire();
 	}
+	return true;
 }
 void FireWeapons(bool groupfire=true)
 {

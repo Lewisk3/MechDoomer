@@ -1,5 +1,6 @@
 LISTMENU "MainMenu"
 {
+		/*
 		LineSpacing 15
 		StaticPatchCentered 150,-60,"MWLOGO"
 		Position 105, 72
@@ -15,8 +16,16 @@ LISTMENU "MainMenu"
 		//StaticPatchCentered 160, 154, "RLOGO"
 		Position 1, 1
 		Font "SMALLFONT", "ORANGE"
+		*/
+		class "Mech_TitleMenu"
 		StaticText 68,50,"MechDoomer 2.30a - Alpha."
 }
+
+LISTMENU "MainMenu_InGame"
+{
+	class "Mech_InGameMenu"
+}
+
 
 AddOptionMenu "OptionsMenu"
 {
@@ -118,7 +127,7 @@ OptionMenu "MechDoomerControlsMenu"
 	Control    "Zoom"						 , "+zoom"
 	Control    "Target Enemy"				 , "netevent \"giveinvbutton:IBTN_TARGET\""
 	Control    "Open Mechlab"				 , "Mech_LoadoutUI"
-	Control    "Toggle Infrared"			 , "netevent \"giveinvbutton:IBTN_INFRARED\""
+	Control    "Toggle Infrared"			 , "netevent screen_toggleinfrared"
 	Control    "Display Objectives"			 , "netevent toggle_objectives" 
 	StaticText " "
 	

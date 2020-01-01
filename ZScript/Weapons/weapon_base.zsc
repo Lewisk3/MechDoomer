@@ -769,12 +769,11 @@ class Flame : Mechbase_Actor
 	Default
 	{
 		Speed 10;
-		Damage 18; // OP lolz
 		DamageType "Fire";
 		RenderStyle "Add";
 		Alpha 1.0;
-		XScale 0.6;
-		YScale 0.6;
+		XScale 0.45;
+		YScale 0.45;
 		Projectile;
 	}
 	States

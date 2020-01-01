@@ -94,6 +94,54 @@ addmenukey "Fire All Weapons" Mech_Alphastrike
 */
 
 
+// Old Infrared
+class InfraredAmp : PowerLightAmp 
+{
+	int fadeto;
+	bool activate;
+	
+	Default
+	{
+		Powerup.Duration 0x7FFFFFFD; // lasts about 2 years;
+	}
+	
+	override void PostBeginPlay()
+	{
+		fadeto = BlendColor.a;
+		BlendColor.a = 0;
+	}
+	
+	override void tick()
+	{
+		if(BlendColor.a < fadeto)
+		{
+			BlendColor.a += (fadeto) / (35 * 0.3); // .3 Second fade
+			Colormap = ((BlendColor & 0xFFFF0000) == SPECIALCOLORMAP_MASK)? BlendColor & 0xffff : PlayerInfo.NOFIXEDCOLORMAP;
+		}
+		
+		// Activate powerup halfway through fade.
+		if(BlendColor.a > fadeto/2)	activate = true;
+		
+	}
+	
+	override void DoEffect()
+	{
+		if(activate) super.DoEffect();
+	}
+}
+class InfraredGiver : PowerupGiver
+{
+	Default
+	{
+		+INVENTORY.AUTOACTIVATE
+		Inventory.MaxAmount 0;
+		Powerup.Type "InfraredAmp";
+		Powerup.Color "DB 35 18", 0.437;
+		Inventory.PickupMessage "Infrared Engaged";
+	}
+}
+
+// Old modeldef(s)
 Model Timberwolf
 {
 	Path "models"
