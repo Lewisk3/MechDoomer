@@ -25,6 +25,7 @@ class AC_2 : AutocannonBall
 {
 	Default
 	{
+		Mechbase_Actor.FireSound "Ballistics/Autocannon";
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC2*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_AC2;
 	}
@@ -42,6 +43,7 @@ class AC_5 : AutocannonBall
 {
 	Default
 	{
+		Mechbase_Actor.FireSound "Ballistics/Autocannon";
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC5*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_AC5;
 	}
@@ -59,6 +61,7 @@ class AC_10 : AutocannonBall
 {
 	Default
 	{
+		Mechbase_Actor.FireSound "Ballistics/Autocannon";
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC10*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_UAC10;
 	}
@@ -76,6 +79,7 @@ class AC_20 : AutocannonBall
 {
 	Default
 	{
+		Mechbase_Actor.FireSound "Ballistics/Autocannon";
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC20*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_AC20;
 	}
@@ -93,6 +97,7 @@ class Gauss : GaussBall
 {
 	Default
 	{
+		Mechbase_Actor.FireSound "Ballistics/Gauss";
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_GAUSS*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_GAUSS;
 	}
@@ -140,7 +145,7 @@ class Laser_SML : Laser
 		Laser.FXColor "Red";
 		StencilColor "f9 16 16";
 		Mechbase_Actor.MaximumRange 200;
-		Laser.FireSound "Lasers/Small";
+		Mechbase_Actor.FireSound "Lasers/Small";
 		Mechbase_Actor.Heat MWHEAT_SLASER;
 	}
 }
@@ -149,7 +154,7 @@ class Laser_ERSML : Laser_SML
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_ERSLAS*MWGAMEPLAY_WEAPDMGSCALE));
-		Laser.FireSound "ERLasers/Small";
+		Mechbase_Actor.FireSound "ERLasers/Small";
 		Mechbase_Actor.Heat MWHEAT_ERSLAS;
 		Mechbase_Actor.MaximumRange 370;
 	}
@@ -159,7 +164,7 @@ class Laser_SMLP : Laser_SML
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_SPLAS*MWGAMEPLAY_WEAPDMGSCALE));
-		Laser.FireSound "PulseLasers/Small";
+		Mechbase_Actor.FireSound "PulseLasers/Small";
 		Mechbase_Actor.Heat MWHEAT_SPLAS;
 	}
 }
@@ -173,7 +178,7 @@ class Laser_MED : Laser
 		Laser.FXColor "Green";
 		StencilColor "Green";
 		Mechbase_Actor.MaximumRange 540;
-		Laser.FireSound "Lasers/Medium";
+		Mechbase_Actor.FireSound "Lasers/Medium";
 		Mechbase_Actor.Heat MWHEAT_MLASER;
 	}
 }
@@ -182,7 +187,7 @@ class Laser_ERMED : Laser_MED
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_ERMLAS*MWGAMEPLAY_WEAPDMGSCALE));
-		Laser.FireSound "ERLasers/Medium";
+		Mechbase_Actor.FireSound "ERLasers/Medium";
 		Mechbase_Actor.MaximumRange 750;
 		Mechbase_Actor.Heat MWHEAT_ERMLAS;
 	}
@@ -193,7 +198,7 @@ class Laser_MEDP : Laser_MED
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_MPLAS*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.MaximumRange 440;
-		Laser.FireSound "PulseLasers/Medium";
+		Mechbase_Actor.FireSound "PulseLasers/Medium";
 		Mechbase_Actor.Heat MWHEAT_MPLAS;
 	}
 }
@@ -208,7 +213,7 @@ class Laser_LRG : Laser
 		Alpha 1.0;
 		Laser.FXColor "Blue";
 		Mechbase_Actor.MaximumRange 900;
-		Laser.FireSound "Lasers/Large";
+		Mechbase_Actor.FireSound "Lasers/Large";
 		Mechbase_Actor.Heat MWHEAT_LLASER;
 	}
 }
@@ -217,7 +222,7 @@ class Laser_ERLRG : Laser_LRG
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_ERLLAS*MWGAMEPLAY_WEAPDMGSCALE));
-		Laser.FireSound "ERLasers/Large";
+		Mechbase_Actor.FireSound "ERLasers/Large";
 		Mechbase_Actor.Heat MWHEAT_ERLLAS;
 		Mechbase_Actor.MaximumRange 1350;
 	}
@@ -227,7 +232,7 @@ class Laser_LRGP : Laser_LRG
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_LPLAS*MWGAMEPLAY_WEAPDMGSCALE));
-		Laser.FireSound "PulseLasers/Large";
+		Mechbase_Actor.FireSound "PulseLasers/Large";
 		Mechbase_Actor.MaximumRange 700;
 		Mechbase_Actor.Heat MWHEAT_LPLAS;
 	}
@@ -247,6 +252,7 @@ class PPCProjectile : PPCBall
 {
 	Default
 	{
+		Mechbase_Actor.FireSound "Energy/PPC";
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_PPC*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_PPC;
 		Mechbase_Actor.MinimumRange 90;
@@ -256,6 +262,7 @@ class ERPPCProjectile : PPCBall
 {
 	Default
 	{
+		Mechbase_Actor.FireSound "Energy/PPC";
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_ERPPC*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_ERPPC;
 	}

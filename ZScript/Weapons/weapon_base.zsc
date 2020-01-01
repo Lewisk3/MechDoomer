@@ -11,11 +11,19 @@ class Mechbase_Actor : Actor
 	float minimum_range;
 	float maximum_range;
 	bool cosmetic;
+	Sound firesound;
 	
+	Property FireSound : firesound;
 	Property Heat : heatgen;
 	Property ConstDamage: truedamage;
 	Property MinimumRange : minimum_range;
 	Property MaximumRange : maximum_range;
+	
+	override void BeginPlay()
+	{
+		A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
+		super.BeginPlay();
+	}
 	
 	void BaseInit()
 	{
@@ -230,6 +238,7 @@ class Mechbase_Weapon : Inventory
 			let weap = Mechbase_Actor(Spawn(type,lpos));
 			if(weap)
 			{
+				plr.A_AlertMonsters(1024);
 				invoker.cooldown_timer = invoker.cooldown*35.0;
 				weap.target = invoker.Owner;
 				weap.mechplayer = MechWarrior(invoker.Owner);
@@ -459,11 +468,8 @@ class MissileLight : Actor
 // Lasers
 class Laser : Mechbase_Actor
 {
-	Sound lasersound;
 	Color gfx_color;
 	double realdamage;
-	
-	Property FireSound : lasersound;
 	Property FXColor : gfx_color;
 	
 	Default
@@ -475,18 +481,11 @@ class Laser : Mechbase_Actor
 		RenderStyle "Add";
 		Decal "DoomImpScorch";
 		+PUFFGETSOWNER
-		Laser.FireSound "";
 		Laser.FXColor "FF FF FF";
 		Mechbase_Actor.Heat 1;
 		Speed 0.1;
 		//RenderStyle "Add";
 		Projectile;
-	}
-	
-	override void BeginPlay()
-	{
-		A_PlaySound(lasersound,CHAN_WEAPON,1,0,0);
-		super.BeginPlay();
 	}
 
 	override void tick()
@@ -691,17 +690,13 @@ class AMS_Missile : Mechbase_Actor
 }
 
 class PPCBall : Mechbase_Actor
-{
-	Sound firesound;
-	Property FireSound : firesound;
-	
+{	
 	Default
 	{
 		Height 3;
 		Radius 3;
 		Damage 40;
 		Speed 1;
-		PPCBall.FireSound "Energy/PPC";
 		Alpha 0.75;
 		RenderStyle "Add";
 		DamageType "Lightning";
@@ -741,7 +736,6 @@ class PPCBall : Mechbase_Actor
 			TNT1 A 0 
 			{				
 				adjustHeatLevel(heatgen);
-				A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
 			}
 		SpawnLoop:
 			MPPC A 1;
@@ -772,15 +766,11 @@ class PPCBall : Mechbase_Actor
 
 class Flame : Mechbase_Actor
 {
-	Sound firesound;
-	Property FireSound : firesound;
-		
 	Default
 	{
 		Speed 10;
 		Damage 18; // OP lolz
 		DamageType "Fire";
-		Flame.FireSound "";
 		RenderStyle "Add";
 		Alpha 1.0;
 		XScale 0.6;
@@ -794,7 +784,6 @@ class Flame : Mechbase_Actor
 			TNT1 A 0 
 			{
 				adjustHeatLevel(heatgen);
-				A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
 			}
 		SpawnLoop:
 			FIO1 BCDEFGHIJKLMN 1;
@@ -808,13 +797,9 @@ class Flame : Mechbase_Actor
 
 class GaussBall : Mechbase_Actor
 {
-	Sound firesound;
-	Property FireSound : firesound;
-	
 	Default
 	{
 		Speed 30;
-		GaussBall.FireSound "Ballistics/Gauss";
 		Projectile;
 	}
 
@@ -824,8 +809,7 @@ class GaussBall : Mechbase_Actor
 			GAUS A 1;
 			TNT1 A 0 
 			{
-				//adjustHeatLevel(heatgen);
-				A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
+				adjustHeatLevel(heatgen);
 			}
 		SpawnLoop:
 			GAUS A 1;
@@ -848,19 +832,14 @@ class GaussBall : Mechbase_Actor
 
 class AutocannonBall : Mechbase_Actor
 {
-
-	Sound firesound;
-	Property FireSound : firesound;
-	
 	Default
 	{
 		Speed 60;
 		Radius 10;
 		Height 5;
-		AutocannonBall.FireSound "Ballistics/Autocannon";
 		Projectile;
 	}
-	
+
 	States
 	{
 		Spawn:
@@ -868,7 +847,6 @@ class AutocannonBall : Mechbase_Actor
 			TNT1 A 0 
 			{
 				adjustHeatLevel(heatgen);
-				A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
 			}
 		SpawnLoop:
 			AUTO A 1;

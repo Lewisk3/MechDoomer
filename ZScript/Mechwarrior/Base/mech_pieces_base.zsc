@@ -187,7 +187,7 @@ class MechCockpitCamera : MechPartsBase
 	{
 		if(!defz) defz = czoffs;
 		if(mechowner && !mechowner.CheckVoodoo()) 
-		{
+		{		
 			float fovdiff = mechowner.player.FOV/mechowner.defaultfov*0.5;
 			CameraFOV = mechowner.player.FOV;
 			angle = MDMath.Lerp(angle,mechowner.angle,0.6*fovdiff);
@@ -200,7 +200,6 @@ class MechCockpitCamera : MechPartsBase
 }
 class MechCockpitModel : MechPartsBase
 {
-	float defz;	
 	float mxoffs;
 	float mzoffs;
 	Property Offset: mxoffs, mzoffs;
@@ -240,7 +239,7 @@ class MechCockpitModel : MechPartsBase
 			Destroy();
 			return;
 		}
-		if(!defz) defz = mzoffs;
+			
 		if(mechowner && !mechowner.CheckVoodoo()) 
 		{
 			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
@@ -249,7 +248,7 @@ class MechCockpitModel : MechPartsBase
 				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
 				A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
 			}
-			mzoffs = defz+mechowner.viewzoffs*0.12;
+			mzoffs = mechowner.viewzoffs*0.12;
 		}
 		
 		if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
@@ -361,6 +360,14 @@ class MechLegsBase : MechPartsBase
 {
 	float spdrating;
 	float stompfriction;
+	float runspeed;
+	
+	Property RunSpeed : runspeed;
+	
+	Default
+	{
+		MechLegsBase.RunSpeed 81;
+	}
 	
 	override void tick()
 	{
@@ -376,7 +383,7 @@ class MechLegsBase : MechPartsBase
 			{
 				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
 				stompfriction = clamp((0.65) + (wrating*(spdrating)), 0.75, 1.05);
-				spdrating = (abs(mechowner.move_throttle) * mechowner.MoveSpeedKPH)/160.;
+				spdrating = abs(mechowner.LegVel*2)+(abs(mechowner.move_throttle) * mechowner.MoveSpeedKPH)/runspeed;
 			}
 		}
 		super.tick();
@@ -390,12 +397,14 @@ class MechLegsBase : MechPartsBase
 			!mechowner.isdead
 		);
 	}
-	virtual bool checkStepping(bool idle=false, int frameoffs=0)
+	virtual bool checkStepping(bool idle=false, int frameone=3, int frametwo=8)
 	{
 		if(!mechowner) return false;
-		mechowner.stepping = idle ? false : (frame == 3+frameoffs || frame == 8+frameoffs);
+		mechowner.stepping = idle ? false : (frame == frameone || frame == frametwo);
+		if(mechowner.stepping) mechowner.A_AlertMonsters(1024);
 		return true;
 	}
+	
 	States
 	{
 		Spawn:
@@ -404,7 +413,7 @@ class MechLegsBase : MechPartsBase
 			"####" "#" 1 A_JumpIf(checkStepping(true) && isMoving(), "WalkCycle");
 		loop;
 		WalkCycle:
-			TLEG BCDEFGHIJ 4 
+			TLEG BCDEFGHI 4 
 			{	
 				if( (frame == 2 || frame == 7) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping() && mechowner.stepping)
@@ -420,7 +429,7 @@ class MechLegsBase : MechPartsBase
 			TLEG KLMNOPQRS 4 
 			{	
 				if( (frame == 10 || frame == 15) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
-				if(checkStepping(false, 8) && mechowner.stepping) 
+				if(checkStepping(false, 11, 16) && mechowner.stepping) 
 				{
 					mechowner.vel.xy *= stompfriction;	
 				//	A_Quake(2,3,0,250,"");
