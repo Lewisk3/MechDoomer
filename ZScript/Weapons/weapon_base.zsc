@@ -774,6 +774,7 @@ class Flame : Mechbase_Actor
 		Alpha 1.0;
 		XScale 0.45;
 		YScale 0.45;
+		Gravity 1.6;
 		Projectile;
 	}
 	States
@@ -785,7 +786,10 @@ class Flame : Mechbase_Actor
 				adjustHeatLevel(heatgen);
 			}
 		SpawnLoop:
-			FIO1 BCDEFGHIJKLMN 1;
+			FIO1 BCDEFGHIJKLMN 1
+			{
+				vel.z -= Gravity;
+			}
 		stop;
 		 
 		Death:
