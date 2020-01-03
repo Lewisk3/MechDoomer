@@ -131,8 +131,10 @@ class Mouse ui
 	
 	void SetPos(vector2 pos)
 	{
-		collider.pos.x = pos.x;
-		collider.pos.y = pos.y;
+		vector2 rpos, _;
+		[rpos,  _] = graphics.GetRelativeScale( (pos.x,pos.y) );
+		collider.pos.x = rpos.x;
+		collider.pos.y = rpos.y;
 	}
 	
 	void DrawDebug()
