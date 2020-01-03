@@ -13,24 +13,16 @@ class Mech_TitleMenu : CustomMenuBase
 		MainBG = MenuTexture.Create(graphics,"mTITLE",(0,0),(1.0,1.0));
 		mMouse = Mouse.Create(graphics,0,0,32,32);
 		
-		TextElement btntxt = newBtnText("NEW MERCENARY");
-		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450, 60,0.2,0.1,btntxt));
-		
-		btntxt = newBtnText("LOAD GAME");
-		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450,260,0.2,0.1,btntxt));
-		
-		btntxt = newBtnText("COMBAT VARIABLES");
-		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450,460,0.2,0.1,btntxt));
-		
-		btntxt = newBtnText("COCKPIT CONTROLS");
-		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450,660,0.2,0.1,btntxt));
-		
-		btntxt = newBtnText("FLEE TO DOS");
-		buttons.push(Button.Create(graphics,"NOBTN","NOBTNL",1450,860,0.2,0.1,btntxt));
+		buttons.push(Button.Create(graphics,  "mBTNEW",  "mBLNEW",  1315, 16,0.29,0.16));
+		buttons.push(Button.Create(graphics, "mBTLOAD",  "mBLLOAD", 1315,190,0.29,0.16));
+		buttons.push(Button.Create(graphics, "mBTOPTS",  "mBLOPTS", 1315,363,0.29,0.16));
+		buttons.push(Button.Create(graphics,"mBTCTRLS", "mBLCTRLS", 1315,545,0.29,0.16));
+		buttons.push(Button.Create(graphics,"mBTCREDS", "mBLCREDS", 1315,720,0.29,0.16));
+		buttons.push(Button.Create(graphics, "mBTEXIT",  "mBLEXIT", 1320,898,0.29,0.16));
 		
 		for(int i = 0; i < buttons.Size(); i++)
 		{
-			 buttons[i].SetupCollider(buttons[i].btnrect.pos.x, buttons[i].btnrect.pos.y,390,110);
+			 buttons[i].SetupCollider(buttons[i].btnrect.pos.x+30, buttons[i].btnrect.pos.y+25,495,120);
 		}
 		DontDim = true;
 	}
@@ -51,6 +43,8 @@ class Mech_TitleMenu : CustomMenuBase
 		{
 			if(buttons[i].hovered)
 			{
+				// buttons[i].DrawCollider();
+			
 				Switch(i)
 				{
 					case 0:	 	// New Game
@@ -65,7 +59,10 @@ class Mech_TitleMenu : CustomMenuBase
 					case 3: 	// Controls
 						graphics.DrawString("Setup MechDoomer's Controls",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
 					break;
-					case 4:		// Exit
+					case 4: 	// Credits
+						graphics.DrawString("Credits",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
+					break;
+					case 5:		// Exit
 						graphics.DrawString("Exit game",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
 					break;
 					default:
@@ -85,11 +82,6 @@ class Mech_TitleMenu : CustomMenuBase
 		for(int i = 0; i < buttons.Size(); i++)
 		{
 			buttons[i].Update(mMouse);
-			
-			if(buttons[i].pressed)
-				buttons[i].btntext.font_color = Font.CR_BLACK;
-			else
-				buttons[i].btntext.font_color = Font.CR_BRICK;
 				
 			if(buttons[i].clicked)
 			{
@@ -110,7 +102,10 @@ class Mech_TitleMenu : CustomMenuBase
 					case 3: 	// Controls
 						Menu.SetMenu("MechDoomerControlsMenu");
 					break;
-					case 4:		// Exit
+					case 4: 	// Credits
+						Menu.SetMenu("MechDoomerCredits");
+					break;
+					case 5:		// Exit
 						Menu.SetMenu("QuitMenu");
 					break;
 					default:
