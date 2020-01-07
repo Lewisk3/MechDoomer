@@ -10,6 +10,24 @@ HardwareShader PostProcess Scene
 	Enabled
 }
 
+// Weapons
+material texture models/Textures/bullet.png {
+	brightmap "models/Textures/bullet.png"
+	brightness 1.0
+}
+material texture models/Textures/redlaser.png {
+	brightmap "models/Textures/redlaser.png"
+	brightness 1.0
+}
+material texture models/Textures/greenlaser.png {
+	brightmap "models/Textures/greenlaser.png"
+	brightness 1.0
+}
+material texture models/Textures/bluelaser.png {
+	brightmap "models/Textures/bluelaser.png"
+	brightness 1.0
+}
+
 // Some PBR stuff for cockpits/models.
 material texture models/Mechs/c_dark.png {
 	shader "shaders/simsun.fp"

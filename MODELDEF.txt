@@ -114,7 +114,7 @@ Model MGunBullet
 	Model 0 "Weapons/bullet.md3"
 	Scale -0.2 0.2 0.2
 	USEACTORPITCH
-	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
+	SurfaceSkin 0 0  "Textures/bullet.png" // Full mesh
 	
    FrameIndex AUTO A 0 0
 } 
