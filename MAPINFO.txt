@@ -4,4 +4,15 @@ GameInfo
 	statusbarclass = "MechStatusBar"
 	eventhandlers = "MechDoomerEvents"
 	addeventhandlers = "ColorTintShaderManager"
+	
+	PlayerClasses = "DoomPlayer",
+					"BattleArmor",
+					"Stormcrow",
+					"Timberwolf",
+					"Commando",
+					"Atlas",
+					"Jenner",
+					"Urbanmech",
+					"Nova",
+					"Tarantula"
 }

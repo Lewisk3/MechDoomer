@@ -1,0 +1,199 @@
+const statscr_base_width = 1920.0;
+const statscr_base_height = 1080.0;
+
+// TODO: Once mixins are officially a thing on ZDoom.org, implement mixin HUD draw functions.
+
+class StatusColor Abstract 
+{
+	static clearscope float hue2rgb(float p, float q, float t)
+	{
+		if(t < 0) t += 1;
+		if(t > 1) t -= 1;
+		if(t < 1./6.) return p + (q - p) * 6 * t;
+		if(t < 1./2.) return q;
+		if(t < 2./3.) return p + (q - p) * (2./3. - t) * 6;
+		return p;
+	}
+	static clearscope Color hslToRgb(float h,float s,float l, float alpha=1.0)
+	{
+		float r, g, b;
+		if(s == 0)
+		{
+			r = g = b = l;
+		} 
+		else
+		{
+			float q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+			float p = 2 * l - q;
+			r = hue2rgb(p, q, h + 1./3.);
+			g = hue2rgb(p, q, h);
+			b = hue2rgb(p, q, h - 1./3.);
+		}
+		return Color(int(255*alpha), int(r * 255), int(g * 255), int(b * 255));
+	}
+}
+
+class MD_SBS Abstract ui
+{
+	enum AlignFlags
+	{
+		SS_SCREEN_CENTER		= 0x1,
+		SS_SCREEN_TOP_CENTER	= 0x2,
+		SS_SCREEN_BOTTOM_CENTER	= 0x4,
+		SS_SCREEN_TOP_LEFT		= 0x8,
+		SS_SCREEN_BOTTOM_LEFT	= 0x10,
+		SS_SCREEN_TOP_RIGHT		= 0x20,
+		SS_SCREEN_BOTTOM_RIGHT	= 0x40,
+		SS_COORDS_TEXGRID		= 0x80
+	};
+
+	static vector2 _ProcessCoords(vector2 pos, uint flags)
+	{
+		vector2 center			= (statscr_base_width/2., statscr_base_height/2.);
+		vector2 top_center		= (statscr_base_width/2., 0);
+		vector2 bottom_center	= (statscr_base_width/2., statscr_base_height);
+		vector2 top_right		= (statscr_base_width, 0);
+		vector2 bottom_right	= (statscr_base_width, statscr_base_height);
+		vector2 bottom_left		= (0, statscr_base_height);
+			
+		if(flags & SS_SCREEN_CENTER       ) return center		+pos;
+		if(flags & SS_SCREEN_TOP_CENTER   ) return top_center	+pos;
+		if(flags & SS_SCREEN_BOTTOM_CENTER) return bottom_center+pos;
+		if(flags & SS_SCREEN_BOTTOM_LEFT  ) return bottom_left  +pos;
+		if(flags & SS_SCREEN_TOP_RIGHT    ) return top_right	+pos;
+		if(flags & SS_SCREEN_BOTTOM_RIGHT ) return bottom_right +pos;
+		return pos;
+	}
+
+	static vector2 _ProcessTextureCoords(vector2 pos, uint flags, TextureID texture, vector2 scale=(1,1))
+	{
+		vector2 texsize;
+		[texsize.x, texsize.y] = TexMan.GetSize(texture);
+		
+		// Ugh, why can't i just multiply 2 vec2's together?
+		texsize.x *= scale.x;
+		texsize.y *= scale.y;
+		
+		if(flags & SS_COORDS_TEXGRID)
+		{
+			pos.x = pos.x*texsize.x;
+			pos.y = pos.y*texsize.y;
+		}
+		pos.x -= texsize.x/2.;
+		pos.y -= texsize.y/2.;
+		
+		return _ProcessCoords(pos, flags);
+	}
+	
+	static void DrawTexture(TextureID texture, Vector2 pos, int flags = 0, double Alpha = 1., Vector2 scale = (1, 1), Color tint=Color(0,0,0,0))
+	{
+		vector2 texsize;
+		[texsize.x, texsize.y] = TexMan.GetSize(texture);
+
+		vector2 npos = _ProcessTextureCoords(pos, flags, texture, scale);
+
+		Screen.DrawTexture(texture, false, npos.x, npos.y,
+			DTA_VirtualWidthF, statscr_base_width,
+			DTA_VirtualHeightF, statscr_base_height,
+			DTA_KeepRatio, true,
+			DTA_Alpha, alpha,
+			DTA_DestWidth, int(texsize.x*scale.x),
+			DTA_DestHeight, int(texsize.y*scale.y),
+			DTA_ColorOverlay, tint
+		);
+	}
+
+	static void DrawImage(String graphic, Vector2 pos, int flags = 0, double Alpha = 1., Vector2 scale = (1, 1), Color tint=Color(0,0,0,0))
+	{
+		TextureID texture = TexMan.CheckForTexture(graphic, TexMan.Type_Any);
+		DrawTexture(texture, pos, flags, alpha, scale, tint);
+	}
+	
+	static void DrawMugshot( int accuracy, vector2 pos, int drawflags = 0, int mugshotflags = 0, 
+							 float alpha = 1.0, vector2 scale=(5.0,5.0), string default_face="STF"			)
+	{
+		TextureID mugtex = statusbar.GetMugshot(accuracy, mugshotflags, default_face);
+		DrawTexture(mugtex, pos, drawflags, 1.0, scale);
+	}
+	
+	static vector2 GetImageSize(String graphic)
+	{
+		vector2 texsize;
+		TextureID texture = TexMan.CheckForTexture(graphic, TexMan.Type_Any);
+		
+		[texsize.x, texsize.y] = TexMan.GetSize(texture);
+		return texsize;
+	}
+	
+	static void DrawString( Font fnt, String str, Vector2 pos, int flags = 0, int translation = Font.CR_UNTRANSLATED, 
+							double Alpha = 1., Vector2 scale = (1, 1), Color tint = Color(0,0,0,0), int linespacing = 20 )
+	{
+		Array<String> lines;
+		str.Split(lines, "\n");
+		vector2 npos = _ProcessCoords(pos, flags);
+		npos.x *= (1./scale.x*0.5);
+		npos.y *= (1./scale.y*0.5);
+		
+		for(int i = 0; i < lines.Size(); i++)
+		{
+			 float lineoffs = (linespacing*i);
+			 Screen.DrawText(fnt, translation, npos.x, npos.y+lineoffs, 
+				lines[i],
+				DTA_VirtualWidthF,  int(statscr_base_width*(1./scale.x*0.5)),
+				DTA_VirtualHeightF, int(statscr_base_height*(1./scale.y*0.5)),
+				DTA_KeepRatio, true,
+				DTA_Alpha, alpha,
+				DTA_ColorOverlay, tint
+			);
+		}		
+	}
+	
+	static void Fill(Color col, double x, double y, double w, double h, int flags = 0)
+	{
+		vector2 pos = (x, y);
+		float sc_xres = Screen.getWidth()/statscr_base_width;
+		float sc_yres = Screen.getHeight()/statscr_base_height;		
+		vector2 npos = _ProcessCoords(pos, flags);
+		npos.x *= sc_xres;
+		npos.y *= sc_yres;
+		w *= sc_xres;
+		h *= sc_yres;
+		
+		Screen.Dim(col, 1.0, npos.x, npos.y, w, h);
+	}
+	
+	static void DrawLine(int x0, int y0, int x1, int y1, Color color, float alpha = 1.0, int flags = 0)
+	{
+		vector2 posFrom = (x0, y0);
+		vector2 posTo = (x1, y1);
+		float sc_xres = Screen.getWidth()/statscr_base_width;
+		float sc_yres = Screen.getHeight()/statscr_base_height;		
+		vector2 nposFrom = _ProcessCoords(posTo, flags);
+		vector2 nposTo = _ProcessCoords(posFrom, flags);
+		posTo.x *= sc_xres;
+		posTo.y *= sc_xres;
+		posFrom.x *= sc_yres;
+		posFrom.y *= sc_yres;
+		Screen.DrawLine(posFrom.x, posFrom.y, posTo.x, posTo.y, color, ceil(alpha*255.));
+	}
+	
+	static void SetClipRect(int x, int y, int w, int h)
+	{
+		float sc_xres = Screen.getWidth()/statscr_base_width;
+		float sc_yres = Screen.getHeight()/statscr_base_height;		
+		x *= sc_xres;
+		y *= sc_yres;
+		w *= sc_xres;
+		h *= sc_yres;
+		Screen.SetClipRect(x,y,w,h);
+	}
+	
+	static vector2 GetRelativePos(vector2 pos)
+	{
+		float sc_xres = Screen.getWidth()/statscr_base_width;
+		float sc_yres = Screen.getHeight()/statscr_base_height;	
+		return (pos.x*sc_xres, pos.y*sc_yres);
+	}
+	
+	static void ClearClipRect() { Screen.ClearClipRect(); }
+}	

@@ -22,6 +22,7 @@ class HudSpriteInitializer : Actor
 #include "ZScript/eventhandler.zsc"
 
 // UI
+#include "ZScript/Huds/status_screen.zsc"
 #include "ZScript/Huds/mechhud.zsc"
 #include "ZScript/Huds/mechlab.zsc"
 #include "ZScript/Huds/Mechlab/mechlab_base.zsc"
