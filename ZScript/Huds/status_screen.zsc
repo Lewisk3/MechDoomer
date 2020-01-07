@@ -172,13 +172,13 @@ class MD_SBS Abstract ui
 		vector2 posTo = (x1, y1);
 		float sc_xres = Screen.getWidth()/statscr_base_width;
 		float sc_yres = Screen.getHeight()/statscr_base_height;		
-		vector2 nposFrom = _ProcessCoords(posTo, flags);
-		vector2 nposTo = _ProcessCoords(posFrom, flags);
-		posTo.x *= sc_xres;
-		posTo.y *= sc_xres;
-		posFrom.x *= sc_yres;
-		posFrom.y *= sc_yres;
-		Screen.DrawLine(posFrom.x, posFrom.y, posTo.x, posTo.y, color, ceil(alpha*255.));
+		vector2 nposFrom = _ProcessCoords(posFrom, flags);
+		vector2 nposTo = _ProcessCoords(posTo, flags);
+		nposTo.x *= sc_xres;
+		nposTo.y *= sc_yres;
+		nposFrom.x *= sc_xres;
+		nposFrom.y *= sc_yres;
+		Screen.DrawLine(nposFrom.x, nposFrom.y, nposTo.x, nposTo.y, color, ceil(alpha*255.));
 	}
 	
 	static void SetClipRect(int x, int y, int w, int h)

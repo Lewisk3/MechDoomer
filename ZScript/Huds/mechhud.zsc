@@ -83,7 +83,7 @@ class MechStatusBar : BaseStatusBar
 
 	void drawAngledLine(int x, int y, int distance, float angle, float fov, Color c)
 	{
-		MD_SBS.DrawLine(x-24,y-20,x+(cos(angle+fov)*(distance*1.1)),y-(sin(angle+fov)*(distance*0.9)),c);
+		MD_SBS.DrawLine(x,y,x+(cos(angle+fov)*(distance*1.1)),y-(sin(angle+fov)*(distance*0.9)),c);
 	}
 	
 	vector2 H_AdjustCoord(vector2 coord)
@@ -433,8 +433,8 @@ class MechStatusBar : BaseStatusBar
 						
 			// Draw FOV bars (For some reason the xaxis needs to be divided by 2 to scale correctly.)
 			float drawang = mech.defaultmovement ? 90 : mech.angle-mech.LegAng+90;
-			drawAngledLine(257,220,165,drawang,mech.player.FOV/2,Color(int(255*hud_alpha),53,255,53));
-			drawAngledLine(257,220,165,drawang,-mech.player.FOV/2,Color(int(255*hud_alpha),53,255,53));
+			drawAngledLine(259,203,165,drawang,mech.player.FOV/2,Color(int(255*hud_alpha),53,255,53));
+			drawAngledLine(259,203,165,drawang,-mech.player.FOV/2,Color(int(255*hud_alpha),53,255,53));
 	
 			float radarx = 260;
 			float radary = 200;
