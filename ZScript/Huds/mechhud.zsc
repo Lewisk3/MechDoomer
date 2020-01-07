@@ -74,10 +74,11 @@ class MechStatusBar : BaseStatusBar
 		MD_SBS.DrawString("dbigfont", str, pos, flags, translation, alpha, font_scale);
 	}
 	
-	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=-1)
+	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, vector2 scale=(1,1), float alpha=-1)
 	{
 		alpha = (alpha < 0) ? hud_alpha : alpha;
-		MD_SBS.DrawString(fnt,str,pos,flags,translation,alpha,font_scale);
+		vector2 finalscale = (font_scale.x*scale.x, font_scale.y*scale.y);
+		MD_SBS.DrawString(fnt,str,pos,flags,translation,alpha,finalscale);
 	}
 
 	void drawAngledLine(int x, int y, int distance, float angle, float fov, Color c)
@@ -498,7 +499,7 @@ class MechStatusBar : BaseStatusBar
 			
 			if(dCash.txt != "" && dCash.alpha > 0) 
 			{
-				H_DrawString(dCash.txt,(1752,420),0,dCash.col,dCash.alpha);
+				H_DrawString(dCash.txt,(1752,420),0,dCash.col,(1,1),dCash.alpha);
 				dCash.alpha -= 0.01;
 			}
 			if(dCash.txt != "" && dCash.alpha <= 0){ dCash.txt = ""; dCash.alpha = 1.0; }
@@ -551,13 +552,14 @@ class MechStatusBar : BaseStatusBar
 			
 			//console.printf("%f :> %d",ct_dmg,mech.inv_context.hardpoints.ct.armor+mech.inv_context.hardpoints.ct.internalhp);
 			
-			int pd_flags = MD_SBS.SS_COORDS_TEXGRID | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
+			int pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
 			String hudmech = mech.hud_mech.."A";
 			Color hpcolor = getHealthyColor(1.0,0);
 			vector2 hudmech_size = MD_SBS.GetImageSize(hudmech);
-			H_DrawImage(hudmech,(-1.7,-1.0),pd_flags,tint:hpcolor);
-
-			vector2 clipoffset = (1428, 750);
+			
+			vector2 hmechpos = (-382,-245);
+			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+			vector2 clipoffset = (1445, 750);
 			
 			// CT -> clipoffset.x+hudmech_size.x/3, clipoffset.y, hudmech_size.x/7,hudmech_size.y/2
 			// LT -> clipoffset.x+hudmech_size.x/4, clipoffset.y, hudmech_size.x/12,hudmech_size.y/2
@@ -570,37 +572,37 @@ class MechStatusBar : BaseStatusBar
 			// CT
 			hpcolor = getHealthyColor(ct_dmg,ct_dmg<1.0);
 			H_SetClipRect(clipoffset.x+hudmech_size.x/3, clipoffset.y, hudmech_size.x/7,hudmech_size.y/2);
-			H_DrawImage(hudmech,(-1.7,-1.0),pd_flags,tint:hpcolor);
+			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
 			// LT
 			hpcolor = getHealthyColor(lt_dmg,lt_dmg<1.0);
 			H_SetClipRect(clipoffset.x+hudmech_size.x/4, clipoffset.y, hudmech_size.x/12,hudmech_size.y/2);
-			H_DrawImage(hudmech,(-1.7,-1.0),pd_flags,tint:hpcolor);
+			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
 			// RT
 			hpcolor = getHealthyColor(rt_dmg,rt_dmg<1.0);
 			H_SetClipRect(clipoffset.x+hudmech_size.x/2.1, clipoffset.y, hudmech_size.x/13,hudmech_size.y/2);
-			H_DrawImage(hudmech,(-1.7,-1.0),pd_flags,tint:hpcolor);
+			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
 			// LA
 			hpcolor = getHealthyColor(la_dmg,la_dmg<1.0);
 			H_SetClipRect(clipoffset.x, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
-			H_DrawImage(hudmech,(-1.7,-1.0),pd_flags,tint:hpcolor);
+			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
 			// RA
 			hpcolor = getHealthyColor(ra_dmg,ra_dmg<1.0);
 			H_SetClipRect(clipoffset.x+hudmech_size.x/1.8, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
-			H_DrawImage(hudmech,(-1.7,-1.0),pd_flags,tint:hpcolor);
+			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
 			// LL
 			hpcolor = getHealthyColor(ll_dmg,ll_dmg<1.0);
 			H_SetClipRect(clipoffset.x+hudmech_size.x/2, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
-			H_DrawImage(hudmech,(-1.7,-1.0),pd_flags,tint:hpcolor);
+			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
 			// RL
 			hpcolor = getHealthyColor(rl_dmg,rl_dmg<1.0);
 			H_SetClipRect(clipoffset.x+hudmech_size.x/5.9, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
-			H_DrawImage(hudmech,(-1.7,-1.0),pd_flags,tint:hpcolor);
+			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
 			
 		
@@ -640,8 +642,11 @@ class MechStatusBar : BaseStatusBar
 		let mech = MechWarriorBase(CPlayer.mo); 
 		if(!mech) return;
 		if(!mech.display_objectives) return;
-		vector2 objpos = (450,280);
-		H_DrawString("MISSION OBJECTIVES",objpos,0,Font.CR_SAPPHIRE);
+		vector2 objpos = (-470,-200);
+		uint flags = MD_SBS.SS_SCREEN_CENTER;
+		float bigscale = 2.0;
+		float smallscale = 1.2;
+		H_DrawString("MISSION OBJECTIVES",objpos,flags,Font.CR_SAPPHIRE,(bigscale,bigscale));
 		
 		int yoffs = 50;
 		for(int i = 0; i < mech.objectives.Size(); i++)
@@ -657,9 +662,9 @@ class MechStatusBar : BaseStatusBar
 				scol = Font.CR_BRICK;
 			}
 			float xoffs = prefix.length()*17;
-			H_DrawString(prefix,(objpos.x,objpos.y+yoffs),0,Font.CR_SAPPHIRE);
-			H_DrawString(main,(objpos.x+xoffs,objpos.y+yoffs),0,Font.CR_GREEN);
-			H_DrawString(suffix,(objpos.x+940,objpos.y+yoffs),0,scol);
+			H_DrawString(prefix,(objpos.x,objpos.y+yoffs),flags,Font.CR_SAPPHIRE,(smallscale,smallscale));
+			H_DrawString(main,(objpos.x+xoffs,objpos.y+yoffs),flags,Font.CR_GREEN,(smallscale,smallscale));
+			H_DrawString(suffix,(objpos.x+940,objpos.y+yoffs),flags,scol,(smallscale,smallscale));
 			yoffs+=30;
 		}
 	}

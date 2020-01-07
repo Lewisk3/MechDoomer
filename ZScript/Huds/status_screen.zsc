@@ -44,7 +44,8 @@ class MD_SBS Abstract ui
 		SS_SCREEN_BOTTOM_LEFT	= 0x10,
 		SS_SCREEN_TOP_RIGHT		= 0x20,
 		SS_SCREEN_BOTTOM_RIGHT	= 0x40,
-		SS_COORDS_TEXGRID		= 0x80
+		SS_COORDS_TEXGRID		= 0x80,
+		SS_TEXCOORDS_ABSOLUTE   = 0x100
 	};
 
 	static vector2 _ProcessCoords(vector2 pos, uint flags)
@@ -79,8 +80,11 @@ class MD_SBS Abstract ui
 			pos.x = pos.x*texsize.x;
 			pos.y = pos.y*texsize.y;
 		}
-		pos.x -= texsize.x/2.;
-		pos.y -= texsize.y/2.;
+		if( !(flags & SS_TEXCOORDS_ABSOLUTE) )
+		{
+			pos.x -= texsize.x/2.;
+			pos.y -= texsize.y/2.;
+		}
 		
 		return _ProcessCoords(pos, flags);
 	}
