@@ -19,7 +19,6 @@ class MechStatusBar : BaseStatusBar
 	int hpcounter;
 	int scrwidth;
 	int scrheight;
-	bool inMenu;
 	bool inHUDLoadout;
 	Vector2 loadm_base;
 	int loadm_selected;
@@ -260,7 +259,6 @@ class MechStatusBar : BaseStatusBar
 	{
 		if(!automapactive) Super.Draw (state, TicFrac);
 		
-		if(inMenu)H_DrawString("HUD is in menu.",(100,-500));
 		if(CPlayer && CPlayer.mo)
 		{
 			let mech = MechWarrior(CPlayer.mo);
@@ -274,33 +272,10 @@ class MechStatusBar : BaseStatusBar
 				return;
 			}
 		}
-		if (state == HUD_StatusBar)
-		{
-			//BeginStatusBar();
-			//DrawFullScreenStuff (TicFrac);
-		}
-		else if (state == HUD_Fullscreen)
-		{
-			BeginHUD();
-			DrawMainBar (TicFrac);
-			if( 
-				CVar.GetCVar("hud_scale",CPlayer).getInt() >  1 || 
-			    CVar.GetCVar("uiscale",CPlayer).getInt()   != 1 || 
-			   !CVar.GetCVar("hud_aspectscale",CPlayer).getBool()  )
-			{
-				invalid = true;
-			}
-		}
 		
-		/*
-		if(invalid && !automapactive)
-		{
-			console.printf("- HUD is not being displayed properly -");
-			console.printf(" Please do the following to fix it");
-			console.printf(" Customize Controls -> MechDoomer Controls");
-			console.printf(" Bind \"Fix HUD\" button.");
-		}
-		*/
+		// Always draw HUD
+		BeginHUD();
+		DrawMainBar (TicFrac);
 	}
 	
 	int realAngle(float ang)
@@ -700,9 +675,6 @@ class MechStatusBar : BaseStatusBar
 		H_DrawImage(image, (32, 144+32),0,(6.0,4.6));
 	}
 
-	void DrawFullScreenStuff (double TicFrac) 
-	{
-		invalid = true;
-	}
+	void DrawFullScreenStuff (double TicFrac) {}
 }
 
