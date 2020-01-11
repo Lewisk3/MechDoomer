@@ -8,9 +8,10 @@ struct FadingText
 
 class MechStatusBar : BaseStatusBar
 {
+	Mechwarrior mechplr;
 	HUDFont mHUDFont;
 	Actor prevtarg;
-	float hud_alpha;
+	float hud_alpha; // Unused atm
 	int tAlign;
 	TextureID compass;
 	bool invalid;
@@ -43,56 +44,8 @@ class MechStatusBar : BaseStatusBar
 	
 	Font fnt;
 	
-	
-	// All H_ function auto adjust to the screen resolution based on 1080p coords.	
-	void H_DrawImage(String img, vector2 pos, uint flags=0, vector2 scale=(1,1), float alpha=-1, Color tint=Color(0,0,0,0))
-	{
-		alpha = (alpha < 0) ? hud_alpha : alpha;
-		MD_SBS.DrawImage(img,pos,flags,alpha,scale,tint);
-	}
-	
-	void H_DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1))
-	{
-		MD_SBS.DrawTexture(texture,pos,flags,1.0,scale);
-	}
-	
-	void H_Fill(Color col, double x, double y, double w, double h, int flags = 0)
-	{
-		MD_SBS.Fill(col,x,y,w,h,flags);
-	}
-	
-	void H_SetClipRect(int x, int y, int width, int height, bool visualize=false)
-	{
-		if(visualize) MD_SBS.Fill(Color(255,0,255,0), x,y,width,height );			
-		MD_SBS.SetClipRect(x,y,width,height);
-	}
-	
-	void H_DrawStringBigFont(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=-1)
-	{
-		alpha = (alpha < 0) ? hud_alpha : alpha;
-		MD_SBS.DrawString("dbigfont", str, pos, flags, translation, alpha, font_scale);
-	}
-	
-	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, vector2 scale=(1,1), float alpha=-1)
-	{
-		alpha = (alpha < 0) ? hud_alpha : alpha;
-		float fontscale = CVar.GetCVar("mwd_fontscale", CPlayer).getFloat();
-		vector2 finalscale = (font_scale.x*scale.x, font_scale.y*scale.y);
-		finalscale *= fontscale;
-		MD_SBS.DrawString(fnt,str,pos,flags,translation,alpha,finalscale);
-	}
-
-	void drawAngledLine(int x, int y, int distance, float angle, float fov, Color c)
-	{
-		MD_SBS.DrawLine(x,y,x+(cos(angle+fov)*(distance*1.1)),y-(sin(angle+fov)*(distance*0.9)),c);
-	}
-	
-	vector2 H_AdjustCoord(vector2 coord)
-	{
-		return MD_SBS.GetRelativePos(coord);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////
+	// H_ Functions
+	mixin HUDScaleFunctions;
 	
 	Color getHealthyColor(float ratio, float tintalpha=1.0)
 	{
@@ -125,7 +78,6 @@ class MechStatusBar : BaseStatusBar
 		font_scale = (0.5, 0.5);
 		compassoffs = 0;
 		compassdir = 1;
-		hud_alpha = 1.0;
 		compass = TexMan.CheckForTexture("MBEARING",TexMan.TYPE_ANY);
 		tAlign = DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_BOTTOM;
 		internalcash = -1; 
@@ -140,30 +92,30 @@ class MechStatusBar : BaseStatusBar
 	{	
 		if(CPlayer && CPlayer.mo)
 		{
-			let mech = MechWarrior(CPlayer.mo);	
-			if(!mech || mech && !mech.inv_context) 
+			if(!mechplr) mechplr = MechWarrior(CPlayer.mo);
+			if(!mechplr || mechplr && !mechplr.inv_context) 
 			{
 				super.tick();
 				return;
 			}
-			if(cashcounter != mech.inv_context.money_cbills) 
+			if(cashcounter != mechplr.inv_context.money_cbills) 
 			{
-				int money = mech.inv_context.money_cbills - cashcounter;
-				if(mech.inv_context.money_cbills < cashcounter)
+				int money = mechplr.inv_context.money_cbills - cashcounter;
+				if(mechplr.inv_context.money_cbills < cashcounter)
 				{ 
 					cashcounter+= money/20; 
 					dCash.txt = money.."";
 					dCash.col = Font.CR_DARKRED;
-					if(cashcounter < mech.inv_context.money_cbills) cashcounter = mech.inv_context.money_cbills;
-					if(money/20 == 0) cashcounter = mech.inv_context.money_cbills;
+					if(cashcounter < mechplr.inv_context.money_cbills) cashcounter = mechplr.inv_context.money_cbills;
+					if(money/20 == 0) cashcounter = mechplr.inv_context.money_cbills;
 				}
-				if(mech.inv_context.money_cbills > cashcounter)
+				if(mechplr.inv_context.money_cbills > cashcounter)
 				{ 
 					cashcounter+= money/20; 
 					dCash.txt = "+" .. money;
 					dCash.col = Font.CR_GREEN;
-					if(cashcounter > mech.inv_context.money_cbills) cashcounter = mech.inv_context.money_cbills;
-					if(money/20 == 0) cashcounter = mech.inv_context.money_cbills;
+					if(cashcounter > mechplr.inv_context.money_cbills) cashcounter = mechplr.inv_context.money_cbills;
+					if(money/20 == 0) cashcounter = mechplr.inv_context.money_cbills;
 				}
 				
 			}
@@ -300,14 +252,14 @@ class MechStatusBar : BaseStatusBar
 				H_DrawString(int(mech.MoveSpeedKPH*mech.throttle) .. "Kph" ,(throttlepos.x-100,throttlepos.y+25),MD_SBS.SS_SCREEN_CENTER);
 				H_DrawImage("Throttle",(throttlepos.x+13,throttlepos.y-39),MD_SBS.SS_SCREEN_CENTER);
 				if(abs(mech.throttle) <= 0.01)
-					H_Fill(Color(int(100*hud_alpha),0,255,0), throttlepos.x,throttlepos.y, 14, -3, MD_SBS.SS_SCREEN_CENTER);
+					H_Fill(Color(int(100),0,255,0), throttlepos.x,throttlepos.y, 14, -3, MD_SBS.SS_SCREEN_CENTER);
 				if(mech.throttle > 0)
 				{
-					H_Fill(Color(int(100*hud_alpha),0,255,0), throttlepos.x,throttlepos.y, 14, -(mech.throttle*150), MD_SBS.SS_SCREEN_CENTER);
+					H_Fill(Color(int(100),0,255,0), throttlepos.x,throttlepos.y, 14, -(mech.throttle*150), MD_SBS.SS_SCREEN_CENTER);
 				}
 				else
 				{
-					H_Fill(Color(int(100*hud_alpha),0,0,255), throttlepos.x,throttlepos.y, 14, -(mech.throttle*140), MD_SBS.SS_SCREEN_CENTER);
+					H_Fill(Color(int(100),0,0,255), throttlepos.x,throttlepos.y, 14, -(mech.throttle*140), MD_SBS.SS_SCREEN_CENTER);
 				}
 				
 				// Torso angle
@@ -315,39 +267,39 @@ class MechStatusBar : BaseStatusBar
 				{
 					float angdiff = MDMath.NormalizeAngle(mech.angle-mech.LegAng);
 					float angmax = angdiff/(mech.uncappedtorso ? 180 : mech.MaxYaw);
-					H_Fill(Color(int(255*hud_alpha),0,255,0),960,45,-(angmax*185),10);
-					if( abs(angdiff) <= 1)H_Fill(Color(int(255*hud_alpha),0,255,0),960,45,4,10);
+					H_Fill(Color(int(255),0,255,0),960,45,-(angmax*185),10);
+					if( abs(angdiff) <= 1)H_Fill(Color(255,0,255,0),960,45,4,10);
 				}
 			}
 			
 			if(mech.Mech_HasJets) 
 			{
 				H_DrawString("Jets",(jetpos.x,jetpos.y+30),MD_SBS.SS_SCREEN_CENTER);
-				H_Fill(Color(int(100*hud_alpha),255,0,0),jetpos.x,jetpos.y,132,20,MD_SBS.SS_SCREEN_CENTER);
-				H_Fill(Color(int(100*hud_alpha),0,255,0),jetpos.x,jetpos.y,mech.mech_jetsfuel*1.32,20,MD_SBS.SS_SCREEN_CENTER);
+				H_Fill(Color(100,255,0,0),jetpos.x,jetpos.y,132,20,MD_SBS.SS_SCREEN_CENTER);
+				H_Fill(Color(100,0,255,0),jetpos.x,jetpos.y,mech.mech_jetsfuel*1.32,20,MD_SBS.SS_SCREEN_CENTER);
 			}
 			H_DrawString("Heat",(heatpos.x-145,heatpos.y+30),MD_SBS.SS_SCREEN_CENTER);
-			H_Fill(Color(int(255*hud_alpha),206,206,0),heatpos.x-147,heatpos.y,290,20, MD_SBS.SS_SCREEN_CENTER);
+			H_Fill(Color(255,206,206,0),heatpos.x-147,heatpos.y,290,20, MD_SBS.SS_SCREEN_CENTER);
 			double heatmid = MWHEAT_MAX*0.25;
 			double sizemul = (200/MWHEAT_MAX)*3;
 			if(mech.HeatLevel > heatmid)
 			{
 				float hmin = clamp(mech.HeatLevel-heatmid,0,heatmid);
 				float hmax = clamp(-(mech.HeatLevel-heatmid),-heatmid,0);
-				H_Fill(Color(int(255*hud_alpha),255,0,0),heatpos.x,heatpos.y,hmin*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
-				H_Fill(Color(int(255*hud_alpha),255,0,0),heatpos.x,heatpos.y,hmax*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
+				H_Fill(Color(255,255,0,0),heatpos.x,heatpos.y,hmin*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
+				H_Fill(Color(255,255,0,0),heatpos.x,heatpos.y,hmax*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
 			}
 			else
 			{
 				float hmin = clamp(mech.HeatLevel,0,heatmid);
 				float hmax = clamp(-(mech.HeatLevel),-heatmid,0);
-				H_Fill(Color(int(255*hud_alpha),2,30,216),heatpos.x,heatpos.y,143-(hmin)*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
-				H_Fill(Color(int(255*hud_alpha),2,30,216),heatpos.x,heatpos.y,-(148+((hmax)*sizemul)),20, MD_SBS.SS_SCREEN_CENTER);
+				H_Fill(Color(255,2,30,216),heatpos.x,heatpos.y,143-(hmin)*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
+				H_Fill(Color(255,2,30,216),heatpos.x,heatpos.y,-(148+((hmax)*sizemul)),20, MD_SBS.SS_SCREEN_CENTER);
 			}
 			H_DrawString("dH/dT",(deltapos.x-127,deltapos.y+30),MD_SBS.SS_SCREEN_CENTER);
-			H_Fill(Color(int(255*hud_alpha),206,206,0),deltapos.x-128,deltapos.y,125,20, MD_SBS.SS_SCREEN_CENTER);
+			H_Fill(Color(255,206,206,0),deltapos.x-128,deltapos.y,125,20, MD_SBS.SS_SCREEN_CENTER);
 			float hmax = clamp(-(mech.deltaHeat),-heatmid,0);
-			H_Fill(Color(int(255*hud_alpha),2,30,216),deltapos.x,deltapos.y,-(130+((hmax)*sizemul)),20, MD_SBS.SS_SCREEN_CENTER);
+			H_Fill(Color(255,2,30,216),deltapos.x,deltapos.y,-(130+((hmax)*sizemul)),20, MD_SBS.SS_SCREEN_CENTER);
 			
 		}
 	}
@@ -413,8 +365,8 @@ class MechStatusBar : BaseStatusBar
 						
 			// Draw FOV bars (For some reason the xaxis needs to be divided by 2 to scale correctly.)
 			float drawang = mech.defaultmovement ? 90 : mech.angle-mech.LegAng+90;
-			drawAngledLine(259,203,165,drawang,mech.player.FOV/2,Color(int(255*hud_alpha),53,255,53));
-			drawAngledLine(259,203,165,drawang,-mech.player.FOV/2,Color(int(255*hud_alpha),53,255,53));
+			drawAngledLine(259,203,165,drawang,mech.player.FOV/2,Color(255,53,255,53));
+			drawAngledLine(259,203,165,drawang,-mech.player.FOV/2,Color(255,53,255,53));
 	
 			float radarx = 260;
 			float radary = 200;
@@ -438,8 +390,6 @@ class MechStatusBar : BaseStatusBar
 					{
 						if(obj.bSOLID && obj.bSHOOTABLE) H_DrawImage("ENEMYIND",(radarx-dx,radary-dy),0,(0.8,0.6));
 						if(obj == mech.targetenemy) H_DrawString("+",(radarx-dx,radary-dy));
-						
-						//if(obj.bNOGRAVITY)DrawString(mHUDFont,"-",(dx-278,dy-200),tAlign,hud_alpha);
 					}
 				}
 			}
@@ -508,10 +458,9 @@ class MechStatusBar : BaseStatusBar
 					hpcounter = 0;
 					prevtarg = mech.targetenemy;
 				}
-				H_Fill(Color(int(255*hud_alpha),0,0,0), 80, 920,
-					242, 16, 0);
-				H_Fill(Color(int(255*hud_alpha),0,173,0), 80, 920,
-					percenthealth*242, 16, 0);
+				H_Fill(Color(255,0,0,0), 80, 920, 242, 16, 0);
+				H_Fill( Color(255,0,173,0), 80, 920,
+						percenthealth*242, 16, 0     );						
 				String percenthp = percenthealth*100 .. "";
 				percenthp.truncate(percenthp.Length()-6);
 				H_DrawString(percenthp .. "%" ,(170,920));

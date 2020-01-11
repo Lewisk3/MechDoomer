@@ -105,7 +105,7 @@ class Mechlab_Menu : GenericMenu
 		valid_hardpoints = mechplr.hardpoints;
 		valid_inv_context = mechplr.inv_context;
 		
-		hud_page = 2;  // Mechlab Page, Armory Page or Shop Page
+		hud_page = 0;  // Mechlab Page, Armory Page or Shop Page
 		
 		// Multi-purpose
 		tMessageBox    = "HMESSBG";

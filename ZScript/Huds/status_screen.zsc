@@ -1,7 +1,55 @@
 const statscr_base_width = 1920.0;
 const statscr_base_height = 1080.0;
 
-// TODO: Once mixins are officially a thing on ZDoom.org, implement mixin HUD draw functions.
+// All H_ function auto adjust to the screen resolution based on 1080p coords.	
+mixin class HUDScaleFunctions
+{
+	void H_DrawImage(String img, vector2 pos, uint flags=0, vector2 scale=(1,1), float alpha=1, Color tint=Color(0,0,0,0))
+	{
+		MD_SBS.DrawImage(img,pos,flags,alpha,scale,tint);
+	}
+	void H_DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1), float alpha=1)
+	{
+		MD_SBS.DrawTexture(texture,pos,flags,alpha,scale);
+	}
+	void H_DrawLine(int x0, int y0, int x1, int y1, Color color)
+	{
+		MD_SBS.DrawLine(x0,y0,x1,y1, color);
+	}
+	void H_Fill(Color col, double x, double y, double w, double h, int flags = 0)
+	{
+		MD_SBS.Fill(col,x,y,w,h,flags);
+	}
+	void H_SetClipRect(int x, int y, int width, int height, bool visualize=false)
+	{
+		if(visualize) MD_SBS.Fill(Color(255,0,255,0), x,y,width,height );			
+		MD_SBS.SetClipRect(x,y,width,height);
+	}
+	void H_DrawStringBigFont(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=1)
+	{
+		MD_SBS.DrawString("dbigfont", str, pos, flags, translation, alpha, font_scale);
+	}
+	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, vector2 scale=(1,1), float alpha=1, Font customfont=NULL)
+	{
+		Font fnt = "MechFont";
+		if (customfont) fnt = customfont;
+		
+		float fontscale = CVar.GetCVar("mwd_fontscale", mechplr.player).getFloat();
+		vector2 finalscale = (font_scale.x*scale.x, font_scale.y*scale.y);
+		finalscale *= fontscale;
+		MD_SBS.DrawString("MechFont",str,pos,flags,translation,alpha,finalscale);
+	}
+	void drawAngledLine(int x, int y, int distance, float angle, float fov, Color c)
+	{
+		MD_SBS.DrawLine(x,y,x+(cos(angle+fov)*(distance*1.1)),y-(sin(angle+fov)*(distance*0.9)),c);
+	}
+	vector2 H_AdjustCoord(vector2 coord)
+	{
+		return MD_SBS.GetRelativePos(coord);
+	}
+}
+
+// -= StatusBarScreen =- \\
 
 class StatusColor Abstract 
 {
