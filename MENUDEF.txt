@@ -66,6 +66,11 @@ OptionMenu "MechDoomerMenu"
 	StaticText "UI Options", "Yellow"
 	StaticText " "
 	
+	Option "Mouse Cursor","vid_cursor", "MechDoomerCursors"
+	StaticText "Changes mouse cursor graphic", "Black"
+	StaticText "\"Mechwarrior\" is the recommend option", "Black"
+	StaticText " " 
+	
 	Slider "Text Scale", "mwd_fontscale", 0.1, 2.0, 0.01, 2
 	StaticText "Adjust size of Text for HUD and Mechlab", "Black"
 	StaticText "1.0 is the default size", "Black"
@@ -120,6 +125,18 @@ OptionValue "2D3D"
 {
 	0,"3D (In-Game)"
 	1,"2D (HUD-Space)"
+}
+
+OptionString "MechDoomerCursors"
+{
+	"None", "Default (Not Recommended)"
+	"cursor", "Mechwarrior"
+	"doomcurs", "$OPTVAL_DOOM"
+	"herecurs", "$OPTSTR_HERETIC"
+	"hexncurs", "$OPTVAL_HEXEN"
+	"strfcurs", "$OPTVAL_STRIFE"
+	"chexcurs", "$OPTSTR_CHEX"
+	"-", "$OPTSTR_SYSTEMCURSOR"
 }
 
 AddOptionMenu "CustomizeControls"
