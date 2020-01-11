@@ -68,7 +68,7 @@ OptionMenu "MechDoomerMenu"
 	
 	Option "Mouse Cursor","vid_cursor", "MechDoomerCursors"
 	StaticText "Changes mouse cursor graphic", "Black"
-	StaticText "\"Mechwarrior\" is the recommend option", "Black"
+	StaticText "\"Mechwarrior\" is the recommended option", "Black"
 	StaticText " " 
 	
 	Slider "Text Scale", "mwd_fontscale", 0.1, 2.0, 0.01, 2
