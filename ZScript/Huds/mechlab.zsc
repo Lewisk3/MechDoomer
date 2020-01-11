@@ -29,28 +29,28 @@ class Mechlab_Menu : GenericMenu
 	ArmoryUtility autil_item;
 	
 	// Textures
-	TextureID tMain, tMainMechs;
-	TextureID tMech_Head, tMech_RTorso, tMech_CTorso, tMech_LTorso, tMech_RArm,
-			  tMech_LArm, tMech_RLeg, tMech_LLeg;
+	String tMain, tMainMechs;
+	String tMech_Head, tMech_RTorso, tMech_CTorso, tMech_LTorso, tMech_RArm,
+			  tMech_LArm, tMech_RLeg, tMech_LLeg, 
+		   tMechInt_Head, tMechInt_RTorso, tMechInt_CTorso, tMechInt_LTorso, tMechInt_RArm,
+			  tMechInt_LArm, tMechInt_RLeg, tMechInt_LLeg;
 			  
-	TextureID tInv_ArrowUp, tInv_ArrowDown;
-	TextureID tBtn_Sort, tBtn_Scrap, tBtn_Equip, tBtn_Dequip,
+	String tInv_ArrowUp, tInv_ArrowDown;
+	String tBtn_Sort, tBtn_Scrap, tBtn_Equip, tBtn_Dequip,
 			  tBtnlit_Sort, tBtnlit_Scrap, tBtnlit_Equip, tBtnlit_Dequip,
 			  tBtn_Shop, tBtnlit_Shop, tBtn_Items, tBtnlit_Items,
 			  tBtn_Mechs, tBtnlit_Mechs, tBtn_Deploy, tBtnlit_Deploy;
 			  
-	TextureID tBtn_WeaponsLab, tBtn_ArmorAndRepair, tBtnlit_WeaponsLab,
+	String tBtn_WeaponsLab, tBtn_ArmorAndRepair, tBtnlit_WeaponsLab,
 			  tBtnlit_ArmorAndRepair;
 			  
-	TextureID tBtn_Highlight;
-	TextureID tMessageBox;
-	TextureID tHud_paperdoll;
+	String tBtn_Highlight, tMessageBox, tHud_paperdoll;
 	// Armory
-	TextureID tArmory, tBtn_Repair, tBtnlit_Repair, tBtn_EquipUtil, 
+	String tArmory, tBtn_Repair, tBtnlit_Repair, tBtn_EquipUtil, 
 			  tBtnlit_EquipUtil, tBtn_Plus, tBtnlit_Plus, tBtn_Minus,
 			  tBtnlit_Minus;
 	// Shop
-	TextureID tShop, tBtn_BuyItem, tBtnlit_BuyItem, 
+	String tShop, tBtn_BuyItem, tBtnlit_BuyItem, 
 			  tBtn_BuyMech, tBtnlit_BuyMech, tBtn_Energy, tBtnlit_Energy,
 			  tBtn_Ballistic, tBtnlit_Ballistic, tBtn_Missiles, tBtnlit_Missiles,
 			  tBtn_Ammo, tBtnlit_Ammo, tBtn_Engines, tBtnlit_Engines, 
@@ -83,6 +83,8 @@ class Mechlab_Menu : GenericMenu
 	
 	// Fonts
 	HUDFont mHUDFont;
+	Font mFont;
+	vector2 font_scale;
 	
 	// Actual Menu
 	void Init(Menu parent, Mechwarrior CPlayer)
@@ -98,124 +100,136 @@ class Mechlab_Menu : GenericMenu
 		defwidth = 1920;
 		defheight = 1080;
 		clearSelected();
+		font_scale = ( 0.65, 0.65 );
 		
 		valid_hardpoints = mechplr.hardpoints;
 		valid_inv_context = mechplr.inv_context;
 		
-		hud_page = 0;  // Mechlab Page, Armory Page or Shop Page
+		hud_page = 2;  // Mechlab Page, Armory Page or Shop Page
 		
 		// Multi-purpose
-		tMessageBox    = TexMan.CheckForTexture("HMESSBG", TexMan.Type_Any);
-		tHud_paperdoll = TexMan.CheckForTexture(CPlayer.hud_mech.."A", TexMan.Type_Any);
-		tInv_ArrowUp   		   = TexMan.CheckForTexture("HUDARW", TexMan.Type_Any);
-		tInv_ArrowDown         = TexMan.CheckForTexture("HUDARWD", TexMan.Type_Any);
-		tBtn_WeaponsLab 	   = TexMan.CheckForTexture("BTWEAPL", TexMan.Type_Any);
-		tBtn_ArmorAndRepair    = TexMan.CheckForTexture("BTPAGE2", TexMan.Type_Any);
-		tBtn_Highlight  	   = TexMan.CheckForTexture("BTNBOX", TexMan.Type_Any);
-		tBtnlit_ArmorAndRepair = TexMan.CheckForTexture("BLPAGE2", TexMan.Type_Any);
-		tBtnlit_WeaponsLab     = TexMan.CheckForTexture("BLWEAPL", TexMan.Type_Any);
+		tMessageBox    = "HMESSBG";
+		tHud_paperdoll = CPlayer.hud_mech.."A";
+		tInv_ArrowUp   		   = "HUDARW";
+		tInv_ArrowDown         = "HUDARWD";
+		tBtn_WeaponsLab 	   = "BTWEAPL";
+		tBtn_ArmorAndRepair    = "BTPAGE2";
+		tBtn_Highlight  	   = "BTNBOX";
+		tBtnlit_ArmorAndRepair = "BLPAGE2";
+		tBtnlit_WeaponsLab     = "BLWEAPL";
 		// Main
-		tMain      = TexMan.CheckForTexture("LOADMHUD", TexMan.Type_Any);
-		tMainMechs = TexMan.CheckForTexture("LOADHUD2", TexMan.Type_Any);
-		tMech_Head             = TexMan.CheckForTexture("LMHUD_HD", TexMan.Type_Any);
-		tMech_LTorso  	       = TexMan.CheckForTexture("LMHUD_LT", TexMan.Type_Any);
-		tMech_CTorso 	       = TexMan.CheckForTexture("LMHUD_CT", TexMan.Type_Any);
-		tMech_RTorso  	       = TexMan.CheckForTexture("LMHUD_RT", TexMan.Type_Any);
-		tMech_LArm   	       = TexMan.CheckForTexture("LMHUD_LA", TexMan.Type_Any);
-		tMech_RArm    	       = TexMan.CheckForTexture("LMHUD_RA", TexMan.Type_Any);
-		tMech_LLeg     		   = TexMan.CheckForTexture("LMHUD_LL", TexMan.Type_Any);
-		tMech_RLeg     		   = TexMan.CheckForTexture("LMHUD_RL", TexMan.Type_Any);
-		tBtn_Shop			   = TexMan.CheckForTexture("BTSHOP", TexMan.Type_Any);
-		tBtnlit_Shop		   = TexMan.CheckForTexture("BLSHOP", TexMan.Type_Any);
-		tBtn_Sort      		   = TexMan.CheckForTexture("BTSORT", TexMan.Type_Any);
-		tBtn_Scrap     	   	   = TexMan.CheckForTexture("BTSCRAP", TexMan.Type_Any);
-		tBtn_Equip     	   	   = TexMan.CheckForTexture("BTEQUIP", TexMan.Type_Any);
-		tBtn_Dequip    	   	   = TexMan.CheckForTexture("BTDEQUIP", TexMan.Type_Any);
-		tBtn_Items     	   	   = TexMan.CheckForTexture("BTITEMS", TexMan.Type_Any);
-		tBtn_Mechs     	   	   = TexMan.CheckForTexture("BTMECHS", TexMan.Type_Any);
-		tBtn_Deploy    	   	   = TexMan.CheckForTexture("BTDEPLOY", TexMan.Type_Any);
-		tBtnlit_Sort   	   	   = TexMan.CheckForTexture("BLSORT", TexMan.Type_Any);
-		tBtnlit_Scrap      	   = TexMan.CheckForTexture("BLSCRAP", TexMan.Type_Any);
-		tBtnlit_Equip  		   = TexMan.CheckForTexture("BLEQUIP", TexMan.Type_Any);
-		tBtnlit_Dequip 		   = TexMan.CheckForTexture("BLDEQUIP", TexMan.Type_Any);
-		tBtnlit_Items     	   = TexMan.CheckForTexture("BLITEMS", TexMan.Type_Any);
-		tBtnlit_Mechs     	   = TexMan.CheckForTexture("BLMECHS", TexMan.Type_Any);
-		tBtnlit_Deploy    	   = TexMan.CheckForTexture("BLDEPLOY", TexMan.Type_Any);
+		tMain      	    = "LOADMHUD";
+		tMainMechs 	    = "LOADHUD2";
+		tMech_Head      = "LMHUD_HD";
+		tMech_LTorso    = "LMHUD_LT";
+		tMech_CTorso    = "LMHUD_CT";
+		tMech_RTorso    = "LMHUD_RT";
+		tMech_LArm      = "LMHUD_LA";
+		tMech_RArm      = "LMHUD_RA";
+		tMech_LLeg      = "LMHUD_LL";
+		tMech_RLeg      = "LMHUD_RL";
+		tMechInt_Head   = "LMINT_HD";
+		tMechInt_LTorso = "LMINT_LT";
+		tMechInt_CTorso = "LMINT_CT";
+		tMechInt_RTorso = "LMINT_RT";
+		tMechInt_LArm   = "LMINT_LA";
+		tMechInt_RArm   = "LMINT_RA";
+		tMechInt_LLeg   = "LMINT_LL";
+		tMechInt_RLeg   = "LMINT_RL";
+		tBtn_Shop	    = "BTSHOP";
+		tBtnlit_Shop    = "BLSHOP";
+		tBtn_Sort       = "BTSORT";
+		tBtn_Scrap      = "BTSCRAP";
+		tBtn_Equip      = "BTEQUIP";
+		tBtn_Dequip     = "BTDEQUIP";
+		tBtn_Items      = "BTITEMS";
+		tBtn_Mechs      = "BTMECHS";
+		tBtn_Deploy     = "BTDEPLOY";
+		tBtnlit_Sort    = "BLSORT";
+		tBtnlit_Scrap   = "BLSCRAP";
+		tBtnlit_Equip   = "BLEQUIP";
+		tBtnlit_Dequip  = "BLDEQUIP";
+		tBtnlit_Items   = "BLITEMS";
+		tBtnlit_Mechs   = "BLMECHS";
+		tBtnlit_Deploy  = "BLDEPLOY";
 		// Armory
-		tArmory = TexMan.CheckForTexture("LOADRHUD", TexMan.Type_Any);
-		tBtn_Repair   	  = TexMan.CheckForTexture("BTREP", TexMan.Type_Any);
-		tBtn_EquipUtil 	  = TexMan.CheckForTexture("BTUTIL", TexMan.Type_Any);
-		tBtn_Plus         = TexMan.CheckForTexture("BTPLUS", TexMan.Type_Any);
-		tBtn_Minus 	      = TexMan.CheckForTexture("BTMINUS", TexMan.Type_Any);
-		tBtnlit_Repair	  = TexMan.CheckForTexture("BLREP", TexMan.Type_Any);
-		tBtnlit_EquipUtil = TexMan.CheckForTexture("BLUTIL", TexMan.Type_Any);
-		tBtnlit_Plus      = TexMan.CheckForTexture("BLPLUS", TexMan.Type_Any);
-		tBtnlit_Minus     = TexMan.CheckForTexture("BLMINUS", TexMan.Type_Any);
+		tArmory 		  = "LOADRHUD";
+		tBtn_Repair   	  = "BTREP";
+		tBtn_EquipUtil 	  = "BTUTIL";
+		tBtn_Plus         = "BTPLUS";
+		tBtn_Minus 	      = "BTMINUS";
+		tBtnlit_Repair	  = "BLREP";
+		tBtnlit_EquipUtil = "BLUTIL";
+		tBtnlit_Plus      = "BLPLUS";
+		tBtnlit_Minus     = "BLMINUS";
 		// Shop
-		tShop = TexMan.CheckForTexture("MDSHOP", TexMan.Type_Any);
-		tBtn_BuyItem 	  = TexMan.CheckForTexture("BTBUYIT", TexMan.Type_Any);
-		tBtn_BuyMech 	  = TexMan.CheckForTexture("BTBUYMH", TexMan.Type_Any);
-		tBtn_Energy 	  = TexMan.CheckForTexture("BTNRG", TexMan.Type_Any);
-		tBtn_Ballistic 	  = TexMan.CheckForTexture("BTBAL", TexMan.Type_Any);
-		tBtn_Missiles	  = TexMan.CheckForTexture("BTMSLS", TexMan.Type_Any);
-		tBtn_Ammo 		  = TexMan.CheckForTexture("BTAMMO", TexMan.Type_Any);
-		tBtn_Engines 	  = TexMan.CheckForTexture("BTENG", TexMan.Type_Any);
-		tBtn_All	 	  = TexMan.CheckForTexture("BTALL", TexMan.Type_Any);
-		tBtn_Light 	  	  = TexMan.CheckForTexture("BTLIGHT", TexMan.Type_Any);
-		tBtn_Medium		  = TexMan.CheckForTexture("BTMED", TexMan.Type_Any);
-		tBtn_Heavy 		  = TexMan.CheckForTexture("BTHEAVY", TexMan.Type_Any);
-		tBtn_Assault 	  = TexMan.CheckForTexture("BTASLT", TexMan.Type_Any);
-		tBtn_MechsMode 	  = TexMan.CheckForTexture("BTMODE", TexMan.Type_Any);
-		tBtnlit_BuyItem   = TexMan.CheckForTexture("BLBUYIT", TexMan.Type_Any);
-		tBtnlit_BuyMech   = TexMan.CheckForTexture("BLBUYMH", TexMan.Type_Any);
-		tBtnlit_Energy    = TexMan.CheckForTexture("BLNRG", TexMan.Type_Any);
-		tBtnlit_Ballistic = TexMan.CheckForTexture("BLBAL", TexMan.Type_Any);
-		tBtnlit_Missiles  = TexMan.CheckForTexture("BLMSLS", TexMan.Type_Any);
-		tBtnlit_Ammo      = TexMan.CheckForTexture("BLAMMO", TexMan.Type_Any);
-		tBtnlit_Engines   = TexMan.CheckForTexture("BLENG", TexMan.Type_Any);
-		tBtnlit_MechsMode = TexMan.CheckForTexture("BLMODE", TexMan.Type_Any);
-		tBtnlit_All	 	  = TexMan.CheckForTexture("BLALL", TexMan.Type_Any);
-		tBtnlit_Light 	  = TexMan.CheckForTexture("BLLIGHT", TexMan.Type_Any);
-		tBtnlit_Medium	  = TexMan.CheckForTexture("BLMED", TexMan.Type_Any);
-		tBtnlit_Heavy 	  = TexMan.CheckForTexture("BLHEAVY", TexMan.Type_Any);
-		tBtnlit_Assault   = TexMan.CheckForTexture("BLASLT", TexMan.Type_Any);
+		tShop 			  = "MDSHOP";
+		tBtn_BuyItem 	  = "BTBUYIT";
+		tBtn_BuyMech 	  = "BTBUYMH";
+		tBtn_Energy 	  = "BTNRG";
+		tBtn_Ballistic 	  = "BTBAL";
+		tBtn_Missiles	  = "BTMSLS";
+		tBtn_Ammo 		  = "BTAMMO";
+		tBtn_Engines 	  = "BTENG";
+		tBtn_All	 	  = "BTALL";
+		tBtn_Light 	  	  = "BTLIGHT";
+		tBtn_Medium		  = "BTMED";
+		tBtn_Heavy 		  = "BTHEAVY";
+		tBtn_Assault 	  = "BTASLT";
+		tBtn_MechsMode 	  = "BTMODE";
+		tBtnlit_BuyItem   = "BLBUYIT";
+		tBtnlit_BuyMech   = "BLBUYMH";
+		tBtnlit_Energy    = "BLNRG";
+		tBtnlit_Ballistic = "BLBAL";
+		tBtnlit_Missiles  = "BLMSLS";
+		tBtnlit_Ammo      = "BLAMMO";
+		tBtnlit_Engines   = "BLENG";
+		tBtnlit_MechsMode = "BLMODE";
+		tBtnlit_All	 	  = "BLALL";
+		tBtnlit_Light 	  = "BLLIGHT";
+		tBtnlit_Medium	  = "BLMED";
+		tBtnlit_Heavy 	  = "BLHEAVY";
+		tBtnlit_Assault   = "BLASLT";
 		
 		
-		mHUDFont = HUDFont.Create("MechFont");
+		mFont = "MechFont";
+		mHUDFont = HUDFont.Create(mFont);
 		hardpoint = -1;
 		
 		// mechplr hardpoint rects
-		initRect(rHD,948,535,36,40);
-		initRect(rCT,925,583,84,114);
-		initRect(rLA,820,524,62,182);
-		initRect(rRA,1055,524,62,182);
-		initRect(rLT,897,524,43,50);
-		initRect(rRT,997,524,43,50);
-		initRect(rLL,833,724,90,192);
-		initRect(rRL,1003,724,90,192);
+		initRect(rHD,972,540,36,40);
+		initRect(rCT,945,593,84,114);
+		initRect(rLA,840,534,62,182);
+		initRect(rRA,1075,534,62,182);
+		initRect(rLT,917,534,43,50);
+		initRect(rRT,1017,534,43,50);
+		initRect(rLL,853,734,90,230);
+		initRect(rRL,1023,734,90,230);
 		// Border rects
 		initRect(weapbox,750,130,415,790);
 		initRect(invbox,1198,130,375,790);
 		// Action Buttons
-		initRect(sortbtn,1445,195,125,50);
-		initRect(scrapbtn,1450,890,125,50);
-		initRect(dequipbtn,1055,450,125,50);
-		initRect(equipbtn,605,305,125,50);
-		initRect(autilbtn,940,440,220,45);
-		initRect(repairbtn,780,440,125,45);
-		initRect(plusbtn,1105,220,25,25);
-		initRect(minusbtn,1070,220,25,25);
-		initRect(shopbtn,332,740,120,45);
-		initRect(invmodebtn,1445,135,125,50);
+		initRect(sortbtn,1526,138,125,50);
+		initRect(scrapbtn,1530,960,125,50);
+		initRect(dequipbtn,1093,435,125,50);
+		initRect(equipbtn,590,265,125,50);
+		initRect(autilbtn,955,427,245,45);
+		initRect(repairbtn,785,427,125,45);
+		initRect(plusbtn,1117,155,30,30);
+		initRect(minusbtn,1076,155,30,30);
+		initRect(shopbtn,290,777,120,60);
+		initRect(invmodebtn,1525,64,125,50);
 		// Shop Buttons
-		initRect(energybtn,1205,133,125,50);
-		initRect(ballisticbtn,1335,133,125,50);
-		initRect(missilesbtn,1465,133,125,50);
-		initRect(ammobtn,1335,195,125,50);
-		initRect(enginesbtn,1465,195,125,50);
-		initRect(buyitembtn,1007,500,125,50);
-		initRect(buymechbtn,952,890,140,50);
-		initRect(mechsmodebtn,1351,893,220,50);
+		initRect(energybtn,1255,63,125,50);
+		initRect(ballisticbtn,1400,63,125,50);
+		initRect(missilesbtn,1545,63,125,50);
+		
+		initRect(ammobtn,1403,137,125,50);
+		initRect(enginesbtn,1545,137,125,50);
+		
+		initRect(buyitembtn,1040,495,125,50);
+		initRect(buymechbtn,980,960,140,50);
+		initRect(mechsmodebtn,1415,965,240,50);
 		
 		initRect(mouse, mpos.x, mpos.y, 8,8);
 	}
@@ -237,11 +251,8 @@ class Mechlab_Menu : GenericMenu
 		//drawRect(scrapbtn, debug_color);
 	 	//drawRect(sortbtn, debug_color);
 		//drawRect(invmodebtn, debug_color);
-		//drawRect(modebtn, debug_color);
 		//drawRect(autilbtn, debug_color);
 		//drawRect(repairbtn, debug_color);
-		//drawRect(plusbtn, debug_color);
-		//drawRect(minusbtn, debug_color);
 		//drawRect(energybtn, debug_color);
 		//drawRect(ballisticbtn, debug_color);
 		//drawRect(missilesbtn, debug_color);
@@ -250,8 +261,10 @@ class Mechlab_Menu : GenericMenu
 		//drawRect(buyitembtn, debug_color);
 		//drawRect(buymechbtn, debug_color);
 		//drawRect(mechsmodebtn, debug_color);
-		//drawRect(mechsmodebtn, debug_color);
+		//drawRect(modebtn, debug_color);
 		//drawRect(shopbtn, debug_color);
+		//drawRect(plusbtn, debug_color);
+		//drawRect(minusbtn, debug_color);
 	}
 
 	override void Drawer ()
@@ -267,15 +280,15 @@ class Mechlab_Menu : GenericMenu
 				if(hardpoint < 0) hardpoint = 1;
 				page_offs = 1;
 				invoffset = 0;
-				initRect(modebtn,490,740,240,45);
+				initRect(modebtn,463,777,255,60);
 				page_init = true;
 			}
-			// H_DrawTexture(tHud_paperdoll,(675,770),0,(0.45,0.4));
-			maxpageitems = 25;
+			// H_DrawImage(tHud_paperdoll,(675,770),0,(0.45,0.4));
+			maxpageitems = 28;
 			drawMechlabInfo();
-			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,815,160);
-			drawLoadoutBody(950,120,hardpoint);
-			drawInventory(1278,225, invoffset, maxpageitems);
+			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,815,135);
+			drawLoadoutBody(-90,-460,hardpoint);
+			drawInventory(1320,225, invoffset, maxpageitems);
 		} 
 		// Armory mode
 		else if(hud_page == 1)
@@ -286,11 +299,11 @@ class Mechlab_Menu : GenericMenu
 				valid_inv_context = mechplr.inv_context;
 				page_offs = -1;
 				if(hardpoint < 0) hardpoint = 1;
-				initRect(modebtn,490,620,238,35);
+				initRect(modebtn,460,625,250,60);
 				page_init = true;
 			}
-			H_DrawTexture(tArmory, (942,807), 0, (0.9,0.7) );
-			drawLoadoutBody(950,120,hardpoint);
+			H_DrawImage(tArmory, (0,0), MD_SBS.SS_SCREEN_CENTER, (1.0, 1.0) );
+			drawLoadoutBody(-90,-460,hardpoint);
 			drawArmoryInfo();
 		}
 		// Shop mode
@@ -302,31 +315,32 @@ class Mechlab_Menu : GenericMenu
 				MechDoomerEvents.SendNetworkEvent("items_getlist");
 				page_offs = -2;
 				invoffset = 0;
-				initRect(modebtn,490,712,238,50);
+				initRect(modebtn,460,745,260,60);
 				mechmode = false;
 				page_init = true;
 				ShopInit();
 			}
-			H_DrawTexture(tShop, (942,807), 0, (0.9,0.7) );
+			maxpageitems = 28;
+			H_DrawImage(tShop, (0,0), MD_SBS.SS_SCREEN_CENTER );
 			drawShopInfo();
 		}
 			
 		// Player produced HUD message.
 		if(plrHudMessage.txt != "" && plrHudMessage.alpha > 0) 
 		{
-			vector2 messagepos = (960, 450*messagepos_yscale);
+			vector2 messagepos = (960, 600*messagepos_yscale);
 			Array<String> text;
 			plrHudMessage.txt.Split(text,"\n");
 			
-			H_DrawTexture(tMessageBox,(messagepos.x+30,messagepos.y),0,(1.3,0.7),1.0);
+			H_DrawImage(tMessageBox,(messagepos.x+30,messagepos.y-500),0,(1.4,1.2),1.0);
 			if(messagepos.y > 80)
 			{
 				for(int i = 0; i < text.Size(); i++)
 				{
-					float yoffs = (messagepos.y-90) + i*20;
-					H_DrawString(text[i],(messagepos.x-240,yoffs),0,plrHudMessage.col,1.0);
+					float yoffs = (messagepos.y-200) + i*25;
+					H_DrawString(text[i],(messagepos.x-240,yoffs),0,plrHudMessage.col,(1,1),1.0);
 				}
-				H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-24),0,Font.CR_White,plrHudMessage.alpha);
+				H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-80),0,Font.CR_White,(1,1),plrHudMessage.alpha);
 			}
 		}
 			
@@ -335,6 +349,7 @@ class Mechlab_Menu : GenericMenu
 		{
 			HUD_ChangePageRelative(page_offs);
 		}		
+		
 		Debug_DrawAllButtons();		
 	}
 	

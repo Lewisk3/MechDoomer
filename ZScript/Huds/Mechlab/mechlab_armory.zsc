@@ -12,6 +12,23 @@ bool ValidateHardpoint(int ind)
 	return (hp.internalhp > 0);
 }
 
+float GetHardpointVitalRatio(MechHardpoint hp)
+{
+	float hp_vitals    = hp.armor+hp.internalhp;
+	float hp_maxvitals = hp.max_armor+hp.max_internal;
+	if(hp.internalhp <= 0) hp_vitals = 0;
+	if(hp_vitals == 0) return 1.0;
+	float vres = 1.0 - (hp_vitals / hp_maxvitals);
+	if(vres < 0.1) vres = 0;
+	return vres;
+}
+
+Color getHealthyColor(float ratio, float tintalpha=1.0)
+{
+	if(ratio <= 0) return StatusColor.HSLtoRGB(0,1.0,0.0,1.0);
+	return StatusColor.HSLtoRGB(0.28*(ratio-0.3),1.0,0.5, tintalpha);
+}
+
 double GetEntireRepairCost()
 {
 	double cost = 0;
@@ -84,6 +101,52 @@ double, double GetHardpointHealthPerc(MechHardpoints hps)
 
 
 // Graphics
+void DrawDamagedHardpoints(vector2 pos)
+{
+	uint flags = MD_SBS.SS_SCREEN_CENTER;
+	vector2 scale = (0.94,0.94);
+	float alpha = 0.69;
+
+	for(int i = 0; i < 8; i++)
+	{
+		MechHardpoint hp = valid_hardpoints.FindByIndex(i);
+		if(!hp) return;
+		
+		float ratio = 1.0-GetHardpointVitalRatio(hp);
+		Color hpcolor = getHealthyColor(ratio,ratio<1.0 ? 0.5 : 0);
+		if(ratio >= 1.0) continue;
+		
+		switch(i)
+		{ 
+			Case 0: // HD
+				H_DrawImage(tMechInt_Head, pos, flags, scale, alpha, tint:hpcolor);
+			break;
+			Case 1: // CT
+				H_DrawImage(tMechInt_CTorso, pos, flags, scale, alpha, tint:hpcolor);
+			break;
+			Case 2: // LT
+				H_DrawImage(tMechInt_LTorso, pos, flags, scale, alpha, tint:hpcolor);
+			break;
+			Case 3: // RT
+				H_DrawImage(tMechInt_RTorso, pos, flags, scale, alpha, tint:hpcolor);
+			break;
+			Case 4: // LA
+				H_DrawImage(tMechInt_LArm, pos, flags, scale, alpha, tint:hpcolor);
+			break;
+			Case 5: // RA
+				H_DrawImage(tMechInt_RArm, pos, flags, scale, alpha, tint:hpcolor);
+			break;
+			Case 6: // LL
+				H_DrawImage(tMechInt_LLeg, pos, flags, scale, alpha, tint:hpcolor);
+			break;
+			Case 7: // RL
+				H_DrawImage(tMechInt_RLeg, pos, flags, scale, alpha, tint:hpcolor);
+			break;
+			default:
+			break;
+		}
+	}	
+}
 void DrawArmorUtilites(int sx, int sy)
 {
 	int offsy = 0;
@@ -94,7 +157,8 @@ void DrawArmorUtilites(int sx, int sy)
 		{
 			Rect checkmouse;
 			string itemstr = armorutil.getTag() .. " x" .. mechplr.countinv(armorutil.getClassName());
-			initRect(checkmouse,sx,sy+offsy+20,14*itemstr.length(),10);
+			initRect(checkmouse,sx,sy+offsy-14,14*itemstr.length(),20);
+			// drawRect(checkmouse, debug_color);
 			if( checkCollision(mouse, checkmouse) && mstats.left_btn ) autil_item = armorutil;
 			uint fcr = Font.CR_WHITE;
 			if(armorutil == autil_item) fcr = Font.CR_GREEN;
@@ -106,7 +170,9 @@ void DrawArmorUtilites(int sx, int sy)
 void drawArmoryInfo()
 {
 	// Draw Utils
-	DrawArmorUtilites(1220,170);
+	DrawArmorUtilites(1260,140);
+	
+	DrawDamagedHardpoints( (51,222) );
 	
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
 	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
@@ -118,9 +184,9 @@ void drawArmoryInfo()
 	weapston.truncate(weapston.length()-3);
 	mechston.truncate(mechston.length()-3);
 	enginetype.truncate(enginetype.Length()-7);
-	vector2 detailpos = (330,300);
-	vector2 cbillpos  = (330,150);
-	vector2 statuspos = (777,185);
+	vector2 detailpos = (280,300);
+	vector2 cbillpos  = (290,105);
+	vector2 statuspos = (777,160);
 	
 	string armorstr = "";
 	string internalstr = "";
@@ -159,29 +225,29 @@ void drawArmoryInfo()
 	internalpercent.truncate(internalpercent.length()-6);
 	
 	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);
-	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+20));
-	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+40));
-	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+60));
-	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+80));
-	H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+120));
-	H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+140));
+	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+25));
+	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+50));
+	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+75));
+	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+100));
+	H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+125));
+	H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+150));
 	
 	float cbills_remain = mechplr.inv_context.money_cbills-repair_cost;
 	if(cbills_remain < 0) cbills_remain = 0;
 	
 	H_DrawString("Funds: ".. mechplr.inv_context.money_cbills, cbillpos);
-	H_DrawString("Price: ".. repair_cost, (cbillpos.x, cbillpos.y+20) );
-	H_DrawString("Bal: ".. int(cbills_remain), (cbillpos.x, cbillpos.y+40) );
+	H_DrawString("Price: ".. repair_cost, (cbillpos.x, cbillpos.y+25) );
+	H_DrawString("Bal: ".. int(cbills_remain), (cbillpos.x, cbillpos.y+50) );
 	
 	// Draw Buttons
-	TextureID repair = (checkCollision(mouse,repairbtn)&&repair_cost) ? tBtnlit_Repair : tBtn_Repair;
-	TextureID util = (checkCollision(mouse,autilbtn)&&autil_item) ? tBtnlit_EquipUtil : tBtn_EquipUtil;
-	TextureID mode = checkCollision(mouse,modebtn) ?  tBtnlit_WeaponsLab : tBtn_WeaponsLab;
-	TextureID plus = tBtn_Plus;
-	TextureID minus = tBtn_Minus;
-	H_DrawTexture(repair,(840,417),0,(0.9,0.7));
-	H_DrawTexture(util,(1050,417),0,(0.9,0.7));
-	H_DrawTexture(mode,(608,561),0,(0.9,0.7));
+	String repair = (checkCollision(mouse,repairbtn)&&repair_cost) ?  tBtnlit_Repair     : tBtn_Repair;
+	String util   = (checkCollision(mouse,autilbtn)&&autil_item)   ?  tBtnlit_EquipUtil  : tBtn_EquipUtil;
+	String mode   =  checkCollision(mouse,modebtn) 				   ?  tBtnlit_WeaponsLab : tBtn_WeaponsLab;
+	String plus = tBtn_Plus;
+	String minus = tBtn_Minus;
+	H_DrawImage(repair,(847,455));
+	H_DrawImage(util,(1080,454));
+	H_DrawImage(mode,(590,660));
 	
 	if( mstats.left_btn )
 	{
@@ -192,7 +258,8 @@ void drawArmoryInfo()
 			{
 				Rect checkmouse;
 				string compare = (i==0) ? armorstr : (i==1) ? internalstr : selectallstr;
-				initRect(checkmouse,statuspos.x,statuspos.y+(i*20)+40,14*compare.length(),20);
+				initRect(checkmouse,statuspos.x,statuspos.y+(i*25),16*compare.length(),20);
+				// drawRect(checkmouse, debug_color);
 				if( checkCollision(mouse, checkmouse) ) astat_selected = i;
 			}
 			
@@ -265,13 +332,13 @@ void drawArmoryInfo()
 	
 	if(hardpoint >= 0)
 	{
-		H_DrawTexture(plus,(1115,205),0,(0.9,0.7));
-		H_DrawTexture(minus,(1080,205),0,(0.9,0.7));
+		H_DrawImage(plus,(1130,170));
+		H_DrawImage(minus,(1090,170));
 	}
 	
 	// Draw hardpoint vitals
 	H_DrawString(armorstr, statuspos,0,ArmorFont);
-	H_DrawString(internalstr, (statuspos.x,statuspos.y+20), 0, InternalsFont);
-	H_DrawString(selectallstr, (statuspos.x,statuspos.y+40), 0, SelectFont);
+	H_DrawString(internalstr, (statuspos.x,statuspos.y+25), 0, InternalsFont);
+	H_DrawString(selectallstr, (statuspos.x,statuspos.y+50), 0, SelectFont);
 }
 	

@@ -77,7 +77,9 @@ class MechStatusBar : BaseStatusBar
 	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, vector2 scale=(1,1), float alpha=-1)
 	{
 		alpha = (alpha < 0) ? hud_alpha : alpha;
+		float fontscale = CVar.GetCVar("mwd_fontscale", CPlayer).getFloat();
 		vector2 finalscale = (font_scale.x*scale.x, font_scale.y*scale.y);
+		finalscale *= fontscale;
 		MD_SBS.DrawString(fnt,str,pos,flags,translation,alpha,finalscale);
 	}
 
@@ -289,6 +291,8 @@ class MechStatusBar : BaseStatusBar
 				invalid = true;
 			}
 		}
+		
+		/*
 		if(invalid && !automapactive)
 		{
 			console.printf("- HUD is not being displayed properly -");
@@ -296,6 +300,7 @@ class MechStatusBar : BaseStatusBar
 			console.printf(" Customize Controls -> MechDoomer Controls");
 			console.printf(" Bind \"Fix HUD\" button.");
 		}
+		*/
 	}
 	
 	int realAngle(float ang)

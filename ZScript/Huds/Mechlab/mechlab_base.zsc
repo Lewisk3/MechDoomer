@@ -1,45 +1,32 @@
 extend class Mechlab_Menu;
 
 // Scalar functions (All H_ function auto adjust to the screen resolution based on 1080p coords.)	
-vector2, vector2 GetRelativeScale(vector2 pos, vector2 scale=(1,1), float cwidth=0, float cheight=0)
+void H_DrawImage(String img, vector2 pos, uint flags=0, vector2 scale=(1,1), float alpha=1, Color tint=Color(0,0,0,0))
 {
-	cwidth = !cwidth ? defwidth : cwidth; 
-	cheight = !cheight ? defheight : cheight; 
-	vector2 hscale = statusbar.GetHUDScale();
-	hscale = ( int(hscale.x), int(hscale.x) ); // Force even scalar.
-	float rwidth  = (Screen.getWidth()  / float(cwidth) ) / hscale.x;
-	float rheight = (Screen.getHeight() / float(cheight)) / hscale.y;
-	vector2 rscale = (scale.x * rwidth, scale.y * rheight);
-	vector2 rpos = ( (pos.x)*rwidth, (pos.y)*rheight );
-	
-	return rpos, rscale;
+	MD_SBS.DrawImage(img,pos,flags,alpha,scale,tint);
 }
 void H_DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1), float alpha=1)
 {
-	vector2 rpos, rscale;
-	[rpos, rscale] = GetRelativeScale(pos, scale);
-	statusbar.DrawTexture(texture, rpos, flags, alpha, (-1, -1), rscale);
+	MD_SBS.DrawTexture(texture,pos,flags,alpha,scale);
 }
-void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=1)
+void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, vector2 scale=(1,1), float alpha=1)
 {
-	vector2 rpos, rscale;
-	[rpos, rscale] = GetRelativeScale(pos);
-	statusbar.DrawString(mHUDFont, str, rpos, flags, translation, alpha);
+	vector2 finalscale = (font_scale.x*scale.x, font_scale.y*scale.y);
+	float fontscale = CVar.GetCVar("mwd_fontscale", mechplr.player).getFloat();
+	finalscale *= fontscale;
+	MD_SBS.DrawString(mFont,str,pos,flags,translation,alpha,finalscale);
 }
 void H_DrawLine(int x0, int y0, int x1, int y1, Color color)
 {
-	vector2 pos0, pos1, _;
-	[pos0, _] = GetRelativeScale( (x0,y0) );
-	[pos1, _] = GetRelativeScale( (x1,y1) );
-	Screen.DrawLine(pos0.x, pos0.y, pos1.x, pos1.y, color);
+	MD_SBS.DrawLine(x0,y0,x1,y1, color);
 }
 
 // Rect utilities
 vector2, vector2 GetActualRectPos(Rect r)
 {
-	vector2 pos0, pos1, _;
-	[pos0, _] = GetRelativeScale( (r.x,r.y) );
-	[pos1, _] = GetRelativeScale( (r.w+r.x,r.h+r.y) );
+	vector2 pos0, pos1;
+	pos0 = MD_SBS.GetRelativePos( (r.x,r.y) );
+	pos1 = MD_SBS.GetRelativePos( (r.x+r.w,r.y+r.h) );
 	return pos0, pos1;
 }
 void initRect(Rect r, double x, double y, double w, double h)

@@ -48,34 +48,33 @@ int Mechlab_GetInvSize()
 void ProcessLoadoutButtons()
 {
 	// Buttons and highlights
-	H_DrawTexture(tBtn_Scrap,  ( scrapbtn.x+61, scrapbtn.y-98),0,(0.9,0.7));
-    H_DrawTexture(tBtn_Sort,   (  sortbtn.x+64,  sortbtn.y+22),0,(0.9,0.7));
-	H_DrawTexture(tBtn_Shop,   (  shopbtn.x+59,  shopbtn.y-71),0,(0.9,0.7));
-	H_DrawTexture(tBtn_ArmorAndRepair, (modebtn.x+117, modebtn.y-72),0,(0.9,0.7));
-	H_DrawTexture(mechmode ? tBtn_Items : tBtn_Mechs, (invmodebtn.x+64,invmodebtn.y+30),0,(0.9,0.7));
-		
-	if(mstats.left_btn && checkCollision(mouse, dequipbtn)) H_DrawTexture(tBtnlit_Dequip, (dequipbtn.x+62, dequipbtn.y-23),0,(0.9,0.7));
-	if(mstats.left_btn && checkCollision(mouse,  scrapbtn)) H_DrawTexture(tBtnlit_Scrap,  ( scrapbtn.x+62, scrapbtn.y-97 ),0,(0.9,0.7));
+	H_DrawImage(tBtn_Scrap,  ( scrapbtn.x+61, scrapbtn.y+30),0);
+    H_DrawImage(tBtn_Sort,   (  sortbtn.x+64,  sortbtn.y+30),0);
+	H_DrawImage(tBtn_Shop,   (  shopbtn.x+57,  shopbtn.y+35),0);
+	H_DrawImage(tBtn_ArmorAndRepair, (modebtn.x+125, modebtn.y+35),0);
+	H_DrawImage(mechmode ? tBtn_Items : tBtn_Mechs, (invmodebtn.x+64,invmodebtn.y+30),0);
+	
+	if(mstats.left_btn && checkCollision(mouse,  scrapbtn)) H_DrawImage(tBtnlit_Scrap,  ( scrapbtn.x+62, scrapbtn.y+30 ),0);
 
 	// Equip button graphics.
-	if(!mechmode) H_DrawTexture(tBtn_Equip,  ( equipbtn.x+61,  equipbtn.y+1),0,(0.9,0.7));
+	if(!mechmode) H_DrawImage(tBtn_Equip,  ( equipbtn.x+61,  equipbtn.y+30),0);
 	if(!mechmode && mstats.left_btn && checkCollision(mouse,  equipbtn)) 
-		H_DrawTexture(tBtnlit_Equip,  ( equipbtn.x+62, equipbtn.y    ),0,(0.9,0.7));
+		H_DrawImage(tBtnlit_Equip,  ( equipbtn.x+62, equipbtn.y+30 ),0);
 	
 	// Dequip or Deploy button graphics.
-	H_DrawTexture(mechmode ? tBtn_Deploy : tBtn_Dequip, (dequipbtn.x+62,dequipbtn.y-24),0,(0.9,0.7));
+	H_DrawImage(mechmode ? tBtn_Deploy : tBtn_Dequip, (dequipbtn.x+62,dequipbtn.y+33),0);
 	if(mstats.left_btn && checkCollision(mouse, dequipbtn)) 
-		H_DrawTexture(mechmode ? tBtnlit_Deploy : tBtnlit_Dequip, (dequipbtn.x+62, dequipbtn.y-23),0,(0.9,0.7));
+		H_DrawImage(mechmode ? tBtnlit_Deploy : tBtnlit_Dequip, (dequipbtn.x+62, dequipbtn.y+33),0);
 	
 	// Hover-Over buttons
 	if(checkCollision(mouse, invmodebtn)) 
-		H_DrawTexture(mechmode ? tBtnlit_Items : tBtnlit_Mechs,(invmodebtn.x+64,invmodebtn.y+30),0,(0.9,0.7));
+		H_DrawImage(mechmode ? tBtnlit_Items : tBtnlit_Mechs,(invmodebtn.x+64,invmodebtn.y+30),0);
 	if(checkCollision(mouse, sortbtn)) 
-		H_DrawTexture(tBtnlit_Sort,   ( sortbtn.x+64,  sortbtn.y+22),0,(0.9,0.7));
+		H_DrawImage(tBtnlit_Sort,   ( sortbtn.x+64,  sortbtn.y+31),0);
 	if(checkCollision(mouse, modebtn))
-		H_DrawTexture(tBtnlit_ArmorAndRepair, (  modebtn.x+117,  modebtn.y-72),0,(0.9,0.7));
+		H_DrawImage(tBtnlit_ArmorAndRepair, (  modebtn.x+125,  modebtn.y+35),0);
 	if(checkCollision(mouse, shopbtn) )
-		H_DrawTexture(tBtnlit_Shop, (shopbtn.x+59,shopbtn.y-71),0,(0.9,0.7));
+		H_DrawImage(tBtnlit_Shop, (shopbtn.x+57,shopbtn.y+35),0);
 	
 	// Scroll
 	if(mstats.scroll == -1 && invoffset-1 > -1){ mstats.scroll = 0;  invoffset--; }
@@ -179,10 +178,10 @@ void ProcessLoadoutButtons()
 				else
 				{
 					// TODO: Switch mech logic, require mech shutdown.
-					if(!mechplr.mech_shutdown)
+					if(!mechplr.mech_shutdown && mechmode)
 					{
 						mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
-						mechplr.sendHudAlert("Active mech must be shutdown\nfirst!.",Font.CR_ORANGE);	
+						mechplr.sendHudAlert("Active mech must be shutdown\nfirst!",Font.CR_ORANGE);	
 						return;
 					}
 					MechDoomerEvents.SendNetworkEvent("exchange_mech",selected_item.index);
@@ -213,51 +212,52 @@ void ProcessLoadoutButtons()
 
 void drawLoadoutBody(int sx, int sy, int ind)
 {
-	vector2 mechparts = (966, 785);
+	vector2 mechparts = (987, 753);
 	
 	uint fontcol = Font.CR_WHITE;
 	if( !ValidateHardpoint(ind) ) fontcol = Font.CR_DARKRED;
-	
+	uint flags = MD_SBS.SS_SCREEN_CENTER;
+
 	switch(ind)
 	{ 
 		Case 0: // HD
-			H_DrawTexture(tMech_Head,mechparts,0,(0.9,0.7));
-			H_DrawString("Head",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			H_DrawImage(tMech_Head,mechparts,0);
+			H_DrawString("Head",(sx,sy),flags,fontcol);
 		break;
 		Case 1: // CT
-			H_DrawTexture(tMech_CTorso,mechparts,0,(0.9,0.7));
-			H_DrawString("Center Torso",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			H_DrawImage(tMech_CTorso,mechparts,0);
+			H_DrawString("Center Torso",(sx,sy),flags,fontcol);
 		break;
 		Case 2: // LT
-			H_DrawTexture(tMech_LTorso,mechparts,0,(0.9,0.7));
-			H_DrawString("Left Torso",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			H_DrawImage(tMech_LTorso,mechparts,0);
+			H_DrawString("Left Torso",(sx,sy),flags,fontcol);
 		break;
 		Case 3: // RT
-			H_DrawTexture(tMech_RTorso,mechparts,0,(0.9,0.7));
-			H_DrawString("Right Torso",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			H_DrawImage(tMech_RTorso,mechparts,0);
+			H_DrawString("Right Torso",(sx,sy),flags,fontcol);
 		break;
 		Case 4: // LA
-			H_DrawTexture(tMech_LArm,mechparts,0,(0.9,0.7));
-			H_DrawString("Left Arm",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			H_DrawImage(tMech_LArm,mechparts,0);
+			H_DrawString("Left Arm",(sx,sy),flags,fontcol);
 		break;
 		Case 5: // RA
-			H_DrawTexture(tMech_RArm,mechparts,0,(0.9,0.7));
-			H_DrawString("Right Arm",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			H_DrawImage(tMech_RArm,mechparts,0);
+			H_DrawString("Right Arm",(sx,sy),flags,fontcol);
 		break;
 		Case 6: // LL
-			H_DrawTexture(tMech_LLeg,mechparts,0,(0.9,0.7));
-			H_DrawString("Left Leg",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			H_DrawImage(tMech_LLeg,mechparts,0);
+			H_DrawString("Left Leg",(sx,sy),flags,fontcol);
 		break;
 		Case 7: // RL
-			H_DrawTexture(tMech_RLeg,mechparts,0,(0.9,0.7));
-			H_DrawString("Right Leg",(sx,sy),statusbar.DI_TEXT_ALIGN_CENTER,fontcol);
+			H_DrawImage(tMech_RLeg,mechparts,0);
+			H_DrawString("Right Leg",(sx,sy),flags,fontcol);
 		break;
 		default:
 		break;
 	}
 }
 
-void drawInfoLine(String txt, int inline, int linesize=20, vector2 detailpos=(330,140))
+void drawInfoLine(String txt, int inline, int linesize=25, vector2 detailpos=(280,90))
 {
 	H_DrawString(txt,(detailpos.x,detailpos.y+(linesize*inline)));
 }
@@ -345,7 +345,7 @@ void drawLoadoutItemInfo()
 
 void drawMechlabInfo()
 {
-	H_DrawTexture(mechmode ? tMainMechs : tMain, (942,807), 0, (0.9,0.7) );
+	H_DrawImage(mechmode ? tMainMechs : tMain, (0,0), MD_SBS.SS_SCREEN_CENTER, (1.0,1.0) );
 	ProcessLoadoutButtons();
 	float ap, ip;
 	[ap, ip] = GetHardpointHealthPerc(mechplr.hardpoints);
@@ -370,23 +370,23 @@ void drawMechlabInfo()
 	armorpercent.truncate(armorpercent.length()-6);
 	internalpercent.truncate(internalpercent.length()-6);
 	
-	vector2 detailpos = mechmode ? (330,150) : (330,380);
+	vector2 detailpos = mechmode ? (300,111) : (300,415);
 	
 	H_DrawString("- Active Mech -", detailpos);
-	H_DrawString("Chassis: " .. mechplr.getChassisName(),(detailpos.x,detailpos.y+20));
-	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+40));
-	H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+60));
-	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+80));
-	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+100));
-	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+120));
-	H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+140));
-	H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+160));
-	H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+180));
+	H_DrawString("Chassis: " .. mechplr.getChassisName(),(detailpos.x,detailpos.y+25));
+	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+50));
+	H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+75));
+	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+100));
+	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+125));
+	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+150));
+	H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+175));
+	H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+200));
+	H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+225));
 	
 	if(mechmode) 
 	{
-		H_DrawString("Worth: " .. int(mechplr.worth/2),(detailpos.x,detailpos.y+200));
-		H_DrawString("- Selected Mech -", (detailpos.x,detailpos.y+230));
+		H_DrawString("Worth: " .. int(mechplr.worth/2),(detailpos.x,detailpos.y+250));
+		H_DrawString("- Selected Mech -", (detailpos.x,detailpos.y+285));
 	}
 	if(mechmode && selected_item.index >= 0)
 	{
@@ -413,23 +413,23 @@ void drawMechlabInfo()
 		armorpercent.truncate(armorpercent.length()-6);
 		internalpercent.truncate(internalpercent.length()-6);
 		
-		detailpos = (330,280);
-		H_DrawString("Chassis: " .. mechdefs.getClassName(),(detailpos.x,detailpos.y+120));
-		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+140));
-		H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+160));
-		H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+180));
-		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+200));
-		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+220));
-		H_DrawString("Slots free: " .. mech.inv_context.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+240));
-		H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+260));
-		H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+280));
-		H_DrawString("Worth: " .. int(mechdefs.worth/2),(detailpos.x,detailpos.y+300));
+		detailpos = (300,295);
+		H_DrawString("Chassis: " .. mechdefs.getClassName(),(detailpos.x,detailpos.y+125));
+		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+150));
+		H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+175));
+		H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+200));
+		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+225));
+		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+250));
+		H_DrawString("Slots free: " .. mech.inv_context.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+275));
+		H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+300));
+		H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+325));
+		H_DrawString("Worth: " .. int(mechdefs.worth/2),(detailpos.x,detailpos.y+350));
 	}
 
 	drawLoadoutItemInfo();
 	
-	if(invoffset > 0)H_DrawTexture(tInv_ArrowUp,(1344,-705),0,(0.9,0.7));
-	if(invoffset+maxpageitems < Mechlab_GetInvSize()) H_DrawTexture(tInv_ArrowDown,(1344,762),0,(0.9,0.7));
+	if(invoffset > 0)H_DrawImage(tInv_ArrowUp,(1404,163),0);
+	if(invoffset+maxpageitems < Mechlab_GetInvSize()) H_DrawImage(tInv_ArrowDown,(1404,974),0);
 }
 
 
@@ -448,11 +448,11 @@ void drawInventory(int px, int py, int start, int max)
 			class<Mechbase_Engine> eng = weapname;
 			
 			Rect checkmouse;
-			initRect(checkmouse,px-65,py+((i-start)*24)+45,16*(weapname.Length()+3),17);
-			// DrawRect(checkmouse,debug_color);
+			initRect(checkmouse,px-65,py+((i-start)*25)+5,16*(weapname.Length()+3),17);
+			// drawRect(checkmouse,debug_color);
 	
 			int slots = ut ? GetDefaultByType(ut).hardslots : GetDefaultByType(mw).hardslots;
-			int sely = (i-start)*20;
+			int sely = (i-start)*25;
 
 			int fcr = eng ? Font.CR_ORANGE : ut ? Font.CR_DARKGRAY : Font.CR_WHITE;
 			if(i == selected_item.index && !selected_item.location) 
@@ -475,8 +475,10 @@ void drawInventory(int px, int py, int start, int max)
 			let mechdefs = GetDefaultByType(mech.baseclass);
 			String mechname = mechplr.GetPrintableDisplayName(mech.baseclass);
 			Rect checkmouse;
-			initRect(checkmouse,px-65,py+((i-start)*24)+45,16*(mechname.Length()+3),17);
-			int sely = (i-start)*20;
+			initRect(checkmouse,px-65,py+((i-start)*25)+5,16*(mechname.Length()+3),17);
+			// drawRect(checkmouse,debug_color);
+			
+			int sely = (i-start)*25;
 			int fcr = (i == selected_item.index) ? Font.CR_GREEN : Font.CR_WHITE;
 			
 			if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
@@ -510,16 +512,16 @@ vector2 DrawCriticalHardpointItems(int ind, int sx, int sy)
 				{	
 					if(selected_item.mEngine && selected_item.location && eng) fcr = Font.CR_BLUE;
 					Rect checkmouse;
-					initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+3),15);
+					initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+3),15);
+					// drawRect(checkmouse,Color(255,255,64,64));
 					if(mstats.left_btn && checkCollision(mouse,checkmouse) && eng && !mechmode) 
 					{	
 						setSelected(ut.getClassName(), hp, ut, null, valid_inv_context.engine.ClassType, i);
 					}
-					initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+3),15);
 					if(valid_inv_context.mechstructs[i].broken) fcr = Font.CR_TAN;
 					H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
-					offs.y += 20;
-					offs.x += 23;
+					offs.y += 24;
+					offs.x += 24;
 				}
 			}
 		}
@@ -537,9 +539,9 @@ void DrawHardpointItems(int ind, int sx, int sy)
 	// Display slot numbers
 	for(int i = 0; i < hp.maxslots; i++)
 	{
-		offs.y += 20;
+		offs.y += 24;
 		if( i < hp.slots) { slottranslation =Font.CR_DARKRED; } else { slottranslation = Font.CR_GRAY; }
-		H_DrawString((i+1)..". ", (sx-45,sy+offs.y-35),0,slottranslation);
+		H_DrawString((i+1)..". ", (sx-45,sy+offs.y-38),0,slottranslation);
 	}
 	// Display structures
 	offs = DrawCriticalHardpointItems(ind,sx,sy);
@@ -559,15 +561,16 @@ void DrawHardpointItems(int ind, int sx, int sy)
 					if(i == selected_item.index && selected_item.mUtil && selected_item.location)fcr = Font.CR_GREEN;
 					String suffix = def_ut.hardslots > 1 ? " (#" .. s+1 .. ")" : "";
 					Rect checkmouse;
-					initRect(checkmouse,sx,sy+offs.x+20,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
+					initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
+					// drawRect(checkmouse,Color(255,128,128,128));
 					if(mstats.left_btn && checkCollision(mouse,checkmouse) && !mechmode) 
 					{	
 						clearSelected();
 						setSelected(ut.getClassName(), hp, ut, null, null, i);
 					}
 					H_DrawString(def_ut.displayName .. suffix, (sx,sy+offs.y-15),0,fcr);
-					offs.y += 20;
-					offs.x += 23;
+					offs.y += 24;
+					offs.x += 24;
 				}
 			}
 		}
@@ -589,7 +592,8 @@ void DrawHardpointItems(int ind, int sx, int sy)
 						String suffix = "";
 						if(ww.hardslots > 1)suffix = " (#" .. i+1 .. ")";
 						Rect checkmouse;
-						initRect(checkmouse,sx,sy+offs.x+20,14*(mechplr.resolveWeaponName(ww).Length()+suffix.Length()+4),15);
+						initRect(checkmouse,sx,sy+offs.x-10,14*(mechplr.resolveWeaponName(ww).Length()+suffix.Length()+4),15);
+						// drawRect(checkmouse,Color(255,255,255,128));
 						if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 						{ 
 							clearSelected();
@@ -597,8 +601,8 @@ void DrawHardpointItems(int ind, int sx, int sy)
 							selected_item.mWeaponOBJ = ww; 
 						}
 						H_DrawString(mechplr.resolveWeaponName(ww) .. suffix, (sx,sy+offs.y-15),0,fcr);
-						offs.y += 20;
-						offs.x += 23;
+						offs.y += 24;
+						offs.x += 24;
 					}
 					wind++;
 				}
@@ -620,7 +624,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 					String suffix = "";
 					if(wwdefs.hardslots > 1)suffix = " (#" .. i+1 .. ")";
 					H_DrawString(ww.Tag .. suffix, (sx,sy+offs.y-15),0,fcr);
-					offs.y += 20;
+					offs.y += 24;
 					offs.x += 23;
 				}
 				wind++;
