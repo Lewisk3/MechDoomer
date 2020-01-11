@@ -18,7 +18,7 @@ LISTMENU "MainMenu"
 		Font "SMALLFONT", "ORANGE"
 		*/
 		class "Mech_TitleMenu"
-		StaticText 68,50,"MechDoomer 2.30a - Alpha."
+		StaticText 68,50,"MechDoomer 2.80a - Alpha."
 }
 
 LISTMENU "MainMenu_InGame"

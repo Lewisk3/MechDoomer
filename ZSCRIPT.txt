@@ -1,5 +1,7 @@
 version "4.0"
 
+const mechdoomer_version = "2.8a";
+
 class HudSpriteInitializer : Actor
 {
 	States

@@ -71,6 +71,10 @@ class Mech_TitleMenu : CustomMenuBase
 			}
 		}
 		
+		graphics.SetFont("BattleTechFont");
+		graphics.DrawString("version " .. mechdoomer_version, (5,5), 0, Font.CR_BLUE, (0.75,0.75));   
+		graphics.SetFont("MechFont");
+		
 		// mMouse.DrawDebug();
 		// buttons[0].DrawDebug();
 	}
