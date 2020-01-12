@@ -1,6 +1,5 @@
 class CustomMenuBase : ListMenu
 {	
-	MenuDrawer graphics;
 	int btn_selected;
 	
 	// Elements
@@ -10,7 +9,7 @@ class CustomMenuBase : ListMenu
 
 	virtual TextElement newBtnText(String txt)
 	{
-		return TextElement.Create(graphics,txt, (0,0), (1.0,1.0), Font.CR_WHITE);
+		return TextElement.Create("BigFont", txt, (0,0), (1.0,1.0), Font.CR_WHITE);
 	}
 	
 	override void Init(Menu parent, ListMenuDescriptor desc)
@@ -83,101 +82,5 @@ class CustomMenuBase : ListMenu
 			return true;
 		}
 		return false;
-	}
-}
-
-class MenuDrawer ui
-{
-	HudFont mHUDFont;
-	Font font_type;
-	float base_width, base_height;
-	
-	static MenuDrawer Create(Font fnt, float defwidth, float defheight)
-	{
-		let newdrawer = new("MenuDrawer");
-		if(newdrawer)
-		{
-			newdrawer.SetFont(fnt);
-			newdrawer.base_width = defwidth;
-			newdrawer.base_height = defheight;
-		}
-		return newdrawer;
-	}
-	
-	void SetFont(Font newfont)
-	{
-		font_type = newfont;
-		mHUDFont = HUDFont.Create(newfont);
-	}
-
-	TextureID FindGraphic(String graphic)
-	{
-		return TexMan.CheckForTexture(graphic, TexMan.Type_Any);
-	}
-
-	vector2, vector2 GetRelativeScale(vector2 pos, vector2 scale=(1,1), float cwidth=0, float cheight=0)
-	{
-		cwidth = !cwidth ? base_width : cwidth; 
-		cheight = !cheight ? base_height : cheight;
-		float rwidth  = (Screen.getWidth()  / float(cwidth) );
-		float rheight = (Screen.getHeight() / float(cheight));
-		vector2 rscale = (scale.x * rwidth, scale.y * rheight);
-		vector2 rpos = ( (pos.x)*rwidth, (pos.y)*rheight );
-		
-		return rpos, rscale;
-	}
-	void DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1), float alpha=1)
-	{
-		Screen.DrawTexture(texture, false, pos.x, pos.y,
-			DTA_VirtualWidthF, base_width,
-			DTA_VirtualHeightF, base_height,
-			DTA_KeepRatio, true,
-			DTA_Alpha, alpha,
-			DTA_DestWidth, int(base_width*scale.x),
-			DTA_DestHeight, int(base_height*scale.y)
-		);
-	}
-	void DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, Vector2 scale = (1,1), float alpha=1)
-	{
-		Screen.DrawText(font_type, translation, pos.x, pos.y, str,
-			DTA_VirtualWidthF, int(base_width*scale.x),
-			DTA_VirtualHeightF, int(base_height*scale.y),
-			DTA_KeepRatio, true,
-			DTA_Alpha, alpha
-		);
-	}
-	void DrawRect(MenuRect r, Color c, bool scaled=true)
-	{	
-		vector2 p, s;
-		p = r.pos;
-		s = r.size;
-		if(scaled)
-		{
-			DrawLine(p.x,     	   p.y,    	     p.x+s.x, p.y+s.y, c);  //: \
-			DrawLine(p.x,     	   p.y,     	 p.x+s.x, p.y,     c);  //: -
-			DrawLine(p.x,     	   p.y+s.y, 	 p.x+s.x, p.y+s.y, c);  //: _
-			DrawLine(p.x,     	   p.y,     	 p.x,     p.y+s.y, c);  //: |
-			DrawLine(p.x+s.x, 	   p.y,     	 p.x+s.x, p.y+s.y, c);  //:  |
-		}
-		else
-		{
-			Screen.DrawLine(p.x,     	   p.y,    	     p.x+s.x, p.y+s.y, c);  //: \
-			Screen.DrawLine(p.x,     	   p.y,     	 p.x+s.x, p.y,     c);  //: -
-			Screen.DrawLine(p.x,     	   p.y+s.y, 	 p.x+s.x, p.y+s.y, c);  //: _
-			Screen.DrawLine(p.x,     	   p.y,     	 p.x,     p.y+s.y, c);  //: |
-			Screen.DrawLine(p.x+s.x,  	   p.y,     	 p.x+s.x, p.y+s.y, c);  //:  |
-		}
-	}
-	void DrawLine(int x0, int y0, int x1, int y1, Color color)
-	{
-		vector2 pos0, pos1, _;
-		[pos0, _] = GetRelativeScale( (x0,y0) );
-		[pos1, _] = GetRelativeScale( (x1,y1) );
-		Screen.DrawLine(pos0.x, pos0.y, pos1.x, pos1.y, color);
-	}
-	
-	void Dim(Color c, float alpha)
-	{
-		Screen.Dim(c,alpha,0,0,Screen.GetWidth(),Screen.GetHeight());
 	}
 }

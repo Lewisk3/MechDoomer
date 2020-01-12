@@ -1,28 +1,28 @@
 class Mech_TitleMenu : CustomMenuBase
 {
-	override TextElement newBtnText(String txt)
+
+	void DStr(String str, vector2 pos, vector2 scale=(1.15,1.15))
 	{
-		return TextElement.Create(graphics,txt, (0,0), (1.35,2.0), Font.CR_BRICK);
+		MD_SBS.DrawString("MechFont", str,pos,0,Font.CR_WHITE,1.0,scale);
 	}
 
 	override void Init(Menu parent, ListMenuDescriptor desc)
 	{
 		Super.Init(parent, desc);
 		
-		graphics = MenuDrawer.Create("MechFont", 1920,1080);
-		MainBG = MenuTexture.Create(graphics,"mTITLE",(0,0),(1.0,1.0));
-		mMouse = Mouse.Create(graphics,0,0,32,32);
+		MainBG = MenuTexture.Create("mTITLE",(0,0),(1.3,1.2));
+		mMouse = Mouse.Create("", 0,0,32,32);
 		
-		buttons.push(Button.Create(graphics,  "mBTNEW",  "mBLNEW",  1315, 16,0.29,0.16));
-		buttons.push(Button.Create(graphics, "mBTLOAD",  "mBLLOAD", 1315,190,0.29,0.16));
-		buttons.push(Button.Create(graphics, "mBTOPTS",  "mBLOPTS", 1315,363,0.29,0.16));
-		buttons.push(Button.Create(graphics,"mBTCTRLS", "mBLCTRLS", 1315,545,0.29,0.16));
-		buttons.push(Button.Create(graphics,"mBTCREDS", "mBLCREDS", 1315,720,0.29,0.16));
-		buttons.push(Button.Create(graphics, "mBTEXIT",  "mBLEXIT", 1320,898,0.29,0.16));
+		buttons.push(Button.Create("mBTNEW"  ,  "mBLNEW" , 1578, 100, 1.3, 1.2));
+		buttons.push(Button.Create("mBTLOAD" ,  "mBLLOAD", 1578, 274, 1.3, 1.2));
+		buttons.push(Button.Create("mBTOPTS" ,  "mBLOPTS", 1578, 447, 1.3, 1.2));
+		buttons.push(Button.Create("mBTCTRLS", "mBLCTRLS", 1578, 629, 1.3, 1.2));
+		buttons.push(Button.Create("mBTCREDS", "mBLCREDS", 1578, 804, 1.3, 1.2));
+		buttons.push(Button.Create("mBTEXIT" ,  "mBLEXIT", 1583, 982, 1.3, 1.2));
 		
 		for(int i = 0; i < buttons.Size(); i++)
 		{
-			 buttons[i].SetupCollider(buttons[i].btnrect.pos.x+30, buttons[i].btnrect.pos.y+25,495,120);
+			 buttons[i].ScaleCollider(0.9, 0.7);
 		}
 		DontDim = true;
 	}
@@ -35,35 +35,34 @@ class Mech_TitleMenu : CustomMenuBase
 			return;
 		}
 
-		graphics.Dim(Color(255,0,0,0), 1.0);
+		MD_SBS.Dim(Color(255,0,0,0), 1.0);
 		super.Drawer();
 		
-		vector2 ht_pos = (75,500);
+		vector2 ht_pos = (75,1000);
 		for(int i = 0; i < buttons.Size(); i++)
 		{
+			// buttons[i].DrawCollider();
 			if(buttons[i].hovered)
 			{
-				// buttons[i].DrawCollider();
-			
 				Switch(i)
 				{
 					case 0:	 	// New Game
-						graphics.DrawString("Start a new game",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
+						DStr("Start a new game",ht_pos);
 					break;
 					case 1:		// Load Game
-						graphics.DrawString("Load a saved game",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
+						DStr("Load a saved game",ht_pos);
 					break;
 					case 2:     // Options
-						graphics.DrawString("Options menu",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
+						DStr("Options menu",ht_pos);
 					break;
 					case 3: 	// Controls
-						graphics.DrawString("Setup MechDoomer's Controls",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
+						DStr("Setup MechDoomer's Controls",ht_pos);
 					break;
 					case 4: 	// Credits
-						graphics.DrawString("Credits",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
+						DStr("Credits",ht_pos);
 					break;
 					case 5:		// Exit
-						graphics.DrawString("Exit game",ht_pos,0,Font.CR_WHITE,(0.5,0.5));
+						DStr("Exit game",ht_pos);
 					break;
 					default:
 					break;
@@ -71,10 +70,9 @@ class Mech_TitleMenu : CustomMenuBase
 			}
 		}
 		
-		graphics.SetFont("BattleTechFont");
-		graphics.DrawString("version " .. mechdoomer_version, (5,5), 0, Font.CR_BLUE, (0.75,0.75));   
-		graphics.SetFont("MechFont");
-		
+		MD_SBS.DrawString("BattleTechFont", "version " .. mechdoomer_version, (5,5), 0, Font.CR_BLUE, 1.0, (0.75,0.75));   
+ 
+		// MD_SBS.DrawRect(mMouse.collider,Color(255,127,64,127), false);
 		// mMouse.DrawDebug();
 		// buttons[0].DrawDebug();
 	}
@@ -125,32 +123,31 @@ class Mech_InGameMenu : CustomMenuBase
 {	
 	override TextElement newBtnText(String txt)
 	{
-		return TextElement.Create(graphics,txt, (0,0), (2.3,1.8), Font.CR_GRAY);
+		return TextElement.Create("MechFont", txt, (0,0), (1.0, 1.0), Font.CR_GRAY);
 	}
 
 	override void Init(Menu parent, ListMenuDescriptor desc)
 	{
 		Super.Init(parent, desc);
-		graphics = MenuDrawer.Create("MechFont", 1920,1080);
-		MainBG = MenuTexture.Create(graphics,"mTITLE2",(650,180),(0.35,0.65));
-		mMouse = Mouse.Create(graphics,0,0,32,32);
+		MainBG = MenuTexture.Create("mTITLE2",(10,0),(1.6,1.5));
+		mMouse = Mouse.Create("", 0,0,32,32);
 		TextElement btntxt = newBtnText("NEW MERCENARY");
-		buttons.push(Button.Create(graphics,"","",760,220,0.2,0.1,btntxt));
+		buttons.push(Button.Create("","",777,220,0.2,0.1,btntxt));
 		
 		btntxt = newBtnText("LOAD GAME");
-		buttons.push(Button.Create(graphics,"","",820,320,0.2,0.1,btntxt));
+		buttons.push(Button.Create("","",830,320,0.2,0.1,btntxt));
 		
 		btntxt = newBtnText("SAVE GAME");
-		buttons.push(Button.Create(graphics,"","",820,420,0.2,0.1,btntxt));
+		buttons.push(Button.Create("","",830,420,0.2,0.1,btntxt));
 		
 		btntxt = newBtnText("COMBAT VARIABLES");
-		buttons.push(Button.Create(graphics,"","",710,520,0.2,0.1,btntxt));
+		buttons.push(Button.Create("","",735,520,0.2,0.1,btntxt));
 		
 		btntxt = newBtnText("COCKPIT CONTROLS");
-		buttons.push(Button.Create(graphics,"","",710,620,0.2,0.1,btntxt));
+		buttons.push(Button.Create("","",735,620,0.2,0.1,btntxt));
 		
 		btntxt = newBtnText("FLEE TO DOS");
-		buttons.push(Button.Create(graphics,"","",800,740,0.2,0.1,btntxt));
+		buttons.push(Button.Create("","",810,760,0.2,0.1,btntxt));
 		
 		for(int i = 0; i < buttons.Size(); i++)
 		{
