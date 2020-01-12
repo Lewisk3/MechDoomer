@@ -1,2 +1,3 @@
 STARTUPTITLE = "MechDoomer - Mechwarrior 2 in GZDoom (v2.80a)"
 STARTUPCOLORS = "b52205", "110000"
+STARTUPTYPE = "Hexen"

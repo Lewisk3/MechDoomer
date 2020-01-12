@@ -129,7 +129,7 @@ OptionValue "2D3D"
 
 OptionString "MechDoomerCursors"
 {
-	"None", "Default (Not Recommended)"
+	"None", "Default (Mechwarrior)"
 	"cursor", "Mechwarrior"
 	"doomcurs", "$OPTVAL_DOOM"
 	"herecurs", "$OPTSTR_HERETIC"

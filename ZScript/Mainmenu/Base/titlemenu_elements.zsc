@@ -154,6 +154,12 @@ class Mouse ui
 		collider.pos.y = rpos.y;
 	}
 	
+	vector2 GetMousePos()
+	{
+		vector2 rpos = MD_SBS.GetRelativePos( (1,1) );
+		return (collider.pos.x / rpos.x, collider.pos.y / rpos.y);
+	}
+	
 	void DrawDebug()
 	{
 		 MD_SBS.DrawString("SmallFont","LPressed: " .. int(left_pressed), (50,300));
@@ -164,7 +170,13 @@ class Mouse ui
 	
 	void Draw(float alpha=1.0, Color tint=Color(0,0,0,0))
 	{
-		if(tex) MD_SBS.DrawTexture(tex,collider.pos,0,alpha,(1.0,1.0),tint);
+		if(tex) 
+		{
+			vector2 truemouse = GetMousePos();
+			truemouse.x += collider.size.x/2;
+			truemouse.y += collider.size.y/2;
+			MD_SBS.DrawTexture(tex,truemouse,0,alpha,(1.0,1.0),tint);
+		}
 	}
 	
 	void Update(UIEvent ev)

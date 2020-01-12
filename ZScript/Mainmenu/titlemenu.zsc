@@ -37,6 +37,7 @@ class Mech_TitleMenu : CustomMenuBase
 
 		MD_SBS.Dim(Color(255,0,0,0), 1.0);
 		super.Drawer();
+		mMouse.Draw();
 		
 		vector2 ht_pos = (75,1000);
 		for(int i = 0; i < buttons.Size(); i++)
