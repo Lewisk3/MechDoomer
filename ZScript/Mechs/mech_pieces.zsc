@@ -1,0 +1,183 @@
+// All mech parts \\
+
+// Cockpits
+class Cockpit_Invisible   : MechCockpitModel {}
+class Cockpit_BattleArmor : MechCockpitModel {}
+class Cockpit_Timberwolf  : MechCockpitModel {}
+class Cockpit_Stormcrow   : MechCockpitModel {}
+class Cockpit_Atlas       : MechCockpitModel {}
+class Cockpit_Commando    : MechCockpitModel {}
+class Cockpit_Jenner      : MechCockpitModel {}
+class Cockpit_Urbanmech   : MechCockpitModel {}
+class Cockpit_Nova    	  : MechCockpitModel {}
+class Cockpit_Tarantula   : MechCockpitModel {}
+
+// Hips
+class Hips_Invisible   : MechHipsBase {}
+class Hips_Jenner 	   : MechHipsBase {}
+class Hips_Urbanmech   : MechHipsBase {}
+class Hips_Timberwolf  : MechHipsBase {}
+class Hips_Stormcrow   : MechHipsBase {}
+class Hips_Atlas       : MechHipsBase {}
+class Hips_Commando    : MechHipsBase {}
+class Hips_Nova    	   : MechHipsBase {}
+class Hips_Tarantula   : MechHipsBase {}
+// Legs	
+class Legs_Invisible   : MechLegsBase {}
+class Legs_Stormcrow   : Legs_Smooth {}
+class Legs_Atlas       : Legs_Smooth {}
+class Legs_Commando    : Legs_Smooth {}
+class Legs_Jenner      : Legs_Smooth {}
+class Legs_Urbanmech   : Legs_Smooth {}
+class Legs_Nova    	   : Legs_Smooth {}
+class Legs_Timberwolf  : Legs_Smooth {}
+
+// Torsos
+class Model_BattleArmor : MechTorsoBase
+{
+	Default {
+		MechTorsoBase.Pieces "Hips_Invisible", "Legs_BattleArmor", "Cockpit_BattleArmor";
+		MechPartsBase.ZOffset 0;
+		MechPartsBase.CockpitOffset 0, 30;
+	}
+}
+class Torso_Timberwolf : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf", "Cockpit_Timberwolf";
+		MechPartsBase.ZOffset 50;
+		MechPartsBase.CockpitOffset 20, 70;
+	}
+}
+class Torso_Stormcrow : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow", "Cockpit_Stormcrow";
+		MechPartsBase.ZOffset 60;
+		MechPartsBase.CockpitOffset 25, 70;
+	}
+}
+class Torso_Atlas : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas", "Cockpit_Atlas";
+		MechPartsBase.ZOffset 60;
+		MechPartsBase.CockpitOffset 0, 100;
+	}
+}
+class Torso_Commando : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Commando", "Legs_Commando", "Cockpit_Commando";
+		MechPartsBase.ZOffset 40;
+		MechPartsBase.CockpitOffset 0, 70;
+	}
+}
+class Torso_Urbanmech : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Urbanmech", "Legs_Urbanmech", "Cockpit_Urbanmech";
+		MechPartsBase.ZOffset 35;
+	}
+}
+class Torso_Jenner : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner", "Cockpit_Jenner";
+		MechPartsBase.ZOffset 42;
+		MechPartsBase.CockpitOffset 25, 47;
+	}
+}
+class Torso_Nova : MechTorsoBase {
+	Default {
+		MechTorsoBase.DoNotTwist true;
+		MechTorsoBase.Pieces "Hips_Nova", "Legs_Nova", "Cockpit_Nova";
+		MechPartsBase.ZOffset 60;
+		MechPartsBase.CockpitOffset 18, 57;
+	}
+}
+class Torso_Tarantula : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Tarantula", "Legs_Tarantula", "Cockpit_Tarantula";
+		MechPartsBase.ZOffset 60;
+		MechPartsBase.CockpitOffset 0, 90;
+	}
+}
+class Torso_Invisible : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Invisible", "Legs_Invisible", "Cockpit_Invisible";
+	}
+}
+
+
+// Specialized Parts
+class Legs_BattleArmor : MechLegsBase 
+{
+	override void tick()
+	{
+		super.Tick();
+		if(mechowner)
+		{
+			angle = mechowner.angle;
+			bInvisible = (!mechowner.dronecam && mechowner.nofirstpersonlegs) && !mechowner.CheckVoodoo();
+				
+			if(!mechowner.CheckVoodoo()) spdrating = (mechowner.overfactor * mechowner.MoveSpeedKPH)/160.;
+		}
+	}
+	
+	bool isMoving()
+	{
+		if(!mechowner) return false;
+		return mechowner.vel.xy.length() >= 4;
+	}
+	
+	States
+	{
+		Spawn:
+			IDLE A 1;
+		SpawnIdle:
+			"####" "#" 1 
+			{
+				if(mechowner && mechowner.player)
+				{
+					if(isMoving()) return ResolveState("WalkCycle");
+					if(mechowner.weapons_fired) return ResolveState("Shoot");
+					if(!mechowner.player.onground) return ResolveState("Flying");
+					if(mechowner.isdead) return ResolveState("Die");
+					if(mechowner.player.onground && Sprite == GetSpriteIndex("TJMPA0"))
+						Sprite = GetSpriteIndex("IDLEA0");
+				}
+				return ResolveState(Null);
+			}
+		loop;
+		WalkCycle:
+			TRUN ABCDEFGHIJKLMNOPQRSTUVWXYZ 1 
+			{	
+				if(mechowner.player.cmd.buttons & BT_ATTACK) return ResolveState("Shoot");
+				if(!mechowner.player.onground) return ResolveState("Flying");
+				if(mechowner.isdead) return ResolveState("Die");
+				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null); 
+			}
+			TRN2 ABCDEF 1
+			{
+				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null); 
+			}
+		loop;
+		Shoot:
+			FIRL A 2;
+		goto SpawnIdle;
+		Flying:
+			TJMP A 2;
+		goto SpawnIdle;
+		Die:
+			DETH ABCDE 2;
+		DeathDone:
+			DETH E 1;
+		loop;
+	}
+}
+
+class Legs_Tarantula  : Legs_Smooth 
+{
+	override bool checkStepping(bool idle, int frameone, int frametwo)
+	{
+		if(!mechowner) return false;
+		mechowner.stepping = idle ? false : (frame == frameone || frame == frametwo || frame == 6+frameone || frame == 8+frametwo);
+		if(mechowner.stepping) mechowner.A_AlertMonsters(1024);
+		return true;
+	}
+}

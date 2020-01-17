@@ -1,33 +1,6 @@
+#include "ZScript/Mechs/MechLegs_Modeldef.txt"
+
 // Battle armor
-Model Legs_BattleArmor
-{
-	Path "models/Mechs/BattleArmor"
-	Model 0 "ba_armor.md3"
-	//Model 1 "cm_hips.md3"
-	Skin 0 "ba_full.png"
-	Scale 1.5 1.5 1.5
-	Offset -5 0 0
-	AngleOffset 0
-	
-   FrameIndex TLEG A 0 0
-   FrameIndex TLEG B 0 1
-   FrameIndex TLEG C 0 2
-   FrameIndex TLEG D 0 3
-   FrameIndex TLEG E 0 4
-   FrameIndex TLEG F 0 5
-   FrameIndex TLEG G 0 6
-   FrameIndex TLEG H 0 7
-   FrameIndex TLEG I 0 8
-   FrameIndex TLEG J 0 9
-   FrameIndex TLEG K 0 10
-   FrameIndex TLEG L 0 11
-   FrameIndex TLEG M 0 12
-   FrameIndex TLEG N 0 13
-   FrameIndex TLEG O 0 14
-   FrameIndex TLEG P 0 15
-   FrameIndex TLEG Q 0 16
-   FrameIndex TLEG R 0 17
-}
 Model Cockpit_BattleArmor
 {
 	Path "models/Mechs/BattleArmor"
@@ -65,33 +38,6 @@ Model Hips_Commando
 	
    FrameIndex MODL A 0 0
 }
-Model Legs_Commando
-{
-	Path "models/Mechs/Commando"
-	Model 0 "cm_legs.md3"
-	Scale 1.0 1.0 1.0
-	Skin 0 "cm_full" // Main
-	
-   FrameIndex TLEG A 0 0
-   FrameIndex TLEG B 0 1
-   FrameIndex TLEG C 0 2
-   FrameIndex TLEG D 0 3
-   FrameIndex TLEG E 0 4
-   FrameIndex TLEG F 0 5
-   FrameIndex TLEG G 0 6
-   FrameIndex TLEG H 0 7
-   FrameIndex TLEG I 0 8
-   FrameIndex TLEG J 0 9
-   FrameIndex TLEG K 0 10
-   FrameIndex TLEG L 0 11
-   FrameIndex TLEG M 0 12
-   FrameIndex TLEG N 0 13
-   FrameIndex TLEG O 0 14
-   FrameIndex TLEG P 0 15
-   FrameIndex TLEG Q 0 16
-   FrameIndex TLEG R 0 17
-   FrameIndex TLEG S 0 18
-}
 Model Cockpit_Commando
 {
 	Path "models/Mechs/Commando"
@@ -104,8 +50,6 @@ Model Cockpit_Commando
 	
    FrameIndex MODL A 0 0
 }
-
-
 
 // Timberwolf
 Model Torso_Timberwolf
@@ -129,95 +73,6 @@ Model Hips_Timberwolf
 	Offset -5 0 0
 	
    FrameIndex MODL A 0 0
-}
-Model Legs_Timberwolf
-{
-	Path "models/Mechs/Timberwolf"
-	Model 0 "tw_legs.md3"
-	Scale 1.0 1.0 1.0
-	Skin 0 "tw_full.png" // Main
-	Offset -5 0 0
-	
-   // Walk
-   FrameIndex TLE1 A 0 0
-   FrameIndex TLE1 B 0 1
-   FrameIndex TLE1 C 0 2
-   FrameIndex TLE1 D 0 3
-   FrameIndex TLE1 E 0 4
-   FrameIndex TLE1 F 0 5
-   FrameIndex TLE1 G 0 6
-   FrameIndex TLE1 H 0 7
-   FrameIndex TLE1 I 0 8
-   FrameIndex TLE1 J 0 9
-   FrameIndex TLE1 K 0 10
-   FrameIndex TLE1 L 0 11
-   FrameIndex TLE1 M 0 12
-   FrameIndex TLE1 N 0 13
-   FrameIndex TLE1 O 0 14
-   FrameIndex TLE1 P 0 15
-   FrameIndex TLE1 Q 0 16
-   FrameIndex TLE1 R 0 17
-   FrameIndex TLE1 S 0 18
-   FrameIndex TLE1 T 0 19
-   FrameIndex TLE1 U 0 20
-   FrameIndex TLE1 V 0 21
-   FrameIndex TLE1 W 0 22
-   FrameIndex TLE1 X 0 23
-   FrameIndex TLE1 Y 0 24
-   FrameIndex TLE1 Z 0 25
-   FrameIndex TLE2 A 0 26
-   FrameIndex TLE2 B 0 27
-   FrameIndex TLE2 C 0 28
-   FrameIndex TLE2 D 0 29
-   FrameIndex TLE2 E 0 30
-   FrameIndex TLE2 F 0 31
-   FrameIndex TLE2 G 0 32
-   // Run
-   FrameIndex TLE3 A 0 33
-   FrameIndex TLE3 B 0 34
-   FrameIndex TLE3 C 0 35
-   FrameIndex TLE3 D 0 36
-   FrameIndex TLE3 E 0 37
-   FrameIndex TLE3 F 0 38
-   FrameIndex TLE3 G 0 39
-   FrameIndex TLE3 H 0 40
-   FrameIndex TLE3 I 0 41
-   FrameIndex TLE3 J 0 42
-   FrameIndex TLE3 K 0 43
-   FrameIndex TLE3 L 0 44
-   FrameIndex TLE3 M 0 45
-   FrameIndex TLE3 N 0 46
-   FrameIndex TLE3 O 0 47
-   FrameIndex TLE3 P 0 48
-   FrameIndex TLE3 Q 0 49
-   FrameIndex TLE3 R 0 50
-   FrameIndex TLE3 S 0 51
-   FrameIndex TLE3 T 0 52
-   FrameIndex TLE3 U 0 53
-   FrameIndex TLE3 V 0 54
-   FrameIndex TLE3 W 0 55
-   FrameIndex TLE3 X 0 56
-   FrameIndex TLE3 Y 0 57
-   FrameIndex TLE3 Z 0 58
-   FrameIndex TLE4 A 0 59
-   FrameIndex TLE4 B 0 60
-   FrameIndex TLE4 C 0 61
-   FrameIndex TLE4 D 0 62
-   FrameIndex TLE4 E 0 63
-   FrameIndex TLE4 F 0 64
-   FrameIndex TLE4 G 0 65
-   FrameIndex TLE4 H 0 66
-   FrameIndex TLE4 I 0 67
-   FrameIndex TLE4 J 0 68
-   FrameIndex TLE4 K 0 69
-   FrameIndex TLE4 L 0 70
-   FrameIndex TLE4 M 0 71
-   FrameIndex TLE4 N 0 72
-   FrameIndex TLE4 O 0 73
-   FrameIndex TLE4 P 0 74
-   FrameIndex TLE4 Q 0 75
-   FrameIndex TLE4 R 0 76
-   FrameIndex TLE4 S 0 77
 }
 Model Cockpit_Timberwolf
 {
@@ -258,35 +113,6 @@ Model Hips_Stormcrow
 	
     FrameIndex MODL A 0 0
 }
-Model Legs_Stormcrow
-{
-	Path "models/Mechs/Stormcrow"
-	Model 0 "sc_legs.md3"
-	Scale 1.0 1.0 1.0
-	Skin 0 "sc_full.png" // Main
-	Offset -5 0 0 
-	//SurfaceSkin 0 1   // Metal
-	
-   FrameIndex TLEG A 0 0
-   FrameIndex TLEG B 0 1
-   FrameIndex TLEG C 0 2
-   FrameIndex TLEG D 0 3
-   FrameIndex TLEG E 0 4
-   FrameIndex TLEG F 0 5
-   FrameIndex TLEG G 0 6
-   FrameIndex TLEG H 0 7
-   FrameIndex TLEG I 0 8
-   FrameIndex TLEG J 0 9
-   FrameIndex TLEG K 0 10
-   FrameIndex TLEG L 0 11
-   FrameIndex TLEG M 0 12
-   FrameIndex TLEG N 0 13
-   FrameIndex TLEG O 0 14
-   FrameIndex TLEG P 0 15
-   FrameIndex TLEG Q 0 16
-   FrameIndex TLEG R 0 17
-   FrameIndex TLEG S 0 18
-}
 Model Cockpit_Stormcrow
 {
 	Path "models/Mechs/Stormcrow"
@@ -323,34 +149,6 @@ Model Hips_Atlas
 	Offset -5 0 0
 	
    FrameIndex MODL A 0 0
-}
-Model Legs_Atlas
-{
-	Path "models/Mechs/Atlas"
-	Model 0 "at_legs.md3"
-	Scale 1.0 1.0 1.0
-	Skin 0 "at_full.png" // Main
-	Offset -5 0 0 
-	
-   FrameIndex TLEG A 0 0
-   FrameIndex TLEG B 0 1
-   FrameIndex TLEG C 0 2
-   FrameIndex TLEG D 0 3
-   FrameIndex TLEG E 0 4
-   FrameIndex TLEG F 0 5
-   FrameIndex TLEG G 0 6
-   FrameIndex TLEG H 0 7
-   FrameIndex TLEG I 0 8
-   FrameIndex TLEG J 0 9
-   FrameIndex TLEG K 0 10
-   FrameIndex TLEG L 0 11
-   FrameIndex TLEG M 0 12
-   FrameIndex TLEG N 0 13
-   FrameIndex TLEG O 0 14
-   FrameIndex TLEG P 0 15
-   FrameIndex TLEG Q 0 16
-   FrameIndex TLEG R 0 17
-   FrameIndex TLEG S 0 18
 }
 Model Cockpit_Atlas
 {
@@ -389,34 +187,6 @@ Model Hips_Jenner
 	
    FrameIndex MODL A 0 0
 }
-Model Legs_Jenner
-{
-	Path "models/Mechs/Jenner"
-	Model 0 "jn_legs.md3"
-	Scale 1.0 1.0 1.0
-	Skin 0 "jn_full.png" // Main
-	Offset 0 0 0 
-	
-   FrameIndex TLEG A 0 0
-   FrameIndex TLEG B 0 1
-   FrameIndex TLEG C 0 2
-   FrameIndex TLEG D 0 3
-   FrameIndex TLEG E 0 4
-   FrameIndex TLEG F 0 5
-   FrameIndex TLEG G 0 6
-   FrameIndex TLEG H 0 7
-   FrameIndex TLEG I 0 8
-   FrameIndex TLEG J 0 9
-   FrameIndex TLEG K 0 10
-   FrameIndex TLEG L 0 11
-   FrameIndex TLEG M 0 12
-   FrameIndex TLEG N 0 13
-   FrameIndex TLEG O 0 14
-   FrameIndex TLEG P 0 15
-   FrameIndex TLEG Q 0 16
-   FrameIndex TLEG R 0 17
-   FrameIndex TLEG S 0 18
-} 
 Model Cockpit_Jenner
 {
 	Path "models/Mechs"
@@ -433,8 +203,6 @@ Model Cockpit_Jenner
 	
    FrameIndex MODL A 0 0
 }
-
-
 
 // Urbanmech
 Model Torso_Urbanmech
@@ -459,35 +227,6 @@ Model Hips_Urbanmech
 	Offset 0 0 0
 	
    FrameIndex MODL A 0 0
-}
-Model Legs_Urbanmech
-{
-	Path "models/Mechs/Urbanmech"
-	Model 0 "ur_legs.md3"
-	Scale 1.0 1.0 1.0
-	Skin 0 "ur_full.png" // Main
-	Offset 0 0 0 
-	//SurfaceSkin 0 1   // Metal
-	
-   FrameIndex TLEG A 0 0
-   FrameIndex TLEG B 0 1
-   FrameIndex TLEG C 0 2
-   FrameIndex TLEG D 0 3
-   FrameIndex TLEG E 0 4
-   FrameIndex TLEG F 0 5
-   FrameIndex TLEG G 0 6
-   FrameIndex TLEG H 0 7
-   FrameIndex TLEG I 0 8
-   FrameIndex TLEG J 0 9
-   FrameIndex TLEG K 0 10
-   FrameIndex TLEG L 0 11
-   FrameIndex TLEG M 0 12
-   FrameIndex TLEG N 0 13
-   FrameIndex TLEG O 0 14
-   FrameIndex TLEG P 0 15
-   FrameIndex TLEG Q 0 16
-   FrameIndex TLEG R 0 17
-   FrameIndex TLEG S 0 18
 }
 Model Cockpit_Urbanmech
 {
@@ -530,35 +269,6 @@ Model Hips_Nova
 	
    FrameIndex MODL A 0 0
 }
-Model Legs_Nova
-{
-	Path "models/Mechs/Nova"
-	Model 0 "nv_legs.md3"
-	Scale 1.0 1.0 1.0
-	Skin 0 "nv_full.png" // Main
-	Offset 0 0 0 
-	//SurfaceSkin 0 1   // Metal
-	
-   FrameIndex TLEG A 0 0
-   FrameIndex TLEG B 0 1
-   FrameIndex TLEG C 0 2
-   FrameIndex TLEG D 0 3
-   FrameIndex TLEG E 0 4
-   FrameIndex TLEG F 0 5
-   FrameIndex TLEG G 0 6
-   FrameIndex TLEG H 0 7
-   FrameIndex TLEG I 0 8
-   FrameIndex TLEG J 0 9
-   FrameIndex TLEG K 0 10
-   FrameIndex TLEG L 0 11
-   FrameIndex TLEG M 0 12
-   FrameIndex TLEG N 0 13
-   FrameIndex TLEG O 0 14
-   FrameIndex TLEG P 0 15
-   FrameIndex TLEG Q 0 16
-   FrameIndex TLEG R 0 17
-   FrameIndex TLEG S 0 18
-}
 Model Cockpit_Nova
 {
 	Path "models/Mechs/Nova"
@@ -592,33 +302,6 @@ Model Hips_Tarantula
 	Scale 1.0 1.0 1.0
 	
    FrameIndex MODL A 0 0
-}
-Model Legs_Tarantula
-{
-	Path "models/Mechs/Tarantula"
-	Model 0 "tr_legs.md3"
-	Scale 1.0 1.0 1.0
-	Skin 0 "tr_full" // Main
-	
-   FrameIndex TLEG A 0 0
-   FrameIndex TLEG B 0 1
-   FrameIndex TLEG C 0 2
-   FrameIndex TLEG D 0 3
-   FrameIndex TLEG E 0 4
-   FrameIndex TLEG F 0 5
-   FrameIndex TLEG G 0 6
-   FrameIndex TLEG H 0 7
-   FrameIndex TLEG I 0 8
-   FrameIndex TLEG J 0 9
-   FrameIndex TLEG K 0 10
-   FrameIndex TLEG L 0 11
-   FrameIndex TLEG M 0 12
-   FrameIndex TLEG N 0 13
-   FrameIndex TLEG O 0 14
-   FrameIndex TLEG P 0 15
-   FrameIndex TLEG Q 0 16
-   FrameIndex TLEG R 0 17
-   FrameIndex TLEG S 0 18
 }
 Model Cockpit_Tarantula 
 {

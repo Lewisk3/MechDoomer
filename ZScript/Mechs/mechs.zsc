@@ -1,0 +1,389 @@
+/*	
+	|-----------------------------|
+	|   Custom Mech Properties    |
+	|-----------------------------|
+
+	(All properties must be prefixed with MechWarriorBase.<property>)
+	* Custom Properties *
+	|	heatEff         	<float>   [ Specifies how heat efficient the mech is by default, without heatsinks]
+	|   LegSpeed        	<float>   [ How fast the legs move, when pressing Left or Right strafe]
+	|   TwistRange      	<int>     [ Goes up to 360, determins the maximum difference in angle between the legs and torso ]
+	|   MoveSpeed       	<float>   [ How fast the mech moves, in KPH ]
+	|   PitchRange      	<int>     [ Determines how far up/down the mech can look ]
+	| 	Weight	   	    	<float>   [ The maximum weight of the mech ]
+	|	HudMech		    	<graphic> [ The paperdoll icon, shows health on each hardpoint]
+	|   HudCockpit     	    <graphic> [ The cockpit sprite ]
+	|   DefaultMovement 	<bool>    [ If this is true, will disable tank based movement ]
+	|   InfiniteTorsoTwist  <bool>    [ If this is true, enables infinite torso twist range ]
+	|   OverTonnage			<bool>    [ If this is true, mech can continue to equip things beyond its weight, mech will slow down in excess ]
+	
+	|----------------------------------|
+	|   Mech configuration functions   |
+	|----------------------------------|
+	
+	[ Hardpoint Indexes & Names ]
+	 --------------------\
+	1* HD = Head 		 |
+	2* CT = Center Torso |
+	3* LT = Left Torso	 |
+	4* RT = Right Torso	 |	
+	5* LA = Left Arm	 |
+	6* RA = Right Arm	 |	
+	7* LL = Left Leg	 |
+	8* RL = Right Leg	 |
+	 --------------------/
+	
+	hardpoints.setupVitals( 1a,2a,3a,4a,5a,6a,7a,8a, 1i,2i,3i,4i,5i,6i,7i,8i )
+	|	#a = Hardpoint Armor
+	|   #i = Hardpoint Internal HP
+	
+	# Setup hardpoint physical locations, weapons will shoot from here and be equipped here.
+	hardpoints.setupLocations( 1(x,y), 2(x,y), 3(x,y), 4(x,y), 5(x,y), 6(x,y), 7(x,y), 8(x,y) )
+	
+	# Setup hardpoint slots, determines the physical size of hardpoints, how many things can fit in them.
+	hardpoints.setupSlots( 1,2,3,4,5,6,7,8 )
+	
+	# Equip mech structure item, at x,y location
+	# Precise x,y locations can be grabbed from any hardpoint with; hardpoint.<hardpoint name>.pos 
+	equipStruct(<Mechbase_Utility>, (x,y), amt)
+	
+	# Same as equip structure, only equips a weapon
+	equipWeapon(<Mechbase_Weapon>, (x,y), amt)
+	
+*/
+
+// Elemental(s) or Battle Armor(s)
+class BattleArmor : MechWarrior
+{
+	Default
+	{
+		Mass 600;
+		Player.DisplayName "BattleArmor"; // (Traditional Doom Movement)
+		Player.ViewHeight 25;
+		MechWarriorBase.TwistRange 130;
+		MechWarriorBase.heatEff 0.1;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.HudCockpit "WARHHUD";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.Weight 10;
+		MechWarriorBase.Engine "Engine_STD_50";
+		MechWarriorBase.MechPieces "Model_BattleArmor";
+		MechWarriorBase.DefaultMovement true;
+		MechWarriorBase.OverTonnage true;
+		MechWarriorBase.HideLegsPerspective true;
+		MechWarriorBase.CValue 500000;
+	}
+	
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 4,8,5,5,5,5,4,4, 4,8,6,6,5,5,4,4 );
+		hardpoints.setupLocations( (0,5), (0,-2), (-6,-2), (6,-2), (12,-5), (-12,-5), (-3,-10), (3,-10) );
+		hardpoints.setupSlots(8,11,12,12,10,10,2,2);
+		equipStruct("Heatsink",hardpoints.hd,1);
+		equipStruct("JumpJet",hardpoints.ct,1);
+		equipWeapon("SmallLaser",hardpoints.la,1);
+		equipWeapon("SmallLaser",hardpoints.ra,1);
+		equipWeapon("MachineGun",hardpoints.la,1);
+		equipWeapon("MachineGun",hardpoints.ra,1);
+		equipStruct("BulletsMGun",hardpoints.ct,1);
+	}
+}
+
+// Light Mechs
+class Commando : MechWarrior
+{
+	Default
+	{
+		Mass 200;
+		Player.DisplayName "Commando Prime";
+		Player.ViewHeight 65;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.Weight 25;
+		MechWarriorBase.Engine "ENGINE_STD_150";
+		MechWarriorBase.MechPieces "Torso_Commando";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.HideLegsPerspective true;
+		MechWarriorBase.CValue 1823750;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,20,14,14,10,10,14,14, 3,11,8,8,5,5,7,7 );
+		hardpoints.setupLocations( (0,10), (0,0), (0,-25), (0,-25), (30,-25), (-30,-25), (10,-45), (-10,-45) );
+		hardpoints.setupSlots();
+		equipStruct("Heatsink",hardpoints.ct,2);
+		equipWeapon("MediumLaser",hardpoints.ra,1);
+		equipWeapon("SRM6",hardpoints.lt,2);
+		equipWeapon("SRM4",hardpoints.lt,2);
+		equipStruct("SRM_Ammo",hardpoints.lt,1);
+	}
+}
+class Jenner : MechWarrior
+{
+	Default
+	{
+		Mass 1400;
+		MechWarriorBase.Engine "ENGINE_XL_315";
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.Weight 35;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.HudCockpit "JENNHUD";
+		MechWarriorBase.HudMech "JENNICO";
+		MechWarriorBase.MechPieces "Torso_Jenner";
+		Player.DisplayName "Jenner Prime";
+		Player.ViewHeight 60; // 52 maligned
+		MechWarriorBase.CValue 3198375;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 9,23,16,16,12,12,16,16, 4,11,8,8,6,6,8,8 );
+		hardpoints.setupLocations( (0,-10), (0,0), (5,-5), (-5,-5), (40,-11), (-40,-11), (30,-45), (-30,-45) );
+		hardpoints.setupSlots();
+		equipWeapon("SRM6",hardpoints.la,1);
+		equipWeapon("SRM6",hardpoints.ra,1);
+		equipWeapon("SSRM4",hardpoints.ct,2);
+		equipStruct("SRM_Ammo",hardpoints.lt,1);
+		equipStruct("SSRM_Ammo",hardpoints.rt,1);
+		equipStruct("JumpJet",hardpoints.lt,2);
+		equipStruct("JumpJet",hardpoints.rt,2);
+		equipStruct("JumpJet",hardpoints.ll,2);
+		equipStruct("JumpJet",hardpoints.rl,1);
+	}
+}
+class Urbanmech : MechWarrior
+{
+	Default
+	{
+		Mass 250;
+		Player.DisplayName "Urbanmech Prime";
+		Player.ViewHeight 62;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 9001; // Over 9000 :P
+		MechWarriorBase.InfiniteTorsoTwist true;
+		MechWarriorBase.Weight 30;
+		MechWarriorBase.Engine "ENGINE_STD_60";
+		MechWarriorBase.MechPieces "Torso_Urbanmech";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.CValue 1471925;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,38,28,28,18,18,16,16, 3,11,8,8,5,5,8,8 );
+		hardpoints.setupLocations( (0,0), (0,18), (0,-12), (0,-12), (35,-12), (-35,-12), (40,-45), (-40,-45) );
+		hardpoints.setupSlots();
+		equipStruct("Heatsink",hardpoints.lt,2);
+		equipStruct("Heatsink",hardpoints.rt,2);
+		equipWeapon("Autocannon10",hardpoints.ra,1);
+		equipWeapon("SmallLaser",hardpoints.la,1);
+		equipStruct("AC10_Ammo",hardpoints.ra,3);
+	}
+}
+class Tarantula : MechWarrior
+{
+	Default
+	{
+		Player.DisplayName "Tarantula Prime";
+		Player.ViewHeight 80;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.Weight 25;
+		MechWarriorBase.Engine "ENGINE_XL_200";
+		MechWarriorBase.MechPieces "Torso_Tarantula";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.Acceleration 2.0;
+		MechWarriorBase.LegSpeed 1.2;
+		MechWarriorBase.CValue 3560417;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 6,20,12,12,8,8,12,12, 3,11,8,8,5,5,7,7 );
+		hardpoints.setupLocations( (0,0), (0,-25), (-5,-15), (5,-15), (10,-15), (-10,-15), (0,-45), (0,-45) );
+		hardpoints.setupSlots(lls:4,rls:4);
+		equipStruct("DoubleHeatsink",hardpoints.lt,2);
+		equipStruct("DoubleHeatsink",hardpoints.rt,2);
+		equipStruct("DoubleHeatsink",hardpoints.la,1);
+		equipStruct("DoubleHeatsink",hardpoints.ra,1);
+		equipStruct("DoubleHeatsink",hardpoints.ra,1);
+		equipStruct("JumpJet",hardpoints.ll,4);
+		equipStruct("JumpJet",hardpoints.rl,4);
+		equipWeapon("SSRM2",hardpoints.ct,1);
+		equipStruct("SSRM_Ammo",hardpoints.ct,2);
+		equipWeapon("MediumLaser",hardpoints.la,2);
+		equipWeapon("MediumLaser",hardpoints.ra,2);
+	}
+}
+
+// Medium Mechs
+class Stormcrow : MechWarrior
+{
+	Default
+	{
+		Mass 2200;
+		Player.DisplayName "Stormcrow Prime";
+		Player.ViewHeight 70;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.Weight 55;
+		MechWarriorBase.Engine "ENGINE_XL_330";
+		MechWarriorBase.HudCockpit "CROWHUD";
+		MechWarriorBase.MechPieces "Torso_Stormcrow";
+		MechWarriorBase.HudMech "SCRWICO";
+		MechWarriorBase.CValue 8771112;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 9,36,26,26,18,18,26,26, 4,18,13,13,9,9,13,13 );
+		hardpoints.setupLocations( (0,20), (0,-18), (20,-11), (-20,-11), (50,-7), (-50,-7), (40,-70), (-40,-70) );
+		hardpoints.setupSlots();
+		equipStruct("DoubleHeatsink",hardpoints.ra,3);
+		equipStruct("DoubleHeatsink",hardpoints.rt,3);	
+		equipStruct("DoubleHeatsink",hardpoints.lt,3);	
+		equipWeapon("ERMediumLaser",hardpoints.ct,1);
+		equipWeapon("ERLargeLaser",hardpoints.la,2);
+		equipWeapon("ERMediumLaser",hardpoints.la,1);
+		equipWeapon("ERLargeLaser",hardpoints.ra,2);
+		equipWeapon("ERMediumLaser",hardpoints.ra,1);
+	}
+}
+class Nova : MechWarrior
+{
+	Default
+	{
+		Mass 2000;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.LegSpeed 1.2;
+		MechWarriorBase.Engine "ENGINE_XL_300";
+		MechWarriorBase.TwistRange 20;
+		MechWarriorBase.Weight 50;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.HudCockpit "NOVAHUD";
+		MechWarriorBase.HudMech "NOVAICO";
+		MechWarriorBase.MechPieces "Torso_Nova";
+		Player.DisplayName "Nova Prime";
+		Player.ViewHeight 55;
+		MechWarriorBase.CValue 6586250;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,34,24,24,16,16,24,24, 4,16,12,12,8,8,12,12 );
+		hardpoints.setupLocations( (0,-5), (0,0), (60,-15), (-60,-15), (60,-24), (-60,-24), (60,-45), (-60,-45) );
+		hardpoints.setupSlots();
+	
+		equipWeapon("ERMediumLaser",hardpoints.rt,1);
+		equipWeapon("ERMediumLaser",hardpoints.rt,1);
+		equipWeapon("ERMediumLaser",hardpoints.rt,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,1);
+		equipWeapon("ERSmallLaser",hardpoints.hd,2);
+		equipWeapon("MediumPulseLaser",hardpoints.rt,2);
+		equipWeapon("MediumPulseLaser",hardpoints.rt,2);
+		equipStruct("JumpJet",hardpoints.ct,1);
+		equipStruct("JumpJet",hardpoints.ll,2);
+		equipStruct("JumpJet",hardpoints.rl,2);
+		equipStruct("DoubleHeatsink",hardpoints.la,1);
+		equipStruct("DoubleHeatsink",hardpoints.ra,1);
+		equipStruct("DoubleHeatsink",hardpoints.rt,2);
+		equipStruct("DoubleHeatsink",hardpoints.lt,2);
+		equipStruct("DoubleHeatsink",hardpoints.ra,1);
+	}
+}
+
+// Heavy Mechs
+class Timberwolf : MechWarrior
+{
+	Default
+	{
+		Mass 3000;
+		Player.DisplayName "Timberwolf Prime";
+		Player.ViewHeight 70;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 80;
+		MechWarriorBase.Weight 75;
+		MechWarriorBase.PitchRange 40,20;
+		MechWarriorBase.Engine "ENGINE_XL_375";
+		MechWarriorBase.HudCockpit "WOLFHUD";
+		MechWarriorBase.MechPieces "Torso_Timberwolf";
+		MechWarriorBase.HudMech "TWLFICO";
+		MechWarriorBase.CValue 11233124;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,46,32,32,24,24,32,32, 4,23,16,16,12,12,16,16 );
+		hardpoints.setupLocations( (0,20), (0,-38), (25,18), (-25,18), (40,-25), (-40,-25), (30,-85), (-30,-85) );
+		hardpoints.setupSlots();
+		equipWeapon("ERLargeLaser",hardpoints.ra,1);
+		equipWeapon("ERMediumLaser",hardpoints.ra,2);
+		equipWeapon("ERLargeLaser",hardpoints.la,1);
+		equipWeapon("ERMediumLaser",hardpoints.la,2);
+		equipWeapon("ERSmallLaser",hardpoints.lt,2);
+		equipWeapon("MediumPulseLaser",hardpoints.lt,2);
+		equipWeapon("LRM20",hardpoints.rt,3);
+		equipWeapon("LRM20",hardpoints.lt,3);
+		equipWeapon("MachineGun",hardpoints.rt,4);
+		equipWeapon("MachineGun",hardpoints.ct,4);
+		equipStruct("BulletsMGun",hardpoints.ra,1);
+		equipStruct("BulletsMGun",hardpoints.rt,1);
+		equipStruct("LRM_Ammo",hardpoints.rt,1);
+		equipStruct("LRM_Ammo",hardpoints.lt,1);
+		equipStruct("DoubleHeatsink",hardpoints.la,1);
+	}
+}
+
+// Assault Mechs
+class Atlas : MechWarrior
+{
+	Default
+	{
+		Mass 4000;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.MechPieces "Torso_Atlas";
+		MechWarriorBase.Engine "ENGINE_STD_300";
+		MechWarriorBase.TwistRange 60;
+		MechWarriorBase.HudCockpit "ATLSHUD";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.Weight 100;
+		MechWarriorBase.HideLegsPerspective true;
+		Player.DisplayName "Atlas Prime";
+		Player.ViewHeight 90;
+		MechWarriorBase.CValue 9626000;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,64,42,42,35,35,42,42, 6,32,23,23,17,17,20,20 );
+		hardpoints.setupLocations( (0,20), (0,0), (-30,-40), (30,-40), (60,-30), (-60,-30), (45,-111), (-45,-111) );
+		hardpoints.setupSlots();
+		equipStruct("Heatsink",hardpoints.ct,4);
+		equipStruct("Heatsink",hardpoints.lt,2);
+		equipStruct("Heatsink",hardpoints.rt,2);
+		equipStruct("LRM_Ammo",hardpoints.ll,1);
+		equipStruct("SRM_Ammo",hardpoints.rl,1);
+		equipStruct("UAC20_Ammo",hardpoints.rt,2);
+		equipWeapon("MediumLaser",hardpoints.la,1);
+		equipWeapon("MediumLaser",hardpoints.la,1);
+		equipWeapon("MediumLaser",hardpoints.ra,1);
+		equipWeapon("MediumLaser",hardpoints.ra,1);
+		equipWeapon("UAutocannon20",hardpoints.rt,2);
+		equipWeapon("LRM20",hardpoints.lt,3);
+		equipWeapon("SRM6",hardpoints.lt,3);
+	}
+
+}
+
+// SuperHeavy Mechs
+// ...
+
+
+// Unfinished
+// ... 

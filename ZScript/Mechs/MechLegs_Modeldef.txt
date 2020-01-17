@@ -1,0 +1,674 @@
+Model Legs_BattleArmor
+{
+	Path "models/Mechs/BattleArmor"
+	Model 0 "ba_armor.md3"
+	//Model 1 "cm_hips.md3"
+	Skin 0 "ba_full.png"
+	Scale 0.2 0.2 0.2
+	Offset -15 0 0
+	AngleOffset 0
+	
+   FrameIndex IDLE A 0 0 // Idle
+   
+   // Run
+   FrameIndex TRUN A 0 1 
+   FrameIndex TRUN B 0 2
+   FrameIndex TRUN C 0 3
+   FrameIndex TRUN D 0 4
+   FrameIndex TRUN E 0 5
+   FrameIndex TRUN F 0 6
+   FrameIndex TRUN G 0 7
+   FrameIndex TRUN H 0 8
+   FrameIndex TRUN I 0 9
+   FrameIndex TRUN J 0 10
+   FrameIndex TRUN K 0 11
+   FrameIndex TRUN L 0 12
+   FrameIndex TRUN M 0 13
+   FrameIndex TRUN N 0 14
+   FrameIndex TRUN O 0 15
+   FrameIndex TRUN P 0 16
+   FrameIndex TRUN Q 0 17
+   FrameIndex TRUN R 0 18
+   FrameIndex TRUN S 0 19
+   FrameIndex TRUN T 0 20
+   FrameIndex TRUN U 0 21
+   FrameIndex TRUN V 0 22
+   FrameIndex TRUN W 0 23
+   FrameIndex TRUN X 0 24
+   FrameIndex TRUN Y 0 25
+   FrameIndex TRUN Z 0 26
+   FrameIndex TRN2 A 0 27
+   FrameIndex TRN2 B 0 28
+   FrameIndex TRN2 C 0 29
+   FrameIndex TRN2 D 0 30
+   FrameIndex TRN2 E 0 31
+   FrameIndex TRN2 F 0 32
+   
+   FrameIndex FIRL A 0 34 // Shoot
+   FrameIndex TJMP A 0 35 // Jump
+   
+   // Die
+   FrameIndex DETH A 0 36 
+   FrameIndex DETH B 0 37 
+   FrameIndex DETH C 0 38 
+   FrameIndex DETH D 0 39 
+   FrameIndex DETH E 0 40  
+
+}
+
+Model Legs_Commando
+{
+	Path "models/Mechs/Commando"
+	Model 0 "cm_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "cm_full" // Main
+	
+// Walk
+   FrameIndex TLE1 A 0 0
+   FrameIndex TLE1 B 0 1
+   FrameIndex TLE1 C 0 2
+   FrameIndex TLE1 D 0 3
+   FrameIndex TLE1 E 0 4
+   FrameIndex TLE1 F 0 5
+   FrameIndex TLE1 G 0 6
+   FrameIndex TLE1 H 0 7
+   FrameIndex TLE1 I 0 8
+   FrameIndex TLE1 J 0 9
+   FrameIndex TLE1 K 0 10
+   FrameIndex TLE1 L 0 11
+   FrameIndex TLE1 M 0 12
+   FrameIndex TLE1 N 0 13
+   FrameIndex TLE1 O 0 14
+   FrameIndex TLE1 P 0 15
+   FrameIndex TLE1 Q 0 16
+   FrameIndex TLE1 R 0 17
+   FrameIndex TLE1 S 0 18
+   FrameIndex TLE1 T 0 19
+   FrameIndex TLE1 U 0 20
+   FrameIndex TLE1 V 0 21
+   FrameIndex TLE1 W 0 22
+   FrameIndex TLE1 X 0 23
+   FrameIndex TLE1 Y 0 24
+   FrameIndex TLE1 Z 0 25
+   FrameIndex TLE2 A 0 26
+   FrameIndex TLE2 B 0 27
+   FrameIndex TLE2 C 0 28
+   FrameIndex TLE2 D 0 29
+   FrameIndex TLE2 E 0 30
+   FrameIndex TLE2 F 0 31
+   FrameIndex TLE2 G 0 32
+   // Run
+   FrameIndex TLE3 A 0 34
+   FrameIndex TLE3 B 0 35
+   FrameIndex TLE3 C 0 36
+   FrameIndex TLE3 D 0 37
+   FrameIndex TLE3 E 0 38
+   FrameIndex TLE3 F 0 39
+   FrameIndex TLE3 G 0 40
+   FrameIndex TLE3 H 0 41
+   FrameIndex TLE3 I 0 42
+   FrameIndex TLE3 J 0 43
+   FrameIndex TLE3 K 0 44
+   FrameIndex TLE3 L 0 45
+   FrameIndex TLE3 M 0 46
+   FrameIndex TLE3 N 0 47
+   FrameIndex TLE3 O 0 48
+   FrameIndex TLE3 P 0 49
+   FrameIndex TLE3 Q 0 50
+   FrameIndex TLE3 R 0 51
+   FrameIndex TLE3 S 0 52
+   FrameIndex TLE3 T 0 53
+   FrameIndex TLE3 U 0 54
+   FrameIndex TLE3 V 0 55
+   FrameIndex TLE3 W 0 56
+   FrameIndex TLE3 X 0 57
+   FrameIndex TLE3 Y 0 58
+   FrameIndex TLE3 Z 0 59
+   FrameIndex TLE4 A 0 60
+   FrameIndex TLE4 B 0 61
+   FrameIndex TLE4 C 0 62
+   FrameIndex TLE4 D 0 63
+   FrameIndex TLE4 E 0 64
+   FrameIndex TLE4 F 0 65
+}
+
+Model Legs_Timberwolf
+{
+	Path "models/Mechs/Timberwolf"
+	Model 0 "tw_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "tw_full.png" // Main
+	Offset -5 0 0
+	
+   // Walk
+   FrameIndex TLE1 A 0 0
+   FrameIndex TLE1 B 0 1
+   FrameIndex TLE1 C 0 2
+   FrameIndex TLE1 D 0 3
+   FrameIndex TLE1 E 0 4
+   FrameIndex TLE1 F 0 5
+   FrameIndex TLE1 G 0 6
+   FrameIndex TLE1 H 0 7
+   FrameIndex TLE1 I 0 8
+   FrameIndex TLE1 J 0 9
+   FrameIndex TLE1 K 0 10
+   FrameIndex TLE1 L 0 11
+   FrameIndex TLE1 M 0 12
+   FrameIndex TLE1 N 0 13
+   FrameIndex TLE1 O 0 14
+   FrameIndex TLE1 P 0 15
+   FrameIndex TLE1 Q 0 16
+   FrameIndex TLE1 R 0 17
+   FrameIndex TLE1 S 0 18
+   FrameIndex TLE1 T 0 19
+   FrameIndex TLE1 U 0 20
+   FrameIndex TLE1 V 0 21
+   FrameIndex TLE1 W 0 22
+   FrameIndex TLE1 X 0 23
+   FrameIndex TLE1 Y 0 24
+   FrameIndex TLE1 Z 0 25
+   FrameIndex TLE2 A 0 26
+   FrameIndex TLE2 B 0 27
+   FrameIndex TLE2 C 0 28
+   FrameIndex TLE2 D 0 29
+   FrameIndex TLE2 E 0 30
+   FrameIndex TLE2 F 0 31
+   FrameIndex TLE2 G 0 32
+   // Run
+   FrameIndex TLE3 A 0 34
+   FrameIndex TLE3 B 0 35
+   FrameIndex TLE3 C 0 36
+   FrameIndex TLE3 D 0 37
+   FrameIndex TLE3 E 0 38
+   FrameIndex TLE3 F 0 39
+   FrameIndex TLE3 G 0 40
+   FrameIndex TLE3 H 0 41
+   FrameIndex TLE3 I 0 42
+   FrameIndex TLE3 J 0 43
+   FrameIndex TLE3 K 0 44
+   FrameIndex TLE3 L 0 45
+   FrameIndex TLE3 M 0 46
+   FrameIndex TLE3 N 0 47
+   FrameIndex TLE3 O 0 48
+   FrameIndex TLE3 P 0 49
+   FrameIndex TLE3 Q 0 50
+   FrameIndex TLE3 R 0 51
+   FrameIndex TLE3 S 0 52
+   FrameIndex TLE3 T 0 53
+   FrameIndex TLE3 U 0 54
+   FrameIndex TLE3 V 0 55
+   FrameIndex TLE3 W 0 56
+   FrameIndex TLE3 X 0 57
+   FrameIndex TLE3 Y 0 58
+   FrameIndex TLE3 Z 0 59
+   FrameIndex TLE4 A 0 60
+   FrameIndex TLE4 B 0 61
+   FrameIndex TLE4 C 0 62
+   FrameIndex TLE4 D 0 63
+   FrameIndex TLE4 E 0 64
+   FrameIndex TLE4 F 0 65
+}
+
+Model Legs_Stormcrow
+{
+	Path "models/Mechs/Stormcrow"
+	Model 0 "sc_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "sc_full.png" // Main
+	Offset -5 0 0 
+	//SurfaceSkin 0 1   // Metal
+	
+ // Walk
+   FrameIndex TLE1 A 0 0
+   FrameIndex TLE1 B 0 1
+   FrameIndex TLE1 C 0 2
+   FrameIndex TLE1 D 0 3
+   FrameIndex TLE1 E 0 4
+   FrameIndex TLE1 F 0 5
+   FrameIndex TLE1 G 0 6
+   FrameIndex TLE1 H 0 7
+   FrameIndex TLE1 I 0 8
+   FrameIndex TLE1 J 0 9
+   FrameIndex TLE1 K 0 10
+   FrameIndex TLE1 L 0 11
+   FrameIndex TLE1 M 0 12
+   FrameIndex TLE1 N 0 13
+   FrameIndex TLE1 O 0 14
+   FrameIndex TLE1 P 0 15
+   FrameIndex TLE1 Q 0 16
+   FrameIndex TLE1 R 0 17
+   FrameIndex TLE1 S 0 18
+   FrameIndex TLE1 T 0 19
+   FrameIndex TLE1 U 0 20
+   FrameIndex TLE1 V 0 21
+   FrameIndex TLE1 W 0 22
+   FrameIndex TLE1 X 0 23
+   FrameIndex TLE1 Y 0 24
+   FrameIndex TLE1 Z 0 25
+   FrameIndex TLE2 A 0 26
+   FrameIndex TLE2 B 0 27
+   FrameIndex TLE2 C 0 28
+   FrameIndex TLE2 D 0 29
+   FrameIndex TLE2 E 0 30
+   FrameIndex TLE2 F 0 31
+   FrameIndex TLE2 G 0 32
+   // Run
+   FrameIndex TLE3 A 0 34
+   FrameIndex TLE3 B 0 35
+   FrameIndex TLE3 C 0 36
+   FrameIndex TLE3 D 0 37
+   FrameIndex TLE3 E 0 38
+   FrameIndex TLE3 F 0 39
+   FrameIndex TLE3 G 0 40
+   FrameIndex TLE3 H 0 41
+   FrameIndex TLE3 I 0 42
+   FrameIndex TLE3 J 0 43
+   FrameIndex TLE3 K 0 44
+   FrameIndex TLE3 L 0 45
+   FrameIndex TLE3 M 0 46
+   FrameIndex TLE3 N 0 47
+   FrameIndex TLE3 O 0 48
+   FrameIndex TLE3 P 0 49
+   FrameIndex TLE3 Q 0 50
+   FrameIndex TLE3 R 0 51
+   FrameIndex TLE3 S 0 52
+   FrameIndex TLE3 T 0 53
+   FrameIndex TLE3 U 0 54
+   FrameIndex TLE3 V 0 55
+   FrameIndex TLE3 W 0 56
+   FrameIndex TLE3 X 0 57
+   FrameIndex TLE3 Y 0 58
+   FrameIndex TLE3 Z 0 59
+   FrameIndex TLE4 A 0 60
+   FrameIndex TLE4 B 0 61
+   FrameIndex TLE4 C 0 62
+   FrameIndex TLE4 D 0 63
+   FrameIndex TLE4 E 0 64
+   FrameIndex TLE4 F 0 65
+}
+
+Model Legs_Atlas
+{
+	Path "models/Mechs/Atlas"
+	Model 0 "at_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "at_full.png" // Main
+	Offset -5 0 0 
+	
+ // Walk
+   FrameIndex TLE1 A 0 0
+   FrameIndex TLE1 B 0 1
+   FrameIndex TLE1 C 0 2
+   FrameIndex TLE1 D 0 3
+   FrameIndex TLE1 E 0 4
+   FrameIndex TLE1 F 0 5
+   FrameIndex TLE1 G 0 6
+   FrameIndex TLE1 H 0 7
+   FrameIndex TLE1 I 0 8
+   FrameIndex TLE1 J 0 9
+   FrameIndex TLE1 K 0 10
+   FrameIndex TLE1 L 0 11
+   FrameIndex TLE1 M 0 12
+   FrameIndex TLE1 N 0 13
+   FrameIndex TLE1 O 0 14
+   FrameIndex TLE1 P 0 15
+   FrameIndex TLE1 Q 0 16
+   FrameIndex TLE1 R 0 17
+   FrameIndex TLE1 S 0 18
+   FrameIndex TLE1 T 0 19
+   FrameIndex TLE1 U 0 20
+   FrameIndex TLE1 V 0 21
+   FrameIndex TLE1 W 0 22
+   FrameIndex TLE1 X 0 23
+   FrameIndex TLE1 Y 0 24
+   FrameIndex TLE1 Z 0 25
+   FrameIndex TLE2 A 0 26
+   FrameIndex TLE2 B 0 27
+   FrameIndex TLE2 C 0 28
+   FrameIndex TLE2 D 0 29
+   FrameIndex TLE2 E 0 30
+   FrameIndex TLE2 F 0 31
+   FrameIndex TLE2 G 0 32
+   // Run
+   FrameIndex TLE3 A 0 34
+   FrameIndex TLE3 B 0 35
+   FrameIndex TLE3 C 0 36
+   FrameIndex TLE3 D 0 37
+   FrameIndex TLE3 E 0 38
+   FrameIndex TLE3 F 0 39
+   FrameIndex TLE3 G 0 40
+   FrameIndex TLE3 H 0 41
+   FrameIndex TLE3 I 0 42
+   FrameIndex TLE3 J 0 43
+   FrameIndex TLE3 K 0 44
+   FrameIndex TLE3 L 0 45
+   FrameIndex TLE3 M 0 46
+   FrameIndex TLE3 N 0 47
+   FrameIndex TLE3 O 0 48
+   FrameIndex TLE3 P 0 49
+   FrameIndex TLE3 Q 0 50
+   FrameIndex TLE3 R 0 51
+   FrameIndex TLE3 S 0 52
+   FrameIndex TLE3 T 0 53
+   FrameIndex TLE3 U 0 54
+   FrameIndex TLE3 V 0 55
+   FrameIndex TLE3 W 0 56
+   FrameIndex TLE3 X 0 57
+   FrameIndex TLE3 Y 0 58
+   FrameIndex TLE3 Z 0 59
+   FrameIndex TLE4 A 0 60
+   FrameIndex TLE4 B 0 61
+   FrameIndex TLE4 C 0 62
+   FrameIndex TLE4 D 0 63
+   FrameIndex TLE4 E 0 64
+   FrameIndex TLE4 F 0 65
+}
+
+Model Legs_Jenner
+{
+	Path "models/Mechs/Jenner"
+	Model 0 "jn_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "jn_full.png" // Main
+	Offset 0 0 0 
+	
+ // Walk
+   FrameIndex TLE1 A 0 0
+   FrameIndex TLE1 B 0 1
+   FrameIndex TLE1 C 0 2
+   FrameIndex TLE1 D 0 3
+   FrameIndex TLE1 E 0 4
+   FrameIndex TLE1 F 0 5
+   FrameIndex TLE1 G 0 6
+   FrameIndex TLE1 H 0 7
+   FrameIndex TLE1 I 0 8
+   FrameIndex TLE1 J 0 9
+   FrameIndex TLE1 K 0 10
+   FrameIndex TLE1 L 0 11
+   FrameIndex TLE1 M 0 12
+   FrameIndex TLE1 N 0 13
+   FrameIndex TLE1 O 0 14
+   FrameIndex TLE1 P 0 15
+   FrameIndex TLE1 Q 0 16
+   FrameIndex TLE1 R 0 17
+   FrameIndex TLE1 S 0 18
+   FrameIndex TLE1 T 0 19
+   FrameIndex TLE1 U 0 20
+   FrameIndex TLE1 V 0 21
+   FrameIndex TLE1 W 0 22
+   FrameIndex TLE1 X 0 23
+   FrameIndex TLE1 Y 0 24
+   FrameIndex TLE1 Z 0 25
+   FrameIndex TLE2 A 0 26
+   FrameIndex TLE2 B 0 27
+   FrameIndex TLE2 C 0 28
+   FrameIndex TLE2 D 0 29
+   FrameIndex TLE2 E 0 30
+   FrameIndex TLE2 F 0 31
+   FrameIndex TLE2 G 0 32
+   // Run
+   FrameIndex TLE3 A 0 34
+   FrameIndex TLE3 B 0 35
+   FrameIndex TLE3 C 0 36
+   FrameIndex TLE3 D 0 37
+   FrameIndex TLE3 E 0 38
+   FrameIndex TLE3 F 0 39
+   FrameIndex TLE3 G 0 40
+   FrameIndex TLE3 H 0 41
+   FrameIndex TLE3 I 0 42
+   FrameIndex TLE3 J 0 43
+   FrameIndex TLE3 K 0 44
+   FrameIndex TLE3 L 0 45
+   FrameIndex TLE3 M 0 46
+   FrameIndex TLE3 N 0 47
+   FrameIndex TLE3 O 0 48
+   FrameIndex TLE3 P 0 49
+   FrameIndex TLE3 Q 0 50
+   FrameIndex TLE3 R 0 51
+   FrameIndex TLE3 S 0 52
+   FrameIndex TLE3 T 0 53
+   FrameIndex TLE3 U 0 54
+   FrameIndex TLE3 V 0 55
+   FrameIndex TLE3 W 0 56
+   FrameIndex TLE3 X 0 57
+   FrameIndex TLE3 Y 0 58
+   FrameIndex TLE3 Z 0 59
+   FrameIndex TLE4 A 0 60
+   FrameIndex TLE4 B 0 61
+   FrameIndex TLE4 C 0 62
+   FrameIndex TLE4 D 0 63
+   FrameIndex TLE4 E 0 64
+   FrameIndex TLE4 F 0 65
+} 
+
+Model Legs_Urbanmech
+{
+	Path "models/Mechs/Urbanmech"
+	Model 0 "ur_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "ur_full.png" // Main
+	Offset 0 0 0 
+	//SurfaceSkin 0 1   // Metal
+	
+  // Walk
+   FrameIndex TLE1 A 0 0
+   FrameIndex TLE1 B 0 1
+   FrameIndex TLE1 C 0 2
+   FrameIndex TLE1 D 0 3
+   FrameIndex TLE1 E 0 4
+   FrameIndex TLE1 F 0 5
+   FrameIndex TLE1 G 0 6
+   FrameIndex TLE1 H 0 7
+   FrameIndex TLE1 I 0 8
+   FrameIndex TLE1 J 0 9
+   FrameIndex TLE1 K 0 10
+   FrameIndex TLE1 L 0 11
+   FrameIndex TLE1 M 0 12
+   FrameIndex TLE1 N 0 13
+   FrameIndex TLE1 O 0 14
+   FrameIndex TLE1 P 0 15
+   FrameIndex TLE1 Q 0 16
+   FrameIndex TLE1 R 0 17
+   FrameIndex TLE1 S 0 18
+   FrameIndex TLE1 T 0 19
+   FrameIndex TLE1 U 0 20
+   FrameIndex TLE1 V 0 21
+   FrameIndex TLE1 W 0 22
+   FrameIndex TLE1 X 0 23
+   FrameIndex TLE1 Y 0 24
+   FrameIndex TLE1 Z 0 25
+   FrameIndex TLE2 A 0 26
+   FrameIndex TLE2 B 0 27
+   FrameIndex TLE2 C 0 28
+   FrameIndex TLE2 D 0 29
+   FrameIndex TLE2 E 0 30
+   FrameIndex TLE2 F 0 31
+   FrameIndex TLE2 G 0 32
+   // Run
+   FrameIndex TLE3 A 0 34
+   FrameIndex TLE3 B 0 35
+   FrameIndex TLE3 C 0 36
+   FrameIndex TLE3 D 0 37
+   FrameIndex TLE3 E 0 38
+   FrameIndex TLE3 F 0 39
+   FrameIndex TLE3 G 0 40
+   FrameIndex TLE3 H 0 41
+   FrameIndex TLE3 I 0 42
+   FrameIndex TLE3 J 0 43
+   FrameIndex TLE3 K 0 44
+   FrameIndex TLE3 L 0 45
+   FrameIndex TLE3 M 0 46
+   FrameIndex TLE3 N 0 47
+   FrameIndex TLE3 O 0 48
+   FrameIndex TLE3 P 0 49
+   FrameIndex TLE3 Q 0 50
+   FrameIndex TLE3 R 0 51
+   FrameIndex TLE3 S 0 52
+   FrameIndex TLE3 T 0 53
+   FrameIndex TLE3 U 0 54
+   FrameIndex TLE3 V 0 55
+   FrameIndex TLE3 W 0 56
+   FrameIndex TLE3 X 0 57
+   FrameIndex TLE3 Y 0 58
+   FrameIndex TLE3 Z 0 59
+   FrameIndex TLE4 A 0 60
+   FrameIndex TLE4 B 0 61
+   FrameIndex TLE4 C 0 62
+   FrameIndex TLE4 D 0 63
+   FrameIndex TLE4 E 0 64
+   FrameIndex TLE4 F 0 65
+}
+
+Model Legs_Nova
+{
+	Path "models/Mechs/Nova"
+	Model 0 "nv_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "nv_full.png" // Main
+	Offset 0 0 0 
+	//SurfaceSkin 0 1   // Metal
+	
+   // Walk
+   FrameIndex TLE1 A 0 0
+   FrameIndex TLE1 B 0 1
+   FrameIndex TLE1 C 0 2
+   FrameIndex TLE1 D 0 3
+   FrameIndex TLE1 E 0 4
+   FrameIndex TLE1 F 0 5
+   FrameIndex TLE1 G 0 6
+   FrameIndex TLE1 H 0 7
+   FrameIndex TLE1 I 0 8
+   FrameIndex TLE1 J 0 9
+   FrameIndex TLE1 K 0 10
+   FrameIndex TLE1 L 0 11
+   FrameIndex TLE1 M 0 12
+   FrameIndex TLE1 N 0 13
+   FrameIndex TLE1 O 0 14
+   FrameIndex TLE1 P 0 15
+   FrameIndex TLE1 Q 0 16
+   FrameIndex TLE1 R 0 17
+   FrameIndex TLE1 S 0 18
+   FrameIndex TLE1 T 0 19
+   FrameIndex TLE1 U 0 20
+   FrameIndex TLE1 V 0 21
+   FrameIndex TLE1 W 0 22
+   FrameIndex TLE1 X 0 23
+   FrameIndex TLE1 Y 0 24
+   FrameIndex TLE1 Z 0 25
+   FrameIndex TLE2 A 0 26
+   FrameIndex TLE2 B 0 27
+   FrameIndex TLE2 C 0 28
+   FrameIndex TLE2 D 0 29
+   FrameIndex TLE2 E 0 30
+   FrameIndex TLE2 F 0 31
+   FrameIndex TLE2 G 0 32
+   // Run
+   FrameIndex TLE3 A 0 34
+   FrameIndex TLE3 B 0 35
+   FrameIndex TLE3 C 0 36
+   FrameIndex TLE3 D 0 37
+   FrameIndex TLE3 E 0 38
+   FrameIndex TLE3 F 0 39
+   FrameIndex TLE3 G 0 40
+   FrameIndex TLE3 H 0 41
+   FrameIndex TLE3 I 0 42
+   FrameIndex TLE3 J 0 43
+   FrameIndex TLE3 K 0 44
+   FrameIndex TLE3 L 0 45
+   FrameIndex TLE3 M 0 46
+   FrameIndex TLE3 N 0 47
+   FrameIndex TLE3 O 0 48
+   FrameIndex TLE3 P 0 49
+   FrameIndex TLE3 Q 0 50
+   FrameIndex TLE3 R 0 51
+   FrameIndex TLE3 S 0 52
+   FrameIndex TLE3 T 0 53
+   FrameIndex TLE3 U 0 54
+   FrameIndex TLE3 V 0 55
+   FrameIndex TLE3 W 0 56
+   FrameIndex TLE3 X 0 57
+   FrameIndex TLE3 Y 0 58
+   FrameIndex TLE3 Z 0 59
+   FrameIndex TLE4 A 0 60
+   FrameIndex TLE4 B 0 61
+   FrameIndex TLE4 C 0 62
+   FrameIndex TLE4 D 0 63
+   FrameIndex TLE4 E 0 64
+   FrameIndex TLE4 F 0 65
+}
+
+Model Legs_Tarantula
+{
+	Path "models/Mechs/Tarantula"
+	Model 0 "tr_legs.md3"
+	Scale 1.0 1.0 1.0
+	Skin 0 "tr_full" // Main
+	
+  // Walk
+   FrameIndex TLE1 A 0 0
+   FrameIndex TLE1 B 0 1
+   FrameIndex TLE1 C 0 2
+   FrameIndex TLE1 D 0 3
+   FrameIndex TLE1 E 0 4
+   FrameIndex TLE1 F 0 5
+   FrameIndex TLE1 G 0 6
+   FrameIndex TLE1 H 0 7
+   FrameIndex TLE1 I 0 8
+   FrameIndex TLE1 J 0 9
+   FrameIndex TLE1 K 0 10
+   FrameIndex TLE1 L 0 11
+   FrameIndex TLE1 M 0 12
+   FrameIndex TLE1 N 0 13
+   FrameIndex TLE1 O 0 14
+   FrameIndex TLE1 P 0 15
+   FrameIndex TLE1 Q 0 16
+   FrameIndex TLE1 R 0 17
+   FrameIndex TLE1 S 0 18
+   FrameIndex TLE1 T 0 19
+   FrameIndex TLE1 U 0 20
+   FrameIndex TLE1 V 0 21
+   FrameIndex TLE1 W 0 22
+   FrameIndex TLE1 X 0 23
+   FrameIndex TLE1 Y 0 24
+   FrameIndex TLE1 Z 0 25
+   FrameIndex TLE2 A 0 26
+   FrameIndex TLE2 B 0 27
+   FrameIndex TLE2 C 0 28
+   FrameIndex TLE2 D 0 29
+   FrameIndex TLE2 E 0 30
+   FrameIndex TLE2 F 0 31
+   FrameIndex TLE2 G 0 32
+   // Run
+   FrameIndex TLE3 A 0 34
+   FrameIndex TLE3 B 0 35
+   FrameIndex TLE3 C 0 36
+   FrameIndex TLE3 D 0 37
+   FrameIndex TLE3 E 0 38
+   FrameIndex TLE3 F 0 39
+   FrameIndex TLE3 G 0 40
+   FrameIndex TLE3 H 0 41
+   FrameIndex TLE3 I 0 42
+   FrameIndex TLE3 J 0 43
+   FrameIndex TLE3 K 0 44
+   FrameIndex TLE3 L 0 45
+   FrameIndex TLE3 M 0 46
+   FrameIndex TLE3 N 0 47
+   FrameIndex TLE3 O 0 48
+   FrameIndex TLE3 P 0 49
+   FrameIndex TLE3 Q 0 50
+   FrameIndex TLE3 R 0 51
+   FrameIndex TLE3 S 0 52
+   FrameIndex TLE3 T 0 53
+   FrameIndex TLE3 U 0 54
+   FrameIndex TLE3 V 0 55
+   FrameIndex TLE3 W 0 56
+   FrameIndex TLE3 X 0 57
+   FrameIndex TLE3 Y 0 58
+   FrameIndex TLE3 Z 0 59
+   FrameIndex TLE4 A 0 60
+   FrameIndex TLE4 B 0 61
+   FrameIndex TLE4 C 0 62
+   FrameIndex TLE4 D 0 63
+   FrameIndex TLE4 E 0 64
+   FrameIndex TLE4 F 0 65
+}
