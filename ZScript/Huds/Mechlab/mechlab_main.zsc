@@ -175,10 +175,10 @@ void ProcessLoadoutButtons()
 					if(selected_item.mWeaponOBJ) MechDoomerEvents.SendNetworkEvent("move_weapinv",selected_item.mWeaponOBJ.WeaponID);
 					if(selected_item.mUtil     ) MechDoomerEvents.SendNetworkEvent("movestruct_weapinv",selected_item.index);
 				}
-				else
+				else if(mechmode)
 				{
 					// TODO: Switch mech logic, require mech shutdown.
-					if(!mechplr.mech_shutdown && mechmode)
+					if(!mechplr.mech_shutdown)
 					{
 						mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
 						mechplr.sendHudAlert("Active mech must be shutdown\nfirst!",Font.CR_ORANGE);	

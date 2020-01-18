@@ -147,6 +147,7 @@ class Legs_BattleArmor : MechLegsBase
 		WalkCycle:
 			TRUN ABCDEFGHIJKLMNOPQRSTUVWXYZ 1 
 			{	
+				if(frame == 7 || frame == 24) mechowner.A_AlertMonsters(1024);
 				if(mechowner.player.cmd.buttons & BT_ATTACK) return ResolveState("Shoot");
 				if(!mechowner.player.onground) return ResolveState("Flying");
 				if(mechowner.isdead) return ResolveState("Die");
