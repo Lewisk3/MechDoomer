@@ -233,6 +233,7 @@ class Mechbase_Weapon : Inventory
 			xoffset += random(-5,5);
 			yoffset += random(-5,5);
 			double offsangle = plr.angle;
+			double offspitch = plr.pitch;
 			Array<FoundStruct> tmp;
 			
 			// If this weapon is NOT on an actuated arm, fire from torso aim.
@@ -243,10 +244,13 @@ class Mechbase_Weapon : Inventory
 			{
 				// Align to cockpit model's rotation.
 				let cockpit = plr.models_reference.cockpit;
-				if(cockpit) offsangle = cockpit.angle;	
+				if(cockpit) 
+				{
+					offsangle = cockpit.angle;
+				}
 			}
 			
-			vector2 offs = MDMath.VOffset(plr.angle, distance, xoffset, 1);			
+			vector2 offs = MDMath.VOffset(offsangle, distance, xoffset, 1);			
 			Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,(plr.viewheight*plr.player.CrouchFactor)+yoffset);
 			
 			let weap = Mechbase_Actor(Spawn(type,lpos));
@@ -256,12 +260,12 @@ class Mechbase_Weapon : Inventory
 				invoker.cooldown_timer = invoker.cooldown*35.0;
 				weap.target = invoker.Owner;
 				weap.mechplayer = MechWarrior(invoker.Owner);
-				weap.pitch = plr.pitch;
-				weap.angle = plr.angle;
+				weap.pitch = offspitch;
+				weap.angle = offsangle;
 				weap.vel = (
-						cos(plr.angle)*cos(plr.pitch),
-						sin(plr.angle)*cos(plr.pitch),
-						-sin(plr.pitch)
+						cos(offsangle)*cos(offspitch),
+						sin(offsangle)*cos(offspitch),
+						-sin(offspitch)
 						) * spd;
 				weap.cosmetic = cosmetic;
 				return true;
