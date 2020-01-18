@@ -232,6 +232,20 @@ class Mechbase_Weapon : Inventory
 			SoundEmitter.SE_Trigger(invoker.atksnd,plr.pos);
 			xoffset += random(-5,5);
 			yoffset += random(-5,5);
+			double offsangle = plr.angle;
+			Array<FoundStruct> tmp;
+			
+			// If this weapon is NOT on an actuated arm, fire from torso aim.
+			if( 
+				!( (invoker.hardpoint == plr.hardpoints.la && plr.FindStructs("StructActuator", plr.hardpoints.la, true, tmp)) || 
+				   (invoker.hardpoint == plr.hardpoints.ra && plr.FindStructs("StructActuator", plr.hardpoints.ra, true, tmp))    )
+			   )
+			{
+				// Align to cockpit model's rotation.
+				let cockpit = plr.models_reference.cockpit;
+				if(cockpit) offsangle = cockpit.angle;	
+			}
+			
 			vector2 offs = MDMath.VOffset(plr.angle, distance, xoffset, 1);			
 			Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,(plr.viewheight*plr.player.CrouchFactor)+yoffset);
 			
