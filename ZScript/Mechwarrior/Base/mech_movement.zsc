@@ -24,6 +24,7 @@ bool canShutdown;
 bool manualshutdown;
 bool stepping;
 bool nofirstpersonlegs;
+bool reversing;
 
 int Mech_JetCount;
 int bobdir;
@@ -180,7 +181,16 @@ void mech_movement()
 		if(throttle == 0) snd_accelerate = true;
 		if(GetPlayerInput(INPUT_BUTTONS) & BT_FORWARD)
 		{
-			throttle += 0.02;
+			bool prevaccel = GetPlayerInput(INPUT_OLDBUTTONS) & BT_FORWARD;
+			throttle += 0.02;	
+			if(throttle > 0 && reversing) 
+			{
+				if(prevaccel) 
+					throttle = 0;
+				else
+					reversing = false;
+			}
+			
 			// If stop is pressed and we continue moving, we don't want the two "forces" to fight.
 			TakeInventory("IBTN_STOP",1);
 			if(snd_accelerate){ A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false; }
@@ -193,11 +203,19 @@ void mech_movement()
 		
 		if(GetPlayerInput(INPUT_BUTTONS) & BT_BACK) 
 		{
+			bool prevdecel = GetPlayerInput(INPUT_OLDBUTTONS) & BT_BACK;
 			throttle -= 0.02;
+			if(throttle < 0 && !reversing) 
+			{
+				if(prevdecel) 
+					throttle = 0;
+				else
+					reversing = true;
+			}	
+				
 			TakeInventory("IBTN_STOP",1);
 			if(!snd_accelerate){ A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true; }
-		}
-		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle < 0)
+		} if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle < 0)
 		{
 			throttle += 0.02;
 			if(snd_accelerate){ A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false; }
