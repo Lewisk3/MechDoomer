@@ -215,7 +215,8 @@ void mech_movement()
 				
 			TakeInventory("IBTN_STOP",1);
 			if(!snd_accelerate){ A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true; }
-		} if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle < 0)
+		}
+		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle < 0)
 		{
 			throttle += 0.02;
 			if(snd_accelerate){ A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false; }
