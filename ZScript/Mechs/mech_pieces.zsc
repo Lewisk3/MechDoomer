@@ -52,7 +52,7 @@ class Torso_Stormcrow : MechTorsoBase {
 	Default {
 		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow", "Cockpit_Stormcrow";
 		MechPartsBase.ZOffset 60;
-		MechPartsBase.CockpitOffset 25, 70;
+		MechPartsBase.CockpitOffset 15, 70;
 	}
 }
 class Torso_Atlas : MechTorsoBase {

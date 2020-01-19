@@ -368,7 +368,7 @@ class MechLegsBase : MechPartsBase
 	
 	Default
 	{
-		MechLegsBase.RunSpeed 81;
+		MechLegsBase.RunSpeed 25;
 	}
 	
 	override void tick()
@@ -385,7 +385,7 @@ class MechLegsBase : MechPartsBase
 			{
 				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
 				stompfriction = clamp((0.65) + (wrating*(spdrating)), 0.75, 1.05);
-				spdrating = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * mechowner.MoveSpeedKPH)/runspeed;
+				spdrating = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * mechowner.MoveSpeedKPH) / (runspeed);
 			}
 		}
 		super.tick();
