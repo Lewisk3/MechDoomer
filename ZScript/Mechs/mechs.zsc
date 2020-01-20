@@ -52,6 +52,15 @@
 	
 */
 
+// Testing template (NOT A MECH)
+class TestingDoomguy : DoomPlayer
+{
+	Default
+	{
+		Player.DisplayName "Debug Class (NOT A MECH)";
+	}
+}
+
 // Elemental(s) or Battle Armor(s)
 class BattleArmor : MechWarrior
 {

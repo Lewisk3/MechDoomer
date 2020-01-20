@@ -5,8 +5,7 @@ GameInfo
 	eventhandlers = "MechDoomerEvents"
 	addeventhandlers = "ColorTintShaderManager"
 	
-	PlayerClasses = "DoomPlayer",
-					"BattleArmor",
+	PlayerClasses = "BattleArmor",
 					"Stormcrow",
 					"Timberwolf",
 					"Commando",
@@ -16,5 +15,6 @@ GameInfo
 					"Nova",
 					"Tarantula",
 					"Direwolf",
-					"Firemoth"
+					"Firemoth",
+					"TestingDoomguy"
 }
