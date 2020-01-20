@@ -1,4 +1,3 @@
-#include "ZScript/Mechs/MechLegs_Modeldef.txt"
 
 // Battle armor
 Model Cockpit_BattleArmor
@@ -313,6 +312,76 @@ Model Cockpit_Tarantula
 	USEACTORROLL 
 	AngleOffset 90
 	Offset -8 0 2;
+	
+   FrameIndex MODL A 0 0
+}
+
+// Direwolf
+Model Torso_Direwolf
+{
+	Path "models/Mechs"
+	Model 0 "Direwolf/dw_torso.md3"
+	SurfaceSkin 0 0 "Direwolf/dw_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Direwolf
+{
+	Path "models/Mechs/Direwolf"
+	Model 0 "dw_hips.md3"
+	Skin 0 "dw_full" // Main
+	Scale 1.0 1.0 1.0
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Direwolf
+{
+	Path "models/Mechs/"
+	Model 0 "Direwolf/dw_head.obj"
+	Scale 0.3 0.3 0.3
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset -137 1 -65;
+	
+   FrameIndex MODL A 0 0
+}
+
+// Firemoth
+Model Torso_Firemoth
+{
+	Path "models/Mechs"
+	Model 0 "Firemoth/fm_torso.md3"
+	SurfaceSkin 0 0 "Firemoth/fm_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Firemoth
+{
+	Path "models/Mechs/Firemoth"
+	Model 0 "fm_hips.md3"
+	Skin 0 "fm_full" // Main
+	Scale 1.0 1.0 1.0
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Firemoth
+{
+	Path "models/Mechs/"
+	Model 0 "Firemoth/fm_head.obj"
+	Scale 0.3 0.3 0.3
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset -30 -3.5 -20;
 	
    FrameIndex MODL A 0 0
 }

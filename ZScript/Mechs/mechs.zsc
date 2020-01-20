@@ -216,6 +216,40 @@ class Tarantula : MechWarrior
 		equipWeapon("MediumLaser",hardpoints.ra,2);
 	}
 }
+class Firemoth : MechWarrior
+{
+	Default
+	{
+		Mass 400;
+		Player.DisplayName "Firemoth Prime";
+		Player.ViewHeight 60;
+		
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.Weight 20;
+		MechWarriorBase.LegSpeed 1.5;
+		MechWarriorBase.Engine "ENGINE_XL_200";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.MechPieces "Torso_Firemoth";
+		
+		MechWarriorBase.CValue 2105000;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 6,10,8,8,10,10,7,7, 3,11,8,8,5,5,7,7 );
+		hardpoints.setupLocations( (0,8), (0,4), (5,10), (-5,10), (38,45), (-38,45), (18,-40), (-18,-40) );
+		hardpoints.setupSlots();
+		
+		equipStruct("DoubleHeatsink",hardpoints.lt,1);
+		equipStruct("DoubleHeatsink",hardpoints.rt,1);
+		equipWeapon("SRM6",hardpoints.lt,1);
+		equipWeapon("SRM4",hardpoints.rt,1);
+		equipStruct("SRM_Ammo",hardpoints.ll,1);
+		equipWeapon("ERMediumLaser",hardpoints.la,2);
+		equipWeapon("ERMediumLaser",hardpoints.ra,2);
+	}
+}
 
 // Medium Mechs
 class Stormcrow : MechWarrior
@@ -350,7 +384,6 @@ class Atlas : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Atlas";
 		MechWarriorBase.Engine "ENGINE_STD_300";
 		MechWarriorBase.TwistRange 60;
-		MechWarriorBase.HudCockpit "ATLSHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.HideLegsPerspective true;
@@ -379,6 +412,49 @@ class Atlas : MechWarrior
 		equipWeapon("SRM6",hardpoints.lt,3);
 	}
 
+}
+
+class Direwolf : MechWarrior
+{
+	Default
+	{
+		Mass 4000;
+		Player.DisplayName "Direwolf Prime";
+		Player.ViewHeight 80;
+		
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 60;
+		MechWarriorBase.LegSpeed 1.0;
+		MechWarriorBase.Weight 100;
+		MechWarriorBase.MechPieces "Torso_Direwolf";
+		MechWarriorBase.Engine "ENGINE_XL_335";
+		MechWarriorBase.HudMech "ATLAICO";
+		
+		MechWarriorBase.CValue 13650000;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,68,46,46,38,38,44,44, 6,32,23,23,17,17,20,20 );
+		hardpoints.setupLocations( (0,20), (0,0), (-20,20), (20,-40), (50,-30), (-50,-30), (45,-111), (-45,-111) );
+		hardpoints.setupSlots();
+		
+		equipStruct("DoubleHeatsink",hardpoints.ct, 2);
+		equipStruct("LRM_Ammo",hardpoints.ll,2);
+		equipStruct("UAC5_Ammo",hardpoints.rl,2);	
+		equipWeapon("ERLargeLaser",hardpoints.la,1);
+		equipWeapon("ERLargeLaser",hardpoints.la,1);
+		equipWeapon("ERLargeLaser",hardpoints.ra,1);
+		equipWeapon("ERLargeLaser",hardpoints.ra,1);
+		equipWeapon("MediumPulseLaser",hardpoints.la,2);
+		equipWeapon("MediumPulseLaser",hardpoints.la,2);
+		equipWeapon("MediumPulseLaser",hardpoints.ra,2);
+		equipWeapon("MediumPulseLaser",hardpoints.ra,2);
+		equipWeapon("UAutocannon5",hardpoints.lt,3);
+		equipWeapon("UAutocannon5",hardpoints.lt,3);
+		equipWeapon("LRM10",hardpoints.rt,4);
+	}
 }
 
 // SuperHeavy Mechs

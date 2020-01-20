@@ -376,7 +376,11 @@ override void tick()
 			HardpointDamageEffects();
 			mech_weapons();
 		}
-		if(mech_shutdown)process_shutdown();
+		if(mech_shutdown)
+		{
+			dronecam_active = false;
+			process_shutdown();
+		}
 	}
 	mechsounds.Tick();
 	

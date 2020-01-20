@@ -72,7 +72,7 @@ void mech_cockpitbob()
 	// Calculate Bob
 	float movebobpart = MW_VELBOBFRAC;
 	float bobthrust = 0;
-	float bobmax = MW_BOBRANGE*(mech_tonnage/100.0);
+	float bobmax = MW_BOBRANGE*(clamp(mech_tonnage,50,100)/100.0);
 	if(defaultmovement) bobmax *= 10;
 	if(!bobdir) bobdir = 1;
 	if(vel.z >  0.5) bobdir = 1;
@@ -179,7 +179,7 @@ void mech_movement()
 			{ A_PlaySound("Mech/TorsoTwist",4,0.3,1); } else { A_StopSound(4); }
 			
 		if(throttle == 0) snd_accelerate = true;
-		if(GetPlayerInput(INPUT_BUTTONS) & BT_FORWARD)
+		if(GetPlayerInput(INPUT_FORWARDMOVE) > 0)
 		{
 			bool prevaccel = GetPlayerInput(INPUT_OLDBUTTONS) & BT_FORWARD;
 			throttle += 0.02;	
@@ -461,7 +461,7 @@ void Bobbing() {
 	if(vel != 0)
 	{
 		TiltOffset  = sin(TiltOsc);
-		TiltOffset *= (vel/2) - (LegVel*2);
+		TiltOffset *= (vel/2) - (LegVel*0.8);
 		TiltOffset *= 0.21;
 		if(defaultmovement) TiltOffset *= 0.6;
 		TiltOffset *= CrouchMulti;

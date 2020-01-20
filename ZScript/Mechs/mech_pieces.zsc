@@ -11,6 +11,8 @@ class Cockpit_Jenner      : MechCockpitModel {}
 class Cockpit_Urbanmech   : MechCockpitModel {}
 class Cockpit_Nova    	  : MechCockpitModel {}
 class Cockpit_Tarantula   : MechCockpitModel {}
+class Cockpit_Direwolf    : MechCockpitModel {}
+class Cockpit_Firemoth    : MechCockpitModel {}
 
 // Hips
 class Hips_Invisible   : MechHipsBase {}
@@ -22,6 +24,9 @@ class Hips_Atlas       : MechHipsBase {}
 class Hips_Commando    : MechHipsBase {}
 class Hips_Nova    	   : MechHipsBase {}
 class Hips_Tarantula   : MechHipsBase {}
+class Hips_Direwolf    : MechHipsBase {}
+class Hips_Firemoth    : MechHipsBase {}
+
 // Legs	
 class Legs_Invisible   : MechLegsBase {}
 class Legs_Stormcrow   : Legs_Smooth {}
@@ -31,6 +36,8 @@ class Legs_Jenner      : Legs_Smooth {}
 class Legs_Urbanmech   : Legs_Smooth {}
 class Legs_Nova    	   : Legs_Smooth {}
 class Legs_Timberwolf  : Legs_Smooth {}
+class Legs_Direwolf    : Legs_Smooth {}
+class Legs_Firemoth    : Legs_Smooth {}
 
 // Torsos
 class Model_BattleArmor : MechTorsoBase
@@ -95,6 +102,20 @@ class Torso_Tarantula : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Tarantula", "Legs_Tarantula", "Cockpit_Tarantula";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 90;
+	}
+}
+class Torso_Direwolf : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Direwolf", "Legs_Direwolf", "Cockpit_Direwolf";
+		MechPartsBase.ZOffset 45;
+		MechPartsBase.CockpitOffset 15, 90;
+	}
+}
+class Torso_Firemoth : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Firemoth", "Legs_Firemoth", "Cockpit_Firemoth";
+		MechPartsBase.ZOffset 40;
+		MechPartsBase.CockpitOffset 10, 50;
 	}
 }
 class Torso_Invisible : MechTorsoBase {

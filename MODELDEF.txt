@@ -1,4 +1,9 @@
 
+// Mech modeldefs
+#include "ZScript/Mechs/MechLegs_Modeldef.txt"
+#include "ZScript/Mechs/MechParts_Modeldef.txt"
+
+// Misc modeldefs
 Model DEBRIS_3D
 {
 	Path "models"

@@ -14,5 +14,7 @@ GameInfo
 					"Jenner",
 					"Urbanmech",
 					"Nova",
-					"Tarantula"
+					"Tarantula",
+					"Direwolf",
+					"Firemoth"
 }
