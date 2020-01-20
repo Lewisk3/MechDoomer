@@ -299,6 +299,7 @@ void mech_movement()
 		
 		// If we're in the air we can move our legs freely of friction.
 		float finalmod = (player.onground ? turnmod*spdmod : 2);
+		finalmod = clamp(finalmod, 0.15, 2);
 		if(!CVar.GetCVar("mwd_relativelegspeed",player).getBool()) finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
 		
 		LegAng += LegVel*finalmod;
@@ -460,7 +461,7 @@ void Bobbing() {
 	if(vel != 0)
 	{
 		TiltOffset  = sin(TiltOsc);
-		TiltOffset *= (vel/2) - (LegVel*0.8);
+		TiltOffset *= clamp((vel/2) - (LegVel*0.8), 0.05, 5.0);
 		TiltOffset *= 0.21;
 		if(defaultmovement) TiltOffset *= 0.6;
 		TiltOffset *= CrouchMulti;
