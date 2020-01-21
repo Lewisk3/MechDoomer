@@ -235,12 +235,12 @@ class Mechbase_Weapon : Inventory
 			double offsangle = plr.angle;
 			double offspitch = plr.pitch;
 			Array<FoundStruct> tmp;
+			bool onarms = ( invoker.hardpoint == plr.hardpoints.la && plr.FindStructs("StructActuator", plr.hardpoints.la, true, tmp) ) || 
+						  ( invoker.hardpoint == plr.hardpoints.ra && plr.FindStructs("StructActuator", plr.hardpoints.ra, true, tmp) );
+			bool onlegs = ( invoker.hardpoint == plr.hardpoints.ll || invoker.hardpoint == plr.hardpoints.rl);
 			
 			// If this weapon is NOT on an actuated arm, fire from torso aim.
-			if( 
-				!( (invoker.hardpoint == plr.hardpoints.la && plr.FindStructs("StructActuator", plr.hardpoints.la, true, tmp)) || 
-				   (invoker.hardpoint == plr.hardpoints.ra && plr.FindStructs("StructActuator", plr.hardpoints.ra, true, tmp))    )
-			   )
+			if(!onarms)
 			{
 				// Align to cockpit model's rotation.
 				let cockpit = plr.models_reference.cockpit;
@@ -248,6 +248,10 @@ class Mechbase_Weapon : Inventory
 				{
 					offsangle = cockpit.angle;
 				}
+			}
+			if(onlegs)
+			{
+				offsangle = plr.LegAng;
 			}
 			
 			vector2 offs = MDMath.VOffset(offsangle, distance, xoffset, 1);			
