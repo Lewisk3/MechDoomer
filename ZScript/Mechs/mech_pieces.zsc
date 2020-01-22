@@ -41,6 +41,7 @@ class Legs_Timberwolf  : Legs_Smooth {}
 class Legs_Direwolf    : Legs_Smooth {}
 class Legs_Firemoth    : Legs_Smooth {}
 class Legs_MadDog      : Legs_Smooth {}
+class Legs_Tarantula   : Legs_Smooth {}
 
 // Torsos
 class Model_BattleArmor : MechTorsoBase
@@ -206,11 +207,11 @@ class Legs_BattleArmor : MechLegsBase
 				if(mechowner.player.cmd.buttons & BT_ATTACK) return ResolveState("Shoot");
 				if(!mechowner.player.onground) return ResolveState("Flying");
 				if(mechowner.isdead) return ResolveState("Die");
-				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null); 
+				return !isMoving() ? ResolveState("Spawn") : ResolveState(Null); 
 			}
 			TRN2 ABCDEF 1
 			{
-				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null); 
+				return !isMoving() ? ResolveState("Spawn") : ResolveState(Null); 
 			}
 		loop;
 		Shoot:
@@ -227,13 +228,3 @@ class Legs_BattleArmor : MechLegsBase
 	}
 }
 
-class Legs_Tarantula  : Legs_Smooth 
-{
-	override bool checkStepping(bool idle, int frameone, int frametwo)
-	{
-		if(!mechowner) return false;
-		mechowner.stepping = idle ? false : (frame == frameone || frame == frametwo || frame == 6+frameone || frame == 8+frametwo);
-		if(mechowner.stepping) mechowner.A_AlertMonsters(1024);
-		return true;
-	}
-}
