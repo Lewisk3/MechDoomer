@@ -153,7 +153,7 @@ class MechWarrior : MechWarriorBase
 		MechWarriorBase.heatEff 0.02;
 		MechWarriorBase.HudCockpit "CROW";
 		MechWarriorBase.HudMech "";
-		MechWarriorBase.LegSpeed 0.8;
+		MechWarriorBase.LegSpeed 1.2;
 		MechWarriorBase.Acceleration 1.0;
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.PitchRange 30,20;

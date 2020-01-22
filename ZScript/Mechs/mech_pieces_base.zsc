@@ -341,7 +341,7 @@ class MechTorsoBase : MechPartsBase
 			{
 				pitch = mechowner.pitch*0.5;
 				roll = mechowner.roll*0.3;
-				angle = mechowner.angle;
+				angle = cockpit.angle;
 			}
 			else
 			{

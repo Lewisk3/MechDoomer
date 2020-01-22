@@ -172,6 +172,7 @@ class Urbanmech : MechWarrior
 		Player.ViewHeight 62;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 9001; // Over 9000 :P
+		MechWarriorBase.LegSpeed 0.8;
 		MechWarriorBase.InfiniteTorsoTwist true;
 		MechWarriorBase.Weight 30;
 		MechWarriorBase.Engine "ENGINE_STD_60";
@@ -206,7 +207,7 @@ class Tarantula : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Tarantula";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Acceleration 2.0;
-		MechWarriorBase.LegSpeed 1.2;
+		MechWarriorBase.LegSpeed 1.3;
 		MechWarriorBase.CValue 3560417;
 	}
 		
@@ -239,7 +240,8 @@ class Firemoth : MechWarrior
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 20;
-		MechWarriorBase.LegSpeed 1.5;
+		MechWarriorBase.LegSpeed 1.3;
+		MechWarriorBase.Acceleration 0.8;
 		MechWarriorBase.Engine "ENGINE_XL_200";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.MechPieces "Torso_Firemoth";
@@ -249,7 +251,7 @@ class Firemoth : MechWarrior
 		
 	override void SetupWeapons()
 	{
-		hardpoints.setupVitals( 6,10,8,8,10,10,7,7, 3,11,8,8,5,5,7,7 );
+		hardpoints.setupVitals( 9,12,10,10,6,6,8,8, 4,6,5,5,3,3,4,4 );
 		hardpoints.setupLocations( (0,8), (0,4), (5,10), (-5,10), (38,45), (-38,45), (18,-40), (-18,-40) );
 		hardpoints.setupSlots();
 		
@@ -275,6 +277,8 @@ class Stormcrow : MechWarrior
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 100;
 		MechWarriorBase.PitchRange 40, 30;
+		MechWarriorBase.LegSpeed 1.0;
+		MechWarriorBase.Acceleration 0.8;
 		MechWarriorBase.Weight 55;
 		MechWarriorBase.Engine "ENGINE_XL_330";
 		MechWarriorBase.HudCockpit "CROWHUD";
@@ -308,6 +312,8 @@ class Nova : MechWarrior
 		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.TwistRange 20;
 		MechWarriorBase.PitchRange 50, 20;
+		MechWarriorBase.LegSpeed 1.1;
+		MechWarriorBase.Acceleration 0.8;
 		MechWarriorBase.Weight 50;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudCockpit "NOVAHUD";
@@ -355,7 +361,8 @@ class Timberwolf : MechWarrior
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 80;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.LegSpeed 0.8;
 		MechWarriorBase.Weight 75;
 		MechWarriorBase.PitchRange 40,20;
 		MechWarriorBase.Engine "ENGINE_XL_375";
@@ -388,6 +395,41 @@ class Timberwolf : MechWarrior
 	}
 }
 
+class MadDog : MechWarrior
+{
+	Default
+	{
+		Mass 3000;
+		Player.DisplayName "MadDog Prime";
+		Player.ViewHeight 70;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.LegSpeed 0.9;
+		MechWarriorBase.Weight 60;
+		MechWarriorBase.PitchRange 45, 25;
+		MechWarriorBase.Engine "ENGINE_XL_300";
+		MechWarriorBase.MechPieces "Torso_MadDog";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.CValue 8270000;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,40,28,28,20,20,28,28, 4,20,14,14,10,10,14,14 );
+		hardpoints.setupLocations( (0,20), (0,-38), (20,18), (-20,18), (42,-10), (-42,-10), (20,-85), (-20,-85) );
+		hardpoints.setupSlots();
+		equipWeapon("LargePulseLaser",hardpoints.la,2);
+		equipWeapon("LargePulseLaser",hardpoints.la,2);
+		equipWeapon("MediumPulseLaser",hardpoints.ra,1);
+		equipWeapon("MediumPulseLaser",hardpoints.ra,1);
+		equipWeapon("LRM20",hardpoints.rt,3);
+		equipWeapon("LRM20",hardpoints.lt,3);
+		equipStruct("LRM_Ammo",hardpoints.rt,2);
+		equipStruct("LRM_Ammo",hardpoints.lt,2);
+	}
+}
+
 // Assault Mechs
 class Atlas : MechWarrior
 {
@@ -397,8 +439,10 @@ class Atlas : MechWarrior
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.MechPieces "Torso_Atlas";
 		MechWarriorBase.Engine "ENGINE_STD_300";
-		MechWarriorBase.TwistRange 60;
+		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.PitchRange 30, 30;
+		MechWarriorBase.LegSpeed 0.8;
+		MechWarriorBase.Acceleration 0.6;
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.HideLegsPerspective true;
@@ -439,9 +483,10 @@ class Direwolf : MechWarrior
 		
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 60;
+		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.PitchRange 25, 20;
-		MechWarriorBase.LegSpeed 1.0;
+		MechWarriorBase.LegSpeed 0.9;
+		MechWarriorBase.Acceleration 0.75;
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.MechPieces "Torso_Direwolf";
 		MechWarriorBase.Engine "ENGINE_XL_335";
@@ -452,7 +497,7 @@ class Direwolf : MechWarrior
 		
 	override void SetupWeapons()
 	{
-		hardpoints.setupVitals( 8,68,46,46,38,38,44,44, 6,32,23,23,17,17,20,20 );
+		hardpoints.setupVitals( 8,62,42,42,34,34,42,42, 4,31,21,21,17,17,21,21 );
 		hardpoints.setupLocations( (0,20), (0,0), (-20,20), (20,-40), (50,-30), (-50,-30), (45,-111), (-45,-111) );
 		hardpoints.setupSlots();
 		

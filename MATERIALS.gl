@@ -136,3 +136,7 @@ material texture models/Mechs/Direwolf/dw_full.png {
 material texture models/Mechs/Firemoth/fm_full.png {
 	shader "shaders/simsun.fp"
 }
+
+material texture models/Mechs/MadDog/md_full.png {
+	shader "shaders/simsun.fp"
+}

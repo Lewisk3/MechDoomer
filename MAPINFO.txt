@@ -16,5 +16,6 @@ GameInfo
 					"Tarantula",
 					"Direwolf",
 					"Firemoth",
+					"MadDog",
 					"TestingDoomguy"
 }
