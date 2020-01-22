@@ -57,6 +57,12 @@ OptionMenu "MechDoomerMenu"
 	StaticText "to find fresh ammo and replace it automatically", "Black"
 	StaticText " "
 	
+	Option "Enable Torso Actuation", "mwd_universalactuation", "YesNo"
+	StaticText "DISHONORABLE", "Red"
+	StaticText "All weapons will fire from crosshair aim", "Black"
+	StaticText "regardless if placed on the torso", "Black"
+	StaticText " "
+	
 	Option "Constant turn-rate", "mwd_relativelegspeed", "NoYes"
 	StaticText "DISHONORABLE", "Red"
 	StaticText "Mech turning speed isn't affected by", "Black"

@@ -4,4 +4,5 @@ user bool mwd_autoreload = false;
 user bool mwd_viewport_target = true;
 user bool mwd_relativelegspeed = true;
 user bool mwd_weaponsconverge = true;
+user bool mwd_universalactuation = false;
 user float mwd_fontscale = 1.0;

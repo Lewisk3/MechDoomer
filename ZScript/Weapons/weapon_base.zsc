@@ -240,7 +240,8 @@ class Mechbase_Weapon : Inventory
 			bool onlegs = ( invoker.hardpoint == plr.hardpoints.ll || invoker.hardpoint == plr.hardpoints.rl);
 			
 			// If this weapon is NOT on an actuated arm, fire from torso aim.
-			if(!onarms)
+			bool notorsoaim = CVar.GetCVar("mwd_universalactuation", plr.player).getBool();
+			if(!onarms && !notorsoaim)
 			{
 				// Align to cockpit model's rotation.
 				let cockpit = plr.models_reference.cockpit;
