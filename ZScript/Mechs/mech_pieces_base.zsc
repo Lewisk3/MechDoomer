@@ -411,9 +411,13 @@ class MechLegsBase : MechPartsBase
 				
 			if(!mechowner.CheckVoodoo())
 			{
+				float curspd = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * mechowner.MoveSpeedKPH);
 				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
-				stompfriction = clamp((0.65) + (wrating*(spdrating)), 0.75, 1.05);
-				spdrating = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * mechowner.MoveSpeedKPH) / (mechowner.MoveSpeedKPH*runspeed);
+				float stomp_spdrating = (curspd / mechowner.MoveSpeedKPH)*0.3;
+				float stomp_wrating = 1.0-(0.7*wrating);
+				
+				spdrating = curspd / (mechowner.MoveSpeedKPH*runspeed);
+				stompfriction = stomp_wrating + stomp_spdrating;
 			}
 		}
 		super.tick();
@@ -476,7 +480,7 @@ class Legs_Smooth  : MechLegsBase
 			TLE1 BCDEFGHIJKLMNOPQRSTUVWXYZ 2 
 			{	
 				if(frame == 1 || frame == 15) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
-				if(checkStepping(false, 2, 17) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(checkStepping(false, 2, 16) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 2);
 				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null);
 			}
@@ -490,7 +494,7 @@ class Legs_Smooth  : MechLegsBase
 			TLE3 BCDEFGHIJKLMNOPQRSTUVWXYZ 2 
 			{	
 				if(frame == 7 || frame == 22) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
-				if(checkStepping(false, 8, 24) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(checkStepping(false, 8, 23) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);
 				return !isMoving() ? ResolveState("SpawnIdle") : (tics >= 3 && frame == 1) ? ResolveState("WalkCycle") : ResolveState(Null);
 			}
