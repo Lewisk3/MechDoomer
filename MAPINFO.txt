@@ -17,5 +17,6 @@ GameInfo
 					"Direwolf",
 					"Firemoth",
 					"MadDog",
+					"Summoner",
 					"TestingDoomguy"
 }

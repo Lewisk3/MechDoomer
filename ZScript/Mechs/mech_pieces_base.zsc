@@ -206,6 +206,7 @@ class MechCockpitModel : MechPartsBase
 	float maxpitch;
 	float maxangle;
 	float rotatespeed;
+	float bobrange;
 	Property Offset: mxoffs, mzoffs;
 	MechPartsBase cockpitcam;	
 	
@@ -263,7 +264,7 @@ class MechCockpitModel : MechPartsBase
 					roll = mechowner.roll;
 				}
 			}
-			mzoffs = mechowner.viewzoffs*0.12;
+			mzoffs = (mechowner.viewzoffs*0.12)*bobrange;
 		}
 		
 		if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
@@ -284,6 +285,7 @@ class MechTorsoBase : MechPartsBase
 	float cockpitpitch_mod;
 	float cockpitangle_mod;
 	float cockpittwist_mod;
+	float cockpitbob_mod;
 	MechPartsBase hips;
 	MechPartsBase legs;
 	MechPartsbase cockpit_camera;
@@ -292,13 +294,13 @@ class MechTorsoBase : MechPartsBase
 	class<MechPartsBase> legs_type;
 	class<MechCockpitModel> cockpit_type;
 	Property Pieces : hips_type, legs_type, cockpit_type;
-	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod;
+	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod, cockpitbob_mod;
 	Property TwistSpeed : cockpittwist_mod;
 	Property DoNotTwist : notwist;
 	
 	Default
 	{
-		MechTorsoBase.CockpitRange 0.7, 0.7;
+		MechTorsoBase.CockpitRange 0.7, 0.7, 1.0;
 		MechTorsoBase.TwistSpeed 0.1;
 	}
 		
@@ -323,6 +325,7 @@ class MechTorsoBase : MechPartsBase
 				cockpit.maxpitch = mechowner.maxPitch * cockpitpitch_mod;
 				cockpit.maxangle = mechowner.MaxYaw * cockpitangle_mod;
 				cockpit.rotatespeed = cockpittwist_mod;
+				cockpit.bobrange = cockpitbob_mod;
 			}
 		}
 		setup = true;
@@ -330,13 +333,13 @@ class MechTorsoBase : MechPartsBase
 	
 	override void tick()
 	{
+		if(!setup) SetupParts(hips_type, legs_type, cockpit_type);
 		if(mechowner && !mechowner.CheckVoodoo())
 		{
 			if( !mechowner.dronecam && !mechowner.dronecam_active &&
 				 mechowner.player && mechowner.player.camera == mechowner ) 
 				mechowner.player.camera = cockpit_camera;
 			
-			if(!setup) SetupParts(hips_type, legs_type, cockpit_type);
 			if(!notwist)
 			{
 				pitch = mechowner.pitch*0.5;

@@ -364,7 +364,7 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.LegSpeed 0.8;
 		MechWarriorBase.Weight 75;
-		MechWarriorBase.PitchRange 40,20;
+		MechWarriorBase.PitchRange 40, 30;
 		MechWarriorBase.Engine "ENGINE_XL_375";
 		MechWarriorBase.HudCockpit "WOLFHUD";
 		MechWarriorBase.MechPieces "Torso_Timberwolf";
@@ -392,6 +392,42 @@ class Timberwolf : MechWarrior
 		equipStruct("LRM_Ammo",hardpoints.rt,1);
 		equipStruct("LRM_Ammo",hardpoints.lt,1);
 		equipStruct("DoubleHeatsink",hardpoints.la,1);
+	}
+}
+
+
+class Summoner : MechWarrior
+{
+	Default
+	{
+		Mass 3500;
+		Player.DisplayName "Summoner Prime";
+		Player.ViewHeight 90;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.LegSpeed 0.8;
+		MechWarriorBase.Weight 70;
+		MechWarriorBase.PitchRange 40, 20;
+		MechWarriorBase.Engine "ENGINE_XL_350";
+		MechWarriorBase.MechPieces "Torso_Summoner";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.CValue 10650000;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 9,44,30,30,22,22,30,30, 4,22,15,15,11,11,15,15 );
+		hardpoints.setupLocations( (0,20), (0,5), (20,30), (-18,-5), (55,-5), (-60,-30), (20,-85), (-20,-85) );
+		hardpoints.setupSlots();
+		equipWeapon("Autocannon10",hardpoints.la,1);
+		equipWeapon("ERPPC",hardpoints.ra,2);
+		equipWeapon("LRM15",hardpoints.rt,3);
+		equipStruct("LRM_Ammo",hardpoints.rt,2);
+		equipStruct("AC10_Ammo",hardpoints.la,1);
+		equipStruct("JumpJet",hardpoints.ll,2);
+		equipStruct("JumpJet",hardpoints.rl,2);
+		equipStruct("JumpJet",hardpoints.ct,1);
 	}
 }
 

@@ -125,7 +125,7 @@ clearscope float EngineGetKPH(int enginetype=0)
 {
 	if(!inv_context.engine && !enginetype) return 0;
 	int engine = enginetype ? enginetype : inv_context.engine.enginetype;
-	return (32.4*(100./mech_tonnage)) / (200./engine);
+	return (32.4*(100./mech_tonnage)) / (187.5/engine);
 }
 
 	

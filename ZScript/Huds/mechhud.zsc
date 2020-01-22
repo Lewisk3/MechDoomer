@@ -216,7 +216,7 @@ class MechStatusBar : BaseStatusBar
 			let mech = MechWarrior(CPlayer.mo);
 			if(!mech) 
 			{
-				console.printf("Failed to display HUD, unsupported player class!");
+				MD_SBS.DrawString("MechFont", "Debug Active - Mechsim Disabled.", (0,25), MD_SBS.SS_SCREEN_TOP_CENTER, Font.CR_DARKRED, scale:(1.0, 1.0));
 				return;
 			}
 			else if(!mech.inv_context)

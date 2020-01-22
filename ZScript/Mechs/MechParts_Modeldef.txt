@@ -421,3 +421,39 @@ Model Cockpit_MadDog
 	
    FrameIndex MODL A 0 0
 }
+
+// Summoner
+Model Torso_Summoner
+{
+	Path "models/Mechs"
+	Model 0 "Summoner/su_torso.md3"
+	SurfaceSkin 0 1 "Summoner/su_full.png"
+	SurfaceSkin 0 0 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Summoner
+{
+	Path "models/Mechs/Summoner"
+	Model 0 "su_hips.md3"
+	Skin 0 "su_full" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Summoner
+{
+	Path "models/Mechs/"
+	Model 0 "Summoner/su_head.obj"
+	Scale 0.05 0.05 0.05
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset -6 -6 -11;
+	
+   FrameIndex MODL A 0 0
+}
