@@ -46,6 +46,8 @@ class Model_BattleArmor : MechTorsoBase
 		MechTorsoBase.Pieces "Hips_Invisible", "Legs_BattleArmor", "Cockpit_BattleArmor";
 		MechPartsBase.ZOffset 0;
 		MechPartsBase.CockpitOffset 0, 30;
+		MechTorsoBase.CockpitRange 1.0, 1.0;
+		MechTorsoBase.TwistSpeed 1.0;
 	}
 }
 class Torso_Timberwolf : MechTorsoBase {
@@ -53,6 +55,8 @@ class Torso_Timberwolf : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf", "Cockpit_Timberwolf";
 		MechPartsBase.ZOffset 50;
 		MechPartsBase.CockpitOffset 20, 70;
+		MechTorsoBase.CockpitRange 0.9, 0.7;
+		MechTorsoBase.TwistSpeed 0.1;
 	}
 }
 class Torso_Stormcrow : MechTorsoBase {
@@ -60,6 +64,8 @@ class Torso_Stormcrow : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow", "Cockpit_Stormcrow";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 15, 70;
+		MechTorsoBase.CockpitRange 0.9, 0.6;
+		MechTorsoBase.TwistSpeed 0.1;
 	}
 }
 class Torso_Atlas : MechTorsoBase {
@@ -67,6 +73,8 @@ class Torso_Atlas : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas", "Cockpit_Atlas";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 100;
+		MechTorsoBase.CockpitRange 0.6, 0.5;
+		MechTorsoBase.TwistSpeed 0.05;
 	}
 }
 class Torso_Commando : MechTorsoBase {
@@ -74,12 +82,16 @@ class Torso_Commando : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Commando", "Legs_Commando", "Cockpit_Commando";
 		MechPartsBase.ZOffset 40;
 		MechPartsBase.CockpitOffset 0, 70;
+		MechTorsoBase.CockpitRange 0.8, 1.0;
+		MechTorsoBase.TwistSpeed 0.2;
 	}
 }
 class Torso_Urbanmech : MechTorsoBase {
 	Default {
 		MechTorsoBase.Pieces "Hips_Urbanmech", "Legs_Urbanmech", "Cockpit_Urbanmech";
 		MechPartsBase.ZOffset 35;
+		MechTorsoBase.CockpitRange 1.0, 1.0;
+		MechTorsoBase.TwistSpeed 1.0;
 	}
 }
 class Torso_Jenner : MechTorsoBase {
@@ -87,6 +99,8 @@ class Torso_Jenner : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner", "Cockpit_Jenner";
 		MechPartsBase.ZOffset 42;
 		MechPartsBase.CockpitOffset 25, 47;
+		MechTorsoBase.CockpitRange 0.8, 0.4;
+		MechTorsoBase.TwistSpeed 0.2;
 	}
 }
 class Torso_Nova : MechTorsoBase {
@@ -95,6 +109,8 @@ class Torso_Nova : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Nova", "Legs_Nova", "Cockpit_Nova";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 18, 57;
+		MechTorsoBase.CockpitRange 0, 1.0;
+		MechTorsoBase.TwistSpeed 1.0;
 	}
 }
 class Torso_Tarantula : MechTorsoBase {
@@ -102,6 +118,8 @@ class Torso_Tarantula : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Tarantula", "Legs_Tarantula", "Cockpit_Tarantula";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 90;
+		MechTorsoBase.CockpitRange 1.0, 1.0;
+		MechTorsoBase.TwistSpeed 0.3;
 	}
 }
 class Torso_Direwolf : MechTorsoBase {
@@ -109,6 +127,8 @@ class Torso_Direwolf : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Direwolf", "Legs_Direwolf", "Cockpit_Direwolf";
 		MechPartsBase.ZOffset 45;
 		MechPartsBase.CockpitOffset 15, 90;
+		MechTorsoBase.CockpitRange 0.7, 0.5;
+		MechTorsoBase.TwistSpeed 0.05;
 	}
 }
 class Torso_Firemoth : MechTorsoBase {
@@ -116,6 +136,8 @@ class Torso_Firemoth : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Firemoth", "Legs_Firemoth", "Cockpit_Firemoth";
 		MechPartsBase.ZOffset 40;
 		MechPartsBase.CockpitOffset 10, 50;
+		MechTorsoBase.CockpitRange 1.0, 0.5;
+		MechTorsoBase.TwistSpeed 0.5;
 	}
 }
 class Torso_Invisible : MechTorsoBase {

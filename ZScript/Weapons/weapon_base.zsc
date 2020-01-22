@@ -244,15 +244,9 @@ class Mechbase_Weapon : Inventory
 			{
 				// Align to cockpit model's rotation.
 				let cockpit = plr.models_reference.cockpit;
-				if(cockpit) 
-				{
-					offsangle = cockpit.angle;
-				}
+				if(cockpit) offsangle = cockpit.angle;
 			}
-			if(onlegs)
-			{
-				offsangle = plr.LegAng;
-			}
+			if(onlegs) offsangle = plr.LegAng;
 			
 			vector2 offs = MDMath.VOffset(offsangle, distance, xoffset, 1);			
 			Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,(plr.viewheight*plr.player.CrouchFactor)+yoffset);

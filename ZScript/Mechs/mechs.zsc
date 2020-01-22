@@ -108,6 +108,7 @@ class Commando : MechWarrior
 		Player.ViewHeight 65;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.PitchRange 40, 40;
 		MechWarriorBase.Weight 25;
 		MechWarriorBase.Engine "ENGINE_STD_150";
 		MechWarriorBase.MechPieces "Torso_Commando";
@@ -135,6 +136,7 @@ class Jenner : MechWarrior
 		Mass 1400;
 		MechWarriorBase.Engine "ENGINE_XL_315";
 		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.PitchRange 90, 40;
 		MechWarriorBase.Weight 35;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudCockpit "JENNHUD";
@@ -198,6 +200,7 @@ class Tarantula : MechWarrior
 		Player.ViewHeight 80;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.PitchRange 50, 20;
 		MechWarriorBase.Weight 25;
 		MechWarriorBase.Engine "ENGINE_XL_200";
 		MechWarriorBase.MechPieces "Torso_Tarantula";
@@ -232,7 +235,7 @@ class Firemoth : MechWarrior
 		Mass 400;
 		Player.DisplayName "Firemoth Prime";
 		Player.ViewHeight 60;
-		
+		MechWarriorBase.PitchRange 40, 40;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.Weight 20;
@@ -271,6 +274,7 @@ class Stormcrow : MechWarrior
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.PitchRange 40, 30;
 		MechWarriorBase.Weight 55;
 		MechWarriorBase.Engine "ENGINE_XL_330";
 		MechWarriorBase.HudCockpit "CROWHUD";
@@ -303,6 +307,7 @@ class Nova : MechWarrior
 		MechWarriorBase.LegSpeed 1.2;
 		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.TwistRange 20;
+		MechWarriorBase.PitchRange 50, 20;
 		MechWarriorBase.Weight 50;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudCockpit "NOVAHUD";
@@ -393,6 +398,7 @@ class Atlas : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Atlas";
 		MechWarriorBase.Engine "ENGINE_STD_300";
 		MechWarriorBase.TwistRange 60;
+		MechWarriorBase.PitchRange 30, 30;
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.HideLegsPerspective true;
@@ -434,6 +440,7 @@ class Direwolf : MechWarrior
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 60;
+		MechWarriorBase.PitchRange 25, 20;
 		MechWarriorBase.LegSpeed 1.0;
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.MechPieces "Torso_Direwolf";

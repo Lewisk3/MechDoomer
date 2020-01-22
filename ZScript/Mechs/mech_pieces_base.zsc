@@ -203,6 +203,9 @@ class MechCockpitModel : MechPartsBase
 {
 	float mxoffs;
 	float mzoffs;
+	float maxpitch;
+	float maxangle;
+	float rotatespeed;
 	Property Offset: mxoffs, mzoffs;
 	MechPartsBase cockpitcam;	
 	
@@ -245,9 +248,20 @@ class MechCockpitModel : MechPartsBase
 		{
 			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
 			{
-				A_SetAngle(MDMath.Lerp(angle,mechowner.angle,0.1),SPF_INTERPOLATE);
-				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
-				A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
+				if(!mechowner.defaultmovement)
+				{
+					float toangle = clamp(mechowner.angle, (-maxangle)+mechowner.LegAng, maxangle+mechowner.LegAng);
+					float topitch = clamp(mechowner.pitch, -maxpitch, maxpitch);
+					A_SetAngle(MDMath.Lerp(angle,toangle,rotatespeed),SPF_INTERPOLATE);
+					A_SetPitch(MDMath.Lerp(pitch,topitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
+					A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
+				}
+				else
+				{
+					pitch = mechowner.pitch;
+					angle = mechowner.angle;
+					roll = mechowner.roll;
+				}
 			}
 			mzoffs = mechowner.viewzoffs*0.12;
 		}
@@ -267,6 +281,9 @@ class MechTorsoBase : MechPartsBase
 {
 	bool notwist;
 	bool setup;
+	float cockpitpitch_mod;
+	float cockpitangle_mod;
+	float cockpittwist_mod;
 	MechPartsBase hips;
 	MechPartsBase legs;
 	MechPartsbase cockpit_camera;
@@ -275,7 +292,15 @@ class MechTorsoBase : MechPartsBase
 	class<MechPartsBase> legs_type;
 	class<MechCockpitModel> cockpit_type;
 	Property Pieces : hips_type, legs_type, cockpit_type;
+	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod;
+	Property TwistSpeed : cockpittwist_mod;
 	Property DoNotTwist : notwist;
+	
+	Default
+	{
+		MechTorsoBase.CockpitRange 0.7, 0.7;
+		MechTorsoBase.TwistSpeed 0.1;
+	}
 		
 	void SetupParts(class<MechPartsBase> phips, class<MechPartsBase> plegs, class<MechCockpitModel> cpit)
 	{
@@ -295,6 +320,9 @@ class MechTorsoBase : MechPartsBase
 			{
 				cockpit.cockpitcam = cockpit_camera;
 				cockpit.angle = mechowner.angle;
+				cockpit.maxpitch = mechowner.maxPitch * cockpitpitch_mod;
+				cockpit.maxangle = mechowner.MaxYaw * cockpitangle_mod;
+				cockpit.rotatespeed = cockpittwist_mod;
 			}
 		}
 		setup = true;
