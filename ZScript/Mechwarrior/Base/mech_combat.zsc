@@ -166,7 +166,7 @@ void mech_weapons()
 		TakeInventory("IBTN_SETWEAPGRP",999);
 	}
 	
-	if(countinv("IBTN_SHOOTALLWEAPONSLIKEAMADLAD"))
+	if(countinv("IBTN_SHOOTALLWEAPONSLIKEAMADLAD") && !pilotlook)
 	{
 		FireGroup(0,true,true); // pew pew pew, whoosh, whoosh, whoosh, pow, pow, po.. *explodes*
 		TakeInventory("IBTN_SHOOTALLWEAPONSLIKEAMADLAD",1);
@@ -245,21 +245,24 @@ void mech_weapons()
 		TakeInventory("IBTN_bFIREMODE",1);
 	}
 	
-	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER1)
+	if(!pilotlook)
 	{
-		if(FireGroup(1)) weapons_fired = true;
-	}
-	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER2)
-	{
-		if(FireGroup(2)) weapons_fired = true;
-	}
-	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER3)
-	{
-		if(FireGroup(3)) weapons_fired = true;
-	}
-	if(GetPlayerInput(INPUT_BUTTONS) & BT_USER4)
-	{
-		if(FireGroup(4)) weapons_fired = true;	
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER1)
+		{
+			if(FireGroup(1)) weapons_fired = true;
+		}
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER2)
+		{
+			if(FireGroup(2)) weapons_fired = true;
+		}
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER3)
+		{
+			if(FireGroup(3)) weapons_fired = true;
+		}
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER4)
+		{
+			if(FireGroup(4)) weapons_fired = true;	
+		}
 	}
 	
 	if(countinv("IBTN_NEXTWEAPON"))

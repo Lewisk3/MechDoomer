@@ -106,7 +106,6 @@ void ChangeMech(int invmech)
 	//console.printf("Changing to: %s",source.baseclass.getClassName());
 	let defs = MechWarriorBase(GetDefaultByType(source.baseclass));
 	baseclass = source.baseclass;
-	ViewHeight = defs.ViewHeight;
 	baseHeatEfficiency = defs.baseHeatEfficiency;
 	LegSpeed = defs.LegSpeed;
 	MaxYaw = defs.MaxYaw;
@@ -123,9 +122,10 @@ void ChangeMech(int invmech)
 	mech_models = defs.mech_models;
 	mechtype = defs.mechtype;
 	nofirstpersonlegs = defs.nofirstpersonlegs;
-	player.viewheight = defs.ViewHeight;
-	player.ViewZ = pos.z+defs.ViewHeight;
+	ViewHeight = defs.ViewHeight;
 	defviewz = defs.ViewHeight;
+	player.ViewHeight = defs.ViewHeight;
+	viewzoffs = 0;
 	
 	// Update vars
 	A_SetSpeed(0);
@@ -345,7 +345,7 @@ override void tick()
 	}
 	
 	// Clamp viewheight so we don't end up inside our hips when we fall.
-	player.viewheight = clamp(player.viewheight, default.viewheight*0.8, default.viewheight*2.0);
+	player.viewheight = clamp(player.viewheight, defviewz*0.8, defviewz*2.0);
 	
 	// Turns out, we lose our models when moving to another map.
 	TrySetupModels();

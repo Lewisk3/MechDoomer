@@ -177,45 +177,37 @@ class MechDoomerEvents : EventHandler
 	// Returns: True if command on key is valid, false if it is not.
 	override bool InputProcess(InputEvent e)
 	{
-		int keyscn = (e.Type == e.Type_KeyDown) ? e.KeyScan : 0;
-		if(e.Type != InputEvent.Type_Mouse)
+		int keystatus = e.Type == e.Type_KeyDown ?  1 : 
+						e.Type == e.Type_KeyUp   ? -1 : 0;
+						
+		if(keystatus != 0)
 		{
-			if(checkBoundKey(keyscn,"Mech_JumpJets_Fire"))
+			int keyscn = e.KeyScan;
+			String onoff = keystatus < 0 ? "-" : "+";
+			bool jets = checkBoundKey(keyscn,"Mech_JumpJets_Fire");
+			bool look = checkBoundKey(keyscn,"Mech_PilotLook");
+			bool loadout = checkBoundKey(keyscn,"Mech_LoadoutUI");
+			
+			if(jets) EventHandler.SendNetworkEvent(onoff.."mwd_user5");
+			if(look) EventHandler.SendNetworkEvent(onoff.."mwd_pilotlook");
+		
+			if(loadout && keystatus > 0)
 			{
-				EventHandler.SendNetworkEvent("+mwd_user5");
+				Menu m = Menu.GetCurrentMenu();
+				let plr = Mechwarrior(players[consoleplayer].mo);
+				if(!plr) return false;
+				
+				if (!Mechlab_Menu(m))
+				{
+					mechlab = new('Mechlab_Menu');
+					mechlab.Init(null, plr);
+					mechlab.ActivateMenu();
+				}
 				return true;
 			}
-			else
-			{
-				EventHandler.SendNetworkEvent("-mwd_user5");
-			}
-			if(checkBoundKey(keyscn,"Mech_PilotLook"))
-			{
-				EventHandler.SendNetworkEvent("+mwd_pilotlook");
-				return true;
-			}
-			else
-			{
-				EventHandler.SendNetworkEvent("-mwd_pilotlook");
-			}
-		}
 		
-		if(checkBoundKey(keyscn,"Mech_LoadoutUI"))
-		{
-			Menu m = Menu.GetCurrentMenu();
-			
-			let plr = Mechwarrior(players[consoleplayer].mo);
-			if(!plr) return false;
-			
-			if (!Mechlab_Menu(m))
-			{
-				mechlab = new('Mechlab_Menu');
-				mechlab.Init(null, plr);
-				mechlab.ActivateMenu();
-			}
-			return true;
+			return jets | look;
 		}
-		
 		return false;
 	}
 

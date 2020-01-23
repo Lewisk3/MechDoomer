@@ -236,18 +236,21 @@ void mech_movement()
 			snd_reactor = false;
 		}
 		
-		if(GetPlayerInput(INPUT_SIDEMOVE) > 0)
+		if(!pilotlook)
 		{
-			TakeInventory("IBTN_CENTER",1);
-			LegVel = -LegSpeed;
-			LookVel = -LegSpeed;
+			if(GetPlayerInput(INPUT_SIDEMOVE) > 0)
+			{
+				TakeInventory("IBTN_CENTER",1);
+				LegVel = -LegSpeed;
+				LookVel = -LegSpeed;
+			}
+			if(GetPlayerInput(INPUT_SIDEMOVE) < 0 )
+			{
+				TakeInventory("IBTN_CENTER",1);
+				LegVel = LegSpeed;
+				LookVel = LegSpeed;
+			}		
 		}
-		if(GetPlayerInput(INPUT_SIDEMOVE) < 0 )
-		{
-			TakeInventory("IBTN_CENTER",1);
-			LegVel = LegSpeed;
-			LookVel = LegSpeed;
-		}		
 		if( !floor(GetPlayerInput(INPUT_SIDEMOVE)*10) )
 		{
 			LookVel = 0;

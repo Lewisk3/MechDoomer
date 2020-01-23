@@ -37,6 +37,14 @@ material texture models/Mechs/c_dark.png {
 	glossiness 10
 }
 
+material texture models/Mechs/c_glass.png {
+	shader "shaders/simsun.fp"
+	brightmap "models/Mechs/c_glass.png"
+	brightness 1.0
+	specularlevel 0.8
+	glossiness 50
+}
+
 material texture models/Mechs/Timberwolf/tw_head.png {
 	shader "shaders/simsun.fp"
 	normal models/Textures/metal_normal.png
