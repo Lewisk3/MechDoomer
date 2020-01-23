@@ -144,7 +144,7 @@ class Torso_Firemoth : MechTorsoBase {
 		MechPartsBase.ZOffset 40;
 		MechPartsBase.CockpitOffset 10, 50;
 		MechTorsoBase.CockpitRange 1.0, 0.5, 2.25;
-		MechTorsoBase.TwistSpeed 0.5;
+		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
 class Torso_MadDog : MechTorsoBase {

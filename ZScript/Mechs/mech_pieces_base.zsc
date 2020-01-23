@@ -191,6 +191,7 @@ class MechCockpitCamera : MechPartsBase
 		{		
 			float fovdiff = mechowner.player.FOV/mechowner.defaultfov*0.5;
 			CameraFOV = mechowner.player.FOV;
+			angle += mechowner.LegDelta;
 			angle = MDMath.Lerp(angle,mechowner.angle,0.6*fovdiff);
 			pitch = MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.065),0.6*fovdiff);
 			roll = mechowner.roll;
@@ -246,14 +247,16 @@ class MechCockpitModel : MechPartsBase
 		}
 			
 		if(mechowner && !mechowner.CheckVoodoo()) 
-		{
+		{	
 			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
 			{
-				if(!mechowner.defaultmovement)
+				if(!mechowner.defaultmovement && GetAge() > 2)
 				{
 					float toangle = clamp(mechowner.angle, (-maxangle)+mechowner.LegAng, maxangle+mechowner.LegAng);
 					float topitch = clamp(mechowner.pitch, -maxpitch, maxpitch);
-					A_SetAngle(MDMath.Lerp(angle,toangle,rotatespeed),SPF_INTERPOLATE);
+
+					angle += mechowner.LegDelta;
+					A_SetAngle(MDMath.Lerp(angle,toangle,rotatespeed*0.6),SPF_INTERPOLATE);
 					A_SetPitch(MDMath.Lerp(pitch,topitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
 					A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
 				}

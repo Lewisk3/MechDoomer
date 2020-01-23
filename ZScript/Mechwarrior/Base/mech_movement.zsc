@@ -31,6 +31,7 @@ int bobdir;
 int shutdown_timer;
 
 float LegAng;
+float LegDelta;
 float lockpitch;
 float lockangle;
 float MoveSpeed;
@@ -306,9 +307,13 @@ void mech_movement()
 		finalmod = clamp(finalmod, 0.15, 2);
 		if(!CVar.GetCVar("mwd_relativelegspeed",player).getBool()) finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
 		
+		// Leg Delta gets how much the leg angle changed between movement.
+		// This conditionally does not track when center button is active.
+		LegDelta = !countinv("IBTN_CENTER") ? (LegVel*finalmod)*2 : 0;
+		
 		LegAng += LegVel*finalmod;
 		angle  += LookVel*finalmod;
-		
+	
 		if( !mech_shutdown )
 		{
 			if(!pilotlook) Pitch = clamp(Pitch, -minPitch, maxPitch);
