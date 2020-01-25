@@ -18,5 +18,6 @@ GameInfo
 					"Firemoth",
 					"MadDog",
 					"Summoner",
+					"Raven",
 					"TestingDoomguy"
 }

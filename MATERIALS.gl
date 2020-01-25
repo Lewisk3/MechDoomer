@@ -38,7 +38,7 @@ material texture models/Mechs/c_dark.png {
 }
 
 material texture models/Mechs/c_glass.png {
-	shader "shaders/simsun.fp"
+	// shader "shaders/simsun.fp"
 	brightmap "models/Mechs/c_glass.png"
 	brightness 1.0
 	specularlevel 0.8
@@ -150,5 +150,9 @@ material texture models/Mechs/MadDog/md_full.png {
 }
 
 material texture models/Mechs/Summoner/su_full.png {
+	shader "shaders/simsun.fp"
+}
+
+material texture models/Mechs/Raven/rv_full.png {
 	shader "shaders/simsun.fp"
 }

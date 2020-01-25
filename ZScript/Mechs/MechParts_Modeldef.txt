@@ -96,7 +96,7 @@ Model Torso_Stormcrow
 	SurfaceSkin 0 0 "Stormcrow/sc_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
-	Offset -5 0 0
+	Offset -16 0 0
 	AngleOffset 0
 	USEACTORPITCH
 	
@@ -454,6 +454,42 @@ Model Cockpit_Summoner
 	USEACTORROLL 
 	AngleOffset 90
 	Offset -6 -6 -11;
+	
+   FrameIndex MODL A 0 0
+}
+
+// Raven
+Model Torso_Raven
+{
+	Path "models/Mechs"
+	Model 0 "Raven/rv_torso.md3"
+	SurfaceSkin 0 0 "Raven/rv_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Raven
+{
+	Path "models/Mechs/Raven"
+	Model 0 "rv_hips.md3"
+	Skin 0 "rv_full" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Raven
+{
+	Path "models/Mechs/"
+	Model 0 "Raven/rv_head.obj"
+	Scale 0.05 0.06 0.05
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset -12 0 3;
 	
    FrameIndex MODL A 0 0
 }

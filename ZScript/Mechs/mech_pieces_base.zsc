@@ -251,8 +251,10 @@ class MechCockpitModel : MechPartsBase
 			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
 			{
 				if(!mechowner.defaultmovement && GetAge() > 2)
-				{
-					float toangle = clamp(mechowner.angle, (-maxangle)+mechowner.LegAng, maxangle+mechowner.LegAng);
+				{					
+					float toangle = mechowner.angle;
+					if(toangle - mechowner.LegAng >  maxangle) toangle = mechowner.LegAng + maxangle;
+					if(toangle - mechowner.LegAng < -maxangle) toangle = mechowner.LegAng - maxangle;
 					float topitch = clamp(mechowner.pitch, -maxpitch, maxpitch);
 
 					angle += mechowner.LegDelta;
@@ -417,12 +419,13 @@ class MechLegsBase : MechPartsBase
 				
 			if(!mechowner.CheckVoodoo())
 			{
-				float curspd = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * mechowner.MoveSpeedKPH);
+				float truemove = !mechowner.MoveSpeedKPH ? 1 : mechowner.MoveSpeedKPH; 
+				float curspd = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * truemove);
 				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
-				float stomp_spdrating = (curspd / mechowner.MoveSpeedKPH)*0.3;
+				float stomp_spdrating = (curspd / truemove)*0.3;
 				float stomp_wrating = 1.0-(0.7*wrating);
 				
-				spdrating = curspd / (mechowner.MoveSpeedKPH*runspeed);
+				spdrating = curspd / (truemove*runspeed);
 				stompfriction = stomp_wrating + stomp_spdrating;
 			}
 		}
