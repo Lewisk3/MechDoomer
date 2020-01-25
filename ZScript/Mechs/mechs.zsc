@@ -272,7 +272,7 @@ class Raven : MechWarrior
 	{
 		Mass 1400;
 		Player.DisplayName "Raven Prime";
-		Player.ViewHeight 70;
+		Player.ViewHeight 50;
 		
 		MechWarriorBase.Engine "ENGINE_XL_210";
 		MechWarriorBase.TwistRange 100;
@@ -290,8 +290,10 @@ class Raven : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 9,23,16,16,12,12,16,16, 4,11,8,8,6,6,8,8 );
-		hardpoints.setupLocations( (0,-20), (0,-25), (20,-20), (-20,-20), (40,-15), (-20,-15), (30,-55), (-30,-55) );
+		hardpoints.setupLocations( (0,20), (0,8), (20,13), (-20,13), (40,20), (-20,13), (30,-55), (-30,-55) );
 		hardpoints.setupSlots();
+		equipStruct("Heatsink",hardpoints.ct,2);
+		equipStruct("Heatsink",hardpoints.la,2);
 		equipWeapon("SRM6",hardpoints.ra,1);
 		equipWeapon("MediumLaser",hardpoints.la,2);
 		equipWeapon("MediumLaser",hardpoints.la,2);

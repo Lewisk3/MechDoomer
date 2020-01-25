@@ -22,7 +22,7 @@ class Mechbase_Actor : Actor
 	override void PostBeginPlay()
 	{
 		S_Sound(firesound, CHAN_WEAPON, 1.0);
-		super.BeginPlay();
+		super.PostBeginPlay();
 	}
 	
 	void BaseInit()
@@ -31,9 +31,10 @@ class Mechbase_Actor : Actor
 		// SetDamage(truedamage);
 		_SetBaseDamage();
 	}
-	void Converge(float spd=0.30)
+	void Converge(float spdfac=1.0)
 	{
-		if(mechplayer)
+		float spd = CVar.GetCVar("mwd_converge_speed", mechplayer.player).getFloat()*spdfac;
+		if(mechplayer && spd > 0)
 		{
 			float truespd = vel.length()*spd;
 			vector3 npos = pos-vel;
@@ -69,8 +70,7 @@ class Mechbase_Actor : Actor
 			}
 			hitactor = NULL;
 		}
-		if(mechplayer && CVar.GetCVar("mwd_weaponsconverge",mechplayer.player).getBool())
-			Converge();
+		if(mechplayer) Converge();
 			
 		super.Tick();
 	}
