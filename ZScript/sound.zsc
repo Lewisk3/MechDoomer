@@ -137,12 +137,14 @@ class SoundEmitter : Actor
 	{
 		+CLIENTSIDEONLY
 		+NOBLOCKMAP
-		-SHOOTABLE
+		+NOINTERACTION
+		Radius 0;
+		Height 0;
 	}
 
 	static SoundEmitter SE_Trigger(Sound snd = "weapons/pistol", vector3 worldpos = (0,0,0) )
 	{
-		let a_snd = SoundEmitter(Spawn("SoundEmitter",worldpos));
+		let a_snd = SoundEmitter(Spawn("SoundEmitter",worldpos, ALLOW_REPLACE));
 		if(a_snd)
 		{
 			a_snd.SeeSound = snd;
@@ -151,12 +153,16 @@ class SoundEmitter : Actor
 		return a_snd;
 	}	
 	
+	override void PostBeginPlay()
+	{
+		S_Sound(audio, CHAN_BODY, 1.0);
+		super.PostBeginPlay();
+	}
 
 	States
 	{
 		Spawn:
-			TNT1 A 0;
-			TNT1 A 1 A_PlaySound(audio,CHAN_BODY,1.0,false,ATTN_NORM);
+			TNT1 A 1;
 		stop;
 	}
 }

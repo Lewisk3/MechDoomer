@@ -19,9 +19,9 @@ class Mechbase_Actor : Actor
 	Property MinimumRange : minimum_range;
 	Property MaximumRange : maximum_range;
 	
-	override void BeginPlay()
+	override void PostBeginPlay()
 	{
-		A_PlaySound(firesound,CHAN_WEAPON,1,0,0);
+		S_Sound(firesound, CHAN_WEAPON, 1.0);
 		super.BeginPlay();
 	}
 	
@@ -535,7 +535,7 @@ class Laser : Mechbase_Actor
 					A_SpawnParticle(gfx_color,SPF_FULLBRIGHT | SPF_RELATIVE,16,2,
 					random(-45,45),random(-30,30),0,random(-30,30),0,3,0.5,0);
 				}
-				SoundEmitter.SE_Trigger("Laser/Impact",pos);
+				A_PlaySound("Laser/Impact",CHAN_BODY);
 			}
 		stop;
 	}
