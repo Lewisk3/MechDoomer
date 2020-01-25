@@ -5,7 +5,7 @@ class SmallLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "SLASER";
 		Mechbase_Weapon.WeaponType "Laser_SML";
-		Mechbase_Weapon.WeaponParams 30,120;
+		Mechbase_Weapon.WeaponParams 30,180;
 		Mechbase_Weapon.Tonnage 0.5;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 2400;
@@ -18,7 +18,7 @@ class ERSmallLaser : SmallLaser
 	{
 		Mechbase_Weapon.DisplayName "erSLAS";
 		Mechbase_Weapon.WeaponType "Laser_ERSML";
-		Mechbase_Weapon.WeaponParams 30,100;
+		Mechbase_Weapon.WeaponParams 30,160;
 		Mechbase_Weapon.Tonnage 0.5;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 2850;
@@ -30,7 +30,7 @@ class SmallPulseLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "SPLAS";
 		Mechbase_Weapon.WeaponType "Laser_SMLP";
-		Mechbase_Weapon.WeaponParams 30,140;
+		Mechbase_Weapon.WeaponParams 30,200;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 3050;
@@ -49,7 +49,7 @@ class MediumLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "MLASER";
 		Mechbase_Weapon.WeaponType "Laser_MED";
-		Mechbase_Weapon.WeaponParams 30,120;
+		Mechbase_Weapon.WeaponParams 30,180;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 3200;
@@ -62,7 +62,7 @@ class ERMediumLaser : MediumLaser
 	{
 		Mechbase_Weapon.DisplayName "erMLAS";
 		Mechbase_Weapon.WeaponType "Laser_ERMED";
-		Mechbase_Weapon.WeaponParams 30,100;
+		Mechbase_Weapon.WeaponParams 30,160;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 4150;
@@ -74,7 +74,7 @@ class MediumPulseLaser : SmallPulseLaser
 	{
 		Mechbase_Weapon.DisplayName "MPLAS";
 		Mechbase_Weapon.WeaponType "Laser_MEDP";
-		Mechbase_Weapon.WeaponParams 30,140;
+		Mechbase_Weapon.WeaponParams 30,200;
 		Mechbase_Weapon.Tonnage 2;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 4300;
@@ -88,7 +88,7 @@ class LargeLaser : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "LLASER";
 		Mechbase_Weapon.WeaponType "Laser_LRG";
-		Mechbase_Weapon.WeaponParams 30,100;
+		Mechbase_Weapon.WeaponParams 30,160;
 		Mechbase_Weapon.Tonnage 4;
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 5700;
@@ -101,7 +101,7 @@ class ERLargeLaser : LargeLaser
 	{
 		Mechbase_Weapon.DisplayName "erLLAS";
 		Mechbase_Weapon.WeaponType "Laser_ERLRG";
-		Mechbase_Weapon.WeaponParams 30,90;
+		Mechbase_Weapon.WeaponParams 30,140;
 		Mechbase_Weapon.Tonnage 4;
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 6210;
@@ -113,7 +113,7 @@ class LargePulseLaser : SmallPulseLaser
 	{
 		Mechbase_Weapon.DisplayName "LPLAS";
 		Mechbase_Weapon.WeaponType "Laser_LRGP";
-		Mechbase_Weapon.WeaponParams 30,120;
+		Mechbase_Weapon.WeaponParams 30,180;
 		Mechbase_Weapon.Tonnage 6;
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 6420;

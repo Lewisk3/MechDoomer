@@ -489,7 +489,7 @@ Model Cockpit_Raven
 	USEACTORPITCH
 	USEACTORROLL 
 	AngleOffset 90
-	Offset -12 0 3;
+	Offset -15 0 4;
 	
    FrameIndex MODL A 0 0
 }

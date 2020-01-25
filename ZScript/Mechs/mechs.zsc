@@ -278,7 +278,7 @@ class Raven : MechWarrior
 		MechWarriorBase.TwistRange 100;
 		MechWarriorBase.PitchRange 60, 30;
 		MechWarriorBase.Weight 35;
-		MechWarriorBase.LegSpeed 0.85;
+		MechWarriorBase.LegSpeed 0.6;
 		MechWarriorBase.Acceleration 0.85;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudMech "ATLAICO";
@@ -290,7 +290,7 @@ class Raven : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 9,23,16,16,12,12,16,16, 4,11,8,8,6,6,8,8 );
-		hardpoints.setupLocations( (0,-25), (0,-30), (20,-25), (-20,-25), (40,-20), (-20,-20), (30,-60), (-30,-60) );
+		hardpoints.setupLocations( (0,-20), (0,-25), (20,-20), (-20,-20), (40,-15), (-20,-15), (30,-55), (-30,-55) );
 		hardpoints.setupSlots();
 		equipWeapon("SRM6",hardpoints.ra,1);
 		equipWeapon("MediumLaser",hardpoints.la,2);
