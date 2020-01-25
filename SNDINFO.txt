@@ -69,6 +69,8 @@ Mech/Betty/TertiarySuccessful OBJTIVE3
 Mech/Betty/MissionSuccess SUCCESS
 Mech/Betty/MissionFail  FAILED
 Mech/Betty/LeavingMission LEAVING
+Mech/Betty/ThermalOptics THERMAL
+Mech/Betty/LightAmp LIGHTAMP
 
 // Unused betty
 Mech/Betty/NoAmmo AMMODEPL

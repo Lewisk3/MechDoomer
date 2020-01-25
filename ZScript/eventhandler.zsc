@@ -245,7 +245,12 @@ class MechDoomerEvents : EventHandler
 				{
 					plr.InfraredActive = !plr.InfraredActive;
 					ShaderManager.imageEnhancementOn = plr.InfraredActive;
-					if(plr.InfraredActive) plr.A_PlaySound("Mech/Infrared",CHAN_WEAPON);
+					if(plr.InfraredActive) 
+					{
+						plr.mechSounds.pushSound("Mech/Betty/LightAmp");
+						plr.mechSounds.pushSound("Mech/Betty/Engaged");
+						plr.A_PlaySound("Mech/Infrared",CHAN_WEAPON);
+					}
 				}
 			}
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;

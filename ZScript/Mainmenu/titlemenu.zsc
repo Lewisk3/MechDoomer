@@ -25,6 +25,8 @@ class Mech_TitleMenu : CustomMenuBase
 			 buttons[i].ScaleCollider(0.9, 0.7);
 		}
 		DontDim = true;
+		mMouse.SetPos(buttons[0].btnrect.pos);
+		btn_selected = 0;
 	}
 	override void Drawer()
 	{
@@ -157,6 +159,9 @@ class Mech_InGameMenu : CustomMenuBase
 		
 		DontBlur = true;
 		DontDim = true;
+		
+		mMouse.SetPos(buttons[0].btnrect.pos);
+		btn_selected = 0;
 	}
 	
 	override void Ticker()
