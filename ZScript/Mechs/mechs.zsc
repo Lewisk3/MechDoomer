@@ -74,8 +74,8 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "ATLAICO";
-		MechWarriorBase.Weight 10;
-		MechWarriorBase.Engine "Engine_CMP_80";
+		MechWarriorBase.Weight 5;
+		MechWarriorBase.Engine "Engine_CMP_100";
 		MechWarriorBase.MechPieces "Model_BattleArmor";
 		MechWarriorBase.DefaultMovement true;
 		MechWarriorBase.HideLegsPerspective true;
