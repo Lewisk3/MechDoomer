@@ -75,10 +75,9 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 10;
-		MechWarriorBase.Engine "Engine_STD_50";
+		MechWarriorBase.Engine "Engine_CMP_80";
 		MechWarriorBase.MechPieces "Model_BattleArmor";
 		MechWarriorBase.DefaultMovement true;
-		MechWarriorBase.OverTonnage true;
 		MechWarriorBase.HideLegsPerspective true;
 		MechWarriorBase.CValue 500000;
 	}
@@ -87,7 +86,7 @@ class BattleArmor : MechWarrior
 	{
 		hardpoints.setupVitals( 4,8,5,5,5,5,4,4, 4,8,6,6,5,5,4,4 );
 		hardpoints.setupLocations( (0,3), (0,-4), (-6,-6), (6,-6), (12,-4), (-12,-4), (-3,-20), (3,-20) );
-		hardpoints.setupSlots(8,11,12,12,10,10,2,2);
+		hardpoints.setupSlots(6,8,9,9,8,8,1,1);
 		equipStruct("Heatsink",hardpoints.hd,1);
 		equipStruct("JumpJet",hardpoints.ct,1);
 		equipWeapon("SmallLaser",hardpoints.la,1);
@@ -104,7 +103,7 @@ class Commando : MechWarrior
 	Default
 	{
 		Mass 200;
-		Player.DisplayName "Commando Prime";
+		Player.DisplayName "Commando - 2D";
 		Player.ViewHeight 65;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 100;
@@ -144,7 +143,7 @@ class Jenner : MechWarrior
 		MechWarriorBase.HudCockpit "JENNHUD";
 		MechWarriorBase.HudMech "JENNICO";
 		MechWarriorBase.MechPieces "Torso_Jenner";
-		Player.DisplayName "Jenner Prime";
+		Player.DisplayName "Jenner - IIC";
 		Player.ViewHeight 60; // 52 maligned
 		MechWarriorBase.CValue 3198375;
 	}
@@ -170,7 +169,7 @@ class Urbanmech : MechWarrior
 	Default
 	{
 		Mass 250;
-		Player.DisplayName "Urbanmech Prime";
+		Player.DisplayName "Urbanmech - R60";
 		Player.ViewHeight 62;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 9001; // Over 9000 :P
@@ -199,7 +198,7 @@ class Tarantula : MechWarrior
 {
 	Default
 	{
-		Player.DisplayName "Tarantula Prime";
+		Player.DisplayName "Tarantula - ZPH1";
 		Player.ViewHeight 80;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 90;
@@ -236,8 +235,9 @@ class Firemoth : MechWarrior
 	Default
 	{
 		Mass 400;
-		Player.DisplayName "Firemoth Prime";
+		Player.DisplayName "Firemoth - Prime";
 		Player.ViewHeight 60;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.PitchRange 40, 40;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 100;
@@ -271,7 +271,7 @@ class Raven : MechWarrior
 	Default
 	{
 		Mass 1400;
-		Player.DisplayName "Raven Prime";
+		Player.DisplayName "Raven - 3L";
 		Player.ViewHeight 50;
 		
 		MechWarriorBase.Engine "ENGINE_XL_210";
@@ -308,7 +308,7 @@ class Stormcrow : MechWarrior
 	Default
 	{
 		Mass 2200;
-		Player.DisplayName "Stormcrow Prime";
+		Player.DisplayName "Stormcrow - Prime";
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
@@ -356,7 +356,7 @@ class Nova : MechWarrior
 		MechWarriorBase.HudCockpit "NOVAHUD";
 		MechWarriorBase.HudMech "NOVAICO";
 		MechWarriorBase.MechPieces "Torso_Nova";
-		Player.DisplayName "Nova Prime";
+		Player.DisplayName "Nova - Prime";
 		Player.ViewHeight 55;
 		MechWarriorBase.CValue 6586250;
 	}
@@ -394,7 +394,7 @@ class Timberwolf : MechWarrior
 	Default
 	{
 		Mass 3000;
-		Player.DisplayName "Timberwolf Prime";
+		Player.DisplayName "Timberwolf - Prime";
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
@@ -438,7 +438,7 @@ class Summoner : MechWarrior
 	Default
 	{
 		Mass 3500;
-		Player.DisplayName "Summoner Prime";
+		Player.DisplayName "Summoner - Prime";
 		Player.ViewHeight 90;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
@@ -473,7 +473,7 @@ class MadDog : MechWarrior
 	Default
 	{
 		Mass 3000;
-		Player.DisplayName "MadDog Prime";
+		Player.DisplayName "MadDog - Prime";
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
@@ -519,7 +519,7 @@ class Atlas : MechWarrior
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.HideLegsPerspective true;
-		Player.DisplayName "Atlas Prime";
+		Player.DisplayName "Atlas - AS7D";
 		Player.ViewHeight 90;
 		MechWarriorBase.CValue 9626000;
 	}
@@ -551,7 +551,7 @@ class Direwolf : MechWarrior
 	Default
 	{
 		Mass 4000;
-		Player.DisplayName "Direwolf Prime";
+		Player.DisplayName "Direwolf - Prime";
 		Player.ViewHeight 80;
 		
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;

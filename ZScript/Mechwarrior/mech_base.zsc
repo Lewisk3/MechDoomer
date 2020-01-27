@@ -95,7 +95,6 @@ class MechWarriorBase : DoomPlayer
 	Property Engine : base_engine;
 	Property DefaultMovement: defaultmovement;
 	Property InfiniteTorsoTwist: uncappedtorso;
-	Property OverTonnage: overtonnage;
 	Property CockpitIsModel: modelcockpit;
 	Property MechPieces : mech_models;
 	Property Manufacturer : mechtype;

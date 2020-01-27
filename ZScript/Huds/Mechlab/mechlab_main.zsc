@@ -173,7 +173,7 @@ void ProcessLoadoutButtons()
 				if(!mechmode && selected_item.location)
 				{
 					if(selected_item.mWeaponOBJ) MechDoomerEvents.SendNetworkEvent("move_weapinv",selected_item.mWeaponOBJ.WeaponID);
-					if(selected_item.mUtil     ) MechDoomerEvents.SendNetworkEvent("movestruct_weapinv",selected_item.index);
+					if(selected_item.mUtil	   ) MechDoomerEvents.SendNetworkEvent("movestruct_weapinv",selected_item.index);
 				}
 				else if(mechmode)
 				{
@@ -359,7 +359,7 @@ void drawMechlabInfo()
 	string armorpercent = ap.."";
 	string internalpercent = ip.."";
 
-	if(mechplr.overtonnage) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
+	if(mechplr.CheckCompensative()) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
 	
 	maxspd.truncate(maxspd.Length()-4);
 	heateff.truncate(heateff.Length()-3);
@@ -505,24 +505,38 @@ vector2 DrawCriticalHardpointItems(int ind, int sx, int sy)
 		if(ut)
 		{
 			let def_ut = GetDefaultByType(ut);
+			
 			if(valid_inv_context.mechstructs[i].hardpoint == hp && !def_ut.moveable)
 			{
-				int fcr = eng ? Font.CR_FIRE : Font.CR_DARKRED;
-				for(int s = 0; s < def_ut.hardslots; s++)
-				{	
-					if(selected_item.mEngine && selected_item.location && eng) fcr = Font.CR_BLUE;
-					Rect checkmouse;
-					initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+3),15);
-					// drawRect(checkmouse,Color(255,255,64,64));
-					if(mstats.left_btn && checkCollision(mouse,checkmouse) && eng && !mechmode) 
+				if(eng && valid_inv_context.engine)
+				{
+					bool eng_moveable = valid_inv_context.engine.moveable;
+					int fcr = (eng && eng_moveable) ? Font.CR_FIRE : Font.CR_DARKRED;
+					for(int s = 0; s < def_ut.hardslots; s++)
 					{	
-						setSelected(ut.getClassName(), hp, ut, null, valid_inv_context.engine.ClassType, i);
+						if(selected_item.mEngine && selected_item.location && eng && eng_moveable) fcr = Font.CR_BLUE;	
+						Rect checkmouse;
+						initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+3),15);
+						// drawRect(checkmouse,Color(255,255,64,64));
+						if(mstats.left_btn && checkCollision(mouse,checkmouse) && eng && !mechmode && eng_moveable) 
+						{	
+							setSelected(ut.getClassName(), hp, ut, null, valid_inv_context.engine.ClassType, i);
+						}
+						if(valid_inv_context.mechstructs[i].broken) fcr = Font.CR_TAN;
+						H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
 					}
-					if(valid_inv_context.mechstructs[i].broken) fcr = Font.CR_TAN;
-					H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
-					offs.y += 24;
-					offs.x += 24;
 				}
+				else
+				{
+					int fcr = Font.CR_DARKRED;
+					for(int s = 0; s < def_ut.hardslots; s++)
+					{	
+						if(valid_inv_context.mechstructs[i].broken) fcr = Font.CR_TAN;
+						H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
+					}
+				}
+				offs.y += 24;
+				offs.x += 24;
 			}
 		}
 	}

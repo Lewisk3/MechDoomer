@@ -102,7 +102,7 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	
 	if( 
 		 (gyroslots+ctslots > slots_ct || ltslots > slots_lt || rtslots > slots_rt) || 
-		 (MDMath.RoundFloat(inv_context.weapons_tonnage+weight > mech_tonnage) && !overtonnage)
+		 (MDMath.RoundFloat(inv_context.weapons_tonnage+weight > mech_tonnage) && !CheckCompensative())
 	  )
 	{
 		inv_context.engine.Destroy();
@@ -129,6 +129,10 @@ clearscope float EngineGetKPH(int enginetype=0)
 	return (32.4*(100./mech_tonnage)) / (baserating/engine); 
 }
 
+clearscope bool CheckCompensative()
+{	
+	return inv_context.engine && (inv_context.engine.model == EngineDatabase.Type_Compensative);
+}
 	
 void DequipEngine()
 {
@@ -300,7 +304,7 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 	}
 	if(!util) return false;
 
-	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(util).weight) > mech_tonnage && !overtonnage)
+	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(util).weight) > mech_tonnage && !CheckCompensative())
 	{
 		A_PlaySound("UI/Error",CHAN_WEAPON);
 		sendHudAlert("Cannot equip item, over tonnage!", Font.CR_DARKRED);

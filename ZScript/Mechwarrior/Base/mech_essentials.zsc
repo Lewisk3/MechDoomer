@@ -135,7 +135,6 @@ void ChangeMech(int invmech)
 	base_engine = defs.base_engine;
 	defaultmovement = defs.defaultmovement;
 	uncappedtorso = defs.uncappedtorso;
-	overtonnage = defs.overtonnage;
 	modelcockpit = defs.modelcockpit;
 	mech_models = defs.mech_models;
 	mechtype = defs.mechtype;
@@ -210,7 +209,7 @@ void GetStoredWeapons(in out Array<mw_StoredWeapon> weaps)
 bool setupInventory()
 {
 	if(!FindInventory("WeaponsHandler")) GiveInventory("WeaponsHandler",1);
-	if(!inv_context)
+	if(!inv_context && !CheckVoodoo())
 	{
 		GiveInventory("mw_InvInfo",1);
 		inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));

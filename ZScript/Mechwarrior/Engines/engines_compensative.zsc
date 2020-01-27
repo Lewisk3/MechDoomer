@@ -1,0 +1,30 @@
+class Engine_CMP : Mechbase_Engine 
+{
+	Default
+	{
+		Mechbase_Engine.Criticals 2,4,3,3;
+		Mechbase_Engine.BaseHeatsinks 0.04, 0;
+		Mechbase_Engine.ScalarCValue 800.00;
+		Mechbase_Utility.Moveable false;
+	}
+}
+
+class Engine_CMP_10 : Engine_CMP {} 
+class Engine_CMP_15 : Engine_CMP {} 
+class Engine_CMP_20 : Engine_CMP {} 
+class Engine_CMP_25 : Engine_CMP {} 
+class Engine_CMP_30 : Engine_CMP {} 
+class Engine_CMP_35 : Engine_CMP {} 
+class Engine_CMP_40 : Engine_CMP {} 
+class Engine_CMP_45 : Engine_CMP {} 
+class Engine_CMP_50 : Engine_CMP {} 
+class Engine_CMP_55 : Engine_CMP {} 
+class Engine_CMP_60 : Engine_CMP {} 
+class Engine_CMP_65 : Engine_CMP {} 
+class Engine_CMP_70 : Engine_CMP {} 
+class Engine_CMP_75 : Engine_CMP {} 
+class Engine_CMP_80 : Engine_CMP {} 
+class Engine_CMP_85 : Engine_CMP {} 
+class Engine_CMP_90 : Engine_CMP {} 
+class Engine_CMP_95 : Engine_CMP {} 
+class Engine_CMP_100 : Engine_CMP {} 

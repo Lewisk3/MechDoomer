@@ -8,7 +8,8 @@ class EngineDatabase Abstract
 		Type_Light,
 		Type_XL,
 		Type_XXL,
-		Type_Compact
+		Type_Compact,
+		Type_Compensative
 	}
 	
 	static float roundTons(float value)
@@ -51,11 +52,12 @@ class EngineDatabase Abstract
 			214.5,243.0,313.0,356.0,405.5,462.5
 		};
 		float tons = std_index_tons[floor(engine/5)-2];
-		if(type == Type_STD    ) return tons;
-		if(type == Type_Light  ) return roundTons(tons*0.75);
-		if(type == Type_XL	   ) return roundTons(tons*0.50);
-		if(type == Type_XXL    ) return roundTons(tons*0.33);
-		if(type == Type_Compact) return roundTons(tons*1.50);
+		if(type == Type_Compensative) return roundTons(tons*1.1);
+		if(type == Type_STD    		) return tons;
+		if(type == Type_Light  		) return roundTons(tons*0.75);
+		if(type == Type_XL	   		) return roundTons(tons*0.50);
+		if(type == Type_XXL    		) return roundTons(tons*0.33);
+		if(type == Type_Compact		) return roundTons(tons*1.50);
 		return 200;
 	}
 }
@@ -114,7 +116,7 @@ class Mechbase_Engine : Mechbase_Utility
 		return defs.baseworth ? defs.baseworth*type : defs.worth;
 	}
 	
-	clearscope static string, int, int, float, float GetBasics(class<Mechbase_Engine> type)
+	clearscope static string, int, int, int, float, float GetBasics(class<Mechbase_Engine> type)
 	{
 		let defs = GetDefaultByType(type);
 		String cname = defs.getClassName();
@@ -126,6 +128,7 @@ class Mechbase_Engine : Mechbase_Utility
 		string t_prefix = cnametokens[1];
 		int cname_type = cname.ToInt();
 		uint engmodel = 0;
+		if(cnametokens[1] == "CMP") engmodel = EngineDatabase.Type_Compensative;
 		if(cnametokens[1] == "STD") engmodel = EngineDatabase.Type_STD;
 		if(cnametokens[1] ==  "XL") engmodel = EngineDatabase.Type_XL;
 		if(cnametokens[1] == "XXL") engmodel = EngineDatabase.Type_XXL;
@@ -140,7 +143,7 @@ class Mechbase_Engine : Mechbase_Utility
 		int sinks = (int(defs.heatsink_scalar*type) | defs.intrinsic_heatsinks) + 
 					(int(defs.dbl_heatsink_scalar*type) | defs.intrinsic_doubleheatsinks);
 		
-		return displayname, type, sinks, weight, worth;
+		return displayname, type, engmodel, sinks, weight, worth;
 	}
 	
 	clearscope static Mechbase_EngineOBJ Create(class<Mechbase_Engine> type)
@@ -148,14 +151,16 @@ class Mechbase_Engine : Mechbase_Utility
 		let defs = GetDefaultByType(type);
 		let engineobj = Mechbase_EngineOBJ(new("Mechbase_EngineOBJ"));
 		String dName;
-		int etype, sinks;
+		int etype, emodel, sinks;
 		float weight, worth;
-		[dName, etype, sinks, weight, worth] = Mechbase_Engine.GetBasics(type);	
+		[dName, etype, emodel, sinks, weight, worth] = Mechbase_Engine.GetBasics(type);	
 		if(engineobj)
 		{
 			engineobj.ClassType = defs.getClassName();
 			engineobj.displayName = dName;
 			engineobj.weight = weight;
+			engineobj.moveable = defs.moveable;
+			engineobj.model = emodel;
 			engineobj.worth = worth;
 			engineobj.enginetype = etype;
 			engineobj.intrinsic_heatsinks = int(defs.heatsink_scalar*engineobj.enginetype) | defs.intrinsic_heatsinks;
@@ -195,7 +200,9 @@ class Mechbase_EngineOBJ : Object
 {
 	String ClassType;
 	String displayName;
+	bool moveable;
 	int enginetype;
+	int model;
 	float weight;
 	float worth;
 	int ctslots;

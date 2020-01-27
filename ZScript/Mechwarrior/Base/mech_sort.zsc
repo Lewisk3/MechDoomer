@@ -473,6 +473,32 @@ clearscope void GetSortList(in out Array<String> items)
 		"Engine_LIGHT_390",
 		"Engine_LIGHT_395",
 		"Engine_LIGHT_400"
+		
+		/* 
+		----------------------------------------------------------
+			 Compensative engines. Should not be purchasable.
+		----------------------------------------------------------
+		"Engine_CMP_10",
+		"Engine_CMP_15",
+		"Engine_CMP_20",
+		"Engine_CMP_25",
+		"Engine_CMP_30",
+		"Engine_CMP_35",
+		"Engine_CMP_40",
+		"Engine_CMP_45",
+		"Engine_CMP_50",
+		"Engine_CMP_55",
+		"Engine_CMP_60",
+		"Engine_CMP_65",
+		"Engine_CMP_70",
+		"Engine_CMP_75",
+		"Engine_CMP_80",
+		"Engine_CMP_85",
+		"Engine_CMP_90",
+		"Engine_CMP_95",
+		"Engine_CMP_100"
+		*/
+		
 	};
 	for(int i = 0; i < ssize; i++) items.push(tosort[i]);
 }

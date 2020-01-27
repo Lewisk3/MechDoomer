@@ -6,7 +6,6 @@ extend class MechWarriorBase;
 // Properties
 bool defaultmovement;
 bool uncappedtorso;
-bool overtonnage;
 
 float minPitch, maxPitch;
 float LegSpeed;
@@ -117,12 +116,12 @@ void mech_cockpitbob()
 void mech_movement()
 {
 	if(!player || isdead) return;
-	if(!overtonnage && mech_shutdown) return;
+	if(!CheckCompensative() && mech_shutdown) return;
 	
 	// Movement Quirks
 	if(defaultmovement && inv_context)
 	{			
-		if(!inv_context.engine && !overtonnage) return;
+		if(!inv_context.engine && !CheckCompensative()) return;
 		// Roll/Sway system
 		uint btns = player.cmd.buttons;
 		bool strafing = (btns & BT_MOVELEFT) | (btns & BT_MOVERIGHT);
@@ -135,7 +134,7 @@ void mech_movement()
 		if( rolloffs != 0 ) A_SetRoll(rolloffs);
 	}
 	// Overtonnage logic
-	if(overtonnage)
+	if(CheckCompensative())
 	{
 		if(!inv_context.engine) 
 		{
@@ -147,7 +146,8 @@ void mech_movement()
 			setupSpeedKPH(clamp(EngineGetKPH(),0,200));
 		}
 		float truetonnage = mech_shutdown ? mech_tonnage*0.25 : mech_tonnage;
-		overfactor = clamp(truetonnage/(inv_context.weapons_tonnage*0.35), 0.1, 1.0);
+		overfactor = clamp(truetonnage/(inv_context.weapons_tonnage*0.75), 0.1, 1.0);
+		setupSpeedKPH(EngineGetKPH()*overfactor);
 		A_SetSpeed(MoveSpeed*0.12*overfactor*throttle_max);
 	}
 	
@@ -328,7 +328,7 @@ void mech_movement()
 	if( (GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) && Mech_HasJets && mech_jetsfuel > 0)
 	{
 		class<JumpJet> jj = "JumpJet";
-		float truetonnage = overtonnage ? inv_context.weapons_tonnage : mech_tonnage;
+		float truetonnage = CheckCompensative() ? inv_context.weapons_tonnage : mech_tonnage;
 		double tonmod = 100-( truetonnage-(5*Mech_JetCount) );
 		double zthrust = ( Mech_JetCount * GetDefaultByType(jj).thrust_power ) * ( tonmod/100 ) + ((mech_jetsfuel/100)*2);
 		vel.z = zthrust * (defaultmovement ? 2 : 1);

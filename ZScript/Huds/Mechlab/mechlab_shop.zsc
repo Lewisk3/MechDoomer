@@ -272,7 +272,7 @@ void drawShopInfo()
 	String maxspd = mechplr.MoveSpeedKPH .. "";
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
 
-	if(mechplr.overtonnage) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
+	if(mechplr.CheckCompensative()) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
 	
 	maxspd.truncate(maxspd.Length()-4);
 	heateff.truncate(heateff.Length()-3);

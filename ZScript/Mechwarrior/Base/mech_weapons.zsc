@@ -214,7 +214,7 @@ bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 	class<Mechbase_Weapon> weap = inv_context.weapon_items[ind-1].Tag;
 	if(!weap) return false;
 	
-	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(weap).weight) > mech_tonnage && !overtonnage)
+	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(weap).weight) > mech_tonnage && !CheckCompensative())
 	{
 		A_PlaySound("UI/Error",CHAN_WEAPON);
 		sendHudAlert("Cannot equip weapon, over tonnage!", Font.CR_DARKRED);

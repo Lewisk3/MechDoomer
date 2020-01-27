@@ -53,6 +53,7 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Mechwarrior/Engines/engines_light.zsc"
 #include "ZScript/Mechwarrior/Engines/engines_extralight.zsc"
 #include "ZScript/Mechwarrior/Engines/engines_hyperlight.zsc"
+#include "ZScript/Mechwarrior/Engines/engines_compensative.zsc"
 
 // Mechwarrior Base
 #include "ZScript/Mechwarrior/mech_structures.zsc"
