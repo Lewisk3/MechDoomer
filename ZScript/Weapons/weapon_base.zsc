@@ -584,8 +584,23 @@ class RandomExplosions : MissileExplosion
 	float zoffs;
 	vector3 spawnpos;
 	float timer;
+	Actor owner;
 		
-	static void Trigger(vector3 pos, int amt, int tics, float zoffset)
+	static RandomExplosions TriggerOnActor(Actor onactor, int amt, int tics, float zoffset)
+	{
+		let rexpl = RandomExplosions(Spawn("RandomExplosions",onactor.pos));
+		if(rexpl)
+		{
+			rexpl.spawnpos = onactor.pos;
+			rexpl.owner = onactor;
+			rexpl.expl_count = amt;
+			rexpl.wait = tics;
+			rexpl.zoffs = zoffset;
+		}
+		return rexpl;
+	}
+	
+	static RandomExplosions Trigger(vector3 pos, int amt, int tics, float zoffset)
 	{
 		let rexpl = RandomExplosions(Spawn("RandomExplosions",pos));
 		if(rexpl)
@@ -595,11 +610,18 @@ class RandomExplosions : MissileExplosion
 			rexpl.wait = tics;
 			rexpl.zoffs = zoffset;
 		}
+		return rexpl;
+	}
+	
+	void Halt()
+	{
+		expl_count = 0;
 	}
 	
 	void DoExplosion()
 	{
-		let expl = Spawn("MissileExplosion",spawnpos);
+		vector3 truepos = owner ? owner.pos : spawnpos;
+		let expl = Spawn("MissileExplosion", truepos);
 		if(expl)
 		{
 			float angle = frandom(-180,180);

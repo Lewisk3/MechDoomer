@@ -376,12 +376,12 @@ Model Cockpit_Firemoth
 {
 	Path "models/Mechs/"
 	Model 0 "Firemoth/fm_head.obj"
-	Scale 0.3 0.3 0.3
+	Scale 0.05 0.05 0.05
 	Skin 0 "c_dark.png" // Main
 	USEACTORPITCH
 	USEACTORROLL 
 	AngleOffset 90
-	Offset -30 -3.5 -20;
+	Offset -6 -0.75 3;
 	
    FrameIndex MODL A 0 0
 }
@@ -412,12 +412,12 @@ Model Cockpit_MadDog
 {
 	Path "models/Mechs/"
 	Model 0 "MadDog/md_head.obj"
-	Scale 0.05 0.045 0.05
+	Scale 0.03 0.025 0.03
 	Skin 0 "c_dark.png" // Main
 	USEACTORPITCH
 	USEACTORROLL 
 	AngleOffset 90
-	Offset 4 0 -8;
+	Offset 2 0 0;
 	
    FrameIndex MODL A 0 0
 }

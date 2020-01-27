@@ -40,7 +40,7 @@ bool AdjustArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
 	
 	double addtons = GetDefaultByType("EndosteelBonus").weight*amt;
 	float correctedtons = MDMath.RoundFloat(inv_context.weapons_tonnage+addtons);
-	if(correctedtons > mech_tonnage) return false;
+	if(correctedtons > mech_tonnage && !overtonnage) return false;
 	hp.max_armor += amt;
 	adjustTonnage(-inv_context.armor_tonnage);
 	inv_context.armor_tonnage += addtons;

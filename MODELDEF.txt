@@ -263,12 +263,32 @@ Model MissileAmmoDisp
 	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Wings
 	SurfaceSkin 0 1  "Textures/metal.png" // Body
 	SurfaceSkin 0 2  "Textures/rocketthrust.png" // Thrustor
+	SurfaceSkin 0 3  "Textures/weapfront.png"
 	AngleOffset 90
 	RollOffset 90
-	ZOffset 20;
+	ZOffset 8;
 	
    FrameIndex MISS A 0 0
 }
+
+Model MissileBoxAmmoDisp
+{
+	Path "models"
+	Model 0 "Weapons/missile.md3"
+	Scale -4.0 3.5 3.5
+	USEACTORPITCH
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Wings
+	SurfaceSkin 0 1  "Textures/metal.png" // Body
+	SurfaceSkin 0 2  "Textures/rocketthrust.png" // Thrustor
+	SurfaceSkin 0 3  "Textures/weapfront.png"
+	AngleOffset 45
+	RollOffset 90
+	ZOffset 8;
+	
+   FrameIndex MISS A 0 0
+}
+
+
 
 Model LRM
 {	

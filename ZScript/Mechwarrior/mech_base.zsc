@@ -19,7 +19,7 @@ class mw_InvStruct
 	bool moveable;
 	bool takesnodamage;
 	int worth;
-	int amt; // Stackable items, horray!
+	int amt; // Stackable items, banzai!
 }
 
 class mw_CombatObjective : Object

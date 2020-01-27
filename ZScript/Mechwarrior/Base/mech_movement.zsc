@@ -410,9 +410,12 @@ void process_shutdown()
 	}
 	if(!manualshutdown)
 	{	
+		// Prevent powerup only to shutdown once again.
+		if(countinv("IBTN_SHUTDOWN")) TakeInventory("IBTN_SHUTDOWN",1);
+		
 		if(throttle > 0)throttle -= 0.1;
 		if(throttle < 0)throttle += 0.1;
-		if( ((ticks - shutdown_timer) > 35*2) && HeatLevel <= 0 && doShutdown)
+		if( ((ticks - shutdown_timer) > 35) && HeatLevel <= (MWHEAT_MAX*0.2) && doShutdown)
 		{
 			// If we are very efficiently cooled, powerup early
 			prevticks = ticks;

@@ -17,6 +17,7 @@ uint mechtype;
 Array<mw_CombatObjective> objectives;
 bool display_objectives;
 MechCamera dronecam;
+RandomExplosions deathexplosions;
 bool dronecam_active;
 bool heatwarn;
 bool supersink;
@@ -37,11 +38,11 @@ void SetCrosshair(int ind)
 }
 
 // Drone
-void ToggleDrone(float cdist, float rotspd, bool front)
+void ToggleDrone(float cdist, float rotspd, float angdist, bool front)
 {
 	if(!dronecam)
 	{
-		dronecam = MechCamera.Create(self, cdist, rotspd, front);
+		dronecam = MechCamera.Create(self, cdist, angdist, rotspd, front);
 		dronecam_active = true;
 	}
 	else
@@ -49,12 +50,13 @@ void ToggleDrone(float cdist, float rotspd, bool front)
 		dronecam_active = false;
 	}
 }
-void AdjustDrone(float cdist, float rotspd, bool front)
+void AdjustDrone(float cdist, float rotspd, float angdist, bool front)
 {
 	if(dronecam && dronecam_active)
 	{
 		dronecam.followdist_desired = cdist;
 		dronecam.rotspd = rotspd;
+		dronecam.followtilt = angdist;
 		dronecam.frontcam = front;
 	}
 }
@@ -63,18 +65,23 @@ void AdjustDrone(float cdist, float rotspd, bool front)
 void ProcessDeath(Actor killer)
 {
 	throttle = 0;
+	if(isdead) return; 
+	
 	if(modelcockpit)
 	{
 		mechsounds.Empty();
 		for(int i = 0; i < 5; i++) mechsounds.PushSound("Mech/Damaged/CriticalExplosion");
-		RandomExplosions.Trigger(pos,75,15,viewheight);
+		deathexplosions = RandomExplosions.TriggerOnActor(self, 75,15,viewheight);
 		if(!dronecam_active) 
-			ToggleDrone(200,1,true);
+			ToggleDrone(350,1,0,true);
 		else
-			AdjustDrone(200,1,true);
+			AdjustDrone(350,1,0,true);
 	}
+	
 	isdead = true;
-	Die(NULL,killer);
+	mech_shutdown = true; 
+	manualshutdown = false;
+	forceshutdown = true;
 	A_SetHealth(0);
 }
 

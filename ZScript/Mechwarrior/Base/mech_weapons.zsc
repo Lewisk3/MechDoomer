@@ -250,7 +250,7 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 		if(!ntype)
 		{
 			A_PlaySound("UI/Error",CHAN_WEAPON);
-			sendHudAlert("Weapon Systems Error. Buffer overloaded!", Font.CR_DARKRED);
+			sendHudAlert("Weapon Systems Error.\nBuffer overloaded!", Font.CR_DARKRED);
 			//console.printf("No free slot found for: %s",(Name(type) .. ""));
 			return false;
 		}

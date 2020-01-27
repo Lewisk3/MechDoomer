@@ -103,7 +103,7 @@ class Torso_Firemoth : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Firemoth", "Legs_Firemoth", "Cockpit_Firemoth";
 		MechPartsBase.ZOffset 40;
 		MechPartsBase.CockpitOffset 10, 50;
-		MechTorsoBase.CockpitRange 1.0, 0.5, 2.25;
+		MechTorsoBase.CockpitRange 1.0, 0.5, 0.55;
 		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
@@ -222,14 +222,18 @@ class Legs_BattleArmor : MechLegsBase
 		SpawnIdle:
 			"####" "#" 1 
 			{
-				if(mechowner && mechowner.player)
+				if(mechowner)
 				{
 					if(isMoving()) return ResolveState("WalkCycle");
 					if(mechowner.weapons_fired) return ResolveState("Shoot");
-					if(!mechowner.player.onground) return ResolveState("Flying");
 					if(mechowner.isdead) return ResolveState("Die");
-					if(mechowner.player.onground && Sprite == GetSpriteIndex("TJMPA0"))
-						Sprite = GetSpriteIndex("IDLEA0");
+					
+					if(mechowner.player)
+					{
+						if(!mechowner.player.onground) return ResolveState("Flying");
+						if(mechowner.player.onground && Sprite == GetSpriteIndex("TJMPA0"))
+							Sprite = GetSpriteIndex("IDLEA0");
+					}
 				}
 				return ResolveState(Null);
 			}

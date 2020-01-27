@@ -256,7 +256,7 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);
 			if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
-			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(350,0,false);
+			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(200,0,15,false);
 			if(netcmd == "droneviewswitch" && !plr.isdead && plr.dronecam) plr.dronecam.frontcam = !plr.dronecam.frontcam;
 			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);

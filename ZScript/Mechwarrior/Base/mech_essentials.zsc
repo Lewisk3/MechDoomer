@@ -36,6 +36,24 @@ String hud_mech;
 
 void StartMechChange(int invmech)
 {
+	if(isdead) 
+	{	
+		A_SetHealth(100);
+		
+		// Spawn corpse if mech is ded.
+		let corpse = MechwarriorBase(Spawn(baseclass, pos));
+		if(corpse) 
+		{
+			corpse.isdead = true;
+			corpse.angle = angle;
+			corpse.pitch = pitch;
+			corpse.LegAng = LegAng;
+			corpse.A_SetHealth(0);
+			if(deathexplosions) deathexplosions.owner = corpse;
+		}
+	}
+	if(dronecam_active) dronecam_active = false;
+	
 	if(!mech_shutdown)
 	{
 		mechsounds.pushSound("Mech/Betty/ShuttingDown");
@@ -133,7 +151,10 @@ void ChangeMech(int invmech)
 	setupSpeedKPH(EngineGetKPH());
 	
 	inv_context.mechs.Delete(invmech);
-	inv_context.mechs.Insert(invmech, curmech);
+	
+	// Only save live mech!
+	if(!isdead) inv_context.mechs.Insert(invmech, curmech);
+	isdead = false;
 	return;
 	
 }
