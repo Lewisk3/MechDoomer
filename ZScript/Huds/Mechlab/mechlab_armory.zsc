@@ -275,6 +275,12 @@ void drawArmoryInfo()
 				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 				mstats.left_btn = false;
 				
+				if(mechplr.isdead)
+				{
+					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
+					mechplr.sendHudAlert("Mech's reactor is completely \ndestroyed!\nUnable to initiate repair \nprocess.",Font.CR_DARKRED);	
+					return;
+				}
 				if(!mechplr.mech_shutdown)
 				{
 					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
