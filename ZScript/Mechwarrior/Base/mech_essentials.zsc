@@ -45,7 +45,6 @@ void StartMechChange(int invmech)
 			Set health to 100 just in case some map script which checks player hp
 			is running.
 		*/
-		
 		mechsounds.Empty();
 		A_SetHealth(100);
 		
@@ -57,6 +56,7 @@ void StartMechChange(int invmech)
 			corpse.angle = angle;
 			corpse.pitch = pitch;
 			corpse.LegAng = LegAng;
+			corpse.roll = roll;
 			corpse.A_SetHealth(0);
 			if(deathexplosions) deathexplosions.owner = corpse;
 		}
@@ -68,6 +68,7 @@ void StartMechChange(int invmech)
 		mechsounds.pushSound("Mech/Betty/ShuttingDown");
 		A_PlaySound("Mech/Shutdown",1);
 	}
+	player.cheats &= ~CF_TOTALLYFROZEN;
 	mech_shutdown = true; 
 	manualshutdown = true;
 	forceshutdown = true;

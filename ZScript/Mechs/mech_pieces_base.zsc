@@ -343,7 +343,7 @@ class MechTorsoBase : MechPartsBase
 	override void tick()
 	{
 		if(!setup) SetupParts(hips_type, legs_type, cockpit_type);
-		if(mechowner && !mechowner.CheckVoodoo())
+		if(mechowner)
 		{
 			if( !mechowner.dronecam && !mechowner.dronecam_active &&
 				 mechowner.player && mechowner.player.camera == mechowner ) 
@@ -413,25 +413,22 @@ class MechLegsBase : MechPartsBase
 	
 	override void tick()
 	{
+		angle = mechowner.LegAng;
 		if(mechowner && !mechowner.CheckVoodoo())
 		{
-			angle = mechowner.LegAng;
-			if((!mechowner.dronecam && mechowner.nofirstpersonlegs) && !mechowner.CheckVoodoo()) 
+			if((!mechowner.dronecam && mechowner.nofirstpersonlegs)) 
 				bInvisible = true;
 			else
 				bInvisible = false;
 				
-			if(!mechowner.CheckVoodoo())
-			{
-				float truemove = !mechowner.MoveSpeedKPH ? 1 : mechowner.MoveSpeedKPH; 
-				float curspd = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * truemove);
-				float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
-				float stomp_spdrating = (curspd / truemove)*0.3;
-				float stomp_wrating = 1.0-(0.7*wrating);
-				
-				spdrating = curspd / (truemove*runspeed);
-				stompfriction = stomp_wrating + stomp_spdrating;
-			}
+			float truemove = !mechowner.MoveSpeedKPH ? 1 : mechowner.MoveSpeedKPH; 
+			float curspd = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * truemove);
+			float wrating = float(mechowner.inv_context.weapons_tonnage)/100.;
+			float stomp_spdrating = (curspd / truemove)*0.3;
+			float stomp_wrating = 1.0-(0.7*wrating);
+			
+			spdrating = curspd / (truemove*runspeed);
+			stompfriction = stomp_wrating + stomp_spdrating;
 		}
 		super.tick();
 	}

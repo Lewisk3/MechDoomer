@@ -69,6 +69,7 @@ void ProcessDeath(Actor killer)
 	
 	if(modelcockpit)
 	{
+		player.cheats |= CF_TOTALLYFROZEN;
 		mechsounds.Empty();
 		for(int i = 0; i < 5; i++) mechsounds.PushSound("Mech/Damaged/CriticalExplosion");
 		deathexplosions = RandomExplosions.TriggerOnActor(self, 75,15,viewheight);
