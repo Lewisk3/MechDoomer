@@ -214,6 +214,7 @@ class MechDoomerEvents : EventHandler
 	override void WorldTick()
 	{
 		let plr = MechWarrior(players[consoleplayer].mo);
+				
 		if(!ShaderManager)
 			ShaderManager = ColorTintShaderManager(StaticEventHandler.Find("ColorTintShaderManager"));
 		else if(plr)

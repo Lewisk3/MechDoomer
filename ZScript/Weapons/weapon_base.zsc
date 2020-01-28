@@ -100,7 +100,7 @@ class Mechbase_Actor : Actor
 	}
 }
 
-class Mechbase_Weapon : Inventory
+class Mechbase_Weapon : Item_NoPickup
 {
 	int cooldown_timer;
 	float volleycooldown;

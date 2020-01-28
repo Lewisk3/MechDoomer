@@ -3,6 +3,15 @@ struct Rect
 	float x,y,w,h;
 }
 
+class Item_NoPickup : Inventory
+{
+	override bool HandlePickup (Inventory item)
+	{
+		if (item.GetClass() == GetClass()) return false;
+		return super.HandlePickup(item);
+	}	
+}
+
 class TempItems : Object
 {
 	String Tag;

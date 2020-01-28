@@ -55,7 +55,7 @@ class mw_StoredMech : Object
 	Array<mw_StoredWeapon> active_weapons;
 	class<MechWarriorBase> baseclass;
 }
-class mw_InvInfo : Inventory
+class mw_InvInfo : Item_NoPickup
 {
 	MechHardpoints hardpoints;
 	Array<mw_InvStruct> weapon_items; // Stores all mech items before they go into the inventory.

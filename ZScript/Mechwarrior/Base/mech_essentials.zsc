@@ -87,6 +87,7 @@ void ChangeMech(int invmech)
 		return;
 	}
 	
+	GetStoredWeapons(curmech.active_weapons);
 	curmech.baseclass = baseclass;
 	curmech.inv_context = inv_context;
 	curmech.inv_defs = new("mw_MechInvDefaults");
@@ -100,7 +101,6 @@ void ChangeMech(int invmech)
 	inv_context.Swap(source.inv_context);
 	inv_context = source.inv_context;
 	hardpoints = inv_context.hardpoints;
-	GetStoredWeapons(curmech.active_weapons);
 	
 	// Destroy current weapons.
 	for(let w = Inv; w != null; w = w.Inv)
