@@ -148,7 +148,7 @@ void mech_movement()
 		float truetonnage = mech_shutdown ? mech_tonnage*0.25 : mech_tonnage;
 		overfactor = clamp( (truetonnage/(inv_context.weapons_tonnage))*1.25, 0.1, 1.0);
 		setupSpeedKPH(EngineGetKPH()*overfactor);
-		float finalspd = clamp(MoveSpeed*0.3*overfactor*throttle_max, 0.1, 1.7);
+		float finalspd = clamp(MoveSpeed*0.3*overfactor*throttle_max, 0.1, 1.45);
 		A_SetSpeed(finalspd);
 	}
 	
