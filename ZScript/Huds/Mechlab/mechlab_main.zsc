@@ -47,6 +47,9 @@ int Mechlab_GetInvSize()
 
 void ProcessLoadoutButtons()
 {
+	// Force mechmode if dead.
+	if(mechplr.isdead && !mechmode) mechmode = true;
+
 	// Buttons and highlights
 	H_DrawImage(tBtn_Scrap,  ( scrapbtn.x+61, scrapbtn.y+30),0);
     H_DrawImage(tBtn_Sort,   (  sortbtn.x+64,  sortbtn.y+30),0);
@@ -67,7 +70,7 @@ void ProcessLoadoutButtons()
 		H_DrawImage(mechmode ? tBtnlit_Deploy : tBtnlit_Dequip, (dequipbtn.x+62, dequipbtn.y+33),0);
 	
 	// Hover-Over buttons
-	if(checkCollision(mouse, invmodebtn)) 
+	if(checkCollision(mouse, invmodebtn) && !mechplr.isdead) 
 		H_DrawImage(mechmode ? tBtnlit_Items : tBtnlit_Mechs,(invmodebtn.x+64,invmodebtn.y+30),0);
 	if(checkCollision(mouse, sortbtn)) 
 		H_DrawImage(tBtnlit_Sort,   ( sortbtn.x+64,  sortbtn.y+31),0);
@@ -104,7 +107,7 @@ void ProcessLoadoutButtons()
 		}
 		
 		// Change mode - Mechs or Items
-		if(checkCollision(mouse,invmodebtn)) 
+		if(checkCollision(mouse,invmodebtn) && !mechplr.isdead) 
 		{
 			clearSelected();
 			mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
