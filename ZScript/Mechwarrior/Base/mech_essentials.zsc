@@ -37,7 +37,16 @@ String hud_mech;
 void StartMechChange(int invmech)
 {
 	if(isdead) 
-	{	
+	{		
+		/*
+			Empty our sound-queue so we get Betty's system announcement when we
+			start back up.
+			
+			Set health to 100 just in case some map script which checks player hp
+			is running.
+		*/
+		
+		mechsounds.Empty();
 		A_SetHealth(100);
 		
 		// Spawn corpse if mech is ded.
