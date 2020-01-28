@@ -156,3 +156,7 @@ material texture models/Mechs/Summoner/su_full.png {
 material texture models/Mechs/Raven/rv_full.png {
 	shader "shaders/simsun.fp"
 }
+
+material texture models/Mechs/Raven/rf_full.png {
+	shader "shaders/simsun.fp"
+}

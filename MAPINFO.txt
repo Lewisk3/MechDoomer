@@ -19,5 +19,6 @@ GameInfo
 					"MadDog",
 					"Summoner",
 					"Raven",
+					"Rifleman",
 					"TestingDoomguy"
 }

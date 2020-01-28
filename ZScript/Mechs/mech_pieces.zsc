@@ -16,6 +16,7 @@ class Cockpit_Firemoth    : MechCockpitModel {}
 class Cockpit_MadDog      : MechCockpitModel {}
 class Cockpit_Summoner    : MechCockpitModel {}
 class Cockpit_Raven   	  : MechCockpitModel {}
+class Cockpit_Rifleman 	  : MechCockpitModel {}
 
 // Hips
 class Hips_Invisible   : MechHipsBase {}
@@ -32,6 +33,7 @@ class Hips_Firemoth    : MechHipsBase {}
 class Hips_MadDog 	   : MechHipsBase {}
 class Hips_Summoner	   : MechHipsBase {}
 class Hips_Raven	   : MechHipsBase {}
+class Hips_Rifleman	   : MechHipsBase {}
 
 // Legs	
 class Legs_Invisible   : MechLegsBase {}
@@ -48,6 +50,7 @@ class Legs_MadDog      : Legs_Smooth {}
 class Legs_Tarantula   : Legs_Smooth {}
 class Legs_Summoner    : Legs_Smooth {}
 class Legs_Raven       : Legs_Smooth {}
+class Legs_Rifleman    : Legs_Smooth {}
 
 // Torsos
 
@@ -164,6 +167,15 @@ class Torso_MadDog : MechTorsoBase {
 		MechPartsBase.CockpitOffset 0, 80;
 		MechTorsoBase.CockpitRange 0.85, 0.5, 0.8;
 		MechTorsoBase.TwistSpeed 0.25;
+	}
+}
+class Torso_Rifleman : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Rifleman", "Legs_Rifleman", "Cockpit_Rifleman";
+		MechPartsBase.ZOffset 40;
+		MechPartsBase.CockpitOffset 0, 85;
+		MechTorsoBase.CockpitRange 1.0, 0.3, 0.5;
+		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
 
