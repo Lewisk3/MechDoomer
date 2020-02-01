@@ -1,6 +1,5 @@
 // Weapon base
-
-class Mechbase_Actor : Actor
+class Mechbase_Actor : FastProjectile
 {
 	actor hitactor;
 	double heatgen;
@@ -383,8 +382,8 @@ class MechMissile : Mechbase_Actor
 	
 	Default
 	{	
-		Radius 11;
-		Height 8;
+		Radius 6;
+		Height 2;
 		//+DEHEXPLOSION
 		//+ROCKETTRAIL
 		//+PUFFGETSOWNER
@@ -495,8 +494,8 @@ class Laser : Mechbase_Actor
 	
 	Default
 	{
-		Height 2;
-		Radius 3;
+		Height 1;
+		Radius 1;
 		+NOGRAVITY;
 		Alpha 1.0;
 		RenderStyle "Add";
@@ -676,8 +675,8 @@ class AMS_Missile : Mechbase_Actor
 		Projectile;
 		+SEEKERMISSILE
 		-NOBLOCKMAP
-		Height 4;
-		Radius 3;
+		Height 2;
+		Radius 2;
 		Speed 9;
 		Scale 0.15;
 		AMS_Missile.Effectiveness 12;
