@@ -106,9 +106,9 @@ class Commando : MechWarrior
 		Player.DisplayName "Commando - 2D";
 		Player.ViewHeight 65;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.PitchRange 40, 40;
-		MechWarriorBase.LegSpeed 0.65;
+		MechWarriorBase.TwistRange 130;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.LegSpeed 110.58*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.Weight 25;
 		MechWarriorBase.Engine "ENGINE_STD_150";
 		MechWarriorBase.MechPieces "Torso_Commando";
@@ -136,10 +136,10 @@ class Jenner : MechWarrior
 		Mass 1400;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.Engine "ENGINE_XL_315";
-		MechWarriorBase.TwistRange 90;
-		MechWarriorBase.PitchRange 90, 40;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Weight 35;
-		MechWarriorBase.LegSpeed 0.75;
+		MechWarriorBase.LegSpeed 102.56*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudCockpit "JENNHUD";
 		MechWarriorBase.HudMech "JENNICO";
@@ -174,7 +174,7 @@ class Urbanmech : MechWarrior
 		Player.ViewHeight 62;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 9001; // Over 9000 :P
-		MechWarriorBase.LegSpeed 0.6;
+		MechWarriorBase.LegSpeed 77.92*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.InfiniteTorsoTwist true;
 		MechWarriorBase.Weight 30;
 		MechWarriorBase.Engine "ENGINE_STD_60";
@@ -202,8 +202,8 @@ class Tarantula : MechWarrior
 		Player.DisplayName "Tarantula - ZPH1";
 		Player.ViewHeight 80;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 90;
-		MechWarriorBase.PitchRange 50, 20;
+		MechWarriorBase.TwistRange 120;
+		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Weight 25;
 		MechWarriorBase.Engine "ENGINE_XL_200";
 		MechWarriorBase.MechPieces "Torso_Tarantula";
@@ -239,11 +239,11 @@ class Firemoth : MechWarrior
 		Player.DisplayName "Firemoth - Prime";
 		Player.ViewHeight 60;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
-		MechWarriorBase.PitchRange 40, 40;
+		MechWarriorBase.PitchRange 80, 80;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.TwistRange 120;
 		MechWarriorBase.Weight 20;
-		MechWarriorBase.LegSpeed 0.8;
+		MechWarriorBase.LegSpeed 105.42*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.Acceleration 0.8;
 		MechWarriorBase.Engine "ENGINE_XL_200";
 		MechWarriorBase.HudMech "ATLAICO";
@@ -276,10 +276,10 @@ class Raven : MechWarrior
 		Player.ViewHeight 50;
 		
 		MechWarriorBase.Engine "ENGINE_XL_210";
-		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.PitchRange 60, 30;
+		MechWarriorBase.TwistRange 120;
+		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Weight 35;
-		MechWarriorBase.LegSpeed 0.6;
+		MechWarriorBase.LegSpeed 85.37*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.Acceleration 0.85;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudMech "ATLAICO";
@@ -313,9 +313,9 @@ class Stormcrow : MechWarrior
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.PitchRange 40, 30;
-		MechWarriorBase.LegSpeed 0.6;
+		MechWarriorBase.TwistRange 165;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.LegSpeed 65.32*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.Acceleration 0.8;
 		MechWarriorBase.Weight 55;
 		MechWarriorBase.Engine "ENGINE_XL_330";
@@ -349,8 +349,8 @@ class Nova : MechWarrior
 		MechWarriorBase.LegSpeed 1.2;
 		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.TwistRange 20;
-		MechWarriorBase.PitchRange 50, 20;
-		MechWarriorBase.LegSpeed 0.7;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.LegSpeed 55.0*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.Acceleration 0.8;
 		MechWarriorBase.Weight 50;
 		MechWarriorBase.CockpitIsModel true;
@@ -399,10 +399,10 @@ class Timberwolf : MechWarrior
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 90;
-		MechWarriorBase.LegSpeed 0.6;
+		MechWarriorBase.TwistRange 105;
+		MechWarriorBase.LegSpeed 42.40*MWGAMEPLAY_TURNRATE*1.5;
 		MechWarriorBase.Weight 75;
-		MechWarriorBase.PitchRange 40, 30;
+		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Engine "ENGINE_XL_375";
 		MechWarriorBase.HudCockpit "WOLFHUD";
 		MechWarriorBase.MechPieces "Torso_Timberwolf";
@@ -442,10 +442,10 @@ class Summoner : MechWarrior
 		Player.ViewHeight 90;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 90;
-		MechWarriorBase.LegSpeed 0.6;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.LegSpeed 67.61*MWGAMEPLAY_TURNRATE*1.5;
 		MechWarriorBase.Weight 70;
-		MechWarriorBase.PitchRange 40, 20;
+		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Engine "ENGINE_XL_350";
 		MechWarriorBase.MechPieces "Torso_Summoner";
 		MechWarriorBase.HudMech "ATLAICO";
@@ -477,10 +477,10 @@ class MadDog : MechWarrior
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.LegSpeed 0.55;
+		MechWarriorBase.TwistRange 125;
+		MechWarriorBase.LegSpeed 50.42*MWGAMEPLAY_TURNRATE*1.5;
 		MechWarriorBase.Weight 60;
-		MechWarriorBase.PitchRange 45, 25;
+		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.MechPieces "Torso_MadDog";
 		MechWarriorBase.HudMech "ATLAICO";
@@ -512,11 +512,11 @@ class Rifleman : MechWarrior
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 120;
-		MechWarriorBase.LegSpeed 0.6;
+		MechWarriorBase.TwistRange 100;
+		MechWarriorBase.LegSpeed 47.56*MWGAMEPLAY_TURNRATE*1.5;
 		MechWarriorBase.Acceleration 1.15;
 		MechWarriorBase.Weight 65;
-		MechWarriorBase.PitchRange 90, 20;
+		MechWarriorBase.PitchRange 70, 70;
 		MechWarriorBase.Engine "ENGINE_XL_195";
 		MechWarriorBase.MechPieces "Torso_Rifleman";
 		MechWarriorBase.HudMech "ATLAICO";
@@ -551,9 +551,9 @@ class Atlas : MechWarrior
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.MechPieces "Torso_Atlas";
 		MechWarriorBase.Engine "ENGINE_STD_300";
-		MechWarriorBase.TwistRange 100;
-		MechWarriorBase.PitchRange 30, 30;
-		MechWarriorBase.LegSpeed 0.6;
+		MechWarriorBase.TwistRange 130;
+		MechWarriorBase.PitchRange 46, 46;
+		MechWarriorBase.LegSpeed 40.11*MWGAMEPLAY_TURNRATE*2.0; // Scaled up a little.
 		MechWarriorBase.Acceleration 0.6;
 		MechWarriorBase.HudMech "ATLAICO";
 		MechWarriorBase.Weight 100;
@@ -595,9 +595,9 @@ class Direwolf : MechWarrior
 		
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.TwistRange 80;
-		MechWarriorBase.PitchRange 25, 20;
-		MechWarriorBase.LegSpeed 0.75;
+		MechWarriorBase.TwistRange 90;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.LegSpeed 32.66*MWGAMEPLAY_TURNRATE*2.0; // Scaled up a little.
 		MechWarriorBase.Acceleration 0.75;
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.MechPieces "Torso_Direwolf";

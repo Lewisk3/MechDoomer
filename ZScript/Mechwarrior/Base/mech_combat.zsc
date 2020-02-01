@@ -38,14 +38,14 @@ void SetCrosshair(int ind)
 }
 
 // Drone
-void ToggleDrone(float cdist, float rotspd, float angdist, bool front)
+void ToggleDrone(float cdist, float rotspd, float angdist, bool front, bool alwayson=false)
 {
 	if(!dronecam)
 	{
 		dronecam = MechCamera.Create(self, cdist, angdist, rotspd, front);
 		dronecam_active = true;
 	}
-	else
+	else if(!alwayson)
 	{
 		dronecam_active = false;
 	}
@@ -69,14 +69,11 @@ void ProcessDeath(Actor killer)
 	
 	if(modelcockpit)
 	{
-		player.cheats |= CF_TOTALLYFROZEN;
 		mechsounds.Empty();
 		for(int i = 0; i < 5; i++) mechsounds.PushSound("Mech/Damaged/CriticalExplosion");
 		deathexplosions = RandomExplosions.TriggerOnActor(self, 75,15,viewheight);
-		if(!dronecam_active) 
-			ToggleDrone(350,1,0,true);
-		else
-			AdjustDrone(350,1,0,true);
+		AdjustDrone(350, 1, 0, true);
+		player.cheats |= CF_TOTALLYFROZEN;
 	}
 	
 	isdead = true;
@@ -114,7 +111,7 @@ void mech_weapons()
 	if(supersink) HeatEfficiency *= 2;
 	if(HeatLevel > 0) HeatLevel -= HeatEfficiency;
 	if(HeatLevel < 0) HeatLevel = 0;
-	if(HeatLevel > MWHEAT_MAX*0.6) DamageMobj(self,null,random(6,12),"overheating",DMG_NO_ARMOR | DMG_NO_FACTOR);
+	if(HeatLevel > MWHEAT_MAX*0.6) DamageMobj(self,null,frandom(24,36),"overheating",DMG_NO_ARMOR | DMG_NO_FACTOR);
 	if(HeatLevel <= MWHEAT_MAX*0.15) heatwarn = false;
 	if(HeatLevel > MWHEAT_MAX*0.275 && !heatwarn)
 	{

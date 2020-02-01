@@ -13,7 +13,7 @@ class MechExchange_Animator : Powerup
 	{
 		Powerup.Duration 0x7FFFFFFD; // lasts about 2 years;
 	}
-	
+
 	override void tick()
 	{		
 		if(clock) clock--;

@@ -152,6 +152,7 @@ void ChangeMech(int invmech)
 	ViewHeight = defs.ViewHeight;
 	defviewz = defs.ViewHeight;
 	player.ViewHeight = defs.ViewHeight;
+	HeatLevel = 0;
 	viewzoffs = 0;
 	
 	// Update vars
@@ -382,6 +383,12 @@ override void tick()
 	
 	if(!inv_context) setupInventory();	
 	if(!dronecam) player.camera = self;
+	
+	// For some XFiles unknown reason, drone cameras will now randomly just REFUSE
+	// to work if the mech has died from overheating, it should not even be possible but it is,
+	// so, this stupid thing is here to force it on.
+	if(!dronecam_active && isdead) 
+		ToggleDrone(350,1,0,true,true);
 	
 	// Make sure player doesn't have any actual weapons.
 	for(let w = Inv; w != null; w = w.Inv)

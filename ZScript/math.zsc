@@ -1,16 +1,31 @@
 // Credits: https://gist.github.com/itsmrpeck/be41d72e9d4c72d2236de687f6f53974
 class MDMath Abstract
 {	
+	// Round float to nearest place
 	static float RoundFloat(float input, float place=100.)
 	{
 		return floor(input*place)/place;
 	}
 
+	// Straight interpolate
+	static float Strp(float a, float b, float value, float dampen=0.7)
+	{	
+		float dampenv = value * (1-(dampen**(abs(a-b)/value)));
+		console.printf("dampenval %f", dampenv);
+		if(a < b) a += dampenv;
+		if(a > b) a -= dampenv;
+		if( abs(a-b) < dampenv) a = b;
+		return a;
+	}
+	
+	// Linear interpolate
 	static float Lerp(float a, float b, float lerpFactor)
 	{
 		float result = ((1.f - lerpFactor) * a) + (lerpFactor * b);
 		return result;
 	}
+	
+	// Linear interpolate 3D vectors
 	static vector3 Lerp3D(vector3 a, vector3 b, float lerpfactor)
 	{
 		vector3 result = a;
@@ -68,16 +83,22 @@ class MDMath Abstract
 
 		return result;
 	}
+	
+	// Pitch between 2 vectors.
 	static float getPitchBetween(Vector3 one, Vector3 two)
 	{	
 		vector3 delta = ( one.x - two.x, one.y - two.y, one.z - two.z );
 		double pitchto = VectorAngle( sqrt(delta.y * delta.y + delta.x * delta.x), delta.z );
 		return pitchto;
 	}
+	
+	// Distance 3D on vectors, not actors.
 	static float Distance3D(vector3 one, vector3 two)
 	{
 		return sqrt( (two.x - one.x)**2 + (two.y - one.y)**2 + (two.z - one.z)**2 );
 	}
+	
+	// Rotate vectors.
 	static Vector2 VRotate(Vector2 pos, double angle, bool invert=false)
 	{
 		if(invert)
@@ -88,7 +109,9 @@ class MDMath Abstract
 		}
 		return ( pos.y * cos(angle) - pos.x * sin(angle), 
 		         pos.y * sin(angle) + pos.x * cos(angle) );
-	}
+	}	
+	
+	// Offset vector position.
 	static Vector2 VOffset(double angle, double xoffs, double yoffs, double dist)
 	{
 		return ( xoffs * cos(angle) - yoffs * sin(angle),

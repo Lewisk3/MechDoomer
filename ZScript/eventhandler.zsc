@@ -214,6 +214,15 @@ class MechDoomerEvents : EventHandler
 	override void WorldTick()
 	{
 		let plr = MechWarrior(players[consoleplayer].mo);
+		
+		/* Debug pickup-able anomalies. *\
+		let it = ThinkerIterator.Create("Inventory");
+		Actor act;
+		while(act = Actor(it.Next()))
+		{
+			if( !(act is "Item_NoPickup") && plr.Distance3D(act) <= 16) console.printf("Pickup-able Inv: %s", act.getClassName());
+		}
+		*/
 				
 		if(!ShaderManager)
 			ShaderManager = ColorTintShaderManager(StaticEventHandler.Find("ColorTintShaderManager"));

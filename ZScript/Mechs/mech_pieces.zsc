@@ -71,15 +71,15 @@ class Torso_Commando : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Commando", "Legs_Commando", "Cockpit_Commando";
 		MechPartsBase.ZOffset 40;
 		MechPartsBase.CockpitOffset 0, 70;
-		MechTorsoBase.CockpitRange 0.8, 1.0, 1.0;
-		MechTorsoBase.TwistSpeed 0.2;
+		MechTorsoBase.CockpitRange 0.6, 0.4, 1.0;
+		MechTorsoBase.TwistSpeed 0.25;
 	}
 }
 class Torso_Urbanmech : MechTorsoBase {
 	Default {
 		MechTorsoBase.Pieces "Hips_Urbanmech", "Legs_Urbanmech", "Cockpit_Urbanmech";
 		MechPartsBase.ZOffset 35;
-		MechTorsoBase.CockpitRange 1.0, 1.0, 2.0;
+		MechTorsoBase.CockpitRange 1.0, 0.45, 2.0;
 		MechTorsoBase.TwistSpeed 0.8;
 	}
 }
@@ -88,8 +88,8 @@ class Torso_Jenner : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner", "Cockpit_Jenner";
 		MechPartsBase.ZOffset 42;
 		MechPartsBase.CockpitOffset 25, 47;
-		MechTorsoBase.CockpitRange 0.8, 0.4, 1.25;
-		MechTorsoBase.TwistSpeed 0.2;
+		MechTorsoBase.CockpitRange 1.0, 0.4, 1.25;
+		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
 class Torso_Tarantula : MechTorsoBase {
@@ -98,7 +98,7 @@ class Torso_Tarantula : MechTorsoBase {
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 90;
 		MechTorsoBase.CockpitRange 1.0, 1.0, 0.7;
-		MechTorsoBase.TwistSpeed 0.3;
+		MechTorsoBase.TwistSpeed 0.4;
 	}
 }
 class Torso_Firemoth : MechTorsoBase {
@@ -106,8 +106,8 @@ class Torso_Firemoth : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Firemoth", "Legs_Firemoth", "Cockpit_Firemoth";
 		MechPartsBase.ZOffset 40;
 		MechPartsBase.CockpitOffset 10, 50;
-		MechTorsoBase.CockpitRange 1.0, 0.5, 0.55;
-		MechTorsoBase.TwistSpeed 0.35;
+		MechTorsoBase.CockpitRange 1.0, 0.25, 0.55;
+		MechTorsoBase.TwistSpeed 0.4;
 	}
 }
 class Torso_Raven : MechTorsoBase {
@@ -115,8 +115,8 @@ class Torso_Raven : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Raven", "Legs_Raven", "Cockpit_Raven";
 		MechPartsBase.ZOffset 42;
 		MechPartsBase.CockpitOffset 20, 55;
-		MechTorsoBase.CockpitRange 0.9, 0.6, 0.8;
-		MechTorsoBase.TwistSpeed 0.3;
+		MechTorsoBase.CockpitRange 1.0, 0.4, 0.8;
+		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
 
@@ -136,7 +136,7 @@ class Torso_Stormcrow : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow", "Cockpit_Stormcrow";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 15, 70;
-		MechTorsoBase.CockpitRange 0.9, 0.6, 1.0;
+		MechTorsoBase.CockpitRange 0.78, 0.4, 1.0;
 		MechTorsoBase.TwistSpeed 0.3;
 	}
 }
@@ -147,7 +147,7 @@ class Torso_Timberwolf : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf", "Cockpit_Timberwolf";
 		MechPartsBase.ZOffset 50;
 		MechPartsBase.CockpitOffset 20, 70;
-		MechTorsoBase.CockpitRange 0.8, 0.7, 1.0;
+		MechTorsoBase.CockpitRange 0.76, 0.4, 1.0;
 		MechTorsoBase.TwistSpeed 0.2;
 	}
 }
@@ -165,7 +165,7 @@ class Torso_MadDog : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_MadDog", "Legs_MadDog", "Cockpit_MadDog";
 		MechPartsBase.ZOffset 55;
 		MechPartsBase.CockpitOffset 0, 80;
-		MechTorsoBase.CockpitRange 0.85, 0.5, 0.8;
+		MechTorsoBase.CockpitRange 0.76, 0.4, 0.8;
 		MechTorsoBase.TwistSpeed 0.25;
 	}
 }
@@ -174,7 +174,7 @@ class Torso_Rifleman : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Rifleman", "Legs_Rifleman", "Cockpit_Rifleman";
 		MechPartsBase.ZOffset 40;
 		MechPartsBase.CockpitOffset 0, 85;
-		MechTorsoBase.CockpitRange 1.0, 0.3, 0.5;
+		MechTorsoBase.CockpitRange 1.0, 0.28, 0.5;
 		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
@@ -185,7 +185,7 @@ class Torso_Atlas : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas", "Cockpit_Atlas";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 100;
-		MechTorsoBase.CockpitRange 0.8, 0.5, 0.7;
+		MechTorsoBase.CockpitRange 0.69, 0.34, 0.7;
 		MechTorsoBase.TwistSpeed 0.05;
 	}
 }
@@ -194,7 +194,7 @@ class Torso_Direwolf : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Direwolf", "Legs_Direwolf", "Cockpit_Direwolf";
 		MechPartsBase.ZOffset 45;
 		MechPartsBase.CockpitOffset 15, 90;
-		MechTorsoBase.CockpitRange 0.7, 0.5, 0.6;
+		MechTorsoBase.CockpitRange 0.66, 0.4, 0.6;
 		MechTorsoBase.TwistSpeed 0.07;
 	}
 }

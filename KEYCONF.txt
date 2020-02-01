@@ -1,0 +1,1 @@
+alias "shillforcomstar" "netevent iamspaceatandt 999999999"
