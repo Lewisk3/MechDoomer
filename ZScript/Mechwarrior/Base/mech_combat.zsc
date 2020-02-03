@@ -329,9 +329,9 @@ void trigger_ams(vector2 amshardpoint)
 		while(obj = Actor(ams_it.Next()))
 		{
 			if(obj is "AMS_Missile" || obj is "Mechbase_Actor") continue;
-			if(obj)
+			if(obj && obj.Damage)
 			{	
-				if( CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
+				if(CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
 				{
 					//console.printf("Firing AMS at: " .. obj.getTag());
 					SoundEmitter.SE_Trigger("Missiles/AMS");

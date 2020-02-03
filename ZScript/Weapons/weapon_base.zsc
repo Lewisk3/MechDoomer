@@ -699,26 +699,27 @@ class AMS_Missile : Mechbase_Actor
 			if(tracer)
 			{
 				angle = AngleTo(tracer);
-				if(tracer.damage <= 0) 
-				{
-					tracer.Destroy();
-					return ResolveState(Null);
-				}
 				if(Distance3D(tracer) <= radius*4) 
 				{
-					tracer.SetDamage(tracer.damage-projdmg); 
-					return ResolveState("Death");
+					if(tracer.damage <= 0) 
+					{
+						tracer.Destroy();
+						return ResolveState(Null);
+					}
+					
+					tracer.SetDamage(tracer.damage-projdmg);
+					return ResolveState("DeathCollide");
 				}
 				A_SeekerMissile(20,20,SMF_CURSPEED,999/64);
 			}
 			else
 			{
-				Die(self,self);
+				return ResolveState("Death");
 			}
 			return ResolveState(Null);
 		}
 		Loop;
-	  Death:
+	  DeathCollide:
 		TNT1 A 1 
 		{	
 			let exp = MissileExplosion(Spawn("MissileExplosion",pos));
@@ -727,6 +728,8 @@ class AMS_Missile : Mechbase_Actor
 				exp.A_SetScale(0.3,0.3);
 			}
 		}
+		Death:
+			TNT1 A 1;
 		Stop;
 	}
 }
