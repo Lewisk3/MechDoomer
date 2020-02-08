@@ -15,7 +15,7 @@ bool ValidateHardpoint(int ind)
 float GetHardpointVitalRatio(MechHardpoint hp)
 {
 	float hp_vitals    = hp.armor+hp.internalhp;
-	float hp_maxvitals = hp.max_armor+hp.max_internal;
+	float hp_maxvitals = hp.defmax_armor+hp.max_internal;
 	if(hp.internalhp <= 0) hp_vitals = 0;
 	if(hp_vitals == 0) return 1.0;
 	float vres = 1.0 - (hp_vitals / hp_maxvitals);
@@ -203,7 +203,7 @@ void drawArmoryInfo()
 		armorstr = "ARMOR: ".. int(hp.armor) .. "/" .. int(hp.max_armor) .. " ("..int(hp.defmax_armor)..")";
 		internalstr = "INTERNALS: ".. int(ceil(hp.internalhp)) .. "/" .. int(hp.max_internal);
 		selectallstr = "Select All";
-		ArmorFont = (hp.armor < hp.max_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
+		ArmorFont = (hp.armor < hp.defmax_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
 		InternalsFont = (hp.internalhp < hp.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
 		if( astat_selected ==  0) ArmorFont = Font.CR_GREEN;
 		if( astat_selected ==  1) InternalsFont = Font.CR_GREEN;
