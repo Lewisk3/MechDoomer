@@ -106,19 +106,17 @@ class Button ui
 		MD_SBS.DrawRect(collider,Color(255,0,127,127));
 	}
 	
-	void Update(Mouse mcheck)
+	void Update(Mouse mcheck, bool usemouse)
 	{
 		hovered = collider.checkCollision(mcheck.collider);
 		if(mcheck.left_pressed) pressed = hovered;
 		if(pressed && !hovered) pressed = false;
-		
 		if(mcheck.left_clicked && pressed)
 		{
 			mcheck.left_clicked = false;
 			pressed = false;
-			if(hovered) clicked = true;
+			if(hovered && usemouse) clicked = true;
 		}
-		
 		cur_tex = pressed ? on_tex : off_tex;
 	}
 }

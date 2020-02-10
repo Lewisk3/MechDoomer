@@ -86,7 +86,7 @@ class Mech_TitleMenu : CustomMenuBase
 	
 		for(int i = 0; i < buttons.Size(); i++)
 		{
-			buttons[i].Update(mMouse);
+			buttons[i].Update(mMouse, btn_selected == -1);
 				
 			if(buttons[i].clicked)
 			{
@@ -170,7 +170,7 @@ class Mech_InGameMenu : CustomMenuBase
 	
 		for(int i = 0; i < buttons.Size(); i++)
 		{
-			buttons[i].Update(mMouse);
+			buttons[i].Update(mMouse, btn_selected == -1);
 			
 			if(buttons[i].pressed)
 			{
