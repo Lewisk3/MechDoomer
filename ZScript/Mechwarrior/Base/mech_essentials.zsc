@@ -374,7 +374,7 @@ override void tick()
 		super.Tick();
 		return;
 	}
-	
+		
 	// Clamp viewheight so we don't end up inside our hips when we fall.
 	player.viewheight = clamp(player.viewheight, defviewz*0.8, defviewz*2.0);
 	
