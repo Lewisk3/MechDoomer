@@ -20,5 +20,6 @@ GameInfo
 					"Summoner",
 					"Raven",
 					"Rifleman",
+					"Marauder",
 					"TestingDoomguy"
 }

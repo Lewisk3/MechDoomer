@@ -542,6 +542,44 @@ class Rifleman : MechWarrior
 	}
 }
 
+class Marauder : MechWarrior
+{
+	Default
+	{
+		Mass 3000;
+		Player.DisplayName "Marauder - 3R";
+		Player.ViewHeight 70;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 105;
+		MechWarriorBase.LegSpeed 50.42*MWGAMEPLAY_TURNRATE*1.5;
+		MechWarriorBase.Acceleration 1.35;
+		MechWarriorBase.Weight 75;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.Engine "ENGINE_STD_300";
+		MechWarriorBase.MechPieces "Torso_Marauder";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.CValue 3315075;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,44,30,30,24,24,30,30, 5,22,15,15,12,12,16,16 );
+		hardpoints.setupLocations( (0,10), (0,32), (30,10), (-30,10), (60,-20), (-60,-20), (20,-85), (-20,-85) );
+		hardpoints.setupSlots();
+		equipStruct("Heatsink",hardpoints.lt,4);
+		equipStruct("Heatsink",hardpoints.rt,4);
+		equipStruct("Heatsink",hardpoints.la,2);
+		equipStruct("Heatsink",hardpoints.ra,2);
+		equipStruct("AC5_Ammo",hardpoints.ll,2);
+		equipStruct("AC5_Ammo",hardpoints.rl,2);
+		equipWeapon("PPC",hardpoints.la,1);
+		equipWeapon("PPC",hardpoints.ra,1);
+		equipWeapon("MediumLaser",hardpoints.la,2);
+		equipWeapon("MediumLaser",hardpoints.ra,2);
+		equipWeapon("Autocannon5",hardpoints.ct,3);
+	}
+}
+
 // Assault Mechs
 class Atlas : MechWarrior
 {
