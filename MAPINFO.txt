@@ -22,5 +22,6 @@ GameInfo
 					"Rifleman",
 					"Marauder",
 					"Kitfox",
+					"Gargoyle",
 					"TestingDoomguy"
 }

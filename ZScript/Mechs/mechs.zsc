@@ -616,6 +616,43 @@ class Marauder : MechWarrior
 	}
 }
 
+class Gargoyle : MechWarrior
+{
+	Default
+	{
+		Mass 3000;
+		Player.DisplayName "Gargoyle - Prime";
+		Player.ViewHeight 70;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 110;
+		MechWarriorBase.LegSpeed 65.32*MWGAMEPLAY_TURNRATE*1.5;
+		MechWarriorBase.Acceleration 0.80;
+		MechWarriorBase.Weight 80;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.Engine "ENGINE_XL_400";
+		MechWarriorBase.MechPieces "Torso_Gargoyle";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.CValue 13020420;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,46,32,32,37,37,34,34, 5,23,16,16,17,17,12,12 );
+		hardpoints.setupLocations( (0,24), (0,-10), (30,-10), (-30,-10), (50,-35), (-50,-35), (20,-85), (-20,-85) );
+		hardpoints.setupSlots();
+		equipWeapon("ERSmallLaser",hardpoints.hd,3);
+		equipWeapon("Autocannon5",hardpoints.la,1);
+		equipWeapon("Autocannon5",hardpoints.ra,1);
+		equipWeapon("SRM6",hardpoints.ct,2);
+		equipWeapon("SRM6",hardpoints.ct,2);
+		equipStruct("SRM_Ammo",hardpoints.ll,2);
+		equipStruct("SRM_Ammo",hardpoints.rl,2);
+		equipStruct("AC5_Ammo",hardpoints.la,3);
+		equipStruct("AC5_Ammo",hardpoints.ra,3);
+	}
+}
+
 // Assault Mechs
 class Atlas : MechWarrior
 {
