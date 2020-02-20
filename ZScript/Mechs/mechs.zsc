@@ -303,6 +303,42 @@ class Raven : MechWarrior
 		equipStruct("AMSAmmo", hardpoints.lt, 2);
 	}
 }
+class Kitfox : MechWarrior
+{
+	Default
+	{
+		Mass 1200;
+		Player.DisplayName "KitFox - Prime";
+		Player.ViewHeight 50;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.Engine "ENGINE_XL_180";
+		MechWarriorBase.TwistRange 160;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.Weight 30;
+		MechWarriorBase.LegSpeed 77.92*MWGAMEPLAY_TURNRATE;
+		MechWarriorBase.Acceleration 1.15;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.MechPieces "Torso_Kitfox";
+		MechWarriorBase.CValue 2684420; 
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,18,13,13,20,10,14,14, 5,9,6,6,10,5,7,7 );
+		hardpoints.setupLocations( (0,20), (0,8), (20,13), (-20,13), (60,-20), (-60,-20), (30,-55), (-30,-55) );
+		hardpoints.setupSlots();
+		equipStruct("DoubleHeatsink",hardpoints.ll,1);
+		equipStruct("DoubleHeatsink",hardpoints.rl,1);
+		equipStruct("DoubleHeatsink",hardpoints.ct,1);
+		equipStruct("AC5_Ammo",hardpoints.ra,2);
+		equipWeapon("Autocannon5",hardpoints.ra,1);
+		equipWeapon("ERLargeLaser",hardpoints.la,2);
+		equipWeapon("SmallPulseLaser",hardpoints.la,2);
+		equipWeapon("SSRM4",hardpoints.ct,3);
+		equipStruct("SSRM_Ammo",hardpoints.rt,2);
+	}
+}
 // Medium Mechs
 class Stormcrow : MechWarrior
 {

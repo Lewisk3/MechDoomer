@@ -160,3 +160,11 @@ material texture models/Mechs/Raven/rv_full.png {
 material texture models/Mechs/Rifleman/rf_full.png {
 	shader "shaders/simsun.fp"
 }
+
+material texture models/Mechs/Marauder/mr_full.png {
+	shader "shaders/simsun.fp"
+}
+
+material texture models/Mechs/Kitfox/kf_full.png {
+	shader "shaders/simsun.fp"
+}

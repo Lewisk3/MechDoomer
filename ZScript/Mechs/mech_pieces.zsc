@@ -18,6 +18,7 @@ class Cockpit_Summoner    : MechCockpitModel {}
 class Cockpit_Raven   	  : MechCockpitModel {}
 class Cockpit_Rifleman 	  : MechCockpitModel {}
 class Cockpit_Marauder 	  : MechCockpitModel {}
+class Cockpit_Kitfox 	  : MechCockpitModel {}
 
 // Hips
 class Hips_Invisible   : MechHipsBase {}
@@ -36,6 +37,14 @@ class Hips_Summoner	   : MechHipsBase {}
 class Hips_Raven	   : MechHipsBase {}
 class Hips_Rifleman	   : MechHipsBase {}
 class Hips_Marauder	   : MechHipsBase {}
+class Hips_Kitfox	   : MechHipsBase {
+	override void Tick()
+	{
+		super.Tick();
+		// Follows torso angle.
+		angle = mechowner.models_reference.cockpit.angle;
+	}
+}
 
 // Legs	
 class Legs_Invisible   : MechLegsBase {}
@@ -54,6 +63,7 @@ class Legs_Summoner    : Legs_Smooth {}
 class Legs_Raven       : Legs_Smooth {}
 class Legs_Rifleman    : Legs_Smooth {}
 class Legs_Marauder    : Legs_Smooth {}
+class Legs_Kitfox      : Legs_Smooth {}
 
 // Torsos
 
@@ -120,6 +130,15 @@ class Torso_Raven : MechTorsoBase {
 		MechPartsBase.CockpitOffset 20, 55;
 		MechTorsoBase.CockpitRange 1.0, 0.4, 0.8;
 		MechTorsoBase.TwistSpeed 0.35;
+	}
+}
+class Torso_Kitfox : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Kitfox", "Legs_Kitfox", "Cockpit_Kitfox";
+		MechPartsBase.ZOffset 42;
+		MechPartsBase.CockpitOffset 5, 52;
+		MechTorsoBase.CockpitRange 0.75, 0.4, 0.35;
+		MechTorsoBase.TwistSpeed 0.3;
 	}
 }
 

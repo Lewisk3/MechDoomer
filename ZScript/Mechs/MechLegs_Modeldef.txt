@@ -1152,13 +1152,14 @@ Model Legs_Rifleman
    FrameIndex TLE4 F 0 65
 }
 
-// Marauder
-Model Legs_Marauder
+
+// Kitfox
+Model Legs_Kitfox
 {
-	Path "models/Mechs/Marauder"
-	Model 0 "mr_legs.md3"
+	Path "models/Mechs/Kitfox"
+	Model 0 "kf_legs.md3"
 	Scale 1.0 1.0 1.0
-	Skin 0 "mr_full.png" // Main
+	Skin 0 "kf_full.png" // Main
 	Offset 0 0 0 
 	
  // Walk
