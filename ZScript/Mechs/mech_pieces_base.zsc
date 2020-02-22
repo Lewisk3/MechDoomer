@@ -267,10 +267,18 @@ class MechCockpitModel : MechPartsBase
 					
 					// float rot_tic = rotatespeed/35.;
 					// A_SetAngle(MDMath.Strp(angle,toangle, rot_tic),SPF_INTERPOLATE);
-					
+					float old_pitch = pitch;
+					float old_angle = angle;
 					A_SetAngle(MDMath.Lerp(angle,toangle, rotatespeed*0.6),SPF_INTERPOLATE);
 					A_SetPitch(MDMath.Lerp(pitch,topitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
 					A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
+					
+					// Torso rotation sounds.
+					if( abs(old_pitch-pitch) > (rotatespeed*0.6) || 
+					    abs(old_angle-angle) > 0.1					) 
+						A_StartSound("Mech/TorsoTwist",CHAN_BODY,0,1,0.3); 
+					else 
+						A_StopSound(CHAN_BODY); 
 				}
 				else
 				{

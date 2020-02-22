@@ -177,9 +177,6 @@ void mech_movement()
 			}
 			return;
 		}
-	
-		if(player.cmd.yaw+player.cmd.pitch != 0 && (abs((angle-LegAng)) < MaxYaw || uncappedtorso) )
-			{ A_PlaySound("Mech/TorsoTwist",4,0.3,1); } else { A_StopSound(4); }
 			
 		if(throttle == 0) snd_accelerate = true;
 		if(GetPlayerInput(INPUT_FORWARDMOVE) > 0)
