@@ -312,7 +312,7 @@ class Kitfox : MechWarrior
 		Player.ViewHeight 50;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.Engine "ENGINE_XL_180";
-		MechWarriorBase.TwistRange 160;
+		MechWarriorBase.TwistRange 100;
 		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Weight 30;
 		MechWarriorBase.LegSpeed 77.92*MWGAMEPLAY_TURNRATE;

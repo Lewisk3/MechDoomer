@@ -138,9 +138,9 @@ class Torso_Raven : MechTorsoBase {
 class Torso_Kitfox : MechTorsoBase {
 	Default {
 		MechTorsoBase.Pieces "Hips_Kitfox", "Legs_Kitfox", "Cockpit_Kitfox";
-		MechPartsBase.ZOffset 42;
-		MechPartsBase.CockpitOffset 5, 52;
-		MechTorsoBase.CockpitRange 0.75, 0.4, 0.35;
+		MechPartsBase.ZOffset 50;
+		MechPartsBase.CockpitOffset 5, 57;
+		MechTorsoBase.CockpitRange 0.2, 0.4, 0.35;
 		MechTorsoBase.TwistSpeed 0.3;
 	}
 }
