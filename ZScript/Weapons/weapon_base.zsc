@@ -7,8 +7,8 @@ class Mechbase_Actor : FastProjectile
 	double basedamage;
 	int truedamage;
 	MechWarrior mechplayer;
-	float minimum_range;
-	float maximum_range;
+	double minimum_range;
+	double maximum_range;
 	bool cosmetic;
 	Sound firesound;
 	
@@ -30,17 +30,17 @@ class Mechbase_Actor : FastProjectile
 		// SetDamage(truedamage);
 		_SetBaseDamage();
 	}
-	void Converge(float spdfac=1.0)
+	void Converge(double spdfac=1.0)
 	{
-		float spd = CVar.GetCVar("mwd_converge_speed", mechplayer.player).getFloat()*spdfac;
+		double spd = CVar.GetCVar("mwd_converge_speed", mechplayer.player).getFloat()*spdfac;
 		if(mechplayer && spd > 0)
 		{
-			float truespd = vel.length()*spd;
+			double truespd = vel.length()*spd;
 			vector3 npos = pos-vel;
 			vector3 tpos = mechplayer.pos;
 			tpos.z += (mechplayer.viewheight*mechplayer.player.crouchfactor);
-			float ato = AngleTo(mechplayer);
-			float pto = MDMath.getPitchBetween(pos,tpos);
+			double ato = AngleTo(mechplayer);
+			double pto = MDMath.getPitchBetween(pos,tpos);
 			npos.x += ( cos(ato)*truespd);
 			npos.y += ( sin(ato)*truespd);
 			npos.z += (-sin(pto)*truespd);
@@ -73,11 +73,11 @@ class Mechbase_Actor : FastProjectile
 			
 		super.Tick();
 	}
-	float getTravelDistance()
+	double getTravelDistance()
 	{
 		return MDMath.Distance3D(pos, spawnpos);
 	}
-	float getPitchTo(Vector3 topos)
+	double getPitchTo(Vector3 topos)
 	{	
 		return MDMath.getPitchBetween(pos, topos);
 	}
@@ -102,8 +102,8 @@ class Mechbase_Actor : FastProjectile
 class Mechbase_Weapon : Item_NoPickup
 {
 	int cooldown_timer;
-	float volleycooldown;
-	float cooldown;
+	double volleycooldown;
+	double cooldown;
 	int group;
 	int WeaponID;
 	MechHardpoint hardpoint;
@@ -113,7 +113,7 @@ class Mechbase_Weapon : Item_NoPickup
 	int volley_inital;
 	bool volley_cosmetic;
 	int hardslots;
-	float weight;
+	double weight;
 	Name displayName;
 	class<Mechbase_Actor> weapType;
 	int weapDistance;
@@ -121,12 +121,12 @@ class Mechbase_Weapon : Item_NoPickup
 	int worth;
 	int ammouse;
 	int ammogive;
-	float lockonspeed;
-	float hitscan_dmg;
+	double lockonspeed;
+	double hitscan_dmg;
 	bool aimtarget;
 	bool target_inview;
-	float hitscan_distance;
-	//float hitscan_amt;
+	double hitscan_distance;
+	//double hitscan_amt;
 	int delay;
 	class<Mechbase_Ammo> ammotype;
 	Sound atksnd;
@@ -374,7 +374,7 @@ class Mechbase_Weapon : Item_NoPickup
 // Missiles
 class MechMissile : Mechbase_Actor
 {
-	float realdamage;
+	double realdamage;
 	bool homming;
 	bool inrange;
 	
@@ -413,7 +413,7 @@ class MechMissile : Mechbase_Actor
 	
 	override void tick()
 	{
-		float distance = getTravelDistance();
+		double distance = getTravelDistance();
 		if(inrange)
 		{
 			realdamage = basedamage * (1.0-(distance/(maximum_range*4.5)));
@@ -580,12 +580,12 @@ class RandomExplosions : MissileExplosion
 {
 	int expl_count;
 	int wait;
-	float zoffs;
+	double zoffs;
 	vector3 spawnpos;
-	float timer;
+	double timer;
 	Actor owner;
 		
-	static RandomExplosions TriggerOnActor(Actor onactor, int amt, int tics, float zoffset)
+	static RandomExplosions TriggerOnActor(Actor onactor, int amt, int tics, double zoffset)
 	{
 		let rexpl = RandomExplosions(Spawn("RandomExplosions",onactor.pos));
 		if(rexpl)
@@ -599,7 +599,7 @@ class RandomExplosions : MissileExplosion
 		return rexpl;
 	}
 	
-	static RandomExplosions Trigger(vector3 pos, int amt, int tics, float zoffset)
+	static RandomExplosions Trigger(vector3 pos, int amt, int tics, double zoffset)
 	{
 		let rexpl = RandomExplosions(Spawn("RandomExplosions",pos));
 		if(rexpl)
@@ -623,14 +623,14 @@ class RandomExplosions : MissileExplosion
 		let expl = Spawn("MissileExplosion", truepos);
 		if(expl)
 		{
-			float angle = frandom(-180,180);
-			float dist = frandom(-50,50);
+			double angle = frandom(-180,180);
+			double dist = frandom(-50,50);
 			vector3 npos = expl.pos;
 			npos.x += cos(angle)*dist;
 			npos.y += sin(angle)*dist;
 			npos.z += zoffs+frandom(-15,15);
 			expl.SetOrigin(npos,false);
-			float scalemod = frandom(0.5,1.5);
+			double scalemod = frandom(0.5,1.5);
 			expl.A_SetScale(scalemod,scalemod);
 			expl.bSPRITEFLIP = random(0,1);
 		}
@@ -665,7 +665,7 @@ class RandomExplosions : MissileExplosion
 class AMS_Missile : Mechbase_Actor
 {
 	int projdmg;
-	float convergefactor;
+	double convergefactor;
 	property Effectiveness : projdmg;
 	property Efficiency : convergefactor;
 	

@@ -2,7 +2,7 @@
 struct FadingText
 {
 	String txt;
-	float alpha;
+	double alpha;
 	int col;
 }
 
@@ -11,12 +11,12 @@ class MechStatusBar : BaseStatusBar
 	Mechwarrior mechplr;
 	HUDFont mHUDFont;
 	Actor prevtarg;
-	float hud_alpha; // Unused atm
+	double hud_alpha; // Unused atm
 	int tAlign;
 	TextureID compass;
 	bool invalid;
-	float compassoffs;
-	float compassdir;
+	double compassoffs;
+	double compassdir;
 	int hpcounter;
 	int scrwidth;
 	int scrheight;
@@ -37,23 +37,23 @@ class MechStatusBar : BaseStatusBar
 	vector2 font_scale;
 	
 	// Scalar constant
-	float defwidth;
-	float defheight;
-	float hud_xoffs;
-	float hud_yoffs;
+	double defwidth;
+	double defheight;
+	double hud_xoffs;
+	double hud_yoffs;
 	
 	Font fnt;
 	
 	// H_ Functions
 	mixin HUDScaleFunctions;
 	
-	Color getHealthyColor(float ratio, float tintalpha=1.0)
+	Color getHealthyColor(double ratio, double tintalpha=1.0)
 	{
 		if(ratio <= 0) return StatusColor.HSLtoRGB(0,1.0,0.0,1.0);
 		return StatusColor.HSLtoRGB(0.28*(ratio-0.3),1.0,0.5, tintalpha);
 	}
 	
-	float point_distance(Actor one, Actor two, float scale)
+	double point_distance(Actor one, Actor two, double scale)
 	{
 		int x = one.pos.x - two.pos.x;
 		int y = one.pos.y - two.pos.y;
@@ -124,7 +124,7 @@ class MechStatusBar : BaseStatusBar
 		super.tick();
 	}
 	
-	void drawWeapons(HUDFont fnt, vector2 pos, float scalex, float scaley)
+	void drawWeapons(HUDFont fnt, vector2 pos, double scalex, double scaley)
 	{
 		int lastweap;
 		if(CPlayer && CPlayer.mo)
@@ -230,7 +230,7 @@ class MechStatusBar : BaseStatusBar
 		DrawMainBar (TicFrac);
 	}
 	
-	int realAngle(float ang)
+	int realAngle(double ang)
 	{
 		return acos(cos(ang));
 	}
@@ -265,8 +265,8 @@ class MechStatusBar : BaseStatusBar
 				// Torso angle
 				if( !mech.pilotlook ) 
 				{
-					float angdiff = MDMath.NormalizeAngle(mech.angle-mech.LegAng);
-					float angmax = angdiff/(mech.uncappedtorso ? 180 : mech.MaxYaw);
+					double angdiff = MDMath.NormalizeAngle(mech.angle-mech.LegAng);
+					double angmax = angdiff/(mech.uncappedtorso ? 180 : mech.MaxYaw);
 					H_Fill(Color(int(255),0,255,0),960,45,-(angmax*185),10);
 					if( abs(angdiff) <= 1)H_Fill(Color(255,0,255,0),960,45,4,10);
 				}
@@ -284,28 +284,28 @@ class MechStatusBar : BaseStatusBar
 			double sizemul = (200/MWHEAT_MAX)*3;
 			if(mech.HeatLevel > heatmid)
 			{
-				float hmin = clamp(mech.HeatLevel-heatmid,0,heatmid);
-				float hmax = clamp(-(mech.HeatLevel-heatmid),-heatmid,0);
+				double hmin = clamp(mech.HeatLevel-heatmid,0,heatmid);
+				double hmax = clamp(-(mech.HeatLevel-heatmid),-heatmid,0);
 				H_Fill(Color(255,255,0,0),heatpos.x,heatpos.y,hmin*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
 				H_Fill(Color(255,255,0,0),heatpos.x,heatpos.y,hmax*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
 			}
 			else
 			{
-				float hmin = clamp(mech.HeatLevel,0,heatmid);
-				float hmax = clamp(-(mech.HeatLevel),-heatmid,0);
+				double hmin = clamp(mech.HeatLevel,0,heatmid);
+				double hmax = clamp(-(mech.HeatLevel),-heatmid,0);
 				H_Fill(Color(255,2,30,216),heatpos.x,heatpos.y,143-(hmin)*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
 				H_Fill(Color(255,2,30,216),heatpos.x,heatpos.y,-(148+((hmax)*sizemul)),20, MD_SBS.SS_SCREEN_CENTER);
 			}
 			H_DrawString("dH/dT",(deltapos.x-127,deltapos.y+30),MD_SBS.SS_SCREEN_CENTER);
 			H_Fill(Color(255,206,206,0),deltapos.x-128,deltapos.y,125,20, MD_SBS.SS_SCREEN_CENTER);
-			float hmax = clamp(-(mech.deltaHeat),-heatmid,0);
+			double hmax = clamp(-(mech.deltaHeat),-heatmid,0);
 			H_Fill(Color(255,2,30,216),deltapos.x,deltapos.y,-(130+((hmax)*sizemul)),20, MD_SBS.SS_SCREEN_CENTER);
 			
 		}
 	}
 	
 	
-	void Draw_Compass(float xoffs=0, float yoffs=0, float woffs=0)
+	void Draw_Compass(double xoffs=0, double yoffs=0, double woffs=0)
 	{
 		if(!CPlayer || !CPlayer.mo) return;
 		let mechplr = Mechwarrior(CPlayer.mo);
@@ -331,8 +331,8 @@ class MechStatusBar : BaseStatusBar
 		//crectxy   = H_AdjustCoord(crectxy);
 		//crectab   = H_AdjustCoord(crectab);
 		
-		float cang = mechplr.defaultmovement ? (mechplr.angle%360) : (mechplr.LegAng%360);
-		float pang = cang-79;
+		double cang = mechplr.defaultmovement ? (mechplr.angle%360) : (mechplr.LegAng%360);
+		double pang = cang-79;
 		vector2 Npos = MDMath.VRotate(basepos,pang)+offsetpos;
 		vector2 Spos = MDMath.VRotate(basepos,pang+180)+offsetpos;
 		vector2 Epos = MDMath.VRotate(basepos,pang+90)+offsetpos;
@@ -357,19 +357,19 @@ class MechStatusBar : BaseStatusBar
 	{	
 		if(CPlayer && CPlayer.mo)
 		{
-			float scale = 7;
+			double scale = 7;
 			let mech = MechWarrior(CPlayer.mo);
 			if(!mech) return;
 			ThinkerIterator act_it = ThinkerIterator.Create("Actor");
 			Actor obj;
 						
 			// Draw FOV bars (For some reason the xaxis needs to be divided by 2 to scale correctly.)
-			float drawang = mech.defaultmovement ? 90 : mech.angle-mech.LegAng+90;
+			double drawang = mech.defaultmovement ? 90 : mech.angle-mech.LegAng+90;
 			drawAngledLine(259,203,165,drawang,mech.player.FOV/2,Color(255,53,255,53));
 			drawAngledLine(259,203,165,drawang,-mech.player.FOV/2,Color(255,53,255,53));
 	
-			float radarx = 260;
-			float radary = 200;
+			double radarx = 260;
+			double radary = 200;
 			H_DrawImage("MECRADAR",(radarx,radary),0,(1.1,0.9));
 			
 			while(obj = Actor(act_it.Next()))
@@ -379,7 +379,7 @@ class MechStatusBar : BaseStatusBar
 				int dis = point_distance(obj,Actor(CPlayer.mo),scale);
 				if( dis < 135 )
 				{
-					float frontangle = mech.angle+180;
+					double frontangle = mech.angle+180;
 					int dx = ( y * cos((frontangle) )) - ( x * sin((frontangle)) );
 					int dy = ( y * sin((frontangle) )) + ( x * cos((frontangle)) );
 					dx /= scale;
@@ -396,13 +396,13 @@ class MechStatusBar : BaseStatusBar
 		}
 	}
 	
-	float GetHardpointVitalRatio(MechHardpoint hp)
+	double GetHardpointVitalRatio(MechHardpoint hp)
 	{
-		float hp_vitals    = hp.armor+hp.internalhp;
-		float hp_maxvitals = hp.max_armor+hp.max_internal;
+		double hp_vitals    = hp.armor+hp.internalhp;
+		double hp_maxvitals = hp.max_armor+hp.max_internal;
 		if(hp.internalhp <= 0) hp_vitals = 0;
 		if(hp_vitals == 0) return 1.0;
-		float vres = 1.0 - (hp_vitals / hp_maxvitals);
+		double vres = 1.0 - (hp_vitals / hp_maxvitals);
 		if(vres < 0.1) vres = 0;
 		return vres;
 	}
@@ -449,7 +449,7 @@ class MechStatusBar : BaseStatusBar
 				H_DrawString("Type: " .. mech.targetenemy.getTag(),(86,960));
 				H_DrawString("Distance: " .. dist .. "m",(86,980));
 				// Enemy health bar
-				float percenthealth = float(mech.targetenemy.SpawnHealth()-(mech.targetenemy.SpawnHealth()-hpcounter) ) / mech.targetenemy.SpawnHealth();
+				double percenthealth = double(mech.targetenemy.SpawnHealth()-(mech.targetenemy.SpawnHealth()-hpcounter) ) / mech.targetenemy.SpawnHealth();
 				if(mech.targetenemy.health < hpcounter)hpcounter -= (hpcounter-mech.targetenemy.health)*0.1;
 				if(hpcounter == 0) hpcounter = mech.targetenemy.health;
 				if(mech.targetenemy.health <= 0) hpcounter = 0;
@@ -470,14 +470,14 @@ class MechStatusBar : BaseStatusBar
 			// Draw armor/paperdoll
 
 			
-			float hd_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.hd);
-			float ct_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ct);
-			float lt_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.lt);
-			float rt_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.rt);
-			float la_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.la);
-			float ra_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ra);
-			float ll_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.rl);
-			float rl_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ll);
+			double hd_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.hd);
+			double ct_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ct);
+			double lt_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.lt);
+			double rt_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.rt);
+			double la_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.la);
+			double ra_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ra);
+			double ll_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.rl);
+			double rl_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ll);
 			
 			//console.printf("%f :> %d",ct_dmg,mech.inv_context.hardpoints.ct.armor+mech.inv_context.hardpoints.ct.internalhp);
 			
@@ -573,8 +573,8 @@ class MechStatusBar : BaseStatusBar
 		if(!mech.display_objectives) return;
 		vector2 objpos = (-470,-200);
 		uint flags = MD_SBS.SS_SCREEN_CENTER;
-		float bigscale = 2.0;
-		float smallscale = 1.2;
+		double bigscale = 2.0;
+		double smallscale = 1.2;
 		H_DrawString("MISSION OBJECTIVES",objpos,flags,Font.CR_SAPPHIRE,(bigscale,bigscale));
 		
 		int yoffs = 50;
@@ -590,7 +590,7 @@ class MechStatusBar : BaseStatusBar
 				suffix = "Failed";
 				scol = Font.CR_BRICK;
 			}
-			float xoffs = prefix.length()*17;
+			double xoffs = prefix.length()*17;
 			H_DrawString(prefix,(objpos.x,objpos.y+yoffs),flags,Font.CR_SAPPHIRE,(smallscale,smallscale));
 			H_DrawString(main,(objpos.x+xoffs,objpos.y+yoffs),flags,Font.CR_GREEN,(smallscale,smallscale));
 			H_DrawString(suffix,(objpos.x+940,objpos.y+yoffs),flags,scol,(smallscale,smallscale));

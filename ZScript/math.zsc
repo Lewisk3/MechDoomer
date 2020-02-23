@@ -1,16 +1,21 @@
 // Credits: https://gist.github.com/itsmrpeck/be41d72e9d4c72d2236de687f6f53974
 class MDMath Abstract
 {	
-	// Round float to nearest place
-	static float RoundFloat(float input, float place=100.)
+	// Round double to nearest place
+	static double RoundFloat(double input, double place=100.)
 	{
 		return floor(input*place)/place;
 	}
+	// Kinda redundant, but for naming reasons it stays.
+	static double RoundNearest(double input, double toval=0.05)
+	{
+		return ceil(input/toval)*toval;
+	}
 
 	// Straight interpolate
-	static float Strp(float a, float b, float value, float dampen=0.7)
+	static double Strp(double a, double b, double value, double dampen=0.7)
 	{	
-		float dampenv = value * (1-(dampen**(abs(a-b)/value)));
+		double dampenv = value * (1-(dampen**(abs(a-b)/value)));
 		console.printf("dampenval %f", dampenv);
 		if(a < b) a += dampenv;
 		if(a > b) a -= dampenv;
@@ -19,14 +24,14 @@ class MDMath Abstract
 	}
 	
 	// Linear interpolate
-	static float Lerp(float a, float b, float lerpFactor)
+	static double Lerp(double a, double b, double lerpFactor)
 	{
-		float result = ((1.f - lerpFactor) * a) + (lerpFactor * b);
+		double result = ((1.f - lerpFactor) * a) + (lerpFactor * b);
 		return result;
 	}
 	
 	// Linear interpolate 3D vectors
-	static vector3 Lerp3D(vector3 a, vector3 b, float lerpfactor)
+	static vector3 Lerp3D(vector3 a, vector3 b, double lerpfactor)
 	{
 		vector3 result = a;
 		result.x = Lerp(result.x,b.x,lerpfactor);
@@ -36,14 +41,14 @@ class MDMath Abstract
 	}
 	
 	// Determine if number v is in range of -r, r relative to t
-	clearscope static bool inRange(float v, float t, float r)
+	clearscope static bool inRange(double v, double t, double r)
 	{
 		return (v >= t-r && v <= t+r);
 	}
 	
 	
 	// Normalizes angle between -180, 180 degrees.
-	static float NormalizeAngle(float ang)
+	static double NormalizeAngle(double ang)
 	{
 		while(ang > 180) ang -= 360;
 		while(ang < -180) ang += 360;
@@ -51,10 +56,10 @@ class MDMath Abstract
 	}
 	
 	// Lerps from angle a to b (both between 0.f and 360.f), taking the shortest path
-	static float LerpDegrees(float a, float b, float lerpFactor) 
+	static double LerpDegrees(double a, double b, double lerpFactor) 
 	{
-		float result;
-		float diff = b - a;
+		double result;
+		double diff = b - a;
 		if (diff < -180.f)
 		{
 			// lerp upwards past 360
@@ -85,7 +90,7 @@ class MDMath Abstract
 	}
 	
 	// Pitch between 2 vectors.
-	static float getPitchBetween(Vector3 one, Vector3 two)
+	static double getPitchBetween(Vector3 one, Vector3 two)
 	{	
 		vector3 delta = ( one.x - two.x, one.y - two.y, one.z - two.z );
 		double pitchto = VectorAngle( sqrt(delta.y * delta.y + delta.x * delta.x), delta.z );
@@ -93,7 +98,7 @@ class MDMath Abstract
 	}
 	
 	// Distance 3D on vectors, not actors.
-	static float Distance3D(vector3 one, vector3 two)
+	static double Distance3D(vector3 one, vector3 two)
 	{
 		return sqrt( (two.x - one.x)**2 + (two.y - one.y)**2 + (two.z - one.z)**2 );
 	}
@@ -117,5 +122,10 @@ class MDMath Abstract
 		return ( xoffs * cos(angle) - yoffs * sin(angle),
 				 yoffs * cos(angle) + xoffs * sin(angle) )*dist;
 	}
-		
+	
+	// UI Features
+	static String GetPrintableFloat(double value, int places=2, double nearest=0.05)
+	{
+		return String.Format("%."..places.."f", RoundNearest(value,nearest));
+	}		
 }

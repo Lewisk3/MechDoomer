@@ -4,11 +4,11 @@ const statscr_base_height = 1080.0;
 // All H_ function auto adjust to the screen resolution based on 1080p coords.	
 mixin class HUDScaleFunctions
 {
-	void H_DrawImage(String img, vector2 pos, uint flags=0, vector2 scale=(1,1), float alpha=1, Color tint=Color(0,0,0,0))
+	void H_DrawImage(String img, vector2 pos, uint flags=0, vector2 scale=(1,1), double alpha=1, Color tint=Color(0,0,0,0))
 	{
 		MD_SBS.DrawImage(img,pos,flags,alpha,scale,tint);
 	}
-	void H_DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1), float alpha=1)
+	void H_DrawTexture(TextureID texture, Vector2 pos, int flags = 0, Vector2 scale = (1, 1), double alpha=1)
 	{
 		MD_SBS.DrawTexture(texture,pos,flags,alpha,scale);
 	}
@@ -25,21 +25,21 @@ mixin class HUDScaleFunctions
 		if(visualize) MD_SBS.Fill(Color(255,0,255,0), x,y,width,height );			
 		MD_SBS.SetClipRect(x,y,width,height);
 	}
-	void H_DrawStringBigFont(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, float alpha=1)
+	void H_DrawStringBigFont(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, double alpha=1)
 	{
 		MD_SBS.DrawString("dbigfont", str, pos, flags, translation, alpha, font_scale);
 	}
-	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, vector2 scale=(1,1), float alpha=1, Font customfont=NULL)
+	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, vector2 scale=(1,1), double alpha=1, Font customfont=NULL)
 	{
 		Font fnt = "MechFont";
 		if (customfont) fnt = customfont;
 		
-		float fontscale = CVar.GetCVar("mwd_fontscale", mechplr.player).getFloat();
+		double fontscale = CVar.GetCVar("mwd_fontscale", mechplr.player).getFloat();
 		vector2 finalscale = (font_scale.x*scale.x, font_scale.y*scale.y);
 		finalscale *= fontscale;
 		MD_SBS.DrawString("MechFont",str,pos,flags,translation,alpha,finalscale);
 	}
-	void drawAngledLine(int x, int y, int distance, float angle, float fov, Color c)
+	void drawAngledLine(int x, int y, int distance, double angle, double fov, Color c)
 	{
 		MD_SBS.DrawLine(x,y,x+(cos(angle+fov)*(distance*1.1)),y-(sin(angle+fov)*(distance*0.9)),c);
 	}
@@ -53,7 +53,7 @@ mixin class HUDScaleFunctions
 
 class StatusColor Abstract 
 {
-	static clearscope float hue2rgb(float p, float q, float t)
+	static clearscope double hue2rgb(double p, double q, double t)
 	{
 		if(t < 0) t += 1;
 		if(t > 1) t -= 1;
@@ -62,17 +62,17 @@ class StatusColor Abstract
 		if(t < 2./3.) return p + (q - p) * (2./3. - t) * 6;
 		return p;
 	}
-	static clearscope Color hslToRgb(float h,float s,float l, float alpha=1.0)
+	static clearscope Color hslToRgb(double h,double s,double l, double alpha=1.0)
 	{
-		float r, g, b;
+		double r, g, b;
 		if(s == 0)
 		{
 			r = g = b = l;
 		} 
 		else
 		{
-			float q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-			float p = 2 * l - q;
+			double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+			double p = 2 * l - q;
 			r = hue2rgb(p, q, h + 1./3.);
 			g = hue2rgb(p, q, h);
 			b = hue2rgb(p, q, h - 1./3.);
@@ -162,7 +162,7 @@ class MD_SBS Abstract ui
 	}
 	
 	static void DrawMugshot( int accuracy, vector2 pos, int drawflags = 0, int mugshotflags = 0, 
-							 float alpha = 1.0, vector2 scale=(5.0,5.0), string default_face="STF"			)
+							 double alpha = 1.0, vector2 scale=(5.0,5.0), string default_face="STF"			)
 	{
 		TextureID mugtex = statusbar.GetMugshot(accuracy, mugshotflags, default_face);
 		DrawTexture(mugtex, pos, drawflags, 1.0, scale);
@@ -188,7 +188,7 @@ class MD_SBS Abstract ui
 		
 		for(int i = 0; i < lines.Size(); i++)
 		{
-			 float lineoffs = (linespacing*i);
+			 double lineoffs = (linespacing*i);
 			 Screen.DrawText(fnt, translation, npos.x, npos.y+lineoffs, 
 				lines[i],
 				DTA_VirtualWidthF,  int(statscr_base_width*(1./scale.x*0.5)),
@@ -203,8 +203,8 @@ class MD_SBS Abstract ui
 	static void Fill(Color col, double x, double y, double w, double h, int flags = 0)
 	{
 		vector2 pos = (x, y);
-		float sc_xres = Screen.getWidth()/statscr_base_width;
-		float sc_yres = Screen.getHeight()/statscr_base_height;		
+		double sc_xres = Screen.getWidth()/statscr_base_width;
+		double sc_yres = Screen.getHeight()/statscr_base_height;		
 		vector2 npos = _ProcessCoords(pos, flags);
 		npos.x *= sc_xres;
 		npos.y *= sc_yres;
@@ -214,12 +214,12 @@ class MD_SBS Abstract ui
 		Screen.Dim(col, 1.0, npos.x, npos.y, w, h);
 	}
 	
-	static void DrawLine(int x0, int y0, int x1, int y1, Color color, float alpha = 1.0, int flags = 0)
+	static void DrawLine(int x0, int y0, int x1, int y1, Color color, double alpha = 1.0, int flags = 0)
 	{
 		vector2 posFrom = (x0, y0);
 		vector2 posTo = (x1, y1);
-		float sc_xres = Screen.getWidth()/statscr_base_width;
-		float sc_yres = Screen.getHeight()/statscr_base_height;		
+		double sc_xres = Screen.getWidth()/statscr_base_width;
+		double sc_yres = Screen.getHeight()/statscr_base_height;		
 		vector2 nposFrom = _ProcessCoords(posFrom, flags);
 		vector2 nposTo = _ProcessCoords(posTo, flags);
 		nposTo.x *= sc_xres;
@@ -231,8 +231,8 @@ class MD_SBS Abstract ui
 	
 	static void SetClipRect(int x, int y, int w, int h)
 	{
-		float sc_xres = Screen.getWidth()/statscr_base_width;
-		float sc_yres = Screen.getHeight()/statscr_base_height;		
+		double sc_xres = Screen.getWidth()/statscr_base_width;
+		double sc_yres = Screen.getHeight()/statscr_base_height;		
 		x *= sc_xres;
 		y *= sc_yres;
 		w *= sc_xres;
@@ -242,8 +242,8 @@ class MD_SBS Abstract ui
 	
 	static vector2 GetRelativePos(vector2 pos)
 	{
-		float sc_xres = Screen.getWidth()/statscr_base_width;
-		float sc_yres = Screen.getHeight()/statscr_base_height;	
+		double sc_xres = Screen.getWidth()/statscr_base_width;
+		double sc_yres = Screen.getHeight()/statscr_base_height;	
 		return (pos.x*sc_xres, pos.y*sc_yres);
 	}
 	

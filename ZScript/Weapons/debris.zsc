@@ -32,8 +32,8 @@ class Debris_Spawner : Actor
 			int angle = angle+random(-360,360);
 			int speed = 3;
 			Vector3 npos = pos;
-			float xo = -(cos(angle)*30);
-			float yo = -(sin(angle)*30);
+			double xo = -(cos(angle)*30);
+			double yo = -(sin(angle)*30);
 			npos.x += xo;
 			npos.y += yo;
 			let debris = Spawn("DEBRIS_3D",npos);

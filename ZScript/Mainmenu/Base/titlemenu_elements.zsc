@@ -20,7 +20,7 @@ class TextElement ui
 		return txt;
 	}
 	
-	void Draw(float alpha=1.0, Color tint=Color(0,0,0,0), int linespace=20)
+	void Draw(double alpha=1.0, Color tint=Color(0,0,0,0), int linespace=20)
 	{
 		MD_SBS.DrawString(text_font,txt,pos,0,font_color,alpha, scale, tint, linespace);
 	}
@@ -41,7 +41,7 @@ class Button ui
 	vector2 texsize;
 	
 	static Button Create(String offtex, String ontex, 
-						 float x, float y, float sw, float sh, TextElement txt=NULL)
+						 double x, double y, double sw, double sh, TextElement txt=NULL)
 	{
 		let btn = new("Button");
 		if(btn)
@@ -61,12 +61,12 @@ class Button ui
 		return btn;
 	}
 	
-	void SetupCollider(float x, float y, float w, float h)
+	void SetupCollider(double x, double y, double w, double h)
 	{
 		collider = MenuRect.Create(x,y,w,h,true);
 	}
 	
-	void ScaleCollider(float wpart, float hpart)
+	void ScaleCollider(double wpart, double hpart)
 	{
 		vector2 ntexsize = texsize;
 		ntexsize.x *= wpart;
@@ -90,14 +90,14 @@ class Button ui
 		 MD_SBS.DrawString("SmallFont","Clicked: " .. int(clicked), (50,150));
 	}
 	
-	void Draw(float alpha=1.0, Color tint=Color(0,0,0,0))
+	void Draw(double alpha=1.0, Color tint=Color(0,0,0,0))
 	{
 		MD_SBS.DrawTexture(cur_tex,btnrect.pos,0,alpha,btnrect.size,tint);
 		if(btntext)
 		{
 			vector2 tscale = btntext.scale;
-			float xoffs = (btnrect.pos.x*tscale.x)+10; 
-			float yoffs = (btnrect.pos.y*tscale.y)+(btnrect.size.y*200);
+			double xoffs = (btnrect.pos.x*tscale.x)+10; 
+			double yoffs = (btnrect.pos.y*tscale.y)+(btnrect.size.y*200);
 			MD_SBS.DrawString(btntext.text_font, btntext.txt,(xoffs,yoffs),0,btntext.font_color,alpha,tscale,tint);
 		}
 	}
@@ -132,7 +132,7 @@ class Mouse ui
 	bool right_clicked;
 	int scroll;
 	
-	static Mouse Create(String tex, float x, float y, float w, float h)
+	static Mouse Create(String tex, double x, double y, double w, double h)
 	{
 		let ms = new("Mouse");
 		if(ms) 
@@ -166,7 +166,7 @@ class Mouse ui
 		 MD_SBS.DrawString("SmallFont","RClicked: " .. int(right_clicked), (50,500));
 	}
 	
-	void Draw(float alpha=1.0, Color tint=Color(0,0,0,0))
+	void Draw(double alpha=1.0, Color tint=Color(0,0,0,0))
 	{
 		if(tex) 
 		{
@@ -216,7 +216,7 @@ class MenuRect ui
 	vector2 size;
 	bool relativepos;
 	
-	static MenuRect Create(float x, float y, float w, float h, bool relative=true)
+	static MenuRect Create(double x, double y, double w, double h, bool relative=true)
 	{
 		let nr = new("MenuRect");
 		if(nr)
@@ -280,22 +280,22 @@ class MenuTexture ui
 		return mtex;
 	}
 	
-	void Draw(float alpha=1.0, Color tint=Color(0,0,0,0))
+	void Draw(double alpha=1.0, Color tint=Color(0,0,0,0))
 	{
 		MD_SBS.DrawTexture(tex,pos,MD_SBS.SS_SCREEN_CENTER,alpha,scale,tint);
 	}
-	void DrawEx(vector2 rpos, vector2 rscale, float alpha, Color tint=Color(0,0,0,0))
+	void DrawEx(vector2 rpos, vector2 rscale, double alpha, Color tint=Color(0,0,0,0))
 	{
 		MD_SBS.DrawTexture(tex,rpos,0,alpha, rscale, tint);
 	}
-	void Move(float xoffs, float yoffs, bool relative=true)
+	void Move(double xoffs, double yoffs, bool relative=true)
 	{
 		xoffs = relative ? pos.x+xoffs : xoffs;
 		xoffs = relative ? pos.y+yoffs : yoffs;
 		pos.x = xoffs;
 		pos.y = yoffs;
 	}
-	void SetScale(float xscale, float yscale)
+	void SetScale(double xscale, double yscale)
 	{
 		scale.x = xscale;
 		scale.y = yscale;
@@ -333,7 +333,7 @@ extend class MD_SBS
 		}
 	}
 	
-	static void Dim(Color c, float alpha)
+	static void Dim(Color c, double alpha)
 	{
 		Screen.Dim(c,alpha,0,0,Screen.GetWidth(),Screen.GetHeight());
 	}

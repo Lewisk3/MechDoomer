@@ -1,6 +1,6 @@
 struct Rect 
 {
-	float x,y,w,h;
+	double x,y,w,h;
 }
 
 class Item_NoPickup : Inventory
@@ -28,8 +28,8 @@ struct UIObject play
 	bool mousebtntwo_click;
 	int mousex;
 	int mousey;
-	float mousex_delta; // unused
-	float mousey_delta; // unused
+	double mousex_delta; // unused
+	double mousey_delta; // unused
 	int key;
 }
 

@@ -45,8 +45,8 @@ extend class MechwarriorBase;
 void startMechbay()
 {
 	let bay = Spawn("mechbay",pos);
-	float xo = (cos(angle+12))*32;
-	float yo = (sin(angle+12))*32;
+	double xo = (cos(angle+12))*32;
+	double yo = (sin(angle+12))*32;
 	let door = Spawn("Door_3D",(pos.x+xo,pos.y+yo,pos.z+60));
 	if(bay)bay.angle = angle;
 	if(door)door.angle = angle+128;
@@ -60,7 +60,7 @@ void startMechbay()
 	lockpitch = pitch;
 }
 
-bool adjustTonnage(float amt, bool force=false)
+bool adjustTonnage(double amt, bool force=false)
 {
 	if(MDMath.RoundFloat(inv_context.weapons_tonnage+amt) > mech_tonnage && !force && !CheckCompensative()) return false;
 	inv_context.weapons_tonnage += amt;

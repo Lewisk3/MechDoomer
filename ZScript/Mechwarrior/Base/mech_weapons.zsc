@@ -12,7 +12,7 @@ bool targetlocked;
 bool weapons_fired;
 int selectedGroup;
 int selectedWeapon;
-float locktimer;
+double locktimer;
 
 // Normalize
 void normalizeWeaponsID(int offs)

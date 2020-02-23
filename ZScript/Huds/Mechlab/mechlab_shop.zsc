@@ -272,7 +272,7 @@ void drawShopInfo()
 	String maxspd = mechplr.MoveSpeedKPH .. "";
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
 
-	if(mechplr.CheckCompensative()) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
+	if(mechplr.CheckCompensative()) maxspd = double(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
 	
 	maxspd.truncate(maxspd.Length()-4);
 	heateff.truncate(heateff.Length()-3);
@@ -290,7 +290,7 @@ void drawShopInfo()
 	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+150));
 	
 	vector2 cbillpos  = (280,110);
-	float cbills_remain = mechplr.inv_context.money_cbills-item_cost;
+	double cbills_remain = mechplr.inv_context.money_cbills-item_cost;
 	String balstr = (cbills_remain < 0) ? "INVALID" : int(cbills_remain).."";
 	H_DrawString("Funds: ".. mechplr.inv_context.money_cbills, cbillpos);
 	H_DrawString("Price: ".. item_cost, (cbillpos.x, cbillpos.y+25) );

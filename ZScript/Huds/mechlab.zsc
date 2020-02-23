@@ -71,8 +71,8 @@ class Mechlab_Menu : GenericMenu
 	int infomode;
 	int invoffset;
 	
-	// Floats
-	float messagepos_yscale; // Messagebox slide
+	// doubles
+	double messagepos_yscale; // Messagebox slide
 	
 	// Rectangles
 	Color debug_color;
@@ -337,7 +337,7 @@ class Mechlab_Menu : GenericMenu
 			{
 				for(int i = 0; i < text.Size(); i++)
 				{
-					float yoffs = (messagepos.y-200) + i*25;
+					double yoffs = (messagepos.y-200) + i*25;
 					H_DrawString(text[i],(messagepos.x-240,yoffs),0,plrHudMessage.col,(1,1),1.0);
 				}
 				H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-80),0,Font.CR_White,(1,1),plrHudMessage.alpha);

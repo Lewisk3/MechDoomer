@@ -3,7 +3,7 @@ class MechDoomerEvents : EventHandler
 {
 	ColorTintShaderManager ShaderManager;
 	ui Mechlab_Menu mechlab;
-	float screenfade;
+	double screenfade;
 	Color screenfadecolor;
 	
 	ui void PrintException(String fmt, int xoffs=0, int yoffs=0)
@@ -319,7 +319,7 @@ class MechDoomerEvents : EventHandler
 				let mech = plr.inv_context.mechs[e.Args[0]];
 				if(mech) 
 				{
-					float value = GetDefaultByType(mech.baseclass).worth/2;
+					double value = GetDefaultByType(mech.baseclass).worth/2;
 					plr.RemoveInventory(mech.inv_context);
 					plr.inv_context.mechs.delete(e.Args[0]);
 					plr.adjustMoney(value);

@@ -4,10 +4,10 @@
 extend class MechWarriorBase;
 	
 // Armor Systems
-float CalculateArmorWeight(bool update=true)
+double CalculateArmorWeight(bool update=true)
 {
-	float apweight = GetDefaultByType("EndosteelBonus").weight;
-	float aw;
+	double apweight = GetDefaultByType("EndosteelBonus").weight;
+	double aw;
 	aw += hardpoints.hd.max_armor*apweight;
 	aw += hardpoints.ct.max_armor*apweight;
 	aw += hardpoints.lt.max_armor*apweight;
@@ -40,8 +40,7 @@ float CalculateArmorWeight(bool update=true)
 bool AddArmorWeight(int amt)
 {
 	double addtons = GetDefaultByType("EndosteelBonus").weight*amt;
-	float correctedtons = MDMath.RoundFloat(inv_context.weapons_tonnage+addtons);
-	if(correctedtons > mech_tonnage && !CheckCompensative()) return false;
+	if(MDMath.RoundFloat(inv_context.weapons_tonnage+addtons) > mech_tonnage && !CheckCompensative()) return false;
 	adjustTonnage(-inv_context.armor_tonnage);
 	inv_context.armor_tonnage += addtons;
 	adjustTonnage(inv_context.armor_tonnage);
@@ -68,8 +67,7 @@ bool AdjustMaxArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
 	}
 	
 	double addtons = GetDefaultByType("EndosteelBonus").weight*amt;
-	float correctedtons = MDMath.RoundFloat(inv_context.weapons_tonnage+addtons);
-	if(correctedtons > mech_tonnage && !CheckCompensative()) return false;
+	if(MDMath.RoundFloat(inv_context.weapons_tonnage+addtons) > mech_tonnage && !CheckCompensative()) return false;
 	hp.max_armor += amt;
 	adjustTonnage(-inv_context.armor_tonnage);
 	inv_context.armor_tonnage += addtons;
@@ -81,8 +79,8 @@ bool AdjustMaxArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
 clearscope int CalculateHardpointRepairCost(MechHardpoint hp, int stat)
 {
 	int repair_cost = 0;
-	float armor_ratio = hp.defmax_armor <= 0 ? 0 : 1.0 - (!hp.armor ? 1 : hp.armor)/hp.defmax_armor;
-	float internalhp_ratio = 1.0 - (!hp.internalhp ? 1 : hp.internalhp)/hp.max_internal;
+	double armor_ratio = hp.defmax_armor <= 0 ? 0 : 1.0 - (!hp.armor ? 1 : hp.armor)/hp.defmax_armor;
+	double internalhp_ratio = 1.0 - (!hp.internalhp ? 1 : hp.internalhp)/hp.max_internal;
 	if(stat == 0 && 	 armor_ratio > 0 ) repair_cost = (4750*armor_ratio)+(hp.defmax_armor*50);
 	if(stat == 1 && internalhp_ratio > 0 ) repair_cost = (1250*internalhp_ratio)+(hp.max_internal*25);
 	return repair_cost;
@@ -151,7 +149,7 @@ void DamageCritSounds(MechHardpoint hp)
 	if(hp == hardpoints.ct) mechsounds.pushSound("Mech/Betty/CenterTorso");
 }
 
-void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false)
+void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false)
 {
 	// Update for over-max armor, via EndosteelBonuses.
 	if(hp.armor > 0 && !noarmor) 
@@ -213,7 +211,7 @@ void DamageHardpoint(MechHardpoint hp, float dmg, bool noarmor=false)
 		SpreadHardpointDamage(hp,dmg);
 	}
 }
-void ProcessHardpointDamage(Name mod, float damage, Actor damager = NULL)
+void ProcessHardpointDamage(Name mod, double damage, Actor damager = NULL)
 {	
 	bool heatdmg = ( mod == "overheating" );
 	if(mod == "MechDamage_CT" || (heatdmg && random(1,5)==5) ) DamageHardpoint(hardpoints.ct,damage,heatdmg&&random(0,1));
@@ -235,7 +233,7 @@ void ProcessHardpointDamage(Name mod, float damage, Actor damager = NULL)
 		ProcessDeath(damager);
 	}
 }
-void SpreadHardpointDamage(MechHardpoint hp, float dmg)
+void SpreadHardpointDamage(MechHardpoint hp, double dmg)
 {
 	if(hp == hardpoints.la) DamageHardpoint(hardpoints.lt,dmg/2);
 	if(hp == hardpoints.ra) DamageHardpoint(hardpoints.rt,dmg/2);

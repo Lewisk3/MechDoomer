@@ -10,7 +10,7 @@ enum MechTypes
 }
 
 // Properties
-float baseHeatEfficiency;
+double baseHeatEfficiency;
 uint mechtype;
 
 // Vars
@@ -23,10 +23,10 @@ bool heatwarn;
 bool supersink;
 bool InfraredActive;
 int ams_timer;
-float HeatEfficiency;
-float HeatLevel;
-float prevheat;
-float deltaHeat;
+double HeatEfficiency;
+double HeatLevel;
+double prevheat;
+double deltaHeat;
 String crosshair_sprite;
 
 // Crosshair(s)
@@ -38,7 +38,7 @@ void SetCrosshair(int ind)
 }
 
 // Drone
-void ToggleDrone(float cdist, float rotspd, float angdist, bool front, bool alwayson=false)
+void ToggleDrone(double cdist, double rotspd, double angdist, bool front, bool alwayson=false)
 {
 	if(!dronecam)
 	{
@@ -50,7 +50,7 @@ void ToggleDrone(float cdist, float rotspd, float angdist, bool front, bool alwa
 		dronecam_active = false;
 	}
 }
-void AdjustDrone(float cdist, float rotspd, float angdist, bool front)
+void AdjustDrone(double cdist, double rotspd, double angdist, bool front)
 {
 	if(dronecam && dronecam_active)
 	{
@@ -110,7 +110,7 @@ void mech_weapons()
 		HeatLevel += CurSector.damageamount * 0.01;
 	}
 	
-	float HSinkEff = (countStruct("Heatsink")*GetDefaultByType(hs).cooling/35)+(countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling/35);
+	double HSinkEff = (countStruct("Heatsink")*GetDefaultByType(hs).cooling/35)+(countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling/35);
 	HeatEfficiency = inv_context.heateff+baseHeatEfficiency+HSinkEff; 
 	Mech_HasJets = (countStruct("JumpJet") > 0);
 	Mech_JetCount = countStruct("JumpJet");

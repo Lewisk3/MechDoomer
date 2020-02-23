@@ -46,7 +46,7 @@ void SortMechs(in out Array<mw_StoredMech> items)
 		for (int i = 0; i < items.Size(); i++)
 		{
 			let defs = GetDefaultByType(items[i].baseclass);
-			float tons = defs.mech_tonnage;
+			double tons = defs.mech_tonnage;
 			if(tons < lighttons)
 			{
 				lightest = i;
@@ -69,14 +69,14 @@ void SortMechs(in out Array<mw_StoredMech> items)
 clearscope int, int, int, int GetMechSortIndexes()
 {
 	Array<Int> indices;
-	float wlevel = 35;
+	double wlevel = 35;
 	while(wlevel < 101)
 	{
 		int found = -1;
 		for(int i = 0; i < shopmechs.Size(); i++)
 		{
 			let defs = GetDefaultByType(shopmechs[i].baseclass);
-			float tons = defs.mech_tonnage;
+			double tons = defs.mech_tonnage;
 			
 			if(tons > wlevel)
 			{

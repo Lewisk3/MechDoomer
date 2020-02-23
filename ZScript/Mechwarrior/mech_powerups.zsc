@@ -3,7 +3,7 @@ class MechExchange_Animator : Powerup
 {
 	MechWarriorBase mech;
 	int mechbaynum;
-	float fadeto;
+	double fadeto;
 	bool activate;
 	bool fadeout;
 	bool done;

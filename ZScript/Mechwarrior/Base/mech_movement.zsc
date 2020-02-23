@@ -7,10 +7,10 @@ extend class MechWarriorBase;
 bool defaultmovement;
 bool uncappedtorso;
 
-float minPitch, maxPitch;
-float LegSpeed;
-float MoveSpeedKPH;
-float MaxYaw;
+double minPitch, maxPitch;
+double LegSpeed;
+double MoveSpeedKPH;
+double MaxYaw;
 
 // Vars
 bool snd_reactor;
@@ -29,34 +29,34 @@ int Mech_JetCount;
 int bobdir;
 int shutdown_timer;
 
-float LegAng;
-float LegDelta;
-float lockpitch;
-float lockangle;
-float MoveSpeed;
-float MoveSpeed_Max;
-float throttle;
-float throttle_max;
-float move_throttle;
-float move_accel;
-float mech_jetsfuel;
-float LookVel;
-float LegVel;
-float overfactor;
-float rolloffs;
-float boboffs;
-float desiredbob;
-float TiltOsc;
-float StepOsc;
-float TiltOffset;
-float StepOffset;
-float CrouchMulti;
-float rolldistort;
-float defviewz;
-float viewzoffs;  // Bob modifier for actual viewz.
+double LegAng;
+double LegDelta;
+double lockpitch;
+double lockangle;
+double MoveSpeed;
+double MoveSpeed_Max;
+double throttle;
+double throttle_max;
+double move_throttle;
+double move_accel;
+double mech_jetsfuel;
+double LookVel;
+double LegVel;
+double overfactor;
+double rolloffs;
+double boboffs;
+double desiredbob;
+double TiltOsc;
+double StepOsc;
+double TiltOffset;
+double StepOffset;
+double CrouchMulti;
+double rolldistort;
+double defviewz;
+double viewzoffs;  // Bob modifier for actual viewz.
 
 // Main
-void setupSpeedKPH(float kph)
+void setupSpeedKPH(double kph)
 {
 	MoveSpeedKPH = kph;
 	MoveSpeed = ((kph*(10.0/36.0))/35.0) * (34*MWGAMEPLAY_MECHSPEEDSCALE);
@@ -70,10 +70,10 @@ void setupSpeedKPH(float kph)
 void mech_cockpitbob()
 {
 	// Calculate Bob
-	float movebobpart = MW_VELBOBFRAC;
-	float bobthrust = 0;
-	float tonmod = defaultmovement ? mech_tonnage/100.0 : clamp(mech_tonnage,50,100)/100.0;
-	float bobmax = MW_BOBRANGE*tonmod;
+	double movebobpart = MW_VELBOBFRAC;
+	double bobthrust = 0;
+	double tonmod = defaultmovement ? mech_tonnage/100.0 : clamp(mech_tonnage,50,100)/100.0;
+	double bobmax = MW_BOBRANGE*tonmod;
 	if(defaultmovement) bobmax *= 10;
 	if(!bobdir) bobdir = 1;
 	if(vel.z >  0.5) bobdir = 1;
@@ -81,7 +81,7 @@ void mech_cockpitbob()
 	if(vel.length() > 0.08 || LegVel)
 	{
 		// 0.12
-		float realvel = vel.length()+(LegVel**2);
+		double realvel = vel.length()+(LegVel**2);
 		bobthrust = clamp(realvel*(movebobpart*MoveSpeed), -(bobmax/3), (bobmax/3));
 		if(stepping) 
 		{ 
@@ -103,10 +103,10 @@ void mech_cockpitbob()
 	if(mech_models)
 	{
 		// Calculate gyroscopics
-		float gfactor = GetDefaultByType("StructGyro").power;
-		float gyros = countStruct("StructGyro") - countStructDamaged("StructGyro",true);
-		float bfactor = 2.76-(gyros*gfactor);
-		float bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 1.2, 3.15);
+		double gfactor = GetDefaultByType("StructGyro").power;
+		double gyros = countStruct("StructGyro") - countStructDamaged("StructGyro",true);
+		double bfactor = 2.76-(gyros*gfactor);
+		double bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 1.2, 3.15);
 		if(defaultmovement) bobmod *= 0.55;
 		Player.ViewZ -= bobmod;
 		viewzoffs = (Player.ViewZ-pos.z)-defviewz;
@@ -145,10 +145,10 @@ void mech_movement()
 		{
 			setupSpeedKPH(clamp(EngineGetKPH(),0,200));
 		}
-		float truetonnage = mech_shutdown ? mech_tonnage*0.25 : mech_tonnage;
+		double truetonnage = mech_shutdown ? mech_tonnage*0.25 : mech_tonnage;
 		overfactor = clamp( (truetonnage/(inv_context.weapons_tonnage))*1.4, 0.1, 1.0);
 		setupSpeedKPH(EngineGetKPH()*overfactor);
-		float finalspd = clamp(MoveSpeed*0.3*overfactor*throttle_max, 0.1, 1.45);
+		double finalspd = clamp(MoveSpeed*0.3*overfactor*throttle_max, 0.1, 1.45);
 		A_SetSpeed(finalspd);
 	}
 	
@@ -158,7 +158,7 @@ void mech_movement()
 		// Move mech by a percentage of throttle.
 		if(!stepping) 
 		{
-			float accel = ((1000/mech_tonnage)/100) * (0.12*move_accel);
+			double accel = ((1000/mech_tonnage)/100) * (0.12*move_accel);
 			move_throttle = MDMath.Lerp( move_throttle, throttle, clamp(accel,0.008,0.4) );
 			vel = (cos(LegAng)*(move_throttle*MoveSpeed),sin(LegAng)*(move_throttle*MoveSpeed),vel.z);
 		}
@@ -266,7 +266,7 @@ void mech_movement()
 		}
 		if(countinv("IBTN_CENTER"))
 		{
-			float yaw = MDMath.NormalizeAngle(angle-LegAng);
+			double yaw = MDMath.NormalizeAngle(angle-LegAng);
 			if(yaw > 0) LegVel =  LegSpeed;
 			if(yaw < 0) LegVel = -LegSpeed;
 			if(abs(yaw) < LegSpeed*2) 
@@ -279,7 +279,7 @@ void mech_movement()
 		}
 		if(countinv("IBTN_CENTERTORSO"))
 		{
-			float yaw = MDMath.NormalizeAngle(angle-LegAng);
+			double yaw = MDMath.NormalizeAngle(angle-LegAng);
 			if(yaw > 0)angle-=2;
 			if(yaw < 0)angle+=2;
 			if(pitch > 0)pitch-=2;
@@ -296,12 +296,12 @@ void mech_movement()
 		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*5)) )*0.5;
 		if( !pilotlook && !mech_shutdown ) A_SetRoll( roll + rolldistort );
 	
-		float curspd = MoveSpeedKPH*move_throttle;
-		float turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
-		float spdmod = 1.0 - (abs(curspd)/2)*0.007;	
+		double curspd = MoveSpeedKPH*move_throttle;
+		double turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
+		double spdmod = 1.0 - (abs(curspd)/2)*0.007;	
 		
 		// If we're in the air we can move our legs freely of friction.
-		float finalmod = (player.onground ? turnmod*spdmod : 2);
+		double finalmod = (player.onground ? turnmod*spdmod : 2);
 		finalmod = clamp(finalmod, 0.15, 2);
 		if(!CVar.GetCVar("mwd_relativelegspeed",player).getBool()) finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
 		
@@ -326,7 +326,7 @@ void mech_movement()
 	if( (GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) && Mech_HasJets && mech_jetsfuel > 0)
 	{
 		class<JumpJet> jj = "JumpJet";
-		float truetonnage = CheckCompensative() ? inv_context.weapons_tonnage : mech_tonnage;
+		double truetonnage = CheckCompensative() ? inv_context.weapons_tonnage : mech_tonnage;
 		double tonmod = 100-( truetonnage-(5*Mech_JetCount) );
 		double zthrust = ( Mech_JetCount * GetDefaultByType(jj).thrust_power ) * ( tonmod/100 ) + ((mech_jetsfuel/100)*2);
 		vel.z = zthrust * (defaultmovement ? 2 : 1);
@@ -451,8 +451,8 @@ void Bobbing() {
 	// Don't bob on voodoos!
 	if(!player || !player.mo || player.mo != self) return;
 	
-	float tiltosc_amp =  10 + (vel.Length()/4);
-	float steposc_amp =  15 + (vel.Length()/2);
+	double tiltosc_amp =  10 + (vel.Length()/4);
+	double steposc_amp =  15 + (vel.Length()/2);
 	tiltosc_amp = clamp(tiltosc_amp,0,18);
 	steposc_amp = clamp(steposc_amp,0,24);
 	TiltOsc += tiltosc_amp;

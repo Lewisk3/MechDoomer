@@ -5,10 +5,10 @@ struct HardpointData play
 
 class HardpointVitals : Object
 {
-	float armor;
-	float internalhp;
-	float max_armor;
-	float max_internal;
+	double armor;
+	double internalhp;
+	double max_armor;
+	double max_internal;
 }
 
 class MechHardpoint : Object
@@ -21,12 +21,12 @@ class MechHardpoint : Object
 	int maxslots;
 	
 	// Vitals
-	float armor;
-	float internalhp;
-	float max_armor;
-	float max_internal;
+	double armor;
+	double internalhp;
+	double max_armor;
+	double max_internal;
 	
-	float defmax_armor;
+	double defmax_armor;
 	
 	clearscope int getFreeSlots()
 	{

@@ -350,28 +350,19 @@ void drawMechlabInfo()
 {
 	H_DrawImage(mechmode ? tMainMechs : tMain, (0,0), MD_SBS.SS_SCREEN_CENTER, (1.0,1.0) );
 	ProcessLoadoutButtons();
-	float ap, ip;
+	double ap, ip;
 	[ap, ip] = GetHardpointHealthPerc(mechplr.hardpoints);
 	
-	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
-	String mechston = (mechplr.mech_tonnage .. "");
-	String armston = (mechplr.inv_context.armor_tonnage .. "");
-	String heateff = mechplr.HeatEfficiency*35 .. "";
-	String maxspd = mechplr.MoveSpeedKPH .. "";
+	double movespd = mechplr.CheckCompensative() ? double(mechplr.MoveSpeedKPH) * mechplr.overfactor : mechplr.MoveSpeedKPH;
+	String weapston = MDMath.GetPrintableFloat(mechplr.inv_context.weapons_tonnage);
+	String mechston = MDMath.GetPrintableFloat(mechplr.mech_tonnage);
+	String armston  = MDMath.GetPrintableFloat(mechplr.inv_context.armor_tonnage);
+	String heateff  = MDMath.GetPrintableFloat(mechplr.HeatEfficiency*35,2,0.01);
+	String maxspd   = MDMath.GetPrintableFloat(movespd,2,0.01);
+	string armorpercent    = String.Format("%d", floor(ap));
+	string internalpercent = String.Format("%d", floor(ip));
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
-	string armorpercent = ap.."";
-	string internalpercent = ip.."";
-
-	if(mechplr.CheckCompensative()) maxspd = float(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
-	
-	maxspd.truncate(maxspd.Length()-4);
-	heateff.truncate(heateff.Length()-3);
-	armston.truncate(armston.length()-3);
-	weapston.truncate(weapston.length()-3);
-	mechston.truncate(mechston.length()-3);
 	enginetype.truncate(enginetype.Length()-7);
-	armorpercent.truncate(armorpercent.length()-6);
-	internalpercent.truncate(internalpercent.length()-6);
 	
 	vector2 detailpos = mechmode ? (300,111) : (300,415);
 	

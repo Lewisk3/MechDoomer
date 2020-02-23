@@ -12,18 +12,18 @@ bool ValidateHardpoint(int ind)
 	return (hp.internalhp > 0);
 }
 
-float GetHardpointVitalRatio(MechHardpoint hp)
+double GetHardpointVitalRatio(MechHardpoint hp)
 {
-	float hp_vitals    = hp.armor+hp.internalhp;
-	float hp_maxvitals = hp.defmax_armor+hp.max_internal;
+	double hp_vitals    = hp.armor+hp.internalhp;
+	double hp_maxvitals = hp.defmax_armor+hp.max_internal;
 	if(hp.internalhp <= 0) hp_vitals = 0;
 	if(hp_vitals == 0) return 1.0;
-	float vres = 1.0 - (hp_vitals / hp_maxvitals);
+	double vres = 1.0 - (hp_vitals / hp_maxvitals);
 	if(vres < 0.1) vres = 0;
 	return vres;
 }
 
-Color getHealthyColor(float ratio, float tintalpha=1.0)
+Color getHealthyColor(double ratio, double tintalpha=1.0)
 {
 	if(ratio <= 0) return StatusColor.HSLtoRGB(0,1.0,0.0,1.0);
 	return StatusColor.HSLtoRGB(0.28*(ratio-0.3),1.0,0.5, tintalpha);
@@ -54,7 +54,7 @@ double, double GetHardpointHealthPerc(MechHardpoints hps)
 {
 	// This is surrounded in curly braces so it can be collapsed and temporarily
 	// removed from view.
-	float curarmor, maxarmor, curinternal, maxinternal;
+	double curarmor, maxarmor, curinternal, maxinternal;
 	{
 		curarmor += hps.hd.armor;
 		curarmor += hps.ct.armor;
@@ -93,8 +93,8 @@ double, double GetHardpointHealthPerc(MechHardpoints hps)
 		maxinternal += hps.rl.max_internal;
 	}
 	
-	float armorp = maxarmor <= 0 ? 100 : (curarmor/maxarmor * 100);
-	float internalp = (curinternal/maxinternal * 100);
+	double armorp = maxarmor <= 0 ? 100 : (curarmor/maxarmor * 100);
+	double internalp = (curinternal/maxinternal * 100);
 	
 	return armorp, internalp;
 }
@@ -105,14 +105,14 @@ void DrawDamagedHardpoints(vector2 pos)
 {
 	uint flags = MD_SBS.SS_SCREEN_CENTER;
 	vector2 scale = (0.94,0.94);
-	float alpha = 0.69;
+	double alpha = 0.69;
 
 	for(int i = 0; i < 8; i++)
 	{
 		MechHardpoint hp = valid_hardpoints.FindByIndex(i);
 		if(!hp) return;
 		
-		float ratio = 1.0-GetHardpointVitalRatio(hp);
+		double ratio = 1.0-GetHardpointVitalRatio(hp);
 		Color hpcolor = getHealthyColor(ratio,ratio<1.0 ? 0.5 : 0);
 		if(ratio >= 1.0) continue;
 		
@@ -174,16 +174,15 @@ void drawArmoryInfo()
 	
 	DrawDamagedHardpoints( (51,222) );
 	
+	double movespd = mechplr.CheckCompensative() ? double(mechplr.MoveSpeedKPH) * mechplr.overfactor : mechplr.MoveSpeedKPH;
+	String weapston = MDMath.GetPrintableFloat(mechplr.inv_context.weapons_tonnage);
+	String mechston = MDMath.GetPrintableFloat(mechplr.mech_tonnage);
+	String armston  = MDMath.GetPrintableFloat(mechplr.inv_context.armor_tonnage);
+	String heateff  = MDMath.GetPrintableFloat(mechplr.HeatEfficiency*35,2,0.01);
+	String maxspd   = MDMath.GetPrintableFloat(movespd,2,0.01);
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
-	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
-	String mechston = (mechplr.mech_tonnage .. "");
-	String heateff = mechplr.HeatEfficiency*35 .. "";
-	String maxspd = mechplr.MoveSpeedKPH .. "";
-	maxspd.truncate(maxspd.Length()-4);
-	heateff.truncate(heateff.Length()-3);
-	weapston.truncate(weapston.length()-3);
-	mechston.truncate(mechston.length()-3);
 	enginetype.truncate(enginetype.Length()-7);
+	
 	vector2 detailpos = (280,300);
 	vector2 cbillpos  = (290,105);
 	vector2 statuspos = (777,160);
@@ -217,22 +216,21 @@ void drawArmoryInfo()
 		}
 	}
 	
-	float ap, ip;
+	double ap, ip;
 	[ap, ip] = GetHardpointHealthPerc(mechplr.hardpoints);
-	string armorpercent = ap.."";
-	string internalpercent = ip.."";
-	armorpercent.truncate(armorpercent.length()-6);
-	internalpercent.truncate(internalpercent.length()-6);
+	string armorpercent    = String.Format("%d", floor(ap));
+	string internalpercent = String.Format("%d", floor(ip));
 	
 	H_DrawString("Chassis: " .. mechplr.getChassisName(),detailpos);
 	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+25));
-	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+50));
-	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+75));
-	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+100));
-	H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+125));
-	H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+150));
+	H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+50));
+	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+75));
+	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+100));
+	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+125));
+	H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+150));
+	H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+175));
 	
-	float cbills_remain = mechplr.inv_context.money_cbills-repair_cost;
+	double cbills_remain = mechplr.inv_context.money_cbills-repair_cost;
 	if(cbills_remain < 0) cbills_remain = 0;
 	
 	H_DrawString("Funds: ".. mechplr.inv_context.money_cbills, cbillpos);

@@ -3,7 +3,7 @@ class MechutilDefs
 {
 	int hardslots;
 	String displayName;
-	float weight;
+	double weight;
 	bool moveable;
 	bool takesnodamage;
 	int worth;
@@ -25,7 +25,7 @@ class Mechbase_Utility : Actor
 
 	int hardslots;
 	String displayName;
-	float weight;
+	double weight;
 	bool moveable;
 	bool takesnodamage;
 	int worth;
@@ -44,7 +44,7 @@ class Mechbase_Utility : Actor
 		Mechbase_Utility.CValue 0;
 	}
 	
-	clearscope static string FormatFloat(float num, int pushback=3)
+	clearscope static string Formatdouble(double num, int pushback=3)
 	{
 		String snum = num.."";
 		snum.truncate(snum.Length()-pushback);	
@@ -73,7 +73,7 @@ class Mechbase_Utility : Actor
 	void GetDefDescription(in out Array<String> desc)
 	{
 		desc.push("Name: " .. displayName);
-		desc.push("Weight: " .. FormatFloat(weight) .. " tons");
+		desc.push("Weight: " .. Formatdouble(weight) .. " tons");
 		desc.push("Criticals: " .. hardslots);
 		desc.push("Sell Value: " .. worth);
 	}
@@ -118,7 +118,7 @@ class StructEngine : Mechbase_Utility
 }
 class StructGyro : Mechbase_Utility
 {
-	float power;
+	double power;
 	Property Effectiveness : power;
 	Default
 	{	
@@ -202,7 +202,7 @@ class C_A_S_E : Mechbase_Utility
 
 class Heatsink : Mechbase_Utility
 {
-	float cooling;
+	double cooling;
 	Property Efficiency : cooling;
 	
 	Default
@@ -239,7 +239,7 @@ class DoubleHeatsink : Heatsink
 
 class JumpJet : Mechbase_Utility
 {
-	float thrust_power;
+	double thrust_power;
 	Property thrust : thrust_power;
 	
 	Default
@@ -367,7 +367,7 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		bool success = true;
 		hpoint.armor++;
 		
-		// Int cast because oddball floating point issues, that'll sometimes 
+		// Int cast because oddball doubleing point issues, that'll sometimes 
 		// result in armor being adjusted one point too soon.
 		if(int(hpoint.armor) > int(hpoint.max_armor)) success = plr.AddArmorWeight(1);
 		if(success)
@@ -411,7 +411,7 @@ class Mechbay : Inventory
 		-NOBLOCKMAP;
 	}
 	
-	float point_distance(Actor one, Actor two, float scale)
+	double point_distance(Actor one, Actor two, double scale)
 	{
 		int x = one.pos.x - two.pos.x;
 		int y = one.pos.y - two.pos.y;
@@ -479,8 +479,8 @@ class Mechbay : Inventory
 	
 	override void PostBeginPlay()
 	{
-		float xo = (cos(angle+5))*8;
-		float yo = (sin(angle+5))*8;
+		double xo = (cos(angle+5))*8;
+		double yo = (sin(angle+5))*8;
 		//console.printf(": %f, %f",xoffset,yoffset);
 		Vector3 lpos = (pos.x+xo,pos.y+yo,pos.z);
 		let bay = Spawn("Mechbay_3D",pos);
