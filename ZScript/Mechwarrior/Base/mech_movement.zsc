@@ -365,13 +365,15 @@ void mech_movement()
 	}
 	else
 	{
-		if(player.DesiredFOV < defaultfov)
+		double trueFOV = CVar.GetCVar("mwd_CockpitFOV", player).getFloat();
+		if(player.DesiredFOV < trueFOV)
 		{
 			player.DesiredFOV += 3;
 			A_PlaySound("Mech/Zoom",7,1,1);
 		}
 		else
 		{
+			player.DesiredFOV = trueFOV;
 			A_StopSound(7);
 		}
 	}
