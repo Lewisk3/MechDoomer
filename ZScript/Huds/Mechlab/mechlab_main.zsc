@@ -158,7 +158,7 @@ void ProcessLoadoutButtons()
 		if(hardpoint < 0) return;
 		
 		// Hardpoint safe check
-		if( !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
+		if( !mechmode && !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
 		{
 			mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
 			mechplr.sendHudAlert("Hardpoint is destroyed!", Font.CR_DARKRED);

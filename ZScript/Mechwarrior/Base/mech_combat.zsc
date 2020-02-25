@@ -114,11 +114,11 @@ void mech_weapons()
 	HeatEfficiency = inv_context.heateff+baseHeatEfficiency+HSinkEff; 
 	Mech_HasJets = (countStruct("JumpJet") > 0);
 	Mech_JetCount = countStruct("JumpJet");
-	if(supersink) HeatEfficiency *= 2;
-	if(HeatLevel > 0) HeatLevel -= HeatEfficiency;
-	if(HeatLevel < 0) HeatLevel = 0;
+	if(supersink) HeatEfficiency *= 3;
 	// Dissipate heat quicker when under water
-	if(waterlevel > 0) HeatEfficiency *= 1.33; 
+	if(waterlevel > 0) HeatEfficiency *= 2;
+	if(HeatLevel > 0) HeatLevel -= HeatEfficiency;
+	if(HeatLevel < 0) HeatLevel = 0; 
 	if(HeatLevel > MWHEAT_MAX*0.53) DamageMobj(self,null,frandom(24,36),"overheating",DMG_NO_ARMOR | DMG_NO_FACTOR);
 	if(HeatLevel <= MWHEAT_MAX*0.15) heatwarn = false;
 	if(HeatLevel > MWHEAT_MAX*0.275 && !heatwarn)

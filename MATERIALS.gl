@@ -10,7 +10,7 @@ HardwareShader PostProcess Scene
 	Enabled
 }
 
-// Weapons
+// Weapons (FullBright Weapons)
 material texture models/Textures/bullet.png {
 	brightmap "models/Textures/bullet.png"
 	brightness 1.0

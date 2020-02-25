@@ -24,8 +24,13 @@ pointlight RedPointLight
 }
 pointlight BluePointLight
 {
-    color 0.0 0.0 1.0
+    color 0.0 0.0 2.0
     size 45
+}
+pointlight PurplePointLight
+{
+	color 0.29 0.13 0.77
+	size 54
 }
 pointlight YellowPointLight
 {
@@ -35,8 +40,8 @@ pointlight YellowPointLight
 
 pointlight BlueBrightLight
 {
-    color 0.0 0.0 5.0
-    size 80
+    color 0.0 0.0 1.0
+    size 32
 }
 
 pulselight BluePulseLight
@@ -49,8 +54,8 @@ pulselight BluePulseLight
 
 object FlameProjectile
 {
-	Frame FIO1 { light DarkRedPointLight }
-	Frame FIO2 { light DarkRedPointLight }
+	Frame FIO1 { light YellowLight }
+	Frame FIO2 { light YellowLight }
 }
 
 object PlasmaWeaponDisp
@@ -93,12 +98,20 @@ object MissileExplosion
 	Frame EXPL { light DarkRedPointLight }
 }
 
+object PPCLight 
+{
+	Frame TNT1 { light PurplePointLight }
+}
 
 object PPCExplosion
 {
 	Frame PEXP { light BlueBrightLight }
 }
 Object MissileLight
+{
+	Frame TNT1 { light YellowPointLight }
+}
+object AutocannonLight
 {
 	Frame TNT1 { light YellowPointLight }
 }

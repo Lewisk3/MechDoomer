@@ -783,7 +783,7 @@ class PPCBall : Mechbase_Actor
 				adjustHeatLevel(heatgen);
 			}
 		SpawnLoop:
-			MPPC A 1;
+			MPPC A 1 Spawn("PPCLight", pos);
 		loop;
 		
 		Death:
@@ -808,6 +808,7 @@ class PPCBall : Mechbase_Actor
 			stop;
 	}
 }
+class PPCLight : AutocannonLight {}
 
 class Flame : Mechbase_Actor
 {
@@ -894,6 +895,7 @@ class AutocannonBall : Mechbase_Actor
 			AUTO A 1;
 			TNT1 A 0 
 			{
+				Spawn("AutocannonLight", pos);
 				adjustHeatLevel(heatgen);
 			}
 		SpawnLoop:
@@ -914,6 +916,18 @@ class AutocannonBall : Mechbase_Actor
 		stop;
 	}
 }
+class AutocannonLight : MissileLight 
+{
+	States
+	{
+		Spawn:
+			TNT1 A 4;
+		stop;
+	}
+}
+
+
+
 class MechBullet : Mechbase_Actor
 {
 	Default
@@ -936,6 +950,8 @@ class MechBullet : Mechbase_Actor
 	States
 	{
 		Spawn:
+			AUTO A 1 NoDelay Spawn("AutocannonLight", pos);
+		SpawnLoop:
 			AUTO A 1;
 		loop;
 		
