@@ -122,8 +122,9 @@ clearscope Items_ShopData GetSortList()
 			// Filter spaces
 			lines[i].Replace(" ", "");
 			lines[i].Replace("\t", "");
-			// Remove carrage return (Byte 13)
-			lines[i].Truncate(lines[i].Length()-1);
+			// Check for Carrage Return byte, if found remove it.
+			if(lines[i].ByteAt(lines[i].Length()-1) == 13) lines[i].Truncate(lines[i].Length()-1);
+			
 			if( lines[i].ByteAt(0) != comment.ByteAt(0) && lines[i].Length() > 1 )
 			{				
 				bool found_marker = (lines[i].ByteAt(0) == marker.ByteAt(0));
