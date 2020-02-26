@@ -29,17 +29,6 @@ void normalizeWeaponsID(int offs)
 		}
 	}
 }
-clearscope String resolveWeaponName(Mechbase_Weapon ww)
-{	
-	Array<String> weaponslot;
-	weaponslot.Clear();
-	String weapcheck = ww.getClassName();
-	String weaptype = weapcheck;
-	weapcheck.Split(weaponslot,"_");
-	if(ww is weaponslot[0]) weaptype = weaponslot[0];
-	//console.printf("Weapon is: %s",weaptype);
-	return weaptype;
-}
 
 // Get
 int getWeaponSlotsUsed(Vector2 loc)
@@ -197,7 +186,7 @@ bool moveWeaponToInv(int weap_ind)
 		{
 			if(ww.WeaponID == weap_ind)
 			{
-				addWeaponToInv(resolveWeaponName(ww),1,false);
+				addWeaponToInv(ww.GetClassName(),1,false);
 				removeWeapon(ww);
 				normalizeWeaponsID(1);
 				return true;
@@ -236,27 +225,6 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 {
 	if(checkVoodoo()) return false;
 	GiveInventory(type,1);
-	if(countinv(type) > 1)
-	{
-		int slotcheck = 1;
-		Name ntype;
-		// You can only have 12 of each weapon, max.
-		for(int i = 1; i < 12; i++)
-		{
-			if(countinv( Name(type) .. "_" .. i )) continue;
-			ntype = Name(type) .. "_" .. i;
-			slotcheck = i;
-		}
-		if(!ntype)
-		{
-			A_PlaySound("UI/Error",CHAN_WEAPON);
-			sendHudAlert("Weapon Systems Error.\nBuffer overloaded!", Font.CR_DARKRED);
-			//console.printf("No free slot found for: %s",(Name(type) .. ""));
-			return false;
-		}
-		GiveInventory(ntype,1);
-		//console.printf("Obtaining another %s; slot #%d",(Name(ntype) .. ""),slotcheck);
-	}
 	inv_context.weapons_count++;
 	for(let w = Inv; w != null; w = w.Inv)
 	{	

@@ -208,7 +208,7 @@ class Torso_Marauder : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Marauder", "Legs_Marauder", "Cockpit_Marauder";
 		MechPartsBase.ZOffset 65;
 		MechPartsBase.CockpitOffset 0, 85;
-		MechTorsoBase.CockpitRange 0.80, 0.40, 0.60;
+		MechTorsoBase.CockpitRange 0.80, 0.40, 0.40;
 		MechTorsoBase.TwistSpeed 0.35;
 	}
 }

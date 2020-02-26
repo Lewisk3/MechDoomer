@@ -207,7 +207,7 @@ void GetStoredWeapons(in out Array<mw_StoredWeapon> weaps)
 		let ww = Mechbase_Weapon(FindInventory("Mechbase_Weapon",true));
 		if(!ww) break;
 		let sweap = new("mw_StoredWeapon");
-		sweap.Tag = resolveWeaponName(ww);
+		sweap.Tag = ww.GetClassName();
 		sweap.baseclass = ww.GetClassName();
 		sweap.group = ww.group;
 		sweap.WeaponID = ww.WeaponID;

@@ -302,7 +302,7 @@ void drawLoadoutItemInfo()
 			String wtons = weap.weight .. "";
 			wtons.truncate(wtons.Length()-4);
 			wheat.truncate(wheat.Length()-4);
-			drawInfoLine("Name: " .. mechplr.resolveWeaponName(weap),0);
+			drawInfoLine("Name: " .. weap.GetClassName(),0);
 			drawInfoLine("Damage: " .. weaptypedefs.truedamage,1);
 			drawInfoLine("Heat: " .. wheat,2);
 			drawInfoLine("Nickname: " .. weap.displayName,3); 
@@ -600,15 +600,16 @@ void DrawHardpointItems(int ind, int sx, int sy)
 						String suffix = "";
 						if(ww.hardslots > 1)suffix = " (#" .. i+1 .. ")";
 						Rect checkmouse;
-						initRect(checkmouse,sx,sy+offs.x-10,14*(mechplr.resolveWeaponName(ww).Length()+suffix.Length()+4),15);
+						String weapname = ww.GetClassName();
+						initRect(checkmouse,sx,sy+offs.x-10,14*(weapname.Length()+suffix.Length()+4),15);
 						// drawRect(checkmouse,Color(255,255,255,128));
 						if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 						{ 
 							clearSelected();
-							setSelected(mechplr.resolveWeaponName(ww), hp, null, ww.getClassName(), null, wind);
+							setSelected(weapname, hp, null, ww.getClassName(), null, wind);
 							selected_item.mWeaponOBJ = ww; 
 						}
-						H_DrawString(mechplr.resolveWeaponName(ww) .. suffix, (sx,sy+offs.y-15),0,fcr);
+						H_DrawString(ww.GetClassName() .. suffix, (sx,sy+offs.y-15),0,fcr);
 						offs.y += 24;
 						offs.x += 24;
 					}

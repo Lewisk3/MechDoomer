@@ -198,3 +198,52 @@ Model Timberwolf
 	if(!isMoving()) return ResolveState("Spawn");
 	return ResolveState(Null);
 */
+
+// Old Weapon's systems
+
+bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool giveammo = true)
+{
+	if(checkVoodoo()) return false;
+	GiveInventory(type,1);
+	if(countinv(type) > 1)
+	{
+		int slotcheck = 1;
+		Name ntype;
+		// You can only have 12 of each weapon, max.
+		for(int i = 1; i < 12; i++)
+		{
+			if(countinv( Name(type) .. "_" .. i )) continue;
+			ntype = Name(type) .. "_" .. i;
+			slotcheck = i;
+		}
+		if(!ntype)
+		{
+			A_PlaySound("UI/Error",CHAN_WEAPON);
+			sendHudAlert("Weapon Systems Error.\nBuffer overloaded!", Font.CR_DARKRED);
+			// console.printf("No free slot found for: %s",(Name(type) .. ""));
+			return false;
+		}
+		GiveInventory(ntype,1);
+		// console.printf("Obtaining another %s; slot #%d",(Name(ntype) .. ""),slotcheck);
+	}
+	inv_context.weapons_count++;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.WeaponID == 0)
+			{
+				//console.printf("Setting new ID: %d",inv_context.weapons_count); 
+				ww.WeaponID = inv_context.weapons_count;
+				ww.group = group;
+				ww.hardpoint = hp;
+				hp.adjustHardslots(ww.hardslots);
+				adjustTonnage(ww.weight);
+				//console.printf("Adding Weapon: %s at %d",ww.displayName,ww.WeaponID);
+			}
+		}
+	}
+	inv_context.maxgroup = getMaxWeaponGrouping();
+	return true;
+}
