@@ -544,7 +544,7 @@ class Rifleman : MechWarrior
 	Default
 	{
 		Mass 3000;
-		Player.DisplayName "Rifleman - Standard";
+		Player.DisplayName "Rifleman - IIC";
 		Player.ViewHeight 70;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
@@ -583,25 +583,23 @@ class Marauder : MechWarrior
 	Default
 	{
 		Mass 3000;
-		Player.DisplayName "Marauder - 3R";
-		Player.ViewHeight 70;
+		Player.DisplayName "Marauder - IIC";
+		Player.ViewHeight 75;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 105;
 		MechWarriorBase.LegSpeed 50.42*MWGAMEPLAY_TURNRATE*1.5;
 		MechWarriorBase.Acceleration 1.35;
-		MechWarriorBase.Weight 75;
+		MechWarriorBase.Weight 85;
 		MechWarriorBase.PitchRange 50, 50;
-		MechWarriorBase.Engine "ENGINE_STD_300";
+		MechWarriorBase.Engine "ENGINE_STD_340";
 		MechWarriorBase.MechPieces "Torso_Marauder";
 		MechWarriorBase.HudMech "ATLAICO";
-		MechWarriorBase.CValue 3315075;
+		MechWarriorBase.CValue 4950720;
 	}
-		
-	override void SetupWeapons()
+	
+	void InnerSphere_Weapons()
 	{
-		hardpoints.setupVitals( 8,44,30,30,24,24,30,30, 5,22,15,15,12,12,16,16 );
-		hardpoints.setupLocations( (0,10), (0,32), (30,10), (-30,10), (60,-20), (-60,-20), (20,-85), (-20,-85) );
-		hardpoints.setupSlots();
 		equipStruct("Heatsink",hardpoints.lt,4);
 		equipStruct("Heatsink",hardpoints.rt,4);
 		equipStruct("Heatsink",hardpoints.la,2);
@@ -613,6 +611,25 @@ class Marauder : MechWarrior
 		equipWeapon("MediumLaser",hardpoints.la,2);
 		equipWeapon("MediumLaser",hardpoints.ra,2);
 		equipWeapon("Autocannon5",hardpoints.ct,3);
+	}
+	
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,50,32,32,28,28,36,36, 5,25,17,17,14,14,18,18 );
+		hardpoints.setupLocations( (0,10), (0,32), (30,10), (-30,10), (60,-20), (-60,-20), (20,-85), (-20,-85) );
+		hardpoints.setupSlots();
+		equipStruct("DoubleHeatsink",hardpoints.la,2);
+		equipStruct("DoubleHeatsink",hardpoints.ra,2);
+		equipStruct("DoubleHeatsink",hardpoints.lt,2);
+		equipStruct("DoubleHeatsink",hardpoints.rt,2);
+		equipWeapon("ERPPC",hardpoints.la,1);
+		equipWeapon("ERPPC",hardpoints.ra,1);
+		equipWeapon("MediumPulseLaser",hardpoints.la,2);
+		equipWeapon("MediumPulseLaser",hardpoints.ra,2);
+		equipWeapon("ERSmallLaser",hardpoints.lt,3);
+		equipWeapon("ERSmallLaser",hardpoints.lt,3);
+		equipWeapon("ERSmallLaser",hardpoints.rt,3);
+		equipWeapon("ERSmallLaser",hardpoints.rt,3);
 	}
 }
 

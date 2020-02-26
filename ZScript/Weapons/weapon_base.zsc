@@ -144,7 +144,7 @@ class Mechbase_Weapon : Item_NoPickup
 	Property LockingSpeed : lockonspeed;
 	Property WeaponDelay : delay;
 	Property AttackSound : atksnd;
-	Property WeaponParams : weapDistance, weapSpeed;
+	Property Distance_Speed : weapDistance, weapSpeed;
 	Property HardslotSize : hardslots;
 	Property Tonnage : weight;
 	Property Cooldown : cooldown, volleycooldown;
@@ -157,7 +157,7 @@ class Mechbase_Weapon : Item_NoPickup
 	{
 		Mechbase_Weapon.DisplayName "Base Weapon";
 		Mechbase_Weapon.DefaultGroup 1;
-		Mechbase_Weapon.WeaponParams 18, 30;
+		Mechbase_Weapon.Distance_Speed 30, 69;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Inventory.maxamount 12; // Each weapon should have atleast 12 available slots.
