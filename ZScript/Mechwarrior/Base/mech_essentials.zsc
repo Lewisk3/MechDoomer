@@ -23,7 +23,9 @@ double defaultfov;
 double kph_default;
 double kph_real;
 double worth;
-Array<mw_InvStruct> shopitems;
+
+// Shop Vars (TEMP)
+Items_ShopData shopitems;
 Array<mw_StoredMech> shopmechs;
 
 // Properties
@@ -368,6 +370,8 @@ override void tick()
 {
 	// Hold onto reference of all mechs for shop
 	if(!shopmechs.Size()) GetAllMechs(shopmechs);
+	// Grab Items reference for shop
+	if(!shopitems) shopitems = GetAllItems();
 	
 	if(checkVoodoo()) 
 	{

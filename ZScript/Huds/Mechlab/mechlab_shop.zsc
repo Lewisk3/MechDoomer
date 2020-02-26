@@ -60,7 +60,7 @@ void UpdateMechWeaponsList()
 int GetMaxShopItems()
 {
     if(!mechmode) 
-		return forcemaxitems ? forcemaxitems : mechplr.shopitems.Size();
+		return forcemaxitems ? forcemaxitems : mechplr.shopitems.items.Size();
 	else
 		return forcemaxitems ? forcemaxitems : mechplr.shopmechs.Size();
 }
@@ -210,16 +210,16 @@ void ChangeShop(int newoffs, int newmax)
 
 void ShopInit()
 {
-	shopstate.energyoffs    = 0;
-	shopstate.ballisticoffs = 12;
-	shopstate.missileoffs   = 22;
-	shopstate.ammooffs      = 32;
-	shopstate.engineoffs    = 46;
-	shopstate.energymax    = 12;
-	shopstate.ballisticmax = 10;
-	shopstate.missilemax   = 10;
-	shopstate.ammomax      = 14;
-	shopstate.enginemax    = 0;
+	shopstate.energyoffs    = mechplr.shopitems.energy_min;
+	shopstate.ballisticoffs = mechplr.shopitems.ballistics_min;
+	shopstate.missileoffs   = mechplr.shopitems.missiles_min;
+	shopstate.ammooffs      = mechplr.shopitems.ammo_min;
+	shopstate.engineoffs    = mechplr.shopitems.engines_min;
+	shopstate.energymax    = mechplr.shopitems.energy_max-1;
+	shopstate.ballisticmax = mechplr.shopitems.ballistics_max-1;
+	shopstate.missilemax   = mechplr.shopitems.missiles_max-1;
+	shopstate.ammomax      = mechplr.shopitems.ammo_max-1;
+	shopstate.enginemax    = mechplr.shopitems.engines_max-1;
 	
 	ClearSelected();
 	invoffset = 0;
@@ -318,7 +318,7 @@ void drawShopItemInfo()
 	if(!mechmode)
 	{
 		mw_InvStruct item;
-		item = mechplr.shopitems[selected_item.index];
+		item = mechplr.shopitems.items[selected_item.index];
 		
 		if(!item && !selected_item.mWeapon) item_cost = 0; 
 		
@@ -414,7 +414,7 @@ void drawShopInventory(int px, int py, int start, int max)
 	{
 		if(!mechmode)
 		{
-			let item = mechplr.shopitems[i];
+			let item = mechplr.shopitems.items[i];
 			String weapname = item.Tag;
 			class<Mechbase_Weapon> mw  = weapname;
 			class<Mechbase_Utility> ut = weapname;

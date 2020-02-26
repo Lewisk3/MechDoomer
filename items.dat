@@ -1,7 +1,7 @@
 # This is a list of all the Items to be added to the Shop System.
 # Simply type in an item's name below the one above it to add it to the shop.
 
-	# WEAPONS #
+<S_ENERGY>
 MediumLaser
 SmallLaser  
 LargeLaser  
@@ -17,6 +17,9 @@ HeavyLargeLaser
 PPC  
 ERPPC  
 Flamer  
+<E_ENERGY>
+
+<S_BALLISTIC>
 MachineGun  
 Autocannon2  
 Autocannon5  
@@ -27,6 +30,9 @@ UAutocannon5
 UAutocannon10  
 UAutocannon20  
 GaussRifle  
+<E_BALLISTIC>
+
+<S_MISSILE>
 SRM2  
 SRM4  
 SRM6  
@@ -37,7 +43,9 @@ LRM5
 LRM10  
 LRM15  
 LRM20  
-	# AMMOS #
+<E_MISSILE>
+
+<S_AMMO>
 AMSAmmo  
 BulletsMGun  
 AC2_Ammo  
@@ -52,13 +60,14 @@ GaussRounds
 SRM_Ammo  
 SSRM_Ammo  
 LRM_Ammo  
-	# STRUCTS #
+<E_AMMO>
+
+<S_ENGINE>
 C_A_S_E  
 JumpJet  
 AntiMissileSystem  
 Heatsink  
 DoubleHeatsink  
-	# ENGINES #
 Engine_STD_10  
 Engine_STD_15  
 Engine_STD_20  
@@ -375,6 +384,7 @@ Engine_LIGHT_385
 Engine_LIGHT_390  
 Engine_LIGHT_395  
 Engine_LIGHT_400 
+<E_ENGINE>
 
 # EXTRAS #
 #----------------------------------------------------------#

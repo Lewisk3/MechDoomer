@@ -4,15 +4,15 @@
 extend class MechWarriorBase;
 
 
-void GetAllItems(in out Array<mw_InvStruct> items)
+Items_ShopData GetAllItems()
 {
-	Array<String> itemtypes;
-	GetSortList(itemtypes);
-	items.Clear();
-	for(int i = 0; i < itemtypes.Size(); i++) 
+	Items_ShopData data = GetSortList();
+	data.items.Clear();
+	for(int i = 0; i < data.items_names.Size(); i++) 
 	{
-		items.push(mw_InvInfo.NewItem(itemtypes[i]));
+		data.items.push(mw_InvInfo.NewItem(data.items_names[i]));
 	}
+	return data;
 }
 
 void GetAllMechs(in out Array<mw_StoredMech> items)
@@ -95,12 +95,18 @@ clearscope int, int, int, int GetMechSortIndexes()
 	return indices[0], indices[1], indices[2], indices[3];
 }
 
-// HUGE sort list
-clearscope void GetSortList(in out Array<String> items)
+// HUGE sort list. I tried to make this not super ugly but, it's still probably pretty ugly. :/
+clearscope Items_ShopData GetSortList()
 {
-	items.Clear();
-	int ssize = 372;
+	Items_ShopData shop_data = new("Items_ShopData");
+	shop_data.items_names.Clear();
+	
 	Array<String> ItemsList;
+	bool count_energy 		= false;
+	bool count_ballistics 	= false;
+	bool count_missiles 	= false;
+	bool count_ammo 		= false;
+	bool count_engines 		= false;
 	
 	// Find items data
 	int lump = -1;
@@ -110,6 +116,7 @@ clearscope void GetSortList(in out Array<String> items)
 		Array<String> lines;
 		data.Split(lines, "\n");
 		String comment = "#";
+		String marker = "<";
 		for(int i = 0; i < lines.Size(); i++)
 		{
 			// Filter spaces
@@ -118,11 +125,86 @@ clearscope void GetSortList(in out Array<String> items)
 			// Remove carrage return (Byte 13)
 			lines[i].Truncate(lines[i].Length()-1);
 			if( lines[i].ByteAt(0) != comment.ByteAt(0) && lines[i].Length() > 1 )
-			{
-				ItemsList.push(lines[i]);
+			{				
+				bool found_marker = (lines[i].ByteAt(0) == marker.ByteAt(0));
+				if(found_marker)
+				{
+					String mark = lines[i];
+					if(mark ~== "<S_ENERGY>") 
+					{
+						count_energy = true;
+						shop_data.energy_min = ItemsList.Size();
+					}
+					else if (mark ~== "<E_ENERGY>") count_energy = false;
+					
+					if(mark ~== "<S_BALLISTIC>") 
+					{
+						count_ballistics = true;
+						shop_data.ballistics_min = ItemsList.Size();
+					}
+					else if (mark ~== "<E_BALLISTIC>") count_ballistics = false;
+					
+					if(mark ~== "<S_MISSILE>")
+					{
+						count_missiles = true;
+						shop_data.missiles_min = ItemsList.Size();
+					}
+					else if (mark ~== "<E_MISSILE>") count_missiles = false;
+					
+					if(mark ~== "<S_AMMO>")
+					{
+						count_ammo = true;
+						shop_data.ammo_min = ItemsList.Size();
+					}
+					else if (mark ~== "<E_AMMO>") count_ammo = false;
+					
+					if(mark ~== "<S_ENGINE>")
+					{
+						count_engines = true;
+						shop_data.engines_min = ItemsList.Size();
+					}
+					else if (mark ~== "<E_ENGINE>") count_engines = false;
+				}
+				else
+					ItemsList.push(lines[i]);
+					
+				if(count_energy    ) shop_data.energy_max++;
+				if(count_ballistics) shop_data.ballistics_max++;
+				if(count_missiles  ) shop_data.missiles_max++;
+				if(count_ammo      ) shop_data.ammo_max++;
+				if(count_engines   ) shop_data.engines_max++;
 			}
 		}
 	}
 	
-	items.Copy(ItemsList);
+	shop_data.items_names.Copy(ItemsList);
+	return shop_data;
+}
+
+static void GetItemsList(in out Array<String> items_names)
+{	
+	// Find items data
+	int lump = -1;
+	while (-1 != (lump = Wads.FindLump("items", lump + 1)))
+	{
+		String data = Wads.ReadLump(lump);
+		Array<String> lines;
+		data.Split(lines, "\n");
+		String comment = "#";
+		String marker = "<";
+		for(int i = 0; i < lines.Size(); i++)
+		{
+			// Filter spaces
+			lines[i].Replace(" ", "");
+			lines[i].Replace("\t", "");
+			// Remove carrage return (Byte 13)
+			lines[i].Truncate(lines[i].Length()-1);
+			if( 
+				lines[i].ByteAt(0) != comment.ByteAt(0) && 
+				lines[i].ByteAt(0) !=  marker.ByteAt(0) &&
+				lines[i].Length() > 1 
+			   )
+				items_names.push(lines[i]);
+		}
+	}
 }

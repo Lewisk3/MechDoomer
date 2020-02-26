@@ -3,6 +3,21 @@ struct HudAlert
 	String text;
 	int col;
 }
+class Items_ShopData
+{
+	int energy_min;
+	int energy_max;
+	int ballistics_min;
+	int ballistics_max;
+	int missiles_min;
+	int missiles_max;
+	int ammo_min;
+	int ammo_max;
+	int engines_min;
+	int engines_max;
+	Array<mw_InvStruct> items;
+	Array<String> items_names;
+}
 class mw_InvStruct
 {
 	string Tag;
