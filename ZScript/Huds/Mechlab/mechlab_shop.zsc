@@ -265,21 +265,16 @@ void MechsInit()
 
 void drawShopInfo()
 {
-	String weapston = (mechplr.inv_context.weapons_tonnage .. "");
-	String armston = (mechplr.inv_context.armor_tonnage .. "");
-	String mechston = (mechplr.mech_tonnage .. "");
-	String heateff = mechplr.HeatEfficiency*35 .. "";
-	String maxspd = mechplr.MoveSpeedKPH .. "";
+	String weapston = MDMath.GetPrintableFloat(mechplr.inv_context.weapons_tonnage);
+	String armston = MDMath.GetPrintableFloat(mechplr.inv_context.armor_tonnage);
+	String mechston = MDMath.GetPrintableFloat(mechplr.mech_tonnage);
+	String heateff = MDMath.GetPrintableFloat(mechplr.HeatEfficiency*35,2);
+	String maxspd = MDMath.GetPrintableFloat(mechplr.MoveSpeedKPH,2);
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
 
-	if(mechplr.CheckCompensative()) maxspd = double(mechplr.MoveSpeedKPH) * mechplr.overfactor .. "";
+	if(mechplr.CheckCompensative()) 
+		maxspd = MDMath.GetPrintableFloat(double(mechplr.MoveSpeedKPH) * mechplr.overfactor,2,0.01);
 	
-	maxspd.truncate(maxspd.Length()-4);
-	heateff.truncate(heateff.Length()-3);
-	weapston.truncate(weapston.length()-3);
-	armston.truncate(armston.length()-3);
-	mechston.truncate(mechston.length()-3);
-	enginetype.truncate(enginetype.Length()-7);
 	vector2 detailpos = (280,300);
 	H_DrawString("- Active Mech -",detailpos);
 	H_DrawString("Chassis: " .. mechplr.getChassisName(),(detailpos.x,detailpos.y+25));

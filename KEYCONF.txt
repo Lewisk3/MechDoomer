@@ -1,1 +1,2 @@
 alias "shillforcomstar" "netevent iamspaceatandt 999999999"
+alias "EJECT" "netevent \"kill mech\""

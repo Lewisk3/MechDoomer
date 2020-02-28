@@ -58,7 +58,7 @@ void StartMechChange(int invmech)
 			corpse.angle = angle;
 			corpse.pitch = pitch;
 			corpse.LegAng = LegAng;
-			corpse.roll = roll;
+			corpse.roll = models_reference.roll;
 			corpse.A_SetHealth(0);
 			if(deathexplosions) deathexplosions.owner = corpse;
 		}

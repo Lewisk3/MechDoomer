@@ -5,17 +5,21 @@
 
 	(All properties must be prefixed with MechWarriorBase.<property>)
 	* Custom Properties *
-	|	heatEff         	<float>   [ Specifies how heat efficient the mech is by default, without heatsinks]
-	|   LegSpeed        	<float>   [ How fast the legs move, when pressing Left or Right strafe]
-	|   TwistRange      	<int>     [ Goes up to 360, determins the maximum difference in angle between the legs and torso ]
-	|   MoveSpeed       	<float>   [ How fast the mech moves, in KPH ]
-	|   PitchRange      	<int>     [ Determines how far up/down the mech can look ]
-	| 	Weight	   	    	<float>   [ The maximum weight of the mech ]
-	|	HudMech		    	<graphic> [ The paperdoll icon, shows health on each hardpoint]
-	|   HudCockpit     	    <graphic> [ The cockpit sprite ]
-	|   DefaultMovement 	<bool>    [ If this is true, will disable tank based movement ]
-	|   InfiniteTorsoTwist  <bool>    [ If this is true, enables infinite torso twist range ]
-	|   OverTonnage			<bool>    [ If this is true, mech can continue to equip things beyond its weight, mech will slow down in excess ]
+	|	heatEff         	<float>   	   [ Specifies how heat efficient the mech is by default, without heatsinks]
+	|   LegSpeed        	<float>  	   [ How fast the legs move, when pressing Left or Right strafe]
+	|   TwistRange      	<int>     	   [ Goes up to 360, determins the maximum difference in angle between the legs and torso ]
+	|   PitchRange      	<int>     	   [ Determines how far up/down the mech can look ]
+	| 	Weight	   	    	<float>   	   [ The maximum weight of the mech ]
+	|	HudMech		    	<graphic>      [ The paperdoll icon, shows health on each hardpoint]
+	|   Engine              <Engine Class> [ Engine class to use Engine_<type>_<model> ]
+	|   HudCockpit     	    <graphic>      [ The cockpit sprite ]
+	|   DefaultMovement 	<bool>   	   [ If this is true, will disable tank based movement ]
+	|   InfiniteTorsoTwist  <bool>   	   [ If this is true, enables infinite torso twist range ]
+	|   MechPieces          <MechTorsoBase>[ Mech parts to use; all 3D models including the cockpit ] 
+	|   CValue				<Worth>		   [ How much the mech is worth, sold at half this price ]
+	# Special Use Properties
+	|   Player.ViewHeight   <float>        [ When weapons convergence is on, weapons will converge to this height ] 
+	|	Player.DisplayName  <string>       [ The name the mech will be reference by in-game ]
 	
 	|----------------------------------|
 	|   Mech configuration functions   |
@@ -44,11 +48,11 @@
 	hardpoints.setupSlots( 1,2,3,4,5,6,7,8 )
 	
 	# Equip mech structure item, at x,y location
-	# Precise x,y locations can be grabbed from any hardpoint with; hardpoint.<hardpoint name>.pos 
-	equipStruct(<Mechbase_Utility>, (x,y), amt)
+	# Grab any hardpoint with; hardpoints.<hardpoint name> 
+	equipStruct(<Mechbase_Utility>, hardpoint, quantity)
 	
 	# Same as equip structure, only equips a weapon
-	equipWeapon(<Mechbase_Weapon>, (x,y), amt)
+	equipWeapon(<Mechbase_Weapon>, hardpoint, group)
 	
 */
 

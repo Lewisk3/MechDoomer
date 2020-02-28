@@ -110,6 +110,7 @@ class Torso_Jenner : MechTorsoBase {
 }
 class Torso_Tarantula : MechTorsoBase {
 	Default {
+		MechTorsoBase.DoNotRoll true;
 		MechTorsoBase.Pieces "Hips_Tarantula", "Legs_Tarantula", "Cockpit_Tarantula";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 90;
@@ -137,6 +138,7 @@ class Torso_Raven : MechTorsoBase {
 }
 class Torso_Kitfox : MechTorsoBase {
 	Default {
+		MechTorsoBase.DoNotRoll true;
 		MechTorsoBase.Pieces "Hips_Kitfox", "Legs_Kitfox", "Cockpit_Kitfox";
 		MechPartsBase.ZOffset 50;
 		MechPartsBase.CockpitOffset 5, 57;
@@ -160,7 +162,7 @@ class Torso_Stormcrow : MechTorsoBase {
 	Default {
 		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow", "Cockpit_Stormcrow";
 		MechPartsBase.ZOffset 60;
-		MechPartsBase.CockpitOffset 15, 70;
+		MechPartsBase.CockpitOffset 15, 80;
 		MechTorsoBase.CockpitRange 0.78, 0.4, 1.0;
 		MechTorsoBase.TwistSpeed 0.3;
 	}

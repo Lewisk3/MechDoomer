@@ -25,6 +25,7 @@ Model Torso_Commando
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -34,6 +35,7 @@ Model Hips_Commando
 	Model 0 "cm_hips.md3"
 	Skin 0 "cm_full" // Main
 	Scale 1.0 1.0 1.0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -60,6 +62,7 @@ Model Torso_Timberwolf
 	Scale 1.0 1.0 1.0
 	Offset -5 0 0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -70,6 +73,7 @@ Model Hips_Timberwolf
 	Scale 1.0 1.0 1.0
 	SurfaceSkin 0 0 "tw_full.png" // Main
 	Offset -5 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -80,7 +84,7 @@ Model Cockpit_Timberwolf
 	Scale 0.20 0.20 0.17
 	Skin 0 "tw_head.png" // Main
 	USEACTORPITCH
-	USEACTORROLL 
+	USEACTORROLL
 	RollOffset 8
 	AngleOffset 90
 	Offset -48 0 -8;
@@ -96,9 +100,10 @@ Model Torso_Stormcrow
 	SurfaceSkin 0 0 "Stormcrow/sc_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
-	Offset -16 0 0
+	Offset 0 0 0
 	AngleOffset 0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -108,7 +113,8 @@ Model Hips_Stormcrow
 	Model 0 "sc_hips.md3"
 	Scale 1.0 1.0 1.0
 	Skin 0 "sc_full.png" // Main
-	Offset -5 0 0 
+	Offset 6 0 0 
+	USEACTORPITCH
 	
     FrameIndex MODL A 0 0
 }
@@ -136,7 +142,8 @@ Model Torso_Atlas
 	Offset -5 0 0
 	AngleOffset 0
 	USEACTORPITCH
-
+	USEACTORROLL
+	
    FrameIndex TRSO A 0 0
 }
 Model Hips_Atlas
@@ -146,6 +153,7 @@ Model Hips_Atlas
 	Skin 0 "Atlas/at_full.png"
 	Scale 1.0 1.0 1.0
 	Offset -5 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -183,6 +191,7 @@ Model Hips_Jenner
 	Skin 0 "Jenner/jn_full.png"
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -214,6 +223,7 @@ Model Torso_Urbanmech
 	Offset 0 0 0 
 	AngleOffset 0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -224,6 +234,7 @@ Model Hips_Urbanmech
 	Skin 0 "Urbanmech/ur_full.png"
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -255,6 +266,7 @@ Model Torso_Nova
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0 
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -265,6 +277,7 @@ Model Hips_Nova
 	Skin 0 "nv_full.png"
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -325,6 +338,7 @@ Model Torso_Direwolf
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -334,6 +348,7 @@ Model Hips_Direwolf
 	Model 0 "dw_hips.md3"
 	Skin 0 "dw_full" // Main
 	Scale 1.0 1.0 1.0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -360,6 +375,7 @@ Model Torso_Firemoth
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -369,6 +385,7 @@ Model Hips_Firemoth
 	Model 0 "fm_hips.md3"
 	Skin 0 "fm_full" // Main
 	Scale 1.0 1.0 1.0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -395,6 +412,7 @@ Model Torso_MadDog
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -405,6 +423,7 @@ Model Hips_MadDog
 	Skin 0 "md_full" // Main
 	Scale 1.0 1.0 1.0
 	Offset -10 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -431,6 +450,7 @@ Model Torso_Summoner
 	SurfaceSkin 0 0 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -441,6 +461,7 @@ Model Hips_Summoner
 	Skin 0 "su_full" // Main
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -467,6 +488,7 @@ Model Torso_Raven
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -477,6 +499,7 @@ Model Hips_Raven
 	Skin 0 "rv_full.png" // Main
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -503,6 +526,7 @@ Model Torso_Rifleman
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -513,6 +537,7 @@ Model Hips_Rifleman
 	Skin 0 "rf_full.png" // Main
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -539,6 +564,7 @@ Model Torso_Marauder
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -549,6 +575,7 @@ Model Hips_Marauder
 	Skin 0 "mr_full.png" // Main
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -575,6 +602,7 @@ Model Torso_Kitfox
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -585,6 +613,7 @@ Model Hips_Kitfox
 	Skin 0 "kf_full.png" // Main
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }
@@ -611,6 +640,7 @@ Model Torso_Gargoyle
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
 	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
 }
@@ -621,6 +651,7 @@ Model Hips_Gargoyle
 	Skin 0 "gg_full.png" // Main
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
+	USEACTORPITCH
 	
    FrameIndex MODL A 0 0
 }

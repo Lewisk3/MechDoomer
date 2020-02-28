@@ -46,7 +46,7 @@ OptionMenu "MechDoomerMenu"
 	StaticText "not pressing move forward/backwards", "Black"
 	StaticText " "
 	
-	Slider "Weapon convergence speed", "mwd_converge_speed", 0.00, 0.5, 0.01, 2
+	Slider "Weapon convergence speed", "mwd_converge_speed", 0.00, 0.3, 0.01, 2
 	StaticText "Adjust the speed weapons converge to", "Black"
 	StaticText "point of aim when fired", "Black"
 	StaticText "Defaults to 0.10", "Black"

@@ -271,7 +271,10 @@ class MechCockpitModel : MechPartsBase
 					double old_angle = angle;
 					A_SetAngle(MDMath.Lerp(angle,toangle, rotatespeed*0.6),SPF_INTERPOLATE);
 					A_SetPitch(MDMath.Lerp(pitch,topitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
-					A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
+					
+					// Follow Roll
+					if(!mechowner.models_reference.noroll)
+						A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
 					
 					// Torso rotation sounds.
 					bool angle_move = abs(old_angle-angle) > 0.1;
@@ -308,6 +311,7 @@ class MechCockpitModel : MechPartsBase
 // Torsos
 class MechTorsoBase : MechPartsBase
 {
+	bool noroll;
 	bool notwist;
 	bool setup;
 	double cockpitpitch_mod;
@@ -325,6 +329,7 @@ class MechTorsoBase : MechPartsBase
 	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod, cockpitbob_mod;
 	Property TwistSpeed : cockpittwist_mod;
 	Property DoNotTwist : notwist;
+	Property DoNotRoll : noroll;
 	
 	Default
 	{
@@ -370,9 +375,18 @@ class MechTorsoBase : MechPartsBase
 			
 			if(!notwist)
 			{
-				pitch = mechowner.pitch*0.5;
-				roll = mechowner.roll*0.3;
-				angle = cockpit.angle;
+				if(cockpit)
+				{
+					pitch = cockpit.pitch;
+					if(!noroll) roll = MDMath.Lerp(roll, cockpit.roll, 0.1);
+					angle = cockpit.angle;
+				}
+				else // Mainly for "MechCorpses".
+				{
+					pitch = mechowner.pitch*cockpitpitch_mod;
+					roll = mechowner.roll;
+					angle = mechowner.angle*cockpitangle_mod;
+				}
 			}
 			else
 			{
@@ -407,6 +421,8 @@ class MechHipsBase : MechPartsBase
 		if(mechowner)
 		{
 			angle = mechowner.LegAng;
+			pitch = mechowner.models_reference.pitch;
+			
 			if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
 				bInvisible = true;
 			else

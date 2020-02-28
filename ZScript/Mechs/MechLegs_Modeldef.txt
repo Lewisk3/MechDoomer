@@ -220,7 +220,7 @@ Model Legs_Stormcrow
 	Model 0 "sc_legs.md3"
 	Scale 1.0 1.0 1.0
 	Skin 0 "sc_full.png" // Main
-	Offset -5 0 0 
+	Offset 11 0 0 
 	//SurfaceSkin 0 1   // Metal
 	
  // Walk

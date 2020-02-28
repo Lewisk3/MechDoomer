@@ -294,7 +294,8 @@ void mech_movement()
 		
 		// Roll distortion when looking far up/down at odd leg angle.
 		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*5)) )*0.5;
-		if( !pilotlook && !mech_shutdown ) A_SetRoll( roll + rolldistort );
+		if( !pilotlook && !mech_shutdown && (!models_reference || !models_reference.noroll) ) 
+			A_SetRoll( roll + rolldistort );
 	
 		double curspd = MoveSpeedKPH*move_throttle;
 		double turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);

@@ -9,7 +9,7 @@ class MDMath Abstract
 	// Kinda redundant, but for naming reasons it stays.
 	static double RoundNearest(double input, double toval=0.05)
 	{
-		return ceil(input/toval)*toval;
+		return floor(input/toval)*toval;
 	}
 
 	// Straight interpolate
@@ -124,8 +124,8 @@ class MDMath Abstract
 	}
 	
 	// UI Features
-	static String GetPrintableFloat(double value, int places=2, double nearest=0.05)
+	static String GetPrintableFloat(double value, int places=2, bool absolute=true)
 	{
-		return String.Format("%."..places.."f", RoundNearest(value,nearest));
+		return String.Format("%."..places.."f", absolute ? abs(value) : value);
 	}		
 }

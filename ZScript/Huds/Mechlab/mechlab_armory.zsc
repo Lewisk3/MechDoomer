@@ -178,8 +178,8 @@ void drawArmoryInfo()
 	String weapston = MDMath.GetPrintableFloat(mechplr.inv_context.weapons_tonnage);
 	String mechston = MDMath.GetPrintableFloat(mechplr.mech_tonnage);
 	String armston  = MDMath.GetPrintableFloat(mechplr.inv_context.armor_tonnage);
-	String heateff  = MDMath.GetPrintableFloat(mechplr.HeatEfficiency*35,2,0.01);
-	String maxspd   = MDMath.GetPrintableFloat(movespd,2,0.01);
+	String heateff  = MDMath.GetPrintableFloat(mechplr.HeatEfficiency*35,2);
+	String maxspd   = MDMath.GetPrintableFloat(movespd,2);
 	string enginetype = mechplr.inv_context.engine ? mechplr.inv_context.engine.displayName : "INVALID ENGINE";
 	enginetype.truncate(enginetype.Length()-7);
 	
