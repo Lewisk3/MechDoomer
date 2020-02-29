@@ -800,7 +800,6 @@ vn -0.478559 0.868773 -0.127338
 
 # main, 116 grouped triangles
 
-usemtl a
 o main
 g main
 

@@ -483,7 +483,6 @@ vn 0.0 0.0 1.0
 
 # main, 69 grouped triangles
 
-usemtl a
 o main
 g main
 

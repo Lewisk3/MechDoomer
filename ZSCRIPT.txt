@@ -1,6 +1,6 @@
 version "4.0"
 
-const mechdoomer_version = "2.95a";
+const mechdoomer_version = "3.00a";
 
 class HudSpriteInitializer : Actor
 {
@@ -22,6 +22,7 @@ class HudSpriteInitializer : Actor
 #include "ZScript/sound.zsc"
 #include "ZScript/dataobjects.zsc"
 #include "ZScript/eventhandler.zsc"
+#include "ZScript/Mechwarrior/mech_brutaldoom.zsc"
 
 // UI
 #include "ZScript/Huds/status_screen.zsc"

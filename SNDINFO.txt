@@ -71,6 +71,9 @@ Mech/Betty/MissionFail  FAILED
 Mech/Betty/LeavingMission LEAVING
 Mech/Betty/ThermalOptics THERMAL
 Mech/Betty/LightAmp LIGHTAMP
+Mech/Betty/ReportsTrap ITSATRAP
+Mech/Betty/Cowardice COWARD
+Mech/Betty/SelfDestruct SELFDEST
 
 // Unused betty
 Mech/Betty/NoAmmo AMMODEPL

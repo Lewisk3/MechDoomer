@@ -221,6 +221,22 @@ class MechDoomerEvents : EventHandler
 			if( !(act is "Item_NoPickup") && plr.Distance3D(act) <= 16) console.printf("Pickup-able Inv: %s", act.getClassName());
 		}
 		*/
+		
+		if(!plr)
+		{
+			let newplr = players[consoleplayer].mo;
+			// What a "classy" state name, mark... 
+			State brutal_edgydoomer = newplr.FindState("Death.Rape",true);
+			if(brutal_edgydoomer && ! newplr.FindInventory("DishonorBoolean")) 
+			{
+				let whyudothis = DishonorablePlayer(Actor.Spawn("DishonorablePlayer", newplr.pos));
+				if(whyudothis)
+				{
+					whyudothis.edgyboi = newplr;
+					newplr.GiveInventory("DishonorBoolean", 1);
+				}
+			}
+		}
 				
 		if(!ShaderManager)
 			ShaderManager = ColorTintShaderManager(StaticEventHandler.Find("ColorTintShaderManager"));
@@ -238,15 +254,22 @@ class MechDoomerEvents : EventHandler
 	override void NetworkProcess(ConsoleEvent e)
 	{
 		String netcmd = e.Name;
-		let plr = MechWarrior(players[e.Player].mo);
-		if(plr)
+		let def_plr = PlayerPawn(players[e.Player].mo);
+		let plr = MechWarrior(def_plr);
+		
+		// Unspecific netevents
+		if(def_plr)
 		{
-			// Process mechlab netevents
 			if(netcmd == "screen_setfadecolor") screenfadecolor = Color(255, e.Args[0],e.Args[1],e.Args[2]);
 			if(netcmd == "screen_setfade") 
 			{
 				screenfade = e.Args[0]/255.0;
 			}
+		}
+		
+		if(plr)
+		{
+			// Process mechlab netevents
 			if(netcmd == "screen_toggleinfrared") 
 			{
 				if(ShaderManager)

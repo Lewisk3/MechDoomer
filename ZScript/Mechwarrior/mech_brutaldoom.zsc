@@ -1,0 +1,82 @@
+class DishonorBoolean : Inventory
+{
+	// Sorta like how brutal does its hacky trash :P
+	// I just can't be bothered to add a bool to my eventhandler for 
+	// this stupid meme.
+	Default
+	{
+		Inventory.MaxAmount 1;
+	}
+}
+
+class DishonorablePlayer : Actor
+{	
+	Actor edgyboi;
+	SoundQueue snds;
+	double scr_fade;
+	
+	Default
+	{
+		+NOINTERACTION;
+	}
+	
+	override void BeginPlay()
+	{
+		snds = SoundQueue.SQ_Create(edgyboi);
+		scr_fade = -1;
+		
+		super.BeginPlay();
+	}
+	
+	override void Tick()
+	{
+		super.Tick();
+		snds.Tick();
+		
+		if(scr_fade >= 0)
+		{
+			MechDoomerEvents.SendNetworkEvent("screen_setfade",scr_fade);
+			scr_fade += 255.0/(35*5);
+			if(scr_fade >= 300.0)
+			{
+				for(int i = 0; i < 100; i++) console.printf("\n");
+				String Line1 = "Brutal Doom isn't supported, please use the monsters only version if you want the gore and stuff. ";
+				String Line2 = "There's also Nashgore which, i HIGHLY recommend you use instead, as it was programmed by an actual competent programmer.\n\n\n";
+				ThrowAbortException( "\n\n\c[Brick][\c[Gold]MechCompat\c[Red]: \c[Orange]Error\c[Brick]] :>\c[Purple] %s\n\c[Brick][\c[Green]Recommended course of action\c[Brick]] :>\c[Purple]\n%s",Line1, Line2 );
+			}
+		}
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 1 NoDelay
+			{
+				snds.Empty();
+				snds.PushSound("Mech/Betty/ReportsTrap");
+				snds.PushSound("Mech/Betty/Cowardice");
+			}
+		SpawnWait:
+			TNT1 A 1 A_JumpIf(snds.isEmpty(),"WaitDone");
+		loop;
+		WaitDone:
+			TNT1 A 20;
+			TNT1 A 35*3 
+			{
+				snds.PushSound("Mech/Betty/SelfDestruct");
+			}
+			TNT1 A 35*2
+			{	
+				if(edgyboi) 
+					edgyboi.DamageMobJ(self,self,0x7FFFFFFF,'Explosive');
+					
+				snds.PushSound("Mech/Damaged/CriticalExplosion");
+				snds.PushSound("Mech/Betty/MissionFail");
+				RandomExplosions.TriggerOnActor(edgyboi, 300,5,16 );
+				scr_fade = 0;
+			}
+		Done:
+			TNT1 A 1;
+		loop;
+	}
+}

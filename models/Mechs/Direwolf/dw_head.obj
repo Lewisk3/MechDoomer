@@ -679,7 +679,6 @@ vn -0.7416 -0.470498 0.478185
 
 # head, 90 grouped triangles
 
-usemtl main
 o head
 g head
 
