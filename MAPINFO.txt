@@ -23,5 +23,8 @@ GameInfo
 					"Marauder",
 					"Kitfox",
 					"Gargoyle",
+					"Warhawk",
+					"Warhammer",
+					"Hellbringer",
 					"TestingDoomguy"
 }

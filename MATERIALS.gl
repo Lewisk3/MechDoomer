@@ -172,3 +172,15 @@ material texture models/Mechs/Kitfox/kf_full.png {
 material texture models/Mechs/Gargoyle/gg_full.png {
 	shader "shaders/simsun.fp"
 }
+
+material texture models/Mechs/Warhawk/wk_full.png {
+	shader "shaders/simsun.fp"
+}
+
+material texture models/Mechs/Hellbringer/hb_full.png {
+	shader "shaders/simsun.fp"
+}
+
+material texture models/Mechs/Warhammer/wh_full.png {
+	shader "shaders/simsun.fp"
+}

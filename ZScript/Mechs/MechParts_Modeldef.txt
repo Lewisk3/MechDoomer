@@ -668,3 +668,117 @@ Model Cockpit_Gargoyle
 	
    FrameIndex MODL A 0 0
 }
+
+// Warhawk
+Model Torso_Warhawk
+{
+	Path "models/Mechs"
+	Model 0 "Warhawk/wk_torso.md3"
+	SurfaceSkin 0 0 "Warhawk/wk_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Warhawk
+{
+	Path "models/Mechs/Warhawk"
+	Model 0 "wk_hips.md3"
+	Skin 0 "wk_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Warhawk
+{
+	Path "models/Mechs/"
+	Model 0 "Warhawk/wk_head.obj"
+	Scale 0.05 0.06 0.05
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset -25 0 0;
+	
+   FrameIndex MODL A 0 0
+}
+
+// Warhammer
+Model Torso_Warhammer
+{
+	Path "models/Mechs"
+	Model 0 "Warhammer/wh_torso.md3"
+	SurfaceSkin 0 0 "Warhammer/wh_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Warhammer
+{
+	Path "models/Mechs/Warhammer"
+	Model 0 "wh_hips.md3"
+	Skin 0 "wh_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Warhammer
+{
+	Path "models/Mechs/"
+	Model 0 "Warhammer/wh_head.obj"
+	Scale 0.05 0.06 0.05
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset -3 0 -5;
+	
+   FrameIndex MODL A 0 0
+}
+
+// Hellbringer
+Model Torso_Hellbringer
+{
+	Path "models/Mechs"
+	Model 0 "Hellbringer/hb_torso.md3"
+	SurfaceSkin 0 0 "Hellbringer/hb_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Hellbringer
+{
+	Path "models/Mechs/Hellbringer"
+	Model 0 "hb_hips.md3"
+	Skin 0 "hb_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Hellbringer
+{
+	Path "models/Mechs/"
+	Model 0 "Hellbringer/hb_head.obj"
+	Scale 0.05 0.06 0.05
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset 3 0 -8;
+	
+   FrameIndex MODL A 0 0
+}

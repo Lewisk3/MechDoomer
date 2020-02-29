@@ -20,6 +20,9 @@ class Cockpit_Rifleman 	  : MechCockpitModel {}
 class Cockpit_Marauder 	  : MechCockpitModel {}
 class Cockpit_Kitfox 	  : MechCockpitModel {}
 class Cockpit_Gargoyle 	  : MechCockpitModel {}
+class Cockpit_Warhawk 	  : MechCockpitModel {}
+class Cockpit_Warhammer   : MechCockpitModel {}
+class Cockpit_Hellbringer : MechCockpitModel {}
 
 // Hips
 class Hips_Invisible   : MechHipsBase {}
@@ -39,6 +42,9 @@ class Hips_Raven	   : MechHipsBase {}
 class Hips_Rifleman	   : MechHipsBase {}
 class Hips_Marauder	   : MechHipsBase {}
 class Hips_Gargoyle	   : MechHipsBase {}
+class Hips_Warhawk	   : MechHipsBase {}
+class Hips_Warhammer   : MechHipsBase {}
+class Hips_Hellbringer : MechHipsBase {}
 class Hips_Kitfox	   : MechHipsBase {
 	override void Tick()
 	{
@@ -67,6 +73,9 @@ class Legs_Rifleman    : Legs_Smooth {}
 class Legs_Marauder    : Legs_Smooth {}
 class Legs_Kitfox      : Legs_Smooth {}
 class Legs_Gargoyle    : Legs_Smooth {}
+class Legs_Warhawk     : Legs_Smooth {}
+class Legs_Warhammer   : Legs_Smooth {}
+class Legs_Hellbringer : Legs_Smooth {}
 
 // Torsos
 
@@ -223,6 +232,15 @@ class Torso_Gargoyle : MechTorsoBase {
 		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
+class Torso_Hellbringer : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Hellbringer", "Legs_Hellbringer", "Cockpit_Hellbringer";
+		MechPartsBase.ZOffset 45;
+		MechPartsBase.CockpitOffset 0, 75;
+		MechTorsoBase.CockpitRange 0.8, 0.4, 0.4;
+		MechTorsoBase.TwistSpeed 0.35;
+	}
+}
 
 
 // Assault
@@ -232,7 +250,7 @@ class Torso_Atlas : MechTorsoBase {
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 100;
 		MechTorsoBase.CockpitRange 0.69, 0.34, 0.7;
-		MechTorsoBase.TwistSpeed 0.05;
+		MechTorsoBase.TwistSpeed 0.06;
 	}
 }
 class Torso_Direwolf : MechTorsoBase {
@@ -241,7 +259,25 @@ class Torso_Direwolf : MechTorsoBase {
 		MechPartsBase.ZOffset 45;
 		MechPartsBase.CockpitOffset 15, 90;
 		MechTorsoBase.CockpitRange 0.66, 0.4, 0.6;
-		MechTorsoBase.TwistSpeed 0.07;
+		MechTorsoBase.TwistSpeed 0.08;
+	}
+}
+class Torso_Warhawk : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Warhawk", "Legs_Warhawk", "Cockpit_Warhawk";
+		MechPartsBase.ZOffset 55;
+		MechPartsBase.CockpitOffset 15, 90;
+		MechTorsoBase.CockpitRange 0.81, 0.4, 0.2;
+		MechTorsoBase.TwistSpeed 0.10;
+	}
+}
+class Torso_Warhammer : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Warhammer", "Legs_Warhammer", "Cockpit_Warhammer";
+		MechPartsBase.ZOffset 42;
+		MechPartsBase.CockpitOffset 0, 70;
+		MechTorsoBase.CockpitRange 0.72, 0.4, 0.2;
+		MechTorsoBase.TwistSpeed 0.08;
 	}
 }
 

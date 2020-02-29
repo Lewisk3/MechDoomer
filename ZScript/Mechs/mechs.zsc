@@ -674,6 +674,47 @@ class Gargoyle : MechWarrior
 	}
 }
 
+class Hellbringer : MechWarrior
+{
+	Default
+	{
+		Mass 3000;
+		Player.DisplayName "Hellbringer - Prime";
+		Player.ViewHeight 60;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 110;
+		MechWarriorBase.LegSpeed 47.56*MWGAMEPLAY_TURNRATE*1.5;
+		MechWarriorBase.Acceleration 0.95;
+		MechWarriorBase.Weight 65;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.Engine "ENGINE_XL_325";
+		MechWarriorBase.MechPieces "Torso_Hellbringer";
+		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.CValue 9566333;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,40,28,28,20,20,28,28, 4,20,14,14,10,10,15,15 );
+		hardpoints.setupLocations( (0,25), (0,0), (20,35), (-20,10), (45,-30), (-45,-30), (20,-85), (-20,-85) );
+		hardpoints.setupSlots();
+		equipStruct("AntiMissileSystem",hardpoints.hd,1);
+		equipWeapon("ERPPC",hardpoints.la,1);
+		equipWeapon("ERPPC",hardpoints.ra,1);
+		equipWeapon("ERMediumLaser",hardpoints.lt,2);
+		equipWeapon("ERMediumLaser",hardpoints.lt,2);
+		equipWeapon("ERMediumLaser",hardpoints.lt,2);
+		equipWeapon("MachineGun",hardpoints.lt,3);
+		equipWeapon("MachineGun",hardpoints.rt,3);
+		equipWeapon("SSRM6",hardpoints.rt,4);
+		equipStruct("SSRM_Ammo",hardpoints.rl,2);
+		equipStruct("BulletsMGun",hardpoints.lt,3);
+		equipStruct("AMSAmmo",hardpoints.rt,3);
+	}
+}
+
+
 // Assault Mechs
 class Atlas : MechWarrior
 {
@@ -762,6 +803,88 @@ class Direwolf : MechWarrior
 	}
 }
 
+class Warhawk : MechWarrior
+{
+	Default
+	{
+		Mass 4000;
+		Player.DisplayName "Warhawk - Prime";
+		Player.ViewHeight 80;
+		
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 110;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.LegSpeed 45.26*MWGAMEPLAY_TURNRATE*2.0; // Scaled up a little.
+		MechWarriorBase.Acceleration 1.15;
+		MechWarriorBase.Weight 85;
+		MechWarriorBase.MechPieces "Torso_Warhawk";
+		MechWarriorBase.Engine "ENGINE_XL_315";
+		MechWarriorBase.HudMech "ATLAICO";
+		
+		MechWarriorBase.CValue 13200665;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,50,33,33,28,28,35,35, 4,25,17,17,14,14,18,18 );
+		hardpoints.setupLocations( (0,0), (0,0), (-20,-10), (20,-10), (50,-15), (-50,-15), (45,-111), (-45,-111) );
+		hardpoints.setupSlots();
+		equipStruct("DoubleHeatsink",hardpoints.hd, 1);
+		equipStruct("DoubleHeatsink",hardpoints.lt, 2);
+		equipStruct("DoubleHeatsink",hardpoints.rt, 2);
+		equipStruct("DoubleHeatsink",hardpoints.ct, 2);
+		equipStruct("LRM_Ammo",hardpoints.ll,2);
+		equipWeapon("ERPPC",hardpoints.la,1);
+		equipWeapon("ERPPC",hardpoints.la,1);
+		equipWeapon("ERPPC",hardpoints.ra,1);
+		equipWeapon("ERPPC",hardpoints.ra,1);
+		equipWeapon("LRM10",hardpoints.rt,2);
+	}
+}
+
+class Warhammer : MechWarrior
+{
+	Default
+	{
+		Mass 4000;
+		Player.DisplayName "Warhammer - IIC";
+		Player.ViewHeight 65;
+		
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 105;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.LegSpeed 37.82*MWGAMEPLAY_TURNRATE*2.0; // Scaled up a little.
+		MechWarriorBase.Acceleration 0.95;
+		MechWarriorBase.Weight 80;
+		MechWarriorBase.MechPieces "Torso_Warhammer";
+		MechWarriorBase.Engine "ENGINE_STD_320";
+		MechWarriorBase.HudMech "ATLAICO";
+		
+		MechWarriorBase.CValue 4580500;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,50,34,34,23,23,34,34, 4,25,17,17,12,12,18,18 );
+		hardpoints.setupLocations( (0,10), (0,0), (-25,25), (25,-10), (50,-15), (-50,-15), (45,-111), (-45,-111) );
+		hardpoints.setupSlots();
+		equipStruct("DoubleHeatsink",hardpoints.la, 2);
+		equipStruct("DoubleHeatsink",hardpoints.lt, 2);
+		equipStruct("DoubleHeatsink",hardpoints.rt, 2);
+		equipStruct("DoubleHeatsink",hardpoints.ra, 2);
+		equipStruct("SRM_Ammo",hardpoints.rl,2);
+		equipWeapon("ERPPC",hardpoints.la,2);
+		equipWeapon("ERPPC",hardpoints.ra,2);
+		equipWeapon("MediumPulseLaser",hardpoints.lt,1);
+		equipWeapon("MediumPulseLaser",hardpoints.lt,1);
+		equipWeapon("MediumPulseLaser",hardpoints.ct,1);
+		equipWeapon("MediumPulseLaser",hardpoints.ct,1);
+		equipWeapon("MediumPulseLaser",hardpoints.hd,1);
+		equipWeapon("SRM6",hardpoints.rt,3);
+	}
+}
 // SuperHeavy Mechs
 // ...
 

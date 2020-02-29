@@ -524,7 +524,7 @@ class Legs_Smooth  : MechLegsBase
 			"####" "#" 1 
 			{
 				if( checkStepping(true) && isMoving() ) return ResolveState("WalkCycle");
-				mid_frame = MDMath.Lerp(frame, 1, 0.05);
+				mid_frame = MDMath.Lerp(frame, 0, 0.05);
 				frame = floor(mid_frame);
 				return ResolveState(Null);
 			}
