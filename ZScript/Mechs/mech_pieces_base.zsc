@@ -185,7 +185,7 @@ class MechCockpitCamera : MechPartsBase
 			double diff = (mechowner.pos.z+czoffs+20)-ceilingz;
 			czoffs -= diff;
 		}
-		vector3 basepos = mechowner.Vec3Offset(cos(mechowner.angle)*cxoffs,sin(mechowner.angle)*cxoffs,czoffs);
+		vector3 basepos = mechowner.Vec3Offset(cos(mechowner.angle)*distoffs,sin(mechowner.angle)*distoffs,czoffs);
 		return basepos;
 	}
 

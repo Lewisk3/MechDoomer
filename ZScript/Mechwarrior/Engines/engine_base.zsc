@@ -14,7 +14,7 @@ class EngineDatabase Abstract
 	
 	static double roundTons(double value)
 	{	
-		return ceil(value*2)/2;
+		return ceil(value*2.0)/2.0;
 	}
 	
 	static double GetTonnage(int engine, int type)
@@ -128,12 +128,12 @@ class Mechbase_Engine : Mechbase_Utility
 		string t_prefix = cnametokens[1];
 		int cname_type = cname.ToInt();
 		uint engmodel = 0;
-		if(cnametokens[1] == "CMP") engmodel = EngineDatabase.Type_Compensative;
-		if(cnametokens[1] == "STD") engmodel = EngineDatabase.Type_STD;
-		if(cnametokens[1] ==  "XL") engmodel = EngineDatabase.Type_XL;
-		if(cnametokens[1] == "XXL") engmodel = EngineDatabase.Type_XXL;
-		if(cnametokens[1] ==   "L") engmodel = EngineDatabase.Type_Light;
-		if(cnametokens[1] == "COM") engmodel = EngineDatabase.Type_Compact;
+		if(cnametokens[1] ==   "CMP") engmodel = EngineDatabase.Type_Compensative;
+		if(cnametokens[1] ==   "STD") engmodel = EngineDatabase.Type_STD;
+		if(cnametokens[1] ==    "XL") engmodel = EngineDatabase.Type_XL;
+		if(cnametokens[1] ==   "XXL") engmodel = EngineDatabase.Type_XXL;
+		if(cnametokens[1] == "LIGHT") engmodel = EngineDatabase.Type_Light;
+		if(cnametokens[1] ==   "COM") engmodel = EngineDatabase.Type_Compact;
 		
 		string displayname = t_prefix .. cname_type .. " ENGINE";
 		int type = defs.enginetype | cname_type;
