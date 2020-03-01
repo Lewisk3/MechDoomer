@@ -152,7 +152,7 @@ class MechWarrior : MechWarriorBase
 {
 	Default
 	{
-		Speed 1.0;
+		Speed 0;
 		Player.AttackZOffset 52;
 		Player.ForwardMove 0.7, 0.9;
 		Player.SideMove 1.0, 1.0;

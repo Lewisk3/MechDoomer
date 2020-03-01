@@ -528,7 +528,7 @@ class MechLegsBase : MechPartsBase
 		return ( 
 			 mechowner && !mechowner.checkVoodoo() && !mechowner.mech_shutdown && 
 		    (mechowner.player && mechowner.player.onground) && 
-			(mechowner.vel.xy.length() >= 0.1 || mechowner.LegVel) && 
+			(mechowner.vel.xy.length() >= 0.1 || mechowner.throttle != 0 || mechowner.LegVel) && 
 			!mechowner.isdead
 		);
 	}
@@ -550,9 +550,9 @@ class MechLegsBase : MechPartsBase
 		WalkCycle:
 			TLEG BCDEFGHI 4 
 			{	
-				if( (frame == 2 || frame == 7) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 4, 10);
+				if( (frame == 2 || frame == 7) && (spdrating > 0.3 || mechowner.LegVel)) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				return !isMoving() ? ResolveState("SpawnIdle") : (tics <= 5 && frame >= 7) ? ResolveState("RunCycle") : ResolveState(Null); 
 			}
 		loop;
@@ -588,7 +588,7 @@ class Legs_Smooth  : MechLegsBase
 		WalkCycle:
 			TLE1 BCDEFGHIJKLMNOPQRSTUVWXYZ 2 
 			{	
-				if(frame == 1 || frame == 15) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
+				if( (frame == 1 || frame == 15) && (spdrating > 0.3 || mechowner.LegVel) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 2, 16) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 2);
 				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null);
