@@ -530,6 +530,19 @@ Model Torso_Rifleman
 	
    FrameIndex TRSO A 0 0
 }
+Model Arms_Rifleman
+{
+	Path "models/Mechs"
+	Model 0 "Rifleman/rf_arms.md3"
+	SurfaceSkin 0 0 "Rifleman/rf_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	Offset -5 0 0
+ 	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 Model Hips_Rifleman
 {
 	Path "models/Mechs/Rifleman"

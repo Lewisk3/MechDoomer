@@ -860,7 +860,7 @@ class Warhammer : MechWarrior
 		MechWarriorBase.Weight 80;
 		MechWarriorBase.MechPieces "Torso_Warhammer";
 		MechWarriorBase.Engine "ENGINE_STD_320";
-		MechWarriorBase.HudMech "ATLAICO";
+		MechWarriorBase.HudMech "WARHICO";
 		
 		MechWarriorBase.CValue 4580500;
 	}

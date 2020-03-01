@@ -181,14 +181,7 @@ class MechDoomerEvents : EventHandler
 		if(keystatus != 0)
 		{
 			int keyscn = e.KeyScan;
-			String onoff = keystatus < 0 ? "-" : "+";
-			bool jets = checkBoundKey(keyscn,"Mech_JumpJets_Fire");
-			bool look = checkBoundKey(keyscn,"Mech_PilotLook");
 			bool loadout = checkBoundKey(keyscn,"Mech_LoadoutUI");
-			
-			if(jets) EventHandler.SendNetworkEvent(onoff.."mwd_user5");
-			if(look) EventHandler.SendNetworkEvent(onoff.."mwd_pilotlook");
-		
 			if(loadout && keystatus > 0)
 			{
 				Menu m = Menu.GetCurrentMenu();
@@ -203,8 +196,6 @@ class MechDoomerEvents : EventHandler
 				}
 				return true;
 			}
-		
-			return jets | look;
 		}
 		return false;
 	}
@@ -225,9 +216,11 @@ class MechDoomerEvents : EventHandler
 		if(!plr)
 		{
 			let newplr = players[consoleplayer].mo;
+			if(!newplr) return;
+			
 			// What a "classy" state name, mark... 
 			State brutal_edgydoomer = newplr.FindState("Death.Rape",true);
-			if(brutal_edgydoomer && ! newplr.FindInventory("DishonorBoolean")) 
+			if(brutal_edgydoomer && !newplr.FindInventory("DishonorBoolean")) 
 			{
 				let whyudothis = DishonorablePlayer(Actor.Spawn("DishonorablePlayer", newplr.pos));
 				if(whyudothis)
@@ -258,18 +251,42 @@ class MechDoomerEvents : EventHandler
 		let plr = MechWarrior(def_plr);
 		
 		// Unspecific netevents
-		if(def_plr)
+		if(def_plr || plr)
 		{
 			if(netcmd == "screen_setfadecolor") screenfadecolor = Color(255, e.Args[0],e.Args[1],e.Args[2]);
 			if(netcmd == "screen_setfade") 
 			{
 				screenfade = e.Args[0]/255.0;
 			}
+			// Command+Args
+			Array<String> netcmds;
+			netcmds.Clear();
+			netcmd.split(netcmds,":");
+			if(netcmds[0] == "destroy_object")
+			{
+				// Objective netevents
+				class<Object> thing = netcmds[1];
+				if(thing)
+				{
+					int count = 0;
+					let objIt = ThinkerIterator.Create("Object");
+					Object FoundObj;
+					while(FoundObj = objIt.Next())
+					{
+						if(FoundObj is thing) 
+						{
+							FoundObj.Destroy();
+							count++;
+						}
+					}
+					console.printf("\c[Red]Destroyed \c[White]%d \c[Blue]Objects \c[White]of type \c[Green]\"%s\"", count, netcmds[1]);
+				}
+			}
 		}
 		
 		if(plr)
 		{
-			// Process mechlab netevents
+			// Process mechlab netevents			
 			if(netcmd == "screen_toggleinfrared") 
 			{
 				if(ShaderManager)

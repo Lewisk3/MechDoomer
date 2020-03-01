@@ -1,2 +1,6 @@
 alias "shillforcomstar" "netevent iamspaceatandt 999999999"
 alias "EJECT" "netevent \"kill mech\""
+alias +jumpjets "netevent +mwd_user5"
+alias -jumpjets "netevent -mwd_user5"
+alias +cockpitlook "netevent +mwd_pilotlook"
+alias -cockpitlook "netevent -mwd_pilotlook"

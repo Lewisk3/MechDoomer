@@ -308,6 +308,41 @@ class MechCockpitModel : MechPartsBase
 	}
 }
 
+// Arms
+class MechArmsBase : MechPartsBase
+{
+	double mzoffs;
+	
+	Default
+	{
+		+INTERPOLATEANGLES
+		+NOINTERACTION
+	}
+	
+	override vector3 getMechPos()
+	{
+		vector3 basepos = mechowner.Vec3Offset(cos(angle)*-cos(pitch-90)*20,sin(angle)*-cos(pitch-90)*20,zoffs+mzoffs);
+		return basepos;
+	}
+	
+	override void tick()
+	{
+		if(mechowner && mechowner.models_reference)
+		{		
+			let cockpit = mechowner.models_reference.cockpit;
+			A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
+			A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
+			mzoffs = mechowner.viewzoffs;
+			
+			 if(!mechowner.models_reference.noroll) 
+				roll = MDMath.Lerp(roll, -(cockpit.roll*0.1), 0.1);
+				
+			bInvisible = mechowner.dronecam || mechowner.CheckVoodoo();
+		}
+		super.tick();
+	}
+}
+
 // Torsos
 class MechTorsoBase : MechPartsBase
 {
@@ -318,15 +353,19 @@ class MechTorsoBase : MechPartsBase
 	double cockpitangle_mod;
 	double cockpittwist_mod;
 	double cockpitbob_mod;
+	double arms_offs;
 	MechPartsBase hips;
 	MechPartsBase legs;
+	MechPartsBase arms;
 	MechPartsbase cockpit_camera;
 	MechCockpitModel cockpit;
+	class<MechPartsBase> arms_type;
 	class<MechPartsBase> hips_type;
 	class<MechPartsBase> legs_type;
 	class<MechCockpitModel> cockpit_type;
-	Property Pieces : hips_type, legs_type, cockpit_type;
+	Property Pieces : hips_type, legs_type, cockpit_type, arms_type;
 	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod, cockpitbob_mod;
+	Property ArmsHeight : arms_offs;
 	Property TwistSpeed : cockpittwist_mod;
 	Property DoNotTwist : notwist;
 	Property DoNotRoll : noroll;
@@ -337,12 +376,14 @@ class MechTorsoBase : MechPartsBase
 		MechTorsoBase.TwistSpeed 0.1;
 	}
 		
-	void SetupParts(class<MechPartsBase> phips, class<MechPartsBase> plegs, class<MechCockpitModel> cpit)
+	void SetupParts(class<MechPartsBase> phips, class<MechPartsBase> plegs, class<MechCockpitModel> cpit, class<MechPartsBase> parms)
 	{
 		cockpit_camera = MechPartsBase.Create("MechCockpitCamera", mechowner);
 		if(phips) hips = MechPartsBase.Create(phips, mechowner);
 		if(plegs) legs = MechPartsBase.Create(plegs, mechowner);
+		if(parms) arms = MechPartsBase.Create(parms, mechowner);
 		if(hips) hips.zoffs = zoffs;
+		if(arms) arms.zoffs = arms_offs;
 		if(cockpit_camera) 
 		{
 			cockpit_camera.cxoffs = cxoffs;
@@ -366,7 +407,7 @@ class MechTorsoBase : MechPartsBase
 	
 	override void tick()
 	{
-		if(!setup) SetupParts(hips_type, legs_type, cockpit_type);
+		if(!setup) SetupParts(hips_type, legs_type, cockpit_type, arms_type);
 		if(mechowner)
 		{
 			if( !mechowner.dronecam && !mechowner.dronecam_active &&
@@ -403,6 +444,7 @@ class MechTorsoBase : MechPartsBase
 	{
 		if(hips) hips.Destroy();
 		if(legs) legs.Destroy();
+		if(arms) arms.Destroy();
 		if(cockpit_camera) cockpit_camera.Destroy();
 	}
 	States
