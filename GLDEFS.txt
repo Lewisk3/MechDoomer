@@ -24,7 +24,7 @@ pointlight RedPointLight
 }
 pointlight BluePointLight
 {
-    color 0.0 0.0 2.0
+    color 0.0 0.0 4.0
     size 45
 }
 pointlight PurplePointLight
