@@ -184,6 +184,19 @@ Model Torso_Jenner
 	
    FrameIndex TRSO A 0 0
 }
+Model Arms_Jenner
+{
+	Path "models/Mechs"
+	Model 0 "Jenner/jn_arms.md3"
+	SurfaceSkin 0 0 "Jenner/jn_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 Model Hips_Jenner
 {
 	Path "models/Mechs"
@@ -199,7 +212,7 @@ Model Cockpit_Jenner
 {
 	Path "models/Mechs"
 	Model 0 "Jenner/jn_head2.md3"
-	Scale 0.20 0.20 0.20
+	Scale 0.05 0.05 0.05
 	Skin 0 "Jenner/jn_head.png" // Main
 	USEACTORPITCH
 	USEACTORROLL 
@@ -207,9 +220,9 @@ Model Cockpit_Jenner
 	//PitchOffset -10
 	RollOffset 8
 	AngleOffset 90
-	Offset -65 0 9;
+	Offset -16 0 8;
 	
-   FrameIndex MODL A 0 0
+	FrameIndex MODL A 0 0
 }
 
 // Urbanmech
@@ -416,6 +429,18 @@ Model Torso_MadDog
 	
    FrameIndex TRSO A 0 0
 }
+Model Arms_MadDog
+{
+	Path "models/Mechs"
+	Model 0 "MadDog/md_arms.md3"
+	SurfaceSkin 0 0 "MadDog/md_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 Model Hips_MadDog
 {
 	Path "models/Mechs/MadDog"
@@ -469,12 +494,12 @@ Model Cockpit_Summoner
 {
 	Path "models/Mechs/"
 	Model 0 "Summoner/su_head.obj"
-	Scale 0.05 0.05 0.05
+	Scale 0.05 -0.05 0.05
 	Skin 0 "c_dark.png" // Main
 	USEACTORPITCH
 	USEACTORROLL 
 	AngleOffset 90
-	Offset -6 -6 -11;
+	Offset -6 6 -11;
 	
    FrameIndex MODL A 0 0
 }
@@ -581,6 +606,18 @@ Model Torso_Marauder
 	
    FrameIndex TRSO A 0 0
 }
+Model Arms_Marauder
+{
+	Path "models/Mechs"
+	Model 0 "Marauder/mr_arms.md3"
+	SurfaceSkin 0 0 "Marauder/mr_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 Model Hips_Marauder
 {
 	Path "models/Mechs/Marauder"
@@ -596,12 +633,12 @@ Model Cockpit_Marauder
 {
 	Path "models/Mechs/"
 	Model 0 "Marauder/mr_head.obj"
-	Scale 0.0005 0.0006 0.0005 // Idk why this model is so huge... 
+	Scale 0.0004 0.0004 0.0004 // Idk why this model is so huge... 
 	Skin 0 "c_dark.png" // Main
 	USEACTORPITCH
 	USEACTORROLL 
 	AngleOffset 90
-	Offset -16 -0.25 2.23;
+	Offset -12 -0.25 3.0;
 	
    FrameIndex MODL A 0 0
 }
@@ -695,6 +732,18 @@ Model Torso_Warhawk
 	
    FrameIndex TRSO A 0 0
 }
+Model Arms_Warhawk
+{
+	Path "models/Mechs"
+	Model 0 "Warhawk/wk_arms.md3"
+	SurfaceSkin 0 0 "Warhawk/wk_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 Model Hips_Warhawk
 {
 	Path "models/Mechs/Warhawk"
@@ -732,6 +781,18 @@ Model Torso_Warhammer
 	USEACTORROLL
 	
    FrameIndex TRSO A 0 0
+}
+Model Arms_Warhammer
+{
+	Path "models/Mechs"
+	Model 0 "Warhammer/wh_arms.md3"
+	SurfaceSkin 0 0 "Warhammer/wh_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
 }
 Model Hips_Warhammer
 {

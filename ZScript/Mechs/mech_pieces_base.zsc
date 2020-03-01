@@ -185,7 +185,7 @@ class MechCockpitCamera : MechPartsBase
 			double diff = (mechowner.pos.z+czoffs+20)-ceilingz;
 			czoffs -= diff;
 		}
-		vector3 basepos = mechowner.Vec3Offset(cos(mechowner.angle)*distoffs,sin(mechowner.angle)*distoffs,czoffs);
+		vector3 basepos = mechowner.Vec3Offset(cos(mechowner.angle)*cxoffs,sin(mechowner.angle)*cxoffs,czoffs);
 		return basepos;
 	}
 
@@ -321,21 +321,36 @@ class MechArmsBase : MechPartsBase
 	
 	override vector3 getMechPos()
 	{
-		vector3 basepos = mechowner.Vec3Offset(cos(angle)*-cos(pitch-90)*20,sin(angle)*-cos(pitch-90)*20,zoffs+mzoffs);
+		if(!mechowner.models_reference || !mechowner.models_reference.cockpit) 
+			return super.getMechPos();
+		double cos_angle = cos(mechowner.angle);
+		double sin_angle = sin(mechowner.angle);
+		
+		double pitchcorrect = -cos(pitch-90)*20;
+		double forward = mechowner.models_reference.cockpit.cockpitcam.cxoffs+
+						 mechowner.models_reference.cockpit.mxoffs;
+		
+		vector3 basepos = mechowner.Vec3Offset(
+				(cos_angle*pitchcorrect) + (cos_angle*forward),
+				(sin_angle*pitchcorrect) + (sin_angle*forward),
+				zoffs+mzoffs
+		);
+		
 		return basepos;
 	}
 	
 	override void tick()
 	{
-		if(mechowner && mechowner.models_reference)
+		let base = mechowner.models_reference;
+		if(mechowner && base)
 		{		
-			let cockpit = mechowner.models_reference.cockpit;
+			let cockpit = base.cockpit;
 			A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
 			A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
 			mzoffs = mechowner.viewzoffs;
 			
 			 if(!mechowner.models_reference.noroll) 
-				roll = MDMath.Lerp(roll, -(cockpit.roll*0.1), 0.1);
+				A_SetRoll(MDMath.Lerp(roll, (base.roll*0.5), 0.5), SPF_INTERPOLATE);
 				
 			bInvisible = mechowner.dronecam || mechowner.CheckVoodoo();
 		}

@@ -78,7 +78,12 @@ class Legs_Warhammer   : Legs_Smooth {}
 class Legs_Hellbringer : Legs_Smooth {}
 
 // Arms
-class Arms_Rifleman : MechArmsBase {}
+class Arms_Rifleman  : MechArmsBase {}
+class Arms_Warhawk   : MechArmsBase {}
+class Arms_Warhammer : MechArmsBase {}
+class Arms_MadDog    : MechArmsBase {}
+class Arms_Marauder  : MechArmsBase {}
+class Arms_Jenner    : MechArmsBase {}
 
 // Torsos
 class Model_BattleArmor : MechTorsoBase
@@ -112,10 +117,11 @@ class Torso_Urbanmech : MechTorsoBase {
 }
 class Torso_Jenner : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner", "Cockpit_Jenner", "";
+		MechTorsoBase.Pieces "Hips_Jenner", "Legs_Jenner", "Cockpit_Jenner", "Arms_Jenner";
 		MechPartsBase.ZOffset 42;
 		MechPartsBase.CockpitOffset 25, 47;
-		MechTorsoBase.CockpitRange 1.0, 0.4, 1.25;
+		MechTorsoBase.ArmsHeight 42;
+		MechTorsoBase.CockpitRange 1.0, 0.4, 0.3;
 		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
@@ -200,9 +206,10 @@ class Torso_Summoner : MechTorsoBase {
 }
 class Torso_MadDog : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_MadDog", "Legs_MadDog", "Cockpit_MadDog", "";
+		MechTorsoBase.Pieces "Hips_MadDog", "Legs_MadDog", "Cockpit_MadDog", "Arms_MadDog";
 		MechPartsBase.ZOffset 55;
 		MechPartsBase.CockpitOffset 0, 80;
+		MechTorsoBase.ArmsHeight 60;
 		MechTorsoBase.CockpitRange 0.76, 0.4, 0.8;
 		MechTorsoBase.TwistSpeed 0.25;
 	}
@@ -219,9 +226,10 @@ class Torso_Rifleman : MechTorsoBase {
 }
 class Torso_Marauder : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Marauder", "Legs_Marauder", "Cockpit_Marauder", "";
+		MechTorsoBase.Pieces "Hips_Marauder", "Legs_Marauder", "Cockpit_Marauder", "Arms_Marauder";
 		MechPartsBase.ZOffset 65;
 		MechPartsBase.CockpitOffset 0, 85;
+		MechTorsoBase.ArmsHeight 70;
 		MechTorsoBase.CockpitRange 0.80, 0.40, 0.40;
 		MechTorsoBase.TwistSpeed 0.35;
 	}
@@ -267,18 +275,20 @@ class Torso_Direwolf : MechTorsoBase {
 }
 class Torso_Warhawk : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Warhawk", "Legs_Warhawk", "Cockpit_Warhawk", "";
+		MechTorsoBase.Pieces "Hips_Warhawk", "Legs_Warhawk", "Cockpit_Warhawk", "Arms_Warhawk";
 		MechPartsBase.ZOffset 55;
-		MechPartsBase.CockpitOffset 15, 90;
-		MechTorsoBase.CockpitRange 0.81, 0.4, 0.2;
+		MechPartsBase.CockpitOffset 15, 80;
+		MechTorsoBase.ArmsHeight 60;
+		MechTorsoBase.CockpitRange 0.81, 0.4, 0.05;
 		MechTorsoBase.TwistSpeed 0.10;
 	}
 }
 class Torso_Warhammer : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Warhammer", "Legs_Warhammer", "Cockpit_Warhammer", "";
+		MechTorsoBase.Pieces "Hips_Warhammer", "Legs_Warhammer", "Cockpit_Warhammer", "Arms_Warhammer";
 		MechPartsBase.ZOffset 43;
 		MechPartsBase.CockpitOffset 0, 70;
+		MechTorsoBase.ArmsHeight 43;
 		MechTorsoBase.CockpitRange 0.72, 0.4, 0.2;
 		MechTorsoBase.TwistSpeed 0.08;
 	}
