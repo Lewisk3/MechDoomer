@@ -1,0 +1,47 @@
+class NAV_Alpha : NAVPoint
+{
+	Default
+	{
+		NAVPoint.SequenceID NAVPoint.ALPHA;
+	}
+}
+
+class NAV_Beta : NAVPoint
+{
+	Default
+	{
+		NAVPoint.SequenceID NAVPoint.BETA;
+	}
+}
+
+class NAV_Delta : NAVPoint
+{
+	Default
+	{
+		NAVPoint.SequenceID NAVPoint.DELTA;
+	}
+}
+
+class NAV_Theta : NAVPoint
+{
+	Default
+	{
+		NAVPoint.SequenceID NAVPoint.THETA;
+	}
+}
+
+class NAV_Chi : NAVPoint
+{
+	Default
+	{
+		NAVPoint.SequenceID NAVPoint.CHI;
+	}
+}
+
+class NAV_Epsilon : NAVPoint
+{
+	Default
+	{
+		NAVPoint.SequenceID NAVPoint.EPSILON;
+	}
+}

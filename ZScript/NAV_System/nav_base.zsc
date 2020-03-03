@@ -1,0 +1,97 @@
+class NAVPoint : Actor
+{
+	int SEQ;
+	
+	Property SequenceID : SEQ;
+	
+	enum NAVSequences
+	{
+		ALPHA = 0,
+		BETA,
+		CHI,
+		DELTA,
+		EPSILON,
+		ETA,
+		IOTA,
+		KAPPA,
+		LAMDA,
+		MU,
+		NU,
+		OMEGA,
+		OMICRON,
+		PHI,
+		PI,
+		PSI,
+		RHO,
+		SIGMA,
+		TAU,
+		THETA,
+		UPSILON,
+		XI,
+		ZETA
+	};
+	
+	Default
+	{
+		NAVPoint.SequenceID NAVPoint.ALPHA;
+		Height 32;
+		Radius 16;
+		+NOINTERACTION;
+	}
+	
+	static NAVPoint Create(int SEQ_Type, vector3 pos)
+	{
+		let npoint = NAVPoint(Spawn("NAVPoint",pos));
+		if(npoint) npoint.SEQ = SEQ_Type;
+		return npoint;
+	}
+
+	static NAVPoint FindNAV(int type)
+	{
+		ThinkerIterator it = ThinkerIterator.Create("NAVPoint");
+		NAVPoint nact;
+		while(nact = NAVPoint(it.Next()))
+		{
+			if(nact.SEQ == type) return nact;
+		}
+		return NULL;
+	}
+	
+	static NAVPoint NextNAV(int from_ID)
+	{
+		Array<NAVPoint> NAVList;
+		ThinkerIterator it = ThinkerIterator.Create("NAVPoint");
+		NAVPoint nact;
+		while(nact = NAVPoint(it.Next())) NAVList.Push(nact);
+		if(NAVList.Size() == 0) return NULL;
+		// Sort
+		Array<NAVPoint> sortedlist;
+		bool sorted = false;
+		int lookingfor = ALPHA;
+		while(!sorted)
+		{
+			bool found = false;
+			for(int i = 0; i < NAVList.Size(); i++)
+			{
+				if(NAVList[i].SEQ == lookingfor)
+				{
+					sortedlist.Push(NAVList[i]);
+					NAVList.Delete(i);
+					lookingfor++;
+					found = true;
+					// It's a BAD idea to continue letting this run
+					// after we've deleted an object.
+					break;
+				}
+			}
+			if(!found) lookingfor++;
+			if(lookingfor > ZETA || NAVList.Size() == 0)
+			{
+				sorted = true;
+				break;
+			}
+		}
+		if(from_ID+1 > sortedlist.Size()-1) return sortedlist[ALPHA];
+		return sortedlist[from_ID+1];
+	}
+}

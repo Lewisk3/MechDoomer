@@ -24,8 +24,13 @@ class HudSpriteInitializer : Actor
 #include "ZScript/eventhandler.zsc"
 #include "ZScript/Mechwarrior/mech_brutaldoom.zsc"
 
+// NAV
+#include "ZScript/NAV_System/nav_base.zsc"
+#include "ZScript/NAV_System/navs.zsc"
+
 // UI
 #include "ZScript/Huds/status_screen.zsc"
+#include "ZScript/Huds/status_screen_3D.zsc"
 #include "ZScript/Huds/mechhud.zsc"
 #include "ZScript/Huds/mechlab.zsc"
 #include "ZScript/Huds/Mechlab/mechlab_base.zsc"

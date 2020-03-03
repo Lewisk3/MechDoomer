@@ -267,3 +267,52 @@ clearscope static bool checkBoundKeyName(int keychar, String binding)
 	String btns = KeyBindings.NameKeys(btnone, btntwo);
 	return (keychar == btns.ByteAt(0)) || (keychar == btns.ByteAt(1));
 }
+
+
+// Old, really bad compass code...
+void Draw_Compass(double xoffs=0, double yoffs=0, double woffs=0)
+{
+	if(!CPlayer || !CPlayer.mo) return;
+	let mechplr = Mechwarrior(CPlayer.mo);
+	if(!mechplr) return;
+	if(!mechplr.defaultmovement)
+	{
+		H_DrawImage("MBEARMID",(960,74));
+		if(mechplr.LegVel < 0) compassoffs += 0.79*abs(mechplr.LegVel);
+		if(mechplr.LegVel > 0) compassoffs -= 0.79*abs(mechplr.LegVel);
+		H_SetClipRect(780, 0, 360, 256);
+		H_DrawTexture(compass, (1126+compassoffs, 90) );
+		ClearClipRect();
+		if(compassoffs > 239)compassoffs = -234;
+		if(compassoffs < -239)compassoffs = 234;
+	}
+	
+	vector2 offsetpos = (949+xoffs,118+yoffs);
+	vector2 basepos   = (286+woffs,51);
+	vector2 crectxy   = (basepos.x+(offsetpos.x/2)-(woffs*2), basepos.y+offsetpos.y-128);
+	vector2 crectab   = (411+(woffs*2.3), 263);
+	//offsetpos = H_AdjustCoord(offsetpos);
+	//basepos   = H_AdjustCoord(basepos);
+	//crectxy   = H_AdjustCoord(crectxy);
+	//crectab   = H_AdjustCoord(crectab);
+	
+	double cang = mechplr.defaultmovement ? (mechplr.angle%360) : (mechplr.LegAng%360);
+	double pang = cang-79;
+	vector2 Npos = MDMath.VRotate(basepos,pang)+offsetpos;
+	vector2 Spos = MDMath.VRotate(basepos,pang+180)+offsetpos;
+	vector2 Epos = MDMath.VRotate(basepos,pang+90)+offsetpos;
+	vector2 Wpos = MDMath.VRotate(basepos,pang-90)+offsetpos;
+	
+	H_SetClipRect(crectxy.x,crectxy.y, crectab.x,crectab.y);
+	if(MDMath.inRange(cang,  90,89)) 
+		H_DrawString("N",(Npos.x,offsetpos.y),0,Font.CR_GREEN);
+	if(MDMath.inRange(cang, 270,89)) 
+		H_DrawString("S",(Spos.x,offsetpos.y),0,Font.CR_GREEN);
+	if(MDMath.inRange(cang,   0,89) ||
+	  (MDMath.inRange(cang, 359,89) && 
+	   MDMath.inRange(cang, 270,89)    ))
+		H_DrawString("E",(Epos.x,offsetpos.y),0,Font.CR_GREEN);
+	if(MDMath.inRange(cang, 180,89)) 
+		H_DrawString("W",(Wpos.x,offsetpos.y),0,Font.CR_GREEN);
+	Screen.ClearClipRect();
+}

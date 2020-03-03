@@ -29,6 +29,7 @@ class MechDoomerEvents : EventHandler
 		}
 		
 		let plr = Mechwarrior(e.Camera);
+		NAVPoint nav;
 		CVar target_mode;		
 		
 		if(!plr) 
@@ -36,10 +37,27 @@ class MechDoomerEvents : EventHandler
 			let cam = MechCockpitCamera(e.Camera);
 			if(cam) plr = Mechwarrior(cam.mechowner);
 		}
-		if(plr) target_mode = CVar.GetCVar("mwd_viewport_target",plr.player);	
+		
+		if(plr) 
+		{
+			target_mode = CVar.GetCVar("mwd_viewport_target",plr.player);	
+			nav = NAVPoint(plr.targetenemy);
+		}
+		if(nav)
+		{
+			let proj = MD_SBS.GetRenderEventViewProj(e);
+			bool front;
+			vector2 ptarget;
+			[front, ptarget] = MD_SBS.GetActorHUDPos(proj, nav, 0,0,nav.height*2);
+			vector2 distscale = (0.5,0.5);
+			distscale /= plr.Distance2D(nav)/300.;
+			if(front) 
+				MD_SBS.DrawImage("NAV", ptarget, 0, 1.0, distscale, absolute:true);
+		}
 		
 		// https://forum.zdoom.org/viewtopic.php?f=122&t=61330#p1064117
-		if(!automapactive && plr && plr.targetenemy && target_mode.getBool())
+		if( !automapactive && plr && plr.targetenemy && 
+			!nav && target_mode.getBool() )
 		{
 			double fovH = (e.camera.player != NULL) ? e.camera.player.FOV : e.camera.cameraFOV;
 			mwd_Matrix worldToClip = mwd_Matrix.worldToClip(e.viewPos, e.viewAngle, e.viewPitch, e.viewRoll, fovH);
@@ -171,6 +189,20 @@ class MechDoomerEvents : EventHandler
 			}
 		}
 	}
+
+	override void WorldLoaded(WorldEvent e)
+	{
+		// Check the map for its own NAV points, if they don't exist
+		// create NAV Alpha at the start of the map.
+		double spawnangle;
+		vector3 spawnpos;
+		[spawnpos, spawnangle] = level.PickPlayerStart(0);
+		if(!NAVPoint.NextNAV(NAVPoint.ALPHA))
+		{
+			let nav = Actor.Spawn("NAV_Alpha", spawnpos);
+			if(nav) nav.angle = spawnangle;
+		}
+	}
 	
 	override void WorldTick()
 	{
@@ -275,6 +307,14 @@ class MechDoomerEvents : EventHandler
 						plr.A_PlaySound("Mech/Infrared",CHAN_WEAPON);
 					}
 				}
+			}
+			if(netcmd == "cycle_navpoint") 
+			{
+				int curnav = NAVPoint.ALPHA;
+				NAVPoint TargetNAV = NAVPoint(plr.targetenemy);
+				if(TargetNAV) curnav = TargetNAV.SEQ;
+				NAVPoint nav = NAVPoint.NextNAV(curnav);
+				if(nav) plr.targetenemy = nav;
 			}
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);
