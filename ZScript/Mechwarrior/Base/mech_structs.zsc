@@ -271,7 +271,7 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 	// So, turns out we need to copy struct items, due to how ammunition is stored.
 	// This is one of those things that'd be near impossible for a non-programmer to 
 	// figure out, it's really odd honestly, if we don't copy we end up depleting multiple
-	// ammo structures at the same time, this is because we never copy out ammunition integer
+	// ammo structures at the same time, this is because we never copy our ammunition integer
 	// out of our stacked item, we only push that item and decrement its amt. 
 	// I'm also pretty sure if we didn't copy and the item was scrapped we'd lose
 	// the instance it was equipped to.

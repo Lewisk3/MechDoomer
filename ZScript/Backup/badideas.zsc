@@ -247,3 +247,23 @@ bool equipWeapon(class<Mechbase_Weapon> type, MechHardpoint hp, int group, bool 
 	inv_context.maxgroup = getMaxWeaponGrouping();
 	return true;
 }
+
+// Check key bindings, shouldn't be used because it only returns 2 binds.
+clearscope static bool checkBoundKey(int keycode, String binding)
+{
+	int btnone, btntwo;
+	[btnone, btntwo] = Bindings.GetKeysForCommand(binding);
+	btntwo = (btntwo == 0) ? btnone : btntwo;
+	if(!btnone && !btntwo) return false;
+	return (keycode == btnone || keycode == btntwo);
+}
+
+clearscope static bool checkBoundKeyName(int keychar, String binding)
+{
+	int btnone, btntwo;
+	[btnone, btntwo] = Bindings.GetKeysForCommand(binding);
+	btntwo = (btntwo == 0) ? btnone : btntwo;
+	if(!btnone && !btntwo) return false;
+	String btns = KeyBindings.NameKeys(btnone, btntwo);
+	return (keychar == btns.ByteAt(0)) || (keychar == btns.ByteAt(1));
+}

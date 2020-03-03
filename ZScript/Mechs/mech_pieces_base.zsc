@@ -318,40 +318,60 @@ class MechArmsBase : MechPartsBase
 		+NOINTERACTION
 	}
 	
+	bool IsThirdPerson()
+	{
+		return mechowner.dronecam || mechowner.CheckVoodoo();
+	}
+	
 	override vector3 getMechPos()
 	{
 		if(!mechowner.models_reference || !mechowner.models_reference.cockpit) 
 			return super.getMechPos();
 		double cos_angle = cos(mechowner.angle);
 		double sin_angle = sin(mechowner.angle);
-		
 		double pitchcorrect = -cos(pitch-90)*20;
-		double forward = mechowner.models_reference.cockpit.cockpitcam.cxoffs+
-						 mechowner.models_reference.cockpit.mxoffs;
+		vector3 basepos;
 		
-		vector3 basepos = mechowner.Vec3Offset(
-				(cos_angle*pitchcorrect) + (cos_angle*forward),
-				(sin_angle*pitchcorrect) + (sin_angle*forward),
-				zoffs+mzoffs
-		);
-		
+		if(!IsThirdPerson())
+		{
+			double forward = mechowner.models_reference.cockpit.cockpitcam.cxoffs+
+							 mechowner.models_reference.cockpit.mxoffs;
+			basepos = mechowner.Vec3Offset(
+					(cos_angle*pitchcorrect) + (cos_angle*forward),
+					(sin_angle*pitchcorrect) + (sin_angle*forward),
+					zoffs+mzoffs
+			);
+		}
+		else
+		{
+			basepos = mechowner.Vec3Offset(cos_angle, sin_angle, zoffs+mzoffs);
+		}
 		return basepos;
 	}
 	
 	override void tick()
 	{
 		let base = mechowner.models_reference;
+		let cockpit = base.cockpit;
 		if(mechowner && base)
 		{		
-			let cockpit = base.cockpit;
-			A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
-			A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
-			mzoffs = mechowner.viewzoffs;
+			// For now, the arms will be invisible in 3rd person but, i do want them to actually
+			// function at some point, can't get the math just right atm.
+			bInvisible = IsThirdPerson();
 			
-			 if(!mechowner.models_reference.noroll) 
-				A_SetRoll(MDMath.Lerp(roll, (base.roll*0.5), 0.5), SPF_INTERPOLATE);
-				
-			bInvisible = mechowner.dronecam || mechowner.CheckVoodoo();
+			if(!IsThirdPerson())
+			{
+				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
+				A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
+				if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, (base.roll*0.5), 0.5), SPF_INTERPOLATE);
+				mzoffs = mechowner.viewzoffs;
+			}
+			else
+			{
+				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
+				if(!base.noroll) roll = MDMath.Lerp(roll, cockpit.roll, 0.1);
+				angle = cockpit.angle;
+			}
 		}
 		super.tick();
 	}

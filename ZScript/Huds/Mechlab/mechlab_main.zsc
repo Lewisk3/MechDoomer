@@ -188,7 +188,7 @@ void ProcessLoadoutButtons()
 						return;
 					}
 					MechDoomerEvents.SendNetworkEvent("exchange_mech",selected_item.index);
-					Close();
+					CloseMechlab();
 				}
 				clearSelected();
 			}

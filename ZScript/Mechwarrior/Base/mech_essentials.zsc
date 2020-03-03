@@ -4,6 +4,7 @@
 extend class MechwarriorBase;
 
 // Vars
+bool uiopen_Mechlab;
 bool forceshutdown;
 class<MechwarriorBase> baseclass;
 mw_InvInfo inv_context;

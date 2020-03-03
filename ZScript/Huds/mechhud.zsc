@@ -444,7 +444,7 @@ class MechStatusBar : BaseStatusBar
 				TexMan.SetCameraToTexture(Actor(mech.targetreticle.cam),"TargetCamera",90.0);
 				TextureID targ = TexMan.CheckForTexture("TargetCamera",TexMan.TYPE_ANY);
 				H_DrawTexture(targ,(199,834),0,(1.3,1.3));
-				String dist = mech.Distance3D(mech.targetenemy)/5 .. "";
+				String dist = mech.Distance3D(mech.targetenemy)/MWGAMEPLAY_UNITMETER .. "";
 				dist.truncate(dist.Length()-6);
 				H_DrawString("Type: " .. mech.targetenemy.getTag(),(86,960));
 				H_DrawString("Distance: " .. dist .. "m",(86,980));

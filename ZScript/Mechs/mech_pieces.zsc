@@ -219,7 +219,7 @@ class Torso_Rifleman : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Rifleman", "Legs_Rifleman", "Cockpit_Rifleman", "Arms_Rifleman";
 		MechPartsBase.ZOffset 40;
 		MechPartsBase.CockpitOffset 0, 85;
-		MechTorsoBase.ArmsHeight 50;
+		MechTorsoBase.ArmsHeight 45;
 		MechTorsoBase.CockpitRange 1.0, 0.28, 0.5;
 		MechTorsoBase.TwistSpeed 0.35;
 	}

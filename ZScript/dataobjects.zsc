@@ -36,7 +36,7 @@ struct UIObject play
 	int key;
 }
 
-class I_Boolean : Inventory
+class I_Boolean : Item_NoPickup
 {
 	Default
 	{
@@ -44,7 +44,7 @@ class I_Boolean : Inventory
 	}
 }
 
-class I_Int16 : Inventory
+class I_Int16 : Item_NoPickup
 {
 	Default
 	{
@@ -52,7 +52,7 @@ class I_Int16 : Inventory
 	}
 }
 
-class I_Percent : Inventory
+class I_Percent : Item_NoPickup
 {
 	Default
 	{
@@ -60,7 +60,7 @@ class I_Percent : Inventory
 	}
 }
 
-class I_Angle : Inventory
+class I_Angle : Item_NoPickup
 {
 	Default
 	{
@@ -68,7 +68,7 @@ class I_Angle : Inventory
 	}
 }
 
-class I_Five : Inventory
+class I_Five : Item_NoPickup
 {
 	Default
 	{
@@ -76,7 +76,7 @@ class I_Five : Inventory
 	}
 }
 
-class I_Nine : Inventory
+class I_Nine : Item_NoPickup
 {
 	Default
 	{
@@ -85,7 +85,7 @@ class I_Nine : Inventory
 }
 
 
-class I_Weapon : Inventory
+class I_Weapon : Item_NoPickup
 {
 	int group;
 	class<Mechbase_Weapon> source;

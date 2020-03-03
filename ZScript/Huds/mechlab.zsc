@@ -70,6 +70,7 @@ class Mechlab_Menu : GenericMenu
 	int inputclear;
 	int infomode;
 	int invoffset;
+	int ui_closekey;
 	
 	// doubles
 	double messagepos_yscale; // Messagebox slide
@@ -87,7 +88,7 @@ class Mechlab_Menu : GenericMenu
 	vector2 font_scale;
 	
 	// Actual Menu
-	void Init(Menu parent, Mechwarrior CPlayer)
+	void Init(Menu parent, Mechwarrior CPlayer, int CloseKey)
 	{
 		//statusbar.SetSize(32, 320, 200);
 		menuactive = OnNoPause;
@@ -99,6 +100,7 @@ class Mechlab_Menu : GenericMenu
 		debug_color = Color(255,230,16,230);
 		defwidth = 1920;
 		defheight = 1080;
+		ui_closekey = CloseKey;
 		clearSelected();
 		font_scale = ( 0.65, 0.65 );
 		
@@ -355,6 +357,8 @@ class Mechlab_Menu : GenericMenu
 	
 	override void Ticker()
 	{
+		if(!mechplr.uiopen_mechlab) Close();
+	
 		if(inputclear == 0)
 		{
 			mstats.left_pressed = false;

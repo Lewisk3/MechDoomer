@@ -29,7 +29,7 @@ class MechDoomerEvents : EventHandler
 		}
 		
 		let plr = Mechwarrior(e.Camera);
-		CVar target_mode;
+		CVar target_mode;		
 		
 		if(!plr) 
 		{
@@ -124,6 +124,25 @@ class MechDoomerEvents : EventHandler
 		}
 	}
 	
+	// Whatever, it works. Until it's actually possible to make a toggle switch for UI
+	// without using hacky code, i'm not going to bother adjusting this.
+	override bool InputProcess(InputEvent e)
+	{
+		let plr = Mechwarrior(players[consoleplayer].mo);
+		Menu m = Menu.GetCurrentMenu();
+		if(plr && plr.uiopen_mechlab)
+		{
+			if (!Mechlab_Menu(m))
+			{
+				let mechlab = Mechlab_Menu(new('Mechlab_Menu'));
+				mechlab.Init(null, plr, e.KeyChar);
+				mechlab.ActivateMenu();
+				return true;
+			}
+		}
+		return false;
+	}
+		
 	override void WorldThingDamaged(WorldEvent e)
 	{
 		if(!e || !e.Thing || !e.DamageSource) return;
@@ -153,53 +172,6 @@ class MechDoomerEvents : EventHandler
 		}
 	}
 	
-	clearscope static bool checkBoundKey(int keycode, String binding)
-	{
-		int btnone, btntwo;
-		[btnone, btntwo] = Bindings.GetKeysForCommand(binding);
-		btntwo = (btntwo == 0) ? btnone : btntwo;
-		if(!btnone && !btntwo) return false;
-		return (keycode == btnone || keycode == btntwo);
-	}
-	
-	clearscope static bool checkBoundKeyName(int keychar, String binding)
-	{
-		int btnone, btntwo;
-		[btnone, btntwo] = Bindings.GetKeysForCommand(binding);
-		btntwo = (btntwo == 0) ? btnone : btntwo;
-		if(!btnone && !btntwo) return false;
-		String btns = KeyBindings.NameKeys(btnone, btntwo);
-		return (keychar == btns.ByteAt(0)) || (keychar == btns.ByteAt(1));
-	}
-	
-	// Returns: True if command on key is valid, false if it is not.
-	override bool InputProcess(InputEvent e)
-	{
-		int keystatus = e.Type == e.Type_KeyDown ?  1 : 
-						e.Type == e.Type_KeyUp   ? -1 : 0;
-						
-		if(keystatus != 0)
-		{
-			int keyscn = e.KeyScan;
-			bool loadout = checkBoundKey(keyscn,"Mech_LoadoutUI");
-			if(loadout && keystatus > 0)
-			{
-				Menu m = Menu.GetCurrentMenu();
-				let plr = Mechwarrior(players[consoleplayer].mo);
-				if(!plr) return false;
-				
-				if (!Mechlab_Menu(m))
-				{
-					mechlab = new('Mechlab_Menu');
-					mechlab.Init(null, plr);
-					mechlab.ActivateMenu();
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-
 	override void WorldTick()
 	{
 		let plr = MechWarrior(players[consoleplayer].mo);
@@ -286,7 +258,10 @@ class MechDoomerEvents : EventHandler
 		
 		if(plr)
 		{
-			// Process mechlab netevents			
+			// Process mechlab netevents	
+			if(netcmd ==  "open_mechlab") plr.uiopen_mechlab = true;
+			if(netcmd == "close_mechlab") plr.uiopen_mechlab = false;
+			
 			if(netcmd == "screen_toggleinfrared") 
 			{
 				if(ShaderManager)

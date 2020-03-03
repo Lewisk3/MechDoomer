@@ -56,14 +56,16 @@ bool checkCollision( Rect one, Rect two )
 	return collision;
 }
 
+void CloseMechlab()
+{
+	MechDoomerEvents.SendNetworkEvent("close_mechlab");
+	Close();
+}
+
 // Controls
 override bool OnUIEvent(UiEvent ev)
 {
-	if(ev.Type == UIEvent.Type_KeyDown)
-	{
-		if(MechDoomerEvents.checkBoundKeyName(ev.KeyChar,"Mech_LoadoutUI")) Close();
-	}
-	
+	if(ev.KeyChar == ui_closekey) CloseMechlab(); 
 	if(ev.Type == UIEvent.Type_MouseMove)
 	{
 		mpos.x = ev.MouseX-5;
@@ -94,7 +96,7 @@ override bool MenuEvent (int mkey, bool fromcontroller)
 	switch (mkey)
 	{
 	case MKEY_Back:
-		Close();
+		CloseMechlab();
 		return true;
 	}
 	return false;

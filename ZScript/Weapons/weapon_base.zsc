@@ -73,9 +73,10 @@ class Mechbase_Actor : FastProjectile
 			
 		super.Tick();
 	}
-	double getTravelDistance()
+	double getTravelDistance(bool unitmeter=true)
 	{
-		return MDMath.Distance3D(pos, spawnpos);
+		double convert = (unitmeter ? MWGAMEPLAY_UNITMETER : 1.0);
+		return MDMath.Distance3D(pos, spawnpos) / convert;
 	}
 	double getPitchTo(Vector3 topos)
 	{	
@@ -416,12 +417,12 @@ class MechMissile : Mechbase_Actor
 		double distance = getTravelDistance();
 		if(inrange)
 		{
-			realdamage = basedamage * (1.0-(distance/(maximum_range*4.5)));
+			realdamage = basedamage * (1.0-(distance/maximum_range));
 			realdamage = clamp(realdamage,0,basedamage);
 			SetConstDamage(floor(realdamage));
-			if(distance > maximum_range*4.5) inrange = false;
+			if(distance > maximum_range) inrange = false;
 		}
-		else if( distance >= (minimum_range*4.5) && distance < (maximum_range*4.5) )
+		else if( distance >= minimum_range && distance < maximum_range )
 		{
 			inrange = true; 
 			SetConstDamage(basedamage); 
@@ -511,7 +512,7 @@ class Laser : Mechbase_Actor
 	override void tick()
 	{
 		if(!basedamage) BaseInit();
-		realdamage = basedamage * (1.0-(getTravelDistance()/(maximum_range*6)));
+		realdamage = basedamage * (1.0-(getTravelDistance()/maximum_range));
 		realdamage = clamp(realdamage,0,basedamage);
 		SetConstDamage(floor(realdamage));
 		super.tick();
@@ -740,9 +741,9 @@ class PPCBall : Mechbase_Actor
 	{
 		Height 3;
 		Radius 3;
-		Damage 40;
+		Damage 0;
 		Speed 1;
-		Alpha 0.75;
+		Alpha 0.25;
 		RenderStyle "Add";
 		DamageType "Lightning";
 		+PUFFGETSOWNER
@@ -751,20 +752,27 @@ class PPCBall : Mechbase_Actor
 		Projectile;
 	}
 
+	override void BeginPlay()
+	{
+		if(!basedamage) BaseInit();
+		super.BeginPlay();
+	}
+
 	override void tick()
 	{
 		Converge();
-		if(!basedamage) BaseInit();
 		if(minimum_range > 0)
 		{
-			if( getTravelDistance() >= (minimum_range*3) ) 
+			if( getTravelDistance() >= minimum_range ) 
 			{
 				A_SetRenderStyle(1.0,STYLE_NORMAL);
 				SetConstDamage(basedamage);
+				console.printf("Damaging");
 			}
 			else
 			{
 				SetConstDamage(0);
+				console.printf("Not Damaging");
 			}
 		}
 		else 
@@ -795,7 +803,7 @@ class PPCBall : Mechbase_Actor
 			}
 			TNT1 A 0 
 			{
-				if(damage) 
+				if(truedamage) 
 				{
 					vector3 spos = pos;
 					spos.x += frandom(-8,8);
@@ -942,7 +950,7 @@ class MechBullet : Mechbase_Actor
 		if(!basedamage) BaseInit();
 		if(maximum_range > 0)
 		{
-			if( getTravelDistance() >= (maximum_range*3) ) Destroy();
+			if( getTravelDistance() >= maximum_range ) Destroy();
 		}
 		super.tick();
 	}
