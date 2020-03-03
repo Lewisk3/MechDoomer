@@ -61,11 +61,11 @@ class DishonorablePlayer : Actor
 		loop;
 		WaitDone:
 			TNT1 A 20;
-			TNT1 A 35*3 
+			TNT1 A 105 // 3 seconds.
 			{
 				snds.PushSound("Mech/Betty/SelfDestruct");
 			}
-			TNT1 A 35*2
+			TNT1 A 70 // 2 seconds.
 			{	
 				if(edgyboi) 
 					edgyboi.DamageMobJ(self,self,0x7FFFFFFF,'Explosive');

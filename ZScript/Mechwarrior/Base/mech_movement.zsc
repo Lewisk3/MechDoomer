@@ -7,6 +7,7 @@ extend class MechWarriorBase;
 bool defaultmovement;
 bool uncappedtorso;
 bool autopilot;
+bool autopilot_finish;
 
 double minPitch, maxPitch;
 double LegSpeed;
@@ -64,6 +65,8 @@ void ToggleAutopilot(bool forceoff = false)
 	if(!targetenemy) return;
 	
 	autopilot = forceoff ? false : !autopilot;
+	autopilot_finish = false;
+	
 	mechSounds.PushSound("Mech/Betty/Autopilot");
 	if(autopilot) 
 		mechSounds.PushSound("Mech/Betty/Engaged");
@@ -97,7 +100,6 @@ void DoAutopilot()
 		double walloffs = 180;
 		adiff = MDMath.NormalizeAngle(LegAng - wnormal+walloffs);
 	}
-	else if(!cansee) adiff += frandom[AutopilotMove](-45,45);
 	
 	if(adiff > 0) LegAng -=  LegSpeed;
 	if(adiff < 0) LegAng +=  LegSpeed;
@@ -110,36 +112,40 @@ void DoAutopilot()
 		if(pitch < 0)pitch+=2;
 		if(abs(yaw) < 2) angle = LegAng;
 		// Make sure we actually slide if a wall is in our way.
-		if(throttle > 0 && !lt.HitLine && cansee) throttle -= 0.02;
+		if(throttle > 0 && !lt.HitLine) throttle -= 0.02;
 	}
-	if(!reached || lt.HitLine && (abs(adiff) >= LegSpeed || !cansee) )
+	if( ((!reached && abs(adiff) <= LegSpeed) || lt.HitLine) && !autopilot_finish )
 	{
 		throttle += 0.02;
 		if(snd_accelerate){ A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false; }
 	}
 	
-	if(reached)
+	if(reached && !autopilot_finish)
 	{
-		if(!snd_accelerate) mechsounds.PushSound("Mech/NavBlip");
+		mechsounds.PushSound("Mech/NavBlip");
+		autopilot_finish = true;
+	}
+	if(autopilot_finish)
+	{
 		if(throttle > 0)
 		{
 			throttle -= 0.02;
 			if(!snd_accelerate){ A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true; }
 		}
-		else
+		if(throttle < 0 && NAVPoint(targetenemy))
 		{
-			if(NAVPoint(targetenemy))
-			{
-				let newNAV = NAVPoint.NextNAV( NAVPoint(targetenemy).SEQ );
-				if(newNAV == targetenemy || !newNAV)
-					ToggleAutopilot(true);
-				else
-					targetenemy = newNAV;
-			}
+			let newNAV = NAVPoint.NextNAV( NAVPoint(targetenemy).SEQ );
+			if(newNAV == targetenemy || !newNAV)
+				ToggleAutopilot(true);
 			else
 			{
-				ToggleAutopilot(true);	
+				targetenemy = newNAV;
+				autopilot_finish = false;
 			}
+		}
+		else if(!NAVPoint(targetenemy))
+		{
+			ToggleAutopilot(true);	
 		}
 	}
 	

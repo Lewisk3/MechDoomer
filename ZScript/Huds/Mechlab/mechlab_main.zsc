@@ -1,5 +1,4 @@
 extend class Mechlab_Menu;
-
 // Variables
 mw_InvInfo valid_inv_context;
 MechHardpoints valid_hardpoints;
@@ -52,7 +51,7 @@ void ProcessLoadoutButtons()
 
 	// Buttons and highlights
 	H_DrawImage(tBtn_Scrap,  ( scrapbtn.x+61, scrapbtn.y+30),0);
-    H_DrawImage(tBtn_Sort,   (  sortbtn.x+64,  sortbtn.y+30),0);
+	H_DrawImage(tBtn_Sort,   (  sortbtn.x+64,  sortbtn.y+30),0);
 	H_DrawImage(tBtn_Shop,   (  shopbtn.x+57,  shopbtn.y+35),0);
 	H_DrawImage(tBtn_ArmorAndRepair, (modebtn.x+125, modebtn.y+35),0);
 	H_DrawImage(mechmode ? tBtn_Items : tBtn_Mechs, (invmodebtn.x+64,invmodebtn.y+30),0);

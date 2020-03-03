@@ -1,3 +1,13 @@
+
+DoomEdNums
+{
+	14200 = "NAV_Alpha"
+	14201 = "NAV_Beta"
+	14202 = "NAV_Delta"
+	14203 = "NAV_Chi"
+	14204 = "NAV_Epsilon"
+}
+
 GameInfo 
 {	
 	titlemusic = "MW2_TTL"

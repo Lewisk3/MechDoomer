@@ -555,8 +555,6 @@ class MechStatusBar : BaseStatusBar
 			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
 			
-		
-			
 			// Draw weapon indicator
 			String weapind = "WEAPIND";
 			int selx = (mech.selectedWeapon+1)%2;
@@ -570,11 +568,14 @@ class MechStatusBar : BaseStatusBar
 			
 			DrawObjectives();
 			// Crosshair
-			H_DrawImage (
-				mech.crosshair_sprite,(0.5,0.5),
-				MD_SBS.SS_COORDS_TEXGRID|MD_SBS.SS_SCREEN_CENTER,
-				(1.35,1.25)
-			);
+			if(mech.inv_context.weapons_count)
+			{
+				H_DrawImage (
+					mech.crosshair_sprite,(0.5,0.5),
+					MD_SBS.SS_COORDS_TEXGRID|MD_SBS.SS_SCREEN_CENTER,
+					(1.35,1.25)
+				);
+			}
 		}
 		//if(inHUDLoadout) drawLoadoutHUD();
 	}

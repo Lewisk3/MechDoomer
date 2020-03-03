@@ -344,5 +344,4 @@ void drawArmoryInfo()
 	H_DrawString(armorstr, statuspos,0,ArmorFont);
 	H_DrawString(internalstr, (statuspos.x,statuspos.y+25), 0, InternalsFont);
 	H_DrawString(selectallstr, (statuspos.x,statuspos.y+50), 0, SelectFont);
-}
-	
+}	

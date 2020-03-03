@@ -8,14 +8,14 @@ sprite CROWA0, 640, 480
 }
 */
 
-sprite XHAIRB8, 145, 145
+sprite XHAIRB08, 145, 145
 {
 	xscale 1
 	yscale 1
 	offset 70, 70
 	patch XHAIRB8, 0, 0
 }
-sprite XHAIRB9, 145, 145
+sprite XHAIRB09, 145, 145
 {
 	xscale 1
 	yscale 1
