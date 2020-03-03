@@ -168,6 +168,7 @@ OptionMenu "MechDoomerControlsMenu"
 	Control    "Stop Mech (X)"           	 	   , "netevent \"giveinvbutton:IBTN_STOP\""
 	Control    "Center Legs to Torso (C)"      	   , "netevent \"giveinvbutton:IBTN_CENTER\""
 	Control    "Center Torso to Legs (B)"	 	   , "netevent \"giveinvbutton:IBTN_CENTERTORSO\""
+	Control    "Autopilot (K)"					   , "netevent toggle_autopilot"
 	Control    "Toggle throttle decay (Backspace)" , "netevent throttledecay_toggle"
 	StaticText " "
 	

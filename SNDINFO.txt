@@ -74,6 +74,7 @@ Mech/Betty/LightAmp LIGHTAMP
 Mech/Betty/ReportsTrap ITSATRAP
 Mech/Betty/Cowardice COWARD
 Mech/Betty/SelfDestruct SELFDEST
+Mech/Betty/Autopilot AUTOPLOT
 
 // Unused betty
 Mech/Betty/NoAmmo AMMODEPL
@@ -101,6 +102,7 @@ Mech/ReactorHum REACTHUM
 Mech/Zoom WEAPZOOM
 Mech/WeaponBusy WEAPBUSY
 Mech/Footstep MECSTEP
+Mech/NavBlip NAVBLIP
 
 // Target sequence
 Mech/Target/Get 	  TARGGET

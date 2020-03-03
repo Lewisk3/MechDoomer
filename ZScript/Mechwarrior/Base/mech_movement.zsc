@@ -6,6 +6,7 @@ extend class MechWarriorBase;
 // Properties
 bool defaultmovement;
 bool uncappedtorso;
+bool autopilot;
 
 double minPitch, maxPitch;
 double LegSpeed;
@@ -54,6 +55,104 @@ double CrouchMulti;
 double rolldistort;
 double defviewz;
 double viewzoffs;  // Bob modifier for actual viewz.
+
+
+// Autopilot
+void ToggleAutopilot(bool forceoff = false)
+{
+	// Only autopilot to target
+	if(!targetenemy) return;
+	
+	autopilot = forceoff ? false : !autopilot;
+	mechSounds.PushSound("Mech/Betty/Autopilot");
+	if(autopilot) 
+		mechSounds.PushSound("Mech/Betty/Engaged");
+	else
+		mechSounds.PushSound("Mech/Betty/Disabled");
+}
+void DoAutopilot()
+{
+	if(!targetenemy) 
+	{
+		ToggleAutopilot(true);
+		return;
+	}
+	
+	bool reached = Distance3D(targetenemy) <= 128;
+	double adiff = MDMath.NormalizeAngle( LegAng - AngleTo(targetenemy) );
+	
+	FLineTraceData lt;
+	LookExParams lookp;
+	lookp.FOV = 180;
+	lookp.maxDist = double.infinity;
+	bool cansee = IsVisible(targetenemy,true,lookp);
+	
+	// Find colliding wall, slide against normal.
+	LineTrace(LegAng,64,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,20,0,0,lt);
+	if(lt.HitLine)
+	{
+		double wnormal = VectorAngle(lt.HitLine.delta.x, lt.HitLine.delta.y);
+		int sign = wnormal > 0 ? 1 : -1;
+		if( abs(wnormal) == 180 ) wnormal = 160 * sign;
+		double walloffs = 180;
+		adiff = MDMath.NormalizeAngle(LegAng - wnormal+walloffs);
+	}
+	else if(!cansee) adiff += frandom[AutopilotMove](-45,45);
+	
+	if(adiff > 0) LegAng -=  LegSpeed;
+	if(adiff < 0) LegAng +=  LegSpeed;
+	double yaw = MDMath.NormalizeAngle(angle-LegAng);
+	if(abs(adiff) >= LegSpeed)
+	{
+		if(yaw > 0)angle-=2;
+		if(yaw < 0)angle+=2;
+		if(pitch > 0)pitch-=2;
+		if(pitch < 0)pitch+=2;
+		if(abs(yaw) < 2) angle = LegAng;
+		// Make sure we actually slide if a wall is in our way.
+		if(throttle > 0 && !lt.HitLine && cansee) throttle -= 0.02;
+	}
+	if(!reached || lt.HitLine && (abs(adiff) >= LegSpeed || !cansee) )
+	{
+		throttle += 0.02;
+		if(snd_accelerate){ A_PlaySound("Mech/AccelFromStop",1); snd_accelerate = false; }
+	}
+	
+	if(reached)
+	{
+		if(!snd_accelerate) mechsounds.PushSound("Mech/NavBlip");
+		if(throttle > 0)
+		{
+			throttle -= 0.02;
+			if(!snd_accelerate){ A_PlaySound("Mech/DeccelToStop",1); snd_accelerate = true; }
+		}
+		else
+		{
+			if(NAVPoint(targetenemy))
+			{
+				let newNAV = NAVPoint.NextNAV( NAVPoint(targetenemy).SEQ );
+				if(newNAV == targetenemy || !newNAV)
+					ToggleAutopilot(true);
+				else
+					targetenemy = newNAV;
+			}
+			else
+			{
+				ToggleAutopilot(true);	
+			}
+		}
+	}
+	
+	// Disable autopilot if player is trying to move.
+	if( countinv("IBTN_STOP")   ||
+		countinv("IBTN_CENTER") ||
+		countinv("IBTN_CENTERTORSO") ) ToggleAutopilot(true);
+
+	if(GetPlayerInput(INPUT_FORWARDMOVE) > 0) ToggleAutopilot(true);
+	if(GetPlayerInput(INPUT_FORWARDMOVE) < 0) ToggleAutopilot(true);
+	if(GetPlayerInput(INPUT_SIDEMOVE)    > 0) ToggleAutopilot(true);	
+	if(GetPlayerInput(INPUT_SIDEMOVE)    < 0) ToggleAutopilot(true);	
+}
 
 // Main
 void setupSpeedKPH(double kph)
@@ -117,6 +216,7 @@ void mech_movement()
 {
 	if(!player || isdead) return;
 	if(!CheckCompensative() && mech_shutdown) return;
+	if(autopilot) DoAutopilot();
 	
 	// Movement Quirks
 	if(defaultmovement && inv_context)

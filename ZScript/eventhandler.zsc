@@ -315,7 +315,9 @@ class MechDoomerEvents : EventHandler
 				if(TargetNAV) curnav = TargetNAV.SEQ;
 				NAVPoint nav = NAVPoint.NextNAV(curnav);
 				if(nav) plr.targetenemy = nav;
+				SoundEmitter.SE_Trigger("Mech/Target/Get",plr.pos);
 			}
+			if(netcmd == "toggle_autopilot") plr.ToggleAutopilot();
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);
 			if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
