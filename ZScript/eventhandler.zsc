@@ -49,8 +49,10 @@ class MechDoomerEvents : EventHandler
 			bool front;
 			vector2 ptarget;
 			[front, ptarget] = MD_SBS.GetActorHUDPos(proj, nav, 0,0,nav.height*2);
-			vector2 distscale = (0.5,0.5);
-			distscale /= plr.Distance2D(nav)/300.;
+			vector2 distscale = (0.15,0.15);
+			distscale *= plr.Distance2D(nav)/1200.;
+			distscale.x = clamp(distscale.x, 0.15, 0.25);
+			distscale.y = clamp(distscale.y, 0.15, 0.25);
 			if(front) 
 				MD_SBS.DrawImage("NAV", ptarget, 0, 1.0, distscale, absolute:true);
 		}

@@ -84,7 +84,12 @@ class NAVPoint : Actor
 					break;
 				}
 			}
-			if(!found) lookingfor++;
+			if(!found) 
+			{
+				lookingfor++;
+				// Properly loop NAV list.
+				if(lookingfor > ZETA) lookingfor = ALPHA;
+			}
 			if(lookingfor > ZETA || NAVList.Size() == 0)
 			{
 				sorted = true;
