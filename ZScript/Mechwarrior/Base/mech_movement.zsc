@@ -104,12 +104,15 @@ void DoAutopilot()
 	if(adiff > 0) LegAng -=  LegSpeed;
 	if(adiff < 0) LegAng +=  LegSpeed;
 	double yaw = MDMath.NormalizeAngle(angle-LegAng);
-	if(abs(adiff) >= LegSpeed)
+	if(abs(yaw) >= 2)
 	{
-		if(yaw > 0)angle-=2;
-		if(yaw < 0)angle+=2;
-		if(pitch > 0)pitch-=2;
-		if(pitch < 0)pitch+=2;
+		if(!pilotlook)
+		{
+			if(yaw > 0)angle-=2;
+			if(yaw < 0)angle+=2;
+			if(pitch > 0)pitch-=2;
+			if(pitch < 0)pitch+=2;
+		}
 		if(abs(yaw) < 2) angle = LegAng;
 		// Make sure we actually slide if a wall is in our way.
 		if(throttle > 0 && !lt.HitLine) throttle -= 0.02;
