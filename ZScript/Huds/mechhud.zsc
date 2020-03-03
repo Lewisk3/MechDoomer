@@ -255,6 +255,53 @@ class MechStatusBar : BaseStatusBar
 		}
 	}
 
+	double alt_cache;
+	double alt_interp_timer;
+	void DrawAltimeter(PlayerPawn plr, Actor target, vector2 pos, double interp=0.05)
+	{
+		double frame_ms = MSTime()-alt_interp_timer;
+		double deltatime = (1000./60.)/frame_ms;
+		alt_interp_timer = MSTime();
+		
+		double toz = plr.pos.z;
+		toz = clamp(toz, -1100, 16800);
+		if(!alt_cache) alt_cache = plr.pos.z;
+		
+		// Interpolate to new pos
+		if(alt_cache != plr.pos.z) alt_cache = MDMath.Lerp(alt_cache, toz, interp*deltatime);
+		double targz = target ? target.pos.z-plr.pos.z : 0;
+		
+		vector2 dpos = (
+			pos.x,
+			pos.y + alt_cache*0.1
+		);
+		vector2 trpos = (
+			 pos.x*1.05,
+			 (pos.y/2.86) - targz*0.1
+		);
+		vector2 lrpos = (
+			pos.x*0.92,
+			pos.y/2.86
+		);
+		if(plr.pos.z <= -1100 || plr.pos.z >= 16800) 
+			lrpos.y -= (plr.pos.z*0.01);
+		
+		// Draw elements
+		H_SetClipRect(pos.x-125, pos.y-1050, 200, 260, false);
+		MD_SBS.DrawImage("ALTMETER",  dpos, scale:(2.0,2.0));
+		MD_SBS.DrawImage("ALTLEVEL", lrpos, scale:(3.5,3.0));
+		if(target)
+		{
+			if( targz < 1000 && targz > -1200) 
+				MD_SBS.DrawImage("AR_LEFT", trpos, 0, scale:(1.5,1.5));
+			else if(targz > 1000)
+				MD_SBS.DrawImage("AR_UP", (pos.x,pos.y/3.65), 0, scale:(2.0,1.5));
+			else if(targz < -1200)
+				MD_SBS.DrawImage("AR_DOWN", (pos.x,pos.y/2.3), 0, scale:(2.0,1.5));
+		}	
+		MD_SBS.ClearClipRect();
+	}
+
 	override void Draw (int state, double TicFrac)
 	{
 		if(!automapactive) Super.Draw (state, TicFrac);
@@ -442,6 +489,7 @@ class MechStatusBar : BaseStatusBar
 			if(mech.mech_shutdown)return;
 			Draw_Radar();
 			DrawCompass(mech, mech.targetenemy, (1313,100),(970,115));
+			DrawAltimeter(mech, mech.targetenemy, (270,1425));
 			H_DrawImage("MWTARGET",(200,836),0,(1.3,1.3));
 			if(mech.targetenemy)
 			{	
