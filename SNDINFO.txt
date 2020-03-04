@@ -75,6 +75,8 @@ Mech/Betty/ReportsTrap ITSATRAP
 Mech/Betty/Cowardice COWARD
 Mech/Betty/SelfDestruct SELFDEST
 Mech/Betty/Autopilot AUTOPLOT
+Mech/Betty/ExternalCamera EXTCAM
+Mech/Betty/SatLinkEstablished SATLINK
 
 // Unused betty
 Mech/Betty/NoAmmo AMMODEPL
@@ -103,6 +105,7 @@ Mech/Zoom WEAPZOOM
 Mech/WeaponBusy WEAPBUSY
 Mech/Footstep MECSTEP
 Mech/NavBlip NAVBLIP
+Mech/Blip BLIP
 
 // Target sequence
 Mech/Target/Get 	  TARGGET

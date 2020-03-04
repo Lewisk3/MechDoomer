@@ -334,6 +334,7 @@ class MechStatusBar : BaseStatusBar
 	
 	void DrawBars()
 	{
+		if(automapactive) return;
 		if(CPlayer && CPlayer.mo) 
 		{
 			let mech = MechWarrior(CPlayer.mo);
@@ -537,8 +538,6 @@ class MechStatusBar : BaseStatusBar
 			drawWeapons(mHUDFont,(1370,55),220,50);
 			
 			// Draw armor/paperdoll
-
-			
 			double hd_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.hd);
 			double ct_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ct);
 			double lt_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.lt);
@@ -604,19 +603,21 @@ class MechStatusBar : BaseStatusBar
 			ClearClipRect();
 			
 			// Draw weapon indicator
-			String weapind = "WEAPIND";
-			int selx = (mech.selectedWeapon+1)%2;
-			int sely = (mech.selectedWeapon+1)/2;
-			vector2 weappos = ( 1450 + (selx*220), 64 + (sely*50) );
-			if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
-			if(mech.selectedWeapon <= mech.inv_context.weapons_count)H_DrawImage(weapind,weappos,0,(0.8,0.6));
-			
+			if(!automapactive)
+			{
+				String weapind = "WEAPIND";
+				int selx = (mech.selectedWeapon+1)%2;
+				int sely = (mech.selectedWeapon+1)/2;
+				vector2 weappos = ( 1450 + (selx*220), 64 + (sely*50) );
+				if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
+				if(mech.selectedWeapon <= mech.inv_context.weapons_count)H_DrawImage(weapind,weappos,0,(0.8,0.6));
+			}
+				
 			// Draw speedometer.
 			DrawBars();
-			
 			DrawObjectives();
 			// Crosshair
-			if(mech.inv_context.weapons_count)
+			if(mech.inv_context.weapons_count && !automapactive)
 			{
 				H_DrawImage (
 					mech.crosshair_sprite,(0.5,0.5),

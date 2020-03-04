@@ -296,16 +296,24 @@ class Mechbase_Weapon : Item_NoPickup
 			{	
 				// Target locked logic.		
 				aimtarget = (plr.targetenemy && plr.targetreticle && target_inview);
-
-				if(plr.locktimer == 0 && aimtarget)SoundEmitter.SE_Trigger("Mech/Target/BeginLock",Owner.pos);
-				if(plr.locktimer < 100 && aimtarget) plr.locktimer += lockonspeed;
-				if(plr.locktimer > 90 && !plr.targetlocked && aimtarget) 
+				
+				// Only lock if weapon is ready.
+				if(checkCooldown())
 				{
-					plr.targetlocked = true;
-					plr.prevlock = plr.targetenemy;
-					SoundEmitter.SE_Trigger("Mech/Target/Locked",Owner.pos);
+					if(plr.locktimer == 0 && aimtarget)SoundEmitter.SE_Trigger("Mech/Target/BeginLock",Owner.pos);
+					if(plr.locktimer < 100 && aimtarget) plr.locktimer += lockonspeed;
+					if(plr.locktimer > 90 && !plr.targetlocked && aimtarget) 
+					{
+						plr.targetlocked = true;
+						plr.prevlock = plr.targetenemy;
+						SoundEmitter.SE_Trigger("Mech/Target/Locked",Owner.pos);
+					}
 				}
-				if(!aimtarget && plr.locktimer > 0) plr.locktimer -= lockonspeed*2;
+				
+				// Deplete lock under conditions.
+				if( (!aimtarget || !checkCooldown()) && plr.locktimer > 0)
+					plr.locktimer -= lockonspeed*2;
+					
 				if(plr.locktimer < 100) plr.targetlocked = false;				
 				if(plr.targetenemy && !plr.prevlock) plr.prevlock = plr.targetenemy;
 				if(plr.targetlocked && plr.targetenemy != plr.prevlock) 

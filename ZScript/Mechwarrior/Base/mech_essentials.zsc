@@ -17,6 +17,7 @@ bool btn_userfive;
 bool pilotlook;
 bool isdead;
 bool docopy_novoodoo;
+bool prev_automap;
 int ticks;
 int prevticks;
 double mech_tonnage;
@@ -373,6 +374,14 @@ override void tick()
 	if(!shopmechs.Size()) GetAllMechs(shopmechs);
 	// Grab Items reference for shop
 	if(!shopitems) shopitems = GetAllItems();
+	
+	// Betty sound for automap toggle
+	if(automapactive && !prev_automap) 
+	{
+		mechSounds.PushSound("Mech/Blip");
+		mechSounds.PushSound("Mech/Betty/SatLinkEstablished");
+	}
+	prev_automap = automapactive;
 	
 	if(checkVoodoo()) 
 	{

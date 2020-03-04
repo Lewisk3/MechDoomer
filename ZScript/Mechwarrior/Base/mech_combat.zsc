@@ -44,6 +44,11 @@ void ToggleDrone(double cdist, double rotspd, double angdist, bool front, bool a
 	{
 		dronecam = MechCamera.Create(self, cdist, angdist, rotspd, front);
 		dronecam_active = true;
+		if(!isdead)
+		{
+			mechSounds.PushSound("Mech/Blip");
+			mechSounds.PushSound("Mech/Betty/ExternalCamera");
+		}
 	}
 	else if(!alwayson)
 	{

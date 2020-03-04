@@ -125,7 +125,6 @@ void DoAutopilot()
 	
 	if(reached && !autopilot_finish)
 	{
-		mechsounds.PushSound("Mech/NavBlip");
 		autopilot_finish = true;
 	}
 	if(autopilot_finish)
@@ -138,10 +137,12 @@ void DoAutopilot()
 		if(throttle < 0 && NAVPoint(targetenemy))
 		{
 			let newNAV = NAVPoint.NextNAV( NAVPoint(targetenemy).SEQ );
+			
 			if(newNAV == targetenemy || !newNAV)
 				ToggleAutopilot(true);
 			else
 			{
+				mechsounds.PushSound("Mech/NavBlip");
 				targetenemy = newNAV;
 				autopilot_finish = false;
 			}
