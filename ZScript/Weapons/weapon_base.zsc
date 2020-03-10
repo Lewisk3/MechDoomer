@@ -298,7 +298,7 @@ class Mechbase_Weapon : Item_NoPickup
 				aimtarget = (plr.targetenemy && plr.targetreticle && target_inview);
 				
 				// Only lock if weapon is ready.
-				if(checkCooldown())
+				if(checkCooldown() || volley_amt > 0)
 				{
 					if(plr.locktimer == 0 && aimtarget)SoundEmitter.SE_Trigger("Mech/Target/BeginLock",Owner.pos);
 					if(plr.locktimer < 100 && aimtarget) plr.locktimer += lockonspeed;
@@ -311,7 +311,7 @@ class Mechbase_Weapon : Item_NoPickup
 				}
 				
 				// Deplete lock under conditions.
-				if( (!aimtarget || !checkCooldown()) && plr.locktimer > 0)
+				if( ((!aimtarget || !checkCooldown()) && volley_amt <= 0) && plr.locktimer > 0)
 					plr.locktimer -= lockonspeed*2;
 					
 				if(plr.locktimer < 100) plr.targetlocked = false;				
@@ -775,12 +775,10 @@ class PPCBall : Mechbase_Actor
 			{
 				A_SetRenderStyle(1.0,STYLE_NORMAL);
 				SetConstDamage(basedamage);
-				console.printf("Damaging");
 			}
 			else
 			{
 				SetConstDamage(0);
-				console.printf("Not Damaging");
 			}
 		}
 		else 
