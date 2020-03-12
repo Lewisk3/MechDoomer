@@ -63,7 +63,11 @@ class Mechbase_Actor : FastProjectile
 			{
 				if(hitactor != mechplayer && !cosmetic) 
 				{
-					hitactor.DamageMobJ(self,mechplayer,truedamage,damagetype,0,mechplayer.angle);
+					// Battle Armor damage application.
+					bool is_battlearmor = (mechplayer.mechtype == mechplayer.MechType_BattleArmor);
+					double damagefinal =  is_battlearmor ? truedamage*MWGAMEPLAY_BADMGSCALE : truedamage;
+					
+					hitactor.DamageMobJ(self,mechplayer,damagefinal,damagetype,0,mechplayer.angle);
 					SetState(ResolveState("Death"));
 				}
 			}

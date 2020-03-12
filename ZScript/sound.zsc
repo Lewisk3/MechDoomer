@@ -4,9 +4,11 @@ class SoundQueue : Object
 	Array<Sound> snds;
 	int onsound;
 	int maxsounds;
-	int curmax;
 	int realsounds;
 	int timer;
+	
+	SoundInfo soundplaying;
+	Actor master;
 	
 	struct SoundInfo
 	{
@@ -14,10 +16,6 @@ class SoundQueue : Object
 		int length;
 		Sound snd;
 	}
-	
-	SoundInfo soundplaying;
-	
-	Actor master;
 	
 	static SoundQueue SQ_Create(Actor user, int maxsnds = 64)
 	{
@@ -42,30 +40,37 @@ class SoundQueue : Object
 		timer = 0;
 		onsound ++;
 		if(onsound >= maxsounds) onsound = 0;
-		if(snds[onsound] == " ")onsound = 0;
+		if(snds[onsound] == " ") onsound = 0;
+		soundplaying.length = 0;
 	}
 	
 	void pushSound(Sound snd)
 	{
 		if(realsounds < maxsounds)
 		{
+			if(realsounds == 0) timer = -1;
 			snds[realsounds] = snd;
-			curmax++;
 			realsounds++;
 		}
-		// Needs to be intialized if it's the first sound.
-		if(realsounds <= 1) PlaySound();
 	}
 	
-	void PlaySound()
+	play void PlaySound()
 	{
 		// Only play if a sound is present.
 		if(snds[onsound] != " ")
 		{
-			S_Sound(snds[onsound],CHAN_BODY,1,0);
+			if(!master)
+				S_StartSound(snds[onsound],CHAN_BODY,0,1.0,ATTN_STATIC);
+			else
+				SoundOnActor.Trigger(snds[onsound], master);
+				
 			soundplaying.qID = onsound;
 			soundplaying.length = S_GetLength(snds[onsound])*36;
 			soundplaying.snd = snds[onsound];
+		}
+		else
+		{
+			soundplaying.length = 0;
 		}
 	}
 	
@@ -76,7 +81,7 @@ class SoundQueue : Object
 	
 	void Empty()
 	{
-		for(int i = 0; i <= curmax; i++) 
+		while(realsounds != 0) 
 		{
 			popSound();
 			NextSound();
@@ -108,26 +113,34 @@ class SoundQueue : Object
 			}
 			else
 			{
-				console.printf("<%i>[%i/%i] >%s<",onsound,i+1,realsounds,snds[i]);
+				console.printf("<%i>[%i/%i] >%s<",onsound,i+1,realsounds,soundplaying.snd);
 			}
 		}
 	}
 	
-	virtual void Tick()
+	play virtual void Tick()
 	{
+		if(timer == -1) 
+		{
+			PlaySound();
+			timer = 0;
+		}
 		timer++;
-		if(timer > soundplaying.length) 
+		
+		if(timer > soundplaying.length || soundplaying.snd == "") 
 		{
 			// Pull sound from stack, move to next sound, play that.
 			if(snds[onsound] == soundplaying.snd) popSound(); // Prevent sound-insert deletion.
 			NextSound();
 			PlaySound();
 		}
+		if(!realsounds && !soundplaying.length) onsound = 0;
 		
-		//  DebugSoundQueue();
+		// DebugSoundQueue();
 	}
 	
 }
+
 
 class SoundEmitter : Actor
 {
@@ -135,7 +148,6 @@ class SoundEmitter : Actor
 
 	Default
 	{
-		+CLIENTSIDEONLY
 		+NOBLOCKMAP
 		+NOINTERACTION
 		Radius 0;
@@ -155,7 +167,7 @@ class SoundEmitter : Actor
 	
 	override void PostBeginPlay()
 	{
-		S_Sound(audio, CHAN_BODY, 1.0);
+		A_StartSound(audio, CHAN_BODY, 0, 1.0);
 		super.PostBeginPlay();
 	}
 
@@ -166,6 +178,42 @@ class SoundEmitter : Actor
 		stop;
 	}
 }
+
+class SoundOnActor : SoundEmitter
+{
+	Actor onactor;
+	
+	Default
+	{
+		+SERVERSIDEONLY
+	}
+	
+	static SoundOnActor Trigger(Sound snd, Actor at)
+	{
+		if(!at) return NULL;
+		let a_snd = SoundOnActor(Spawn("SoundOnActor", at.pos, ALLOW_REPLACE));
+		if(a_snd)
+		{
+			a_snd.audio = snd;
+			a_snd.onactor = at;
+		}
+		return a_snd;
+	}
+	
+	override void PostBeginPlay()
+	{
+		A_StartSound(audio, CHAN_BODY, 0, 1.0, ATTN_NORM);
+		super.PostBeginPlay();
+	}
+	
+	override void Tick()
+	{
+		super.Tick();
+		if(onactor) SetOrigin(onactor.pos, false);
+	}
+	
+}
+
 class MechFootstepEmitter : Actor
 {
 	Default

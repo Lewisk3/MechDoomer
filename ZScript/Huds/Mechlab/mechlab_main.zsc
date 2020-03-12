@@ -145,8 +145,8 @@ void ProcessLoadoutButtons()
 				else
 				{
 					String mechname = mechplr.GetPrintableDisplayName(mechplr.inv_context.mechs[selected_item.index].baseclass);
-					mechplr.sendHudAlert("Sold mech: \n"..mechname, Font.CR_DARKRED);
 					MechDoomerEvents.SendNetworkEvent("sell_mech",selected_item.index);
+					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[DarkRed]Sold mech: \n"..mechname);
 					clearSelected();
 				}
 				mstats.left_btn = false;
@@ -160,7 +160,7 @@ void ProcessLoadoutButtons()
 		if( !mechmode && !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
 		{
 			mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
-			mechplr.sendHudAlert("Hardpoint is destroyed!", Font.CR_DARKRED);
+			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[DarkRed]Hardpoint is destroyed!");
 			return;
 		}
 		
@@ -183,7 +183,7 @@ void ProcessLoadoutButtons()
 					if(!mechplr.mech_shutdown)
 					{
 						mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
-						mechplr.sendHudAlert("Active mech must be shutdown\nfirst!",Font.CR_ORANGE);	
+						MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Active mech must be shutdown\nfirst!");
 						return;
 					}
 					MechDoomerEvents.SendNetworkEvent("exchange_mech",selected_item.index);

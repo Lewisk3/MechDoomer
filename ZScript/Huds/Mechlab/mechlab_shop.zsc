@@ -140,7 +140,7 @@ void ProcessShopButtons()
 			mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 			MechDoomerEvents.SendNetworkEvent("shop_buyitem",selected_item.index, item_cost);
 			mstats.left_btn = false;
-			mechplr.sendHudAlert("Item purchased: \n"..selected_item.Tag,Font.CR_GREEN);
+			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Green]Item purchased: \n"..selected_item.Tag);
 		}
 		if( checkCollision(mouse, buymechbtn) && pricevalid && selected_item.index >= 0 &&  mechmode)
 		{
@@ -149,7 +149,7 @@ void ProcessShopButtons()
 			mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
 			MechDoomerEvents.SendNetworkEvent("shop_buymech",selected_item.index, item_cost);
 			mstats.left_btn = false;
-			mechplr.sendHudAlert("Mech purchased: \n"..PlayerPawn.GetPrintableDisplayName(mech.baseclass),Font.CR_GREEN);
+			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Green]Mech purchased: \n"..PlayerPawn.GetPrintableDisplayName(mech.baseclass));
 		}
 		
 		if( checkCollision(mouse, energybtn) )

@@ -1,3 +1,4 @@
+$pitchshiftrange 4
 PulseLasers/Small  PULSSML
 PulseLasers/Medium PULSMED
 PulseLasers/Large  PULSLRG
@@ -36,8 +37,8 @@ $volume Lasers/Medium 0.4
 $volume Lasers/Large  0.4
 $volume Laser/Impact 1.0
 
-
 // Mech Betty
+$pitchshiftrange 0
 Mech/Betty/HeatCritical HEATWARN
 Mech/Betty/ShutdownInit MWSHUTSQ
 Mech/Betty/ShutdownOverride MWSHUTOV

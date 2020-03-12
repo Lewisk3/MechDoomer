@@ -287,13 +287,13 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 		if(inv_context.engine) 
 		{
 			A_PlaySound("UI/Error",CHAN_WEAPON);
-			sendHudAlert("Engine already equipped!", Font.CR_DARKRED);
+			Mechlab_Alert("Engine already equipped!", Font.CR_DARKRED);
 			return false;
 		}
 		if(!EquipEngine(eng))
 		{
 			A_PlaySound("UI/Error",CHAN_WEAPON);
-			sendHudAlert("Failed to equip engine\novertonnage or too big!", Font.CR_DARKRED);
+			Mechlab_Alert("Failed to equip engine\novertonnage or too big!", Font.CR_DARKRED);
 			return false;
 		}
 		else
@@ -307,13 +307,13 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(util).weight) > mech_tonnage && !CheckCompensative())
 	{
 		A_PlaySound("UI/Error",CHAN_WEAPON);
-		sendHudAlert("Cannot equip item, over tonnage!", Font.CR_DARKRED);
+		Mechlab_Alert("Cannot equip item, over tonnage!", Font.CR_DARKRED);
 		return false;
 	}
 	if( hp.getFreeSlots() < GetDefaultByType(util).hardslots )
 	{
 		A_PlaySound("UI/Error",CHAN_WEAPON);
-		sendHudAlert("Cannot equip item, no freeslots!", Font.CR_DARKRED);
+		Mechlab_Alert("Cannot equip item, no freeslots!", Font.CR_DARKRED);
 		return false;	
 	}
 	 

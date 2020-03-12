@@ -432,8 +432,8 @@ override void tick()
 			dronecam_active = false;
 			process_shutdown();
 		}
-	}
-	mechsounds.Tick();
+	}	
 	
+	mechsounds.Tick();
 	super.tick();
 }

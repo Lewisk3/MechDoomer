@@ -397,6 +397,11 @@ class MechDoomerEvents : EventHandler
 			Array<String> netcmds;
 			netcmds.Clear();
 			netcmd.split(netcmds,":");
+			if(netcmds[0] == "mechlab_alert")
+			{
+				plr.mechlab_alert(netcmds[1],Font.CR_RED);
+			}
+			
 			// Objective netevents
 			if(netcmds[0] == "objective")
 			{

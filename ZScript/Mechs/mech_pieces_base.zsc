@@ -164,6 +164,7 @@ class MechCockpitCamera : MechPartsBase
 	Default
 	{
 		+NOINTERACTION;
+		+CLIENTSIDEONLY
 	}
 
 	double defz;	
@@ -221,6 +222,7 @@ class MechCockpitModel : MechPartsBase
 	Default
 	{
 		+NOINTERACTION
+		+CLIENTSIDEONLY
 	}
 	
 	override vector3 getMechPos()
@@ -316,6 +318,7 @@ class MechArmsBase : MechPartsBase
 	Default
 	{
 		+NOINTERACTION
+		+CLIENTSIDEONLY
 	}
 	
 	bool IsThirdPerson()

@@ -7,3 +7,4 @@ user bool mwd_universalactuation = false;
 user float mwd_converge_speed = 0.10;
 user float mwd_fontscale = 1.0;
 user float mwd_CockpitFOV = 90.0;
+user float mwd_crosshairsize = 1.0;

@@ -276,13 +276,13 @@ void drawArmoryInfo()
 				if(mechplr.isdead)
 				{
 					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
-					mechplr.sendHudAlert("Mech's reactor is completely \ndestroyed!\nUnable to initiate repair \nprocess.",Font.CR_DARKRED);	
+					MechDoomerEvents.SendNetworkEvent("mechlab_alert:Mech's reactor is completely \ndestroyed!\nUnable to initiate repair \nprocess.");
 					return;
 				}
 				if(!mechplr.mech_shutdown)
 				{
 					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
-					mechplr.sendHudAlert("Mech must be shutdown to initiate \nrepairs.",Font.CR_ORANGE);	
+					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Mech must be shutdown to initiate \nrepairs.");
 					return;
 				}
 				
@@ -291,7 +291,7 @@ void drawArmoryInfo()
 					if(!repair_cost)  
 					{
 						mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
-						mechplr.sendHudAlert("Nothing to repair.",Font.CR_ORANGE);	
+						MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Nothing to repair.");
 						return;
 					}
 					if(astat_selected < 2) 
@@ -302,7 +302,7 @@ void drawArmoryInfo()
 				else
 				{
 					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
-					mechplr.sendHudAlert("You must select a component to repair!",Font.CR_ORANGE);	
+					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]You must select a component to repair!");
 				}
 			}
 			

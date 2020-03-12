@@ -60,6 +60,12 @@ void startMechbay()
 	lockpitch = pitch;
 }
 
+void Mechlab_Alert(String str, int c)
+{
+	hAlert.text = str;
+	hAlert.col = c;
+}
+
 bool adjustTonnage(double amt, bool force=false)
 {
 	if(MDMath.RoundFloat(inv_context.weapons_tonnage+amt) > mech_tonnage && !force && !CheckCompensative()) return false;

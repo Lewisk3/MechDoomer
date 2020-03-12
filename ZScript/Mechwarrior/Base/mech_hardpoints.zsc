@@ -91,7 +91,7 @@ void RepairHardpointStat(int hindex, int stat)
 	int cost = CalculateHardpointRepairCost(hp,stat);
 	if(inv_context.money_cbills < cost) 
 	{
-		sendHudAlert("Insufficient funds!",Font.CR_DARKRED);
+		Mechlab_Alert("Insufficient funds!",Font.CR_DARKRED);
 	}
 	else
 	{
@@ -123,7 +123,7 @@ void _DoHardpointRepair(MechHardpoint hp, int stats)
 		}
 		hp.internalhp = hp.max_internal;	
 	}
-	sendHudAlert("Hardpoint repaired!",Font.CR_GREEN);
+	Mechlab_Alert("Hardpoint repaired!",Font.CR_GREEN);
 }
 void ActivateArmorUtility(class<ArmoryUtility> type, int hindex)
 {	

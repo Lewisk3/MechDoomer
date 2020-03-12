@@ -46,6 +46,18 @@ OptionMenu "MechDoomerMenu"
 	StaticText "not pressing move forward/backwards", "Black"
 	StaticText " "
 	
+	Slider "Cockpit FOV", mwd_cockpitfov, 60, 120, 1, 0
+	StaticText "Cockpit Field-Of-Vision", "Black"
+	StaticText "Adjust this if you're experiencing motion sickness.", "Black"
+	StaticText "Keep in mind that the cockpit models were adjusted", "Black"
+	StaticText "with an FOV of 90 in mind, so they might look odd.", "Black"
+	StaticText " "
+	
+	Slider "Crosshair Scale", mwd_crosshairsize, 0.1, 2.0, 0.01, 2
+	StaticText "Adjust the size of the weapons system crosshair.", "Black"
+	StaticText "Default: 1.0", "Black"
+	StaticText " "
+	
 	Slider "Weapon convergence speed", "mwd_converge_speed", 0.00, 0.3, 0.01, 2
 	StaticText "Adjust the speed weapons converge to", "Black"
 	StaticText "point of aim when fired", "Black"

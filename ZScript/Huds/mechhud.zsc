@@ -617,12 +617,13 @@ class MechStatusBar : BaseStatusBar
 			DrawBars();
 			DrawObjectives();
 			// Crosshair
+			double chscale = CVar.GetCVar("mwd_crosshairsize",mech.player).GetFloat();
 			if(mech.inv_context.weapons_count && !automapactive)
 			{
 				H_DrawImage (
 					mech.crosshair_sprite,(0.5,0.5),
 					MD_SBS.SS_COORDS_TEXGRID|MD_SBS.SS_SCREEN_CENTER,
-					(1.35,1.25)
+					(1.35*chscale,1.25*chscale)
 				);
 			}
 		}

@@ -6,7 +6,8 @@ extend class MechWarriorBase;
 enum MechTypes
 {
 	MechType_Clan,
-	MechType_Innersphere
+	MechType_Innersphere,
+	MechType_BattleArmor
 }
 
 // Properties

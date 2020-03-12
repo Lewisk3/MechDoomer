@@ -117,11 +117,6 @@ class MechWarriorBase : DoomPlayer
 	property CValue : worth;
 	
 	// Clearscope
-	clearscope void sendHudAlert(String str, int c)
-	{
-		hAlert.text = str;
-		hAlert.col = c;
-	}
 	clearscope class<Mechbase_Utility> utilcast(String type)
 	{
 		class<Mechbase_Utility> mechutil = type;
@@ -160,7 +155,7 @@ class MechWarrior : MechWarriorBase
 		Player.JumpZ 0;
 		Player.SoundClass "MechWarrior";
 		Player.DisplayName "";
-	
+		
 		MechWarriorBase.CValue 1000000;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Innersphere;
 		MechWarriorBase.Engine "Engine_STD_300";

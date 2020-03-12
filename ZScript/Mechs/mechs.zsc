@@ -73,6 +73,7 @@ class BattleArmor : MechWarrior
 		Mass 600;
 		Player.DisplayName "BattleArmor"; // (Traditional Doom Movement)
 		Player.ViewHeight 30;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_BattleArmor;
 		MechWarriorBase.TwistRange 130;
 		MechWarriorBase.heatEff 0.1;
 		MechWarriorBase.CockpitIsModel true;
