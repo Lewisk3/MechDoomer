@@ -14,8 +14,10 @@ Missiles/SRM4      MECSRM4
 Missiles/SRM6      MECSRM6
 Missiles/LRM	   MECLRM
 Missiles/AMS       MECWAMS
+$pitchshiftrange 2
 Ballistics/MGUN       BALMGUN
 Ballistics/Autocannon MECAUTOC
+$pitchshiftrange 4
 Ballistics/Gauss      MECGAUSS
 Energy/PPC    MECPPC
 Energy/Flamer MECHFLM

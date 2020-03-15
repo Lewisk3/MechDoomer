@@ -32,15 +32,49 @@ AddOptionMenu "OptionsMenu"
 	Submenu    "MechDoomer Options"      , "MechDoomerMenu"
 }
 
+OptionMenu "MechDoomerGraphicsMenu"
+{
+	Title "Graphics Shortcuts"	
+	StaticText "Render Mode (Hardware)", "Yellow"
+	Option "$VIDMNU_RENDERMODE",		"vid_rendermode", "RenderMode"
+	StaticText " "
+	StaticText "Filtering", "Yellow"
+	Option "Filter Mode (Trilinear)",		gl_texture_filter,				"FilterModes"
+	ifOption(MMX)
+	{
+		Option "Resize Mode (NormalNx)",		gl_texture_hqresizemode,		"HqResizeModes"
+	}
+	else
+	{
+		Option "Resize Mode (NormalNx)",		gl_texture_hqresizemode,		"HqResizeModesNoMMX"
+	}
+	Option "Resize Multiplier (>=4x)",	gl_texture_hqresizemult,		"HqResizeMultipliers"
+	StaticText " "
+	StaticText "Lighting", "Yellow"
+	Option "$GLPREFMNU_SECLIGHTMODE",			gl_lightmode,					"LightingModes"
+	Option "$GLPREFMNU_SWLMBANDED",				gl_bandedswlight,				"OnOff"
+	Option "$GLPREFMNU_FOGMODE",				gl_fogmode,						"FogMode"
+	StaticText " "
+	StaticText "Post Processing", "Yellow"
+	Option "$GLPREFMNU_BLOOM",		 			gl_bloom,						"OnOff"
+	Option "$GLPREFMNU_LENS",		 			gl_lens,						"OnOff"
+	Option "$GLPREFMNU_SSAO",		 			gl_ssao,						"SSAOModes"
+	Slider "$GLPREFMNU_SSAO_PORTALS",			gl_ssao_portals,				0.0, 4.0, 1.0, 0
+	Option "$GLPREFMNU_FXAA",		 			gl_fxaa,						"FXAAQuality"
+	Option "$GLPREFMNU_DITHER",		 			gl_dither_bpc,					"DitherModes"
+	Option "$GLPREFMNU_TONEMAP", 				gl_tonemap,						"TonemapModes"
+	StaticText " "	
+}
+
 OptionMenu "MechDoomerMenu"
 {
 	Title "MechDoomer Options"
 	
+	StaticText "Extra Options", "Yellow"
+	Submenu "Controls", "MechDoomerControlsMenu"
+	Submenu "Graphics", "MechDoomerGraphicsMenu"
 	StaticText " "
 	StaticText "Gameplay Options", "Yellow"
-	Submenu "Controls", "MechDoomerControlsMenu"
-	StaticText " "
-	
 	Option "Enable throttle decay", "mwd_throttledecay", "YesNo"
 	StaticText "Throttle moves to neutral position when", "Black"
 	StaticText "not pressing move forward/backwards", "Black"
@@ -163,15 +197,35 @@ AddOptionMenu "CustomizeControls"
 	Submenu    "MechDoomer Controls"      , "MechDoomerControlsMenu"
 }
 
+OptionMenu "MechDoomerMouseMenu"
+{
+	Title "MechDoomer Recommended Mouse Options"
+	StaticText " "
+	Option "Prescale Mouse (No)"    , "m_noprescale", "NoYes"
+	StaticText "Mouse movement feels a bit better with this off.", "Black"
+	Option "Smooth Mouse (Yes)"   , "smooth_mouse", "YesNo"
+	StaticText "This will make angle/pitch changes smoother.", "Black"
+	Slider "Horizontal Scale (1.0)"     , "m_yaw", 0, 2.5, 0.1
+	Slider "Vertical Scale (0.5)", "m_pitch", 0, 2.5, 0.1
+	StaticText "GZDoom scales the mouse differently along", "Black"
+	StaticText "the Y axis, this needs to be set to 0.5", "Black" 
+	StaticText "if we disable Prescale Mouse.", "Black"
+	StaticText 	""
+}
+
+
 OptionMenu "MechDoomerControlsMenu"
 {
 	Title "MechDoomer Controls"
 	ScrollTop 2
 	StaticTextSwitchable "$CNTRLMNU_SWITCHTEXT1", "$CNTRLMNU_SWITCHTEXT2", "ControlMessage"	
 	StaticText " "
-	
-	StaticText "Movement Systems", "Yellow"
+	StaticText 	"Mouse Setup", "Yellow"
 	Option 	   "Enable Mouselook (Yes)"  , "freelook", "YesNo"
+	Slider "$MOUSEMNU_SENSITIVITY",		"mouse_sensitivity", 0.5, 2.5, 0.1
+	Submenu    "More Mouse Options", "MechDoomerMouseMenu"
+	StaticText " "
+	StaticText "Movement Systems", "Yellow"
 	Control    "Accelerate (W)"          , "+forward"
 	Control    "Decelerate (S)"          , "+back"
 	Control    "Turn Left (A)"           , "+moveleft"
