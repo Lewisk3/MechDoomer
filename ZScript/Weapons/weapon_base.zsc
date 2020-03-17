@@ -115,6 +115,7 @@ class Mechbase_Actor : FastProjectile
 
 class Mechbase_Weapon : Item_NoPickup
 {
+	Mechwarrior mechplr;
 	int cooldown_timer;
 	double volleycooldown;
 	double cooldown;
@@ -187,10 +188,8 @@ class Mechbase_Weapon : Item_NoPickup
 
 	action bool CheckClassicSounds() 
 	{
-		let plr = Mechwarrior(invoker.Owner);
-		if(!plr) return false;
-		
-		return CVar.GetCVar("mwd_useclassicsound", plr.player).GetBool();
+		if(!invoker.mechplr) return false;	
+		return CVar.GetCVar("mwd_useclassicsound", invoker.mechplr.player).GetBool();
 	}
 
 	action bool FireBullets(int damage,int distance=0,int sxoff=1, int syoff=1)
@@ -243,6 +242,7 @@ class Mechbase_Weapon : Item_NoPickup
 		{
 			invoker.dofire = false;
 			invoker.cooldown_timer = invoker.cooldown*35.0;
+			invoker.MWPostFire();
 			return false;
 		}
 		return true;
@@ -252,7 +252,7 @@ class Mechbase_Weapon : Item_NoPickup
 		if(checkCooldown() || instant)
 		{
 			let plr = MechWarrior(invoker.Owner);
-			if(!plr)return false;
+			if(!plr) return false;
 			if(invoker.ammouse > 0)
 			{
 				if(plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
@@ -310,6 +310,7 @@ class Mechbase_Weapon : Item_NoPickup
 				return true;
 			}
 		}
+		if(!invoker.volley_amt) invoker.MWPostFire();
 		return false;
 	}
 	
@@ -317,6 +318,7 @@ class Mechbase_Weapon : Item_NoPickup
 	{
 		let plr = MechWarrior(Owner);
 		if(!plr) return;
+		mechplr = plr;
 		
 		// Discard lock if we're not a homing weapon and we've just been selected.
 		if(plr.selectedWeapon == WeaponID && !isHomming && plr.locktimer )
@@ -387,6 +389,7 @@ class Mechbase_Weapon : Item_NoPickup
 		super.tick();
 	}
 
+	virtual void MWPostFire() {}
 	virtual bool MWFire()
 	{
 		let plr = MechwarriorBase(Owner);

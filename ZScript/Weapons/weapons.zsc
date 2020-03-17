@@ -554,6 +554,64 @@ class LRM20: LRM5
 	}
 }
 
+// Missiles - RocketLauncher
+const RLSpread = 0.15;
+
+class RocketLauncher10 : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "RL10";
+		Mechbase_Weapon.WeaponType "RocketMissile";
+		Mechbase_Weapon.Distance_Speed 30,85;
+		Mechbase_Weapon.Tonnage 0.5;
+		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.CValue 1500;
+		Mechbase_Weapon.Cooldown 1, 0.03;
+	}
+		
+	override void MWPostFire()
+	{
+		mechplr.DestroyWeapon(self);
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(10,RLSpread,RLSpread,"Missiles/SRM2","Classic/Missiles/SRM2");
+	}
+}
+class RocketLauncher15 : RocketLauncher10
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "RL15";
+		Mechbase_Weapon.Tonnage 1;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 3000;
+	}
+
+	override bool MWFire()
+	{
+		return FireVolley(15,RLSpread,RLSpread,"Missiles/SRM2","Classic/Missiles/SRM2");
+	}
+}
+class RocketLauncher20 : RocketLauncher10
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "RL20";
+		Mechbase_Weapon.Tonnage 1.5;
+		Mechbase_Weapon.HardslotSize 3;
+		Mechbase_Weapon.CValue 4500;
+	}
+
+	override bool MWFire()
+	{
+		return FireVolley(20,RLSpread,RLSpread,"Missiles/SRM2","Classic/Missiles/SRM2");
+	}
+}
+
+
 // Ballistics
 class MachineGun : Mechbase_Weapon
 {	

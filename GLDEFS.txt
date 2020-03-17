@@ -135,6 +135,10 @@ object CATM
 {
 	Frame MISS { light YellowLight }
 }
+object RocketMissile
+{
+	Frame MISS { light YellowLight }
+}
 object Laser_SML
 {
 	Frame LASR { light RedPointLight }
