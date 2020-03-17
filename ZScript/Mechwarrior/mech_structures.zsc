@@ -263,39 +263,6 @@ class JumpJet : Mechbase_Utility
 	
 }
 
-class AntiMissileSystem : Mechbase_Utility
-{
-	int cooldown;
-	int pdamage;
-	int ammouse;
-	int activerange; // AMS becomes active when another missile enters range.
-	class<AMS_Missile> amstype;
-	class<Mechbase_Ammo> ammotype;
-	
-	Property Cooldown : cooldown;
-	Property Damage : pdamage;
-	Property AmmoUse : ammouse;
-	property ActiveRange : activerange;
-	Property MissileType : amstype;
-	Property AmmoType : ammotype;
-
-	Default
-	{
-		Mechbase_Utility.Tonnage 1.5;
-		Mechbase_Utility.displayName "AMS";
-		Mechbase_Utility.Criticals 2;
-		Mechbase_Utility.Moveable 1;
-		Mechbase_Utility.CValue 9800;
-		AntiMissileSystem.Cooldown 3;
-		AntiMissileSystem.Damage 15;
-		AntiMissileSystem.ActiveRange 800;
-		AntiMissileSystem.AmmoUse 1;
-		AntiMissileSystem.AmmoType "AMSAmmo";
-		AntiMissileSystem.MissileType "AntiMissile";
-	}
-	
-}
-
 // Armor
 class ArmoryUtility : Inventory
 {
@@ -398,6 +365,39 @@ class EndoBlue : EndosteelBonus replaces BlueArmor
 	}
 }
 
+// Combat Structures
+class AntiMissileSystem : Mechbase_Utility
+{
+	int cooldown;
+	int pdamage;
+	int ammouse;
+	int activerange; // AMS becomes active when another missile enters range.
+	class<AMS_Missile> amstype;
+	class<Mechbase_Ammo> ammotype;
+	
+	Property Cooldown : cooldown;
+	Property Damage : pdamage;
+	Property AmmoUse : ammouse;
+	property ActiveRange : activerange;
+	Property MissileType : amstype;
+	Property AmmoType : ammotype;
+
+	Default
+	{
+		Mechbase_Utility.Tonnage 1.5;
+		Mechbase_Utility.displayName "AMS";
+		Mechbase_Utility.Criticals 2;
+		Mechbase_Utility.Moveable 1;
+		Mechbase_Utility.CValue 9800;
+		AntiMissileSystem.Cooldown 3;
+		AntiMissileSystem.Damage 15;
+		AntiMissileSystem.ActiveRange 800;
+		AntiMissileSystem.AmmoUse 1;
+		AntiMissileSystem.AmmoType "AMSAmmo";
+		AntiMissileSystem.MissileType "AntiMissile";
+	}
+	
+}
 
 // Misc (WIP) 
 class Mechbay : Inventory

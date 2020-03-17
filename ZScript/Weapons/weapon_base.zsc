@@ -20,7 +20,7 @@ class Mechbase_Actor : FastProjectile
 	
 	override void PostBeginPlay()
 	{
-		S_Sound(firesound, CHAN_WEAPON, 1.0);
+		S_StartSound(firesound, CHAN_WEAPON, 1.0);
 		super.PostBeginPlay();
 	}
 	
@@ -699,8 +699,12 @@ class AMS_Missile : Mechbase_Actor
 	override void PostBeginPlay()
 	{
 		speed *= convergefactor;
+		// LAMS capable
+		// if(mechplayer) adjustHeatLevel(0.15);
+		
 		super.PostBeginPlay();
 	}
+	
 	
 	States
 	{

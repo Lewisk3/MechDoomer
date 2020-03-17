@@ -162,14 +162,13 @@ class MechStatusBar : BaseStatusBar
 			for(int i = 0; i < mech.inv_context.mechstructs.Size(); i++)
 			{
 				String cname = mech.inv_context.mechstructs[i].Tag;
-				cname.ToLower();
-				if(cname == "antimissilesystem")
+				class<AntiMissileSystem> basecast = cname;
+				if(basecast)
 				{
 					int ftranslation = Font.CR_SAPPHIRE;
 					int nselx = (lastweap+1+amsid)%2;
 					int nsely = (lastweap+1+amsid)/2;
-					class<AntiMissileSystem> defams = "AntiMissileSystem";
-					let ams_def = GetDefaultByType(defams);
+					let ams_def = GetDefaultByType(basecast);
 					if(ams_def.ammotype && ams_def.ammouse > mech.countammo(ams_def.ammotype))ftranslation = Font.CR_DARKRED;
 					if(mech.ams_timer > 0)ftranslation = Font.CR_DARKRED;
 					string prefix = ams_def.displayName;

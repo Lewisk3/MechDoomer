@@ -315,18 +315,21 @@ void process_antimissilesystem()
 	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 	{
 		String cname = inv_context.mechstructs[i].Tag;
-		cname.ToLower();
-		if(cname == "antimissilesystem")
+		class<AntiMissileSystem> basecast = cname;
+		if(basecast)
 		{
-			trigger_ams( inv_context.mechstructs[i].hardpoint.pos );
+			trigger_ams( inv_context.mechstructs[i] );
 		}
 	}
 	if(ams_timer > 0) ams_timer--;
 }
-void trigger_ams(vector2 amshardpoint)
+void trigger_ams(mw_InvStruct amsitem)
 {
-	class<Mechbase_Utility> amsut = "AntiMissileSystem";
-	class<AntiMissileSystem> amsdef = "AntiMissileSystem";
+	String cname = amsitem.Tag;
+	vector2 amshardpoint = amsitem.hardpoint.pos;
+	class<Mechbase_Utility> amsut = cname;
+	class<AntiMissileSystem> amsdef = cname;
+	
 	let def_utams = GetDefaultByType(amsut);
 	let def_ams = GetDefaultByType(amsdef);
 	
@@ -358,6 +361,7 @@ void trigger_ams(vector2 amshardpoint)
 					if(ams)
 					{
 						// AMS Sound FX
+						ams.mechplayer = Mechwarrior(self);
 						ams.tracer = obj;
 						ams.master = self;
 						ams_timer = def_ams.cooldown;
