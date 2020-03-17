@@ -43,6 +43,10 @@ CATM3
 CATM6
 CATM9
 CATM12
+MRM10
+MRM20
+MRM30
+MRM40
 LRM5  
 LRM10  
 LRM15  
@@ -64,6 +68,7 @@ GaussRounds
 SRM_Ammo  
 SSRM_Ammo 
 ATM_Ammo 
+MRM_Ammo
 LRM_Ammo  
 <E_AMMO>
 

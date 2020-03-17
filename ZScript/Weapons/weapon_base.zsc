@@ -27,7 +27,7 @@ class Mechbase_Actor : FastProjectile
 		if(mechplayer && DOS_firesound && CVar.GetCVar("mwd_useclassicsound", mechplayer.player).getBool())
 			finalsound = DOS_firesound;
 		
-		S_StartSound(finalsound, CHAN_WEAPON, 1.0);
+		if(finalsound) S_StartSound(finalsound, CHAN_WEAPON, 1.0);
 		adjustHeatLevel(heatgen);
 		
 		super.PostBeginPlay();
@@ -125,6 +125,8 @@ class Mechbase_Weapon : Item_NoPickup
 	bool isHomming;
 	int volley_amt;
 	int volley_inital;
+	double volley_xspread;
+	double volley_yspread;
 	bool volley_cosmetic;
 	int hardslots;
 	double weight;
@@ -208,7 +210,7 @@ class Mechbase_Weapon : Item_NoPickup
 		invoker.cooldown_timer = invoker.delay;
 		return true;
 	}
-	action bool FireVolley(int amt=0, int xspread=5, int yspread=5, Sound volleysnd="", Sound clsvolleysnd="", bool extra_cosmetic=false)
+	action bool FireVolley(int amt=0, double xspread=2, double yspread=2, Sound volleysnd="", Sound clsvolleysnd="", bool extra_cosmetic=false)
 	{
 		if(!invoker.dofire && checkCooldown())
 		{
@@ -220,11 +222,14 @@ class Mechbase_Weapon : Item_NoPickup
 			invoker.volley_amt = amt;
 			invoker.volley_inital = amt;
 			invoker.volley_cosmetic = extra_cosmetic;
+			invoker.volley_xspread = xspread;
+			invoker.volley_yspread = yspread;
 		}
 		else if(invoker.volley_amt > 0)
 		{
-			int rxoff = random(-xspread,xspread)**2;
-			int ryoff = random(-yspread,yspread)**2;
+			double rxoff = frandom(-64,64)*invoker.volley_xspread;
+			double ryoff = frandom(-64,64)*invoker.volley_yspread;
+			console.printf("%d", rxoff);
 			
 			// Extra_Cosmetic will make only the first object fired deal damage/generate heat.
 			bool cosmetic = invoker.volley_cosmetic ? (invoker.volley_amt < invoker.volley_inital) : false;

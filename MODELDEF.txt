@@ -301,6 +301,17 @@ Model MissileBoxAmmoDisp
 }
 
 
+Model MRM
+{	
+	Path "models"
+	Model 0 "Weapons/missile_lrm.md3"
+	Scale 0.3 0.2 0.3
+	USEACTORPITCH
+	SurfaceSkin 0 0  "Textures/missile.png" // Wings
+	
+   FrameIndex MISS A 0 0
+   FrameIndex MISS B 0 1
+}
 
 Model LRM
 {	

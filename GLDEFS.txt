@@ -123,7 +123,15 @@ object SRM
 {
 	Frame MISS { light YellowLight }
 }
+object MRM 
+{
+	Frame MISS { light YellowLight }
+}
 object LRM 
+{
+	Frame MISS { light YellowLight }
+}
+object CATM
 {
 	Frame MISS { light YellowLight }
 }

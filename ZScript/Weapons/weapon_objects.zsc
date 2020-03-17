@@ -122,6 +122,17 @@ class SSRM : SRM
 	}
 }
 
+class MRM : MechMissile
+{
+	Default
+	{
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_MRM*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.MaximumRange 450;
+		MechMissile.Homming false;
+		Mechbase_Actor.Heat MWHEAT_MRM;
+	}
+}
+
 class LRM : MechMissile
 {	
 	Default
