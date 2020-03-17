@@ -26,8 +26,10 @@ class Mechbase_Actor : FastProjectile
 		Sound finalsound = firesound;
 		if(mechplayer && DOS_firesound && CVar.GetCVar("mwd_useclassicsound", mechplayer.player).getBool())
 			finalsound = DOS_firesound;
-
+		
 		S_StartSound(finalsound, CHAN_WEAPON, 1.0);
+		adjustHeatLevel(heatgen);
+		
 		super.PostBeginPlay();
 	}
 	
@@ -471,7 +473,7 @@ class MechMissile : Mechbase_Actor
 	  {
 		  Spawn:
 			MISS B 1;
-			MISS AB 1 adjustHeatLevel(heatgen);
+			MISS AB 1;
 		  SpawnLoop:
 			MISS AB 1 Bright A_JumpIfTargetInLOS("Seek");
 			Loop;
@@ -556,8 +558,6 @@ class Laser : Mechbase_Actor
 	States
 	{
 		Spawn:
-			LASR A 1 NoDelay adjustHeatLevel(heatgen);
-		SpawnLoop:
 			LASR A 1;
 		loop;
 		Death:
@@ -824,12 +824,6 @@ class PPCBall : Mechbase_Actor
 	States
 	{
 		Spawn:
-			MPPC A 1;
-			TNT1 A 0 
-			{				
-				adjustHeatLevel(heatgen);
-			}
-		SpawnLoop:
 			MPPC A 1 Spawn("PPCLight", pos);
 		loop;
 		
@@ -873,12 +867,6 @@ class Flame : Mechbase_Actor
 	States
 	{
 		Spawn:
-			FIO1 B 1;
-			TNT1 A 0 
-			{
-				adjustHeatLevel(heatgen);
-			}
-		SpawnLoop:
 			FIO1 BCDEFGHIJKLMN 1
 			{
 				vel.z -= Gravity;
@@ -902,12 +890,6 @@ class GaussBall : Mechbase_Actor
 	States
 	{
 		Spawn:
-			GAUS A 1;
-			TNT1 A 0 
-			{
-				adjustHeatLevel(heatgen);
-			}
-		SpawnLoop:
 			GAUS A 1;
 		loop;
 		
@@ -939,12 +921,7 @@ class AutocannonBall : Mechbase_Actor
 	States
 	{
 		Spawn:
-			AUTO A 1;
-			TNT1 A 0 
-			{
-				Spawn("AutocannonLight", pos);
-				adjustHeatLevel(heatgen);
-			}
+			AUTO A 1 NoDelay Spawn("AutocannonLight", pos);
 		SpawnLoop:
 			AUTO A 1;
 		loop;

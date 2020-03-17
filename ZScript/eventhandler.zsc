@@ -196,9 +196,11 @@ class MechDoomerEvents : EventHandler
 	{
 		// Check the map for its own NAV points, if they don't exist
 		// create NAV Alpha at the start of the map.
-		double spawnangle;
-		vector3 spawnpos;
-		[spawnpos, spawnangle] = level.PickPlayerStart(0);
+		PlayerPawn plr = players[consoleplayer].mo;
+		if(!plr) return;
+		
+		double spawnangle = plr.angle;
+		vector3 spawnpos = plr.pos;
 		if(!NAVPoint.NextNAV(NAVPoint.ALPHA))
 		{
 			let nav = Actor.Spawn("NAV_Alpha", spawnpos);
