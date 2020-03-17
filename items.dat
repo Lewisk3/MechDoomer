@@ -38,7 +38,11 @@ SRM4
 SRM6  
 SSRM2  
 SSRM4  
-SSRM6  
+SSRM6 
+CATM3 
+CATM6
+CATM9
+CATM12
 LRM5  
 LRM10  
 LRM15  
@@ -58,7 +62,8 @@ UAC10_Ammo
 UAC20_Ammo  
 GaussRounds  
 SRM_Ammo  
-SSRM_Ammo  
+SSRM_Ammo 
+ATM_Ammo 
 LRM_Ammo  
 <E_AMMO>
 

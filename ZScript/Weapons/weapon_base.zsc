@@ -223,10 +223,13 @@ class Mechbase_Weapon : Item_NoPickup
 		}
 		else if(invoker.volley_amt > 0)
 		{
+			int rxoff = random(-xspread,xspread)**2;
+			int ryoff = random(-yspread,yspread)**2;
+			
 			// Extra_Cosmetic will make only the first object fired deal damage/generate heat.
 			bool cosmetic = invoker.volley_cosmetic ? (invoker.volley_amt < invoker.volley_inital) : false;
-			if(FireWeapon(invoker.weapType,invoker.hardpoint.pos.x+random(-xspread,xspread),
-						  invoker.hardpoint.pos.y+random(-yspread,yspread),invoker.weapDistance,invoker.weapSpeed,false,cosmetic))
+			if(FireWeapon(invoker.weapType,invoker.hardpoint.pos.x+rxoff,
+						  invoker.hardpoint.pos.y+ryoff,invoker.weapDistance,invoker.weapSpeed,false,cosmetic))
 			{
 				invoker.volley_amt--;
 				invoker.cooldown_timer = invoker.volleycooldown*35.0;
@@ -472,11 +475,8 @@ class MechMissile : Mechbase_Actor
 	  States
 	  {
 		  Spawn:
-			MISS B 1;
-			MISS AB 1;
-		  SpawnLoop:
-			MISS AB 1 Bright A_JumpIfTargetInLOS("Seek");
-			Loop;
+			MISS AB 1 NoDelay Bright A_JumpIfTargetInLOS("Seek");
+		  Loop;
 		  Seek:
 			MISS ABAB 1 Bright 
 			{
@@ -487,7 +487,7 @@ class MechMissile : Mechbase_Actor
 					A_SeekerMissile(20,20,SMF_CURSPEED|SMF_PRECISE,0,maximum_range/64);
 				}
 			}
-		  goto SpawnLoop;
+		  goto Spawn;
 		  Death:
 			TNT1 A 2 Bright 
 			{ 

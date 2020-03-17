@@ -134,6 +134,18 @@ class LRM : MechMissile
 	}
 }
 
+class CATM : MechMissile
+{
+	Default
+	{
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_ATM*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.MinimumRange 50;
+		Mechbase_Actor.MaximumRange 450;
+		MechMissile.Homming false;
+		Mechbase_Actor.Heat MWHEAT_ATM;
+	}
+}
+
 // Lasers
 
 class Laser_SML : Laser 

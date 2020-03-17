@@ -181,7 +181,6 @@ class Flamer : Mechbase_Weapon
 		Mechbase_Weapon.DisplayName "FLAMER";
 		Mechbase_Weapon.WeaponType "FlameProjectile";
 		Mechbase_Weapon.Distance_Speed 30,55;
-		Mechbase_Weapon.WeaponDelay 1;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 6400;
@@ -229,7 +228,6 @@ class SRM2 : Mechbase_Weapon
 		
 		Mechbase_Weapon.WeaponType "SRM";
 		Mechbase_Weapon.Distance_Speed 30,60;
-		Mechbase_Weapon.WeaponDelay 8;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_Weapon.Tonnage 0.5; // 1
@@ -265,7 +263,6 @@ class SRM4 : Mechbase_Weapon
 		Mechbase_Weapon.DisplayName "SRM4 ";
 		Mechbase_Weapon.WeaponType "SRM";
 		Mechbase_Weapon.Distance_Speed 30,60;
-		Mechbase_Weapon.WeaponDelay 12;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_weapon.HardslotSize 4;
@@ -303,7 +300,6 @@ class SRM6 : Mechbase_Weapon
 		Mechbase_Weapon.DisplayName "SRM6 ";
 		Mechbase_Weapon.WeaponType "SRM";
 		Mechbase_Weapon.Distance_Speed 30,60;
-		Mechbase_Weapon.WeaponDelay 16;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_Weapon.Tonnage 1.5;
@@ -333,6 +329,77 @@ class SSRM6 : SRM6
 	}
 }
 
+// Missiles - ATM
+class CATM3 : Mechbase_Weapon
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "ATM3 ";
+		
+		Mechbase_Weapon.WeaponType "CATM";
+		Mechbase_Weapon.Distance_Speed 30,90;
+		Mechbase_Weapon.AmmoType "ATM_Ammo";
+		Mechbase_Weapon.AmmoUse 1;
+		Mechbase_Weapon.Tonnage 1.5;
+		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.CValue 18500;
+		Mechbase_Weapon.Cooldown MWCOOL_ATM3, 0.1;
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(3,1024,1024,"Missiles/LRM", "Classic/Missiles/LRM");
+	}
+}
+class CATM6 : CATM3
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "ATM6 ";
+		Mechbase_Weapon.Tonnage 3.5;
+		Mechbase_Weapon.HardslotSize 3;
+		Mechbase_Weapon.CValue 46250;
+		Mechbase_Weapon.Cooldown MWCOOL_ATM6, 0.1;
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(6,1024,1024,"Missiles/LRM", "Classic/Missiles/LRM");
+	}
+}
+class CATM9 : CATM3
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "ATM9 ";
+		Mechbase_Weapon.Tonnage 5.0;
+		Mechbase_Weapon.HardslotSize 4;
+		Mechbase_Weapon.CValue 69350;
+		Mechbase_Weapon.Cooldown MWCOOL_ATM9, 0.1;
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(9,1024,1024,"Missiles/LRM", "Classic/Missiles/LRM");
+	}
+}
+class CATM12 : CATM3
+{
+	Default
+	{
+		Mechbase_Weapon.DisplayName "ATM12 ";
+		Mechbase_Weapon.Tonnage 7.0;
+		Mechbase_Weapon.HardslotSize 5;
+		Mechbase_Weapon.CValue 107875;
+		Mechbase_Weapon.Cooldown MWCOOL_ATM12, 0.1;
+	}
+	
+	override bool MWFire()
+	{
+		return FireVolley(12,128,128,"Missiles/LRM", "Classic/Missiles/LRM");
+	}
+}
+
 // Missiles - LRM
 class LRM5: Mechbase_Weapon
 {
@@ -341,7 +408,6 @@ class LRM5: Mechbase_Weapon
 		Mechbase_Weapon.DisplayName "LRM5";
 		Mechbase_Weapon.WeaponType "LRM";
 		Mechbase_Weapon.Distance_Speed 30,85;
-		Mechbase_Weapon.WeaponDelay 7;
 		Mechbase_Weapon.AmmoType "LRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_Weapon.Tonnage 1;
@@ -671,6 +737,15 @@ class SSRM_Ammo : SRM_Ammo
 	{
 		Mechbase_Utility.displayName "SSRM AMMO";
 		Mechbase_Utility.CValue 3750;
+	}
+}
+class ATM_Ammo : AMSAmmo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "ATM AMMO";
+		Mechbase_Ammo.Amount 60;
+		Mechbase_Utility.CValue 7825;
 	}
 }
 class LRM_Ammo : AMSAmmo

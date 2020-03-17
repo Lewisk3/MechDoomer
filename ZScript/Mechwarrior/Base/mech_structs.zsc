@@ -280,6 +280,17 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 	// Equip struct from items
 	class<Mechbase_Utility> util = obj.Tag;
 	class<Mechbase_Engine> eng = obj.Tag;
+	
+	// Cannot quite nail-down this bug, i think it has to do with an invalid
+	// selected item index in the Mechlab menu. Hoping i can get users to report this
+	// issue as it occurs, so that i can figure out exactly why it happens.
+	// With this check though, at least it will not VM Abort.
+	if(!util) 
+	{
+		console.printf("\c[Red][MechLab Error]\c[Gray]::\c[Purple]Invalid structure object! (Please report this error!)");
+		return false;
+	}
+	
 	let defs = GetDefaultByType(util);
 	
 	if(eng)
