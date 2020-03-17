@@ -42,8 +42,8 @@ class Debris_Spawner : Actor
 				debris.A_SetRoll(roll+random(-180,180));
 				debris.pitch = pitch+random(-20,45);
 				debris.vel = (
-						-(cos(angle)*cos(pitch)),
-						-(sin(angle)*cos(pitch)),
+						-(cos(angle)*cos(-pitch)),
+						-(sin(angle)*cos(-pitch)),
 						sin(debris.pitch) * (speed)
 						) * speed;
 			}

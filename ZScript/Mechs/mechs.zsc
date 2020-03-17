@@ -589,7 +589,7 @@ class Marauder : MechWarrior
 	{
 		Mass 3000;
 		Player.DisplayName "Marauder - IIC";
-		Player.ViewHeight 75;
+		Player.ViewHeight 85;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.TwistRange 105;

@@ -50,8 +50,9 @@ class Mechbase_Actor : FastProjectile
 			tpos.z += (mechplayer.viewheight*mechplayer.player.crouchfactor);
 			double ato = AngleTo(mechplayer);
 			double pto = MDMath.getPitchBetween(pos,tpos);
-			npos.x += ( cos(ato)*truespd);
-			npos.y += ( sin(ato)*truespd);
+			double cpitch = cos(-pto);
+			npos.x += ( cos(ato)*truespd*cpitch);
+			npos.y += ( sin(ato)*truespd*cpitch);
 			npos.z += (-sin(pto)*truespd);
 			npos += vel;
 			SetOrigin(npos,true);
@@ -302,8 +303,8 @@ class Mechbase_Weapon : Item_NoPickup
 				weap.pitch = offspitch;
 				weap.angle = offsangle;
 				weap.vel = (
-						cos(offsangle)*cos(offspitch),
-						sin(offsangle)*cos(offspitch),
+						cos(offsangle)*cos(-offspitch),
+						sin(offsangle)*cos(-offspitch),
 						-sin(offspitch)
 						) * spd;
 				weap.cosmetic = cosmetic;
