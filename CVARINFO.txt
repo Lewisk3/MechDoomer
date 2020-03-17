@@ -4,6 +4,7 @@ user bool mwd_autoreload = false;
 user bool mwd_viewport_target = true;
 user bool mwd_relativelegspeed = true;
 user bool mwd_universalactuation = false;
+user bool mwd_useclassicsound = false;
 user float mwd_converge_speed = 0.10;
 user float mwd_fontscale = 1.0;
 user float mwd_CockpitFOV = 90.0;

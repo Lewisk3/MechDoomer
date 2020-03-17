@@ -11,8 +11,10 @@ class Mechbase_Actor : FastProjectile
 	double maximum_range;
 	bool cosmetic;
 	Sound firesound;
+	Sound DOS_firesound;
 	
 	Property FireSound : firesound;
+	Property ClassicFireSound : DOS_firesound;
 	Property Heat : heatgen;
 	Property ConstDamage: truedamage;
 	Property MinimumRange : minimum_range;
@@ -20,7 +22,12 @@ class Mechbase_Actor : FastProjectile
 	
 	override void PostBeginPlay()
 	{
-		S_StartSound(firesound, CHAN_WEAPON, 1.0);
+		// Swap to alt-sound if CVar is flipped.
+		Sound finalsound = firesound;
+		if(mechplayer && DOS_firesound && CVar.GetCVar("mwd_useclassicsound", mechplayer.player).getBool())
+			finalsound = DOS_firesound;
+
+		S_StartSound(finalsound, CHAN_WEAPON, 1.0);
 		super.PostBeginPlay();
 	}
 	
@@ -134,7 +141,7 @@ class Mechbase_Weapon : Item_NoPickup
 	//double hitscan_amt;
 	int delay;
 	class<Mechbase_Ammo> ammotype;
-	Sound atksnd;
+	Sound atksnd, DOS_atksnd;
 	
 	
 	Property DisplayName : displayName;
@@ -149,6 +156,7 @@ class Mechbase_Weapon : Item_NoPickup
 	Property LockingSpeed : lockonspeed;
 	Property WeaponDelay : delay;
 	Property AttackSound : atksnd;
+	Property ClassicAttackSound : DOS_atksnd;
 	Property Distance_Speed : weapDistance, weapSpeed;
 	Property HardslotSize : hardslots;
 	Property Tonnage : weight;
@@ -173,6 +181,14 @@ class Mechbase_Weapon : Item_NoPickup
 		return (invoker.cooldown_timer == 0);
 	}
 
+	action bool CheckClassicSounds() 
+	{
+		let plr = Mechwarrior(invoker.Owner);
+		if(!plr) return false;
+		
+		return CVar.GetCVar("mwd_useclassicsound", plr.player).GetBool();
+	}
+
 	action bool FireBullets(int damage,int distance=0,int sxoff=1, int syoff=1)
 	{
 		if(!checkCooldown()) return false;
@@ -190,14 +206,14 @@ class Mechbase_Weapon : Item_NoPickup
 		invoker.cooldown_timer = invoker.delay;
 		return true;
 	}
-	action bool FireVolley(int amt=0, int xspread=5, int yspread=5, Sound volleysnd="", bool extra_cosmetic=false)
+	action bool FireVolley(int amt=0, int xspread=5, int yspread=5, Sound volleysnd="", Sound clsvolleysnd="", bool extra_cosmetic=false)
 	{
 		if(!invoker.dofire && checkCooldown())
 		{
 			let plr = MechWarrior(invoker.Owner);
 			if(!plr) return false;
 			if(invoker.ammouse > 0 && plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
-			SoundEmitter.SE_Trigger(volleysnd,plr.pos);
+			SoundEmitter.SE_Trigger(CheckClassicSounds() ? clsvolleysnd : volleysnd, plr.pos);
 			invoker.dofire = true;
 			invoker.volley_amt = amt;
 			invoker.volley_inital = amt;
@@ -233,7 +249,14 @@ class Mechbase_Weapon : Item_NoPickup
 				if(plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
 				plr.TakeAmmo(invoker.ammotype,invoker.ammouse);
 			}
-			SoundEmitter.SE_Trigger(invoker.atksnd,plr.pos);
+			
+			// Legacy Sound
+			Sound finalsnd = invoker.atksnd;
+			if(invoker.DOS_atksnd && CVar.GetCVar("mwd_useclassicsound", plr.player).getBool()) 
+				finalsnd = invoker.DOS_atksnd;
+			if(finalsnd) SoundEmitter.SE_Trigger(finalsnd,plr.pos);
+			
+			// Get shoot position and offsets
 			xoffset += random(-5,5);
 			yoffset += random(-5,5);
 			let mechparts = plr.models_reference;
@@ -562,10 +585,12 @@ class PPCExplosion : Actor
 		XScale 0.8;
 		YScale 0.8;
 	}
+	
 
 	States
 	{
 		Spawn:
+			TNT1 A 0 NoDelay S_StartSound("Classic/PPC/Impact", CHAN_BODY);
 			PEXP OPABCDEFGHIJKLMN 2;
 		stop;
 	}

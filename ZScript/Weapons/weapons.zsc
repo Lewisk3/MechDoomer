@@ -39,7 +39,7 @@ class SmallPulseLaser : Mechbase_Weapon
 	override bool MWFire()
 	{
 		// Only the first laser will deal damage/generate heat.
-		return FireVolley(2,0,0,"",true);
+		return FireVolley(2,0,0,"","",true);
 	}
 }
 class HeavySmallLaser : Mechbase_Weapon
@@ -56,7 +56,7 @@ class HeavySmallLaser : Mechbase_Weapon
 	}	
 	override bool MWFire()
 	{
-		return FireVolley(8,0,0,"",false);
+		return FireVolley(8,0,0,"","",false);
 	}
 }
 
@@ -113,7 +113,7 @@ class HeavyMediumLaser : Mechbase_Weapon
 	}	
 	override bool MWFire()
 	{
-		return FireVolley(5,0,0,"",false);
+		return FireVolley(5,0,0,"","",false);
 	}
 }
 
@@ -169,7 +169,7 @@ class HeavyLargeLaser : Mechbase_Weapon
 	}	
 	override bool MWFire()
 	{
-		return FireVolley(3,0,0,"",false);
+		return FireVolley(3,0,0,"","",false);
 	}
 }
 
@@ -190,7 +190,7 @@ class Flamer : Mechbase_Weapon
 	
 	override bool MWFire()
 	{
-		return FireVolley(6,16,16,"Energy/Flamer",false);
+		return FireVolley(6,16,16,"Energy/Flamer","Energy/Flamer",false);
 	}
 }
 
@@ -240,7 +240,7 @@ class SRM2 : Mechbase_Weapon
 	
 	override bool MWFire()
 	{
-		return FireVolley(2,16,16,"Missiles/SRM2");
+		return FireVolley(2,16,16,"Missiles/SRM2", "Classic/Missiles/SRM2");
 	}
 }
 class SSRM2 : SRM2
@@ -277,7 +277,7 @@ class SRM4 : Mechbase_Weapon
 	
 	override bool MWFire()
 	{
-		return FireVolley(4,16,16,"Missiles/SRM4");
+		return FireVolley(4,16,16,"Missiles/SRM4", "Classic/Missiles/SRM4");
 	}
 }
 class SSRM4 : SRM4
@@ -314,7 +314,7 @@ class SRM6 : Mechbase_Weapon
 	
 	override bool MWFire()
 	{
-		return FireVolley(6,16,16,"Missiles/SRM6");
+		return FireVolley(6,16,16,"Missiles/SRM6","Classic/Missiles/SRM6");
 	}
 }
 class SSRM6 : SRM6
@@ -354,7 +354,7 @@ class LRM5: Mechbase_Weapon
 	
 	override bool MWFire()
 	{
-		return FireVolley(5,0,0,"Missiles/LRM");
+		return FireVolley(5,0,0,"Missiles/LRM","Classic/Missiles/LRM");
 	}
 }
 class LRM10: LRM5
@@ -372,7 +372,7 @@ class LRM10: LRM5
 	
 	override bool MWFire()
 	{
-		return FireVolley(10,0,0,"Missiles/LRM");
+		return FireVolley(10,0,0,"Missiles/LRM","Classic/Missiles/LRM");
 	}
 }
 class LRM15: LRM5
@@ -390,7 +390,7 @@ class LRM15: LRM5
 	
 	override bool MWFire()
 	{
-		return FireVolley(15,0,0,"Missiles/LRM");
+		return FireVolley(15,0,0,"Missiles/LRM","Classic/Missiles/LRM");
 	}
 }
 class LRM20: LRM5
@@ -408,7 +408,7 @@ class LRM20: LRM5
 	
 	override bool MWFire()
 	{
-		return FireVolley(20,0,0,"Missiles/LRM");
+		return FireVolley(20,0,0,"Missiles/LRM","Classic/Missiles/LRM");
 	}
 }
 

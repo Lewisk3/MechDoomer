@@ -22,6 +22,19 @@ Ballistics/Gauss      MECGAUSS
 Energy/PPC    MECPPC
 Energy/Flamer MECHFLM
 
+Classic/PPC CLSPPC
+Classic/PPC/Impact CLSEXPPC
+Classic/PulseLasers/Small  CLSPLAS
+Classic/PulseLasers/Medium CLSPULSE
+Classic/PulseLasers/Large  CLSPULSE
+Classic/Lasers/Small 	   CLSSLAS
+Classic/Lasers/Medium 	   CLSMLAS
+Classic/Lasers/Large 	   CLSLLAS
+Classic/Missiles/SRM2      CLSPPC // Oddly enough, the same sound is used.
+Classic/Missiles/SRM4      CLSPPC
+Classic/Missiles/SRM6      CLSPPC
+Classic/Missiles/LRM	   CLSMISL
+
 $volume Ballistics/Gauss 0.6
 $volume Ballistics/Autocannon 0.5
 $volume Missiles/SRM2 0.5
