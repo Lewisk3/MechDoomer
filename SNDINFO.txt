@@ -24,7 +24,7 @@ Energy/Flamer MECHFLM
 
 Classic/PPC CLSPPC
 Classic/PPC/Impact CLSEXPPC
-Classic/PulseLasers/Small  CLSPLAS
+Classic/PulseLasers/Small  CLSSPLAS
 Classic/PulseLasers/Medium CLSPULSE
 Classic/PulseLasers/Large  CLSPULSE
 Classic/Lasers/Small 	   CLSSLAS
@@ -44,12 +44,18 @@ $volume Missiles/AMS 0.35
 $volume PulseLasers/Small  0.4
 $volume PulseLasers/Medium 0.4
 $volume PulseLasers/Large  0.4
+$volume Classic/PulseLasers/Small  0.7
+$volume Classic/PulseLasers/Medium 0.7
+$volume Classic/PulseLasers/Large  0.7
 $volume ERLasers/Small  0.4
 $volume ERLasers/Medium 0.4
 $volume ERLasers/Large  0.4
 $volume Lasers/Small  0.4
 $volume Lasers/Medium 0.4
 $volume Lasers/Large  0.4
+$volume Classic/Lasers/Small  0.7
+$volume Classic/Lasers/Medium 0.7
+$volume Classic/Lasers/Large  0.7
 $volume Laser/Impact 1.0
 
 // Mech Betty
