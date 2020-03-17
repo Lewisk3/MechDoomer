@@ -229,7 +229,6 @@ class Mechbase_Weapon : Item_NoPickup
 		{
 			double rxoff = frandom(-64,64)*invoker.volley_xspread;
 			double ryoff = frandom(-64,64)*invoker.volley_yspread;
-			console.printf("%d", rxoff);
 			
 			// Extra_Cosmetic will make only the first object fired deal damage/generate heat.
 			bool cosmetic = invoker.volley_cosmetic ? (invoker.volley_amt < invoker.volley_inital) : false;

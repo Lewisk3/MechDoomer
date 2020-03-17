@@ -14,6 +14,21 @@ int selectedGroup;
 int selectedWeapon;
 double locktimer;
 
+// Misc
+void DestroyWeapon(Mechbase_Weapon weap)
+{
+	for(let w = Inv; w; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww == weap)
+		{
+			removeWeapon(ww);
+			normalizeWeaponsID(1);
+			mechsounds.pushSound("Mech/Betty/WeaponDestroyed");
+		}
+	}
+}
+
 // Normalize
 void normalizeWeaponsID(int offs)
 {
