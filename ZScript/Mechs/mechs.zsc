@@ -454,7 +454,7 @@ class Timberwolf : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 8,46,32,32,24,24,32,32, 5,23,16,16,12,12,16,16 );
-		hardpoints.setupLocations( (0,20), (0,-38), (25,18), (-25,18), (40,-25), (-40,-25), (30,-85), (-30,-85) );
+		hardpoints.setupLocations( (0,20), (0,-10), (25,10), (-25,10), (40,-25), (-40,-25), (30,-85), (-30,-85) );
 		hardpoints.setupSlots();
 		equipWeapon("ERLargeLaser",hardpoints.ra,1);
 		equipWeapon("ERMediumLaser",hardpoints.ra,2);
@@ -603,6 +603,17 @@ class Marauder : MechWarrior
 		MechWarriorBase.CValue 4950720;
 	}
 	
+	override void setupCriticals()
+	{
+		equipStruct("StructLifesupport",hardpoints.hd);
+		equipStruct("StructSensors",hardpoints.hd);
+		equipStruct("StructCockpit",hardpoints.hd);
+		equipStruct("StructHip",hardpoints.lt);
+		equipStruct("StructHip",hardpoints.rt);
+		equipStruct("StructActuator",hardpoints.la);
+		equipStruct("StructActuator",hardpoints.ra);
+	}
+	
 	void InnerSphere_Weapons()
 	{
 		equipStruct("Heatsink",hardpoints.lt,4);
@@ -621,8 +632,8 @@ class Marauder : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 8,50,32,32,28,28,36,36, 5,25,17,17,14,14,18,18 );
-		hardpoints.setupLocations( (0,10), (0,32), (30,10), (-30,10), (60,-20), (-60,-20), (20,-85), (-20,-85) );
-		hardpoints.setupSlots();
+		hardpoints.setupLocations( (0,15), (0,5), (30,10), (-30,10), (60,-20), (-60,-20), (20,-85), (-20,-85) );
+		hardpoints.setupSlots(hds:15);
 		equipStruct("DoubleHeatsink",hardpoints.la,2);
 		equipStruct("DoubleHeatsink",hardpoints.ra,2);
 		equipStruct("DoubleHeatsink",hardpoints.lt,2);
@@ -869,7 +880,7 @@ class Warhammer : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 8,50,34,34,23,23,34,34, 4,25,17,17,12,12,18,18 );
-		hardpoints.setupLocations( (0,10), (0,0), (-25,25), (25,-10), (50,-15), (-50,-15), (45,-111), (-45,-111) );
+		hardpoints.setupLocations( (0,10), (0,0), (-25,20), (25,0), (50,-10), (-50,-10), (45,-111), (-45,-111) );
 		hardpoints.setupSlots();
 		equipStruct("DoubleHeatsink",hardpoints.la, 2);
 		equipStruct("DoubleHeatsink",hardpoints.lt, 2);

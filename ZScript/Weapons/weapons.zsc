@@ -622,12 +622,13 @@ class MachineGun : Mechbase_Weapon
 		Mechbase_Weapon.WeaponType "MGunBullet";
 		Mechbase_Weapon.AmmoType "BulletsMGun";
 		//Mechbase_Weapon.WeaponDelay 5;
-		Mechbase_Weapon.Distance_Speed 20,100;
+		Mechbase_Weapon.Distance_Speed 40,100;
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_Weapon.AttackSound "Ballistics/MGUN";
 		Mechbase_Weapon.Tonnage 0.25;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 2600;
+		Mechbase_Weapon.WeaponBaseSpread 1, 1;
 		Mechbase_Weapon.Cooldown MWCOOL_MGUN, 0;
 	}
 }

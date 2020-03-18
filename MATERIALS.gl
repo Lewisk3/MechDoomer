@@ -27,6 +27,10 @@ material texture models/Textures/bluelaser.png {
 	brightmap "models/Textures/bluelaser.png"
 	brightness 1.0
 }
+material texture Sprites/MGMZA0.png {
+	brightmap "Sprites/MGMZA0.png"
+	brightness 1.0
+}
 
 // Some PBR stuff for cockpits/models.
 material texture models/Mechs/c_dark.png {

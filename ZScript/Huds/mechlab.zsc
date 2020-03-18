@@ -288,8 +288,8 @@ class Mechlab_Menu : GenericMenu
 			// H_DrawImage(tHud_paperdoll,(675,770),0,(0.45,0.4));
 			maxpageitems = 28;
 			drawMechlabInfo();
-			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,815,135);
-			drawLoadoutBody(-90,-460,hardpoint);
+			if( ValidateHardpoint(hardpoint) && hardpoint >= 0 ) DrawHardpointItems(hardpoint,815,115);
+			drawLoadoutBody(-80,-470,hardpoint);
 			drawInventory(1320,225, invoffset, maxpageitems);
 		} 
 		// Armory mode

@@ -45,16 +45,14 @@ class Mechbase_Actor : FastProjectile
 		if(mechplayer && spd > 0)
 		{
 			double truespd = vel.length()*spd;
-			vector3 npos = pos-vel;
+			vector3 npos = Vec3Offset(-vel.x,-vel.y,-vel.z);
 			vector3 tpos = mechplayer.pos;
 			tpos.z += (mechplayer.viewheight*mechplayer.player.crouchfactor);
 			double ato = AngleTo(mechplayer);
 			double pto = MDMath.getPitchBetween(pos,tpos);
 			double cpitch = cos(-pto);
-			npos.x += ( cos(ato)*truespd*cpitch);
-			npos.y += ( sin(ato)*truespd*cpitch);
-			npos.z += (-sin(pto)*truespd);
-			npos += vel;
+			vector3 addpos = (cos(ato)*truespd*cpitch, sin(ato)*truespd*cpitch, -sin(pto)*truespd);
+			npos = level.Vec3Offset(npos, addpos+vel);
 			SetOrigin(npos,true);
 		}
 	}
@@ -144,6 +142,7 @@ class Mechbase_Weapon : Item_NoPickup
 	bool aimtarget;
 	bool target_inview;
 	double hitscan_distance;
+	double basespreadx, basespready;
 	//double hitscan_amt;
 	int delay;
 	class<Mechbase_Ammo> ammotype;
@@ -167,6 +166,7 @@ class Mechbase_Weapon : Item_NoPickup
 	Property HardslotSize : hardslots;
 	Property Tonnage : weight;
 	Property Cooldown : cooldown, volleycooldown;
+	Property WeaponBaseSpread : basespreadx, basespready;
 	
 	// Hardpoint processing
 	int dmg_taken;
@@ -179,6 +179,7 @@ class Mechbase_Weapon : Item_NoPickup
 		Mechbase_Weapon.Distance_Speed 30, 69;
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
+		Mechbase_Weapon.WeaponBaseSpread 5, 5;
 		Inventory.maxamount 12; // Each weapon should have atleast 12 available slots.
 	}
 	
@@ -267,8 +268,8 @@ class Mechbase_Weapon : Item_NoPickup
 			if(finalsnd) SoundEmitter.SE_Trigger(finalsnd,plr.pos);
 			
 			// Get shoot position and offsets
-			xoffset += random(-5,5);
-			yoffset += random(-5,5);
+			xoffset += random(-invoker.basespreadx,invoker.basespreadx);
+			yoffset += random(-invoker.basespready,invoker.basespready);
 			let mechparts = plr.models_reference;
 			double offsangle = plr.angle;
 			double offspitch = plr.pitch;
@@ -409,7 +410,7 @@ class Mechbase_Weapon : Item_NoPickup
 		}
 		if(curammo > 0)
 		{
-			if(plr.countammo(ammotype) == 0)
+			if(plr.countammo(ammotype) <= 0)
 			{
 				// If you want to make a betty skin, this is just another option.
 				plr.mechsounds.pushSound("Mech/Betty/NoAmmo");
@@ -981,6 +982,12 @@ class MechBullet : Mechbase_Actor
 		super.tick();
 	}
 	
+	override void BeginPlay()
+	{
+		Spawn("MachineGunFlash", pos);
+		super.BeginPlay();
+	}
+	
 	States
 	{
 		Spawn:
@@ -991,6 +998,21 @@ class MechBullet : Mechbase_Actor
 		
 		Death:
 			PUFF ABCD 2;
+		stop;
+	}
+}
+class MachineGunFlash : PPCExplosion
+{
+	Default
+	{
+		XScale 0.05;
+		YScale 0.05;
+	}
+	
+	States
+	{
+		Spawn:
+			MGMZ A 2 Bright;
 		stop;
 	}
 }

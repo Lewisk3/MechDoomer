@@ -25,6 +25,7 @@ double defaultfov;
 double kph_default;
 double kph_real;
 double worth;
+vector3 prevpos;
 
 // Shop Vars (TEMP)
 Items_ShopData shopitems;
@@ -241,7 +242,7 @@ bool setupInventory()
 	return inv_context==NULL;
 }
 
-void setupCriticals()
+virtual void setupCriticals()
 {
 	// Setup criticals
 	equipStruct("StructLifesupport",hardpoints.hd);
@@ -370,6 +371,14 @@ override void PostBeginPlay()
 	
 override void tick()
 {
+	// Check if teleported (Drastic position change)
+	vector3 posdiff = level.Vec3Diff(prevpos, pos);
+	if(posdiff.x > vel.x || posdiff.y > vel.y || posdiff.z > vel.z)
+	{
+		LegAng = angle;
+	}
+	prevpos = pos;
+	
 	// Hold onto reference of all mechs for shop
 	if(!shopmechs.Size()) GetAllMechs(shopmechs);
 	// Grab Items reference for shop
