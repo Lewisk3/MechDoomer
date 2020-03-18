@@ -127,7 +127,7 @@ class MRM : MechMissile
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_MRM*MWGAMEPLAY_WEAPDMGSCALE));
-		Mechbase_Actor.MaximumRange 450;
+		Mechbase_Actor.MaximumRange 550;
 		MechMissile.Homming false;
 		Mechbase_Actor.Heat MWHEAT_MRM;
 	}
@@ -138,7 +138,7 @@ class LRM : MechMissile
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_LRM*MWGAMEPLAY_WEAPDMGSCALE));
-		Mechbase_Actor.MinimumRange 100; // 180 is a bit too high for Doom scale.
+		Mechbase_Actor.MinimumRange 120; // 180 is a bit too high for Doom scale.
 		Mechbase_Actor.MaximumRange 1000;
 		MechMissile.Homming true;
 		Mechbase_Actor.Heat MWHEAT_LRM;
@@ -150,8 +150,8 @@ class CATM : MechMissile
 	Default
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_ATM*MWGAMEPLAY_WEAPDMGSCALE));
-		Mechbase_Actor.MinimumRange 50;
-		Mechbase_Actor.MaximumRange 450;
+		Mechbase_Actor.MinimumRange 80;
+		Mechbase_Actor.MaximumRange 800;
 		MechMissile.Homming false;
 		Mechbase_Actor.Heat MWHEAT_ATM;
 	}
