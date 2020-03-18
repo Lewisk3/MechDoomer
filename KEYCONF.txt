@@ -4,4 +4,105 @@ alias +jumpjets "netevent +mwd_user5"
 alias -jumpjets "netevent -mwd_user5"
 alias +cockpitlook "netevent +mwd_pilotlook"
 alias -cockpitlook "netevent -mwd_pilotlook"
+alias Autopilot "netevent toggle_autopilot"
+alias ThrottleDecay "netevent throttledecay_toggle"
+alias NextNAV "netevent cycle_navpoint"
+alias HeatVision "netevent screen_toggleinfrared"
+alias ViewObjectives "netevent toggle_objectives" 
+alias MechChase "netevent dronebackchase"
+alias MechChaseView "netevent droneviewswitch"
 alias Mechlab_Open  "netevent open_mechlab"
+alias StopMech "netevent \"giveinvbutton:IBTN_STOP\""
+alias Center_LegTorso "netevent \"giveinvbutton:IBTN_CENTER\""
+alias Center_TorsoLeg "netevent \"giveinvbutton:IBTN_CENTERTORSO\""
+alias MechShutdown "netevent \"giveinvbutton:IBTN_SHUTDOWN\""
+alias MechOverride "netevent \"giveinvbutton:IBTN_OVERRIDE\""
+alias TargetEnemy  "netevent \"giveinvbutton:IBTN_TARGET\""
+alias Firemode "netevent \"giveinvbutton:IBTN_bFIREMODE\""
+alias NextMechWeapon "netevent \"giveinvbutton:IBTN_NEXTWEAPON\""
+alias PrevMechWeapon "netevent \"giveinvbutton:IBTN_PREVWEAPON\""
+alias NextGroup "netevent \"giveinvbutton:IBTN_NXTGROUP\""
+alias PrevGroup "netevent \"giveinvbutton:IBTN_PRVGROUP\""
+alias AlphaStrike "netevent \"giveinvbutton:IBTN_SHOOTALLWEAPONSLIKEAMADLAD\""
+alias SetGroup1 "netevent \"mechsetgroup:1\""
+alias SetGroup2 "netevent \"mechsetgroup:2\""
+alias SetGroup3 "netevent \"mechsetgroup:3\""
+alias SetGroup4 "netevent \"mechsetgroup:4\""
+
+addkeysection "MechDoomer Controls" MechDoomerControls
+addmenukey "Accelerate (W)" +forward
+addmenukey "Decelerate (S)" +back
+addmenukey "Turn Left (A)" +moveleft
+addmenukey "Turn Right (D)" +moveright
+addmenukey "Jump Jets (J)" +jumpjets
+addmenukey "Stop Mech (X)" StopMech
+addmenukey "Center Legs to Torso (C)" Center_LegTorso 
+addmenukey "Center Torso to Legs (B)" Center_TorsoLeg
+addmenukey "Autopilot (K)" Autopilot
+addmenukey "Toggle throttle decay (Backspace)" ThrottleDecay 
+addmenukey "Interact (E)" +use
+addmenukey "Shutdown (P)" MechShutdown
+addmenukey "Override Shutdown (O)" MechOverride
+addmenukey "Zoom (Z)" +zoom
+addmenukey "Target Enemy (R)" TargetEnemy
+addmenukey "Cycle NAV Points (N)" NextNAV		
+addmenukey "Open Mechlab (Q)" Mechlab_Open
+addmenukey "Toggle Infrared (H)" HeatVision		
+addmenukey "Satellite Link (TAB)" togglemap
+addmenukey "Display Objectives (F12)" ViewObjectives
+addmenukey "Cockpit Look (Left Ctrl)" +cockpitlook
+addmenukey "Toggle Drone Camera (V)" MechChase
+addmenukey "Switch Drone View (F4)"	MechChaseView
+addmenukey "Fire Selected (F)" +attack
+addmenukey "Toggle Firemode (\)" Firemode		 
+addmenukey "Next Weapon (Scroll-down)" NextMechWeapon
+addmenukey "Previous Weapon (Scroll-up)" PrevMechWeapon
+addmenukey "Next Group (Down arrow)" NextGroup	
+addmenukey "Previous Group (Up arrow)" PrevGroup
+addmenukey "Fire Group One (Left mouse)" +user1
+addmenukey "Fire Group Two (Right mouse)" +user2
+addmenukey "Fire Group Three (Mouse3)" +user3
+addmenukey "Fire Group Four (Mouse4)" +user4
+addmenukey "Fire All Weapons (')" AlphaStrike		
+addmenukey "Set Group One (1)" SetGroup1
+addmenukey "Set Group Two (2)" SetGroup2				 
+addmenukey "Set Group Three (3)" SetGroup3			 
+addmenukey "Set Group Four (4)"	SetGroup4	
+defaultbind W +forward
+defaultbind S +back
+defaultbind A +moveleft
+defaultbind D +moveright
+defaultbind J +jumpjets
+defaultbind X StopMech
+defaultbind C Center_LegTorso 
+defaultbind B Center_TorsoLeg
+defaultbind K Autopilot
+defaultbind Backspace ThrottleDecay 
+defaultbind E +use
+defaultbind P MechShutdown
+defaultbind O MechOverride
+defaultbind Z +zoom
+defaultbind R TargetEnemy
+defaultbind N NextNAV		
+defaultbind Q Mechlab_Open
+defaultbind H HeatVision		
+defaultbind tab togglemap
+defaultbind F12 ViewObjectives
+defaultbind Ctrl +cockpitlook
+defaultbind V MechChase
+defaultbind F4 MechChaseView
+defaultbind F +attack
+defaultbind \ Firemode		 
+defaultbind MWheelDown NextMechWeapon
+defaultbind MWheelUp PrevMechWeapon
+defaultbind DownArrow NextGroup	
+defaultbind UpArrow PrevGroup
+defaultbind mouse1 +user1
+defaultbind mouse2 +user2
+defaultbind mouse3 +user3
+defaultbind mouse4 +user4
+defaultbind ' AlphaStrike		
+defaultbind 1 SetGroup1
+defaultbind 2 SetGroup2				 
+defaultbind 3 SetGroup3			 
+defaultbind 4 SetGroup4	 	 

@@ -590,6 +590,7 @@ class PPCExplosion : Actor
 	{
 		+NOGRAVITY
 		+NOBLOCKMAP
+		+NOINTERACTION
 		XScale 0.8;
 		YScale 0.8;
 	}
@@ -610,6 +611,7 @@ class MissileExplosion : Actor
 	{
 		+NOGRAVITY
 		+NOBLOCKMAP
+		+NOINTERACTION
 		XScale 1.6;
 		YScale 1.6;
 	}
