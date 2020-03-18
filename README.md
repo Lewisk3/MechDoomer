@@ -5,10 +5,32 @@
  aspects of Mechwarrior 2 into Doom.
 
 # CVar List
-	mwd_throttledecay    - When true throttle will move to 0 when not pressing forward/backwards.
-	mwd_nohud            - When true the HUD will be made invisible.
-	mwd_autoreload       - When true will find the next valid ammunition in your inventory and equip it for you.
-	mwd_hudwarn          - When true disables "hud is not being displayed correctly!" message.
-	mwd_viewport_target  - When false will switch targeting graphics to in-game sprites
-	mwd_relativelegspeed - When false will keep turning speeds consistent no matter how fast you're moving.
-	mwd_weaponsconverge  - When false weapons will not converge onto the players aim.
+*	`bool mwd_throttledecay`
+*	`bool mwd_nohud`
+*	`bool mwd_autoreload`
+*	`bool mwd_viewport_target`
+*	`bool mwd_relativelegspeed`
+*	`bool mwd_relativelegspeed`
+*	`bool mwd_universalactuation`
+*	`bool mwd_useclassicsound`
+*	`float mwd_converge_speed`
+*	`float mwd_fontscale`
+*	`float mwd_CockpitFOV`
+*	`float mwd_crosshairsize`
+
+# Cheats
+###### `shillforcomstar`
+* Gives a ton of CBills. 
+###### `EJECT`
+* Destroys the current mech's head component (Not really a cheat)
+### Network Events
+> Command template is; netevent "#command#:#argument#".  
+> Omit "#" when running these commands.
+Command | Effect
+------------ | -------------
+`giveweapon:#name#` | Gives weapon called `name`
+`iamspaceatandt:#amount#` | Gives `amount` of CBills
+`givemech:#name#` | Gives mech called `name`
+`objective:complete:#id#` | Completes objective number `id`
+`mechlab_alert:#text#` | Sends `text` alert to Mechlab
+`destroy_object:#class#` | __Debug!__ This will __destroy__ object of type `class`
