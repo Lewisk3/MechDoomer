@@ -25,8 +25,10 @@
 * Destroys the current mech's head component (Not really a cheat)
 ### Network Events
 > Command template is; netevent "#command#:#argument#".  
-> Omit "#" when running these commands.
-Command | Effect
+> Omit "#" when running these commands. 
+
+
+ Command | Effect
 ------------ | -------------
 `giveweapon:#name#` | Gives weapon called `name`
 `iamspaceatandt:#amount#` | Gives `amount` of CBills
