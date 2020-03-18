@@ -372,11 +372,7 @@ override void PostBeginPlay()
 override void tick()
 {
 	// Check if teleported (Drastic position change)
-	vector3 posdiff = level.Vec3Diff(prevpos, pos);
-	if(posdiff.x > vel.x || posdiff.y > vel.y || posdiff.z > vel.z)
-	{
-		LegAng = angle;
-	}
+	if(!CheckMove(prevpos.xy)) LegAng = angle;
 	prevpos = pos;
 	
 	// Hold onto reference of all mechs for shop
