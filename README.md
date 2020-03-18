@@ -6,7 +6,7 @@
 
 # CVar List
 *	`bool mwd_throttledecay`
-*	`bool mwd_nohud = false`
+*	`bool mwd_nohud`
 *	`bool mwd_autoreload`
 *	`bool mwd_viewport_target`
 *	`bool mwd_relativelegspeed`
