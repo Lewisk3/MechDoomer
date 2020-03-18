@@ -31,3 +31,30 @@ decal RedLaserDecal
 	randomflipx
 	randomflipy
 }
+
+decal YellowLaserDecal 
+{
+	pic LASRDEC 
+	shade "Yellow"
+	Animator LaserDecalAnimator
+	randomflipx
+	randomflipy
+}
+
+decal PurpleLaserDecal 
+{
+	pic LASRDEC 
+	shade "Purple"
+	Animator LaserDecalAnimator
+	randomflipx
+	randomflipy
+}
+
+decal OrangeLaserDecal 
+{
+	pic LASRDEC 
+	shade "Orange"
+	Animator LaserDecalAnimator
+	randomflipx
+	randomflipy
+}

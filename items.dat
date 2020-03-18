@@ -11,6 +11,9 @@ ERSmallLaser
 SmallPulseLaser  
 MediumPulseLaser  
 LargePulseLaser  
+ERSmallPulseLaser  
+ERMediumPulseLaser  
+ERLargePulseLaser  
 HeavySmallLaser  
 HeavyMediumLaser  
 HeavyLargeLaser  

@@ -491,6 +491,17 @@ Model Laser_MEDP
 	
    FrameIndex LASR A 0 0
 }
+Model Laser_ERMEDP
+{
+	Path "models"
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/yellowlaser.png"
+	Scale 1.5 0.6 0.6
+	USEACTORPITCH
+	
+   FrameIndex LASR A 0 0
+}
+
 
 Model Laser_LRG
 {
@@ -522,6 +533,16 @@ Model Laser_LRGP
 	
    FrameIndex LASR A 0 0
 }
+Model Laser_ERLRGP
+{
+	Path "models"
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/purplelaser.png"
+	Scale 2.0 0.7 0.7
+	USEACTORPITCH
+	
+   FrameIndex LASR A 0 0
+}
 
 Model Laser_SML
 {
@@ -548,6 +569,16 @@ Model Laser_SMLP
 	Path "models"
 	Model 0 "Weapons/laser.md3"
 	Skin 0 "Textures/redlaser.png"
+	Scale 1.0 0.2 0.2
+	USEACTORPITCH
+	
+   FrameIndex LASR A 0 0
+}
+Model Laser_ERSMLP
+{
+	Path "models"
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/orangelaser.png"
 	Scale 1.0 0.2 0.2
 	USEACTORPITCH
 	

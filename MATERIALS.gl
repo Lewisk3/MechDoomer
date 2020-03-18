@@ -27,6 +27,18 @@ material texture models/Textures/bluelaser.png {
 	brightmap "models/Textures/bluelaser.png"
 	brightness 1.0
 }
+material texture models/Textures/orangelaser.png {
+	brightmap "models/Textures/orangelaser.png"
+	brightness 1.0
+}
+material texture models/Textures/yellowlaser.png {
+	brightmap "models/Textures/yellowlaser.png"
+	brightness 1.0
+}
+material texture models/Textures/orangelaser.png {
+	brightmap "models/Textures/orangelaser.png"
+	brightness 1.0
+}
 material texture Sprites/MGMZA0.png {
 	brightmap "Sprites/MGMZA0.png"
 	brightness 1.0
