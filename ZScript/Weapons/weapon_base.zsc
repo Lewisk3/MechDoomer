@@ -329,6 +329,51 @@ class Mechbase_Weapon : Item_NoPickup
 		return false;
 	}
 	
+	int CheckAllAmmo()
+	{
+		int total = 0;
+		if(ammotype ) total += mechplr.countammo(ammotype);
+		if(ammotype2) total += mechplr.countammo(ammotype2);
+		if(ammotype3) total += mechplr.countammo(ammotype3);
+		return total;
+	}
+	
+	virtual int DoAmmoSwitch(int amindex)
+	{
+		ammotype = NULL;
+		ammo_mode = amindex-1;
+		int totalammo = CheckAllAmmo();
+		if(!totalammo) ammo_mode = -1;
+		while(!ammotype || !mechplr.countammo(ammotype))
+		{
+			ammo_mode++;
+			switch(ammo_mode)
+			{
+				case 0:
+					weapType = default.weapType;
+					ammotype = default.ammotype;
+					displayName = default.displayName;
+				break;
+				case 1:
+					weapType = weapType2;
+					ammotype = ammotype2;
+					displayName = weapname2;
+				break;
+				case 2:
+					weapType = weapType3;
+					ammotype = ammotype3;
+					displayName = weapname3;
+				break;
+				default:
+					ammotype = NULL;
+					ammo_mode = -1;
+				break;
+			}
+			if(!totalammo) break;
+		}
+		return ammo_mode;
+	}
+	
 	void weapon_tick()
 	{
 		let plr = MechWarrior(Owner);
@@ -336,38 +381,14 @@ class Mechbase_Weapon : Item_NoPickup
 		mechplr = plr;
 		if(switch_timer) switch_timer --;
 		
+		if(  ammotype && !mechplr.countammo(ammotype) && 
+		    (ammotype2 || ammotype3) ) DoAmmoSwitch(ammo_mode+1);
+		
 		if( (!ammotype && ammouse) || (mechplr.getSelectedWeapon() is self.GetClass() && 
 		    mechplr.btn_switchammo && (ammotype2 || ammotype3)) && !switch_timer ) 
 		{
-			ammotype = NULL;
 			switch_timer = 35/2;
-			while(!ammotype)
-			{
-				ammo_mode++;
-				switch(ammo_mode)
-				{
-					case 0:
-						weapType = default.weapType;
-						ammotype = default.ammotype;
-						displayName = default.displayName;
-					break;
-					case 1:
-						weapType = weapType2;
-						ammotype = ammotype2;
-						displayName = weapname2;
-					break;
-					case 2:
-						weapType = weapType3;
-						ammotype = ammotype3;
-						displayName = weapname3;
-					break;
-					default:
-						ammotype = NULL;
-						ammo_mode = -1;
-					break;
-				}
-			}
-			
+			DoAmmoSwitch(ammo_mode+1);
 		}
 		
 		// Discard lock if we're not a homing weapon and we've just been selected.
