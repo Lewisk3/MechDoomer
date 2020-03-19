@@ -392,8 +392,11 @@ class MechDoomerEvents : EventHandler
 				console.printf("Obtained: %d cbills from a totally legitimate source.", e.Args[0]);
 			}
 			
-			if(netcmd == "+mwd_user5")plr.btn_userfive = true;
-			if(netcmd == "-mwd_user5")plr.btn_userfive = false;
+			if(netcmd == "-mwd_switchammo") plr.btn_switchammo = false;
+			if(netcmd == "+mwd_switchammo") plr.btn_switchammo = true;
+	
+			if(netcmd == "+mwd_user5") plr.btn_jumpjets = true;
+			if(netcmd == "-mwd_user5") plr.btn_jumpjets = false;
 			if(netcmd == "+mwd_pilotlook" && plr.modelcockpit && !plr.dronecam) plr.pilotlook = true;
 			if(netcmd == "-mwd_pilotlook")plr.pilotlook = false;
 			Array<String> netcmds;

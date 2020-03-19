@@ -50,11 +50,17 @@ void RemoveItem(int ind, int amt=0)
 static mw_InvStruct NewItem(String type)
 {
 	class<Mechbase_Utility> util = type;
+	class<Mechbase_Weapon> weap = type;
 	let typeobj = util==NULL ? NULL : Mechbase_Utility.CreateTemp(util);
 	let item = new("mw_InvStruct");
 	if(item)
 	{
 		item.Tag = type;
+		if(weap) 
+		{
+			string flavortext = GetDefaultByType(weap).shopdesc;
+			item.shopdesc = "\n"..flavortext;
+		}
 		if(typeobj) 
 		{
 			item.utiltype = type;

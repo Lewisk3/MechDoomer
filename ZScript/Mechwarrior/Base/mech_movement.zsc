@@ -444,12 +444,12 @@ void mech_movement()
 		mech_jetsfuel -= 1;
 		A_PlaySound("Mech/JetLoop",5,1,1);
 	} 
-	else if(!btn_userfive && mech_jetsfuel > 0)
+	else if(!btn_jumpjets && mech_jetsfuel > 0)
 	{
 		A_StopSound(5);
 	}
 	
-	if(btn_userfive && Mech_HasJets && mech_jetsfuel > 0)
+	if(btn_jumpjets && Mech_HasJets && mech_jetsfuel > 0)
 	{
 		class<JumpJet> jj = "JumpJet";
 		double tonmod = 100-( mech_tonnage-(5*Mech_JetCount) );
@@ -509,7 +509,7 @@ void mech_movement()
 	
 	if(countStruct("JumpJet") > 0 && mech_jetsfuel < 100 && 
 	 !(GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) &&
-	 !btn_userfive && player.OnGround) mech_jetsfuel += 0.5;
+	 !btn_jumpjets && player.OnGround) mech_jetsfuel += 0.5;
 }
 
 void process_shutdown()

@@ -38,6 +38,17 @@ class UAC_2 : AC_2
 		Mechbase_Actor.Heat MWHEAT_UAC2;
 	}
 }
+class LBX_AC_2 : AutocannonBall
+{
+	Default
+	{
+		Speed 60;
+		AutocannonBall.ClusterMode true;
+		Mechbase_Actor.FireSound "Ballistics/Autocannon";
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC2*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.Heat MWHEAT_AC2;
+	}
+}
 
 class AC_5 : AutocannonBall
 {
@@ -54,6 +65,17 @@ class UAC_5 : AC_5
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_UAC5*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_UAC5;
+	}
+}
+class LBX_AC_5 : AutocannonBall
+{
+	Default
+	{
+		Speed 60;
+		AutocannonBall.ClusterMode true;
+		Mechbase_Actor.FireSound "Ballistics/Autocannon";
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC5*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.Heat MWHEAT_AC5;
 	}
 }
 
@@ -74,6 +96,17 @@ class UAC_10 : AC_10
 		Mechbase_Actor.Heat MWHEAT_UAC10;
 	}
 }
+class LBX_AC_10 : AutocannonBall
+{
+	Default
+	{
+		Speed 60;
+		AutocannonBall.ClusterMode true;
+		Mechbase_Actor.FireSound "Ballistics/Autocannon";
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC10*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.Heat MWHEAT_UAC10;
+	}
+}
 
 class AC_20 : AutocannonBall
 {
@@ -90,6 +123,17 @@ class UAC_20 : AC_20
 	{
 		Mechbase_Actor.ConstDamage (ceil(MWDMG_UAC20*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_UAC20;
+	}
+}
+class LBX_AC_20 : AutocannonBall
+{
+	Default
+	{
+		Speed 60;
+		AutocannonBall.ClusterMode true;
+		Mechbase_Actor.FireSound "Ballistics/Autocannon";
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC20*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.Heat MWHEAT_AC20;
 	}
 }
 
@@ -154,6 +198,14 @@ class CATM : MechMissile
 		Mechbase_Actor.MaximumRange 800;
 		MechMissile.Homming false;
 		Mechbase_Actor.Heat MWHEAT_ATM;
+	}
+}
+class HE_CATM : CATM
+{
+	Default
+	{
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_HEATM*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.MinimumRange 0;
 	}
 }
 

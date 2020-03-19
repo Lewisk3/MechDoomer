@@ -136,6 +136,18 @@ Model UAC_2
 	
    FrameIndex AUTO A 0 0
 } 
+Model LBX_AC_2
+{
+	Path "models"
+	Model 0 "Weapons/autocannon_round.md3"
+	Scale 0.6 0.8 0.6
+	USEACTORPITCH
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
+	AngleOffset 90
+	
+   FrameIndex AUTO A 0 0
+} 
+
 
 Model AC_5
 {
@@ -153,6 +165,17 @@ Model UAC_5
 	Path "models"
 	Model 0 "Weapons/autocannon_round.md3"
 	Scale 1.8 1.8 1.8
+	USEACTORPITCH
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
+	AngleOffset 90
+	
+   FrameIndex AUTO A 0 0
+} 
+Model LBX_AC_5
+{
+	Path "models"
+	Model 0 "Weapons/autocannon_round.md3"
+	Scale 1.8 2.0 1.8
 	USEACTORPITCH
 	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
@@ -182,6 +205,17 @@ Model UAC_10
 	
    FrameIndex AUTO A 0 0
 } 
+Model LBX_AC_10
+{
+	Path "models"
+	Model 0 "Weapons/autocannon_round.md3"
+	Scale 1.8 2.2 1.8
+	USEACTORPITCH
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
+	AngleOffset 90
+	
+   FrameIndex AUTO A 0 0
+}
 
 Model AC_20
 {
@@ -199,6 +233,17 @@ Model UAC_20
 	Path "models"
 	Model 0 "Weapons/autocannon_round.md3"
 	Scale 2.6 2.6 2.6
+	USEACTORPITCH
+	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
+	AngleOffset 90
+	
+   FrameIndex AUTO A 0 0
+} 
+Model LBX_AC_20
+{
+	Path "models"
+	Model 0 "Weapons/autocannon_round.md3"
+	Scale 2.6 2.8 2.6
 	USEACTORPITCH
 	SurfaceSkin 0 0  "Textures/Metal_Dark.png" // Full mesh
 	AngleOffset 90
@@ -223,6 +268,18 @@ Model CATM
 	Path "models"
 	Model 0 "Weapons/missile_srm.md3"
 	Scale 0.2 0.4 0.4
+	USEACTORPITCH
+	SurfaceSkin 0 0  "Textures/missile.png" // Wings
+	
+   FrameIndex MISS A 0 0
+   FrameIndex MISS B 0 1
+}
+
+Model HE_CATM
+{
+	Path "models"
+	Model 0 "Weapons/missile_srm.md3"
+	Scale 0.1 0.3 0.3
 	USEACTORPITCH
 	SurfaceSkin 0 0  "Textures/missile.png" // Wings
 	

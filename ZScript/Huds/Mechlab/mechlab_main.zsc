@@ -259,7 +259,7 @@ void drawLoadoutBody(int sx, int sy, int ind)
 	}
 }
 
-void drawInfoLine(String txt, int inline, int linesize=25, vector2 detailpos=(280,90))
+void drawInfoLine(String txt, int inline, int linesize=25, vector2 detailpos=(280,75))
 {
 	H_DrawString(txt,(detailpos.x,detailpos.y+(linesize*inline)));
 }
@@ -457,8 +457,10 @@ void drawInventory(int px, int py, int start, int max)
 				clearSelected();
 				setSelected(weapname, null, ut, mw, eng, i);
 			}
-			string displayName = eng ? MechBase_Engine.GetRealName(eng) : weapname .. "(#"..slots..")";
-			if(item.amt > 0) displayName = displayName .. " x" .. item.amt+1;
+			string displayName = weapname.. " \c[Orange]["..slots.."]";
+			if(ut) displayName = GetDefaultByType(ut).displayName.. " \c[Orange]["..slots.."]";
+			if(eng) displayName = MechBase_Engine.GetRealName(eng);
+			if(item.amt > 0) displayName = displayName .. "\c[Green] x" .. item.amt+1;
 			H_DrawString(displayName, (px-68,py+sely),0,fcr);
 			if(ut && !GetDefaultByType(ut).moveable)H_DrawString("ERROR: Immoveable Item!", (px-68,py+sely),0,Font.CR_DARKRED);	
 		}
@@ -566,7 +568,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 				for(int s = 0; s < def_ut.hardslots; s++)
 				{	
 					if(i == selected_item.index && selected_item.mUtil && selected_item.location)fcr = Font.CR_GREEN;
-					String suffix = def_ut.hardslots > 1 ? " (#" .. s+1 .. ")" : "";
+					String suffix = def_ut.hardslots > 1 ? " \c[Orange][" .. s+1 .. "]" : "";
 					Rect checkmouse;
 					initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
 					// drawRect(checkmouse,Color(255,128,128,128));
@@ -597,7 +599,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 					for(int i = 0; i < ww.hardslots; i++)
 					{							
 						String suffix = "";
-						if(ww.hardslots > 1)suffix = " (#" .. i+1 .. ")";
+						if(ww.hardslots > 1)suffix = " \c[Orange][" .. i+1 .. "]";
 						Rect checkmouse;
 						String weapname = ww.GetClassName();
 						initRect(checkmouse,sx,sy+offs.x-10,14*(weapname.Length()+suffix.Length()+4),15);
@@ -630,7 +632,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 				for(int i = 0; i < wwdefs.hardslots; i++)
 				{							
 					String suffix = "";
-					if(wwdefs.hardslots > 1)suffix = " (#" .. i+1 .. ")";
+					if(wwdefs.hardslots > 1)suffix = " \c[Orange][" .. i+1 .. "]";
 					H_DrawString(ww.Tag .. suffix, (sx,sy+offs.y-15),0,fcr);
 					offs.y += 24;
 					offs.x += 23;

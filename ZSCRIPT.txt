@@ -48,6 +48,7 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Weapons/weapon_base.zsc"
 #include "ZScript/Weapons/weapon_objects.zsc"
 #include "ZScript/Weapons/weapons.zsc"
+#include "ZScript/Weapons/weapon_ammos.zsc"
 #include "ZScript/Weapons/debris.zsc"
 #include "ZScript/Weapons/weapon_disp.zsc"
 #include "ZScript/Weapons/ammo_disp.zsc"

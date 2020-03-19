@@ -22,6 +22,7 @@ class mw_InvStruct
 {
 	string Tag;
 	Array<String> description;
+	string shopdesc;
 	class<Mechbase_Utility> utiltype;
 	MechutilDefs utildefs;
 	MechHardpoint hardpoint;

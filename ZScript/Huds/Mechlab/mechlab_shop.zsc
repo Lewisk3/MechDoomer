@@ -337,6 +337,7 @@ void drawShopItemInfo()
 			if(weaptypedefs.minimum_range) drawShopInfoLine("Min Range: " .. int(weaptypedefs.minimum_range),++shopline);
 			if(weaptypedefs.maximum_range) drawShopInfoLine("Max Range: " .. int(weaptypedefs.maximum_range),++shopline);
 			item_cost = GetDefaultByType(invweap).worth*2;
+			drawShopInfoLine(item.shopdesc,shopline+1);
 		}
 		
 		if(item && !selected_item.mWeapon)
@@ -360,6 +361,7 @@ void drawShopItemInfo()
 			}
 			class<Mechbase_Ammo> am = item.Tag;
 			if(am) drawShopInfoLine("Ammunition: "..item.ammunition,i);
+			drawShopInfoLine(item.shopdesc,i+1);
 		}
 	}
 	else
@@ -414,6 +416,7 @@ void drawShopInventory(int px, int py, int start, int max)
 			class<Mechbase_Weapon> mw  = weapname;
 			class<Mechbase_Utility> ut = weapname;
 			class<Mechbase_Engine> eng = weapname;
+			bool marker = !(ut || mw || eng);
 			
 			Rect checkmouse;
 			initRect(checkmouse,px-65,py+((i-start)*25),16*(weapname.Length()+3),17);
@@ -426,12 +429,19 @@ void drawShopInventory(int px, int py, int start, int max)
 			{
 				fcr = selected_item.mEngine ? Font.CR_GREEN : selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
 			}
-			if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
+			if(mstats.left_btn && checkCollision(mouse,checkmouse) && !marker) 
 			{
 				clearSelected();
 				setSelected(weapname, null, ut, mw, eng, i);
 			}
-			string displayName = eng ? MechBase_Engine.GetRealName(eng) : weapname;
+			string displayName = weapname;
+			if(ut) displayName = GetDefaultByType(ut).displayName;
+			if(eng) displayName = MechBase_Engine.GetRealName(eng);
+			if(marker)
+			{
+				fcr = Font.CR_Red;
+				displayName = displayName;
+			}
 			H_DrawString(displayName, (px-68,py+sely),0,fcr);
 		}
 		else

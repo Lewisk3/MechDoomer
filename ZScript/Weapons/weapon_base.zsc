@@ -115,6 +115,7 @@ class Mechbase_Actor : FastProjectile
 class Mechbase_Weapon : Item_NoPickup
 {
 	Mechwarrior mechplr;
+	string shopdesc;
 	int cooldown_timer;
 	double volleycooldown;
 	double cooldown;
@@ -131,7 +132,6 @@ class Mechbase_Weapon : Item_NoPickup
 	int hardslots;
 	double weight;
 	Name displayName;
-	class<Mechbase_Actor> weapType;
 	int weapDistance;
 	int weapSpeed;
 	int worth;
@@ -146,9 +146,18 @@ class Mechbase_Weapon : Item_NoPickup
 	string specprefix; // Special prefix for certain weapons.
 	//double hitscan_amt;
 	int delay;
-	class<Mechbase_Ammo> ammotype;
 	Sound atksnd, DOS_atksnd;
 	
+	int ammo_mode;
+	int switch_timer; // Retarded solution but idgaf anymore.
+	string weapname2;
+	string weapname3;
+	class<Mechbase_Actor> weapType;
+	class<Mechbase_Actor> weapType2;
+	class<Mechbase_Actor> weapType3;
+	class<Mechbase_Ammo> ammotype;
+	class<Mechbase_Ammo> ammotype2;
+	class<Mechbase_Ammo> ammotype3;
 	
 	Property DisplayName : displayName;
 	Property DefaultGroup : group;
@@ -168,6 +177,9 @@ class Mechbase_Weapon : Item_NoPickup
 	Property Tonnage : weight;
 	Property Cooldown : cooldown, volleycooldown;
 	Property WeaponBaseSpread : basespreadx, basespready;
+	Property WeaponMode2 : weapType2, ammotype2, weapname2;
+	Property WeaponMode3 : weapType3, ammotype3, weapname3;
+	Property FlavorText : shopdesc;
 	
 	// Hardpoint processing
 	int dmg_taken;
@@ -322,6 +334,41 @@ class Mechbase_Weapon : Item_NoPickup
 		let plr = MechWarrior(Owner);
 		if(!plr) return;
 		mechplr = plr;
+		if(switch_timer) switch_timer --;
+		
+		if( (!ammotype && ammouse) || (mechplr.getSelectedWeapon() is self.GetClass() && 
+		    mechplr.btn_switchammo && (ammotype2 || ammotype3)) && !switch_timer ) 
+		{
+			ammotype = NULL;
+			switch_timer = 35/2;
+			while(!ammotype)
+			{
+				ammo_mode++;
+				switch(ammo_mode)
+				{
+					case 0:
+						weapType = default.weapType;
+						ammotype = default.ammotype;
+						displayName = default.displayName;
+					break;
+					case 1:
+						weapType = weapType2;
+						ammotype = ammotype2;
+						displayName = weapname2;
+					break;
+					case 2:
+						weapType = weapType3;
+						ammotype = ammotype3;
+						displayName = weapname3;
+					break;
+					default:
+						ammotype = NULL;
+						ammo_mode = -1;
+					break;
+				}
+			}
+			
+		}
 		
 		// Discard lock if we're not a homing weapon and we've just been selected.
 		if(plr.selectedWeapon == WeaponID && !isHomming && plr.locktimer )

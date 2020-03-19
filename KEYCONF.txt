@@ -28,6 +28,8 @@ alias SetGroup1 "netevent \"mechsetgroup:1\""
 alias SetGroup2 "netevent \"mechsetgroup:2\""
 alias SetGroup3 "netevent \"mechsetgroup:3\""
 alias SetGroup4 "netevent \"mechsetgroup:4\""
+alias +SwitchAmmo "netevent +mwd_switchammo"
+alias -SwitchAmmo "netevent -mwd_switchammo"
 
 addkeysection "MechDoomer Controls" MechDoomerControls
 addmenukey "Accelerate (W)" +forward
@@ -55,6 +57,7 @@ addmenukey "Toggle Drone Camera (V)" MechChase
 addmenukey "Switch Drone View (F4)"	MechChaseView
 addmenukey "Fire Selected (F)" +attack
 addmenukey "Toggle Firemode (\)" Firemode		 
+addmenukey "Switch Weapon Type (M)" +SwitchAmmo
 addmenukey "Next Weapon (Scroll-down)" NextMechWeapon
 addmenukey "Previous Weapon (Scroll-up)" PrevMechWeapon
 addmenukey "Next Group (Down arrow)" NextGroup	

@@ -1,0 +1,221 @@
+
+// AMS
+class AMSAmmo : Mechbase_Ammo
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "AMS AMMO";
+		Mechbase_Utility.Tonnage 1;
+		Mechbase_Utility.Criticals 1;
+		Mechbase_Utility.CValue 1850;
+		Mechbase_Ammo.Amount 1100;
+	}
+}
+
+// Machinegun
+class BulletsMGun : AMSAmmo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "MACHINEGUN AMMO";
+		Mechbase_Utility.CValue 1250;
+		Mechbase_Ammo.Amount 200;
+	}
+}
+
+// Gauss
+class GaussRounds : AMSAmmo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "GAUSSRIFLE AMMO";
+		Mechbase_Ammo.Amount 10;
+		Mechbase_Utility.CValue 4680;
+	}
+}
+
+// Slug AC Ammo
+class AC2_Ammo : AMSAmmo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC2 AMMO (Slug)";
+		Mechbase_Utility.CValue 2750;
+		Mechbase_Ammo.Amount 40;
+	}
+}
+class AC5_Ammo : AC2_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC5 AMMO (Slug)";
+		Mechbase_Ammo.Amount 20;
+		Mechbase_Utility.CValue 3200;
+	}
+}
+class AC10_Ammo : AC5_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC10 AMMO (Slug)";
+		Mechbase_Ammo.Amount 10;
+		Mechbase_Utility.CValue 3870;
+	}
+}
+class AC20_Ammo : AC5_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC20 AMMO (Slug)";
+		Mechbase_Ammo.Amount 5;
+		Mechbase_Utility.CValue 5870;
+	}
+}
+class UAC2_Ammo : AC2_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "UAC2 AMMO";
+		Mechbase_Utility.CValue 2250;
+	}
+}
+class UAC5_Ammo : AC5_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "UAC5 AMMO";
+		Mechbase_Utility.CValue 2650;
+	}
+}
+class UAC10_Ammo : AC10_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "UAC10 AMMO";
+		Mechbase_Utility.CValue 3115;
+	}
+}
+class UAC20_Ammo : AC20_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "UAC20 AMMO";
+		Mechbase_Utility.CValue 5790;
+	}
+}
+
+// Cluster AC Ammo.
+mixin class LBXInfo
+{
+	override void SetupItem(mw_InvStruct item)
+	{
+		super.SetupItem(item);
+		item.shopdesc = (
+			"\n"
+			"\c[Yellow]-------------------------------------------\n"	
+			"\c[Orange]Explodes into sharp metal\n"
+			"\c[Orange]shards on impact, digs into\n"	
+			"\c[Orange]targets armor/flesh.\n"
+			"\c[Yellow]-------------------------------------------"
+		);	
+	}
+}
+
+class LBX_AC2_Ammo : AC2_Ammo
+{
+	mixin LBXInfo;
+	Default
+	{
+		Mechbase_Utility.displayName "AC2 AMMO (Cluster)";
+	}
+}
+class LBX_AC5_Ammo : AC5_Ammo
+{
+	mixin LBXInfo;
+	Default
+	{
+		Mechbase_Utility.displayName "AC5 AMMO (Cluster)";
+	}
+}
+class LBX_AC10_Ammo : AC10_Ammo
+{
+	mixin LBXInfo;
+	Default
+	{
+		Mechbase_Utility.displayName "AC10 AMMO (Cluster)";
+	}
+}
+class LBX_AC20_Ammo : AC20_Ammo
+{
+	mixin LBXInfo;
+	Default
+	{
+		Mechbase_Utility.displayName "AC20 AMMO (Cluster)";
+	}
+}
+
+// Missile Ammo
+class SRM_Ammo : AMSAmmo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "SRM AMMO";
+		Mechbase_Ammo.Amount 120;
+		Mechbase_Utility.CValue 2780;
+	}
+}
+class SSRM_Ammo : SRM_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "SSRM AMMO";
+		Mechbase_Utility.CValue 3750;
+	}
+}
+class ATM_Ammo : AMSAmmo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "ATM AMMO";
+		Mechbase_Ammo.Amount 60;
+		Mechbase_Utility.CValue 7825;
+	}
+}
+class HE_ATM_Ammo : ATM_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "ATM AMMO (H.E)";
+	}
+	
+	override void SetupItem(mw_InvStruct item)
+	{
+		super.SetupItem(item);
+		item.shopdesc = (
+			"\n"
+			"\c[Yellow]-------------------------------------------\n"
+			"\c[Brick]!Highly Explosive!\n"
+			"\c[Orange]Removes Minimum range\n"
+			"\c[Orange]at the cost of accuracy.\n"
+			"\c[Yellow]-------------------------------------------" 
+		);
+	}
+}
+class MRM_Ammo : AMSAmmo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "MRM AMMO";
+		Mechbase_Ammo.Amount 240;
+		Mechbase_Utility.CValue 5000;
+	}
+}
+class LRM_Ammo : AMSAmmo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "LRM AMMO";
+		Mechbase_Ammo.Amount 240;
+		Mechbase_Utility.CValue 2500;
+	}
+}

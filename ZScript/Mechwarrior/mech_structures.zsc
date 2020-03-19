@@ -29,7 +29,7 @@ class Mechbase_Utility : Actor
 	bool moveable;
 	bool takesnodamage;
 	int worth;
-	
+
 	Property Criticals : hardslots;
 	Property DisplayName : displayName;
 	Property CValue : worth;
@@ -193,10 +193,8 @@ class C_A_S_E : Mechbase_Utility
 
 	override void SetupItem(mw_InvStruct item)
 	{
-		GetDefDescription(item.description);
-		item.description.push("Supresses ammo");
-		item.description.push("explosions.");	
-		item.worth = worth;
+		super.SetupItem(item);
+		item.description.push("\n\c[Orange]Supresses ammo\n\c[Orange]explosions");
 	}
 }
 
@@ -208,7 +206,7 @@ class Heatsink : Mechbase_Utility
 	Default
 	{
 		Mechbase_Utility.Tonnage 1;
-		Mechbase_Utility.displayName "Heat Sink";
+		Mechbase_Utility.displayName "Heatsink";
 		Heatsink.Efficiency MWHS_EFF;
 		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.Moveable 1;
@@ -217,11 +215,14 @@ class Heatsink : Mechbase_Utility
 	
 	override void SetupItem(mw_InvStruct item)
 	{
-		String hef = cooling .. "";
-		hef.truncate(hef.Length()-3);
-		GetDefDescription(item.description);
-		item.description.Insert(3,"Conductivity: +" .. hef);
-		item.worth = worth;
+		super.SetupItem(item);
+		item.description.Insert(3,"Conductivity: +" .. MDMath.getPrintableFloat(cooling));
+		item.shopdesc = (
+			"\c[Orange]Helps cool mechs faster\n"
+			"\c[Orange]by collecting coolant and\n"
+			"\c[Orange]delivering it to a series\n"
+			"\c[Orange]of radiators\n"
+		);
 	}
 }
 class DoubleHeatsink : Heatsink
@@ -229,7 +230,7 @@ class DoubleHeatsink : Heatsink
 	Default
 	{
 		Mechbase_Utility.Tonnage 1;
-		Mechbase_Utility.displayName "Heat Sink";
+		Mechbase_Utility.displayName "Double Heatsink";
 		Heatsink.Efficiency MWDBLHS_EFF;
 		Mechbase_Utility.Criticals 2;
 		Mechbase_Utility.Moveable 1;
@@ -254,11 +255,11 @@ class JumpJet : Mechbase_Utility
 	
 	override void SetupItem(mw_InvStruct item)
 	{
-		String thrust = ((thrust_power* 1/100) + 2) .. "";
-		thrust.truncate(thrust.Length()-3);
-		GetDefDescription(item.description);
-		item.description.Insert(3,"Strength: " .. thrust);
-		item.worth = worth;
+		super.SetupItem(item);
+		double thrust = ((thrust_power* 1/100) + 2);
+		item.description.Insert(3,"Strength: " .. MDMath.getPrintableFloat(thrust));
+		item.description.push("\c[Orange]Rocket propels mechs for\n\c[Orange]all your poptarting needs!");
+		item.shopdesc = "\c[Orange]Heavier mechs will require\n\c[Orange]more of these!";
 	}
 	
 }
@@ -397,6 +398,12 @@ class AntiMissileSystem : Mechbase_Utility
 		AntiMissileSystem.MissileType "AntiMissile";
 	}
 	
+	
+	override void SetupItem(mw_InvStruct item)
+	{
+		super.SetupItem(item);
+		item.description.Push("\n\c[Orange]Shoots missiles down\n\c[Orange]before they hit you.");
+	}
 }
 
 // Misc (WIP) 
