@@ -720,6 +720,11 @@ class MachineGun : Mechbase_Weapon
 	}
 }
 
+const ACText = (
+	"\c[Orange]ACs utilize ammo switching.\n"
+	"\c[Orange]Switches between: \n"
+	"\c[Orange]Slug and Cluster shot." 
+);
 class Autocannon2 : Mechbase_Weapon
 {
 	Default
@@ -734,6 +739,7 @@ class Autocannon2 : Mechbase_Weapon
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 8800;
 		Mechbase_Weapon.Cooldown MWCOOL_AC2, 0;
+		Mechbase_Weapon.FlavorText ACText;
 	}	
 }
 class UAutocannon2 : Mechbase_Weapon
@@ -764,6 +770,7 @@ class Autocannon5 : Autocannon2
 		Mechbase_Weapon.HardslotSize 4;
 		Mechbase_Weapon.CValue 9250;
 		Mechbase_Weapon.Cooldown MWCOOL_AC5, 0;
+		Mechbase_Weapon.FlavorText ACText;
 	}	
 }
 class UAutocannon5 : UAutocannon2
@@ -792,6 +799,7 @@ class Autocannon10 : Autocannon2
 		Mechbase_Weapon.HardslotSize 7;
 		Mechbase_Weapon.CValue 12850;
 		Mechbase_Weapon.Cooldown MWCOOL_AC10, 0;
+		Mechbase_Weapon.FlavorText ACText;
 	}	
 }
 class UAutocannon10 : UAutocannon2
@@ -819,6 +827,7 @@ class Autocannon20 : Autocannon2
 		Mechbase_Weapon.HardslotSize 7;
 		Mechbase_Weapon.CValue 13480;
 		Mechbase_Weapon.Cooldown MWCOOL_AC20, 0;
+		Mechbase_Weapon.FlavorText ACText;
 	}	
 }
 class UAutocannon20 : UAutocannon2
