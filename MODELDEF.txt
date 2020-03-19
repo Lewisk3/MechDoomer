@@ -324,6 +324,17 @@ Model AntiMissile
    FrameIndex AMSL A 0 0
 }
 
+Model LaserAntiMissile
+{
+	Path "models"
+	Model 0 "Weapons/laser.md3"
+	Skin 0 "Textures/redlaser.png"
+	Scale 0.5 0.05 0.05
+	USEACTORPITCH
+	
+   FrameIndex AMSL A 0 0
+}
+
 Model MissileAmmoDisp
 {
 	Path "models"

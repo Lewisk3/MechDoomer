@@ -369,6 +369,7 @@ class EndoBlue : EndosteelBonus replaces BlueArmor
 // Combat Structures
 class AntiMissileSystem : Mechbase_Utility
 {
+	Sound firesound;
 	int cooldown;
 	int pdamage;
 	int ammouse;
@@ -382,6 +383,7 @@ class AntiMissileSystem : Mechbase_Utility
 	property ActiveRange : activerange;
 	Property MissileType : amstype;
 	Property AmmoType : ammotype;
+	Property ShootSound : firesound;
 
 	Default
 	{
@@ -396,6 +398,7 @@ class AntiMissileSystem : Mechbase_Utility
 		AntiMissileSystem.AmmoUse 1;
 		AntiMissileSystem.AmmoType "AMSAmmo";
 		AntiMissileSystem.MissileType "AntiMissile";
+		AntiMissileSystem.ShootSound "Missiles/AMS";
 	}
 	
 	
@@ -403,6 +406,38 @@ class AntiMissileSystem : Mechbase_Utility
 	{
 		super.SetupItem(item);
 		item.description.Push("\n\c[Orange]Shoots missiles down\n\c[Orange]before they hit you.");
+	}
+}
+
+class LaserAntiMissileSystem : AntiMissileSystem
+{
+	Default
+	{
+		Mechbase_Utility.Tonnage 1.5;
+		Mechbase_Utility.displayName "LAMS";
+		Mechbase_Utility.Criticals 2;
+		Mechbase_Utility.Moveable 1;
+		Mechbase_Utility.CValue 19600;
+		AntiMissileSystem.Cooldown 10;
+		AntiMissileSystem.Damage 30;
+		AntiMissileSystem.ActiveRange 800;
+		AntiMissileSystem.AmmoUse 0;
+		AntiMissileSystem.AmmoType "";
+		AntiMissileSystem.MissileType "LaserAntiMissile";
+		AntiMissileSystem.ShootSound "Classic/PulseLasers/Small";
+	}
+	
+	override void SetupItem(mw_InvStruct item)
+	{
+		super.SetupItem(item);
+		item.description.Pop();
+		item.description.Insert(1,"Heat: "..MWHEAT_LAMS);
+		item.description.Push(
+			"\n"
+			"\c[Orange]Lasers missiles down\n"
+			"\c[Orange]before they hit you.\n"
+			"\c[Orange]Generates heat.\n"
+		);
 	}
 }
 

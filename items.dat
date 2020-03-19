@@ -104,6 +104,7 @@ HE_ATM_Ammo
 C_A_S_E  
 JumpJet  
 AntiMissileSystem  
+LaserAntiMissileSystem
 Heatsink  
 DoubleHeatsink  
 [STD_Engines]

@@ -7,6 +7,20 @@ class AntiMissile : AMS_Missile
 		AMS_Missile.Efficiency 0.6;
 	}
 }
+class LaserAntiMissile : AMS_Missile
+{
+	Default
+	{
+		AMS_Missile.Effectiveness 12;
+		AMS_Missile.Efficiency 0.4;
+	}
+	
+	override void PostBeginPlay()
+	{
+		adjustHeatLevel(MWHEAT_LAMS);
+		super.PostBeginPlay();
+	}
+}
 
 // Ballistics
 class MGunBullet : MechBullet

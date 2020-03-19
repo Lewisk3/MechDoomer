@@ -553,9 +553,9 @@ class MRM40: MRM10
 
 // Missiles - LRM
 const LRMText = (
-	"\c[Orange]LRMs are Lock-On capable\n"
+	"\c[Orange]LRMs are Lock-On capable.\n"
 	"\c[Orange]Due to dual stage boosters\n"
-	"\c[Orange]LRMs have a minimum range\n"
+	"\c[Orange]LRMs have a minimum range.\n"
 );
 
 class LRM5: Mechbase_Weapon
