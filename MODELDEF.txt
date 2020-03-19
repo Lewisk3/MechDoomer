@@ -10,6 +10,7 @@ Model DEBRIS_3D
 	Model 0 "Weapons/debris.md3"
 	Scale -0.6 0.6 0.6
 	USEACTORPITCH
+	USEACTORROLL
 	SurfaceSkin 0 0  "Textures/metal_dark.png" // Full mesh
 	AngleOffset 90
 	

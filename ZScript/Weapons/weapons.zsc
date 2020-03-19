@@ -388,8 +388,27 @@ class CATM3 : Mechbase_Weapon
 		Mechbase_Weapon.Tonnage 1.5;
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 18500;
+		// Mechbase_Weapon.LockingSpeed 2.8;
 		Mechbase_Weapon.Cooldown MWCOOL_ATM3, 0.05;
 	}
+	
+	/*
+	override void DoEffect()
+	{
+		if(mechplr)
+		{
+			bool btn = mechplr.player.cmd.buttons & BT_RELOAD;
+			if(btn && mechplr.getSelectedWeapon() is GetClass()) 
+			{
+				specprefix = "ER ";
+				isHomming = true;
+				weapType = "AC_5";
+				console.printf("Switched ammo");
+			}
+		}
+		super.DoEffect();
+	}
+	*/
 	
 	override bool MWFire()
 	{

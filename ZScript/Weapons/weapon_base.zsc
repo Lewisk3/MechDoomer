@@ -143,6 +143,7 @@ class Mechbase_Weapon : Item_NoPickup
 	bool target_inview;
 	double hitscan_distance;
 	double basespreadx, basespready;
+	string specprefix; // Special prefix for certain weapons.
 	//double hitscan_amt;
 	int delay;
 	class<Mechbase_Ammo> ammotype;
@@ -921,12 +922,16 @@ class GaussBall : Mechbase_Actor
 
 class AutocannonBall : Mechbase_Actor
 {
+	bool isCluster;
+	Property ClusterMode : isCluster;
+
 	Default
 	{
-		Speed 60;
+		Speed 80;
 		Radius 10;
 		Height 5;
 		Projectile;
+		AutocannonBall.ClusterMode false;
 	}
 
 	States
@@ -941,11 +946,22 @@ class AutocannonBall : Mechbase_Actor
 			AUTO A 1;
 			AUTO A 1 
 			{
-				let deb = Spawn("Debris_Spawner",pos);
-				if(deb)
+				let deb = Debris_Spawner(Spawn("Debris_Spawner",pos));
+				if(deb && isCluster)
 				{
+					deb.spread = 30;
+					deb.pieces = 12;
 					deb.angle = angle;
 					deb.pitch = pitch;
+					deb.SetDamage(ceil((truedamage/36.)));
+				}
+				else if(deb)
+				{
+					deb.spread = 3;
+					deb.pieces = 4;
+					deb.angle = angle;
+					deb.pitch = pitch;
+					deb.SetDamage(0);
 				}
 			}
 		stop;
@@ -984,7 +1000,7 @@ class MechBullet : Mechbase_Actor
 	
 	override void BeginPlay()
 	{
-		Spawn("MachineGunFlash", pos);
+		MachineGunFlash.Init(self);
 		super.BeginPlay();
 	}
 	
@@ -1007,6 +1023,24 @@ class MachineGunFlash : PPCExplosion
 	{
 		XScale 0.05;
 		YScale 0.05;
+		RenderStyle "Add";
+		Alpha 1.0;
+		+FLATSPRITE
+	}
+	
+	static MachineGunFlash Init(Actor from)
+	{
+		let mflash = MachineGunFlash(Spawn("MachineGunFlash", from.pos));
+		if(mflash) mflash.master = from;
+		return mflash;
+	}
+	
+	override void PostBeginPlay()
+	{
+		angle = master.angle;
+		pitch = master.pitch+90;
+		A_SetRoll(random(0,359));
+		super.PostBeginPlay();
 	}
 	
 	States

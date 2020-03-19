@@ -25,27 +25,34 @@ class MissileDebris : Actor
 
 class Debris_Spawner : Actor
 {
+	int pieces;
+	double spread;
+
 	override void PostBeginPlay()
 	{
-		for(int i = 0; i < 12; i++)
+		for(int i = 0; i < pieces; i++)
 		{
 			int angle = angle+random(-360,360);
 			int speed = 3;
 			Vector3 npos = pos;
-			double xo = -(cos(angle)*30);
-			double yo = -(sin(angle)*30);
+			double xo = -(cos(angle)*spread);
+			double yo = -(sin(angle)*spread);
+			double zo = frandom(-spread, spread);
 			npos.x += xo;
 			npos.y += yo;
+			npos.z += zo;
 			let debris = Spawn("DEBRIS_3D",npos);
 			if(debris)
 			{
+				debris.SetDamage(damage); // Small cluster damage.
 				debris.A_SetRoll(roll+random(-180,180));
-				debris.pitch = pitch+random(-20,45);
-				debris.vel = (
-						-(cos(angle)*cos(-pitch)),
-						-(sin(angle)*cos(-pitch)),
-						sin(debris.pitch) * (speed)
-						) * speed;
+				debris.pitch = pitch;
+				debris.vel = 
+				(
+					cos(angle+180)*cos(debris.pitch),
+					sin(angle+180)*cos(debris.pitch),
+					sin(debris.pitch+frandom(-45,45))*speed
+				) * speed;
 			}
 		}
 		super.PostBeginPlay();
@@ -62,25 +69,50 @@ class DEBRIS_3D : Actor
 {
 	Default
 	{
+		Damage 0;
 		+BOUNCEONWALLS
 		+BOUNCEONFLOORS
 		BounceType "Doom";
-		BounceCount 1;
-		BounceFactor 1.2;
+		BounceCount 4;
+		BounceFactor 0.6;
 		Gravity 0.3;
 		Projectile;
 		-NOGRAVITY
+		+RIPPER
+		+INTERPOLATEANGLES
+	}
+	
+	override void Tick()
+	{
+		A_SetPitch(pitch+8, SPF_INTERPOLATE);
+		super.Tick();
 	}
 
 	States
 	{
 		Spawn:
-			DEBR A 1 ;
+			DEBR A 1;
 		loop;
+		Bounce:
+			DEBR A 1
+			{
+				A_SetRoll(roll+frandom(-45,45));
+				A_SetPitch(pitch+frandom(-60,60));
+				A_SetAngle(angle+frandom(-90,90));
+			}
+		goto DeathLoop;
 		Death:
 			DEBR A 1;
 			TNT1 A 0 { bSOLID = false; }
 		DeathLoop:
+			DEBR A 1 
+			{
+				A_SetScale(scale.x*0.97,scale.y*0.97);
+				if(scale.x <= 0.2 || scale.y <= 0.2) return ResolveState("DeathFinal");
+				return ResolveState(null);
+			}
+		loop;
+		DeathFinal:
 			DEBR A 1 A_FadeOut(0.03);
 		wait;
 	}

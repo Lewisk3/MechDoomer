@@ -150,9 +150,9 @@ class MechStatusBar : BaseStatusBar
 					int selx = (ww.WeaponID+1)%2;
 					int sely = (ww.WeaponID+1)/2;
 					if(ww.ammotype)
-						H_DrawString(ww.displayName .. " " .. mech.countammo(ww.ammotype),(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
+						H_DrawString(ww.specprefix..ww.displayName .. " " .. mech.countammo(ww.ammotype),(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
 					if(!ww.ammotype)
-						H_DrawString(ww.displayName,(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
+						H_DrawString(ww.specprefix..ww.displayName,(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
 					if(lastweap < ww.WeaponID) lastweap = ww.WeaponID;
 				}
 			}
