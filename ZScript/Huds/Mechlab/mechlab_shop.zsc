@@ -442,7 +442,10 @@ void drawShopInventory(int px, int py, int start, int max)
 				fcr = Font.CR_Red;
 				displayName = displayName;
 			}
-			H_DrawString(displayName, (px-68,py+sely),0,fcr);
+			int itemcount = mechplr.inv_context.countitems(weapname)+mechplr.countStruct(weapname);
+			string countsuffix = itemcount ? "\t\t\c[Teal]("..itemcount..")\c[White]" : "";
+			if(marker) countsuffix = "";
+			H_DrawString(displayName..countsuffix, (px-68,py+sely),0,fcr);
 		}
 		else
 		{

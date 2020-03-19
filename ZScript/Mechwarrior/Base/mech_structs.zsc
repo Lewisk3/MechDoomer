@@ -231,11 +231,10 @@ bool getStructsIn(MechHardpoint pos, in out Array<FoundStruct> objs)
 	}
 	return (objs.Size() > 0);
 }
-int countStruct(String type)
+clearscope int countStruct(String type)
 {
 	int count = 0;
 	type.ToLower();
-	if(!inv_context.mechstructs.Size()) inv_context.mechstructs.Clear();
 	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 	{
 		String cname = inv_context.mechstructs[i].Tag;
