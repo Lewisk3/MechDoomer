@@ -170,11 +170,13 @@ class MechStatusBar : BaseStatusBar
 					int nsely = (lastweap+1+amsid)/2;
 					let ams_def = GetDefaultByType(basecast);
 					if(ams_def.ammotype && ams_def.ammouse > mech.countammo(ams_def.ammotype))ftranslation = Font.CR_DARKRED;
-					if(mech.ams_timer > 0)ftranslation = Font.CR_DARKRED;
+					if(mech.ams_passive) ftranslation = Font.CR_BRICK;  
+					if(mech.ams_timer > 0) ftranslation = Font.CR_DARKRED;
 					string prefix = ams_def.displayName;
 					if(ams_def.ammotype)
 					{
 						H_DrawString(prefix .. " " .. mech.countammo(ams_def.ammotype),(pos.x+(nselx*scalex),pos.y+(nsely*scaley)),0,ftranslation);
+						amsid++;
 					}
 					else
 					{

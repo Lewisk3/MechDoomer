@@ -3,7 +3,7 @@ class AntiMissile : AMS_Missile
 {
 	Default
 	{
-		AMS_Missile.Effectiveness 4;
+		AMS_Missile.Effectiveness MWDMG_SRM;
 		AMS_Missile.Efficiency 0.6;
 	}
 }
@@ -11,8 +11,10 @@ class LaserAntiMissile : AMS_Missile
 {
 	Default
 	{
-		AMS_Missile.Effectiveness 12;
-		AMS_Missile.Efficiency 0.4;
+		AMS_Missile.Effectiveness MWDMG_SPLAS*10;
+		AMS_Missile.Efficiency 0.98;
+		Alpha 1.0;
+		RenderStyle "Add";
 	}
 	
 	override void PostBeginPlay()
@@ -57,9 +59,9 @@ class LBX_AC_2 : AutocannonBall
 	Default
 	{
 		Speed 60;
-		AutocannonBall.ClusterMode true;
+		AutocannonBall.ClusterMode true, 2;
 		Mechbase_Actor.FireSound "Ballistics/Autocannon";
-		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC2*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_LBXAC*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_AC2;
 	}
 }
@@ -86,9 +88,9 @@ class LBX_AC_5 : AutocannonBall
 	Default
 	{
 		Speed 60;
-		AutocannonBall.ClusterMode true;
+		AutocannonBall.ClusterMode true, 5;
 		Mechbase_Actor.FireSound "Ballistics/Autocannon";
-		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC5*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_LBXAC*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_AC5;
 	}
 }
@@ -115,9 +117,9 @@ class LBX_AC_10 : AutocannonBall
 	Default
 	{
 		Speed 60;
-		AutocannonBall.ClusterMode true;
+		AutocannonBall.ClusterMode true, 10;
 		Mechbase_Actor.FireSound "Ballistics/Autocannon";
-		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC10*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_LBXAC*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_UAC10;
 	}
 }
@@ -144,9 +146,9 @@ class LBX_AC_20 : AutocannonBall
 	Default
 	{
 		Speed 60;
-		AutocannonBall.ClusterMode true;
+		AutocannonBall.ClusterMode true, 20;
 		Mechbase_Actor.FireSound "Ballistics/Autocannon";
-		Mechbase_Actor.ConstDamage (ceil(MWDMG_AC20*MWGAMEPLAY_WEAPDMGSCALE));
+		Mechbase_Actor.ConstDamage (ceil(MWDMG_LBXAC*MWGAMEPLAY_WEAPDMGSCALE));
 		Mechbase_Actor.Heat MWHEAT_AC20;
 	}
 }

@@ -393,7 +393,6 @@ class AntiMissileSystem : Mechbase_Utility
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 9800;
 		AntiMissileSystem.Cooldown 3;
-		AntiMissileSystem.Damage 15;
 		AntiMissileSystem.ActiveRange 800;
 		AntiMissileSystem.AmmoUse 1;
 		AntiMissileSystem.AmmoType "AMSAmmo";
@@ -405,6 +404,7 @@ class AntiMissileSystem : Mechbase_Utility
 	override void SetupItem(mw_InvStruct item)
 	{
 		super.SetupItem(item);
+		item.description.Insert(1,"Damage: "..GetDefaultByType(amstype).projdmg);
 		item.description.Push("\n\c[Orange]Shoots missiles down\n\c[Orange]before they hit you.");
 	}
 }
@@ -413,13 +413,13 @@ class LaserAntiMissileSystem : AntiMissileSystem
 {
 	Default
 	{
+		Speed 20;
 		Mechbase_Utility.Tonnage 1.5;
 		Mechbase_Utility.displayName "LAMS";
 		Mechbase_Utility.Criticals 2;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 19600;
-		AntiMissileSystem.Cooldown 10;
-		AntiMissileSystem.Damage 30;
+		AntiMissileSystem.Cooldown 15;
 		AntiMissileSystem.ActiveRange 800;
 		AntiMissileSystem.AmmoUse 0;
 		AntiMissileSystem.AmmoType "";
@@ -431,7 +431,7 @@ class LaserAntiMissileSystem : AntiMissileSystem
 	{
 		super.SetupItem(item);
 		item.description.Pop();
-		item.description.Insert(1,"Heat: "..MWHEAT_LAMS);
+		item.description.Insert(2,"Heat: "..MWHEAT_LAMS);
 		item.description.Push(
 			"\n"
 			"\c[Orange]Lasers missiles down\n"

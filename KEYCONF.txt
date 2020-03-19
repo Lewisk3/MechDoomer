@@ -30,6 +30,7 @@ alias SetGroup3 "netevent \"mechsetgroup:3\""
 alias SetGroup4 "netevent \"mechsetgroup:4\""
 alias +SwitchAmmo "netevent +mwd_switchammo"
 alias -SwitchAmmo "netevent -mwd_switchammo"
+alias ToggleAMS "netevent toggle_ams"
 
 addkeysection "MechDoomer Controls" MechDoomerControls
 addmenukey "Accelerate (W)" +forward
@@ -50,6 +51,7 @@ addmenukey "Target Enemy (R)" TargetEnemy
 addmenukey "Cycle NAV Points (N)" NextNAV		
 addmenukey "Open Mechlab (Q)" Mechlab_Open
 addmenukey "Toggle Infrared (H)" HeatVision		
+addmenukey "Toggle AMS (,)" ToggleAMS
 addmenukey "Satellite Link (TAB)" togglemap
 addmenukey "Display Objectives (F12)" ViewObjectives
 addmenukey "Cockpit Look (Left Ctrl)" +cockpitlook

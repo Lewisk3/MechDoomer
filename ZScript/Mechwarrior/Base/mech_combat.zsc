@@ -23,6 +23,7 @@ bool dronecam_active;
 bool heatwarn;
 bool supersink;
 bool InfraredActive;
+bool ams_passive;
 int ams_timer;
 double HeatEfficiency;
 double HeatLevel;
@@ -312,6 +313,7 @@ void mech_weapons()
 // AMS
 void process_antimissilesystem()
 {
+	if(ams_passive) return;
 	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 	{
 		String cname = inv_context.mechstructs[i].Tag;
@@ -372,7 +374,7 @@ void trigger_ams(mw_InvStruct amsitem)
 								cos(ams.AngleTo(obj))*cos(obj.pitch),
 								sin(ams.AngleTo(obj))*cos(obj.pitch),
 								-sin(obj.pitch)*5
-								) * obj.speed;
+								) * (obj.speed+def_ams.speed);
 						if(def_ams.ammotype) TakeAmmo(def_ams.ammotype,def_ams.ammouse);
 					}
 				}

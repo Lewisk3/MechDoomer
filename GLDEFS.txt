@@ -192,3 +192,7 @@ object Laser_ERLRGP
 {
 	Frame LASR { light PurplePointLight }
 }
+object LaserAntiMissile
+{
+	Frame AMSL { light RedPointLight }
+}

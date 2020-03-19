@@ -389,6 +389,7 @@ class Mechbase_Weapon : Item_NoPickup
 		{
 			switch_timer = 35/2;
 			DoAmmoSwitch(ammo_mode+1);
+			plr.A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
 		}
 		
 		// Discard lock if we're not a homing weapon and we've just been selected.
@@ -527,6 +528,7 @@ class MechMissile : Mechbase_Actor
 		{
 			inrange = true;
 		}
+		Spawn("MissileLight", pos);
 		super.PostBeginPlay();
 	}
 	
@@ -620,7 +622,6 @@ class Laser : Mechbase_Actor
 		Laser.FXColor "FF FF FF";
 		Mechbase_Actor.Heat 1;
 		Speed 0.1;
-		//RenderStyle "Add";
 		Projectile;
 	}
 
@@ -804,9 +805,7 @@ class AMS_Missile : Mechbase_Actor
 	override void PostBeginPlay()
 	{
 		speed *= convergefactor;
-		// LAMS capable
-		// if(mechplayer) adjustHeatLevel(0.15);
-		
+		Spawn("MissileLight", pos);
 		super.PostBeginPlay();
 	}
 	
@@ -821,6 +820,8 @@ class AMS_Missile : Mechbase_Actor
 			if(tracer)
 			{
 				angle = AngleTo(tracer);
+				pitch = MDMath.GetPitchBetween(pos,tracer.pos);
+				
 				if(Distance3D(tracer) <= radius*4) 
 				{
 					if(tracer.damage <= 0) 
@@ -830,6 +831,7 @@ class AMS_Missile : Mechbase_Actor
 					}
 					
 					tracer.SetDamage(tracer.damage-projdmg);
+					console.printf("Damaging by: %f", projdmg);
 					return ResolveState("DeathCollide");
 				}
 				A_SeekerMissile(20,20,SMF_CURSPEED,999/64);
@@ -991,7 +993,8 @@ class GaussBall : Mechbase_Actor
 class AutocannonBall : Mechbase_Actor
 {
 	bool isCluster;
-	Property ClusterMode : isCluster;
+	int clusterAmt;
+	Property ClusterMode : isCluster, clusterAmt;
 
 	Default
 	{
@@ -999,7 +1002,7 @@ class AutocannonBall : Mechbase_Actor
 		Radius 10;
 		Height 5;
 		Projectile;
-		AutocannonBall.ClusterMode false;
+		AutocannonBall.ClusterMode false, 0;
 	}
 
 	States
@@ -1018,10 +1021,10 @@ class AutocannonBall : Mechbase_Actor
 				if(deb && isCluster)
 				{
 					deb.spread = 30;
-					deb.pieces = 12;
+					deb.pieces = clusterAmt;
 					deb.angle = angle;
 					deb.pitch = pitch;
-					deb.SetDamage(ceil((truedamage/36.)));
+					deb.SetDamage(truedamage);
 				}
 				else if(deb)
 				{
