@@ -1,19 +1,21 @@
 
+// Caution: Ammo Inheritence should ONLY be from Mechbase_Ammo
+// or to a Half-Ammo's parent. Otherwise ammo detection will not work
+// properly for some weapons.
+
 // AMS
 class AMSAmmo : Mechbase_Ammo
 {
 	Default
 	{	
 		Mechbase_Utility.displayName "AMS AMMO";
-		Mechbase_Utility.Tonnage 1;
-		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.CValue 1850;
 		Mechbase_Ammo.Amount 1100;
 	}
 }
 
 // Machinegun
-class BulletsMGun : AMSAmmo
+class BulletsMGun : Mechbase_Ammo
 {
 	Default
 	{
@@ -24,7 +26,7 @@ class BulletsMGun : AMSAmmo
 }
 
 // Gauss
-class GaussRounds : AMSAmmo
+class GaussRounds : Mechbase_Ammo
 {
 	Default
 	{
@@ -35,7 +37,7 @@ class GaussRounds : AMSAmmo
 }
 
 // Slug AC Ammo
-class AC2_Ammo : AMSAmmo
+class AC2_Ammo : Mechbase_Ammo
 {
 	Default
 	{
@@ -44,7 +46,7 @@ class AC2_Ammo : AMSAmmo
 		Mechbase_Ammo.Amount 40;
 	}
 }
-class AC5_Ammo : AC2_Ammo
+class AC5_Ammo : Mechbase_Ammo
 {
 	Default
 	{
@@ -53,7 +55,7 @@ class AC5_Ammo : AC2_Ammo
 		Mechbase_Utility.CValue 3200;
 	}
 }
-class AC10_Ammo : AC5_Ammo
+class AC10_Ammo : Mechbase_Ammo
 {
 	Default
 	{
@@ -62,7 +64,7 @@ class AC10_Ammo : AC5_Ammo
 		Mechbase_Utility.CValue 3870;
 	}
 }
-class AC20_Ammo : AC5_Ammo
+class AC20_Ammo : Mechbase_Ammo
 {
 	Default
 	{
@@ -71,36 +73,40 @@ class AC20_Ammo : AC5_Ammo
 		Mechbase_Utility.CValue 5870;
 	}
 }
-class UAC2_Ammo : AC2_Ammo
+class UAC2_Ammo : Mechbase_Ammo
 {
 	Default
 	{
 		Mechbase_Utility.displayName "UAC2 AMMO";
 		Mechbase_Utility.CValue 2250;
+		Mechbase_Ammo.Amount 40;
 	}
 }
-class UAC5_Ammo : AC5_Ammo
+class UAC5_Ammo : Mechbase_Ammo
 {
 	Default
 	{
 		Mechbase_Utility.displayName "UAC5 AMMO";
 		Mechbase_Utility.CValue 2650;
+		Mechbase_Ammo.Amount 20;
 	}
 }
-class UAC10_Ammo : AC10_Ammo
+class UAC10_Ammo : Mechbase_Ammo
 {
 	Default
 	{
 		Mechbase_Utility.displayName "UAC10 AMMO";
 		Mechbase_Utility.CValue 3115;
+		Mechbase_Ammo.Amount 10;
 	}
 }
-class UAC20_Ammo : AC20_Ammo
+class UAC20_Ammo : Mechbase_Ammo
 {
 	Default
 	{
 		Mechbase_Utility.displayName "UAC20 AMMO";
 		Mechbase_Utility.CValue 5790;
+		Mechbase_Ammo.Amount 5;
 	}
 }
 
@@ -121,41 +127,49 @@ mixin class LBXInfo
 	}
 }
 
-class LBX_AC2_Ammo : AC2_Ammo
+class LBX_AC2_Ammo : Mechbase_Ammo
 {
 	mixin LBXInfo;
 	Default
 	{
 		Mechbase_Utility.displayName "AC2 AMMO (Cluster)";
+		Mechbase_Ammo.Amount 40;
+		Mechbase_Utility.CValue 3870;
 	}
 }
-class LBX_AC5_Ammo : AC5_Ammo
+class LBX_AC5_Ammo : Mechbase_Ammo
 {
 	mixin LBXInfo;
 	Default
 	{
 		Mechbase_Utility.displayName "AC5 AMMO (Cluster)";
+		Mechbase_Ammo.Amount 20;
+		Mechbase_Utility.CValue 3870;
 	}
 }
-class LBX_AC10_Ammo : AC10_Ammo
+class LBX_AC10_Ammo : Mechbase_Ammo
 {
 	mixin LBXInfo;
 	Default
 	{
 		Mechbase_Utility.displayName "AC10 AMMO (Cluster)";
+		Mechbase_Ammo.Amount 10;
+		Mechbase_Utility.CValue 3870;
 	}
 }
-class LBX_AC20_Ammo : AC20_Ammo
+class LBX_AC20_Ammo : Mechbase_Ammo
 {
 	mixin LBXInfo;
 	Default
 	{
 		Mechbase_Utility.displayName "AC20 AMMO (Cluster)";
+		Mechbase_Ammo.Amount 5;
+		Mechbase_Utility.CValue 3870;
 	}
 }
 
 // Missile Ammo
-class SRM_Ammo : AMSAmmo
+class SRM_Ammo : Mechbase_Ammo
 {
 	Default
 	{
@@ -164,15 +178,16 @@ class SRM_Ammo : AMSAmmo
 		Mechbase_Utility.CValue 2780;
 	}
 }
-class SSRM_Ammo : SRM_Ammo
+class SSRM_Ammo : Mechbase_Ammo
 {
 	Default
 	{
 		Mechbase_Utility.displayName "SSRM AMMO";
+		Mechbase_Ammo.Amount 120;
 		Mechbase_Utility.CValue 3750;
 	}
 }
-class ATM_Ammo : AMSAmmo
+class ATM_Ammo : Mechbase_Ammo
 {
 	Default
 	{
@@ -181,11 +196,13 @@ class ATM_Ammo : AMSAmmo
 		Mechbase_Utility.CValue 7825;
 	}
 }
-class HE_ATM_Ammo : ATM_Ammo
+class HE_ATM_Ammo : Mechbase_Ammo
 {
 	Default
 	{
 		Mechbase_Utility.displayName "ATM AMMO (H.E)";
+		Mechbase_Ammo.Amount 60;
+		Mechbase_Utility.CValue 7825;
 	}
 	
 	override void SetupItem(mw_InvStruct item)
@@ -201,7 +218,7 @@ class HE_ATM_Ammo : ATM_Ammo
 		);
 	}
 }
-class MRM_Ammo : AMSAmmo
+class MRM_Ammo : Mechbase_Ammo
 {
 	Default
 	{
@@ -210,12 +227,226 @@ class MRM_Ammo : AMSAmmo
 		Mechbase_Utility.CValue 5000;
 	}
 }
-class LRM_Ammo : AMSAmmo
+class LRM_Ammo : Mechbase_Ammo
 {
 	Default
 	{
 		Mechbase_Utility.displayName "LRM AMMO";
 		Mechbase_Ammo.Amount 240;
 		Mechbase_Utility.CValue 2500;
+	}
+}
+
+// Half Ammo
+class Small_AMSAmmo : AMSAmmo
+{
+	Default
+	{	
+		Mechbase_Utility.displayName "AMS AMMO (1/2)";
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 1850/2;
+		Mechbase_Ammo.Amount 550;
+	}
+}
+class Small_BulletsMGun : BulletsMGun
+{
+	Default
+	{
+		Mechbase_Utility.displayName "MACHINEGUN AMMO (1/2)";
+		Mechbase_Utility.CValue 1250/2;
+		Mechbase_Ammo.Amount 100;
+		Mechbase_Utility.Tonnage 0.5;
+	}
+}
+class Small_GaussRounds : GaussRounds
+{
+	Default
+	{
+		Mechbase_Utility.displayName "GAUSSRIFLE AMMO (1/2)";
+		Mechbase_Ammo.Amount 5;
+		Mechbase_Utility.CValue 4680/2;
+		Mechbase_Utility.Tonnage 0.5;
+	}
+}
+class Small_AC2_Ammo : AC2_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC2 AMMO (Slug) (1/2)";
+		Mechbase_Utility.CValue 2750/2;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Ammo.Amount 20;
+	}
+}
+class Small_AC5_Ammo : AC5_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC5 AMMO (Slug) (1/2)";
+		Mechbase_Ammo.Amount 10;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 3200/2;
+	}
+}
+class Small_AC10_Ammo : AC10_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC10 AMMO (Slug) (1/2)";
+		Mechbase_Ammo.Amount 5;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 3870/2;
+	}
+}
+class Small_AC20_Ammo : AC20_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC20 AMMO (Slug) (1/2)";
+		Mechbase_Ammo.Amount 2;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 5870/2;
+	}
+}
+class Small_UAC2_Ammo : UAC2_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "UAC2 AMMO (1/2)";
+		Mechbase_Ammo.Amount 20;
+		Mechbase_Utility.CValue 2250/2;
+		Mechbase_Utility.Tonnage 0.5;
+	}
+}
+class Small_UAC5_Ammo : UAC5_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "UAC5 AMMO (1/2)";
+		Mechbase_Ammo.Amount 10;
+		Mechbase_Utility.CValue 2650/2;
+		Mechbase_Utility.Tonnage 0.5;
+	}
+}
+class Small_UAC10_Ammo : UAC10_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "UAC10 AMMO (1/2)";
+		Mechbase_Ammo.Amount 5;
+		Mechbase_Utility.CValue 3115/2;
+		Mechbase_Utility.Tonnage 0.5;
+	}
+}
+class Small_UAC20_Ammo : UAC20_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "UAC20 AMMO (1/2)";
+		Mechbase_Ammo.Amount 2;
+		Mechbase_Utility.CValue 5790/2;
+		Mechbase_Utility.Tonnage 0.5;
+	}
+}
+class Small_LBX_AC2_Ammo : LBX_AC2_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC2 AMMO (Cluster) (1/2)";
+		Mechbase_Ammo.Amount 20;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 2250/2;
+	}
+}
+class Small_LBX_AC5_Ammo : LBX_AC5_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC5 AMMO (Cluster) (1/2)";
+		Mechbase_Ammo.Amount 10;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 2650/2;
+	}
+}
+class Small_LBX_AC10_Ammo : LBX_AC10_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC10 AMMO (Cluster) (1/2)";
+		Mechbase_Ammo.Amount 5;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 3115/2;
+	}
+}
+class Small_LBX_AC20_Ammo : LBX_AC20_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "AC20 AMMO (Cluster) (1/2)";
+		Mechbase_Ammo.Amount 2;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 5790/2;
+	}
+}
+
+// Missile Ammo
+class Small_SRM_Ammo : SRM_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "SRM AMMO (1/2)";
+		Mechbase_Ammo.Amount 60;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 2780/2;
+	}
+}
+class Small_SSRM_Ammo : SSRM_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "SSRM AMMO (1/2)";
+		Mechbase_Ammo.Amount 60;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 3750/2;
+	}
+}
+class Small_ATM_Ammo : ATM_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "ATM AMMO (1/2)";
+		Mechbase_Ammo.Amount 30;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 7825/2;
+	}
+}
+class Small_HE_ATM_Ammo : HE_ATM_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "ATM AMMO (H.E) (1/2)";
+		Mechbase_Ammo.Amount 30;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 7825/2;
+	}
+}
+class Small_MRM_Ammo : MRM_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "MRM AMMO (1/2)";
+		Mechbase_Ammo.Amount 120;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 5000/2;
+	}
+}
+class Small_LRM_Ammo : LRM_Ammo
+{
+	Default
+	{
+		Mechbase_Utility.displayName "LRM AMMO (1/2)";
+		Mechbase_Ammo.Amount 120;
+		Mechbase_Utility.Tonnage 0.5;
+		Mechbase_Utility.CValue 2500/2;
 	}
 }

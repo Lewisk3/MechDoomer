@@ -831,7 +831,6 @@ class AMS_Missile : Mechbase_Actor
 					}
 					
 					tracer.SetDamage(tracer.damage-projdmg);
-					console.printf("Damaging by: %f", projdmg);
 					return ResolveState("DeathCollide");
 				}
 				A_SeekerMissile(20,20,SMF_CURSPEED,999/64);

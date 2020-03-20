@@ -95,6 +95,8 @@ class Mechbase_Ammo : Mechbase_Utility
 	Default
 	{
 		Mechbase_Ammo.Amount 1;
+		Mechbase_Utility.Tonnage 1;
+		Mechbase_Utility.Criticals 1;
 		Mechbase_Utility.Moveable 1;
 	}
 	

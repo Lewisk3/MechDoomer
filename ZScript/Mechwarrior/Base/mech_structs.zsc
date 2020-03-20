@@ -17,9 +17,9 @@ clearscope int countammo(class<Mechbase_Ammo> type)
 	ctype.ToLower();
 	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 	{
-		String cname = inv_context.mechstructs[i].Tag;
-		cname.ToLower();
-		if(cname == ctype) count+=inv_context.mechstructs[i].ammunition;
+		class<Mechbase_Ammo> cname = inv_context.mechstructs[i].Tag;
+		if(!cname) continue;
+		if(cname is ctype) count+=inv_context.mechstructs[i].ammunition;
 	}
 	return count;
 }
@@ -36,9 +36,9 @@ void takeammo(class<Mechbase_Ammo> type, int amt)
 		for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 		{
 			mw_InvStruct obj = inv_context.mechstructs[i];
-			String cname = obj.Tag;
-			cname.ToLower();
-			if(cname == ctype) 
+			class<Mechbase_Ammo> cname = obj.Tag;
+			if(!cname) continue;
+			if(cname is type) 
 			{
 				ammoobj = obj;
 				index = i;
