@@ -978,11 +978,15 @@ class GaussBall : Mechbase_Actor
 			GAUS A 1;
 			GAUS A 1 
 			{
-				let deb = Spawn("Debris_Spawner",pos);
+				let deb = Debris_Spawner(Spawn("Debris_Spawner",pos));
 				if(deb)
 				{
+					deb.debris_type = "Gauss_Debris";
+					deb.spread = 8;
+					deb.pieces = 20;
 					deb.angle = angle;
 					deb.pitch = pitch;
+					deb.SetDamage(0);
 				}
 			}
 		stop;

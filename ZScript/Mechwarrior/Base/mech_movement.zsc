@@ -433,6 +433,11 @@ void mech_movement()
 			}
 		}
 	}
+	else
+	{
+		// Set leg angle to looking angle.
+		LegAng = angle;
+	}
 	
 	if( (GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) && Mech_HasJets && mech_jetsfuel > 0)
 	{

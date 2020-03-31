@@ -83,7 +83,7 @@ class mw_InvInfo : Item_NoPickup
 	double heateff;
 	bool active;
 	
-	int money_cbills;			// moneys
+	uint money_cbills;			// moneys
 	double weapons_tonnage;		// How much weapons weigh.
 	double armor_tonnage;		// How much armor weighs.
 	

@@ -75,7 +75,7 @@ class BattleArmor : MechWarrior
 		Player.ViewHeight 30;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_BattleArmor;
 		MechWarriorBase.TwistRange 130;
-		MechWarriorBase.heatEff 0.1;
+		MechWarriorBase.heatEff 0.05;
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "ATLAICO";

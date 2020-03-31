@@ -16,6 +16,19 @@ Model DEBRIS_3D
 	
    FrameIndex DEBR A 0 0
 } 
+Model Gauss_Debris
+{
+	Path "models"
+	Model 0 "Weapons/debris.md3"
+	Scale -0.6 0.6 0.6
+	USEACTORPITCH
+	USEACTORROLL
+	SurfaceSkin 0 0 "Textures/gauss.png" // Full mesh
+	AngleOffset 90
+	
+   FrameIndex DEBR A 0 0
+} 
+
 
 Model MechCamera
 {
@@ -81,7 +94,7 @@ Model Gauss
 {
 	Path "models"
 	Model 0 "Weapons/gauss_ball.md3"
-	Scale 0.6 0.6 0.6
+	Scale 1.2 1.2 1.2
 	USEACTORPITCH
 	SurfaceSkin 0 0  "Textures/gauss.png" // Full mesh
 	AngleOffset 90

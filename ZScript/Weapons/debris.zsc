@@ -27,6 +27,14 @@ class Debris_Spawner : Actor
 {
 	int pieces;
 	double spread;
+	class<Actor> debris_type;
+	property Debris : debris_type;
+	
+	Default
+	{
+		+NOINTERACTION;
+		Debris_Spawner.Debris "DEBRIS_3D";
+	}
 
 	override void PostBeginPlay()
 	{
@@ -41,7 +49,7 @@ class Debris_Spawner : Actor
 			npos.x += xo;
 			npos.y += yo;
 			npos.z += zo;
-			let debris = Spawn("DEBRIS_3D",npos);
+			let debris = Spawn(debris_type,npos);
 			if(debris)
 			{
 				debris.SetDamage(damage); // Small cluster damage.
@@ -117,3 +125,4 @@ class DEBRIS_3D : Actor
 		wait;
 	}
 }
+class Gauss_Debris : DEBRIS_3D {}
