@@ -1,4 +1,14 @@
 // XL Engines
+const XLDescription = (
+	"\c[Brick][\c[Orange]Caution\c[Brick]]\n"
+	"\c[Purple]XL Engines are more bulky\n"
+	"\c[Purple]than STD engines, this\n"
+	"\c[Purple]causes expansion into the\n"
+	"\c[Purple]side torsos. On Inner Sphere\n"
+	"\c[Purple]manufactured mechs taking\n"
+	"\c[Purple]severe damage to the LT/RT\n"
+	"\c[Purple]will destroy the mech.\n"
+);
 class Engine_XL : Mechbase_Engine 
 {
 	Default
@@ -6,6 +16,12 @@ class Engine_XL : Mechbase_Engine
 		Mechbase_Engine.Criticals 2,4,2,2;
 		Mechbase_Engine.BaseHeatsinks 0.04, 0;
 		Mechbase_Engine.ScalarCValue 1133.3325;
+	}
+	
+	override void SetupItem(mw_InvStruct item) 
+	{
+		super.SetupItem(item);
+		item.shopdesc = XLDescription;
 	}
 }
 

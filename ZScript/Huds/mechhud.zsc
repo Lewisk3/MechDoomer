@@ -538,27 +538,92 @@ class MechStatusBar : BaseStatusBar
 			}
 			drawWeapons(mHUDFont,(1370,55),220,50);
 			
-			// Draw armor/paperdoll
-			double hd_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.hd);
-			double ct_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ct);
-			double lt_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.lt);
-			double rt_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.rt);
-			double la_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.la);
-			double ra_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ra);
-			double ll_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.rl);
-			double rl_dmg = 1.0-GetHardpointVitalRatio(mech.inv_context.hardpoints.ll);
+			String hud_mech = mech.hud_mech;
+			if(hud_mech.ByteAt(0) == "#")
+			{
+				hud_mech.Remove(0,1);
+				DrawPaperDoll(hud_mech, false);
+			}
+			else
+				DrawPaperDoll(hud_mech, true);
+				
+			// Draw weapon indicator
+			if(!automapactive)
+			{
+				String weapind = "WEAPIND";
+				int selx = (mech.selectedWeapon+1)%2;
+				int sely = (mech.selectedWeapon+1)/2;
+				vector2 weappos = ( 1450 + (selx*220), 64 + (sely*50) );
+				if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
+				if(mech.selectedWeapon <= mech.inv_context.weapons_count)H_DrawImage(weapind,weappos,0,(0.8,0.6));
+			}
+				
+			// Draw speedometer.
+			DrawBars();
+			DrawObjectives();
+			// Crosshair
+			double chscale = CVar.GetCVar("mwd_crosshairsize",mech.player).GetFloat();
+			if(mech.inv_context.weapons_count && !automapactive)
+			{
+				H_DrawImage (
+					mech.crosshair_sprite,(0.5,0.5),
+					MD_SBS.SS_COORDS_TEXGRID|MD_SBS.SS_SCREEN_CENTER,
+					(1.35*chscale,1.25*chscale)
+				);
+			}
+		}
+		//if(inHUDLoadout) drawLoadoutHUD();
+	}
+
+	void DrawPaperDoll(String paperdoll, bool clipmode=true)
+	{
+		double hd_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.hd);
+		double ct_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ct);
+		double lt_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.lt);
+		double rt_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.rt);
+		double la_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.la);
+		double ra_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ra);
+		double ll_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.rl);
+		double rl_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ll);
+		
+		vector2 hmechpos = (-382,-245);
+		Color hpcolor = getHealthyColor(1.0,0);
+		int pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
+		if(!clipmode)
+		{
+			// HD
+			hpcolor = getHealthyColor(hd_dmg,hd_dmg<1.0);
+			H_DrawImage(paperdoll.."_HD",hmechpos,pd_flags,tint:hpcolor);
+			// CT
+			hpcolor = getHealthyColor(ct_dmg,ct_dmg<1.0);
+			H_DrawImage(paperdoll.."_CT",hmechpos,pd_flags,tint:hpcolor);
+			// LT
+			hpcolor = getHealthyColor(lt_dmg,lt_dmg<1.0);
+			H_DrawImage(paperdoll.."_LT",hmechpos,pd_flags,tint:hpcolor);
+			// RT
+			hpcolor = getHealthyColor(rt_dmg,rt_dmg<1.0);
+			H_DrawImage(paperdoll.."_RT",hmechpos,pd_flags,tint:hpcolor);
+			// LA
+			hpcolor = getHealthyColor(la_dmg,la_dmg<1.0);
+			H_DrawImage(paperdoll.."_LA",hmechpos,pd_flags,tint:hpcolor);
+			// RA
+			hpcolor = getHealthyColor(ra_dmg,ra_dmg<1.0);
+			H_DrawImage(paperdoll.."_RA",hmechpos,pd_flags,tint:hpcolor);
+			// LL
+			hpcolor = getHealthyColor(ll_dmg,ll_dmg<1.0);
+			H_DrawImage(paperdoll.."_LL",hmechpos,pd_flags,tint:hpcolor);
+			// RL
+			hpcolor = getHealthyColor(rl_dmg,rl_dmg<1.0);
+			H_DrawImage(paperdoll.."_RL",hmechpos,pd_flags,tint:hpcolor);
+		}
+		else
+		{
 			
-			//console.printf("%f :> %d",ct_dmg,mech.inv_context.hardpoints.ct.armor+mech.inv_context.hardpoints.ct.internalhp);
+			String hudmech = paperdoll.."A";
 			
-			int pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
-			String hudmech = mech.hud_mech.."A";
-			Color hpcolor = getHealthyColor(1.0,0);
 			vector2 hudmech_size = MD_SBS.GetImageSize(hudmech);
-			
-			vector2 hmechpos = (-382,-245);
 			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			vector2 clipoffset = (1445, 750);
-			
 			// CT -> clipoffset.x+hudmech_size.x/3, clipoffset.y, hudmech_size.x/7,hudmech_size.y/2
 			// LT -> clipoffset.x+hudmech_size.x/4, clipoffset.y, hudmech_size.x/12,hudmech_size.y/2
 			// RT -> clipoffset.x+hudmech_size.x/2.1, clipoffset.y, hudmech_size.x/13,hudmech_size.y/2
@@ -566,7 +631,6 @@ class MechStatusBar : BaseStatusBar
 			// RA -> clipoffset.x+hudmech_size.x/1.8, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3
 			// LL -> clipoffset.x+hudmech_size.x/2, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2
 			// RL -> clipoffset.x+hudmech_size.x/5.9, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2
-			
 			// CT
 			hpcolor = getHealthyColor(ct_dmg,ct_dmg<1.0);
 			H_SetClipRect(clipoffset.x+hudmech_size.x/3, clipoffset.y, hudmech_size.x/7,hudmech_size.y/2);
@@ -602,33 +666,7 @@ class MechStatusBar : BaseStatusBar
 			H_SetClipRect(clipoffset.x+hudmech_size.x/5.9, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
 			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
 			ClearClipRect();
-			
-			// Draw weapon indicator
-			if(!automapactive)
-			{
-				String weapind = "WEAPIND";
-				int selx = (mech.selectedWeapon+1)%2;
-				int sely = (mech.selectedWeapon+1)/2;
-				vector2 weappos = ( 1450 + (selx*220), 64 + (sely*50) );
-				if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
-				if(mech.selectedWeapon <= mech.inv_context.weapons_count)H_DrawImage(weapind,weappos,0,(0.8,0.6));
-			}
-				
-			// Draw speedometer.
-			DrawBars();
-			DrawObjectives();
-			// Crosshair
-			double chscale = CVar.GetCVar("mwd_crosshairsize",mech.player).GetFloat();
-			if(mech.inv_context.weapons_count && !automapactive)
-			{
-				H_DrawImage (
-					mech.crosshair_sprite,(0.5,0.5),
-					MD_SBS.SS_COORDS_TEXGRID|MD_SBS.SS_SCREEN_CENTER,
-					(1.35*chscale,1.25*chscale)
-				);
-			}
 		}
-		//if(inHUDLoadout) drawLoadoutHUD();
 	}
 
 	void DrawObjectives()

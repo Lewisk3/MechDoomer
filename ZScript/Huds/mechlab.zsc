@@ -44,7 +44,7 @@ class Mechlab_Menu : GenericMenu
 	String tBtn_WeaponsLab, tBtn_ArmorAndRepair, tBtnlit_WeaponsLab,
 			  tBtnlit_ArmorAndRepair;
 			  
-	String tBtn_Highlight, tMessageBox, tHud_paperdoll;
+	String tBtn_Highlight, tMessageBox;
 	// Armory
 	String tArmory, tBtn_Repair, tBtnlit_Repair, tBtn_EquipUtil, 
 			  tBtnlit_EquipUtil, tBtn_Plus, tBtnlit_Plus, tBtn_Minus,
@@ -111,7 +111,6 @@ class Mechlab_Menu : GenericMenu
 		
 		// Multi-purpose
 		tMessageBox    = "HMESSBG";
-		tHud_paperdoll = CPlayer.hud_mech.."A";
 		tInv_ArrowUp   		   = "HUDARW";
 		tInv_ArrowDown         = "HUDARWD";
 		tBtn_WeaponsLab 	   = "BTWEAPL";

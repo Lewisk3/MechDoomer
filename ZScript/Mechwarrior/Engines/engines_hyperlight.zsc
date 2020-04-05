@@ -7,6 +7,12 @@ class Engine_XXL : Mechbase_Engine
 		Mechbase_Engine.BaseHeatsinks 0.04, 0;
 		Mechbase_Engine.ScalarCValue 1817.20377;
 	}
+	
+	override void SetupItem(mw_InvStruct item) 
+	{
+		super.SetupItem(item);
+		item.shopdesc = XLDescription;
+	}
 }
 
 class Engine_XXL_10 : Engine_XXL {} 
