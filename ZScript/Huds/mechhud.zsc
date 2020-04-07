@@ -583,89 +583,153 @@ class MechStatusBar : BaseStatusBar
 		double rt_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.rt);
 		double la_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.la);
 		double ra_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ra);
-		double ll_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.rl);
-		double rl_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ll);
+		double ll_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ll);
+		double rl_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.rl);
 		
-		vector2 hmechpos = (-382,-245);
-		Color hpcolor = getHealthyColor(1.0,0);
-		int pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
-		if(!clipmode)
-		{
+		vector2 hmechpos;
+		Color hpcolor;
+		int pd_flags;
+		
+		if(mechplr.hud_htal)
+		{	
+			vector2 clippos = (1370,810);
+			hmechpos = (-590,-360);
+			hpcolor  = getHealthyColor(1.0,0);
+			pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
+			H_SetClipRect(clippos.x,clippos.y-128,256,115,false);
+			H_DrawImage("HTALBASE",hmechpos,pd_flags,scale:(1.3,1.3),tint:hpcolor);
 			// HD
-			hpcolor = getHealthyColor(hd_dmg,hd_dmg<1.0);
-			H_DrawImage(paperdoll.."_HD",hmechpos,pd_flags,tint:hpcolor);
-			// CT
-			hpcolor = getHealthyColor(ct_dmg,ct_dmg<1.0);
-			H_DrawImage(paperdoll.."_CT",hmechpos,pd_flags,tint:hpcolor);
+			hmechpos += (44, 88);
+			hpcolor = getHealthyColor(hd_dmg,(hd_dmg<1.0)*0.7);
+			H_SetClipRect(clippos.x,clippos.y,28,42*hd_dmg,false);
+			H_DrawImage("HBARTHIC",hmechpos,pd_flags,scale:(1.3,0.5),tint:hpcolor);
+			ClearClipRect();
 			// LT
-			hpcolor = getHealthyColor(lt_dmg,lt_dmg<1.0);
-			H_DrawImage(paperdoll.."_LT",hmechpos,pd_flags,tint:hpcolor);
+			hmechpos += (34, 4);
+			hpcolor = getHealthyColor(lt_dmg,(lt_dmg<1.0)*0.7);
+			H_SetClipRect(clippos.x+34,clippos.y,14,70*lt_dmg,false);
+			H_DrawImage("HBARTHIN",hmechpos,pd_flags,scale:(1.3,0.7),tint:hpcolor);
+			ClearClipRect();
+			// CT
+			hmechpos += (27, 0);
+			hpcolor = getHealthyColor(ct_dmg,(ct_dmg<1.0)*0.7);
+			H_SetClipRect(clippos.x+34+27,clippos.y,14,90*ct_dmg,false);
+			H_DrawImage("HBARTHIN",hmechpos,pd_flags,scale:(1.3,1.0),tint:hpcolor);
+			ClearClipRect();
 			// RT
-			hpcolor = getHealthyColor(rt_dmg,rt_dmg<1.0);
-			H_DrawImage(paperdoll.."_RT",hmechpos,pd_flags,tint:hpcolor);
+			hmechpos += (27, 0);
+			hpcolor = getHealthyColor(rt_dmg,(rt_dmg<1.0)*0.7);
+			H_SetClipRect(clippos.x+34+27+27,clippos.y,14,70*rt_dmg,false);
+			H_DrawImage("HBARTHIN",hmechpos,pd_flags,scale:(1.3,0.7),tint:hpcolor);
+			ClearClipRect();
 			// LA
-			hpcolor = getHealthyColor(la_dmg,la_dmg<1.0);
-			H_DrawImage(paperdoll.."_LA",hmechpos,pd_flags,tint:hpcolor);
+			hmechpos += (32, 0);
+			hpcolor = getHealthyColor(la_dmg,(la_dmg<1.0)*0.7);
+			H_SetClipRect(clippos.x+34+27+27+32,clippos.y,28,70*la_dmg,false);
+			H_DrawImage("HBARTHIC",hmechpos,pd_flags,scale:(1.3,0.7),tint:hpcolor);
+			ClearClipRect();
 			// RA
-			hpcolor = getHealthyColor(ra_dmg,ra_dmg<1.0);
-			H_DrawImage(paperdoll.."_RA",hmechpos,pd_flags,tint:hpcolor);
+			hmechpos += (27, 0);
+			hpcolor = getHealthyColor(ra_dmg,(ra_dmg<1.0)*0.7);
+			H_SetClipRect(clippos.x+34+27+27+32+27,clippos.y,28,70*ra_dmg,false);
+			H_DrawImage("HBARTHIC",hmechpos,pd_flags,scale:(1.3,0.7),tint:hpcolor);
+			ClearClipRect();
 			// LL
-			hpcolor = getHealthyColor(ll_dmg,ll_dmg<1.0);
-			H_DrawImage(paperdoll.."_LL",hmechpos,pd_flags,tint:hpcolor);
+			hmechpos += (32, 0);
+			hpcolor = getHealthyColor(ll_dmg,(ll_dmg<1.0)*0.7);
+			H_SetClipRect(clippos.x+34+27+27+32+27+32,clippos.y,28,90*ll_dmg,false);
+			H_DrawImage("HBARTHIC",hmechpos,pd_flags,scale:(1.3,1.0),tint:hpcolor);
+			ClearClipRect();
 			// RL
-			hpcolor = getHealthyColor(rl_dmg,rl_dmg<1.0);
-			H_DrawImage(paperdoll.."_RL",hmechpos,pd_flags,tint:hpcolor);
+			hmechpos += (27, 0);
+			hpcolor = getHealthyColor(rl_dmg,(rl_dmg<1.0)*0.7);
+			H_SetClipRect(clippos.x+34+27+27+32+27+32+27,clippos.y,28,90*rl_dmg,false);
+			H_DrawImage("HBARTHIC",hmechpos,pd_flags,scale:(1.3,1.0),tint:hpcolor);
+			ClearClipRect();
 		}
 		else
 		{
-			
-			String hudmech = paperdoll.."A";
-			
-			vector2 hudmech_size = MD_SBS.GetImageSize(hudmech);
-			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
-			vector2 clipoffset = (1445, 750);
-			// CT -> clipoffset.x+hudmech_size.x/3, clipoffset.y, hudmech_size.x/7,hudmech_size.y/2
-			// LT -> clipoffset.x+hudmech_size.x/4, clipoffset.y, hudmech_size.x/12,hudmech_size.y/2
-			// RT -> clipoffset.x+hudmech_size.x/2.1, clipoffset.y, hudmech_size.x/13,hudmech_size.y/2
-			// LA -> clipoffset.x, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3
-			// RA -> clipoffset.x+hudmech_size.x/1.8, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3
-			// LL -> clipoffset.x+hudmech_size.x/2, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2
-			// RL -> clipoffset.x+hudmech_size.x/5.9, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2
-			// CT
-			hpcolor = getHealthyColor(ct_dmg,ct_dmg<1.0);
-			H_SetClipRect(clipoffset.x+hudmech_size.x/3, clipoffset.y, hudmech_size.x/7,hudmech_size.y/2);
-			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
-			ClearClipRect();
-			// LT
-			hpcolor = getHealthyColor(lt_dmg,lt_dmg<1.0);
-			H_SetClipRect(clipoffset.x+hudmech_size.x/4, clipoffset.y, hudmech_size.x/12,hudmech_size.y/2);
-			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
-			ClearClipRect();
-			// RT
-			hpcolor = getHealthyColor(rt_dmg,rt_dmg<1.0);
-			H_SetClipRect(clipoffset.x+hudmech_size.x/2.1, clipoffset.y, hudmech_size.x/13,hudmech_size.y/2);
-			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
-			ClearClipRect();
-			// LA
-			hpcolor = getHealthyColor(la_dmg,la_dmg<1.0);
-			H_SetClipRect(clipoffset.x, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
-			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
-			ClearClipRect();
-			// RA
-			hpcolor = getHealthyColor(ra_dmg,ra_dmg<1.0);
-			H_SetClipRect(clipoffset.x+hudmech_size.x/1.8, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
-			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
-			ClearClipRect();
-			// LL
-			hpcolor = getHealthyColor(ll_dmg,ll_dmg<1.0);
-			H_SetClipRect(clipoffset.x+hudmech_size.x/2, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
-			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
-			ClearClipRect();
-			// RL
-			hpcolor = getHealthyColor(rl_dmg,rl_dmg<1.0);
-			H_SetClipRect(clipoffset.x+hudmech_size.x/5.9, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
-			H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
-			ClearClipRect();
+			hmechpos = (-382,-245);
+			hpcolor  = getHealthyColor(1.0,0);
+			pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
+			if(!clipmode)
+			{
+				// HD
+				hpcolor = getHealthyColor(hd_dmg,hd_dmg<1.0);
+				H_DrawImage(paperdoll.."_HD",hmechpos,pd_flags,tint:hpcolor);
+				// CT
+				hpcolor = getHealthyColor(ct_dmg,ct_dmg<1.0);
+				H_DrawImage(paperdoll.."_CT",hmechpos,pd_flags,tint:hpcolor);
+				// LT
+				hpcolor = getHealthyColor(lt_dmg,lt_dmg<1.0);
+				H_DrawImage(paperdoll.."_LT",hmechpos,pd_flags,tint:hpcolor);
+				// RT
+				hpcolor = getHealthyColor(rt_dmg,rt_dmg<1.0);
+				H_DrawImage(paperdoll.."_RT",hmechpos,pd_flags,tint:hpcolor);
+				// LA
+				hpcolor = getHealthyColor(la_dmg,la_dmg<1.0);
+				H_DrawImage(paperdoll.."_LA",hmechpos,pd_flags,tint:hpcolor);
+				// RA
+				hpcolor = getHealthyColor(ra_dmg,ra_dmg<1.0);
+				H_DrawImage(paperdoll.."_RA",hmechpos,pd_flags,tint:hpcolor);
+				// LL
+				hpcolor = getHealthyColor(ll_dmg,ll_dmg<1.0);
+				H_DrawImage(paperdoll.."_LL",hmechpos,pd_flags,tint:hpcolor);
+				// RL
+				hpcolor = getHealthyColor(rl_dmg,rl_dmg<1.0);
+				H_DrawImage(paperdoll.."_RL",hmechpos,pd_flags,tint:hpcolor);
+			}
+			else
+			{
+				
+				String hudmech = paperdoll.."A";
+				
+				vector2 hudmech_size = MD_SBS.GetImageSize(hudmech);
+				H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+				vector2 clipoffset = (1445, 750);
+				// CT -> clipoffset.x+hudmech_size.x/3, clipoffset.y, hudmech_size.x/7,hudmech_size.y/2
+				// LT -> clipoffset.x+hudmech_size.x/4, clipoffset.y, hudmech_size.x/12,hudmech_size.y/2
+				// RT -> clipoffset.x+hudmech_size.x/2.1, clipoffset.y, hudmech_size.x/13,hudmech_size.y/2
+				// LA -> clipoffset.x, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3
+				// RA -> clipoffset.x+hudmech_size.x/1.8, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3
+				// LL -> clipoffset.x+hudmech_size.x/2, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2
+				// RL -> clipoffset.x+hudmech_size.x/5.9, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2
+				// CT
+				hpcolor = getHealthyColor(ct_dmg,ct_dmg<1.0);
+				H_SetClipRect(clipoffset.x+hudmech_size.x/3, clipoffset.y, hudmech_size.x/7,hudmech_size.y/2);
+				H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+				ClearClipRect();
+				// LT
+				hpcolor = getHealthyColor(lt_dmg,lt_dmg<1.0);
+				H_SetClipRect(clipoffset.x+hudmech_size.x/4, clipoffset.y, hudmech_size.x/12,hudmech_size.y/2);
+				H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+				ClearClipRect();
+				// RT
+				hpcolor = getHealthyColor(rt_dmg,rt_dmg<1.0);
+				H_SetClipRect(clipoffset.x+hudmech_size.x/2.1, clipoffset.y, hudmech_size.x/13,hudmech_size.y/2);
+				H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+				ClearClipRect();
+				// LA
+				hpcolor = getHealthyColor(la_dmg,la_dmg<1.0);
+				H_SetClipRect(clipoffset.x, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
+				H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+				ClearClipRect();
+				// RA
+				hpcolor = getHealthyColor(ra_dmg,ra_dmg<1.0);
+				H_SetClipRect(clipoffset.x+hudmech_size.x/1.8, clipoffset.y+hudmech_size.y/6, hudmech_size.x/4,hudmech_size.y/3);
+				H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+				ClearClipRect();
+				// LL
+				hpcolor = getHealthyColor(ll_dmg,ll_dmg<1.0);
+				H_SetClipRect(clipoffset.x+hudmech_size.x/2, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
+				H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+				ClearClipRect();
+				// RL
+				hpcolor = getHealthyColor(rl_dmg,rl_dmg<1.0);
+				H_SetClipRect(clipoffset.x+hudmech_size.x/5.9, clipoffset.y+hudmech_size.y/2.5, hudmech_size.x/7,hudmech_size.y/2);
+				H_DrawImage(hudmech,hmechpos,pd_flags,tint:hpcolor);
+				ClearClipRect();
+			}
 		}
 	}
 

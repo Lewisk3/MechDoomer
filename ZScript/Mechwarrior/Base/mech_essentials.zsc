@@ -9,7 +9,6 @@ bool forceshutdown;
 class<MechwarriorBase> baseclass;
 mw_InvInfo inv_context;
 MechHardpoints hardpoints;
-HudAlert hAlert;
 SoundQueue mechsounds;
 MechTorsoBase models_reference;
 bool buttonTick;
@@ -37,9 +36,12 @@ Array<mw_StoredMech> shopmechs;
 class<MechTorsoBase> mech_models;
 class<Mechbase_Engine> base_engine;
 bool modelcockpit;
+
+// HUD
 String hud_cockpit;
 String hud_mech;
-
+HudAlert hAlert;
+bool hud_htal;
 
 void StartMechChange(int invmech)
 {
@@ -49,8 +51,7 @@ void StartMechChange(int invmech)
 			Empty our sound-queue so we get Betty's system announcement when we
 			start back up.
 			
-			Set health to 100 just in case some map script which checks player hp
-			is running.
+			Set health to 100 just in case some map script which checks player hp.
 		*/
 		mechsounds.Empty();
 		A_SetHealth(100);
@@ -366,7 +367,6 @@ override void PostBeginPlay()
 		level.airfriction = 0.87;
 	}	
 	
-	//inv_context.mechs.Push(CreateStoredMech("Atlas"));
 	//startMechbay();
 	super.PostBeginPlay();
 }

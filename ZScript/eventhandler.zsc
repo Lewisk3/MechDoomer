@@ -326,12 +326,21 @@ class MechDoomerEvents : EventHandler
 				SoundOnActor.Trigger("Mech/Blip",plr);
 				plr.ams_passive = !plr.ams_passive;	
 			}
+			if(netcmd == "hud_toggle_htal") 
+			{
+				SoundOnActor.Trigger("Mech/Blip",plr);
+				plr.hud_htal = !plr.hud_htal;
+			}
 			if(netcmd == "toggle_autopilot") plr.ToggleAutopilot();
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);
 			if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
 			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(200,0,15,false);
-			if(netcmd == "droneviewswitch" && !plr.isdead && plr.dronecam) plr.dronecam.frontcam = !plr.dronecam.frontcam;
+			if(netcmd == "droneviewswitch" && !plr.isdead) 
+			{
+				if(!plr.dronecam) plr.ToggleDrone(200,0,15,false);
+				plr.dronecam.frontcam = !plr.dronecam.frontcam;
+			}
 			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
 			if(netcmd == "adjust_armor") plr.AdjustMaxArmor(plr.hardpoints.FindByIndex(e.Args[0]),e.Args[1], true);
@@ -411,7 +420,26 @@ class MechDoomerEvents : EventHandler
 			{
 				plr.mechlab_alert(netcmds[1],Font.CR_RED);
 			}
-			
+			// Hardpoint debug
+			if(netcmds[0] == "damage_hardpoint")
+			{
+				Name type = netcmds[1];
+				double dmg = netcmds[2].ToDouble();
+				MechHardpoint dhp;
+				switch (type)
+				{
+					case 'hd': {dhp = plr.hardpoints.hd; break;}
+					case 'ct': {dhp = plr.hardpoints.ct; break;}
+					case 'lt': {dhp = plr.hardpoints.lt; break;}
+					case 'rt': {dhp = plr.hardpoints.rt; break;}
+					case 'la': {dhp = plr.hardpoints.la; break;}
+					case 'ra': {dhp = plr.hardpoints.ra; break;}
+					case 'll': {dhp = plr.hardpoints.ll; break;}
+					case 'rl': {dhp = plr.hardpoints.rl; break;}
+					default: break;
+				}
+				if(dhp) plr.DamageHardpoint(dhp, dmg);
+			}
 			// Objective netevents
 			if(netcmds[0] == "objective")
 			{

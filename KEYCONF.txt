@@ -31,6 +31,7 @@ alias SetGroup4 "netevent \"mechsetgroup:4\""
 alias +SwitchAmmo "netevent +mwd_switchammo"
 alias -SwitchAmmo "netevent -mwd_switchammo"
 alias ToggleAMS "netevent toggle_ams"
+alias ToggleHTAL "netevent hud_toggle_htal"
 
 addkeysection "MechDoomer Controls" MechDoomerControls
 addmenukey "Accelerate (W)" +forward
@@ -48,7 +49,8 @@ addmenukey "Shutdown (P)" MechShutdown
 addmenukey "Override Shutdown (O)" MechOverride
 addmenukey "Zoom (Z)" +zoom
 addmenukey "Target Enemy (R)" TargetEnemy
-addmenukey "Cycle NAV Points (N)" NextNAV		
+addmenukey "Switch Damage Display" ToggleHTAL
+addmenukey "Cycle NAV Points (N)" NextNAV	
 addmenukey "Open Mechlab (Q)" Mechlab_Open
 addmenukey "Toggle Infrared (H)" HeatVision		
 addmenukey "Toggle AMS (,)" ToggleAMS
@@ -88,6 +90,7 @@ defaultbind P MechShutdown
 defaultbind O MechOverride
 defaultbind Z +zoom
 defaultbind R TargetEnemy
+defaultbind F5 ToggleHTAL
 defaultbind N NextNAV		
 defaultbind Q Mechlab_Open
 defaultbind H HeatVision		

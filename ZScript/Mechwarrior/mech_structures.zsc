@@ -336,9 +336,6 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		}
 		bool success = true;
 		hpoint.armor++;
-		
-		// Int cast because oddball doubleing point issues, that'll sometimes 
-		// result in armor being adjusted one point too soon.
 		if(int(hpoint.armor) > int(hpoint.max_armor)) success = plr.AddArmorWeight(1);
 		if(success)
 			plr.TakeInventory(getClassName(),1);
