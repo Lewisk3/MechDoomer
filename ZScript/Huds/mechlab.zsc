@@ -339,7 +339,7 @@ class Mechlab_Menu : GenericMenu
 				for(int i = 0; i < text.Size(); i++)
 				{
 					double yoffs = (messagepos.y-200) + i*25;
-					H_DrawString(text[i],(messagepos.x-240,yoffs),0,plrHudMessage.col,(1,1),1.0);
+					H_DrawString(text[i],(messagepos.x-240,yoffs),0,0,(1,1),1.0);
 				}
 				H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-80),0,Font.CR_White,(1,1),plrHudMessage.alpha);
 			}
@@ -368,13 +368,12 @@ class Mechlab_Menu : GenericMenu
 		if(inputclear > 0) inputclear --;
 		
 		// Player produced HUD message.
-		if(mechplr.hAlert.text != "")
+		if(mechplr.hAlert.mechlab_text != "")
 		{
-			plrHudMessage.txt = mechplr.hAlert.text;
+			plrHudMessage.txt = mechplr.hAlert.mechlab_text;
 			plrHudMessage.alpha = 0.2;
 			messagepos_yscale = 0;
-			plrHudMessage.col = mechplr.hAlert.col;
-			mechplr.hAlert.text = "";
+			MechDoomerEvents.SendNetworkEvent("mechlab_alert:[reset]");
 			messagebox_active = true; 
 		}
 		if(mstats.left_btn && messagebox_active && plrHudMessage.alpha >= 0.4) 

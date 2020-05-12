@@ -297,13 +297,13 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 		if(inv_context.engine) 
 		{
 			A_PlaySound("UI/Error",CHAN_WEAPON);
-			Mechlab_Alert("Engine already equipped!", Font.CR_DARKRED);
+			Mechlab_Alert("\c[DARKRED]Engine already equipped!");
 			return false;
 		}
 		if(!EquipEngine(eng))
 		{
 			A_PlaySound("UI/Error",CHAN_WEAPON);
-			Mechlab_Alert("Failed to equip engine\novertonnage or too big!", Font.CR_DARKRED);
+			Mechlab_Alert("\c[DARKRED]Failed to equip engine\novertonnage or too big!");
 			return false;
 		}
 		else
@@ -317,13 +317,13 @@ bool equipStructInv(int ind, MechHardpoint hp, bool move=true)
 	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(util).weight) > mech_tonnage && !CheckCompensative())
 	{
 		A_PlaySound("UI/Error",CHAN_WEAPON);
-		Mechlab_Alert("Cannot equip item, over tonnage!", Font.CR_DARKRED);
+		Mechlab_Alert("\c[DARKRED]Cannot equip item, over tonnage!");
 		return false;
 	}
 	if( hp.getFreeSlots() < GetDefaultByType(util).hardslots )
 	{
 		A_PlaySound("UI/Error",CHAN_WEAPON);
-		Mechlab_Alert("Cannot equip item, no freeslots!", Font.CR_DARKRED);
+		Mechlab_Alert("\c[DARKRED]Cannot equip item, no freeslots!");
 		return false;	
 	}
 	 
@@ -380,6 +380,13 @@ bool moveStructToInv(int struc_ind, bool move=true)
 
 void removeStruct(int ind, bool delete=true)
 {
+	if(ind < 0 || ind > inv_context.mechstructs.Size()-1)
+	{
+		// This really shouldn't happen but, it did to me once and i cannot reproduce it.
+		console.printf("[FATAL]: Fatal error handled in removeStruct, struct doesn't exist! (Please report this error to Lewisk3)");
+		return;
+	}
+	
 	let mstruct = inv_context.mechstructs[ind];
 	let ut = GetDefaultByType(utilcast(mstruct.Tag));
 	MechHardpoint hp = mstruct.hardpoint;

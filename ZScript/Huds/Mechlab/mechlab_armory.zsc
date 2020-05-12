@@ -282,7 +282,7 @@ void drawArmoryInfo()
 				if(!mechplr.mech_shutdown)
 				{
 					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
-					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Mech must be shutdown to initiate \nrepairs.");
+					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Mech must be shutdown to initiate \n\c[Orange]repairs.");
 					return;
 				}
 				

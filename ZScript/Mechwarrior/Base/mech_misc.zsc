@@ -60,10 +60,30 @@ void startMechbay()
 	lockpitch = pitch;
 }
 
-void Mechlab_Alert(String str, int c)
+void Mechlab_Alert(String str)
 {
-	hAlert.text = str;
-	hAlert.col = c;
+	hAlert.mechlab_text = str;
+}
+
+void Cockpit_Alert(String str, double time = 8.0)
+{
+	int msize = hAlert.cockpit_messages.Size();
+	
+	if(msize < 2)
+	{
+		if(msize == 0) 
+			hAlert.mtimer1 = time;
+		else
+			hAlert.mtimer2 = time*1.25;
+			
+		hAlert.cockpit_messages.Push(str);
+	}
+	else 
+	{
+		hAlert.mtimer1 = time;
+		hAlert.mtimer2 = time*1.5;
+		hAlert.cockpit_messages[0] = str;
+	}
 }
 
 bool adjustTonnage(double amt, bool force=false)

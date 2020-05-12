@@ -382,6 +382,12 @@ override void tick()
 	// Grab Items reference for shop
 	if(!shopitems) shopitems = GetAllItems();
 	
+	if(checkVoodoo()) 
+	{
+		super.Tick();
+		return;
+	}
+		
 	// Betty sound for automap toggle
 	if(automapactive && !prev_automap) 
 	{
@@ -389,12 +395,6 @@ override void tick()
 		mechSounds.PushSound("Mech/Betty/SatLinkEstablished");
 	}
 	prev_automap = automapactive;
-	
-	if(checkVoodoo()) 
-	{
-		super.Tick();
-		return;
-	}
 	
 	// Clamp viewheight so we don't end up inside our hips when we fall.
 	player.viewheight = clamp(player.viewheight, defviewz*0.8, defviewz*2.0);

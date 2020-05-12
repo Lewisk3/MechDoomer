@@ -115,6 +115,7 @@ class StructEngine : Mechbase_Utility
 	{	
 		Mechbase_Utility.displayName "ENGINE";
 		Mechbase_Utility.Criticals 1;
+		Mechbase_Utility.Moveable false;
 	}
 	override void SetupItem(mw_InvStruct item) {}
 }
@@ -196,7 +197,7 @@ class C_A_S_E : Mechbase_Utility
 	override void SetupItem(mw_InvStruct item)
 	{
 		super.SetupItem(item);
-		item.description.push("\n\c[Orange]Supresses ammo\n\c[Orange]explosions");
+		item.description.push("\n\c[Orange]Suppresses ammo\n\c[Orange]explosions");
 	}
 }
 
@@ -331,7 +332,7 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		if(hpoint.internalhp <= 0)
 		{
 			plr.A_PlaySound("UI/Error",CHAN_WEAPON);
-			plr.mechlab_alert("Hardpoint must be repaired first!",Font.CR_RED);
+			plr.mechlab_alert("\c[RED]Hardpoint must be repaired first!");
 			return;
 		}
 		bool success = true;
@@ -342,7 +343,7 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		else
 		{
 			plr.A_PlaySound("UI/Error",CHAN_WEAPON);
-			plr.mechlab_alert("Cannot add armor, over-tonnage!",Font.CR_RED);
+			plr.mechlab_alert("\c[RED]Cannot add armor, over-tonnage!");
 			hpoint.armor--;
 		}
 	}

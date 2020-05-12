@@ -44,38 +44,6 @@ class I_Boolean : Item_NoPickup
 	}
 }
 
-class I_Int16 : Item_NoPickup
-{
-	Default
-	{
-		Inventory.maxamount 65536;
-	}
-}
-
-class I_Percent : Item_NoPickup
-{
-	Default
-	{
-		Inventory.maxamount 100;
-	}
-}
-
-class I_Angle : Item_NoPickup
-{
-	Default
-	{
-		Inventory.maxamount 360;
-	}
-}
-
-class I_Five : Item_NoPickup
-{
-	Default
-	{
-		Inventory.maxamount 5;
-	}
-}
-
 class I_Nine : Item_NoPickup
 {
 	Default
@@ -84,20 +52,11 @@ class I_Nine : Item_NoPickup
 	}
 }
 
-
 class I_Weapon : Item_NoPickup
 {
 	int group;
 	class<Mechbase_Weapon> source;
 	Vector2 mountpos;
-}
-
-class A_Int16 : Ammo
-{
-	Default
-	{
-		Inventory.maxamount 65536;
-	}
 }
 
 class A_Nine : Ammo

@@ -16,6 +16,8 @@ class MechCamera : Actor
 	Default
 	{
 		+NOGRAVITY;
+		+NOINTERACTION;
+		+DONTTHRUST;
 		Radius 1;
 		Height 1;
 		MechCamera.FollowDistance 5;
@@ -124,6 +126,7 @@ class MechPartsBase : Actor
 	{
 		+INTERPOLATEANGLES
 		+NOGRAVITY;
+		+DONTTHRUST;
 		MechPartsBase.ZOffset 0;
 		MechPartsBase.CockpitOffset 0, 60;
 	}
@@ -550,7 +553,7 @@ class MechLegsBase : MechPartsBase
 	{
 		return ( 
 			 mechowner && !mechowner.checkVoodoo() && !mechowner.mech_shutdown && 
-		    (mechowner.player && mechowner.player.onground) && 
+		     mechowner.player && mechowner.player.onground && 
 			(mechowner.vel.xy.length() >= 0.1 || mechowner.throttle != 0 || mechowner.LegVel) && 
 			!mechowner.isdead
 		);

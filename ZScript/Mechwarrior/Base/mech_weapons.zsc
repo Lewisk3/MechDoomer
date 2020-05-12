@@ -17,16 +17,10 @@ double locktimer;
 // Misc
 void DestroyWeapon(Mechbase_Weapon weap)
 {
-	for(let w = Inv; w; w = w.Inv)
-	{	
-		let ww = Mechbase_Weapon(w);
-		if(ww == weap)
-		{
-			removeWeapon(ww);
-			normalizeWeaponsID(1);
-			mechsounds.pushSound("Mech/Betty/WeaponDestroyed");
-		}
-	}
+	removeWeapon(weap);
+	normalizeWeaponsID(1);
+	Cockpit_Alert("\c[DARKRED]Weapon destroyed! ".. weap.displayName, true);
+	mechsounds.pushSound("Mech/Betty/WeaponDestroyed");
 }
 
 // Normalize
@@ -221,13 +215,13 @@ bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(weap).weight) > mech_tonnage && !CheckCompensative())
 	{
 		A_PlaySound("UI/Error",CHAN_WEAPON);
-		Mechlab_Alert("Cannot equip weapon, over tonnage!", Font.CR_DARKRED);
+		Mechlab_Alert("\c[DARKRED]Cannot equip weapon, over tonnage!");
 		return false;
 	}
 	if( hp.getFreeSlots() < GetDefaultByType(weap).hardslots )
 	{
 		A_PlaySound("UI/Error",CHAN_WEAPON);
-		Mechlab_Alert("Cannot equip weapon, no freeslots!", Font.CR_DARKRED);
+		Mechlab_Alert("\c[DARKRED]Cannot equip weapon, no freeslots!");
 		return false;	
 	}
 	 

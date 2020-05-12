@@ -46,6 +46,8 @@ double LookVel;
 double LegVel;
 double overfactor;
 double rolloffs;
+
+// Bobbing
 double boboffs;
 double desiredbob;
 double TiltOsc;
@@ -69,9 +71,15 @@ void ToggleAutopilot(bool forceoff = false)
 	
 	mechSounds.PushSound("Mech/Betty/Autopilot");
 	if(autopilot) 
+	{
+		Cockpit_Alert("\c[GREEN]Autopilot: Engaged");
 		mechSounds.PushSound("Mech/Betty/Engaged");
+	}
 	else
+	{
+		Cockpit_Alert("\c[GREEN]Autopilot: Disabled");
 		mechSounds.PushSound("Mech/Betty/Disabled");
+	}
 }
 void DoAutopilot()
 {
@@ -503,7 +511,7 @@ void mech_movement()
 		}
 		else
 		{
-			A_Print("Shutdown overridden.");
+			Cockpit_Alert("\c[SAPPHIRE]Shutdown overridden.");
 			doShutdown = false;
 			shutdown_timer = ticks;
 			A_PlaySound("Mech/Override",1);
@@ -539,6 +547,7 @@ void process_shutdown()
 			A_PlaySound("Mech/Power",2);
 			mechsounds.pushSound("Mech/StartupDone");
 			doShutdown = false;
+			Cockpit_Alert("\c[GREEN]Reactor powering up...", 30);
 		}
 		if(!doShutdown && (ticks-prevticks) > 35*5)powerup();
 		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*3.0;
@@ -554,6 +563,7 @@ void process_shutdown()
 			manualshutdown = false;
 			TakeInventory("IBTN_SHUTDOWN",1);
 			prevticks = ticks;
+			Cockpit_Alert("\c[GREEN]Reactor powering up...", 30);
 		}
 	}
 	ticks++;

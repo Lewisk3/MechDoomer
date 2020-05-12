@@ -91,7 +91,7 @@ void RepairHardpointStat(int hindex, int stat)
 	int cost = CalculateHardpointRepairCost(hp,stat);
 	if(inv_context.money_cbills < cost) 
 	{
-		Mechlab_Alert("Insufficient funds!",Font.CR_DARKRED);
+		Mechlab_Alert("\c[DARKRED]Insufficient funds!");
 	}
 	else
 	{
@@ -123,7 +123,7 @@ void _DoHardpointRepair(MechHardpoint hp, int stats)
 		}
 		hp.internalhp = hp.max_internal;	
 	}
-	Mechlab_Alert("Hardpoint repaired!",Font.CR_GREEN);
+	Mechlab_Alert("\c[GREEN]Hardpoint repaired!");
 }
 void ActivateArmorUtility(class<ArmoryUtility> type, int hindex)
 {	
@@ -277,11 +277,11 @@ void DamageHardpointStruct(MechHardpoint hp, int amt=50)
 					if( mechtype != MechType_Clan ) SpreadHardpointDamage(hp,20);
 				}
 				else
-					inv_context.mechstructs.delete(stcaseind);
+				{
+					removeStruct(stcaseind);
+				}
 			}
-			hp.adjustHardslots(-ut.hardslots);
-			adjustTonnage(-ut.weight);
-			inv_context.mechstructs.delete(item.realindex);
+			removeStruct(item.realindex);
 		}
 		else 
 		{
@@ -295,10 +295,6 @@ void DamageHardpointStruct(MechHardpoint hp, int amt=50)
 			if(engine) mechsounds.pushSound("Mech/Betty/Engine");
 			if(hip) mechsounds.pushSound("Mech/Betty/Hip");
 		}
-	}
-	for(int i = 0; i < items.Size(); i++)
-	{
-		if(items[i].obj.broken) items.delete(i);
 	}
 }
 void DamageHardpointWeapons(MechHardpoint hp, int amt=50)
@@ -318,9 +314,7 @@ void DamageHardpointWeapons(MechHardpoint hp, int amt=50)
 				if(ww.dmg_taken >= 100)
 				{
 					DamageCritSounds(hp);
-					removeWeapon(ww);
-					normalizeWeaponsID(1);
-					mechsounds.pushSound("Mech/Betty/WeaponDestroyed");
+					DestroyWeapon(ww);
 				}
 			}
 			index++;
@@ -336,9 +330,7 @@ void DestroyHardpointItems(MechHardpoint hp, bool recurse=true)
 		{
 			if(ww.hardpoint == hp) 
 			{
-				removeWeapon(ww);
-				normalizeWeaponsID(1);
-				mechsounds.pushSound("Mech/Betty/WeaponDestroyed");
+				DestroyWeapon(ww);
 				if(recurse) DestroyHardpointItems(hp,recurse);
 			}
 		}
@@ -360,9 +352,7 @@ void DestroyHardpointStructs(MechHardpoint hp, bool recurse=true)
 				mechsounds.pushSound("Mech/Betty/Heatsink");
 				mechsounds.pushSound("Mech/Betty/Destroyed");
 			}
-			hp.adjustHardslots(-ut.hardslots);
-			adjustTonnage(-ut.weight);
-			inv_context.mechstructs.delete(i);
+			removeStruct(i);
 			if(recurse) DestroyHardpointStructs(hp,recurse);
 		}
 	}

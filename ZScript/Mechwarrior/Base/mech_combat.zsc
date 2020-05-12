@@ -136,7 +136,7 @@ void mech_weapons()
 	}
 	if(HeatLevel >= MWHEAT_MAX*0.42 && !doShutdown && canShutdown) 
 	{
-		A_Print("Shutdown sequence initiated!");
+		Cockpit_Alert("\c[SAPPHIRE]Shutdown sequence initiated!");
 		mechsounds.pushSound("Mech/Betty/ShutdownInit");
 		doShutdown = true;
 		canShutdown = false;
@@ -146,7 +146,7 @@ void mech_weapons()
 	if( ((ticks - shutdown_timer) > MWHEAT_MAX) && doShutdown )
 	{
 		A_StopSound(1);
-		A_Print("Shutting down...");
+		Cockpit_Alert("\c[SAPPHIRE]Shutting down...");
 		A_PlaySound("Mech/Betty/ShuttingDown",1);
 		doShutdown = true;
 		lockangle = angle;
@@ -216,7 +216,7 @@ void mech_weapons()
 	
 	if(countinv("IBTN_SHUTDOWN") || (!mech_shutdown && !inv_context.engine) )
 	{
-		A_Print("Shutting down...");
+		Cockpit_Alert("\c[RED]Shutting down...");
 		mechsounds.pushSound("Mech/Betty/ShuttingDown");
 		A_PlaySound("Mech/Shutdown",1);
 		mech_shutdown = true;
@@ -253,11 +253,16 @@ void mech_weapons()
 	if(countinv("IBTN_bFIREMODE"))
 	{
 		weapon_groupfire = !weapon_groupfire;
-		if(weapon_groupfire){
+		if(weapon_groupfire)
+		{
+			Cockpit_Alert("\c[GREEN]Group Fire: Engaged");
 			mechsounds.pushSound("Mech/Betty/Groupfire");
 			mechsounds.pushSound("Mech/Betty/Engaged");
 			TakeInventory("IBTN_bFIREMODE",1);
-		} else {
+		} 
+		else 
+		{
+			Cockpit_Alert("\c[GREEN]Chain Fire: Engaged");
 			mechsounds.pushSound("Mech/Betty/Chainfire");
 			mechsounds.pushSound("Mech/Betty/Engaged");
 			TakeInventory("IBTN_bFIREMODE",1);
@@ -311,6 +316,16 @@ void mech_weapons()
 }
 
 // AMS
+bool CheckHasAMS()
+{
+	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
+	{
+		String cname = inv_context.mechstructs[i].Tag;
+		class<AntiMissileSystem> basecast = cname;
+		if(basecast) return true;
+	}
+	return false;
+}
 void process_antimissilesystem()
 {
 	if(ams_passive) return;

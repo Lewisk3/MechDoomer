@@ -323,8 +323,21 @@ class MechDoomerEvents : EventHandler
 			}
 			if(netcmd == "toggle_ams") 
 			{
-				SoundOnActor.Trigger("Mech/Blip",plr);
-				plr.ams_passive = !plr.ams_passive;	
+				if(!plr.CheckHasAMS())
+				{
+					plr.Cockpit_Alert("\c[GREEN]Not equipped with an AntiMissileSystem.");
+				}
+				else
+				{
+					SoundOnActor.Trigger("Mech/Blip",plr);
+					String alertmsg = "\c[GREEN] AntiMissileSystems: ";
+					plr.ams_passive = !plr.ams_passive;	
+					if(!plr.ams_passive) 
+						alertmsg = alertmsg.."Disabled.";
+					else
+						alertmsg = alertmsg.."Enabled.";
+					plr.Cockpit_Alert(alertmsg);
+				}
 			}
 			if(netcmd == "hud_toggle_htal") 
 			{
@@ -354,7 +367,15 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "throttledecay_toggle") 
 			{
 				CVar throtd = CVar.FindCVar("mwd_throttledecay");
-				throtd.SetBool(!throtd.GetBool());
+				bool bdecay = throtd.GetBool();
+				throtd.SetBool(!bdecay);
+				
+				String alertmsg = "\c[GREEN] Throttle Decay: ";
+				if(!bdecay) 
+					alertmsg = alertmsg.."Disabled.";
+				else
+					alertmsg = alertmsg.."Enabled.";
+				plr.Cockpit_Alert(alertmsg);
 			}
 			if(netcmd == "shop_buyitem" && plr.shopitems) 
 			{
@@ -418,7 +439,28 @@ class MechDoomerEvents : EventHandler
 			netcmd.split(netcmds,":");
 			if(netcmds[0] == "mechlab_alert")
 			{
-				plr.mechlab_alert(netcmds[1],Font.CR_RED);
+				plr.mechlab_alert("\c[RED]"..netcmds[1]);
+				if(netcmds[1] ~== "[reset]") plr.hAlert.mechlab_text = "";
+			}
+			if(netcmds[0] == "cockpit_alert")
+			{
+				int msize = plr.hAlert.cockpit_messages.Size();
+				if(netcmds[1] ~== "[clear1]") 
+				{
+					if(msize > 0) plr.hAlert.cockpit_messages[0] = "";
+				}
+				else if(netcmds[1] ~== "[clear2]") 
+				{
+					if(msize > 1) plr.hAlert.cockpit_messages[1] = "";
+				}
+				else if(netcmds[1] ~==  "[reset]") 
+				{
+					plr.hAlert.cockpit_messages.Clear();
+				}
+				else
+				{
+					plr.cockpit_alert("\c[GREEN]"..netcmds[1]);
+				}
 			}
 			// Hardpoint debug
 			if(netcmds[0] == "damage_hardpoint")
