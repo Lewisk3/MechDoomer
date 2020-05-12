@@ -372,9 +372,9 @@ class MechDoomerEvents : EventHandler
 				
 				String alertmsg = "\c[GREEN] Throttle Decay: ";
 				if(!bdecay) 
-					alertmsg = alertmsg.."Disabled.";
-				else
 					alertmsg = alertmsg.."Enabled.";
+				else
+					alertmsg = alertmsg.."Disabled.";
 				plr.Cockpit_Alert(alertmsg);
 			}
 			if(netcmd == "shop_buyitem" && plr.shopitems) 
