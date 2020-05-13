@@ -128,4 +128,14 @@ class MDMath Abstract
 	{
 		return String.Format("%."..places.."f", absolute ? abs(value) : value);
 	}		
+	
+	// Flags
+	static void SetFlag(in out uint bits, uint bit)
+	{
+		bits |= bit;
+	}
+	static void UnsetFlag(in out uint bits, uint bit)
+	{
+		bits &= ~bit;
+	}
 }

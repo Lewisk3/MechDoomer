@@ -20,6 +20,7 @@ bool snd_accelerate;
 bool Mech_HasJets;
 bool doShutdown;
 bool mech_shutdown;
+bool mech_poweringup;
 bool zoomed_in;
 bool canShutdown;
 bool manualshutdown;
@@ -544,14 +545,19 @@ void process_shutdown()
 		{
 			// If we are very efficiently cooled, powerup early
 			prevticks = ticks;
-			mechsounds.pushSound("Mech/Betty/SystemsCheck");
-			A_PlaySound("Mech/Power",2);
-			mechsounds.pushSound("Mech/StartupDone");
+			mech_poweringup = true;
+			// mechsounds.pushSound("Mech/Betty/SystemsCheck");
+			S_StartSound("Mech/Power", CHAN_OVERLAP);
 			doShutdown = false;
-			Cockpit_Alert("\c[GREEN]Reactor powering up...", 30);
-			hAlert.hud_powersequence = 2;
+			Cockpit_Alert("\c[GREEN]Powering up...", 30);
+			hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
 		}
-		if(!doShutdown && (ticks-prevticks) > 35*5)powerup();
+		if(!doShutdown && (ticks-prevticks) > 35*4)
+		{
+			powerup();
+			S_StartSound("Mech/StartupDone", CHAN_OVERLAP);
+			mechsounds.pushSound("Mech/Betty/SystemsCheck");
+		}
 		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*3.0;
 	}
 	else
@@ -559,14 +565,14 @@ void process_shutdown()
 		if(countinv("IBTN_SHUTDOWN") && !forceshutdown)
 		{
 			doShutdown = false;
-			mechsounds.pushSound("Mech/Betty/SystemsCheck");
-			A_PlaySound("Mech/Power",2);
-			mechsounds.pushSound("Mech/StartupDone");
+			mech_poweringup = true;
+			// mechsounds.pushSound("Mech/Betty/SystemsCheck");
+			S_StartSound("Mech/Power", CHAN_OVERLAP);
 			manualshutdown = false;
 			TakeInventory("IBTN_SHUTDOWN",1);
 			prevticks = ticks;
-			Cockpit_Alert("\c[GREEN]Reactor powering up...", 30);
-			hAlert.hud_powersequence = 2;
+			Cockpit_Alert("\c[GREEN]Powering up...", 30);
+			hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
 		}
 	}
 	ticks++;
@@ -575,6 +581,7 @@ void powerup()
 {
 	mech_shutdown = false;
 	doShutdown = false;
+	mech_poweringup = false;
 }
 
 // Bobbing

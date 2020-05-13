@@ -11,9 +11,8 @@ struct HudAlert
 	double mtimer2;
 	
 	// Used for animating HUD features when powering up.
-	// This gets subtracted from when each animated element finishes its animation.
-	// I figure this is a pretty smart way to time multiple animations.
-	int hud_powersequence; // 0 = Stop animating. 
+	// This is a system of flags.
+	uint hud_powersequence; // Nothing animating. 
 }
 
 class Items_ShopData

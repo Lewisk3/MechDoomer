@@ -226,6 +226,7 @@ void mech_weapons()
 		lockpitch = pitch;
 		lockangle = angle;
 		TakeInventory("IBTN_SHUTDOWN",1);
+		hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
 	}
 		
 	if(!targetenemy && targetreticle)
