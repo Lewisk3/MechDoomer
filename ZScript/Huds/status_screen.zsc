@@ -41,11 +41,21 @@ mixin class HUDScaleFunctions
 	}
 	void drawAngledLine(int x, int y, int distance, double angle, double fov, Color c)
 	{
-		MD_SBS.DrawLine(x,y,x+(cos(angle+fov)*(distance*1.1)),y-(sin(angle+fov)*(distance*0.9)),c);
+		MD_SBS.DrawThickLine(x,y,x+(cos(angle+fov)*distance),y-(sin(angle+fov)*distance),2,c);
 	}
 	vector2 H_AdjustCoord(vector2 coord)
 	{
 		return MD_SBS.GetRelativePos(coord);
+	}
+	void H_DrawCircle(String texture="YLWPXL", vector2 pos=(0,0), double radius=500, uint flags = MD_SBS.SS_SCREEN_CENTER)
+	{
+		double step = 1.0 / (radius/100);
+		for(double i = 0; i < 360; i+=step)
+		{
+			double xpos = pos.x + (cos(i)*radius);
+			double ypos = pos.y + (sin(i)*radius);
+			H_DrawImage(texture, (xpos,ypos), flags);
+		}
 	}
 }
 
@@ -339,6 +349,22 @@ class MD_SBS Abstract ui
 		nposFrom.y *= sc_yres;
 		Screen.DrawLine(nposFrom.x, nposFrom.y, nposTo.x, nposTo.y, color, ceil(alpha*255.));
 	}
+	
+	static void DrawThickLine(int x0, int y0, int x1, int y1, int thickness, Color color, double alpha = 1.0, int flags = 0)
+	{
+		vector2 posFrom = (x0, y0);
+		vector2 posTo = (x1, y1);
+		double sc_xres = Screen.getWidth()/statscr_base_width;
+		double sc_yres = Screen.getHeight()/statscr_base_height;		
+		vector2 nposFrom = _ProcessCoords(posFrom, flags);
+		vector2 nposTo = _ProcessCoords(posTo, flags);
+		nposTo.x *= sc_xres;
+		nposTo.y *= sc_yres;
+		nposFrom.x *= sc_xres;
+		nposFrom.y *= sc_yres;
+		Screen.DrawThickLine(nposFrom.x, nposFrom.y, nposTo.x, nposTo.y, thickness, color, ceil(alpha*255.));
+	}
+	
 	
 	static vector2 GetRelativePos(vector2 pos)
 	{

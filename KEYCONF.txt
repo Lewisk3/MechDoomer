@@ -33,6 +33,7 @@ alias -SwitchAmmo "netevent -mwd_switchammo"
 alias ToggleAMS "netevent toggle_ams"
 alias ToggleHTAL "netevent hud_toggle_htal"
 alias RadarRange "netevent radar_switchrange"
+alias RadarScale "netevent radar_switchscale"
 
 addkeysection "MechDoomer Controls" MechDoomerControls
 addmenukey "Accelerate (W)" +forward
@@ -53,6 +54,7 @@ addmenukey "Target Enemy (R)" TargetEnemy
 addmenukey "Switch Damage Display" ToggleHTAL
 addmenukey "Cycle NAV Points (N)" NextNAV	
 addmenukey "Cycle Radar Range (T)" RadarRange
+addmenukey "Cycle Radar Scale (F2)" RadarScale
 addmenukey "Open Mechlab (Q)" Mechlab_Open
 addmenukey "Toggle Infrared (H)" HeatVision		
 addmenukey "Toggle AMS (,)" ToggleAMS
@@ -95,6 +97,7 @@ defaultbind R TargetEnemy
 defaultbind F5 ToggleHTAL
 defaultbind N NextNAV		
 defaultbind T RadarRange
+defaultbind F2 RadarScale
 defaultbind Q Mechlab_Open
 defaultbind H HeatVision		
 defaultbind tab togglemap

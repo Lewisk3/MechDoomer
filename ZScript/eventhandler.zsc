@@ -142,6 +142,32 @@ class MechDoomerEvents : EventHandler
 				}
 			}
 		}
+		
+		// Print distance on HUD space
+		// Uses SBS's lesser known 3D features :P
+		if(plr.targetenemy)
+		{
+			double mdist = plr.Distance3D(plr.targetenemy)/MWGAMEPLAY_UNITMETER;
+			String dist = String.Format("%.0fm", mdist);
+			bool infront;
+			ViewProjection viewproj = MD_SBS.GetRenderEventViewProj(e);
+			vector2 apos;
+			[infront, apos] = MD_SBS.GetActorHUDPos(
+				viewproj,
+				plr.targetenemy, plr.targetenemy.radius, 0, 0
+			);
+			if(infront)
+			{
+				MD_SBS.DrawString3D(
+					"MechFont", 
+					dist, 
+					apos, 0, 
+					Font.CR_GOLD, 
+					scale:(1.25,1.25),
+					distance: e.Camera.Distance2D(plr.targetenemy)
+				);
+			}
+		}
 	}
 	
 	// Whatever, it works. Until it's actually possible to make a toggle switch for UI
@@ -366,8 +392,21 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "sort_mechs") plr.SortMechs(plr.inv_context.mechs);
 			if(netcmd == "radar_switchrange")
 			{
-				plr.radar_range++;
-				if(plr.radar_range > 3) plr.radar_range = 0;
+				SoundOnActor.Trigger("Mech/Blip",plr);
+				if(plr.radar_scale == 2)
+				{
+					plr.Cockpit_Alert("\c[GREEN]Radar is hidden.");
+				}
+				else
+				{
+					plr.radar_range++;
+					if(plr.radar_range > 3) plr.radar_range = 0;
+				}
+			}
+			if(netcmd == "radar_switchscale")
+			{
+				plr.radar_scale++;
+				if(plr.radar_scale > 2) plr.radar_scale = 0;
 				SoundOnActor.Trigger("Mech/Blip",plr);
 			}
 			if(netcmd == "throttledecay_toggle") 
