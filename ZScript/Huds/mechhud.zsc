@@ -467,27 +467,44 @@ class MechStatusBar : BaseStatusBar
 	{	
 		if(CPlayer && CPlayer.mo)
 		{
-			double scale = 7;
+			double ranges[4] = 
+			{
+				1000,
+				500,
+				250,
+				2000
+			};
+			
 			let mech = MechWarrior(CPlayer.mo);
 			if(!mech) return;
+			double range = ranges[mech.radar_range];
+			double scale = range * 0.04;
 			ThinkerIterator act_it = ThinkerIterator.Create("Actor");
 			Actor obj;
 						
 			// Draw FOV bars (For some reason the xaxis needs to be divided by 2 to scale correctly.)
 			double drawang = mech.defaultmovement ? 90 : mech.angle-mech.LegAng+90;
-			drawAngledLine(259,203,165,drawang,mech.player.FOV/2,Color(255,53,255,53));
-			drawAngledLine(259,203,165,drawang,-mech.player.FOV/2,Color(255,53,255,53));
+			drawAngledLine(238,180,156,drawang,mech.player.FOV/2,Color(255,53,255,53));
+			drawAngledLine(238,180,156,drawang,-mech.player.FOV/2,Color(255,53,255,53));
 	
-			double radarx = 260;
-			double radary = 200;
-			H_DrawImage("MECRADAR",(radarx,radary),0,(1.1,0.9));
+			double radarx = 240;
+			double radary = 180;
+			H_DrawImage("MECRADAR",(radarx,radary),0,(1.0,0.9));
 			
+			string metertext = String.Format("%.1fm",range);
+			if(range >= 1000)
+			{
+				metertext = String.Format("%.1fkm",range/1000);
+			}
+			
+			H_DrawString("\c[GREEN]R: " .. metertext, (65,35), scale:(1.25,1.35));
+		
 			while(obj = Actor(act_it.Next()))
 			{			
 				int x = mech.pos.x - obj.pos.x;
 				int y = mech.pos.y - obj.pos.y;
-				int dis = point_distance(obj,Actor(CPlayer.mo),scale);
-				if( dis < 135 )
+				int dis = obj.Distance2D(CPlayer.mo) / MWGAMEPLAY_UNITMETER;
+				if( dis < range )
 				{
 					double frontangle = mech.angle+180;
 					int dx = ( y * cos((frontangle) )) - ( x * sin((frontangle)) );

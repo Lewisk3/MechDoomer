@@ -364,6 +364,12 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "mechs_getlist") plr.GetAllMechs(plr.shopmechs);
 			if(netcmd == "sort_inv") plr.sortWeaponInv();
 			if(netcmd == "sort_mechs") plr.SortMechs(plr.inv_context.mechs);
+			if(netcmd == "radar_switchrange")
+			{
+				plr.radar_range++;
+				if(plr.radar_range > 3) plr.radar_range = 0;
+				SoundOnActor.Trigger("Mech/Blip",plr);
+			}
 			if(netcmd == "throttledecay_toggle") 
 			{
 				CVar throtd = CVar.FindCVar("mwd_throttledecay");

@@ -29,6 +29,7 @@ double HeatEfficiency;
 double HeatLevel;
 double prevheat;
 double deltaHeat;
+int radar_range; // Rader range mode; 0-3
 String crosshair_sprite;
 
 // Crosshair(s)
