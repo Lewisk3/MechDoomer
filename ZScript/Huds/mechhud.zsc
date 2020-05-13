@@ -556,6 +556,7 @@ class MechStatusBar : BaseStatusBar
 				double drawang = mech.defaultmovement ? 90 : mech.angle-mech.LegAng+90;
 				double radarx = 240;
 				double radary = 180;
+				Color linecol = 0x796100;
 				string metertext = String.Format("%.1fm",range);
 				if(range >= 1000) metertext = String.Format("%.1fkm",range/1000);
 				
@@ -565,15 +566,15 @@ class MechStatusBar : BaseStatusBar
 					radary = 0;
 					vector2 scrmid = (1920/2., 1080/2.);
 					H_DrawCircle(); // Defaults to RAD_HUGE parameters.
-					drawAngledLine(scrmid.x,scrmid.y,166*3,drawang,mech.player.FOV/2,Color(255,53,255,53));
-					drawAngledLine(scrmid.x,scrmid.y,166*3,drawang,-mech.player.FOV/2,Color(255,53,255,53));
+					drawAngledLine(scrmid.x,scrmid.y,166*3,drawang,mech.player.FOV/2,linecol);
+					drawAngledLine(scrmid.x,scrmid.y,166*3,drawang,-mech.player.FOV/2,linecol);
 					H_DrawImage("RADARMID",(0,0),MD_SBS.SS_SCREEN_CENTER,(1.0,0.9));
 					H_DrawString("\c[GREEN]R: " .. metertext, (500,100), scale:(1.75,1.85));
 				}
 				else
 				{
-					drawAngledLine(radarx,radary,fradius-2,drawang,mech.player.FOV/2,Color(255,53,255,53));
-					drawAngledLine(radarx,radary,fradius-2,drawang,-mech.player.FOV/2,Color(255,53,255,53));
+					drawAngledLine(radarx,radary,fradius-2,drawang,mech.player.FOV/2,linecol);
+					drawAngledLine(radarx,radary,fradius-2,drawang,-mech.player.FOV/2,linecol);
 					H_DrawCircle("YLWPXL", (radarx, radary), fradius, 0);
 					H_DrawImage("RADARMID",(radarx, radary),0,(1.0,0.9));
 					H_DrawString("\c[GREEN]R: " .. metertext, (65,35), scale:(1.25,1.35));
