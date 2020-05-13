@@ -145,7 +145,7 @@ class MechDoomerEvents : EventHandler
 		
 		// Print distance on HUD space
 		// Uses SBS's lesser known 3D features :P
-		if(plr.targetenemy && !NAVPoint(plr.targetenemy))
+		if(plr && plr.targetenemy && !NAVPoint(plr.targetenemy))
 		{
 			double mdist = plr.Distance3D(plr.targetenemy)/MWGAMEPLAY_UNITMETER;
 			String dist = String.Format("%.0fm", mdist);

@@ -34,7 +34,7 @@ class MechStatusBar : BaseStatusBar
 	int invoffset;
 	FadingText dCash;
 	vector2 font_scale;
-	double prevMS; // TicFrac is honestly useless to me, this makes way more sense.
+	
 	
 	// Scalar constant
 	double defwidth;
@@ -42,6 +42,16 @@ class MechStatusBar : BaseStatusBar
 	double hud_xoffs;
 	double hud_yoffs;
 	
+	// Counters
+	double tAnim_radar;
+	double tAnim_weapons;
+	
+	// Delta-time logic.
+	// TicFrac is honestly useless to me, this makes way more sense.
+	double prevMS; 
+	double deltatime;
+	
+	// Font(s)
 	Font fnt;
 	
 	// H_ Functions
@@ -138,15 +148,6 @@ class MechStatusBar : BaseStatusBar
 		double ypos = 28;
 		
 		// Milliseconds are way more natural to work with than Tic Fractions.
-		if(!prevMS)
-		{
-			prevMS = MSTime();
-			return;
-		}
-		double ftime = MSTime()-prevMS;
-		prevMS = MSTime();
-		double dtime = 1000.0 / 60.0;
-		double deltatime = (ftime/dtime);
 		double fadeamt = 0.1 * deltatime;
 		
 		// Message and alpha processing.
@@ -184,16 +185,37 @@ class MechStatusBar : BaseStatusBar
 	}
 	
 	void drawWeapons(HUDFont fnt, vector2 pos, double scalex, double scaley)
-	{
+	{	
 		int lastweap;
 		if(CPlayer && CPlayer.mo)
 		{
-			let mech = MechWarrior(CPlayer.mo);		
+			let mech = MechWarrior(CPlayer.mo);	
+			int weapcount = mech.inv_context.weapons_count;
+			bool animating = mech.hAlert.hud_powersequence == 1;
+			if(animating)
+			{
+				tAnim_weapons += (0.01 * deltatime);
+				if(tAnim_weapons >= 1.0) 
+				{
+					mech.hAlert.hud_powersequence--;
+					tAnim_weapons = 0;
+				}
+			}
+			else if(mech.hAlert.hud_powersequence)
+			{
+				// Do not draw if we're animating something else before us.
+				return;
+			}
+			
+			int icount = 0;
 			for(let weap = mech.Inv; weap != null; weap = weap.Inv)
 			{
 				let ww = Mechbase_Weapon(weap);
 				if(ww)
 				{
+					if( animating && ww.WeaponID > ceil(weapcount*tAnim_weapons) )
+						continue;
+						
 					int ftranslation = Font.CR_GREEN;
 					static const int group_colors[] =
 					{
@@ -213,10 +235,11 @@ class MechStatusBar : BaseStatusBar
 					if(!ww.ammotype)
 						H_DrawString(ww.specprefix..ww.displayName,(pos.x+(selx*scalex),pos.y+(sely*scaley)),0,ftranslation);
 					if(lastweap < ww.WeaponID) lastweap = ww.WeaponID;
+					icount++;
 				}
 			}
 			// Special exclusive weapon drawing for a struct!
-			
+			if(animating) return;
 			int amsid=1;
 			for(int i = 0; i < mech.inv_context.mechstructs.Size(); i++)
 			{
@@ -487,6 +510,16 @@ class MechStatusBar : BaseStatusBar
 			double scale = range * 0.04;
 			ThinkerIterator act_it = ThinkerIterator.Create("Actor");
 			Actor obj;
+			bool animating = mech.hAlert.hud_powersequence > 1;
+			if(animating)
+			{
+				tAnim_radar += (5.0 * deltatime);
+				if(tAnim_radar >= 160) 
+				{
+					mech.hAlert.hud_powersequence--;
+					tAnim_radar = 0;
+				}
+			}
 			
 			if(mode != RAD_NONE)
 			{
@@ -497,15 +530,7 @@ class MechStatusBar : BaseStatusBar
 				string metertext = String.Format("%.1fm",range);
 				if(range >= 1000) metertext = String.Format("%.1fkm",range/1000);
 				
-				if(mode != RAD_HUGE)
-				{
-					drawAngledLine(radarx,radary,158,drawang,mech.player.FOV/2,Color(255,53,255,53));
-					drawAngledLine(radarx,radary,158,drawang,-mech.player.FOV/2,Color(255,53,255,53));
-					H_DrawCircle("YLWPXL", (radarx, radary), 160, 0);
-					H_DrawImage("RADARMID",(radarx, radary),0,(1.0,0.9));
-					H_DrawString("\c[GREEN]R: " .. metertext, (65,35), scale:(1.25,1.35));
-				}
-				else
+				if(mode == RAD_HUGE)
 				{
 					radarx = 0;
 					radary = 0;
@@ -516,13 +541,23 @@ class MechStatusBar : BaseStatusBar
 					H_DrawImage("RADARMID",(0,0),MD_SBS.SS_SCREEN_CENTER,(1.0,0.9));
 					H_DrawString("\c[GREEN]R: " .. metertext, (500,100), scale:(1.75,1.85));
 				}
+				else
+				{
+					double fradius = animating ? tAnim_radar : 160;
+					drawAngledLine(radarx,radary,fradius-2,drawang,mech.player.FOV/2,Color(255,53,255,53));
+					drawAngledLine(radarx,radary,fradius-2,drawang,-mech.player.FOV/2,Color(255,53,255,53));
+					H_DrawCircle("YLWPXL", (radarx, radary), fradius, 0);
+					H_DrawImage("RADARMID",(radarx, radary),0,(1.0,0.9));
+					H_DrawString("\c[GREEN]R: " .. metertext, (65,35), scale:(1.25,1.35));
+				}
 			
 				while(obj = Actor(act_it.Next()))
 				{			
 					int x = mech.pos.x - obj.pos.x;
 					int y = mech.pos.y - obj.pos.y;
 					int dis = obj.Distance2D(CPlayer.mo) / MWGAMEPLAY_UNITMETER;
-					if( dis < range )
+					double frange = animating ? range * (tAnim_radar/160.) : range;
+					if( dis < frange )
 					{
 						double frontangle = mech.angle+180;
 						vector2 indscale = (0.8, 0.6);
@@ -611,89 +646,106 @@ class MechStatusBar : BaseStatusBar
 			{
 				Draw_Radar();
 				DrawCompass(mech, mech.targetenemy, (1313,100),(970,115));
-				DrawAltimeter(mech, mech.targetenemy, (270,1425));
-				H_DrawImage("MWTARGET",(200,836),0,(1.3,1.3));
-				if(mech.targetenemy)
-				{	
-					bool isNav = NAVPoint(mech.targetenemy) != NULL;
-					Actor cam;
-					if(!isNav)
-						cam = mech.targetreticle.cam;
-					else
-						cam = mech.targetenemy;
-						
-					TexMan.SetCameraToTexture(cam,"TargetCamera",90.0);
-					TextureID targ = TexMan.CheckForTexture("TargetCamera",TexMan.TYPE_ANY);
-					H_DrawTexture(targ,(199,834),0,(1.3,1.3));
-					double mdist = mech.Distance3D(mech.targetenemy)/MWGAMEPLAY_UNITMETER;
-					String dist = String.Format("%.0f", mdist);
-					
-					String targetname = mech.targetenemy.getTag();
-					targetname.Replace("_"," ");
-					if(isNav)	
-						H_DrawString("\c[SAPPHIRE]" .. targetname,(50,955),scale:(1.5,1.5));
-					else
-						H_DrawString("\c[RED]" .. targetname,(50,955),scale:(1.5,1.5));
-						
-					H_DrawString("\c[GREEN]"..dist .. "m",(55,983),scale:(1.35,1.35));
-					// Enemy health bar (If not NAVPoint)
-					if(!NAVPoint(mech.targetenemy))
-					{
-						double percenthealth = double(mech.targetenemy.SpawnHealth()-(mech.targetenemy.SpawnHealth()-hpcounter) ) / mech.targetenemy.SpawnHealth();
-						if(mech.targetenemy.health < hpcounter)hpcounter -= (hpcounter-mech.targetenemy.health)*0.1;
-						if(hpcounter == 0) hpcounter = mech.targetenemy.health;
-						if(mech.targetenemy.health <= 0) hpcounter = 0;
-						if(prevtarg != mech.targetenemy)
-						{
-							hpcounter = 0;
-							prevtarg = mech.targetenemy;
-						}
-						H_Fill(Color(255,0,0,0), 80, 920, 242, 16, 0);
-						H_Fill( Color(255,0,173,0), 80, 920,
-								percenthealth*242, 16, 0     );						
-						String percenthp = percenthealth*100 .. "";
-						percenthp.truncate(percenthp.Length()-6);
-						H_DrawString(percenthp .. "%" ,(170,920));
-					}
-				}
 				drawWeapons(mHUDFont,(1370,55),220,50);
 				
-				String hud_mech = mech.hud_mech;
-				if(hud_mech.ByteAt(0) == "#")
+				if(!mech.hAlert.hud_powersequence)
 				{
-					hud_mech.Remove(0,1);
-					DrawPaperDoll(hud_mech, false);
-				}
-				else
-					DrawPaperDoll(hud_mech, true);
+					DrawAltimeter(mech, mech.targetenemy, (270,1425));
+					H_DrawImage("MWTARGET",(200,836),0,(1.3,1.3));
+					if(mech.targetenemy)
+					{	
+						bool isNav = NAVPoint(mech.targetenemy) != NULL;
+						Actor cam;
+						if(!isNav)
+							cam = mech.targetreticle.cam;
+						else
+							cam = mech.targetenemy;
+							
+						TexMan.SetCameraToTexture(cam,"TargetCamera",90.0);
+						TextureID targ = TexMan.CheckForTexture("TargetCamera",TexMan.TYPE_ANY);
+						H_DrawTexture(targ,(199,834),0,(1.3,1.3));
+						double mdist = mech.Distance3D(mech.targetenemy)/MWGAMEPLAY_UNITMETER;
+						String dist = String.Format("%.0f", mdist);
+						
+						String targetname = mech.targetenemy.getTag();
+						targetname.Replace("_"," ");
+						if(isNav)	
+							H_DrawString("\c[SAPPHIRE]" .. targetname,(50,955),scale:(1.5,1.5));
+						else
+							H_DrawString("\c[RED]" .. targetname,(50,955),scale:(1.5,1.5));
+							
+						H_DrawString("\c[GREEN]"..dist .. "m",(55,983),scale:(1.35,1.35));
+						// Enemy health bar (If not NAVPoint)
+						if(!NAVPoint(mech.targetenemy))
+						{
+							double percenthealth = double(mech.targetenemy.SpawnHealth()-(mech.targetenemy.SpawnHealth()-hpcounter) ) / mech.targetenemy.SpawnHealth();
+							if(mech.targetenemy.health < hpcounter)hpcounter -= (hpcounter-mech.targetenemy.health)*0.1;
+							if(hpcounter == 0) hpcounter = mech.targetenemy.health;
+							if(mech.targetenemy.health <= 0) hpcounter = 0;
+							if(prevtarg != mech.targetenemy)
+							{
+								hpcounter = 0;
+								prevtarg = mech.targetenemy;
+							}
+							H_Fill(Color(255,0,0,0), 80, 920, 242, 16, 0);
+							H_Fill( Color(255,0,173,0), 80, 920,
+									percenthealth*242, 16, 0     );						
+							String percenthp = percenthealth*100 .. "";
+							percenthp.truncate(percenthp.Length()-6);
+							H_DrawString(percenthp .. "%" ,(170,920));
+						}
+					}
+				
+					// Draw speedometer.
+					DrawBars();
+					DrawObjectives();
 					
-				// Draw weapon indicator
-				if(!automapactive)
-				{
-					String weapind = "WEAPIND";
-					int selx = (mech.selectedWeapon+1)%2;
-					int sely = (mech.selectedWeapon+1)/2;
-					vector2 weappos = ( 1450 + (selx*220), 64 + (sely*50) );
-					if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
-					if(mech.selectedWeapon <= mech.inv_context.weapons_count)H_DrawImage(weapind,weappos,0,(0.8,0.6));
-				}
+					// Draw paperdoll
+					String hud_mech = mech.hud_mech;
+					if(hud_mech.ByteAt(0) == "#")
+					{
+						hud_mech.Remove(0,1);
+						DrawPaperDoll(hud_mech, false);
+					}
+					else
+						DrawPaperDoll(hud_mech, true);
+						
+					// Crosshair
+					double chscale = CVar.GetCVar("mwd_crosshairsize",mech.player).GetFloat();
+					if(mech.inv_context.weapons_count && !automapactive)
+					{
+						H_DrawImage (
+							mech.crosshair_sprite,(0.5,0.5),
+							MD_SBS.SS_COORDS_TEXGRID|MD_SBS.SS_SCREEN_CENTER,
+							(1.35*chscale,1.25*chscale)
+						);
+					}
 					
-				// Draw speedometer.
-				DrawBars();
-				DrawObjectives();
-				// Crosshair
-				double chscale = CVar.GetCVar("mwd_crosshairsize",mech.player).GetFloat();
-				if(mech.inv_context.weapons_count && !automapactive)
-				{
-					H_DrawImage (
-						mech.crosshair_sprite,(0.5,0.5),
-						MD_SBS.SS_COORDS_TEXGRID|MD_SBS.SS_SCREEN_CENTER,
-						(1.35*chscale,1.25*chscale)
-					);
+					// Draw weapon indicator
+					if(!automapactive)
+					{
+						String weapind = "WEAPIND";
+						int selx = (mech.selectedWeapon+1)%2;
+						int sely = (mech.selectedWeapon+1)/2;
+						vector2 weappos = ( 1450 + (selx*220), 64 + (sely*50) );
+						if(checkWeaponBusy(mech.selectedWeapon)) weapind = "WEAPSEL";
+						if(mech.selectedWeapon <= mech.inv_context.weapons_count)H_DrawImage(weapind,weappos,0,(0.8,0.6));
+					}
 				}
 			}
+			
 			// Draw messages on top.
 			DrawCockpitMessages();
+			// Keep track of time, always.
+			if(!prevMS)
+			{
+				prevMS = MSTime();
+				return;
+			}
+			double ftime = MSTime()-prevMS;
+			prevMS = MSTime();
+			double dtime = 1000.0 / 60.0;
+			deltatime = (ftime/dtime);
 		}
 	}
 

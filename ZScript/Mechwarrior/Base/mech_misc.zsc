@@ -14,9 +14,9 @@ class Door_3D : Actor
 	
 	override void tick()
 	{
-		vel.z = 1.2;
+		vel.z = 0.6;
 		up++;
-		if(up > 155) 
+		if(up > 255) 
 		{
 			Die(self,self);
 		}

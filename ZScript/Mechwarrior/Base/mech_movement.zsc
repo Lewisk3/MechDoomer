@@ -532,6 +532,7 @@ void process_shutdown()
 		angle = lockangle;
 		pitch = lockpitch;
 	}
+	radar_scale = 0;
 	if(!manualshutdown)
 	{	
 		// Prevent powerup only to shutdown once again.
@@ -548,6 +549,7 @@ void process_shutdown()
 			mechsounds.pushSound("Mech/StartupDone");
 			doShutdown = false;
 			Cockpit_Alert("\c[GREEN]Reactor powering up...", 30);
+			hAlert.hud_powersequence = 2;
 		}
 		if(!doShutdown && (ticks-prevticks) > 35*5)powerup();
 		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*3.0;
@@ -564,6 +566,7 @@ void process_shutdown()
 			TakeInventory("IBTN_SHUTDOWN",1);
 			prevticks = ticks;
 			Cockpit_Alert("\c[GREEN]Reactor powering up...", 30);
+			hAlert.hud_powersequence = 2;
 		}
 	}
 	ticks++;

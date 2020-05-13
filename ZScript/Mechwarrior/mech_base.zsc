@@ -1,5 +1,6 @@
 
 // Used for processing messages between UI elements.
+// Probably Hax, if it is, I'll fix it but right now it "JustWorks".
 struct HudAlert 
 {	
 	String mechlab_text;
@@ -8,6 +9,11 @@ struct HudAlert
 	// Used for timing messages, currently used for cockpit_messages.
 	double mtimer1; 
 	double mtimer2;
+	
+	// Used for animating HUD features when powering up.
+	// This gets subtracted from when each animated element finishes its animation.
+	// I figure this is a pretty smart way to time multiple animations.
+	int hud_powersequence; // 0 = Stop animating. 
 }
 
 class Items_ShopData
