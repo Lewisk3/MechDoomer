@@ -537,11 +537,30 @@ class MechStatusBar : BaseStatusBar
 						}
 						// If we're not the player and we're awake.
 						let nmech = MechWarrior(obj);
-						if( nmech != mech && obj.target != NULL)
+						if(nmech != mech)
 						{
+							String basegraphic = "NONE";
 							uint drawflags = (mode == RAD_HUGE) ? MD_SBS.SS_SCREEN_CENTER : 0; 
-							if(obj.bSOLID && obj.bSHOOTABLE) H_DrawImage("ENEMYIND",(radarx-dx,radary-dy),drawflags,indscale);
-							if(obj == mech.targetenemy) H_DrawString("+",(radarx-dx,radary-dy),drawflags);
+							if(obj.target != NULL && !obj.bFRIENDLY)
+							{
+								if(obj.bSOLID && obj.bSHOOTABLE) basegraphic = "ENEMY";
+							}
+							else if(NAVPoint(obj))
+							{
+								basegraphic = "NAV";
+							}
+							else if(obj.bFRIENDLY)
+							{
+								bool isvoodoo = false;
+								if(MechWarrior(obj)) 
+									isvoodoo = MechWarrior(obj).checkVoodoo();
+								if(!isvoodoo) basegraphic = "ALLY";
+							}
+							
+							if(obj == mech.targetenemy && basegraphic != "NONE")
+								H_DrawImage(basegraphic.."SEL",(radarx-dx,radary-dy),drawflags,indscale);
+							else
+								H_DrawImage(basegraphic.."IND",(radarx-dx,radary-dy),drawflags,indscale);
 						}
 					}
 				}
@@ -612,7 +631,7 @@ class MechStatusBar : BaseStatusBar
 					String targetname = mech.targetenemy.getTag();
 					targetname.Replace("_"," ");
 					if(isNav)	
-						H_DrawString(targetname,(86,960));
+						H_DrawString("\c[SAPPHIRE]" .. targetname,(50,955),scale:(1.5,1.5));
 					else
 						H_DrawString("\c[RED]" .. targetname,(50,955),scale:(1.5,1.5));
 						
