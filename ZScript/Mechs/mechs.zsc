@@ -251,7 +251,7 @@ class Firemoth : MechWarrior
 		MechWarriorBase.LegSpeed 105.42*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.Acceleration 0.8;
 		MechWarriorBase.Engine "ENGINE_XL_200";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#Moth";
 		MechWarriorBase.MechPieces "Torso_Firemoth";
 		
 		MechWarriorBase.CValue 2105000;
@@ -489,7 +489,7 @@ class Summoner : MechWarrior
 		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Engine "ENGINE_XL_350";
 		MechWarriorBase.MechPieces "Torso_Summoner";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#Summ";
 		MechWarriorBase.CValue 10650000;
 	}
 		
@@ -524,7 +524,7 @@ class MadDog : MechWarrior
 		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.MechPieces "Torso_MadDog";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#MadD";
 		MechWarriorBase.CValue 8270000;
 	}
 		
@@ -560,7 +560,7 @@ class Rifleman : MechWarrior
 		MechWarriorBase.PitchRange 70, 70;
 		MechWarriorBase.Engine "ENGINE_XL_195";
 		MechWarriorBase.MechPieces "Torso_Rifleman";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#Rifle";
 		MechWarriorBase.CValue 2870250;
 	}
 		
@@ -599,7 +599,7 @@ class Marauder : MechWarrior
 		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Engine "ENGINE_STD_340";
 		MechWarriorBase.MechPieces "Torso_Marauder";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#Mara";
 		MechWarriorBase.CValue 4950720;
 	}
 	
@@ -665,7 +665,7 @@ class Gargoyle : MechWarrior
 		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Engine "ENGINE_XL_400";
 		MechWarriorBase.MechPieces "Torso_Gargoyle";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#Garg";
 		MechWarriorBase.CValue 13020420;
 	}
 		
@@ -702,7 +702,7 @@ class Hellbringer : MechWarrior
 		MechWarriorBase.PitchRange 50, 50;
 		MechWarriorBase.Engine "ENGINE_XL_325";
 		MechWarriorBase.MechPieces "Torso_Hellbringer";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#HBri";
 		MechWarriorBase.CValue 9566333;
 	}
 		
@@ -787,7 +787,7 @@ class Direwolf : MechWarrior
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.MechPieces "Torso_Direwolf";
 		MechWarriorBase.Engine "ENGINE_XL_335";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#Dire";
 		
 		MechWarriorBase.CValue 13650000;
 	}
@@ -832,7 +832,7 @@ class Warhawk : MechWarrior
 		MechWarriorBase.Weight 85;
 		MechWarriorBase.MechPieces "Torso_Warhawk";
 		MechWarriorBase.Engine "ENGINE_XL_315";
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#Hawk";
 		
 		MechWarriorBase.CValue 13200665;
 	}
