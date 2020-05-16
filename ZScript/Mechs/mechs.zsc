@@ -323,7 +323,7 @@ class Kitfox : MechWarrior
 		MechWarriorBase.LegSpeed 77.92*MWGAMEPLAY_TURNRATE;
 		MechWarriorBase.Acceleration 1.15;
 		MechWarriorBase.CockpitIsModel true;
-		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.HudMech "#KFox";
 		MechWarriorBase.MechPieces "Torso_Kitfox";
 		MechWarriorBase.CValue 2684420; 
 	}

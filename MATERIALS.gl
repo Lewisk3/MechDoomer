@@ -39,8 +39,8 @@ material texture models/Textures/orangelaser.png {
 	brightmap "models/Textures/orangelaser.png"
 	brightness 1.0
 }
-material texture Sprites/MGMZA0.png {
-	brightmap "Sprites/MGMZA0.png"
+material texture Sprites/Weapons/MGMZA0.png {
+	brightmap "Sprites/Weapons/MGMZA0.png"
 	brightness 1.0
 }
 

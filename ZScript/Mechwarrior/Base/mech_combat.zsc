@@ -24,7 +24,6 @@ bool heatwarn;
 bool supersink;
 bool InfraredActive;
 bool ams_passive;
-int ams_timer;
 double HeatEfficiency;
 double HeatLevel;
 double prevheat;
@@ -334,14 +333,15 @@ void process_antimissilesystem()
 	if(ams_passive) return;
 	for(int i = 0; i < inv_context.mechstructs.Size(); i++)
 	{
-		String cname = inv_context.mechstructs[i].Tag;
+		mw_InvStruct item = inv_context.mechstructs[i];
+		String cname = item.Tag;
 		class<AntiMissileSystem> basecast = cname;
 		if(basecast)
 		{
-			trigger_ams( inv_context.mechstructs[i] );
+			trigger_ams(item);
+			item.active_cooldown--;
 		}
 	}
-	if(ams_timer > 0) ams_timer--;
 }
 void trigger_ams(mw_InvStruct amsitem)
 {
@@ -353,48 +353,45 @@ void trigger_ams(mw_InvStruct amsitem)
 	let def_utams = GetDefaultByType(amsut);
 	let def_ams = GetDefaultByType(amsdef);
 	
-	if(ams_timer <= 0)
-	{	
-		// Check ammunition.
-		if(def_ams.ammotype) 
-		{
-			if(countammo(def_ams.ammotype) < def_ams.ammouse) return;
-		}
-		// Check if a projectile is near us.
-		ThinkerIterator ams_it = ThinkerIterator.Create("Actor");
-		Actor obj;
-		while(obj = Actor(ams_it.Next()))
-		{
-			if(obj is "AMS_Missile" || obj is "Mechbase_Actor") continue;
-			if(obj && obj.Damage)
-			{	
-				if(CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
+	// Check ammunition.
+	if(def_ams.ammotype) 
+	{
+		if(countammo(def_ams.ammotype) < def_ams.ammouse) return;
+	}
+	// Check if a projectile is near us.
+	ThinkerIterator ams_it = ThinkerIterator.Create("Actor");
+	Actor obj;
+	while(obj = Actor(ams_it.Next()))
+	{
+		if(obj is "AMS_Missile" || obj is "Mechbase_Actor") continue;
+		if(obj && obj.Damage && amsitem.active_cooldown <= 0)
+		{	
+			if(CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
+			{
+				//console.printf("Firing AMS at: " .. obj.getTag());
+				SoundEmitter.SE_Trigger(def_ams.firesound);
+				amshardpoint.x += random(-5,5);
+				amshardpoint.y += random(-5,5);
+				vector2 offs = MDMath.VOffset(angle, 25, amshardpoint.x, 1);	
+				vector3 lpos = Vec3Offset(offs.x,offs.y,(viewheight*player.crouchFactor)+amshardpoint.y);
+				obj.bSHOOTABLE = true;
+				let ams = AMS_Missile(Spawn(def_ams.amstype,lpos));
+				if(ams)
 				{
-					//console.printf("Firing AMS at: " .. obj.getTag());
-					SoundEmitter.SE_Trigger(def_ams.firesound);
-					amshardpoint.x += random(-5,5);
-					amshardpoint.y += random(-5,5);
-					vector2 offs = MDMath.VOffset(angle, 25, amshardpoint.x, 1);	
-					vector3 lpos = Vec3Offset(offs.x,offs.y,(viewheight*player.crouchFactor)+amshardpoint.y);
-					obj.bSHOOTABLE = true;
-					let ams = AMS_Missile(Spawn(def_ams.amstype,lpos));
-					if(ams)
-					{
-						// AMS Sound FX
-						ams.mechplayer = Mechwarrior(self);
-						ams.tracer = obj;
-						ams.master = self;
-						ams_timer = def_ams.cooldown;
-						ams.pitch = obj.pitch;
-						ams.angle = ams.AngleTo(obj);
-						// Will automatically set convengence factor in postplay.
-						ams.vel = (
-								cos(ams.AngleTo(obj))*cos(obj.pitch),
-								sin(ams.AngleTo(obj))*cos(obj.pitch),
-								-sin(obj.pitch)*5
-								) * (obj.speed+def_ams.speed);
-						if(def_ams.ammotype) TakeAmmo(def_ams.ammotype,def_ams.ammouse);
-					}
+					// AMS Sound FX
+					ams.mechplayer = Mechwarrior(self);
+					ams.tracer = obj;
+					ams.master = self;
+					amsitem.active_cooldown = def_ams.cooldown;
+					ams.pitch = obj.pitch;
+					ams.angle = ams.AngleTo(obj);
+					// Will automatically set convengence factor in postplay.
+					ams.vel = (
+							cos(ams.AngleTo(obj))*cos(obj.pitch),
+							sin(ams.AngleTo(obj))*cos(obj.pitch),
+							-sin(obj.pitch)*5
+							) * (obj.speed+def_ams.speed);
+					if(def_ams.ammotype) TakeAmmo(def_ams.ammotype,def_ams.ammouse);
 				}
 			}
 		}

@@ -27,7 +27,7 @@ mixin class HUDScaleFunctions
 	}
 	void H_DrawStringBigFont(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, double alpha=1)
 	{
-		MD_SBS.DrawString("dbigfont", str, pos, flags, translation, alpha, font_scale);
+		MD_SBS.DrawString("BigFont", str, pos, flags, translation, alpha, font_scale);
 	}
 	void H_DrawString(String str, vector2 pos, uint flags = 0, int translation = Font.CR_UNTRANSLATED, vector2 scale=(1,1), double alpha=1, Font customfont=NULL)
 	{

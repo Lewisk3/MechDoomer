@@ -131,6 +131,7 @@ clearscope double EngineGetKPH(int enginetype=0)
 
 clearscope bool CheckCompensative()
 {	
+	// if(!inv_context) return;
 	return inv_context.engine && (inv_context.engine.model == EngineDatabase.Type_Compensative);
 }
 	

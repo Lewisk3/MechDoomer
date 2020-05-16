@@ -39,6 +39,7 @@ class mw_InvStruct
 	MechutilDefs utildefs;
 	MechHardpoint hardpoint;
 	bool broken;
+	int active_cooldown; // Used for temporary cooldowns on structure items.
 	int dmg_taken;
 	int ammunition; // Contains ammo left in structure.
 	int hardslots;
@@ -186,7 +187,7 @@ class MechWarrior : MechWarriorBase
 	// This somehow makes movement a WHOLE lot smoother, idek, it WAS a mistake at first.
 	override void tick()
 	{
-		if(!checkVoodoo()) 
+		if(!checkVoodoo() && inv_context) 
 		{
 			mech_movement();
 			Bobbing();

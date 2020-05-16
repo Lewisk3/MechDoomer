@@ -18,9 +18,10 @@ class MechDoomerEvents : EventHandler
 	override void RenderOverlay(RenderEvent e)
 	{
 		Screen.Dim(screenfadecolor,screenfade,0,0,Screen.GetWidth(),Screen.GetHeight());
-	
+
+		// NOTE: vid_rendermode does not exist in LZDoom, apparently.
 		CVar rendermode = CVar.FindCVar("vid_rendermode");
-		if(rendermode.GetInt() != 4)
+		if(rendermode && rendermode.GetInt() != 4)
 		{
 			Color dimcol = Color(0,0,0,0);
 			Screen.Dim(dimcol,1.0,0,0,Screen.GetWidth(),Screen.GetHeight());
