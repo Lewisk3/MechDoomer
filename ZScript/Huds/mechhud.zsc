@@ -267,7 +267,8 @@ class MechStatusBar : BaseStatusBar
 			int amsid=1;
 			for(int i = 0; i < mech.inv_context.mechstructs.Size(); i++)
 			{
-				String cname = mech.inv_context.mechstructs[i].Tag;
+				mw_InvStruct item = mech.inv_context.mechstructs[i];
+				String cname = item.Tag;
 				class<AntiMissileSystem> basecast = cname;
 				if(basecast)
 				{
@@ -277,7 +278,7 @@ class MechStatusBar : BaseStatusBar
 					let ams_def = GetDefaultByType(basecast);
 					if(ams_def.ammotype && ams_def.ammouse > mech.countammo(ams_def.ammotype))ftranslation = Font.CR_DARKRED;
 					if(mech.ams_passive) ftranslation = Font.CR_BRICK;  
-					if(mech.ams_timer > 0) ftranslation = Font.CR_DARKRED;
+					if(item.active_cooldown > 0) ftranslation = Font.CR_DARKRED;
 					string prefix = ams_def.displayName;
 					if(ams_def.ammotype)
 					{
