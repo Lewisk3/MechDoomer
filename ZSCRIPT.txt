@@ -43,8 +43,11 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Mainmenu/Base/titlemenu_elements.zsc"
 #include "ZScript/Mainmenu/titlemenu.zsc"
 
+// Balancing configuration.
+// # Replace with "classic_skill.cfg" for MechDoomer Alpha settings.
+#include "skill.cfg" 
+
 // Weapons
-#include "skill.cfg"
 #include "ZScript/Weapons/weapon_base.zsc"
 #include "ZScript/Weapons/weapon_objects.zsc"
 #include "ZScript/Weapons/weapons.zsc"

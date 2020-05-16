@@ -154,6 +154,7 @@ void mech_weapons()
 		lockpitch = pitch;
 		mech_shutdown = true;
 		shutdown_timer = ticks;
+		hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
 		A_PlaySound("Mech/Shutdown",2);
 	}
 	if(HeatLevel > MWHEAT_MAX) HeatLevel = MWHEAT_MAX;
