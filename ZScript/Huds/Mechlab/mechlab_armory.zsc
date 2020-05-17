@@ -263,25 +263,25 @@ void drawArmoryInfo()
 			
 			if(checkCollision(mouse,autilbtn) && autil_item)
 			{
-				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 				MechDoomerEvents.SendNetworkEvent("autil_useitem:" .. autil_item.getClassName(),hardpoint);
 				mstats.left_btn = false;
 			}
 			
 			if( checkCollision(mouse,repairbtn) )
 			{
-				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 				mstats.left_btn = false;
 				
 				if(mechplr.isdead)
 				{
-					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
+					mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 					MechDoomerEvents.SendNetworkEvent("mechlab_alert:Mech's reactor is completely \ndestroyed!\nUnable to initiate repair \nprocess.");
 					return;
 				}
 				if(!mechplr.mech_shutdown)
 				{
-					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
+					mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Mech must be shutdown to initiate \n\c[Orange]repairs.");
 					return;
 				}
@@ -290,7 +290,7 @@ void drawArmoryInfo()
 				{
 					if(!repair_cost)  
 					{
-						mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
+						mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 						MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Nothing to repair.");
 						return;
 					}
@@ -301,21 +301,21 @@ void drawArmoryInfo()
 				}
 				else
 				{
-					mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
+					mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]You must select a component to repair!");
 				}
 			}
 			
 			if(checkCollision(mouse,plusbtn))
 			{	
-				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 				MechDoomerEvents.SendNetworkEvent("adjust_armor", hardpoint, 1);
 				plus = tBtnlit_Plus;
 				 mstats.left_btn = false;
 			}
 			if(checkCollision(mouse,minusbtn))
 			{
-				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 				MechDoomerEvents.SendNetworkEvent("adjust_armor", hardpoint, -1);
 				minus = tBtnlit_Minus;
 				mstats.left_btn = false;
@@ -331,7 +331,7 @@ void drawArmoryInfo()
 		if(checkCollision(mouse,rRA)) {hardpoint = 5; astat_selected=-1;}
 		if(checkCollision(mouse,rLL)) {hardpoint = 6; astat_selected=-1;}
 		if(checkCollision(mouse,rRL)) {hardpoint = 7; astat_selected=-1;}
-		if(php != hardpoint) mechplr.A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+		if(php != hardpoint) mechplr.S_StartSound("Mech/NextWeapon",CHAN_WEAPON);
 	}
 	
 	if(hardpoint >= 0)

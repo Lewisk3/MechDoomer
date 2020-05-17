@@ -214,13 +214,13 @@ bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 	
 	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(weap).weight) > mech_tonnage && !CheckCompensative())
 	{
-		A_PlaySound("UI/Error",CHAN_WEAPON);
+		S_StartSound("UI/Error",CHAN_BODY);
 		Mechlab_Alert("\c[DARKRED]Cannot equip weapon, over tonnage!");
 		return false;
 	}
 	if( hp.getFreeSlots() < GetDefaultByType(weap).hardslots )
 	{
-		A_PlaySound("UI/Error",CHAN_WEAPON);
+		S_StartSound("UI/Error",CHAN_BODY);
 		Mechlab_Alert("\c[DARKRED]Cannot equip weapon, no freeslots!");
 		return false;	
 	}
@@ -300,11 +300,11 @@ void sortWeaponInv()
 	for(int i = 0; i < sortedtypes.Size(); i++)
 	{
 		type = sortedtypes[i];
-		type.toLower();
+		type.MakeLower();
 		for(int x = 0; x < inv_context.weapon_items.Size(); x++)
 		{
 			String thing = inv_context.weapon_items[x].Tag;
-			thing.ToLower();
+			thing.MakeLower();
 			if(thing == type)
 			{
 				newinv.push(inv_context.weapon_items[x]);

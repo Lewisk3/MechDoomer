@@ -127,7 +127,7 @@ void mech_weapons()
 	if(HeatLevel <= MWHEAT_MAX*0.15) heatwarn = false;
 	if(HeatLevel > MWHEAT_MAX*0.275 && !heatwarn)
 	{
-		A_PlaySound("Mech/HeatWarn",1,1);
+		A_StartSound("Mech/HeatWarn", CHAN_VOICE, CHANF_OVERLAP);
 		mechsounds.pushSound("Mech/Betty/HeatCritical");
 		heatwarn = true;
 	}
@@ -142,16 +142,16 @@ void mech_weapons()
 	if(HeatLevel <= MWHEAT_MAX*0.32) canShutdown = true;
 	if( ((ticks - shutdown_timer) > MWHEAT_MAX) && doShutdown )
 	{
-		A_StopSound(1);
+		A_StopSound(CHAN_VOICE);
 		Cockpit_Alert("\c[SAPPHIRE]Shutting down...");
-		A_PlaySound("Mech/Betty/ShuttingDown",1);
+		A_StartSound("Mech/Betty/ShuttingDown", CHAN_VOICE);
 		doShutdown = true;
 		lockangle = angle;
 		lockpitch = pitch;
 		mech_shutdown = true;
 		shutdown_timer = ticks;
 		hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
-		A_PlaySound("Mech/Shutdown",2);
+		A_StartSound("Mech/Shutdown", CHAN_VOICE);
 	}
 	if(HeatLevel > MWHEAT_MAX) HeatLevel = MWHEAT_MAX;
 	
@@ -214,7 +214,7 @@ void mech_weapons()
 	{
 		Cockpit_Alert("\c[RED]Shutting down...");
 		mechsounds.pushSound("Mech/Betty/ShuttingDown");
-		A_PlaySound("Mech/Shutdown",1);
+		A_StartSound("Mech/Shutdown", CHAN_VOICE);
 		mech_shutdown = true;
 		manualshutdown = true;
 		lockpitch = pitch;
@@ -279,7 +279,7 @@ void mech_weapons()
 	{	
 		if(inv_context.weapons_count > 1)
 		{
-			A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+			A_StartSound("Mech/NextWeapon",CHAN_WEAPON, CHANF_OVERLAP);
 			selectedWeapon++;
 		}
 		if(selectedWeapon > inv_context.weapons_count) selectedWeapon = 1;
@@ -289,7 +289,7 @@ void mech_weapons()
 	{
 		if(inv_context.weapons_count > 1)
 		{
-			A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+			A_StartSound("Mech/NextWeapon",CHAN_WEAPON, CHANF_OVERLAP);
 			selectedWeapon--;
 		}
 		if(selectedWeapon < 1) selectedWeapon = inv_context.weapons_count;

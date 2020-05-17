@@ -331,7 +331,7 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		*/
 		if(hpoint.internalhp <= 0)
 		{
-			plr.A_PlaySound("UI/Error",CHAN_WEAPON);
+			plr.S_StartSound("UI/Error",CHAN_BODY);
 			plr.mechlab_alert("\c[RED]Hardpoint must be repaired first!");
 			return;
 		}
@@ -342,7 +342,7 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 			plr.TakeInventory(getClassName(),1);
 		else
 		{
-			plr.A_PlaySound("UI/Error",CHAN_WEAPON);
+			plr.S_StartSound("UI/Error",CHAN_BODY);
 			plr.mechlab_alert("\c[RED]Cannot add armor, over-tonnage!");
 			hpoint.armor--;
 		}

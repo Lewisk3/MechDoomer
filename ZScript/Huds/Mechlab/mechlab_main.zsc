@@ -96,7 +96,7 @@ void ProcessLoadoutButtons()
 		if(checkCollision(mouse,rRA)) {hardpoint = 5; clearSelected(doclear);}
 		if(checkCollision(mouse,rLL)) {hardpoint = 6; clearSelected(doclear);}
 		if(checkCollision(mouse,rRL)) {hardpoint = 7; clearSelected(doclear);}
-		if(hardpoint != php) mechplr.A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+		if(hardpoint != php) mechplr.S_StartSound("Mech/NextWeapon",CHAN_WEAPON);
 		
 		// Shop
 		if(checkCollision(mouse,shopbtn)) 
@@ -109,7 +109,7 @@ void ProcessLoadoutButtons()
 		if(checkCollision(mouse,invmodebtn) && !mechplr.isdead) 
 		{
 			clearSelected();
-			mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+			mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 			mstats.left_btn = false;
 			mechmode = !mechmode;
 			if(!mechmode) 
@@ -122,7 +122,7 @@ void ProcessLoadoutButtons()
 		// Sort
 		if(checkCollision(mouse,sortbtn)) 
 		{
-			mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+			mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 			if(!mechmode)
 				MechDoomerEvents.SendNetworkEvent("sort_inv");
 			else
@@ -135,7 +135,7 @@ void ProcessLoadoutButtons()
 		{
 			if(selected_item.index > -1)
 			{
-				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 				if(!mechmode)
 				{
 					int amt = valid_inv_context.weapon_items[selected_item.index].amt;
@@ -159,7 +159,7 @@ void ProcessLoadoutButtons()
 		// Hardpoint safe check
 		if( !mechmode && !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
 		{
-			mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
+			mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[DarkRed]Hardpoint is destroyed!");
 			return;
 		}
@@ -169,7 +169,7 @@ void ProcessLoadoutButtons()
 		{
 			if(selected_item.index > -1)
 			{
-				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 				mstats.left_btn = false;
 				
 				if(!mechmode && selected_item.location)
@@ -182,7 +182,7 @@ void ProcessLoadoutButtons()
 					// TODO: Switch mech logic, require mech shutdown.
 					if(!mechplr.mech_shutdown)
 					{
-						mechplr.A_PlaySound("UI/Error",CHAN_WEAPON);
+						mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 						MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Active mech must be shutdown\nfirst!");
 						return;
 					}
@@ -198,7 +198,7 @@ void ProcessLoadoutButtons()
 		{
 			if(selected_item.index > -1)
 			{
-				mechplr.A_PlaySound("UI/PressButton",CHAN_WEAPON);
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 				int amt = valid_inv_context.weapon_items[selected_item.index].amt;
 				if(selected_item.mWeapon) MechDoomerEvents.SendNetworkEvent("equip_invweap",selected_item.index,hardpoint);
 				if(selected_item.mUtil  ) MechDoomerEvents.SendNetworkEvent("equip_structinvweap",selected_item.index,hardpoint);

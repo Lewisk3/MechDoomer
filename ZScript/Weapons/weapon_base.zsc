@@ -389,7 +389,7 @@ class Mechbase_Weapon : Item_NoPickup
 		{
 			switch_timer = 35/2;
 			DoAmmoSwitch(ammo_mode+1);
-			plr.A_PlaySound("Mech/NextWeapon",CHAN_WEAPON);
+			plr.S_StartSound("Mech/NextWeapon",CHAN_WEAPON);
 		}
 		
 		// Discard lock if we're not a homing weapon and we've just been selected.
@@ -573,7 +573,6 @@ class MechMissile : Mechbase_Actor
 			{ 
 				if(inrange) 
 				{
-					A_PlaySound("weapons/rocklx");
 					A_Explode(damage/2,256,0); 
 					Spawn("MissileExplosion",pos); 
 				}
@@ -649,7 +648,7 @@ class Laser : Mechbase_Actor
 					A_SpawnParticle(gfx_color,SPF_FULLBRIGHT | SPF_RELATIVE,16,2,
 					random(-45,45),random(-30,30),0,random(-30,30),0,3,0.5,0);
 				}
-				A_PlaySound("Laser/Impact",CHAN_BODY);
+				A_StartSound("Laser/Impact",CHAN_BODY);
 			}
 		stop;
 	}
@@ -670,6 +669,7 @@ class PPCExplosion : Actor
 	States
 	{
 		Spawn:
+			// PPC Impacts sound really good without attenuation.
 			TNT1 A 0 NoDelay S_StartSound("Classic/PPC/Impact", CHAN_BODY);
 			PEXP OPABCDEFGHIJKLMN 2;
 		stop;
@@ -690,7 +690,11 @@ class MissileExplosion : Actor
 	States
 	{
 		Spawn:
-			EXPL ABCDEFGHIJKLMNOP 2;
+			EXPL A 2 NoDelay
+			{
+				A_StartSound("weapons/rocklx", CHAN_BODY);
+			}
+			EXPL BCDEFGHIJKLMNOP 2;
 		stop;
 	}
 }

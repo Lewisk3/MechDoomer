@@ -201,8 +201,8 @@ class MechDoomerEvents : EventHandler
 		{SourceName = e.DamageSource.GetClassName();}
 		
 		// Make names easier to check against.
-		SourceName.ToLower();
-		ThingHit.ToLower();
+		SourceName.MakeLower();
+		ThingHit.MakeLower();
 
 		int Thinghealth = e.Thing.SpawnHealth();
 		int gibhealth = -Thinghealth;
@@ -335,7 +335,7 @@ class MechDoomerEvents : EventHandler
 					{
 						plr.mechSounds.pushSound("Mech/Betty/LightAmp");
 						plr.mechSounds.pushSound("Mech/Betty/Engaged");
-						plr.A_PlaySound("Mech/Infrared",CHAN_WEAPON);
+						plr.S_StartSound("Mech/Infrared",CHAN_WEAPON);
 					}
 				}
 			}
@@ -586,7 +586,7 @@ class MechDoomerEvents : EventHandler
 			}
 			if(netcmds[0] == "mechsetgroup")
 			{
-				int amt = (netcmds[1].CharCodeAt(0))-48;
+				int amt = (netcmds[1].ByteAt(0))-48;
 				plr.GiveInventory("IBTN_SETWEAPGRP",amt);
 			}
 			if(netcmds[0] == "giveweapon")

@@ -73,7 +73,7 @@ void StartMechChange(int invmech)
 	if(!mech_shutdown)
 	{
 		mechsounds.pushSound("Mech/Betty/ShuttingDown");
-		A_PlaySound("Mech/Shutdown",1);
+		A_StartSound("Mech/Shutdown", CHAN_WEAPON);
 	}
 	player.cheats &= ~CF_TOTALLYFROZEN;
 	mech_shutdown = true; 
