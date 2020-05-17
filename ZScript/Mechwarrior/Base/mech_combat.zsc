@@ -94,11 +94,7 @@ void ProcessDeath(Actor killer)
 // Main
 void mech_weapons()
 {
-	if((ticks - prevticks ) > 5)
-	{
-		buttonTick = true;
-		prevticks = ticks;
-	}
+	if(!player) return;
 	
 	bool firing = (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) || 
 				  (GetPlayerInput(INPUT_BUTTONS) & BT_USER1 ) ||
@@ -113,7 +109,7 @@ void mech_weapons()
 	process_antimissilesystem();
 	
 	// Process hot/damaging floors. (Increase HeatLevel every 2 ticks)
-	if( player && player.onground && CurSector.damageamount != 0 && !(level.maptime%2) )
+	if( player.onground && CurSector.damageamount != 0 && !(level.maptime%2) )
 	{
 		HeatLevel += CurSector.damageamount * 0.01;
 	}
@@ -164,8 +160,6 @@ void mech_weapons()
 	if( (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) && getSelectedWeapon() && !pilotlook )
 	{
 		FireWeapons(weapon_groupfire);
-		weapons_fired = true;
-		if(buttonTick)buttonTick = false;
 	}
 	if(!firing && weapons_fired && getSelectedWeapon() && !getSelectedWeapon().dofire) 
 	{	
@@ -275,22 +269,10 @@ void mech_weapons()
 	
 	if(!pilotlook)
 	{
-		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER1)
-		{
-			if(FireGroup(1)) weapons_fired = true;
-		}
-		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER2)
-		{
-			if(FireGroup(2)) weapons_fired = true;
-		}
-		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER3)
-		{
-			if(FireGroup(3)) weapons_fired = true;
-		}
-		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER4)
-		{
-			if(FireGroup(4)) weapons_fired = true;	
-		}
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER1) FireGroup(1);
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER2) FireGroup(2);
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER3) FireGroup(3);
+		if(GetPlayerInput(INPUT_BUTTONS) & BT_USER4) FireGroup(4);
 	}
 	
 	if(countinv("IBTN_NEXTWEAPON"))

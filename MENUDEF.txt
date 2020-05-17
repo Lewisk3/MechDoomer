@@ -130,11 +130,11 @@ OptionMenu "MechDoomerMenu"
 	
 	Slider "Crosshair Scale", mwd_crosshairsize, 0.1, 2.0, 0.01, 2
 	StaticText "Adjust the size of the weapons system crosshair.", "Black"
-	StaticText "Default: 1.0", "Black"
+	StaticText "Default: 0.90", "Black"
 	StaticText " "
 	Slider "Text Scale", "mwd_fontscale", 0.1, 2.0, 0.01, 2
 	StaticText "Adjust size of Text for HUD and Mechlab", "Black"
-	StaticText "1.0 is the default size", "Black"
+	StaticText "0.80 is the default size", "Black"
 	StaticText " " 
 	StaticText " " 
 }

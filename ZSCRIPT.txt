@@ -1,6 +1,6 @@
 version "4.0"
 
-const mechdoomer_version = "3.00a";
+const mechdoomer_version = "1.00b";
 
 class HudSpriteInitializer : Actor
 {

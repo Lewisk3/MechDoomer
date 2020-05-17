@@ -9,6 +9,8 @@ class Weapon_NoPickup : Weapon
 	}	
 }
 
+// This controls the crosshair sprites but, it's mainly for legacy support.
+// It's still possible to create a mech with a Cockpit sprite instead of model.
 class WeaponsHandler : Weapon_NoPickup
 {
 	int bobdir;

@@ -329,7 +329,11 @@ bool FireGroup(int group, bool alpha=false, bool forcegroup=false)
 			let ww = Mechbase_Weapon(w);
 			if(ww)
 			{	
-				if( (ww.group == group) || alpha) ww.MWFire();
+				if( (ww.group == group) || alpha) 
+				{
+					if(!ww.MWFire() && !weapons_fired) S_StartSound("Mech/WeaponBusy", CHAN_OVERLAP);
+					weapons_fired = true;
+				}
 			}
 		}
 	}
@@ -338,7 +342,11 @@ bool FireGroup(int group, bool alpha=false, bool forcegroup=false)
 		int curgrp = getWeaponGroupAt(selectedWeapon);
 		if(curgrp != group) selectedWeapon = getNearestWeaponAt(group);
 		let weap = getSelectedWeapon();
-		if(weap) weap.MWFire();
+		if(weap) 
+		{
+			if(!weap.MWFire() && !weapons_fired) S_StartSound("Mech/WeaponBusy", CHAN_OVERLAP);
+			weapons_fired = true;
+		}
 	}
 	return true;
 }
@@ -349,17 +357,12 @@ void FireWeapons(bool groupfire=true)
 	{	
 		let ww = Mechbase_Weapon(w);
 		if(ww)
-		{	if(groupfire)
+		{	
+			bool valid = groupfire ? (ww.group == getWeaponGroupAt(selectedWeapon)) : (ww.WeaponID == selectedWeapon);
+			if(valid)
 			{
-				//int bit = 2 ** (ww.group-1);
-				if(ww.group == getWeaponGroupAt(selectedWeapon))
-				{
-					if(!ww.MWFire() && buttonTick && !weapon_groupfire) A_PlaySound("Mech/WeaponBusy",3);
-				}
-			}
-			else if(ww.WeaponID == selectedWeapon)
-			{
-				if(!ww.MWFire() && buttonTick && !weapon_groupfire && weapons_fired == 0) A_PlaySound("Mech/WeaponBusy",3);
+				if(!ww.MWFire() && !weapons_fired) S_StartSound("Mech/WeaponBusy", CHAN_OVERLAP);
+				weapons_fired = true;
 			}
 		}
 	}
