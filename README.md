@@ -4,6 +4,14 @@
  MechDoomer is a Mechwarrior 2 gameplay mod for GZDoom, its goal is to bring the simulator
  aspects of Mechwarrior 2 into Doom.
 
+# Recommended Mods 
+ Mod | Description | Author
+------------ | ------------- | -------------
+[Big Doom](https://forum.zdoom.org/viewtopic.php?f=43&t=68532) | "Big Doom is a mutator that resizes Doom maps, making them either very cramped or just huge." | Josh711
+[Rampancy](https://forum.zdoom.org/viewtopic.php?f=43&t=67193) | "Rampancy is a robot-themed monsterpack for GZDoom, designed for maximum compatibility with weapon mods and mapsets."| Yholl
+
+
+
 # CVar List
 *	`bool mwd_throttledecay`
 *	`bool mwd_nohud`
@@ -26,7 +34,6 @@
 ### Network Events
 > Command template is; netevent "#command#:#argument#".  
 > Omit "#" when running these commands. 
-
 
  Command | Effect
 ------------ | -------------
