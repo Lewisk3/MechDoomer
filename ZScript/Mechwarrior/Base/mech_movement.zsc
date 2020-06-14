@@ -174,15 +174,23 @@ void DoAutopilot()
 }
 
 // Main
+const HOURTOSEC = 3600.;
+const TICRATE = 35.;
 void setupSpeedKPH(double kph)
 {
+	// Calculations based on physics.
+	double meters = (kph*1000.)/HOURTOSEC;
+	double units = meters*MWGAMEPLAY_UNITMETER;
+	double unitspeed = (units/TICRATE) * MWGAMEPLAY_MECHSPEEDSCALE;
 	MoveSpeedKPH = kph;
-	MoveSpeed = ((kph*(10.0/36.0))/35.0) * (34*MWGAMEPLAY_MECHSPEEDSCALE);
+	MoveSpeed = unitspeed; 
 	MoveSpeed_Max = MoveSpeed;
 	
+	// Pseudo speed calculations.
 	//kph_default = 25000; //75000
 	//kph_real = 25000/MWGAMEPLAY_MECHSPEEDSCALE;
 	//MoveSpeed = ceil((MoveSpeedKPH*15000)/kph_real);
+	//MoveSpeed = ((kph*(10.0/36.0))/35.0) * (34*MWGAMEPLAY_MECHSPEEDSCALE);
 }
 
 void mech_cockpitbob()
@@ -265,7 +273,7 @@ void mech_movement()
 			setupSpeedKPH(clamp(EngineGetKPH(),0,200));
 		}
 		double truetonnage = mech_shutdown ? mech_tonnage*0.25 : mech_tonnage;
-		overfactor = clamp( (truetonnage/(inv_context.weapons_tonnage))*1.4, 0.1, 1.0);
+		overfactor = clamp( (truetonnage/(inv_context.weapons_tonnage))*1.8, 0.1, 1.0);
 		setupSpeedKPH(EngineGetKPH()*overfactor);
 		double finalspd = clamp(MoveSpeed*0.3*overfactor*throttle_max, 0.1, 1.45);
 		A_SetSpeed(finalspd);
@@ -316,7 +324,7 @@ void mech_movement()
 			TakeInventory("IBTN_STOP",1);
 			if(snd_accelerate){ A_StartSound("Mech/AccelFromStop", CHAN_WEAPON); snd_accelerate = false; }
 		}
-		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle > 0.02)
+		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle > 0.02 && !autopilot)
 		{
 			throttle -= 0.02;
 			if(!snd_accelerate){ A_StartSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }

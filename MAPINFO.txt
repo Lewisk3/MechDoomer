@@ -12,7 +12,7 @@ GameInfo
 {	
 	titlemusic = "MW2_TTL"
 	statusbarclass = "MechStatusBar"
-	eventhandlers = "MechDoomerEvents"
+	addeventhandlers = "MechDoomerEvents"
 	addeventhandlers = "ColorTintShaderManager" 
 	
 	PlayerClasses = "BattleArmor",

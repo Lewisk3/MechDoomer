@@ -33,7 +33,7 @@ class MGunBullet : MechBullet
 		xscale 1.2;
 		yscale 1.2;
 		Mechbase_Actor.Heat MWHEAT_MGUN;
-		Mechbase_Actor.MaximumRange 70;
+		Mechbase_Actor.MaximumRange 90;
 	}
 }
 
