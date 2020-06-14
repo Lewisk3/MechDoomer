@@ -94,6 +94,12 @@ void ProcessDeath(Actor killer)
 // Main
 void mech_weapons()
 {
+	// Calc HeatEff before player check because it's used for defaults.
+	class<Heatsink> hs = "Heatsink";
+	class<Heatsink> dhs = "DoubleHeatsink";
+	double HSinkEff = (countStruct("Heatsink")*GetDefaultByType(hs).cooling/35)+(countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling/35);
+	HeatEfficiency = inv_context.heateff+baseHeatEfficiency+HSinkEff;
+	// Return if invalid.
 	if(!player) return;
 	
 	bool firing = (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) || 
@@ -104,8 +110,6 @@ void mech_weapons()
 
 	// Process Heat levels and struct functionality.
 	deltaHeat = HeatLevel-prevheat;
-	class<Heatsink> hs = "Heatsink";
-	class<Heatsink> dhs = "DoubleHeatsink";
 	process_antimissilesystem();
 	
 	// Process hot/damaging floors. (Increase HeatLevel every 2 ticks)
@@ -114,8 +118,6 @@ void mech_weapons()
 		HeatLevel += CurSector.damageamount * 0.01;
 	}
 	
-	double HSinkEff = (countStruct("Heatsink")*GetDefaultByType(hs).cooling/35)+(countStruct("DoubleHeatsink")*GetDefaultByType(dhs).cooling/35);
-	HeatEfficiency = inv_context.heateff+baseHeatEfficiency+HSinkEff; 
 	Mech_HasJets = (countStruct("JumpJet") > 0);
 	Mech_JetCount = countStruct("JumpJet");
 	if(supersink) HeatEfficiency *= 3;

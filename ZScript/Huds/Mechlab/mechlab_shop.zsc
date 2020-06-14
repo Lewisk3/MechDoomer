@@ -370,18 +370,13 @@ void drawShopItemInfo()
 		let mechdefs = GetDefaultByType(mech.baseclass);
 		if(!mech) return;
 	
-		String weapston = (mech.inv_defs.weapons_tonnage .. "");
-		String armston = (mech.inv_defs.armor_tonnage .. "");
-		String mechston = (mechdefs.mech_tonnage .. "");
-		String heateff = mech.inv_defs.heateff*35 .. "";
-		String maxspd = mech.inv_defs.MoveSpeedKPH .. "";
+		String weapston = MDMath.GetPrintableFloat(mech.inv_defs.weapons_tonnage);
+		String armston  = MDMath.GetPrintableFloat(mech.inv_defs.armor_tonnage);
+		String mechston = MDMath.GetPrintableFloat(mechdefs.mech_tonnage);
+		String heateff  = MDMath.GetPrintableFloat(mech.inv_defs.heateff*35,2);
+		String maxspd   = MDMath.GetPrintableFloat(mech.inv_defs.MoveSpeedKPH,2);
 		string enginetype = mech.inv_defs.engine ? mech.inv_defs.engine.displayName : "INVALID ENGINE";
 		
-		maxspd.truncate(maxspd.Length()-4);
-		weapston.truncate(weapston.length()-3);
-		armston.truncate(armston.length()-3);
-		heateff.truncate(heateff.Length()-3);
-		mechston.truncate(mechston.length()-3);
 		enginetype.truncate(enginetype.Length()-7);
 		
 		vector2 detailpos = (280,390);
