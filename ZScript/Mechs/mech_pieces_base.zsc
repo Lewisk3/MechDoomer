@@ -178,12 +178,12 @@ class MechCockpitCamera : MechPartsBase
 	{
 		double distoffs = cxoffs;
 		FLineTraceData lndata;
-		mechowner.LineTrace(angle,cxoffs,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,czoffs-sin(mechowner.pitch),0,0,lndata);
+		mechowner.LineTrace(angle,cxoffs+128,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,czoffs+sin(mechowner.pitch),0,0,lndata);
 		if( lndata.HitType == lndata.TRACE_HitWall    || 
 		    lndata.HitType == lndata.TRACE_HitCeiling || 
 			lndata.HitType == TRACE_HitFloor			  ) 
 		{
-			distoffs = lndata.Distance-20;
+			if(distoffs > lndata.Distance-50) distoffs = lndata.Distance-50;
 		}
 		if(mechowner.pos.z+czoffs+20 > ceilingz) 
 		{
@@ -233,12 +233,12 @@ class MechCockpitModel : MechPartsBase
 		double fxoffs = cockpitcam.cxoffs+mxoffs;
 		double fzoffs = cockpitcam.czoffs+mzoffs;
 		FLineTraceData lndata;
-		mechowner.LineTrace(angle,fxoffs,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,fzoffs-sin(mechowner.pitch),0,0,lndata);
+		mechowner.LineTrace(angle,fxoffs+128,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,fzoffs+sin(mechowner.pitch),0,0,lndata);
 		if( lndata.HitType == lndata.TRACE_HitWall    || 
 		    lndata.HitType == lndata.TRACE_HitCeiling || 
 			lndata.HitType == TRACE_HitFloor			  ) 
 		{
-			fxoffs = lndata.Distance-20;
+			if(fxoffs > lndata.Distance-50) fxoffs = lndata.Distance-50;
 		}
 		if(mechowner.pos.z+fzoffs+20 > ceilingz) 
 		{
