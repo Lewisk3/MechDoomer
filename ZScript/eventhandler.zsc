@@ -371,6 +371,7 @@ class MechDoomerEvents : EventHandler
 				SoundOnActor.Trigger("Mech/Blip",plr);
 				plr.hud_htal = !plr.hud_htal;
 			}
+			if(netcmd == "hud_resetanimflags") plr.hAlert.hud_powersequence = 0;
 			if(netcmd == "toggle_autopilot") plr.ToggleAutopilot();
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);

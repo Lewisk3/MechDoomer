@@ -131,6 +131,11 @@ class MechPartsBase : Actor
 		MechPartsBase.CockpitOffset 0, 60;
 	}
 	
+	bool CheckLocalObserver()
+	{
+		return mechowner == MechwarriorBase(players[consoleplayer].mo);
+	}
+	
 	virtual vector3 getMechPos()
 	{
 		vector3 basepos = mechowner.Vec3Offset(0,0,zoffs);
@@ -303,12 +308,17 @@ class MechCockpitModel : MechPartsBase
 			mzoffs = (mechowner.viewzoffs*0.12)*bobrange;
 		}
 		
-		if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
-			bInvisible = false;
-		else 
+		// Only visible for the local player.
+		if(CheckLocalObserver())
+		{
+			if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
+				bInvisible = false;
+			else 
+				bInvisible = true;
+		}
+		else
 			bInvisible = true;
-		
-		// bInvisible = false; // Debug
+			
 		super.Tick();
 	}
 }
@@ -357,9 +367,11 @@ class MechArmsBase : MechPartsBase
 	
 	override void tick()
 	{
+		super.tick();
+		if(!mechowner) return;
 		let base = mechowner.models_reference;
 		let cockpit = base.cockpit;
-		if(mechowner && base)
+		if(mechowner && base && CheckLocalObserver())
 		{		
 			// For now, the arms will be invisible in 3rd person but, i do want them to actually
 			// function at some point, can't get the math just right atm.
@@ -379,7 +391,8 @@ class MechArmsBase : MechPartsBase
 				angle = cockpit.angle;
 			}
 		}
-		super.tick();
+		else
+			bInvisible = true;
 	}
 }
 
@@ -473,8 +486,13 @@ class MechTorsoBase : MechPartsBase
 			{
 				angle = mechowner.LegAng;
 			}
-			if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
-				bInvisible = true;
+			if(CheckLocalObserver())
+			{
+				if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
+					bInvisible = true;
+				else
+					bInvisible = false;
+			}
 			else
 				bInvisible = false;
 		}
@@ -505,8 +523,13 @@ class MechHipsBase : MechPartsBase
 			angle = mechowner.LegAng;
 			pitch = mechowner.models_reference.pitch;
 			
-			if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
-				bInvisible = true;
+			if(CheckLocalObserver())
+			{
+				if(!mechowner.dronecam && !mechowner.CheckVoodoo()) 
+					bInvisible = true;
+				else
+					bInvisible = false;
+			}
 			else
 				bInvisible = false;
 		}
@@ -530,11 +553,18 @@ class MechLegsBase : MechPartsBase
 	
 	override void tick()
 	{
+		super.tick();
+		if(!mechowner) return;
 		angle = mechowner.LegAng;
 		if(mechowner && !mechowner.CheckVoodoo())
 		{
-			if((!mechowner.dronecam && mechowner.nofirstpersonlegs)) 
-				bInvisible = true;
+			if(CheckLocalObserver())
+			{
+				if((!mechowner.dronecam && mechowner.nofirstpersonlegs)) 
+					bInvisible = true;
+				else
+					bInvisible = false;
+			}
 			else
 				bInvisible = false;
 				
@@ -547,7 +577,6 @@ class MechLegsBase : MechPartsBase
 			spdrating = curspd / (truemove*runspeed);
 			stompfriction = stomp_wrating + stomp_spdrating;
 		}
-		super.tick();
 	}
 	bool isMoving()
 	{

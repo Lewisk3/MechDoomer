@@ -310,7 +310,10 @@ class Legs_BattleArmor : MechLegsBase
 		if(mechowner)
 		{
 			angle = mechowner.angle;
-			bInvisible = (!mechowner.dronecam && mechowner.nofirstpersonlegs) && !mechowner.CheckVoodoo();
+			if(CheckLocalObserver())
+				bInvisible = (!mechowner.dronecam && mechowner.nofirstpersonlegs) && !mechowner.CheckVoodoo();
+			else
+				bInvisible = false;
 				
 			if(!mechowner.CheckVoodoo()) spdrating = (mechowner.overfactor * mechowner.MoveSpeedKPH)/160.;
 		}

@@ -1215,7 +1215,7 @@ class MechTargetReticle : Actor
 		RETC A 0 Bright; // primer state. The frame gets changed on spawn.
 		RETC "#" 1 Bright 
 		{
-			if(CVar.GetCVar("mwd_viewport_target",master.player).getBool())
+			if(master && master.player && CVar.GetCVar("mwd_viewport_target",master.player).getBool())
 			{
 				sprite = GetSpriteIndex("TNT1");
 			}

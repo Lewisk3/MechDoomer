@@ -6,6 +6,13 @@ struct FadingText
 	int col;
 }
 
+struct MechMsg
+{
+	string msg;
+	double timer;
+}
+
+
 class MechStatusBar : BaseStatusBar
 {
 	Mechwarrior mechplr;
@@ -35,6 +42,9 @@ class MechStatusBar : BaseStatusBar
 	FadingText dCash;
 	vector2 font_scale;
 	
+	// Animation(s)
+	uint power_animflags;
+	bool power_animating;
 	
 	// Scalar constant
 	double defwidth;
@@ -47,6 +57,10 @@ class MechStatusBar : BaseStatusBar
 	double tAnim_weapons;
 	vector2 tAnim_targetscale;
 	
+	// Messages
+	MechMsg mechmsg_one;
+	MechMsg mechmsg_two;
+	
 	enum AnimElements
 	{
 		ANIM_RADAR  = 1,
@@ -56,8 +70,7 @@ class MechStatusBar : BaseStatusBar
 	bool CheckAnimating()
 	{
 		if(!mechplr) return false;
-		uint flags = mechplr.hAlert.hud_powersequence;
-		return (flags & ANIM_RADAR) || (flags & ANIM_WEAPS) || (flags & ANIM_TARGET);
+		return (power_animflags & ANIM_RADAR) || (power_animflags & ANIM_WEAPS) || (power_animflags & ANIM_TARGET);
 	}
 	clearscope static uint GetAnimFlags()
 	{
@@ -145,7 +158,34 @@ class MechStatusBar : BaseStatusBar
 					if(cashcounter > mechplr.inv_context.money_cbills) cashcounter = mechplr.inv_context.money_cbills;
 					if(money/20 == 0) cashcounter = mechplr.inv_context.money_cbills;
 				}
-				
+			}
+			
+			// Update for animations
+			if(mechplr.hAlert.hud_powersequence != 0 && !power_animating)
+			{
+				power_animflags = mechplr.hAlert.hud_powersequence;
+				power_animating = true;
+				MechDoomerEvents.SendNetworkEvent("hud_resetanimflags");
+			}
+			else if(power_animating && power_animflags == 0)
+			{
+				power_animating = false;
+			}
+			// Update for cockpit messages
+			int msize = mechplr.hAlert.cockpit_messages.Size();
+			String message_one = msize>0 ? mechplr.hAlert.cockpit_messages[0] : "";
+			String message_two = msize>1 ? mechplr.hAlert.cockpit_messages[1] : "";
+			if(message_one != "" && mechmsg_one.msg != message_one)
+			{
+				mechmsg_one.msg = message_one;
+				mechmsg_one.timer = mechplr.hAlert.mtimer1;
+				MechDoomerEvents.SendNetworkEvent("cockpit_alert:[clear1]");
+			}
+			if(message_two != "" && mechmsg_two.msg != message_two)
+			{
+				mechmsg_two.msg = message_two;
+				mechmsg_two.timer = mechplr.hAlert.mtimer2;
+				MechDoomerEvents.SendNetworkEvent("cockpit_alert:[reset]");
 			}
 		}
 	
@@ -158,47 +198,35 @@ class MechStatusBar : BaseStatusBar
 	
 	void DrawCockpitMessages()
 	{
-		int msize = mechplr.hAlert.cockpit_messages.Size();
-		String message_one = msize>0 ? mechplr.hAlert.cockpit_messages[0] : "";
-		String message_two = msize>1 ? mechplr.hAlert.cockpit_messages[1] : "";
-		double alpha_one = mechplr.hAlert.mtimer1;
-		double alpha_two = mechplr.hAlert.mtimer2;
+		double alpha_one = mechmsg_one.timer;
+		double alpha_two = mechmsg_two.timer;
 		double ypos = 28;
 		
 		// Milliseconds are way more natural to work with than Tic Fractions.
 		double fadeamt = 0.1 * deltatime;
 		
 		// Message and alpha processing.
-		if(message_one != "")
+		if(mechmsg_one.msg)
 		{
 			H_DrawImage("MSGBAR",(960,ypos),MD_SBS.SS_SCREEN_TOP_LEFT,scale:(3.0,2.0), alpha:alpha_one);
-			H_DrawString(message_one, (32,ypos-12), scale:(2.5, 1.8), alpha:alpha_one);
+			H_DrawString(mechmsg_one.msg, (32,ypos-12), scale:(2.5, 1.8), alpha:alpha_one);
 		}
 		ypos = 1080-28;
-		if(message_two != "")
+		if(mechmsg_two.msg)
 		{
 			H_DrawImage("MSGBAR",(960,ypos),MD_SBS.SS_SCREEN_TOP_LEFT,scale:(3.0,2.0), alpha:alpha_two);
-			H_DrawString(message_two, (32,ypos-12), scale:(2.5, 1.8), alpha:alpha_two);
+			H_DrawString(mechmsg_two.msg, (32,ypos-12), scale:(2.5, 1.8), alpha:alpha_two);
 		}
 		
-		if(alpha_one > 0 && message_one != "")
+		if(alpha_one > 0 && mechmsg_one.msg != "")
 		{	
-			mechplr.hAlert.mtimer1 -= fadeamt;
-			if(mechplr.hAlert.mtimer1 <= 0.1) 
-			{
-				mechplr.hAlert.cockpit_messages[0] = "";
-				if(message_two == "")
-					MechDoomerEvents.SendNetworkEvent("cockpit_alert:[reset]");
-			}
+			mechmsg_one.timer -= fadeamt;
+			if(mechmsg_one.timer <= 0.1) mechmsg_one.msg = "";
 		}
-		if(alpha_two > 0 && message_two != "")
+		if(alpha_two > 0 && mechmsg_two.msg != "")
 		{	
-			mechplr.hAlert.mtimer2 -= fadeamt;
-			if(mechplr.hAlert.mtimer2 <= 0.1) 
-			{
-				mechplr.hAlert.cockpit_messages[1] = "";
-				MechDoomerEvents.SendNetworkEvent("cockpit_alert:[reset]");
-			}
+			mechmsg_two.timer -= fadeamt;
+			if(mechmsg_two.timer <= 0.1) mechmsg_two.msg = "";
 		}
 	}
 	
@@ -208,7 +236,7 @@ class MechStatusBar : BaseStatusBar
 		if(CPlayer && CPlayer.mo)
 		{
 			let mech = MechWarrior(CPlayer.mo);	
-			bool animating = mech.hAlert.hud_powersequence & ANIM_WEAPS;
+			bool animating = power_animflags & ANIM_WEAPS;
 			bool shutdownanim = mech.mech_shutdown && !mech.mech_poweringup;
 			if(!animating && shutdownanim) 
 			{
@@ -221,7 +249,7 @@ class MechStatusBar : BaseStatusBar
 				tAnim_weapons += (0.01 * deltatime);
 				if(tAnim_weapons >= 1.0) 
 				{
-					MDMath.UnsetFlag(mech.hAlert.hud_powersequence, ANIM_WEAPS);
+					MDMath.UnsetFlag(power_animflags, ANIM_WEAPS);
 					tAnim_weapons = 0;
 				}
 			}
@@ -532,7 +560,7 @@ class MechStatusBar : BaseStatusBar
 			int mode = mech.radar_scale;
 			double range = ranges[mech.radar_range];
 			double scale = range * 0.04;
-			bool animating = mech.hAlert.hud_powersequence & ANIM_RADAR;
+			bool animating = power_animflags & ANIM_RADAR;
 			if(!animating && shutdownanim) return;
 			
 			ThinkerIterator act_it = ThinkerIterator.Create("Actor");
@@ -543,7 +571,7 @@ class MechStatusBar : BaseStatusBar
 				
 				if(tAnim_radar >= 160) 
 				{
-					MDMath.UnsetFlag(mech.hAlert.hud_powersequence, ANIM_RADAR);
+					MDMath.UnsetFlag(power_animflags, ANIM_RADAR);
 					tAnim_radar = 0;
 				}
 				
@@ -650,7 +678,7 @@ class MechStatusBar : BaseStatusBar
 		let mech = mechplr;
 		
 		bool shutdownanim = mech.mech_shutdown && !mech.mech_poweringup;
-		bool animating = mech.hAlert.hud_powersequence & ANIM_TARGET;
+		bool animating = power_animflags & ANIM_TARGET;
 		if(!animating && shutdownanim) return;
 		if(animating)
 		{	
@@ -661,7 +689,7 @@ class MechStatusBar : BaseStatusBar
 				if(tAnim_targetscale.x >= 0.4 && tAnim_targetscale.y >= 0.5)
 				{
 					tAnim_targetscale = (0,0);
-					MDMath.UnsetFlag(mech.hAlert.hud_powersequence, ANIM_TARGET);
+					MDMath.UnsetFlag(power_animflags, ANIM_TARGET);
 				}
 			}
 			else
@@ -671,7 +699,7 @@ class MechStatusBar : BaseStatusBar
 				if(tAnim_targetscale.x >= 1.2 && tAnim_targetscale.y >= 1.2)
 				{
 					tAnim_targetscale = (0,0);
-					MDMath.UnsetFlag(mech.hAlert.hud_powersequence, ANIM_TARGET);
+					MDMath.UnsetFlag(power_animflags, ANIM_TARGET);
 				}
 			}
 		}
