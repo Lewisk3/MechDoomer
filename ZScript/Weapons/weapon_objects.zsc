@@ -172,6 +172,7 @@ class SRM : MechMissile
 		Mechbase_Actor.MaximumRange 260;
 		MechMissile.Homming false;
 		Mechbase_Actor.Heat MWHEAT_SRM;
+		MechMissile.ExplosionScale 0.5;
 	}
 }
 class SSRM : SRM
@@ -214,6 +215,7 @@ class CATM : MechMissile
 		Mechbase_Actor.MaximumRange 800;
 		MechMissile.Homming false;
 		Mechbase_Actor.Heat MWHEAT_ATM;
+		MechMissile.ExplosionScale 0.5;
 	}
 }
 class HE_CATM : CATM

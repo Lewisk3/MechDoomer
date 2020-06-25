@@ -283,6 +283,8 @@ class Mechbase_Weapon : Item_NoPickup
 			// Get shoot position and offsets
 			xoffset += random(-invoker.basespreadx,invoker.basespreadx);
 			yoffset += random(-invoker.basespready,invoker.basespready);
+			let weapdefs = GetDefaultByType(type);
+			if(MechMissile(weapdefs)) yoffset = clamp(yoffset, weapdefs.height, int.max);
 			let mechparts = plr.models_reference;
 			double offsangle = plr.angle;
 			double offspitch = plr.pitch;
@@ -305,6 +307,7 @@ class Mechbase_Weapon : Item_NoPickup
 				offsangle = plr.LegAng;
 			
 			vector2 offs = MDMath.VOffset(offsangle, distance, xoffset, 1);			
+			
 			Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,(plr.viewheight*plr.player.CrouchFactor)+yoffset);
 			
 			let weap = Mechbase_Actor(Spawn(type,lpos));
@@ -497,8 +500,10 @@ class MechMissile : Mechbase_Actor
 	double realdamage;
 	bool homming;
 	bool inrange;
+	double explosionscale;
 	
 	Property Homming : homming;
+	Property ExplosionScale : explosionscale;
 	
 	Default
 	{	
@@ -511,6 +516,7 @@ class MechMissile : Mechbase_Actor
 		SeeSound "weapons/rocklf";
 		//DeathSound "weapons/rocklx";
 		Projectile;
+		MechMissile.ExplosionScale 1.0;
 	}
 	
 	override void PostBeginPlay()
@@ -574,7 +580,8 @@ class MechMissile : Mechbase_Actor
 				if(inrange) 
 				{
 					A_Explode(damage/2,256,0); 
-					Spawn("MissileExplosion",pos); 
+					let expl = Spawn("MissileExplosion",pos);
+					if(expl) expl.A_SetScale(explosionscale,explosionscale);
 				}
 				else
 				{
@@ -1062,6 +1069,7 @@ class MechBullet : Mechbase_Actor
 	Default
 	{
 		Damage 5;
+		Height 1;
 		Speed 100;
 		Projectile;
 	}
