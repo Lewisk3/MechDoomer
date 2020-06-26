@@ -214,13 +214,13 @@ bool equipWeaponInv(int ind, MechHardpoint hp, int grp, bool move=true)
 	
 	if( MDMath.RoundFloat(inv_context.weapons_tonnage+GetDefaultByType(weap).weight) > mech_tonnage && !CheckCompensative())
 	{
-		S_StartSound("UI/Error",CHAN_BODY);
+		A_StartLocalSound("UI/Error",CHAN_BODY);
 		Mechlab_Alert("\c[DARKRED]Cannot equip weapon, over tonnage!");
 		return false;
 	}
 	if( hp.getFreeSlots() < GetDefaultByType(weap).hardslots )
 	{
-		S_StartSound("UI/Error",CHAN_BODY);
+		A_StartLocalSound("UI/Error",CHAN_BODY);
 		Mechlab_Alert("\c[DARKRED]Cannot equip weapon, no freeslots!");
 		return false;	
 	}
@@ -331,7 +331,7 @@ bool FireGroup(int group, bool alpha=false, bool forcegroup=false)
 			{	
 				if( (ww.group == group) || alpha) 
 				{
-					if(!ww.MWFire() && !weapons_fired) S_StartSound("Mech/WeaponBusy", CHAN_OVERLAP);
+					if(!ww.MWFire() && !weapons_fired) A_StartLocalSound("Mech/WeaponBusy", CHAN_OVERLAP);
 					weapons_fired = true;
 				}
 			}
@@ -344,7 +344,7 @@ bool FireGroup(int group, bool alpha=false, bool forcegroup=false)
 		let weap = getSelectedWeapon();
 		if(weap) 
 		{
-			if(!weap.MWFire() && !weapons_fired) S_StartSound("Mech/WeaponBusy", CHAN_OVERLAP);
+			if(!weap.MWFire() && !weapons_fired) A_StartLocalSound("Mech/WeaponBusy", CHAN_OVERLAP);
 			weapons_fired = true;
 		}
 	}
@@ -361,7 +361,7 @@ void FireWeapons(bool groupfire=true)
 			bool valid = groupfire ? (ww.group == getWeaponGroupAt(selectedWeapon)) : (ww.WeaponID == selectedWeapon);
 			if(valid)
 			{
-				if(!ww.MWFire() && !weapons_fired) S_StartSound("Mech/WeaponBusy", CHAN_OVERLAP);
+				if(!ww.MWFire() && !weapons_fired) A_StartLocalSound("Mech/WeaponBusy", CHAN_OVERLAP);
 				weapons_fired = true;
 			}
 		}

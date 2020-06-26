@@ -294,7 +294,7 @@ class MechCockpitModel : MechPartsBase
 						abs(mechowner.player.cmd.pitch) > 30
 					);
 					if(pitch_move || angle_move)
-						A_StartSound("Mech/TorsoTwist",CHAN_BODY,0,1,0.3); 
+						A_StartSound("Mech/TorsoTwist",CHAN_BODY,0,1,3); 
 					else 
 						A_StopSound(CHAN_BODY); 					
 				}

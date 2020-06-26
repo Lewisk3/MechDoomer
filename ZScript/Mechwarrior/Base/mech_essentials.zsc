@@ -41,6 +41,8 @@ String hud_cockpit;
 String hud_mech;
 HudAlert hAlert;
 bool hud_htal;
+double screen_fade;
+Color screen_fadecolor;
 
 void StartMechChange(int invmech)
 {
@@ -73,7 +75,7 @@ void StartMechChange(int invmech)
 	if(!mech_shutdown)
 	{
 		mechsounds.pushSound("Mech/Betty/ShuttingDown");
-		A_StartSound("Mech/Shutdown", CHAN_WEAPON);
+		A_StartLocalSound("Mech/Shutdown", CHAN_WEAPON);
 	}
 	player.cheats &= ~CF_TOTALLYFROZEN;
 	mech_shutdown = true; 

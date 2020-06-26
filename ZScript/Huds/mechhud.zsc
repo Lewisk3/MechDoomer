@@ -836,6 +836,8 @@ class MechStatusBar : BaseStatusBar
 				}
 			}
 			
+			// Fade screen
+			Screen.Dim(mech.screen_fadecolor, mech.screen_fade, 0,0, Screen.GetWidth(), Screen.GetHeight());
 			// Draw messages on top.
 			DrawCockpitMessages();
 			// Keep track of time, always.

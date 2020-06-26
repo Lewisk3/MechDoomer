@@ -60,9 +60,9 @@ class SoundQueue : Object
 		if(snds[onsound] != " ")
 		{
 			if(!master)
-				S_StartSound(snds[onsound],CHAN_BODY,0,1.0,ATTN_STATIC);
+				S_StartSound(snds[onsound],CHAN_BODY,CHANF_LOCAL,1.0,3);
 			else
-				SoundOnActor.Trigger(snds[onsound], master);
+				SoundOnActor.Trigger(snds[onsound], master, true);
 				
 			soundplaying.qID = onsound;
 			soundplaying.length = S_GetLength(snds[onsound])*36;
@@ -167,7 +167,7 @@ class SoundEmitter : Actor
 	
 	override void PostBeginPlay()
 	{
-		S_StartSound(audio, CHAN_BODY, 0, 1.0);
+		A_StartSound(audio, CHAN_BODY, 0, 1.0, 2);
 		super.PostBeginPlay();
 	}
 
@@ -179,16 +179,21 @@ class SoundEmitter : Actor
 	}
 }
 
-class SoundOnActor : SoundEmitter
+class SoundOnActor : Actor
 {
+	Sound audio;
+	bool onlylocal;
 	Actor onactor;
-	
+
 	Default
 	{
-		+SERVERSIDEONLY
+		+NOBLOCKMAP
+		+NOINTERACTION
+		Radius 0;
+		Height 0;
 	}
 	
-	static SoundOnActor Trigger(Sound snd, Actor at)
+	static SoundOnActor Trigger(Sound snd, Actor at, bool onlylocal = false)
 	{
 		if(!at) return NULL;
 		let a_snd = SoundOnActor(Spawn("SoundOnActor", at.pos, ALLOW_REPLACE));
@@ -196,13 +201,23 @@ class SoundOnActor : SoundEmitter
 		{
 			a_snd.audio = snd;
 			a_snd.onactor = at;
+			a_snd.onlylocal = onlylocal;
 		}
 		return a_snd;
 	}
 	
 	override void PostBeginPlay()
 	{
-		A_StartSound(audio, CHAN_BODY, 0, 1.0, ATTN_NORM);
+		bool doplay = true;
+		let plr = PlayerPawn(onactor);
+		let cplr = players[consoleplayer].mo;
+		if(plr && (plr != cplr)) doplay = false;
+		
+		if(doplay) 
+			S_StartSound(audio, CHAN_BODY, CHANF_OVERLAP, 1.0);
+		else if(!onlylocal)
+			A_StartSound(audio, CHAN_BODY, CHANF_OVERLAP, 1.0, ATTN_NORM);
+		
 		super.PostBeginPlay();
 	}
 	
@@ -213,7 +228,6 @@ class SoundOnActor : SoundEmitter
 	}
 	
 }
-
 class MechFootstepEmitter : Actor
 {
 	Default

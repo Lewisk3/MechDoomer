@@ -129,7 +129,7 @@ void DoAutopilot()
 	if( ((!reached && abs(adiff) <= LegSpeed) || lt.HitLine) && !autopilot_finish )
 	{
 		throttle += 0.02;
-		if(snd_accelerate){ A_StartSound("Mech/AccelFromStop", CHAN_WEAPON); snd_accelerate = false; }
+		if(snd_accelerate){ A_StartLocalSound("Mech/AccelFromStop", CHAN_WEAPON); snd_accelerate = false; }
 	}
 	
 	if(reached && !autopilot_finish)
@@ -141,7 +141,7 @@ void DoAutopilot()
 		if(throttle > 0)
 		{
 			throttle -= 0.02;
-			if(!snd_accelerate){ A_StartSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }
+			if(!snd_accelerate){ A_StartLocalSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }
 		}
 		if(throttle < 0 && NAVPoint(targetenemy))
 		{
@@ -322,12 +322,12 @@ void mech_movement()
 			
 			// If stop is pressed and we continue moving, we don't want the two "forces" to fight.
 			TakeInventory("IBTN_STOP",1);
-			if(snd_accelerate){ A_StartSound("Mech/AccelFromStop", CHAN_WEAPON); snd_accelerate = false; }
+			if(snd_accelerate){ A_StartLocalSound("Mech/AccelFromStop", CHAN_WEAPON); snd_accelerate = false; }
 		}
 		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle > 0.02 && !autopilot)
 		{
 			throttle -= 0.02;
-			if(!snd_accelerate){ A_StartSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }
+			if(!snd_accelerate){ A_StartLocalSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }
 		}
 		
 		if(GetPlayerInput(INPUT_FORWARDMOVE) < 0) 
@@ -343,24 +343,24 @@ void mech_movement()
 			}	
 				
 			TakeInventory("IBTN_STOP",1);
-			if(!snd_accelerate){ A_StartSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }
+			if(!snd_accelerate){ A_StartLocalSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }
 		}
 		else if(CVar.FindCVar("mwd_throttledecay").getInt() == 1 && throttle < 0)
 		{
 			throttle += 0.02;
-			if(snd_accelerate){ A_StartSound("Mech/AccelFromStop", CHAN_WEAPON); snd_accelerate = false; }
+			if(snd_accelerate){ A_StartLocalSound("Mech/AccelFromStop", CHAN_WEAPON); snd_accelerate = false; }
 		}
 		
 		throttle = clamp(throttle,-(throttle_max/2),throttle_max);
 		
 		if(throttle > 0.5 && !snd_reactor)
 		{
-			A_StartSound("Mech/ReactorHum",CHAN_ITEM,CHANF_LOOPING,0.3);
+			A_StartLocalSound("Mech/ReactorHum",CHAN_6,CHANF_LOOPING,0.5);
 			snd_reactor = true;
 		}
 		else if(throttle < 0.5 && snd_reactor)
 		{
-			A_StopSound(CHAN_ITEM);
+			A_StopSound(CHAN_6);
 			snd_reactor = false;
 		}
 		
@@ -390,7 +390,7 @@ void mech_movement()
 			if(abs(throttle) <= 0.1)TakeInventory("IBTN_STOP",1);
 			if(throttle < 0)throttle += 0.02;
 			if(throttle > 0)throttle -= 0.02;
-			if(!snd_accelerate){A_StartSound("Mech/DeccelToStop", CHAN_WEAPON, CHANF_OVERLAP); snd_accelerate = true;}
+			if(!snd_accelerate){A_StartLocalSound("Mech/DeccelToStop", CHAN_WEAPON, CHANF_OVERLAP); snd_accelerate = true;}
 			if(abs(throttle) <= 0.1)throttle = 0;
 		}
 		if(countinv("IBTN_CENTER"))
@@ -467,9 +467,9 @@ void mech_movement()
 		double zthrust = ( Mech_JetCount * GetDefaultByType(jj).thrust_power ) * ( tonmod/100 ) + ((mech_jetsfuel/100)*2);
 		vel.z = zthrust * (defaultmovement ? 2 : 1);
 		mech_jetsfuel -= 1;
-		A_StartSound("Mech/JetLoop", CHAN_5, CHANF_LOOPING);
+		if(mech_jetsfuel > 10) A_StartSound("Mech/JetLoop", CHAN_5, CHANF_LOOPING);
 	} 
-	else if(!jets && mech_jetsfuel > 0)
+	else if(!jets || player.onground || mech_jetsfuel <= 10)
 	{
 		A_StopSound(CHAN_5);
 	}
@@ -479,7 +479,7 @@ void mech_movement()
 		if(player.DesiredFOV > 30)
 		{
 			player.DesiredFOV -= 3;
-			A_StartSound("Mech/Zoom", CHAN_7);
+			A_StartLocalSound("Mech/Zoom", CHAN_7);
 		}
 		else
 			A_StopSound(CHAN_7);
@@ -490,7 +490,7 @@ void mech_movement()
 		if(player.DesiredFOV < trueFOV)
 		{
 			player.DesiredFOV += 3;
-			A_StartSound("Mech/Zoom", CHAN_7);
+			A_StartLocalSound("Mech/Zoom", CHAN_7);
 		}
 		else
 		{
@@ -511,7 +511,7 @@ void mech_movement()
 			Cockpit_Alert("\c[SAPPHIRE]Shutdown overridden.");
 			doShutdown = false;
 			shutdown_timer = ticks;
-			A_StartSound("Mech/Override", CHAN_BODY, CHANF_OVERLAP);
+			A_StartLocalSound("Mech/Override", CHAN_BODY, CHANF_OVERLAP);
 			mechsounds.pushSound("Mech/Betty/ShutdownOverride");
 			TakeInventory("IBTN_OVERRIDE",1);
 		}
@@ -543,7 +543,7 @@ void process_shutdown()
 			prevticks = ticks;
 			mech_poweringup = true;
 			// mechsounds.pushSound("Mech/Betty/SystemsCheck");
-			S_StartSound("Mech/Power", CHAN_BODY, CHANF_OVERLAP);
+			A_StartLocalSound("Mech/Power", CHAN_BODY, CHANF_OVERLAP);
 			doShutdown = false;
 			Cockpit_Alert("\c[GREEN]Powering up...", 30);
 			hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
@@ -551,7 +551,7 @@ void process_shutdown()
 		if(!doShutdown && (ticks-prevticks) > 35*4)
 		{
 			powerup();
-			S_StartSound("Mech/StartupDone", CHAN_BODY, CHANF_OVERLAP);
+			A_StartLocalSound("Mech/StartupDone", CHAN_BODY, CHANF_OVERLAP);
 			mechsounds.pushSound("Mech/Betty/SystemsCheck");
 		}
 		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*3.0;
@@ -563,7 +563,7 @@ void process_shutdown()
 			doShutdown = false;
 			mech_poweringup = true;
 			// mechsounds.pushSound("Mech/Betty/SystemsCheck");
-			S_StartSound("Mech/Power", CHAN_OVERLAP);
+			A_StartLocalSound("Mech/Power", CHAN_OVERLAP);
 			manualshutdown = false;
 			TakeInventory("IBTN_SHUTDOWN",1);
 			prevticks = ticks;

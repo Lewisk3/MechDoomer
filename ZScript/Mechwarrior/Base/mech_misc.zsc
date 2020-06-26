@@ -97,3 +97,9 @@ void adjustMoney(int amt)
 { 
 	if(!CheckVoodoo()) inv_context.money_cbills += amt; 
 }
+
+void A_StartLocalSound(Sound snd, uint channel = CHAN_BODY, uint flags = 0, double volume=1.0, double attn = ATTN_NORM, double pitch = 0.0)
+{
+	let cplr = MechwarriorBase(players[consoleplayer].mo);
+	if(cplr && (cplr == self)) A_StartSound(snd, channel, flags, volume, attn, pitch);
+}

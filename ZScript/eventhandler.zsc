@@ -3,8 +3,6 @@ class MechDoomerEvents : EventHandler
 {
 	ColorTintShaderManager ShaderManager;
 	ui Mechlab_Menu mechlab;
-	double screenfade;
-	Color screenfadecolor;
 	
 	ui void PrintException(String fmt, int xoffs=0, int yoffs=0)
 	{	
@@ -17,8 +15,6 @@ class MechDoomerEvents : EventHandler
 	
 	override void RenderOverlay(RenderEvent e)
 	{
-		Screen.Dim(screenfadecolor,screenfade,0,0,Screen.GetWidth(),Screen.GetHeight());
-
 		// NOTE: vid_rendermode does not exist in LZDoom, apparently.
 		CVar rendermode = CVar.FindCVar("vid_rendermode");
 		if(rendermode && rendermode.GetInt() != 4)
@@ -288,11 +284,6 @@ class MechDoomerEvents : EventHandler
 		// Unspecific netevents
 		if(def_plr || plr)
 		{
-			if(netcmd == "screen_setfadecolor") screenfadecolor = Color(255, e.Args[0],e.Args[1],e.Args[2]);
-			if(netcmd == "screen_setfade") 
-			{
-				screenfade = e.Args[0]/255.0;
-			}
 			// Command+Args
 			Array<String> netcmds;
 			netcmds.Clear();
@@ -321,6 +312,11 @@ class MechDoomerEvents : EventHandler
 		
 		if(plr)
 		{
+			if(netcmd == "screen_setfadecolor") plr.screen_fadecolor = Color(255, e.Args[0],e.Args[1],e.Args[2]);
+			if(netcmd == "screen_setfade") 
+			{
+				plr.screen_fade = e.Args[0]/255.0;
+			}
 			// Process mechlab netevents	
 			if(netcmd ==  "open_mechlab") plr.uiopen_mechlab = true;
 			if(netcmd == "close_mechlab") plr.uiopen_mechlab = false;

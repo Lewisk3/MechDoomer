@@ -27,9 +27,8 @@ class Mechbase_Actor : FastProjectile
 		if(mechplayer && DOS_firesound && CVar.GetCVar("mwd_useclassicsound", mechplayer.player).getBool())
 			finalsound = DOS_firesound;
 		
-		if(finalsound) S_StartSound(finalsound, CHAN_WEAPON, 1.0);
+		if(finalsound) SoundOnActor.Trigger(finalsound, mechplayer);
 		adjustHeatLevel(heatgen);
-		
 		super.PostBeginPlay();
 	}
 	
@@ -218,7 +217,7 @@ class Mechbase_Weapon : Item_NoPickup
 		}
 		if(plr)
 		{
-			SoundEmitter.SE_Trigger(invoker.atksnd,plr.pos);
+			SoundOnActor.Trigger(invoker.atksnd, plr);
 			plr.LineAttack(plr.angle,distance,plr.pitch,damage,"Ballistic","BulletPuff");
 		}
 		invoker.cooldown_timer = invoker.delay;
@@ -231,7 +230,7 @@ class Mechbase_Weapon : Item_NoPickup
 			let plr = MechWarrior(invoker.Owner);
 			if(!plr) return false;
 			if(invoker.ammouse > 0 && plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
-			SoundEmitter.SE_Trigger(CheckClassicSounds() ? clsvolleysnd : volleysnd, plr.pos);
+			SoundOnActor.Trigger(CheckClassicSounds() ? clsvolleysnd : volleysnd, plr);
 			invoker.dofire = true;
 			invoker.volley_amt = amt;
 			invoker.volley_inital = amt;
@@ -278,7 +277,7 @@ class Mechbase_Weapon : Item_NoPickup
 			Sound finalsnd = invoker.atksnd;
 			if(invoker.DOS_atksnd && CVar.GetCVar("mwd_useclassicsound", plr.player).getBool()) 
 				finalsnd = invoker.DOS_atksnd;
-			if(finalsnd) SoundEmitter.SE_Trigger(finalsnd,plr.pos);
+			if(finalsnd) SoundOnActor.Trigger(finalsnd, plr);
 			
 			// Get shoot position and offsets
 			xoffset += random(-invoker.basespreadx,invoker.basespreadx);
@@ -392,7 +391,7 @@ class Mechbase_Weapon : Item_NoPickup
 		{
 			switch_timer = 35/2;
 			DoAmmoSwitch(ammo_mode+1);
-			plr.S_StartSound("Mech/NextWeapon",CHAN_WEAPON);
+			plr.A_StartLocalSound("Mech/NextWeapon",CHAN_WEAPON);
 		}
 		
 		// Discard lock if we're not a homing weapon and we've just been selected.

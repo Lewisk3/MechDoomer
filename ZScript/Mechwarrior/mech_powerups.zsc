@@ -13,17 +13,6 @@ class MechExchange_Animator : Powerup
 	{
 		Powerup.Duration 0x7FFFFFFD; // lasts about 2 years;
 	}
-
-	override void tick()
-	{		
-		if(clock) clock--;
-		MechDoomerEvents.SendNetworkEvent("screen_setfade",fadeto);
-		fadeto += fadeout ? -3 : 3;
-		if(fadeto >= 300 && !fadeout) 
-			activate = true;
-		else if(fadeto <= 20 && fadeout) 
-			done = true;
-	}
 	
 	static MechExchange_Animator Setup(MechWarriorBase curmech, int swapmechbay)
 	{
@@ -40,6 +29,16 @@ class MechExchange_Animator : Powerup
 
 	override void DoEffect()
 	{
+		if(clock) clock--;
+		mech.screen_fadecolor = Color(255,0,0,0);
+		mech.screen_fade = fadeto/255.0;
+		
+		fadeto += fadeout ? -3 : 3;
+		if(fadeto >= 300 && !fadeout) 
+			activate = true;
+		else if(fadeto <= 20 && fadeout) 
+			done = true;
+	
 		if(mech && activate)
 		{
 			vector3 spawnpos;
