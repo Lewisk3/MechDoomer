@@ -11,8 +11,16 @@ class HardpointVitals : Object
 	double max_internal;
 }
 
+struct HitboxInfo 
+{
+	double xoffs, yoffs, forward, radius, height;
+}
+
 class MechHardpoint : Object
 {
+	// Hitbox
+	HitboxInfo hitbox_info;
+	
 	// Position
 	vector2 pos;
 
@@ -47,6 +55,15 @@ class MechHardpoint : Object
 			hp.max_internal = max_internal;
 		}
 		return hp;
+	}
+	
+	void SetupHitbox(double xoffs, double yoffs, double radius, double height, double forward=0)
+	{
+		hitbox_info.xoffs = xoffs;
+		hitbox_info.yoffs = yoffs;
+		hitbox_info.forward = forward;
+		hitbox_info.radius = radius;
+		hitbox_info.height = height;
 	}
 	
 	void adjustHardslots(int amt)

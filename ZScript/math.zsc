@@ -89,6 +89,11 @@ class MDMath Abstract
 		return result;
 	}
 	
+	static int Sign(double num)
+	{
+		return (num < 0 ? -1 : 1);
+	}
+	
 	// Pitch between 2 vectors.
 	static double getPitchBetween(Vector3 one, Vector3 two)
 	{	
@@ -121,6 +126,12 @@ class MDMath Abstract
 	{
 		return ( xoffs * cos(angle) - yoffs * sin(angle),
 				 yoffs * cos(angle) + xoffs * sin(angle) )*dist;
+	}
+	
+	static Vector3 VOffsetPitch(double angle, double pitch, double xoffs, double yoffs, double dist)
+	{
+		return ( (xoffs * cos(angle)*cos(pitch)) - (yoffs * sin(angle)*cos(pitch)),
+				 (yoffs * cos(angle)*cos(pitch)) + (xoffs * sin(angle)*cos(pitch)), -sin(pitch) )*dist;
 	}
 	
 	// UI Features

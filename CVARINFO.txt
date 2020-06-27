@@ -9,3 +9,4 @@ user float mwd_converge_speed = 0.15;
 user float mwd_fontscale = 0.8;
 user float mwd_CockpitFOV = 90.0;
 user float mwd_crosshairsize = 0.90;
+server bool mwd_debug_hitboxes = false;

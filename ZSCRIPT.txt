@@ -16,6 +16,9 @@ class HudSpriteInitializer : Actor
 #include "zscript/Gutamatics/GlobalMaths.zsc"
 #include "zscript/Gutamatics/Matrix.zsc"
 
+// RadiusDebug 
+#include "ZScript/RadiusDebug/RadiusDebug.zsc"
+
 // Base
 #include "ZScript/math.zsc"
 #include "ZScript/hardpoints.zsc"
@@ -84,7 +87,7 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Mechs/mechs.zsc"
 #include "ZScript/Mechs/mech_pieces_base.zsc"
 #include "ZScript/Mechs/mech_pieces.zsc"
-
+#include "ZScript/Mechs/mech_hitbox_base.zsc"
 
 class IBTN_STOP : I_Boolean {}
 class IBTN_CENTER : I_Boolean {}

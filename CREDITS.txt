@@ -8,6 +8,8 @@ Skyfaller   (Author of MechVM, used to export MW2 assets)
 Cherno 	    (Mech model exports + UV shading + Walk/Run-cycles, Simulated sunlight shader for textures)
 Caligari87  (Original mech bobbing code)
 Xaser       (Argents ArgRocketReticle used for non-projected targeting graphics)
+Gutawer     (Gutamatics maths library)
+Nash        (RadiusDebug hitbox library)
 
 	- Mech sounds/Mech models/Mech Lore -
 Activision/BattleTech/Mechwarrior 2 : 31st Century Combat

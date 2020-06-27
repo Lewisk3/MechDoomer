@@ -1,7 +1,6 @@
 // Weapon base
 class Mechbase_Actor : FastProjectile
 {
-	actor hitactor;
 	double heatgen;
 	vector3 spawnpos;
 	double basedamage;
@@ -56,32 +55,29 @@ class Mechbase_Actor : FastProjectile
 		}
 	}
 	
-	override bool CanCollideWith(Actor other, bool passive)
+	override int SpecialMissileHit(Actor victim)
 	{
-		hitactor = other;
-		return super.CanCollideWith(other, passive);
+		// Do not hit physical movement hitbox.
+		if(victim is "Mechwarrior") return 1;
+
+		if((victim is "MechHitBox") && MechHitBox(victim).mech == mechplayer) 
+		{
+			return 1;
+		}
+		if(truedamage)
+		{
+			bool is_battlearmor = (mechplayer.mechtype == mechplayer.MechType_BattleArmor);
+			double damagefinal =  is_battlearmor ? truedamage*MWGAMEPLAY_BADMGSCALE : truedamage;
+			victim.DamageMobJ(self,mechplayer,damagefinal,damagetype,0,mechplayer.angle);
+			SetState(ResolveState("Death"));
+			return 0;
+		}
+		return -1;
 	}
 	
 	override void Tick()
 	{
-		if(truedamage && hitactor && hitactor.bSHOOTABLE)
-		{
-			if(pos.z >= hitactor.pos.z && pos.z <= hitactor.pos.z+hitactor.height)
-			{
-				if(hitactor != mechplayer && !cosmetic) 
-				{
-					// Battle Armor damage application.
-					bool is_battlearmor = (mechplayer.mechtype == mechplayer.MechType_BattleArmor);
-					double damagefinal =  is_battlearmor ? truedamage*MWGAMEPLAY_BADMGSCALE : truedamage;
-					
-					hitactor.DamageMobJ(self,mechplayer,damagefinal,damagetype,0,mechplayer.angle);
-					SetState(ResolveState("Death"));
-				}
-			}
-			hitactor = NULL;
-		}
-		if(mechplayer) Converge();
-			
+		if(mechplayer) Converge();		
 		super.Tick();
 	}
 	double getTravelDistance(bool unitmeter=true)

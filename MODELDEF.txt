@@ -4,6 +4,8 @@
 #include "ZScript/Mechs/MechParts_Modeldef.txt"
 
 // Misc modeldefs
+#include "models/radiusdebug/rd_models.txt"
+
 Model DEBRIS_3D
 {
 	Path "models"

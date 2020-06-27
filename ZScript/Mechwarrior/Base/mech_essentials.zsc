@@ -6,6 +6,7 @@ extend class MechwarriorBase;
 // Vars
 bool uiopen_Mechlab;
 bool forceshutdown;
+bool reset_hitboxes;
 class<MechwarriorBase> baseclass;
 mw_InvInfo inv_context;
 MechHardpoints hardpoints;
@@ -95,7 +96,7 @@ void ChangeMech(int invmech)
 		console.printf("[Failed to deploy mech] -> Source mech doesn't exist!");
 		return;
 	}
-	
+	reset_hitboxes = true;
 	GetStoredWeapons(curmech.active_weapons);
 	curmech.baseclass = baseclass;
 	curmech.inv_context = inv_context;
@@ -173,7 +174,6 @@ void ChangeMech(int invmech)
 	
 	// Only save live mech!
 	if(!isdead) inv_context.mechs.Insert(invmech, curmech);
-	isdead = false;
 	return;
 	
 }
@@ -241,7 +241,8 @@ bool setupInventory()
 		{
 			console.printf("Pilot Error -> Failed to equip mech's engine, too heavy or not enough free slots!");
 		}
-		setupCriticals();		
+		setupCriticals();
+		SetupHitboxes();
 	}
 	return inv_context==NULL;
 }
@@ -263,7 +264,11 @@ virtual void setupCriticals()
 // Setup models
 void TrySetupModels()
 {
-	if(mech_models && !models_reference) models_reference = MechTorsoBase(MechPartsBase.Create(mech_models, self));
+	if(mech_models && !models_reference) 
+	{
+		models_reference = MechTorsoBase(MechPartsBase.Create(mech_models, self));
+		reset_hitboxes = true; // Setup hitboxes whenever our model needs resetting.
+	}
 }
 
 // Virtual
@@ -273,59 +278,34 @@ virtual void SetupWeapons()
 	hardpoints.setupSlots();
 }
 
+virtual void SetupHitboxes()
+{
+	CreateHitbox(hardpoints.ll,  16, 0, 8,46,-10);
+	CreateHitbox(hardpoints.rl, -16, 0, 8,46,-10);
+	CreateHitbox(hardpoints.la,  34,44, 8,36, 5);
+	CreateHitbox(hardpoints.ra, -34,44, 8,36, 5);
+	CreateHitbox(hardpoints.lt,  15,65,10,36, 0);
+	CreateHitbox(hardpoints.rt, -15,65,10,36, 0);
+	CreateHitbox(hardpoints.ct,   0,40,10,48,10);
+}
+
+// Hitbox helper
+void CreateHitbox(MechHardpoint hp, double xo, double yo, double r, double h, double fo=0)
+{
+	hp.SetupHitbox(xo,yo,r,h,fo);
+}
+
 // Override
 override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
 {	
 	if(checkVoodoo()) return super.DamageMobj(inflictor,source,damage,mod,flags,angle);
+	if(mod == "Hitscan") return ProcessHitscanDamageMobJ(inflictor, source, damage, mod, flags, angle);
 	
 	double newdmg = double(damage)*MWGAMEPLAY_DAMAGESCALE;
 	if( !source ) 
 	{
 		ProcessHardpointDamage(mod,newdmg);
 		return 0;
-	}
-	
-	Actor damager = inflictor;
-	if(mod == "hitscan") damager = source;
-	double shootslope = (source.height); // * 0.5
-
-	// Preform ray cast to determine where the shooter is aiming.
-	FLineTraceData lt;
-	damager.LineTrace(inflictor.angle,2048,source.pitch+random(-8,16),TRF_ABSOFFSET,shootslope-random(0,source.height/4),0,0,lt);
-	vector3 dmgpos = lt.HitLocation;
-	double plrdmgz = (viewheight*Player.crouchfactor);
-
-	vector2 mechangle = ( pos.x, pos.y );
-	vector2 dmgpos2D  = ( dmgpos.x, dmgpos.y );
-	mechangle = MDMath.VRotate(mechangle,self.angle);
-	double lrpos = atan2(source.pos.y - mechangle.y , source.pos.x - mechangle.x);
-	double hitangle = abs((atan2(pos.x - dmgpos.x , pos.y - dmgpos.y))) + frandom(-8,8);
-	hitangle = abs(hitangle-((self.angle-90)%180));
-	// Legs
-	if( dmgpos.z < pos.z+(plrdmgz/4) ) 
-	{ 
-		if(lrpos > 0) ProcessHardpointDamage("MechDamage_LL",newdmg,damager);
-		if(lrpos < 0) ProcessHardpointDamage("MechDamage_RL",newdmg,damager);
-	}
-	else // Torso
-	{	
-		// left/right torsos
-		if( hitangle > 40 && hitangle < 100)
-		{
-			if(lrpos < 0) ProcessHardpointDamage("MechDamage_RT",newdmg,damager);
-			if(lrpos > 0) ProcessHardpointDamage("MechDamage_LT",newdmg,damager);
-		}
-		// Left/right arm
-		else if( hitangle >= 100 )
-		{
-			if(lrpos < 0) ProcessHardpointDamage("MechDamage_RA",newdmg,damager);
-			if(lrpos > 0) ProcessHardpointDamage("MechDamage_LA",newdmg,damager);
-		}
-		// Center torso
-		else
-		{
-			ProcessHardpointDamage("MechDamage_CT",newdmg,damager);
-		}
 	}
 	return 0;
 }
@@ -367,6 +347,7 @@ override void PostBeginPlay()
 		level.airfriction = 0.87;
 	}	
 	
+		
 	// startMechbay();
 	super.PostBeginPlay();
 }
@@ -387,7 +368,19 @@ override void tick()
 		super.Tick();
 		return;
 	}
-		
+	
+	if(reset_hitboxes && models_reference)
+	{
+		reset_hitboxes = false;
+		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.ct);
+		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.la);
+		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.ra);
+		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.lt);
+		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.rt);
+		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.ll);
+		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.rl);
+	}
+	
 	// Betty sound for automap toggle
 	if(automapactive && !prev_automap) 
 	{
@@ -443,4 +436,59 @@ override void tick()
 	
 	mechsounds.Tick();
 	super.tick();
+}
+
+
+// Legacy Damage function, pretty much JUST for hitscan.
+int ProcessHitscanDamageMobJ(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
+{	
+	double newdmg = double(damage)*MWGAMEPLAY_DAMAGESCALE;
+	if( !source ) 
+	{
+		ProcessHardpointDamage(mod,newdmg);
+		return 0;
+	}
+	
+	Actor damager = source;
+	double shootslope = (source.height); // * 0.5
+
+	// Preform ray cast to determine where the shooter is aiming.
+	FLineTraceData lt;
+	damager.LineTrace(inflictor.angle,2048,source.pitch+random(-8,16),TRF_ABSOFFSET,shootslope-random(0,source.height/4),0,0,lt);
+	vector3 dmgpos = lt.HitLocation;
+	double plrdmgz = (viewheight*Player.crouchfactor);
+
+	vector2 mechangle = ( pos.x, pos.y );
+	vector2 dmgpos2D  = ( dmgpos.x, dmgpos.y );
+	mechangle = MDMath.VRotate(mechangle,self.angle);
+	double lrpos = atan2(source.pos.y - mechangle.y , source.pos.x - mechangle.x);
+	double hitangle = abs((atan2(pos.x - dmgpos.x , pos.y - dmgpos.y))) + frandom(-8,8);
+	hitangle = abs(hitangle-((self.angle-90)%180));
+	// Legs
+	if( dmgpos.z < pos.z+(plrdmgz/4) ) 
+	{ 
+		if(lrpos > 0) ProcessHardpointDamage("MechDamage_LL",newdmg,damager);
+		if(lrpos < 0) ProcessHardpointDamage("MechDamage_RL",newdmg,damager);
+	}
+	else // Torso
+	{	
+		// left/right torsos
+		if( hitangle > 40 && hitangle < 100)
+		{
+			if(lrpos < 0) ProcessHardpointDamage("MechDamage_RT",newdmg,damager);
+			if(lrpos > 0) ProcessHardpointDamage("MechDamage_LT",newdmg,damager);
+		}
+		// Left/right arm
+		else if( hitangle >= 100 )
+		{
+			if(lrpos < 0) ProcessHardpointDamage("MechDamage_RA",newdmg,damager);
+			if(lrpos > 0) ProcessHardpointDamage("MechDamage_LA",newdmg,damager);
+		}
+		// Center torso
+		else
+		{
+			ProcessHardpointDamage("MechDamage_CT",newdmg,damager);
+		}
+	}
+	return 0;
 }

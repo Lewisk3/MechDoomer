@@ -184,6 +184,7 @@ class SoundOnActor : Actor
 	Sound audio;
 	bool onlylocal;
 	Actor onactor;
+	uint lifetime;
 
 	Default
 	{
@@ -202,6 +203,7 @@ class SoundOnActor : Actor
 			a_snd.audio = snd;
 			a_snd.onactor = at;
 			a_snd.onlylocal = onlylocal;
+			a_snd.lifetime = S_GetLength(snd)*36;
 		}
 		return a_snd;
 	}
@@ -224,6 +226,11 @@ class SoundOnActor : Actor
 	override void Tick()
 	{
 		super.Tick();
+		if(GetAge() >= lifetime) 
+		{
+			Destroy();
+			return;
+		}
 		if(onactor) SetOrigin(onactor.pos, false);
 	}
 	

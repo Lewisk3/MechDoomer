@@ -244,6 +244,23 @@ class MechDoomerEvents : EventHandler
 		}
 		*/
 		
+		// Hitbox debugging
+		let it = ThinkerIterator.Create();
+		Actor act;
+		while(act = Actor(it.Next()))
+		{
+			if(!act.bSHOOTABLE) continue;
+			bool hasdebug = act.FindInventory("RadiusDebugMe")!=NULL;
+			if(mwd_debug_hitboxes && !hasdebug && !(act is "Mechwarrior")) 
+			{
+				RadiusDebug.Enable(act);
+			}
+			if(!mwd_debug_hitboxes && hasdebug)
+			{
+				RadiusDebug.Disable(act);
+			}
+		}
+		
 		if(!plr)
 		{
 			let newplr = players[consoleplayer].mo;

@@ -1,0 +1,69 @@
+class MechHitbox : Actor
+{
+	MechHardpoint mounted_hp;
+	Mechwarrior mech;
+	double xoffs, yoffs, forward;
+	
+	Default
+	{
+		Health int.max;
+		+SHOOTABLE;
+		+NOGRAVITY;
+		Radius 5;
+		Height 5;
+	}
+		
+	static MechHitBox SetupHitbox(Mechwarrior basemech, MechHardpoint mountpoint)
+	{
+		let box = MechHitBox(Actor.Spawn("MechHitbox", basemech.pos));
+		if(box)
+		{
+			box.A_SetSize(mountpoint.hitbox_info.radius, mountpoint.hitbox_info.height);
+			box.xoffs = mountpoint.hitbox_info.xoffs;
+			box.yoffs = mountpoint.hitbox_info.yoffs;
+			box.forward = mountpoint.hitbox_info.forward;
+			box.mech = basemech;
+			box.mounted_hp = mountpoint;
+		}
+		return box;
+	}
+	 
+	override int DamageMobJ(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
+	{
+		// Take no damage directly, instead redirect to hardpoint.
+		if(!mech || mech.checkVoodoo() || !mounted_hp || Mechwarrior(inflictor) == mech || Mechwarrior(source) == mech) return 0;
+		double newdmg = double(damage)*MWGAMEPLAY_DAMAGESCALE;
+		Actor damager = inflictor;
+		if(mod == "hitscan") damager = source;
+		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
+		return 0;
+	}
+	
+	bool CheckTorsoMount()
+	{
+		return (mounted_hp != mech.hardpoints.ll) && (mounted_hp != mech.hardpoints.rl);
+	}
+	
+	override void Tick()
+	{
+		super.Tick();
+		if(!mech || !mech.models_reference || !mech.models_reference.cockpit) 
+		{
+			Destroy();
+			return;
+		}
+		if(!mounted_hp || mech.mech_shutdown) return;
+		double offsangle = CheckTorsoMount() ? mech.models_reference.cockpit.angle : mech.LegAng;
+		double offspitch = CheckTorsoMount() ? mech.models_reference.roll*-MDMath.Sign(xoffs) : 0;
+		vector3 offs = MDMath.VOffsetPitch(offsangle,offspitch, forward, xoffs, 1);	
+		Vector3 finalpos = mech.Vec3Offset(offs.x,offs.y,yoffs+(offs.z*18));
+		SetOrigin(finalpos, false);
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 1;
+		loop;
+	}
+}

@@ -1,0 +1,9 @@
+Model RadiusDebug
+{
+	Path "models/RadiusDebug"
+	Model 0 "RadiusDebug.md3"
+	Scale 0.01 0.01 0.01
+	ZOffset 0.01
+	AngleOffset 90
+	FrameIndex 0000 A 0 0
+}

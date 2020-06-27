@@ -647,6 +647,17 @@ class Marauder : MechWarrior
 		equipWeapon("ERSmallLaser",hardpoints.rt,3);
 		equipWeapon("ERSmallLaser",hardpoints.rt,3);
 	}
+	
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  27, 0, 8,54,-10);
+		CreateHitbox(hardpoints.rl, -27, 0, 8,54,-10);
+		CreateHitbox(hardpoints.la,  50,40,12,36, 20);
+		CreateHitbox(hardpoints.ra, -50,40,12,36, 20);
+		CreateHitbox(hardpoints.lt,  10,70, 8,30, 0);
+		CreateHitbox(hardpoints.rt, -10,70, 8,30, 0);
+		CreateHitbox(hardpoints.ct,   0,65,10,44,10);
+	}
 }
 
 class Gargoyle : MechWarrior

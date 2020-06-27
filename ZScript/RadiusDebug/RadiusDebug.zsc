@@ -1,0 +1,105 @@
+// RadiusDebug
+// A debugging utility that lets you draw a model representation of an Actor's radius
+// Written by Nash Muhandes
+
+class RadiusDebug : Actor
+{
+	Default
+	{
+		Radius 1;
+		Height 1;
+		//RenderStyle "STYLE_Translucent";
+		//Alpha 0.4;
+		+NOINTERACTION
+	}
+
+	Actor AttachTo;
+
+	static void Enable(Actor me, bool disable = false)
+	{
+		if (me)
+		{
+			if (!disable)
+			{
+				me.A_GiveInventory("RadiusDebugMe", 1);
+			}
+			else
+			{
+				me.A_TakeInventory("RadiusDebugMe", 0x7FFFFFFF);
+			}
+		}
+	}
+
+	static void Disable(Actor me)
+	{
+		Enable(me, true);
+	}
+
+	override void Tick(void)
+	{
+		if (AttachTo && AttachTo.FindInventory("RadiusDebugMe"))
+		{
+			// Calling A_SetSize every tic might be expensive
+			// But since this is a debugging utility, I am not
+			// going to bother to optimize this.
+			A_SetSize(AttachTo.Radius, AttachTo.Height, false);
+			Scale.X = double(Radius) * 2;
+			Scale.Y = double(Height) * level.pixelstretch;
+			SetOrigin(AttachTo.Pos, true);
+		}
+		else
+		{
+			Destroy();
+		}
+
+		Super.Tick();
+	}
+
+	States
+	{
+	Spawn:
+		0000 A -1 BRIGHT;
+		Stop;
+	}
+}
+
+class RadiusDebugMe : CustomInventory
+{
+	Default
+	{
+		Inventory.MaxAmount 1;
+		+INVENTORY.UNDROPPABLE
+		+INVENTORY.UNTOSSABLE
+		+INVENTORY.AUTOACTIVATE
+	}
+
+	Actor cube;
+
+	override void Tick(void)
+	{
+		if (!cube)
+		{
+			cube = Spawn("RadiusDebug", Owner.Pos, NO_REPLACE);
+		}
+
+		if (cube)
+		{
+			RadiusDebug(cube).AttachTo = Owner;
+		}
+
+		Super.Tick();
+	}
+
+	States
+	{
+	Use:
+		TNT1 A 0;
+		Fail;
+	Pickup:
+		TNT1 A 0
+		{
+			return true;
+		}
+		Stop;
+	}
+}
