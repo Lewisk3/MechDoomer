@@ -100,6 +100,16 @@ class BattleArmor : MechWarrior
 		equipWeapon("MachineGun",hardpoints.ra,1);
 		equipStruct("BulletsMGun",hardpoints.ct,1);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  8, 0, 4,20,-14);
+		CreateHitbox(hardpoints.rl, -8, 0, 4,20,-14);
+		CreateHitbox(hardpoints.la,  16,24,2,14,-14);
+		CreateHitbox(hardpoints.ra, -16,24,2,14,-14);
+		CreateHitbox(hardpoints.lt,  6, 24,4,17,-14);
+		CreateHitbox(hardpoints.rt, -6, 24,4,17,-14);
+		CreateHitbox(hardpoints.ct,  0, 20,4,26,-14);
+	}
 }
 
 // Light Mechs
@@ -132,6 +142,16 @@ class Commando : MechWarrior
 		equipWeapon("SRM6",hardpoints.lt,2);
 		equipWeapon("SRM4",hardpoints.lt,2);
 		equipStruct("SRM_Ammo",hardpoints.lt,1);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  12, 0, 4,36, 0);
+		CreateHitbox(hardpoints.rl, -12, 0, 4,36, 0);
+		CreateHitbox(hardpoints.la,  20,44, 8,24, 5);
+		CreateHitbox(hardpoints.ra, -20,44, 8,24, 5);
+		CreateHitbox(hardpoints.lt,   8,44,6,21, 0);
+		CreateHitbox(hardpoints.rt,  -8,44,6,21, 0);
+		CreateHitbox(hardpoints.ct,   0,40,6,28,10);
 	}
 }
 class Jenner : MechWarrior
@@ -169,6 +189,16 @@ class Jenner : MechWarrior
 		equipStruct("JumpJet",hardpoints.ll,2);
 		equipStruct("JumpJet",hardpoints.rl,1);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 4,46, 0);
+		CreateHitbox(hardpoints.rl, -16, 0, 4,46, 0);
+		CreateHitbox(hardpoints.la,  36,44, 8,20, 5);
+		CreateHitbox(hardpoints.ra, -36,44, 8,20, 5);
+		CreateHitbox(hardpoints.lt,  12, 44,6,18, 0);
+		CreateHitbox(hardpoints.rt, -12, 44,6,18, 0);
+		CreateHitbox(hardpoints.ct,  0, 40,10,24,20);
+	}
 }
 class Urbanmech : MechWarrior
 {
@@ -198,6 +228,16 @@ class Urbanmech : MechWarrior
 		equipWeapon("Autocannon10",hardpoints.ra,1);
 		equipWeapon("SmallLaser",hardpoints.la,1);
 		equipStruct("AC10_Ammo",hardpoints.ra,3);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  14, 0, 6,40, 0);
+		CreateHitbox(hardpoints.rl, -14, 0, 6,40, 0);
+		CreateHitbox(hardpoints.la,  26,50,6,12, 5);
+		CreateHitbox(hardpoints.ra, -26,50,6,12, 5);
+		CreateHitbox(hardpoints.lt,  12,40,8,28, 0);
+		CreateHitbox(hardpoints.rt, -12,40,8,28, 0);
+		CreateHitbox(hardpoints.ct,   0,30,10,36,10);
 	}
 }
 class Tarantula : MechWarrior
@@ -234,6 +274,16 @@ class Tarantula : MechWarrior
 		equipStruct("SSRM_Ammo",hardpoints.ct,2);
 		equipWeapon("MediumLaser",hardpoints.la,2);
 		equipWeapon("MediumLaser",hardpoints.ra,2);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  40, 0,36,46, 0);
+		CreateHitbox(hardpoints.rl, -40, 0,36,46, 0);
+		CreateHitbox(hardpoints.la,  8,80, 6,4, 50);
+		CreateHitbox(hardpoints.ra, -8,80, 6,4, 50);
+		CreateHitbox(hardpoints.lt,  15,65,10,36, 0);
+		CreateHitbox(hardpoints.rt, -15,65,10,36, 0);
+		CreateHitbox(hardpoints.ct,   0,50,10,48,10);
 	}
 }
 class Firemoth : MechWarrior
@@ -380,6 +430,16 @@ class Stormcrow : MechWarrior
 		equipWeapon("ERLargeLaser",hardpoints.ra,2);
 		equipWeapon("ERMediumLaser",hardpoints.ra,1);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  20, 0, 8,55,10);
+		CreateHitbox(hardpoints.rl, -20, 0, 8,55,10);
+		CreateHitbox(hardpoints.la,  34,60, 8,36,15);
+		CreateHitbox(hardpoints.ra, -34,60, 8,36,15);
+		CreateHitbox(hardpoints.lt,  15,65, 6,36, 0);
+		CreateHitbox(hardpoints.rt, -15,65, 6,36, 0);
+		CreateHitbox(hardpoints.ct,   0,60,10,38,24);
+	}
 }
 class Nova : MechWarrior
 {
@@ -428,6 +488,16 @@ class Nova : MechWarrior
 		equipStruct("DoubleHeatsink",hardpoints.lt,2);
 		equipStruct("DoubleHeatsink",hardpoints.ra,1);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  28, 0, 6,46,-10);
+		CreateHitbox(hardpoints.rl, -28, 0, 6,46,-10);
+		CreateHitbox(hardpoints.la,  50,30,12,36,-5);
+		CreateHitbox(hardpoints.ra, -50,30,12,36,-5);
+		CreateHitbox(hardpoints.lt,  25,55, 8,12,-20);
+		CreateHitbox(hardpoints.rt, -25,55, 8,12,-20);
+		CreateHitbox(hardpoints.ct,   0,40,10,26,10);
+	}
 }
 
 // Heavy Mechs
@@ -471,6 +541,16 @@ class Timberwolf : MechWarrior
 		equipStruct("LRM_Ammo",hardpoints.rt,1);
 		equipStruct("LRM_Ammo",hardpoints.lt,1);
 		equipStruct("DoubleHeatsink",hardpoints.la,1);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 8,46,-10);
+		CreateHitbox(hardpoints.rl, -16, 0, 8,46,-10);
+		CreateHitbox(hardpoints.la,  34,44, 8,36, 5);
+		CreateHitbox(hardpoints.ra, -34,44, 8,36, 5);
+		CreateHitbox(hardpoints.lt,  15,65,10,36, 0);
+		CreateHitbox(hardpoints.rt, -15,65,10,36, 0);
+		CreateHitbox(hardpoints.ct,   0,40,10,48,10);
 	}
 }
 
@@ -580,6 +660,16 @@ class Rifleman : MechWarrior
 		equipWeapon("ERSmallLaser",hardpoints.ct,3);
 		equipStruct("JumpJet",hardpoints.ll,2);
 		equipStruct("JumpJet",hardpoints.rl,2);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.la,  40,65,16,20, 30);
+		CreateHitbox(hardpoints.ra, -40,65,16,20, 30);
+		CreateHitbox(hardpoints.lt,  15,60,10,20, 0);
+		CreateHitbox(hardpoints.rt, -15,60,10,20, 0);
+		CreateHitbox(hardpoints.ct,   0,40,10,48,10);
 	}
 }
 
