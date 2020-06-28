@@ -238,14 +238,16 @@ void mech_weapons()
 		
 		// Get reference to shootable actor under players aim.
 		// AimLineAttack or AimTarget fail to respect viewheight, hence the LineTrace.
-		FLineTraceData lt;
-		LineTrace(angle, 9999, pitch, 0, viewheight, 0.0,0.0, lt);
-		if(lt.HitActor)
+		//FLineTraceData lt;
+		//LineTrace(angle, 9999, pitch, 0, viewheight, 0.0,0.0, lt);
+		let lt = MechTargetTracer.CreateTrace(self, Vec3Offset(0,0,viewheight),angle,pitch,8192.0);
+		if(lt.hit_target)
 		{
 			SoundEmitter.SE_Trigger("Mech/Target/Get",pos);
-			if(targetreticle)targetreticle.RDeconstruct();
-			targetenemy = lt.HitActor;
-			targetreticle = MechTargetReticle.InitCreate(self, targetenemy, 16);
+			if(targetreticle) targetreticle.RDeconstruct();
+			targetenemy = lt.hit_target;
+			double fdist = MechHitBox(targetenemy) ? 64 : 2;
+			targetreticle = MechTargetReticle.InitCreate(self, targetenemy, 16, fdist);
 		}
 	}
 	

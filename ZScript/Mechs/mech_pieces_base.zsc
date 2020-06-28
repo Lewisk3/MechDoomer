@@ -131,6 +131,12 @@ class MechPartsBase : Actor
 		MechPartsBase.CockpitOffset 0, 60;
 	}
 	
+	override bool CanCollideWith(Actor other, bool passive)
+	{
+		if(other is "MechHitbox") return false;
+		return super.CanCollideWith(other, passive);
+	}
+	
 	bool CheckLocalObserver()
 	{
 		return mechowner == MechwarriorBase(players[consoleplayer].mo);
@@ -202,7 +208,7 @@ class MechCockpitCamera : MechPartsBase
 	override void tick()
 	{
 		if(!defz) defz = czoffs;
-		if(mechowner && !mechowner.CheckVoodoo()) 
+		if(mechowner && !mechowner.CheckVoodoo(true)) 
 		{		
 			double fovdiff = mechowner.player.FOV/mechowner.defaultfov*0.5;
 			CameraFOV = mechowner.player.FOV;
@@ -263,7 +269,7 @@ class MechCockpitModel : MechPartsBase
 		}
 		cockpitcam.rot_spd = rotatespeed;	
 		
-		if(mechowner && !mechowner.CheckVoodoo()) 
+		if(mechowner && !mechowner.CheckVoodoo(true)) 
 		{	
 			if( (!mechowner.mech_shutdown && !mechowner.pilotlook) || mechowner.defaultmovement )
 			{
@@ -367,8 +373,11 @@ class MechArmsBase : MechPartsBase
 	
 	override void tick()
 	{
-		super.tick();
-		if(!mechowner) return;
+		if(!mechowner)
+		{
+			super.Tick();	
+			return;
+		}
 		let base = mechowner.models_reference;
 		let cockpit = base.cockpit;
 		if(mechowner && base && CheckLocalObserver())
@@ -393,6 +402,7 @@ class MechArmsBase : MechPartsBase
 		}
 		else
 			bInvisible = true;
+		super.tick();
 	}
 }
 

@@ -113,6 +113,7 @@ class mw_InvInfo : Item_NoPickup
 class MechWarriorBase : DoomPlayer
 {
 	// Chassis properties
+	Property Size : mech_radius, mech_height;
 	Property heatEff  : baseHeatEfficiency;
 	Property LegSpeed : LegSpeed;
 	Property Acceleration : move_accel;
@@ -145,9 +146,12 @@ class MechWarriorBase : DoomPlayer
 		
 		return 0;
 	}
-	clearscope bool checkVoodoo() 
+	clearscope bool checkVoodoo(bool checkpinfo=false) 
 	{ 
-		return docopy_novoodoo ? false : (!player || !player.mo || player.mo != self); 
+		if(checkpinfo) 
+			return !player;
+		else
+			return docopy_novoodoo ? false : (!player || !player.mo || player.mo != self); 
 	}
 	clearscope String getChassisName()
 	{
@@ -172,6 +176,7 @@ class MechWarrior : MechWarriorBase
 		Player.SoundClass "MechWarrior";
 		Player.DisplayName "";
 		
+		MechWarriorBase.Size 48, 64;
 		MechWarriorBase.CValue 1000000;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Innersphere;
 		MechWarriorBase.Engine "Engine_STD_300";

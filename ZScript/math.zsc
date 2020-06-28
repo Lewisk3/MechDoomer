@@ -150,3 +150,64 @@ class MDMath Abstract
 		bits &= ~bit;
 	}
 }
+
+// LineTracer for targetting mechs and monsters.
+class MechTargetTracer : LineTracer
+{
+	Actor source;
+	Actor hit_target;
+	
+	play static MechTargetTracer CreateTrace(Actor src, vector3 startpos, double angle, double pitch, double dist, uint traceflags = 0)
+	{
+		vector3 dir;
+		dir.xy = Actor.AngleToVector(angle);
+		dir.z = sin(-pitch);
+		let tracer = new("MechTargetTracer");
+		if(tracer) 
+		{
+			tracer.source = src;
+			let secget = Actor.Spawn("Actor",startpos);
+			tracer.Trace(startpos, secget.CurSector, dir, dist, traceflags);
+			secget.Destroy();
+		}
+		return tracer;
+	}
+	
+	override ETraceStatus TraceCallback()
+	{
+		if(results.HitType == Trace_HitWall)
+		{
+			return Trace_Skip;
+		}
+		
+		if(results.HitType == Trace_HitActor)
+		{
+			let hitactor = results.HitActor;
+			if(hitactor == source || !hitactor.bSHOOTABLE) return Trace_Skip;
+			
+			// Handle mech hit, redirect to mech center.
+			if(Mechwarrior(hitactor)) 
+			{
+				hit_target == Mechwarrior(hitactor).hitbox_middle;
+				return Trace_Stop;
+			}
+			
+			// Handle mech hitboxes.
+			let hitbox = MechHitBox(hitactor);
+			if(hitbox)
+			{
+				if(hitbox.mech == source) 
+					return Trace_Skip;
+				else
+				{
+					hit_target = hitbox.mech.hitbox_middle;
+					return Trace_Stop;
+				}
+			}
+			
+			// Default
+			hit_target = hitactor;
+		}
+		return Trace_Stop;
+	}
+}

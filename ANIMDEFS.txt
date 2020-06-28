@@ -1,1 +1,1 @@
-cameratexture TargetCamera 128 120 fit 227 176 // This texture is drawn with HudMessage.
+cameratexture TargetCamera 1024 768 fit 227 176 // This texture is drawn with HudMessage.

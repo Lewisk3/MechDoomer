@@ -61,6 +61,19 @@ class MechDoomerEvents : EventHandler
 			double fovH = (e.camera.player != NULL) ? e.camera.player.FOV : e.camera.cameraFOV;
 			mwd_Matrix worldToClip = mwd_Matrix.worldToClip(e.viewPos, e.viewAngle, e.viewPitch, e.viewRoll, fovH);
 			Actor projActor = plr.targetenemy;
+			double projRadius = projActor.radius;
+			double projHeight = projActor.height;
+			double bottom = 0;
+			if(projActor is "MechHitbox")
+			{
+				let hbox = MechHitBox(projActor);
+				if(projActor)
+				{
+					projRadius = Mechwarrior(hbox.mech).mech_radius;
+					projHeight = Mechwarrior(hbox.mech).mech_height;
+					bottom = -(projHeight*0.5);
+				}
+			}
 			if (plr && projActor) 
 			{
 				// this moves the position of the actor into absolute coordinates relative to the viewPos
@@ -68,14 +81,14 @@ class MechDoomerEvents : EventHandler
 				Vector3 adjustedWorldPos = e.viewPos + LevelLocals.vec3Diff(e.viewPos, projActor.pos);
 				
 				Vector3 positions[8];
-				positions[0] = (adjustedWorldPos + ( projActor.radius,  projActor.radius, 0               ));
-				positions[1] = (adjustedWorldPos + (-projActor.radius,  projActor.radius, 0               ));
-				positions[2] = (adjustedWorldPos + ( projActor.radius, -projActor.radius, 0               ));
-				positions[3] = (adjustedWorldPos + (-projActor.radius, -projActor.radius, 0               ));
-				positions[4] = (adjustedWorldPos + ( projActor.radius,  projActor.radius, projActor.height));
-				positions[5] = (adjustedWorldPos + (-projActor.radius,  projActor.radius, projActor.height));
-				positions[6] = (adjustedWorldPos + ( projActor.radius, -projActor.radius, projActor.height));
-				positions[7] = (adjustedWorldPos + (-projActor.radius, -projActor.radius, projActor.height));
+				positions[0] = (adjustedWorldPos + ( projRadius,  projRadius, bottom    ));
+				positions[1] = (adjustedWorldPos + (-projRadius,  projRadius, bottom    ));
+				positions[2] = (adjustedWorldPos + ( projRadius, -projRadius, bottom    ));
+				positions[3] = (adjustedWorldPos + (-projRadius, -projRadius, bottom    ));
+				positions[4] = (adjustedWorldPos + ( projRadius,  projRadius, projHeight));
+				positions[5] = (adjustedWorldPos + (-projRadius,  projRadius, projHeight));
+				positions[6] = (adjustedWorldPos + ( projRadius, -projRadius, projHeight));
+				positions[7] = (adjustedWorldPos + (-projRadius, -projRadius, projHeight));
 				
 				Vector3 ndcPositions[8];
 				// ndcCounter tracks how many valid ndcPositions were found, if it's not 8 by the end of the loop then
@@ -497,6 +510,18 @@ class MechDoomerEvents : EventHandler
 			Array<String> netcmds;
 			netcmds.Clear();
 			netcmd.split(netcmds,":");
+			if(netcmds[0] == "createmech")
+			{
+				string type = netcmds[1];
+				let mechact = MechwarriorBase(plr.Spawn(type,plr.pos));
+				if(mechact)
+				{
+					mechact.docopy_novoodoo = true;
+					mechact.setupInventory();
+					mechact.mech_weapons();
+					mechact.baseclass = type;
+				}
+			}
 			if(netcmds[0] == "mechlab_alert")
 			{
 				plr.mechlab_alert("\c[RED]"..netcmds[1]);

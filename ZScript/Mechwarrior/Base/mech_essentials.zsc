@@ -6,7 +6,6 @@ extend class MechwarriorBase;
 // Vars
 bool uiopen_Mechlab;
 bool forceshutdown;
-bool reset_hitboxes;
 class<MechwarriorBase> baseclass;
 mw_InvInfo inv_context;
 MechHardpoints hardpoints;
@@ -36,6 +35,13 @@ Array<mw_StoredMech> shopmechs;
 class<MechTorsoBase> mech_models;
 class<Mechbase_Engine> base_engine;
 bool modelcockpit;
+// Visual properties, mainly for targetting.
+double mech_height;
+double mech_radius;
+
+// Hitbox
+bool reset_hitboxes;
+MechHitBox hitbox_middle;
 
 // HUD
 String hud_cockpit;
@@ -311,7 +317,7 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 }
 
 override void PostBeginPlay()
-{
+{	
 	// Spawn pieces (WIP)
 	TrySetupModels();
 	
@@ -321,18 +327,20 @@ override void PostBeginPlay()
 		super.PostBeginPlay();
 		return;
 	}
-	setupInventory();
-	
-	baseclass = GetClassName();
-	weapons_fired = false;
-	weapon_groupfire = false;
-	selectedGroup = 1;
-	selectedWeapon = 1;
-	mech_jetsfuel = 100;
-	defviewz = Player.ViewHeight;
-	inv_context.maxgroup = getMaxWeaponGrouping();
-	defaultfov = player.desiredFOV;
-			
+	// Check for temp mech with no real player.
+	if(player)
+	{
+		setupInventory();	
+		baseclass = GetClassName();
+		weapons_fired = false;
+		weapon_groupfire = false;
+		selectedGroup = 1;
+		selectedWeapon = 1;
+		mech_jetsfuel = 100;
+		defviewz = Player.ViewHeight;
+		inv_context.maxgroup = getMaxWeaponGrouping();
+		defaultfov = player.desiredFOV;
+	}
 	// SoundQueue 
 	mechsounds = SoundQueue.SQ_Create(self, 32);
 	
@@ -347,7 +355,6 @@ override void PostBeginPlay()
 		level.airfriction = 0.87;
 	}	
 	
-		
 	// startMechbay();
 	super.PostBeginPlay();
 }
@@ -372,7 +379,8 @@ override void tick()
 	if(reset_hitboxes && models_reference)
 	{
 		reset_hitboxes = false;
-		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.ct);
+		// Middle hitbox is used for targetting
+		hitbox_middle = MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.ct);
 		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.la);
 		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.ra);
 		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.lt);
@@ -381,6 +389,7 @@ override void tick()
 		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.rl);
 	}
 	
+	if(!player) return;
 	// Betty sound for automap toggle
 	if(automapactive && !prev_automap) 
 	{

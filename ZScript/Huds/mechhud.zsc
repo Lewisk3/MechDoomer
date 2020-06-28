@@ -731,7 +731,8 @@ class MechStatusBar : BaseStatusBar
 			
 			if(!animating)
 			{
-				String targetname = mech.targetenemy.getTag();
+				let hbox = MechHitBox(mech.targetenemy);
+				String targetname = (hbox && hbox.mech) ? hbox.mech.getChassisName() : mech.targetenemy.getTag();
 				targetname.Replace("_"," ");
 				if(isNav)	
 					H_DrawString("\c[SAPPHIRE]" .. targetname,(50,955),scale:(1.5,1.5));
