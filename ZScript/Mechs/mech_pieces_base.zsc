@@ -208,7 +208,7 @@ class MechCockpitCamera : MechPartsBase
 	override void tick()
 	{
 		if(!defz) defz = czoffs;
-		if(mechowner && !mechowner.CheckVoodoo(true)) 
+		if(mechowner && !mechowner.CheckVoodoo() && mechowner.player) 
 		{		
 			double fovdiff = mechowner.player.FOV/mechowner.defaultfov*0.5;
 			CameraFOV = mechowner.player.FOV;

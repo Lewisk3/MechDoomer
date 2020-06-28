@@ -64,14 +64,17 @@ class MechDoomerEvents : EventHandler
 			double projRadius = projActor.radius;
 			double projHeight = projActor.height;
 			double bottom = 0;
+			double top = projHeight;
 			if(projActor is "MechHitbox")
 			{
 				let hbox = MechHitBox(projActor);
 				if(projActor)
 				{
-					projRadius = Mechwarrior(hbox.mech).mech_radius;
-					projHeight = Mechwarrior(hbox.mech).mech_height;
-					bottom = -(projHeight*0.5);
+					let mech = Mechwarrior(hbox.mech);
+					projRadius = mech.mech_radius;
+					projHeight = mech.mech_height;
+					bottom = mech.pos.z-projActor.pos.z;
+					top = projHeight;
 				}
 			}
 			if (plr && projActor) 
@@ -85,10 +88,10 @@ class MechDoomerEvents : EventHandler
 				positions[1] = (adjustedWorldPos + (-projRadius,  projRadius, bottom    ));
 				positions[2] = (adjustedWorldPos + ( projRadius, -projRadius, bottom    ));
 				positions[3] = (adjustedWorldPos + (-projRadius, -projRadius, bottom    ));
-				positions[4] = (adjustedWorldPos + ( projRadius,  projRadius, projHeight));
-				positions[5] = (adjustedWorldPos + (-projRadius,  projRadius, projHeight));
-				positions[6] = (adjustedWorldPos + ( projRadius, -projRadius, projHeight));
-				positions[7] = (adjustedWorldPos + (-projRadius, -projRadius, projHeight));
+				positions[4] = (adjustedWorldPos + ( projRadius,  projRadius, top		));
+				positions[5] = (adjustedWorldPos + (-projRadius,  projRadius, top		));
+				positions[6] = (adjustedWorldPos + ( projRadius, -projRadius, top		));
+				positions[7] = (adjustedWorldPos + (-projRadius, -projRadius, top		));
 				
 				Vector3 ndcPositions[8];
 				// ndcCounter tracks how many valid ndcPositions were found, if it's not 8 by the end of the loop then

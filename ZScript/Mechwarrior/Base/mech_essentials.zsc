@@ -6,6 +6,7 @@ extend class MechwarriorBase;
 // Vars
 bool uiopen_Mechlab;
 bool forceshutdown;
+bool valid_player; // For multiplayer checking when a player DCs.
 class<MechwarriorBase> baseclass;
 mw_InvInfo inv_context;
 MechHardpoints hardpoints;

@@ -716,6 +716,7 @@ class MechStatusBar : BaseStatusBar
 		
 		if(mech.targetenemy)
 		{	
+			let targetMechBase = MechHitBox(mech.targetenemy);
 			bool isNav = NAVPoint(mech.targetenemy) != NULL;
 			Actor cam;
 			if(!isNav)
@@ -731,8 +732,7 @@ class MechStatusBar : BaseStatusBar
 			
 			if(!animating)
 			{
-				let hbox = MechHitBox(mech.targetenemy);
-				String targetname = (hbox && hbox.mech) ? hbox.mech.getChassisName() : mech.targetenemy.getTag();
+				String targetname = (targetMechBase && targetMechBase.mech) ? targetMechBase.mech.getChassisName() : mech.targetenemy.getTag();
 				targetname.Replace("_"," ");
 				if(isNav)	
 					H_DrawString("\c[SAPPHIRE]" .. targetname,(50,955),scale:(1.5,1.5));
@@ -741,7 +741,7 @@ class MechStatusBar : BaseStatusBar
 					
 				H_DrawString("\c[GREEN]"..dist .. "m",(55,983),scale:(1.35,1.35));
 				// Enemy health bar (If not NAVPoint)
-				if(!NAVPoint(mech.targetenemy))
+				if(!isNav && !targetMechBase)
 				{
 					double percenthealth = double(mech.targetenemy.SpawnHealth()-(mech.targetenemy.SpawnHealth()-hpcounter) ) / mech.targetenemy.SpawnHealth();
 					if(mech.targetenemy.health < hpcounter)hpcounter -= (hpcounter-mech.targetenemy.health)*0.1;
@@ -758,6 +758,16 @@ class MechStatusBar : BaseStatusBar
 					String percenthp = percenthealth*100 .. "";
 					percenthp.truncate(percenthp.Length()-6);
 					H_DrawString(percenthp .. "%" ,(170,920));
+				}
+				if(targetMechBase && targetMechBase.mech)
+				{
+					// Draw paperdoll
+					String hud_mech = targetMechBase.mech.hud_mech;
+					if(hud_mech.ByteAt(0) == "#")
+					{
+						hud_mech.Remove(0,1);
+						DrawPaperDoll((-1722, -250), targetMechBase.mech, hud_mech, false);
+					}
 				}
 			}
 		}
@@ -809,10 +819,10 @@ class MechStatusBar : BaseStatusBar
 				if(hud_mech.ByteAt(0) == "#")
 				{
 					hud_mech.Remove(0,1);
-					DrawPaperDoll(hud_mech, false);
+					DrawPaperDoll((-382, -245), mechplr, hud_mech, false);
 				}
 				else
-					DrawPaperDoll(hud_mech, true);
+					DrawPaperDoll((-590, -360), mechplr, hud_mech, true);
 					
 				// Crosshair
 				double chscale = CVar.GetCVar("mwd_crosshairsize",mech.player).GetFloat();
@@ -854,16 +864,17 @@ class MechStatusBar : BaseStatusBar
 		}
 	}
 
-	void DrawPaperDoll(String paperdoll, bool clipmode=true)
+	void DrawPaperDoll(vector2 pos, Mechwarrior src, String paperdoll, bool clipmode=true)
 	{
-		double hd_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.hd);
-		double ct_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ct);
-		double lt_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.lt);
-		double rt_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.rt);
-		double la_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.la);
-		double ra_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ra);
-		double ll_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.ll);
-		double rl_dmg = 1.0-GetHardpointVitalRatio(mechplr.inv_context.hardpoints.rl);
+		if(!src.inv_context) return;
+		double hd_dmg = 1.0-GetHardpointVitalRatio(src.inv_context.hardpoints.hd);
+		double ct_dmg = 1.0-GetHardpointVitalRatio(src.inv_context.hardpoints.ct);
+		double lt_dmg = 1.0-GetHardpointVitalRatio(src.inv_context.hardpoints.lt);
+		double rt_dmg = 1.0-GetHardpointVitalRatio(src.inv_context.hardpoints.rt);
+		double la_dmg = 1.0-GetHardpointVitalRatio(src.inv_context.hardpoints.la);
+		double ra_dmg = 1.0-GetHardpointVitalRatio(src.inv_context.hardpoints.ra);
+		double ll_dmg = 1.0-GetHardpointVitalRatio(src.inv_context.hardpoints.ll);
+		double rl_dmg = 1.0-GetHardpointVitalRatio(src.inv_context.hardpoints.rl);
 		
 		vector2 hmechpos;
 		Color hpcolor;
@@ -871,8 +882,9 @@ class MechStatusBar : BaseStatusBar
 		
 		if(mechplr.hud_htal)
 		{	
-			vector2 clippos = (1370,810);
-			hmechpos = (-590,-360);
+			// 1370, 810 :: -590, -360
+			hmechpos = pos;
+			vector2 clippos = (hmechpos.x+1960,hmechpos.y+1170);
 			hpcolor  = getHealthyColor(1.0,0);
 			pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
 			H_SetClipRect(clippos.x,clippos.y-128,256,115,false);
@@ -928,7 +940,8 @@ class MechStatusBar : BaseStatusBar
 		}
 		else
 		{
-			hmechpos = (-382,-245);
+			// -382, -245
+			hmechpos = pos;
 			hpcolor  = getHealthyColor(1.0,0);
 			pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
 			if(!clipmode)
