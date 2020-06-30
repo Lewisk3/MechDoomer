@@ -321,6 +321,16 @@ class Firemoth : MechWarrior
 		equipWeapon("ERMediumLaser",hardpoints.la,2);
 		equipWeapon("ERMediumLaser",hardpoints.ra,2);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,   8, 0, 4,40,  0);
+		CreateHitbox(hardpoints.rl,  -8, 0, 4,40,  0);
+		CreateHitbox(hardpoints.la,  24,60, 6,18,  0);
+		CreateHitbox(hardpoints.ra, -24,60, 6,18,  0);
+		CreateHitbox(hardpoints.lt,   8,40, 4,24,  0);
+		CreateHitbox(hardpoints.rt,  -8,40, 4,24,  0);
+		CreateHitbox(hardpoints.ct,   0,40, 6,24, 10);
+	}
 }
 class Raven : MechWarrior
 {
@@ -357,6 +367,16 @@ class Raven : MechWarrior
 		equipStruct("AntiMissileSystem", hardpoints.lt, 1);
 		equipStruct("AMSAmmo", hardpoints.lt, 2);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  18, 0, 4,40, 0);
+		CreateHitbox(hardpoints.rl, -18, 0, 4,40, 0);
+		CreateHitbox(hardpoints.la,  26,62, 4, 8, 5);
+		CreateHitbox(hardpoints.ra, -26,62, 4, 8, 5);
+		CreateHitbox(hardpoints.lt,  18,50, 6,16, 0);
+		CreateHitbox(hardpoints.rt, -18,50, 6,16, 0);
+		CreateHitbox(hardpoints.ct,   0,38, 8,26,10);
+	}
 }
 class Kitfox : MechWarrior
 {
@@ -392,6 +412,16 @@ class Kitfox : MechWarrior
 		equipWeapon("SmallPulseLaser",hardpoints.la,2);
 		equipWeapon("SSRM4",hardpoints.ct,3);
 		equipStruct("SSRM_Ammo",hardpoints.rt,2);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  24, 0, 8,46,-10);
+		CreateHitbox(hardpoints.rl, -24, 0, 8,46,-10);
+		CreateHitbox(hardpoints.la,  42,44,10,20, 15);
+		CreateHitbox(hardpoints.ra, -42,44,10,20, 15);
+		CreateHitbox(hardpoints.lt,  18,42, 8,24,  0);
+		CreateHitbox(hardpoints.rt, -18,42, 8,24,  0);
+		CreateHitbox(hardpoints.ct,   0,48,12,30, 14);
 	}
 }
 // Medium Mechs
