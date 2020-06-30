@@ -617,6 +617,16 @@ class Summoner : MechWarrior
 		equipStruct("JumpJet",hardpoints.rl,2);
 		equipStruct("JumpJet",hardpoints.ct,1);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 8,46, 0);
+		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 0);
+		CreateHitbox(hardpoints.la,  34,60, 8,26, 5);
+		CreateHitbox(hardpoints.ra, -34,44, 8,36, 5);
+		CreateHitbox(hardpoints.lt,  15,65,10,36, 0);
+		CreateHitbox(hardpoints.rt, -15,55,10,36, 0);
+		CreateHitbox(hardpoints.ct,   0,55,10,36,10);
+	}
 }
 
 class MadDog : MechWarrior
@@ -651,6 +661,16 @@ class MadDog : MechWarrior
 		equipWeapon("LRM20",hardpoints.lt,3);
 		equipStruct("LRM_Ammo",hardpoints.rt,2);
 		equipStruct("LRM_Ammo",hardpoints.lt,2);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  26, 0, 8,48,-10);
+		CreateHitbox(hardpoints.rl, -26, 0, 8,48,-10);
+		CreateHitbox(hardpoints.la,  38,55, 8,20, 8);
+		CreateHitbox(hardpoints.ra, -38,55, 8,20, 8);
+		CreateHitbox(hardpoints.lt,  15,65,10,28, 0);
+		CreateHitbox(hardpoints.rt, -15,65,10,28, 0);
+		CreateHitbox(hardpoints.ct,   0,55,10,36,20);
 	}
 }
 
@@ -815,6 +835,16 @@ class Gargoyle : MechWarrior
 		equipStruct("AC5_Ammo",hardpoints.la,3);
 		equipStruct("AC5_Ammo",hardpoints.ra,3);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.la,  34,54, 8,36, 8);
+		CreateHitbox(hardpoints.ra, -34,54, 8,36, 8);
+		CreateHitbox(hardpoints.lt,  15,55,10,36, 0);
+		CreateHitbox(hardpoints.rt, -15,55,10,36, 0);
+		CreateHitbox(hardpoints.ct,   0,38,10,52,10);
+	}
 }
 
 class Hellbringer : MechWarrior
@@ -854,6 +884,16 @@ class Hellbringer : MechWarrior
 		equipStruct("SSRM_Ammo",hardpoints.rl,2);
 		equipStruct("BulletsMGun",hardpoints.lt,3);
 		equipStruct("AMSAmmo",hardpoints.rt,3);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.la,  38,44, 8,30, 8);
+		CreateHitbox(hardpoints.ra, -38,44, 8,30, 8);
+		CreateHitbox(hardpoints.lt,  15,55, 8,36, 0);
+		CreateHitbox(hardpoints.rt, -15,55, 8,36, 0);
+		CreateHitbox(hardpoints.ct,   0,44,10,36, 0);
 	}
 }
 
@@ -898,7 +938,16 @@ class Atlas : MechWarrior
 		equipWeapon("LRM20",hardpoints.lt,3);
 		equipWeapon("SRM6",hardpoints.lt,3);
 	}
-
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.la,  44,70,12,36,20);
+		CreateHitbox(hardpoints.ra, -44,70,12,36,20);
+		CreateHitbox(hardpoints.lt,  22,68, 8,36, 5);
+		CreateHitbox(hardpoints.rt, -22,68, 8,36, 5);
+		CreateHitbox(hardpoints.ct,   0,55,10,48,10);
+	}
 }
 
 class Direwolf : MechWarrior
@@ -944,6 +993,16 @@ class Direwolf : MechWarrior
 		equipWeapon("UAutocannon5",hardpoints.lt,3);
 		equipWeapon("LRM10",hardpoints.rt,4);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0,12,46,-10);
+		CreateHitbox(hardpoints.rl, -16, 0,12,46,-10);
+		CreateHitbox(hardpoints.la,  44,44,12,36, 12);
+		CreateHitbox(hardpoints.ra, -44,44,12,36, 12);
+		CreateHitbox(hardpoints.lt,  15,48,10,36,  8);
+		CreateHitbox(hardpoints.rt, -15,48,10,36,  8);
+		CreateHitbox(hardpoints.ct,   0,40,12,48, 20);
+	}
 }
 
 class Warhawk : MechWarrior
@@ -983,6 +1042,16 @@ class Warhawk : MechWarrior
 		equipWeapon("ERPPC",hardpoints.ra,1);
 		equipWeapon("ERPPC",hardpoints.ra,1);
 		equipWeapon("LRM10",hardpoints.rt,2);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0,14,46, 15);
+		CreateHitbox(hardpoints.rl, -16, 0,14,46, 15);
+		CreateHitbox(hardpoints.la,  44,50,18,36, 16);
+		CreateHitbox(hardpoints.ra, -44,50,18,36, 16);
+		CreateHitbox(hardpoints.lt,  15,65,10,30,  8);
+		CreateHitbox(hardpoints.rt, -15,65,10,30,  8);
+		CreateHitbox(hardpoints.ct,   0,55,12,40, 20);
 	}
 }
 
@@ -1027,6 +1096,16 @@ class Warhammer : MechWarrior
 		equipWeapon("MediumPulseLaser",hardpoints.hd,1);
 		equipWeapon("SRM6",hardpoints.rt,3);
 	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 5);
+		CreateHitbox(hardpoints.la,  44,44,18,30,20);
+		CreateHitbox(hardpoints.ra, -44,44,18,30,20);
+		CreateHitbox(hardpoints.lt,  20,60, 8,38, 0);
+		CreateHitbox(hardpoints.rt, -20,60, 8,38, 0);
+		CreateHitbox(hardpoints.ct,   0,44,10,36, 0);
+	}	
 }
 // SuperHeavy Mechs
 // ...
