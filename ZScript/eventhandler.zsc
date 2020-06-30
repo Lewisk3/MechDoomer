@@ -185,19 +185,18 @@ class MechDoomerEvents : EventHandler
 	
 	// Whatever, it works. Until it's actually possible to make a toggle switch for UI
 	// without using hacky code, i'm not going to bother adjusting this.
-	ui Array<int> keycache;
+	ui int keycache;
 	override bool InputProcess(InputEvent e)
 	{
 		let plr = Mechwarrior(players[consoleplayer].mo);
 		Menu m = Menu.GetCurrentMenu();
-		if(plr && !plr.uiopen_mechlab) keycache.Push(int(e.KeyChar));
-		if(keycache.Size() > 3) keycache.Clear();
+		if(plr && !plr.uiopen_mechlab) keycache = e.KeyChar;
 		if(plr && plr.uiopen_mechlab)
 		{
 			if (!Mechlab_Menu(m))
 			{
 				let mechlab = Mechlab_Menu(new('Mechlab_Menu'));
-				mechlab.Init(null, plr, keycache[keycache.Size()-1]);
+				mechlab.Init(null, plr, keycache);
 				mechlab.ActivateMenu();
 				return true;
 			}
