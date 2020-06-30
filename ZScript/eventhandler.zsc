@@ -411,7 +411,7 @@ class MechDoomerEvents : EventHandler
 				if(!plr.dronecam) plr.ToggleDrone(200,0,15,false);
 				plr.dronecam.frontcam = !plr.dronecam.frontcam;
 			}
-			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageMobJ(null,null,1,""); }
+			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageHardpoint(plr.hardpoints.hd, 1); }
 			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
 			if(netcmd == "adjust_armor") plr.AdjustMaxArmor(plr.hardpoints.FindByIndex(e.Args[0]),e.Args[1], true);
 			if(netcmd == "equip_invweap") plr.equipWeaponInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);
@@ -502,7 +502,12 @@ class MechDoomerEvents : EventHandler
 				plr.adjustMoney(e.Args[0]);
 				console.printf("Obtained: %d cbills from a totally legitimate source.", e.Args[0]);
 			}
-			
+			if(netcmd == "restoremechstatus")
+			{
+				plr.isdead = false;
+				plr.player.cheats &= ~CF_TOTALLYFROZEN;
+				console.printf("Restored mech status for player #%d", plr.PlayerNumber()); 
+			}	
 			if(netcmd == "-mwd_switchammo") plr.btn_switchammo = false;
 			if(netcmd == "+mwd_switchammo") plr.btn_switchammo = true;
 	

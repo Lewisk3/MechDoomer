@@ -181,8 +181,11 @@ void ChangeMech(int invmech)
 	
 	// Only save live mech!
 	if(!isdead) inv_context.mechs.Insert(invmech, curmech);
-	return;
 	
+	// Revive potentially dead player.
+	isdead = false;
+	player.cheats &= ~CF_TOTALLYFROZEN;
+	return;
 }
 
 mw_StoredMech CreateStoredMech(class<MechwarriorBase> type, bool attachtomech=true)
