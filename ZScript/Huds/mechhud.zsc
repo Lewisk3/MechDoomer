@@ -613,7 +613,7 @@ class MechStatusBar : BaseStatusBar
 				{			
 					int x = mech.pos.x - obj.pos.x;
 					int y = mech.pos.y - obj.pos.y;
-					int dis = obj.Distance2D(CPlayer.mo) / MWGAMEPLAY_UNITMETER;
+					int dis = obj.Distance2D(CPlayer.mo) / 6;
 					double frange = animating ? range * (fradius/160.) : range;
 					if( dis < frange )
 					{

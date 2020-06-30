@@ -381,13 +381,7 @@ bool moveStructToInv(int struc_ind, bool move=true)
 
 void removeStruct(int ind, bool delete=true)
 {
-	if(ind < 0 || ind > inv_context.mechstructs.Size()-1)
-	{
-		// This really shouldn't happen but, it did to me once and i cannot reproduce it.
-		console.printf("[FATAL]: Fatal error handled in removeStruct, struct doesn't exist! (Please report this error to Lewisk3)");
-		return;
-	}
-	
+	if(ind < 0 || ind > inv_context.mechstructs.Size()-1) return;
 	let mstruct = inv_context.mechstructs[ind];
 	let ut = GetDefaultByType(utilcast(mstruct.Tag));
 	MechHardpoint hp = mstruct.hardpoint;
