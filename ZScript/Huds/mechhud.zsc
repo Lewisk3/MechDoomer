@@ -766,7 +766,9 @@ class MechStatusBar : BaseStatusBar
 					if(hud_mech.ByteAt(0) == "#")
 					{
 						hud_mech.Remove(0,1);
-						DrawPaperDoll((-1722, -250), targetMechBase.mech, hud_mech, false);
+						vector2 pdpos = (-1722, -250);
+						if(mechplr.hud_htal) pdpos = (-1280,0);
+						DrawPaperDoll(pdpos, targetMechBase.mech, hud_mech, false);
 					}
 				}
 			}
@@ -818,8 +820,10 @@ class MechStatusBar : BaseStatusBar
 				String hud_mech = mech.hud_mech;
 				if(hud_mech.ByteAt(0) == "#")
 				{
+					vector2 pdpos = (-382, -245);
 					hud_mech.Remove(0,1);
-					DrawPaperDoll((-382, -245), mechplr, hud_mech, false);
+					if(mechplr.hud_htal) pdpos = (0,0);
+					DrawPaperDoll(pdpos, mechplr, hud_mech, false);
 				}
 				else
 					DrawPaperDoll((-590, -360), mechplr, hud_mech, true);
@@ -883,8 +887,10 @@ class MechStatusBar : BaseStatusBar
 		if(mechplr.hud_htal)
 		{	
 			// 1370, 810 :: -590, -360
-			hmechpos = pos;
-			vector2 clippos = (hmechpos.x+1960,hmechpos.y+1170);
+			vector2 clippos = (1370,810);
+			hmechpos = (-590,-360);
+			clippos+=pos;
+			hmechpos+=pos;
 			hpcolor  = getHealthyColor(1.0,0);
 			pd_flags = MD_SBS.SS_TEXCOORDS_ABSOLUTE | MD_SBS.SS_SCREEN_BOTTOM_RIGHT;
 			H_SetClipRect(clippos.x,clippos.y-128,256,115,false);
