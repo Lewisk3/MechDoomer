@@ -244,6 +244,8 @@ void mech_movement()
 	if(!player || isdead) return;
 	if(!CheckCompensative() && mech_shutdown) return;
 	if(autopilot) DoAutopilot();
+	CVar throttle_taptoggle = CVar.GetCVar("mwd_throttletaptoggle", player);
+	bool taptoaccelerate = throttle_taptoggle && throttle_taptoggle.GetBool();
 	
 	// Movement Quirks
 	if(defaultmovement && inv_context)
@@ -310,7 +312,7 @@ void mech_movement()
 		{
 			bool prevaccel = GetPlayerInput(INPUT_OLDBUTTONS) & BT_FORWARD;
 			throttle += 0.02;	
-			if(throttle > 0 && reversing) 
+			if(throttle > 0 && reversing && taptoaccelerate) 
 			{
 				if(prevaccel) 
 					throttle = 0;
@@ -334,7 +336,7 @@ void mech_movement()
 		{
 			bool prevdecel = GetPlayerInput(INPUT_OLDBUTTONS) & BT_BACK;
 			throttle -= 0.02;
-			if(throttle < 0 && !reversing) 
+			if(throttle < 0 && !reversing && taptoaccelerate) 
 			{
 				if(prevdecel) 
 					throttle = 0;

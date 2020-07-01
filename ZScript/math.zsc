@@ -157,11 +157,11 @@ class MechTargetTracer : LineTracer
 	Actor source;
 	Actor hit_target;
 	
-	play static MechTargetTracer CreateTrace(Actor src, vector3 startpos, double angle, double pitch, double dist, uint traceflags = 0)
+	play static MechTargetTracer CreateTrace(Actor src, vector3 startpos, double tangle, double tpitch, double dist, uint traceflags = 0)
 	{
 		vector3 dir;
-		dir.xy = Actor.AngleToVector(angle);
-		dir.z = sin(-pitch);
+		dir.xy = Actor.AngleToVector(tangle);
+		dir.z = sin(-tpitch);
 		let tracer = new("MechTargetTracer");
 		if(tracer) 
 		{
@@ -183,12 +183,13 @@ class MechTargetTracer : LineTracer
 		if(results.HitType == Trace_HitActor)
 		{
 			let hitactor = results.HitActor;
-			if(hitactor == source || !hitactor.bSHOOTABLE) return Trace_Skip;
+			if(hitactor == source || !hitactor.bSHOOTABLE || hitactor is "MechPartsBase")
+				return Trace_Skip;
 			
 			// Handle mech hit, redirect to mech center.
 			if(Mechwarrior(hitactor)) 
 			{
-				hit_target == Mechwarrior(hitactor).hitbox_middle;
+				hit_target = Mechwarrior(hitactor).hitbox_middle;
 				return Trace_Stop;
 			}
 			

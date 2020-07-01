@@ -239,7 +239,7 @@ void mech_weapons()
 		// AimLineAttack or AimTarget fail to respect viewheight, hence the LineTrace.
 		//FLineTraceData lt;
 		//LineTrace(angle, 9999, pitch, 0, viewheight, 0.0,0.0, lt);
-		let lt = MechTargetTracer.CreateTrace(self, Vec3Offset(0,0,viewheight),angle,pitch,8192.0);
+		let lt = MechTargetTracer.CreateTrace(self, Vec3Offset(0,0,viewheight),angle,pitch,81920.0);
 		if(lt.hit_target)
 		{
 			SoundEmitter.SE_Trigger("Mech/Target/Get",pos);

@@ -150,8 +150,8 @@ class MechPartsBase : Actor
 	
 	override void tick()
 	{
-		super.Tick();
 		if(mechowner) SetOrigin(getMechPos(),true);
+		super.Tick();
 	}	
 	
 	static MechPartsBase Create(class<MechPartsBase> part, MechWarriorBase base)
@@ -615,6 +615,7 @@ class MechLegsBase : MechPartsBase
 		WalkCycle:
 			TLEG BCDEFGHI 4 
 			{	
+				if(!mechowner) return ResolveState("Null"); // This occurs on disconnect while walking.
 				if(checkStepping() && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 4, 10);
 				if( (frame == 2 || frame == 7) && (spdrating > 0.3 || mechowner.LegVel)) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
@@ -624,6 +625,7 @@ class MechLegsBase : MechPartsBase
 		RunCycle:
 			TLEG KLMNOPQRS 4 
 			{	
+				if(!mechowner) return ResolveState("Null"); // This occurs on disconnect while running.
 				if( (frame == 10 || frame == 15) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 11, 16) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 3, 10);
@@ -653,6 +655,7 @@ class Legs_Smooth  : MechLegsBase
 		WalkCycle:
 			TLE1 BCDEFGHIJKLMNOPQRSTUVWXYZ 2 
 			{	
+				if(!mechowner) return ResolveState("Null"); // This occurs on disconnect while walking.
 				if( (frame == 1 || frame == 15) && (spdrating > 0.3 || mechowner.LegVel) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 2, 16) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 2);
@@ -667,6 +670,7 @@ class Legs_Smooth  : MechLegsBase
 		RunCycle:
 			TLE3 BCDEFGHIJKLMNOPQRSTUVWXYZ 2 
 			{	
+				if(!mechowner) return ResolveState("Null"); // This occurs on disconnect while running.
 				if(frame == 7 || frame == 22) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 8, 23) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);

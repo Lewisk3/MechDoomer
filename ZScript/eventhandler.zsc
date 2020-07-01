@@ -226,7 +226,7 @@ class MechDoomerEvents : EventHandler
 			{
 				if(MechWarrior(e.DamageSource))
 				{
-					int amt = max(Thinghealth * 10.27,1);
+					int amt = max(Thinghealth * 15.60,1);
 					MechWarrior(e.DamageSource).adjustMoney(amt);
 				}
 			}

@@ -81,8 +81,8 @@ clearscope int CalculateHardpointRepairCost(MechHardpoint hp, int stat)
 	int repair_cost = 0;
 	double armor_ratio = hp.defmax_armor <= 0 ? 0 : 1.0 - (!hp.armor ? 1 : hp.armor)/hp.defmax_armor;
 	double internalhp_ratio = 1.0 - (!hp.internalhp ? 1 : hp.internalhp)/hp.max_internal;
-	if(stat == 0 && 	 armor_ratio > 0 ) repair_cost = (4750*armor_ratio)+(hp.defmax_armor*50);
-	if(stat == 1 && internalhp_ratio > 0 ) repair_cost = (1250*internalhp_ratio)+(hp.max_internal*25);
+	if(stat == 0 && 	 armor_ratio > 0 ) repair_cost = (4750*armor_ratio)+(hp.defmax_armor*100);
+	if(stat == 1 && internalhp_ratio > 0 ) repair_cost = (1250*internalhp_ratio)+(hp.max_internal*50);
 	return repair_cost;
 }
 void RepairHardpointStat(int hindex, int stat)

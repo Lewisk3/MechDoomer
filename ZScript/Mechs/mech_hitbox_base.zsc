@@ -53,7 +53,7 @@ class MechHitbox : Actor
 			Destroy();
 			return;
 		}
-		if(!mounted_hp || mech.mech_shutdown) return;
+		if(!mounted_hp) return;
 		double offsangle = CheckTorsoMount() ? mech.models_reference.cockpit.angle : mech.LegAng;
 		double offspitch = CheckTorsoMount() ? mech.models_reference.roll*-MDMath.Sign(xoffs) : 0;
 		vector3 offs = MDMath.VOffsetPitch(offsangle,offspitch, forward, xoffs, 1);	
