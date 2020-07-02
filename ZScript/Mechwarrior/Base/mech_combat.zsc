@@ -242,14 +242,27 @@ void mech_weapons()
 		let c_aim = models_reference ? models_reference.cockpit.cockpitcam : NULL;
 		double aimangle = c_aim ? c_aim.angle : angle;
 		double aimpitch = c_aim ? c_aim.pitch : pitch;
-		let lt = MechTargetTracer.CreateTrace(self, Vec3Offset(0,0,viewheight),aimangle,aimpitch,81920.0);
-		if(lt.hit_target)
+		double twidth = 20;
+		double steps = 16;
+		MechTargetTracer lt;
+		lt = MechTargetTracer.CreateTrace(self, Vec3Offset(0,0,viewheight),aimangle,aimpitch,81920.0);
+		for(int i = 0; i < steps; i++)
 		{
-			SoundEmitter.SE_Trigger("Mech/Target/Get",pos);
-			if(targetreticle) targetreticle.RDeconstruct();
-			targetenemy = lt.hit_target;
-			double fdist = MechHitBox(targetenemy) ? 64 : 2;
-			targetreticle = MechTargetReticle.InitCreate(self, targetenemy, 16, fdist);
+			if(!lt.hit_target)
+			{
+				double arc = (i/steps)*180;
+				double aoffs = cos(180+arc);
+				lt = MechTargetTracer.CreateTrace(self, Vec3Offset(0,0,viewheight),aimangle+(aoffs*twidth),aimpitch,81920.0);
+			}
+			if(lt.hit_target)
+			{
+				SoundEmitter.SE_Trigger("Mech/Target/Get",pos);
+				if(targetreticle) targetreticle.RDeconstruct();
+				targetenemy = lt.hit_target;
+				double fdist = MechHitBox(targetenemy) ? 64 : 2;
+				targetreticle = MechTargetReticle.InitCreate(self, targetenemy, 16, fdist);
+				break;
+			}
 		}
 	}
 	
