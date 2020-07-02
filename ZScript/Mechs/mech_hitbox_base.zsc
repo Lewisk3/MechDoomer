@@ -33,9 +33,12 @@ class MechHitbox : Actor
 	{
 		// Take no damage directly, instead redirect to hardpoint.
 		if(!mech || mech.checkVoodoo() || !mounted_hp || Mechwarrior(inflictor) == mech || Mechwarrior(source) == mech) return 0;
-		double newdmg = double(damage)*MWGAMEPLAY_DAMAGESCALE;
 		Actor damager = inflictor;
+		let mechweap = Mechbase_Actor(inflictor);
 		if(mod == "hitscan") damager = source;
+		double realdamage = mechweap ? mechweap.truedamage : damage;
+		bool mechdmg = (inflictor is "Mechwarrior") || (source is "Mechwarrior");
+		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
 		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
 		return 0;
 	}

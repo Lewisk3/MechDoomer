@@ -4,7 +4,7 @@ class Mechbase_Actor : FastProjectile
 	double heatgen;
 	vector3 spawnpos;
 	double basedamage;
-	int truedamage;
+	double truedamage;
 	MechWarrior mechplayer;
 	double minimum_range;
 	double maximum_range;
@@ -67,8 +67,12 @@ class Mechbase_Actor : FastProjectile
 		if(truedamage)
 		{
 			bool is_battlearmor = (mechplayer.mechtype == mechplayer.MechType_BattleArmor);
-			double damagefinal =  is_battlearmor ? truedamage*MWGAMEPLAY_BADMGSCALE : truedamage;
-			if(!cosmetic) victim.DamageMobJ(self,mechplayer,damagefinal,damagetype,0,mechplayer.angle);
+			double damagefinal =  is_battlearmor ? ceil(truedamage*MWGAMEPLAY_BADMGSCALE) : truedamage;
+			if(!cosmetic)
+			{
+				if(!(victim is "MechHitBox")) damagefinal *= MWGAMEPLAY_WEAPDMGSCALE;
+				victim.DamageMobJ(self,mechplayer,damagefinal,damagetype,0,mechplayer.angle);
+			}
 			SetState(ResolveState("Death"));
 			return 0;
 		}
@@ -951,6 +955,16 @@ class Flame : Mechbase_Actor
 		Gravity 1.6;
 		Projectile;
 	}
+	override int SpecialMissileHit(Actor victim)
+	{
+		let mhit = MechHitBox(victim);
+		if(mhit && mhit.mech && mhit.mech != mechplayer)
+		{
+			Mechwarrior(mhit.mech).heatlevel += (heatgen*MWHEAT_MOD)*1.5;
+		}
+		return super.SpecialMissileHit(victim);
+	}
+	
 	States
 	{
 		Spawn:
