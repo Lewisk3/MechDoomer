@@ -181,7 +181,7 @@ class Torso_Stormcrow : MechTorsoBase {
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 15, 80;
 		MechTorsoBase.CockpitRange 0.78, 0.4, 1.0;
-		MechTorsoBase.TwistSpeed 0.3;
+		MechTorsoBase.TwistSpeed 0.45;
 	}
 }
 
@@ -192,7 +192,7 @@ class Torso_Timberwolf : MechTorsoBase {
 		MechPartsBase.ZOffset 50;
 		MechPartsBase.CockpitOffset 20, 70;
 		MechTorsoBase.CockpitRange 0.76, 0.4, 1.0;
-		MechTorsoBase.TwistSpeed 0.2;
+		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
 class Torso_Summoner : MechTorsoBase {
@@ -201,7 +201,7 @@ class Torso_Summoner : MechTorsoBase {
 		MechPartsBase.ZOffset 45;
 		MechPartsBase.CockpitOffset 0, 90;
 		MechTorsoBase.CockpitRange 0.8, 0.4, 0.6;
-		MechTorsoBase.TwistSpeed 0.15;
+		MechTorsoBase.TwistSpeed 0.25;
 	}
 }
 class Torso_MadDog : MechTorsoBase {
@@ -211,7 +211,7 @@ class Torso_MadDog : MechTorsoBase {
 		MechPartsBase.CockpitOffset 0, 80;
 		MechTorsoBase.ArmsHeight 60;
 		MechTorsoBase.CockpitRange 0.76, 0.4, 0.8;
-		MechTorsoBase.TwistSpeed 0.25;
+		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
 class Torso_Rifleman : MechTorsoBase {
@@ -221,7 +221,7 @@ class Torso_Rifleman : MechTorsoBase {
 		MechPartsBase.CockpitOffset 0, 85;
 		MechTorsoBase.ArmsHeight 45;
 		MechTorsoBase.CockpitRange 1.0, 0.28, 0.5;
-		MechTorsoBase.TwistSpeed 0.35;
+		MechTorsoBase.TwistSpeed 0.45;
 	}
 }
 class Torso_Marauder : MechTorsoBase {
@@ -261,7 +261,7 @@ class Torso_Atlas : MechTorsoBase {
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 100;
 		MechTorsoBase.CockpitRange 0.69, 0.34, 0.7;
-		MechTorsoBase.TwistSpeed 0.06;
+		MechTorsoBase.TwistSpeed 0.12;
 	}
 }
 class Torso_Direwolf : MechTorsoBase {
@@ -270,7 +270,7 @@ class Torso_Direwolf : MechTorsoBase {
 		MechPartsBase.ZOffset 45;
 		MechPartsBase.CockpitOffset 15, 90;
 		MechTorsoBase.CockpitRange 0.66, 0.4, 0.6;
-		MechTorsoBase.TwistSpeed 0.08;
+		MechTorsoBase.TwistSpeed 0.14;
 	}
 }
 class Torso_Warhawk : MechTorsoBase {
@@ -280,7 +280,7 @@ class Torso_Warhawk : MechTorsoBase {
 		MechPartsBase.CockpitOffset 15, 80;
 		MechTorsoBase.ArmsHeight 60;
 		MechTorsoBase.CockpitRange 0.81, 0.4, 0.05;
-		MechTorsoBase.TwistSpeed 0.10;
+		MechTorsoBase.TwistSpeed 0.20;
 	}
 }
 class Torso_Warhammer : MechTorsoBase {
@@ -290,7 +290,7 @@ class Torso_Warhammer : MechTorsoBase {
 		MechPartsBase.CockpitOffset 0, 70;
 		MechTorsoBase.ArmsHeight 43;
 		MechTorsoBase.CockpitRange 0.72, 0.4, 0.2;
-		MechTorsoBase.TwistSpeed 0.08;
+		MechTorsoBase.TwistSpeed 0.16;
 	}
 }
 
@@ -375,4 +375,3 @@ class Legs_BattleArmor : MechLegsBase
 		loop;
 	}
 }
-

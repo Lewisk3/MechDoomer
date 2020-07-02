@@ -97,7 +97,7 @@ class Mechbase_Actor : FastProjectile
 	{
 		if(mechplayer && !cosmetic) mechplayer.HeatLevel += amt*MWHEAT_MOD;
 	}
-	void SetConstDamage(int newdamage)
+	void SetConstDamage(double newdamage)
 	{
 		truedamage = newdamage;
 	}
@@ -544,7 +544,7 @@ class MechMissile : Mechbase_Actor
 		{
 			realdamage = basedamage * (1.0-(distance/maximum_range));
 			realdamage = clamp(realdamage,0,basedamage);
-			SetConstDamage(floor(realdamage));
+			SetConstDamage(realdamage);
 			if(distance > maximum_range) inrange = false;
 		}
 		else if( distance >= minimum_range && distance < maximum_range )
