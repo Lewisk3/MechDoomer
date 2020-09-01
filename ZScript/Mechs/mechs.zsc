@@ -84,7 +84,7 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.MechPieces "Model_BattleArmor";
 		MechWarriorBase.DefaultMovement true;
 		MechWarriorBase.HideLegsPerspective true;
-		MechWarriorBase.CValue 500000;
+		MechWarriorBase.CValue 500000*MWMECHPRICE_FACTOR;
 	}
 	
 	override void SetupWeapons()
@@ -129,7 +129,7 @@ class Commando : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Commando";
 		MechWarriorBase.HudMech "#Atlas";
 		MechWarriorBase.HideLegsPerspective true;
-		MechWarriorBase.CValue 1823750;
+		MechWarriorBase.CValue 1823750*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -171,7 +171,7 @@ class Jenner : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Jenner";
 		Player.DisplayName "Jenner - IIC";
 		Player.ViewHeight 60; // 52 maligned
-		MechWarriorBase.CValue 3198375;
+		MechWarriorBase.CValue 3198375*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -215,7 +215,7 @@ class Urbanmech : MechWarrior
 		MechWarriorBase.Engine "ENGINE_STD_60";
 		MechWarriorBase.MechPieces "Torso_Urbanmech";
 		MechWarriorBase.HudMech "#Atlas";
-		MechWarriorBase.CValue 1471925;
+		MechWarriorBase.CValue 1471925*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -255,7 +255,7 @@ class Tarantula : MechWarrior
 		MechWarriorBase.HudMech "#Atlas";
 		MechWarriorBase.Acceleration 2.0;
 		MechWarriorBase.LegSpeed 1.3;
-		MechWarriorBase.CValue 3560417;
+		MechWarriorBase.CValue 3560417*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -304,7 +304,7 @@ class Firemoth : MechWarrior
 		MechWarriorBase.HudMech "#Moth";
 		MechWarriorBase.MechPieces "Torso_Firemoth";
 		
-		MechWarriorBase.CValue 2105000;
+		MechWarriorBase.CValue 2105000*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -350,7 +350,7 @@ class Raven : MechWarrior
 		MechWarriorBase.HudMech "#Atlas";
 		MechWarriorBase.MechPieces "Torso_Raven";
 
-		MechWarriorBase.CValue 2850500;
+		MechWarriorBase.CValue 2850500*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -395,7 +395,7 @@ class Kitfox : MechWarrior
 		MechWarriorBase.CockpitIsModel true;
 		MechWarriorBase.HudMech "#KFox";
 		MechWarriorBase.MechPieces "Torso_Kitfox";
-		MechWarriorBase.CValue 2684420; 
+		MechWarriorBase.CValue 2684420*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -443,7 +443,7 @@ class Stormcrow : MechWarrior
 		MechWarriorBase.HudCockpit "CROWHUD";
 		MechWarriorBase.MechPieces "Torso_Stormcrow";
 		MechWarriorBase.HudMech "#Storm";
-		MechWarriorBase.CValue 8771112;
+		MechWarriorBase.CValue 8771112*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -490,7 +490,7 @@ class Nova : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Nova";
 		Player.DisplayName "Nova - Prime";
 		Player.ViewHeight 55;
-		MechWarriorBase.CValue 6586250;
+		MechWarriorBase.CValue 6586250*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -529,6 +529,51 @@ class Nova : MechWarrior
 		CreateHitbox(hardpoints.ct,   0,40,10,26,10);
 	}
 }
+class Hunchback : MechWarrior
+{
+	Default
+	{
+		Mass 2200;
+		Player.DisplayName "Hunchback - 4G";
+		Player.ViewHeight 65;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 165;
+		MechWarriorBase.PitchRange 60, 60;
+		MechWarriorBase.LegSpeed 55.00*MWGAMEPLAY_TURNRATE;
+		MechWarriorBase.Acceleration 0.8;
+		MechWarriorBase.Weight 50;
+		MechWarriorBase.Engine "ENGINE_STD_200";
+		MechWarriorBase.MechPieces "Torso_Hunchback";
+		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.CValue 3467875*MWMECHPRICE_FACTOR;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 10,32,24,24,16,16,24,24, 5,16,12,12,8,8,12,12 );
+		hardpoints.setupLocations( (0,20), (0,-5), (20,13), (-20,-5), (38,-7), (-38,-7), (37,-60), (-37,-60) );
+		hardpoints.setupSlots();
+		
+		equipStruct("Heatsink",hardpoints.ct,2);
+		equipStruct("Heatsink",hardpoints.rt,2);
+		equipStruct("Heatsink",hardpoints.lt,1);
+		equipWeapon("Autocannon20",hardpoints.rt,1);
+		equipStruct("AC20_Ammo",hardpoints.lt,2);	
+		equipWeapon("MediumLaser", hardpoints.la, 2);
+		equipWeapon("MediumLaser", hardpoints.ra, 2);
+		equipWeapon("SmallLaser", hardpoints.hd, 3);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  18, 0, 8,50,0);
+		CreateHitbox(hardpoints.rl, -18, 0, 8,50,0);
+		CreateHitbox(hardpoints.la,  32,53, 8,29,8);
+		CreateHitbox(hardpoints.ra, -32,53, 8,29,8);
+		CreateHitbox(hardpoints.lt,  15,60, 8,31, 0);
+		CreateHitbox(hardpoints.rt, -15,55, 4,31, 0);
+		CreateHitbox(hardpoints.ct,   0,55,10,32, 0);
+	}
+}
 
 // Heavy Mechs
 class Timberwolf : MechWarrior
@@ -548,7 +593,7 @@ class Timberwolf : MechWarrior
 		MechWarriorBase.HudCockpit "WOLFHUD";
 		MechWarriorBase.MechPieces "Torso_Timberwolf";
 		MechWarriorBase.HudMech "#Wolf";
-		MechWarriorBase.CValue 11233124;
+		MechWarriorBase.CValue 11233124*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -600,7 +645,7 @@ class Summoner : MechWarrior
 		MechWarriorBase.Engine "ENGINE_XL_350";
 		MechWarriorBase.MechPieces "Torso_Summoner";
 		MechWarriorBase.HudMech "#Summ";
-		MechWarriorBase.CValue 10650000;
+		MechWarriorBase.CValue 10650000*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -645,7 +690,7 @@ class MadDog : MechWarrior
 		MechWarriorBase.Engine "ENGINE_XL_300";
 		MechWarriorBase.MechPieces "Torso_MadDog";
 		MechWarriorBase.HudMech "#MadD";
-		MechWarriorBase.CValue 8270000;
+		MechWarriorBase.CValue 8270000*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -691,7 +736,7 @@ class Rifleman : MechWarrior
 		MechWarriorBase.Engine "ENGINE_XL_195";
 		MechWarriorBase.MechPieces "Torso_Rifleman";
 		MechWarriorBase.HudMech "#Rifle";
-		MechWarriorBase.CValue 2870250;
+		MechWarriorBase.CValue 2870250*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -740,7 +785,7 @@ class Marauder : MechWarrior
 		MechWarriorBase.Engine "ENGINE_STD_340";
 		MechWarriorBase.MechPieces "Torso_Marauder";
 		MechWarriorBase.HudMech "#Mara";
-		MechWarriorBase.CValue 4950720;
+		MechWarriorBase.CValue 4950720*MWMECHPRICE_FACTOR;
 	}
 	
 	override void setupCriticals()
@@ -817,7 +862,7 @@ class Gargoyle : MechWarrior
 		MechWarriorBase.Engine "ENGINE_XL_400";
 		MechWarriorBase.MechPieces "Torso_Gargoyle";
 		MechWarriorBase.HudMech "#Garg";
-		MechWarriorBase.CValue 13020420;
+		MechWarriorBase.CValue 13020420*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -864,7 +909,7 @@ class Hellbringer : MechWarrior
 		MechWarriorBase.Engine "ENGINE_XL_325";
 		MechWarriorBase.MechPieces "Torso_Hellbringer";
 		MechWarriorBase.HudMech "#HBri";
-		MechWarriorBase.CValue 9566333;
+		MechWarriorBase.CValue 9566333*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -916,7 +961,7 @@ class Atlas : MechWarrior
 		MechWarriorBase.HideLegsPerspective true;
 		Player.DisplayName "Atlas - AS7D";
 		Player.ViewHeight 100;
-		MechWarriorBase.CValue 9626000;
+		MechWarriorBase.CValue 9626000*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -969,7 +1014,7 @@ class Direwolf : MechWarrior
 		MechWarriorBase.Engine "ENGINE_XL_335";
 		MechWarriorBase.HudMech "#Dire";
 		
-		MechWarriorBase.CValue 13650000;
+		MechWarriorBase.CValue 13650000*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -1024,7 +1069,7 @@ class Warhawk : MechWarrior
 		MechWarriorBase.Engine "ENGINE_XL_315";
 		MechWarriorBase.HudMech "#Hawk";
 		
-		MechWarriorBase.CValue 13200665;
+		MechWarriorBase.CValue 13200665*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
@@ -1074,7 +1119,7 @@ class Warhammer : MechWarrior
 		MechWarriorBase.Engine "ENGINE_STD_320";
 		MechWarriorBase.HudMech "#Warh";
 		
-		MechWarriorBase.CValue 4580500;
+		MechWarriorBase.CValue 4580500*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()

@@ -49,6 +49,7 @@ bool AddArmorWeight(int amt)
 
 bool AdjustMaxArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
 {
+	int overdiff = 0;
 	if(hp.armor > hp.max_armor && amt < 0) 
 	{
 		hp.armor+=amt;
@@ -61,14 +62,15 @@ bool AdjustMaxArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
 	if(hp.max_armor+amt > hp.defmax_armor && clampmaxarmor) return false;
 	if(hp.max_armor+amt < hp.armor) 
 	{
-		int diff = hp.armor-hp.max_armor;
-		A_GiveInventory("EndoSteelBonus",diff);
+		overdiff = hp.armor-(hp.max_armor+amt);
+		A_GiveInventory("EndoSteelBonus",overdiff);
 		hp.armor = hp.max_armor+amt;
 	}
 	
+	hp.max_armor += amt;
+	if(overdiff > 1) amt -= overdiff+1;
 	double addtons = GetDefaultByType("EndosteelBonus").weight*amt;
 	if(MDMath.RoundFloat(inv_context.weapons_tonnage+addtons) > mech_tonnage && !CheckCompensative()) return false;
-	hp.max_armor += amt;
 	adjustTonnage(-inv_context.armor_tonnage);
 	inv_context.armor_tonnage += addtons;
 	adjustTonnage(inv_context.armor_tonnage);
@@ -79,9 +81,9 @@ bool AdjustMaxArmor(MechHardpoint hp, int amt, bool clampmaxarmor=false)
 clearscope int CalculateHardpointRepairCost(MechHardpoint hp, int stat)
 {
 	int repair_cost = 0;
-	double armor_ratio = hp.defmax_armor <= 0 ? 0 : 1.0 - (!hp.armor ? 1 : hp.armor)/hp.defmax_armor;
+	double armor_ratio = hp.max_armor <= 0 ? 0 : 1.0 - (!hp.armor ? 1 : hp.armor)/hp.max_armor;
 	double internalhp_ratio = 1.0 - (!hp.internalhp ? 1 : hp.internalhp)/hp.max_internal;
-	if(stat == 0 && 	 armor_ratio > 0 ) repair_cost = (4750*armor_ratio)+(hp.defmax_armor*100);
+	if(stat == 0 && 	 armor_ratio > 0 ) repair_cost = (4750*armor_ratio)+(hp.max_armor*100);
 	if(stat == 1 && internalhp_ratio > 0 ) repair_cost = (1250*internalhp_ratio)+(hp.max_internal*50);
 	return repair_cost;
 }
@@ -103,8 +105,7 @@ void _DoHardpointRepair(MechHardpoint hp, int stats)
 {
 	if(stats == 0) 
 	{
-		hp.armor = hp.defmax_armor;
-		hp.max_armor = hp.defmax_armor;
+		hp.armor = hp.max_armor;
 	}
 	if(stats == 1) 
 	{

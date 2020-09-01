@@ -163,7 +163,7 @@ class MechDoomerEvents : EventHandler
 			double mdist = plr.Distance3D(plr.targetenemy)/MWGAMEPLAY_UNITMETER;
 			String dist = String.Format("%.0fm", mdist);
 			bool infront;
-			ViewProjection viewproj = MD_SBS.GetRenderEventViewProj(e);
+			ViewProjection viewproj = MD_SBS.GetMechViewProj(plr);
 			vector2 apos;
 			[infront, apos] = MD_SBS.GetActorHUDPos(
 				viewproj,
@@ -504,11 +504,28 @@ class MechDoomerEvents : EventHandler
 				plr.adjustMoney(e.Args[0]);
 				console.printf("Obtained: %d cbills from a totally legitimate source.", e.Args[0]);
 			}
+			if(netcmd == "commiespaceatandt")
+			{
+				for(int i = 0; i < MAXPLAYERS; i++)
+				{
+					if(playeringame[i]) 
+					{
+						let mplr = MechWarrior(players[i].mo);
+						if(mplr)
+						{
+							mplr.adjustMoney(e.Args[0]);
+							console.printf("[Player#%d]:> Received a small loan of %d cbills.", i, e.Args[0]);
+						}
+					}
+				}
+			}
 			if(netcmd == "restoremechstatus")
 			{
-				plr.isdead = false;
-				plr.player.cheats &= ~CF_TOTALLYFROZEN;
-				console.printf("Restored mech status for player #%d", plr.PlayerNumber()); 
+				let mplr = MechWarrior(players[e.Args[0]].mo);
+				if(!mplr) mplr = plr;
+				mplr.isdead = false;
+				mplr.player.cheats &= ~CF_TOTALLYFROZEN;
+				console.printf("Restored mech status for player #%d", mplr.PlayerNumber()); 
 			}	
 			if(netcmd == "-mwd_switchammo") plr.btn_switchammo = false;
 			if(netcmd == "+mwd_switchammo") plr.btn_switchammo = true;

@@ -60,7 +60,6 @@ double rolldistort;
 double defviewz;
 double viewzoffs;  // Bob modifier for actual viewz.
 
-
 // Autopilot
 void ToggleAutopilot(bool forceoff = false)
 {

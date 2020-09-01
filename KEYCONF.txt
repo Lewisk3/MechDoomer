@@ -34,6 +34,7 @@ alias ToggleAMS "netevent toggle_ams"
 alias ToggleHTAL "netevent hud_toggle_htal"
 alias RadarRange "netevent radar_switchrange"
 alias RadarScale "netevent radar_switchscale"
+alias SpaceCommies "netevent commiespaceatandt 999999999"
 
 addkeysection "MechDoomer Controls" MechDoomerControls
 addmenukey "Accelerate (W)" +forward

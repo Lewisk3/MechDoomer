@@ -36,5 +36,6 @@ GameInfo
 					"Warhawk",
 					"Warhammer",
 					"Hellbringer",
+					"Hunchback",
 					"TestingDoomguy"
 }

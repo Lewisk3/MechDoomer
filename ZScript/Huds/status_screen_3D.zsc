@@ -99,8 +99,24 @@ extend class MD_SBS
 		
 		ViewProjection vp = new("ViewProjection");
 		vp.FOV = viewplr.FOV;
-		vp.view_pos = viewer.vec3offset(0, 0, viewplr.viewheight);
+		vp.view_pos = viewer.vec3offset(0, 0, viewplr.viewz-viewer.pos.z);
 		vp.view_ang = (viewer.angle, viewer.pitch, viewer.roll);
+		
+		return vp;
+	}
+	
+	static ViewProjection GetMechViewProj(Mechwarrior viewer)
+	{
+		PlayerInfo viewplr = viewer.Player;
+		if(!viewplr) return NULL;
+		Actor cockpit = viewer;
+		let mechparts = viewer.models_reference;
+		if(mechparts && mechparts.cockpit) cockpit = mechparts.cockpit.cockpitcam;
+		
+		ViewProjection vp = new("ViewProjection");
+		vp.FOV = viewplr.FOV;
+		vp.view_pos = cockpit.pos;
+		vp.view_ang = (cockpit.angle, cockpit.pitch, cockpit.roll);
 		
 		return vp;
 	}

@@ -86,6 +86,19 @@ void Cockpit_Alert(String str, double time = 8.0)
 	}
 }
 
+void RadiusDamage(double dmg, double radius, Name type, class<Actor> ignoreactor = NULL)
+{
+	let it = ThinkerIterator.Create();
+	Actor act;
+	while(act = Actor(it.Next()))
+	{
+		if(ignoreactor && act is ignoreactor) continue;
+		if(!act.bSHOOTABLE || act == self || Distance2D(act) > radius) continue;
+		double rdmg = dmg*(1/(Distance2D(act)/radius));
+		act.DamageMobJ(self, self, ceil(rdmg), type, 0, angle);
+	}
+}
+
 bool adjustTonnage(double amt, bool force=false)
 {
 	if(MDMath.RoundFloat(inv_context.weapons_tonnage+amt) > mech_tonnage && !force && !CheckCompensative()) return false;

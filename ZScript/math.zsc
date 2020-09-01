@@ -102,7 +102,7 @@ class MDMath Abstract
 		return pitchto;
 	}
 	
-	// Distance 3D on vectors, not actors.
+	// Distance 3D on vectors, not actors. (Precise version)
 	static double Distance3D(vector3 one, vector3 two)
 	{
 		return sqrt( (two.x - one.x)**2 + (two.y - one.y)**2 + (two.z - one.z)**2 );
