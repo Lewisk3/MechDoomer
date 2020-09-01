@@ -475,7 +475,7 @@ class MechStatusBar : BaseStatusBar
 			if(!mech) return;
 			
 			vector2 throttlepos = (800, 350);
-			vector2 jetpos = (270, 450);
+			vector2 jetpos = (270, 425);
 			vector2 heatpos = (-75, 425);
 			vector2 deltapos = (230, 425);
 			uint strcol = 0xFF00D300;
