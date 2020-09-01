@@ -311,7 +311,18 @@ override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int
 	if(checkVoodoo()) return super.DamageMobj(inflictor,source,damage,mod,flags,angle);
 	if(mod == "Hitscan") return ProcessHitscanDamageMobJ(inflictor, source, damage, mod, flags, angle);
 	
+	Actor damager = inflictor;
 	double newdmg = double(damage)*MWGAMEPLAY_DAMAGESCALE;
+	
+	// Only redirect to CT, LT, RT if we're being hit by another MobJ.
+	bool mechdmg = (inflictor is "Mechwarrior") || (source is "Mechwarrior");
+	if(!mechdmg)
+	{
+		int choose = random(1,3);
+		MechHardpoint hp_todmg = (choose == 1) ? hardpoints.lt : (choose == 2) ? hardpoints.rt : hardpoints.ct;
+		DamageHardpoint(hp_todmg, newdmg, false, damager);
+	}
+	
 	if( !source ) 
 	{
 		ProcessHardpointDamage(mod,newdmg);

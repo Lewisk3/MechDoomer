@@ -271,7 +271,7 @@ class Torso_Atlas : MechTorsoBase {
 	Default {
 		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas", "Cockpit_Atlas", "";
 		MechPartsBase.ZOffset 60;
-		MechPartsBase.CockpitOffset 0, 100;
+		MechPartsBase.CockpitOffset 0, 110;
 		MechTorsoBase.CockpitRange 0.69, 0.34, 0.7;
 		MechTorsoBase.TwistSpeed 0.12;
 	}

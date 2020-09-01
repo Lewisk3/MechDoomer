@@ -960,14 +960,14 @@ class Atlas : MechWarrior
 		MechWarriorBase.Weight 100;
 		MechWarriorBase.HideLegsPerspective true;
 		Player.DisplayName "Atlas - AS7D";
-		Player.ViewHeight 100;
+		Player.ViewHeight 80;
 		MechWarriorBase.CValue 9626000*MWMECHPRICE_FACTOR;
 	}
 		
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 9,65,42,42,34,34,42,42, 5,31,21,21,17,17,21,21 );
-		hardpoints.setupLocations( (0,20), (0,0), (-30,-40), (30,-40), (60,-30), (-60,-30), (45,-111), (-45,-111) );
+		hardpoints.setupLocations( (0,20), (0,0), (-25,-10), (20,-40), (57,-15), (-57,-15), (45,-111), (-45,-111) );
 		hardpoints.setupSlots();
 		equipStruct("Heatsink",hardpoints.ct,4);
 		equipStruct("Heatsink",hardpoints.lt,2);

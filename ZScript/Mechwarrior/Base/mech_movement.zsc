@@ -607,9 +607,9 @@ void Bobbing() {
 	{
 		TiltOffset  = sin(TiltOsc);
 		TiltOffset *= clamp((vel/2) - (LegVel*0.8), 0.05, 5.0);
-		TiltOffset *= 0.21;
+		TiltOffset *= 0.25;
 		if(defaultmovement) TiltOffset *= 0.6;
-		TiltOffset *= rolldistort*0.21;
+		//TiltOffset *= rolldistort*0.1;
 
 		StepOffset  = sin(StepOsc);
 		StepOffset *= (vel/2) + (LegVel*2);
