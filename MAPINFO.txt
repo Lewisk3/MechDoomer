@@ -37,5 +37,6 @@ GameInfo
 					"Warhammer",
 					"Hellbringer",
 					"Hunchback",
+					"Centurion",
 					"TestingDoomguy"
 }

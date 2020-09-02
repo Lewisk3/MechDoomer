@@ -894,3 +894,41 @@ Model Cockpit_Hunchback
 	
    FrameIndex MODL A 0 0
 }
+
+// Centurion
+Model Torso_Centurion
+{
+	Path "models/Mechs"
+	Model 0 "Centurion/ct_torso.md3"
+	SurfaceSkin 0 0 "Centurion/ct_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Centurion
+{
+	Path "models/Mechs/Centurion"
+	Model 0 "ct_hips.md3"
+	Skin 0 "ct_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Centurion
+{
+	Path "models/Mechs/"
+	Model 0 "Centurion/ct_head.md3"
+	Scale 0.05 0.06 0.05
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 0
+	Offset -2 0 0.8;
+	
+   FrameIndex MODL A 0 0
+}

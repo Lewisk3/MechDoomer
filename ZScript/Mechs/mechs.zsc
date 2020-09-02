@@ -574,6 +574,50 @@ class Hunchback : MechWarrior
 		CreateHitbox(hardpoints.ct,   0,55,10,32, 0);
 	}
 }
+class Centurion : MechWarrior
+{
+	Default
+	{
+		Mass 2200;
+		Player.DisplayName "Centurion - CN9A";
+		Player.ViewHeight 60;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 135;
+		MechWarriorBase.PitchRange 60, 60;
+		MechWarriorBase.LegSpeed 55.00*MWGAMEPLAY_TURNRATE;
+		MechWarriorBase.Acceleration 0.65;
+		MechWarriorBase.Weight 50;
+		MechWarriorBase.Engine "ENGINE_STD_200";
+		MechWarriorBase.MechPieces "Torso_Centurion";
+		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.CValue 3491500*MWMECHPRICE_FACTOR;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 10,32,24,24,16,16,24,24, 5,16,12,12,8,8,12,12 );
+		hardpoints.setupLocations( (0,20), (0,-5), (10,-5), (-10,-5), (30,-20), (-30,-20), (20,-70), (-20,-70) );
+		hardpoints.setupSlots();
+		
+		equipStruct("Heatsink",hardpoints.ct,2);
+		equipWeapon("Autocannon10",hardpoints.la,1);
+		equipStruct("AC10_Ammo",hardpoints.rt,2);	
+		equipWeapon("MediumLaser", hardpoints.ct, 2);
+		equipWeapon("MediumLaser", hardpoints.ct, 2);
+		equipWeapon("LRM10", hardpoints.lt, 3);
+		equipStruct("LRM_Ammo", hardpoints.lt, 2);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  15, 0, 6,47, 0);
+		CreateHitbox(hardpoints.rl, -15, 0, 6,47, 0);
+		CreateHitbox(hardpoints.la,  22,50, 6,30, 4);
+		CreateHitbox(hardpoints.ra, -22,50, 6,30, 4);
+		CreateHitbox(hardpoints.lt,  10,50, 4,28, 0);
+		CreateHitbox(hardpoints.rt, -10,50, 4,28, 0);
+		CreateHitbox(hardpoints.ct,   0,40, 6,40, 0);
+	}
+}
 
 // Heavy Mechs
 class Timberwolf : MechWarrior

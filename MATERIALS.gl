@@ -204,3 +204,7 @@ material texture models/Mechs/Warhammer/wh_full.png {
 material texture models/Mechs/Hunchback/hbk_full.png {
 	shader "shaders/simsun.fp"
 }
+
+material texture models/Mechs/Centurion/ct_full.png {
+	shader "shaders/simsun.fp"
+}
