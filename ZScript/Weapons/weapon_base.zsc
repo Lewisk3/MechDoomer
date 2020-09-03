@@ -8,6 +8,7 @@ class Mechbase_Actor : FastProjectile
 	MechWarrior mechplayer;
 	double minimum_range;
 	double maximum_range;
+	double projGravity; 
 	bool cosmetic;
 	Sound firesound;
 	Sound DOS_firesound;
@@ -16,8 +17,14 @@ class Mechbase_Actor : FastProjectile
 	Property ClassicFireSound : DOS_firesound;
 	Property Heat : heatgen;
 	Property ConstDamage: truedamage;
+	Property Gravity : projGravity;
 	Property MinimumRange : minimum_range;
 	Property MaximumRange : maximum_range;
+	
+	Default
+	{
+		+INTERPOLATEANGLES;
+	}
 	
 	override void PostBeginPlay()
 	{
@@ -81,7 +88,12 @@ class Mechbase_Actor : FastProjectile
 	
 	override void Tick()
 	{
-		if(mechplayer) Converge();		
+		if(mechplayer) Converge();	
+		if(projGravity && pos.z > floorz)
+		{
+			A_SetPitch(pitch + (projGravity*0.2), SPF_INTERPOLATE);
+			vel.z = -sin(pitch)*speed;
+		}
 		super.Tick();
 	}
 	double getTravelDistance(bool unitmeter=true)
@@ -259,7 +271,7 @@ class Mechbase_Weapon : Item_NoPickup
 			invoker.MWPostFire();
 			return false;
 		}
-		return true;
+		return !checkCooldown() ? false : true;
 	}
 	action bool FireWeapon(class<Mechbase_Actor> type, int xoffset, int yoffset, int distance, int spd, bool instant=false, bool cosmetic=false)
 	{	
@@ -318,6 +330,7 @@ class Mechbase_Weapon : Item_NoPickup
 				weap.mechplayer = MechWarrior(invoker.Owner);
 				weap.pitch = offspitch;
 				weap.angle = offsangle;
+				weap.speed = spd;
 				weap.vel = (
 						cos(offsangle)*cos(-offspitch),
 						sin(offsangle)*cos(-offspitch),
@@ -404,7 +417,7 @@ class Mechbase_Weapon : Item_NoPickup
 		if(isHomming && Owner)
 		{
 			// If this weapon is selected.
-			if(plr.selectedWeapon == WeaponID)
+			if(plr.selectedWeapon == WeaponID && plr.targetenemy)
 			{	
 				// Target locked logic.		
 				aimtarget = (plr.targetenemy && plr.targetreticle && target_inview);
@@ -434,14 +447,13 @@ class Mechbase_Weapon : Item_NoPickup
 					plr.prevlock = NULL;
 				}
 				//console.printf("[Missile Status]\n LOS: %i\n Lock Process: %i%\n Has Lock: %i", aimtarget, plr.locktimer, plr.targetlocked);
-				
-				// Note: IsVisible appears to need an entire tic to work properly,
-				// this is why it's cached to target_inview.
-				LookExParams visview;
-				visview.FOV = plr.player.FOV;
-				visview.maxDist = double.infinity;
-				visview.flags = LOF_NOSIGHTCHECK;	
-				target_inview = plr.IsVisible(plr.targetenemy, true, visview); 	
+	
+				vector3 sight = level.SphericalCoords(
+					plr.Vec3Offset(0,0,plr.viewheight), 
+					plr.targetenemy.Vec3Offset(0,0,plr.targetenemy.height/2), 
+					(plr.angle,plr.pitch)
+				);
+				target_inview = (abs(sight.x) < 30 && abs(sight.y) < 30);
 			}
 			
 		}
@@ -499,9 +511,11 @@ class MechMissile : Mechbase_Actor
 	double realdamage;
 	bool homming;
 	bool inrange;
+	vector2 homspread;
+	double arc;
 	double explosionscale;
 	
-	Property Homming : homming;
+	Property Homming : homming, arc;
 	Property ExplosionScale : explosionscale;
 	
 	Default
@@ -522,7 +536,10 @@ class MechMissile : Mechbase_Actor
 	{
 		BaseInit();
 		if(mechplayer && mechplayer.targetlocked) tracer = mechplayer.targetenemy;
-		if(homming) bSEEKERMISSILE = true;
+		if(homming)
+		{
+			homspread = (frandom(-25,25),frandom(-25,25));
+		}
 		if(minimum_range > 0) 
 		{
 			inrange = false;
@@ -557,10 +574,45 @@ class MechMissile : Mechbase_Actor
 		super.tick();
 	}
 	
+	double fDist()
+	{
+		return abs((pos - tracer.pos).Length() / MWGAMEPLAY_UNITMETER);
+	}
+	
 	  States
 	  {
 		  Spawn:
-			MISS AB 1 NoDelay Bright A_JumpIfTargetInLOS("Seek");
+			MISS A 1 NoDelay Bright
+			{
+				if(arc > 0 && tracer && (!CheckSight(tracer) || fDist() > 180)) 
+				{
+					A_SetPitch(pitch-arc);
+					vel = (
+						cos(angle)*cos(pitch),
+						sin(angle)*cos(pitch),
+						-sin(pitch)
+					) * speed;
+				}
+			}
+			MISS B 1 Bright;
+		  Spawn.Loop:
+			MISS AB 1 Bright 
+			{
+				if(tracer && CheckSight(tracer) && fDist() > 64 && realdamage > 1) 
+					return ResolveState("Seek");
+				else
+					return ResolveState(Null);
+			}
+			// Not seeking.
+			TNT1 A 0 
+			{
+				A_SetPitch(pitch + 1.2*(getTravelDistance()/maximum_range), SPF_INTERPOLATE);
+				vel = (
+					cos(angle)*cos(pitch),
+					sin(angle)*cos(pitch),
+					-sin(pitch)
+				) * speed;
+			}
 		  Loop;
 		  Seek:
 			MISS ABAB 1 Bright 
@@ -568,11 +620,26 @@ class MechMissile : Mechbase_Actor
 				if(homming && tracer) 
 				{
 					vector3 corrected_pos = (tracer.pos.x, tracer.pos.y, tracer.pos.z+(tracer.height/2));
-					pitch = getPitchTo(corrected_pos);
-					A_SeekerMissile(20,20,SMF_CURSPEED|SMF_PRECISE,0,maximum_range/64);
+					// A_SetPitch(getPitchTo(corrected_pos)+arc, SPF_INTERPOLATE);
+					vector3 sight = level.SphericalCoords( pos, 
+						tracer.Vec3Offset(homspread.x,homspread.y,tracer.height/2), 
+						(angle, pitch)
+					);
+					double hspd = clamp(90/(sight.z/MWGAMEPLAY_UNITMETER), 0.25, 1.0);
+					if(sight.z > 32)
+					{
+						A_SetAngle(MDMath.Lerp(angle, angle-sight.x, hspd), SPF_INTERPOLATE);
+						A_SetPitch(MDMath.Lerp(pitch, pitch-sight.y, hspd), SPF_INTERPOLATE);
+					}
+					vel = (
+						cos(angle)*cos(pitch),
+						sin(angle)*cos(pitch),
+						-sin(pitch)
+					) * speed;
+					//A_SeekerMissile(20,20,SMF_CURSPEED|SMF_PRECISE,0,maximum_range/64);
 				}
 			}
-		  goto Spawn;
+		  goto Spawn.Loop;
 		  Death:
 			TNT1 A 2 Bright 
 			{ 
@@ -1026,6 +1093,7 @@ class AutocannonBall : Mechbase_Actor
 		Height 5;
 		Projectile;
 		AutocannonBall.ClusterMode false, 0;
+		Mechbase_Actor.Gravity 1.0;
 	}
 
 	States
@@ -1305,6 +1373,7 @@ class MechTargetReticle : Actor
 		} 
 	}
 }
+
 
 
 

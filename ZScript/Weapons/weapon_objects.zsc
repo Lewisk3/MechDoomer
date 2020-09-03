@@ -170,7 +170,7 @@ class SRM : MechMissile
 	{
 		Mechbase_Actor.ConstDamage (MWDMG_SRM);
 		Mechbase_Actor.MaximumRange 260;
-		MechMissile.Homming false;
+		MechMissile.Homming false, 0;
 		Mechbase_Actor.Heat MWHEAT_SRM;
 		MechMissile.ExplosionScale 0.5;
 	}
@@ -179,7 +179,7 @@ class SSRM : SRM
 {
 	Default
 	{
-		MechMissile.Homming true;
+		MechMissile.Homming true, 0;
 	}
 }
 
@@ -189,7 +189,7 @@ class MRM : MechMissile
 	{
 		Mechbase_Actor.ConstDamage (MWDMG_MRM);
 		Mechbase_Actor.MaximumRange 550;
-		MechMissile.Homming false;
+		MechMissile.Homming false, 0;
 		Mechbase_Actor.Heat MWHEAT_MRM;
 	}
 }
@@ -201,7 +201,7 @@ class LRM : MechMissile
 		Mechbase_Actor.ConstDamage (MWDMG_LRM);
 		Mechbase_Actor.MinimumRange 120; // 180 is a bit too high for Doom scale.
 		Mechbase_Actor.MaximumRange 1000;
-		MechMissile.Homming true;
+		MechMissile.Homming true, 24;
 		Mechbase_Actor.Heat MWHEAT_LRM;
 	}
 }
@@ -213,7 +213,7 @@ class CATM : MechMissile
 		Mechbase_Actor.ConstDamage (MWDMG_ATM);
 		Mechbase_Actor.MinimumRange 80;
 		Mechbase_Actor.MaximumRange 800;
-		MechMissile.Homming false;
+		MechMissile.Homming false, 0;
 		Mechbase_Actor.Heat MWHEAT_ATM;
 		MechMissile.ExplosionScale 0.5;
 	}
@@ -233,7 +233,7 @@ class RocketMissile : MechMissile
 	{
 		Mechbase_Actor.ConstDamage (MWDMG_ROCKET);
 		Mechbase_Actor.MaximumRange 540;
-		MechMissile.Homming false;
+		MechMissile.Homming false, 0;
 		Mechbase_Actor.Heat MWHEAT_ROCKET;
 	}
 } 

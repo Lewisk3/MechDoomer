@@ -289,7 +289,7 @@ class ArmoryUtility : Inventory
 		if(type)
 		{
 			toucher.GiveInventory(type,amt);
-			Die(self,self);
+			GoAwayAndDie();
 			return false;
 		}
 		return super.TryPickup(toucher);
