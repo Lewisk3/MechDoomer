@@ -193,7 +193,7 @@ void setupVitals(int hda,int cta,int lta,int rta,int laa,int raa,int lla,int rla
 	ll.internalhp = lli;
 	rl.internalhp = rli;
 }
-void setupSlots(int hds=10,int cts=12,int rts=12, int lts=12, int las=12,int ras=12, int lls=2,int rls=2)
+void setupSlots(int hds=6,int cts=12,int rts=12, int lts=12, int las=12,int ras=12, int lls=2,int rls=2)
 {
 	hd.maxslots = hds;
 	hd.slots = 0;

@@ -519,6 +519,8 @@ vector2 DrawCriticalHardpointItems(int ind, int sx, int sy)
 						}
 						if(valid_inv_context.mechstructs[i].broken) fcr = Font.CR_TAN;
 						H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
+						offs.y += 24;
+						offs.x += 24;
 					}
 				}
 				else
@@ -528,10 +530,10 @@ vector2 DrawCriticalHardpointItems(int ind, int sx, int sy)
 					{	
 						if(valid_inv_context.mechstructs[i].broken) fcr = Font.CR_TAN;
 						H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
+						offs.y += 24;
+						offs.x += 24;
 					}
 				}
-				offs.y += 24;
-				offs.x += 24;
 			}
 		}
 	}
@@ -571,7 +573,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 					String suffix = def_ut.hardslots > 1 ? " \c[Orange][" .. s+1 .. "]" : "";
 					Rect checkmouse;
 					initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
-					// drawRect(checkmouse,Color(255,128,128,128));
+					//drawRect(checkmouse,Color(255,128,128,128));
 					if(mstats.left_btn && checkCollision(mouse,checkmouse) && !mechmode) 
 					{	
 						clearSelected();

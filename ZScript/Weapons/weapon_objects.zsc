@@ -201,7 +201,7 @@ class LRM : MechMissile
 		Mechbase_Actor.ConstDamage (MWDMG_LRM);
 		Mechbase_Actor.MinimumRange 120; // 180 is a bit too high for Doom scale.
 		Mechbase_Actor.MaximumRange 1000;
-		MechMissile.Homming true, 24;
+		MechMissile.Homming true, 14;
 		Mechbase_Actor.Heat MWHEAT_LRM;
 	}
 }

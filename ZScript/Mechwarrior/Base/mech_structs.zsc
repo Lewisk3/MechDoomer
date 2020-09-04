@@ -342,7 +342,7 @@ bool equipStruct(class<Mechbase_Utility> type, MechHardpoint hp, int amt = 1)
 {
 	if( (hp.getFreeSlots()-(GetDefaultByType(type).hardslots*amt)) < 0)
 	{
-		if(!GetDefaultByType(type).moveable) console.printf("WARNING: Failed to equip critical item: %s",type.getClassName());
+		if(!GetDefaultByType(type).moveable) console.printf("WARNING: %s failed to equip critical item: %s [S:%d]", getClassName(), type.getClassName(),hp.getFreeSlots());
 		return false;
 	}
 	for(int i = 0; i < amt; i++)

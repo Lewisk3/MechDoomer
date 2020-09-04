@@ -136,7 +136,7 @@ class StructLifesupport : Mechbase_Utility
 	Default
 	{	
 		Mechbase_Utility.displayName "LIFESUPPORT";
-		Mechbase_Utility.Criticals 1;
+		Mechbase_Utility.Criticals 2;
 	}
 }
 class StructSensors : Mechbase_Utility
@@ -144,7 +144,7 @@ class StructSensors : Mechbase_Utility
 	Default
 	{	
 		Mechbase_Utility.displayName "Sensors";
-		Mechbase_Utility.Criticals 1;
+		Mechbase_Utility.Criticals 2;
 	}
 }
 class StructCockpit : Mechbase_Utility

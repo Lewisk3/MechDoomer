@@ -598,7 +598,7 @@ class MechMissile : Mechbase_Actor
 		  Spawn.Loop:
 			MISS AB 1 Bright 
 			{
-				if(tracer && CheckSight(tracer) && fDist() > 64 && realdamage > 1) 
+				if(tracer && CheckSight(tracer) && fDist() > 16 && getTravelDistance() < maximum_range) 
 					return ResolveState("Seek");
 				else
 					return ResolveState(Null);

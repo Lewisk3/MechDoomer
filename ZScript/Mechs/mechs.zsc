@@ -961,7 +961,7 @@ class Hellbringer : MechWarrior
 		hardpoints.setupVitals( 8,40,28,28,20,20,28,28, 4,20,14,14,10,10,15,15 );
 		hardpoints.setupLocations( (0,25), (0,0), (20,35), (-20,10), (45,-30), (-45,-30), (20,-85), (-20,-85) );
 		hardpoints.setupSlots();
-		equipStruct("AntiMissileSystem",hardpoints.hd,1);
+		equipStruct("AntiMissileSystem",hardpoints.lt,1);
 		equipWeapon("ERPPC",hardpoints.la,1);
 		equipWeapon("ERPPC",hardpoints.ra,1);
 		equipWeapon("ERMediumLaser",hardpoints.lt,2);
@@ -1121,10 +1121,9 @@ class Warhawk : MechWarrior
 		hardpoints.setupVitals( 8,50,33,33,28,28,35,35, 4,25,17,17,14,14,18,18 );
 		hardpoints.setupLocations( (0,0), (0,0), (-20,-10), (20,-10), (50,-15), (-50,-15), (45,-111), (-45,-111) );
 		hardpoints.setupSlots();
-		equipStruct("DoubleHeatsink",hardpoints.hd, 1);
 		equipStruct("DoubleHeatsink",hardpoints.lt, 2);
 		equipStruct("DoubleHeatsink",hardpoints.rt, 2);
-		equipStruct("DoubleHeatsink",hardpoints.ct, 2);
+		equipStruct("DoubleHeatsink",hardpoints.ct, 3);
 		equipStruct("LRM_Ammo",hardpoints.ll,2);
 		equipWeapon("ERPPC",hardpoints.la,1);
 		equipWeapon("ERPPC",hardpoints.la,1);

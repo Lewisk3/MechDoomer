@@ -263,11 +263,12 @@ virtual void setupCriticals()
 	equipStruct("StructLifesupport",hardpoints.hd);
 	equipStruct("StructSensors",hardpoints.hd);
 	equipStruct("StructCockpit",hardpoints.hd);
-	equipStruct("StructGyro",hardpoints.hd);
 	equipStruct("StructHip",hardpoints.lt);
 	equipStruct("StructHip",hardpoints.rt);
 	equipStruct("StructActuator",hardpoints.la);
 	equipStruct("StructActuator",hardpoints.ra);
+	// Add intrinsic weight based on chassis max tonnage.
+	adjustTonnage(mech_tonnage / 10.);
 }
 
 
