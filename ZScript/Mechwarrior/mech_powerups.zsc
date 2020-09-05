@@ -1,67 +1,4 @@
 // Powerups and Cockpit Effects
-class MechExchange_Animator : Powerup
-{
-	MechWarriorBase mech;
-	int mechbaynum;
-	double fadeto;
-	bool activate;
-	bool fadeout;
-	bool done;
-	int clock;
-	
-	Default
-	{
-		Powerup.Duration 0x7FFFFFFD; // lasts about 2 years;
-	}
-	
-	static MechExchange_Animator Setup(MechWarriorBase curmech, int swapmechbay)
-	{
-		curmech.Cockpit_Alert("\c[SAPPHIRE]Deploying new mech...", 35);
-		curmech.GiveInventory("MechExchange_Animator",1);
-		let mea = MechExchange_Animator(curmech.FindInventory("MechExchange_Animator"));
-		if(mea) 
-		{
-			mea.mechbaynum = swapmechbay;
-			mea.mech = curmech;
-		}
-		return mea;
-	}
-
-	override void DoEffect()
-	{
-		if(clock) clock--;
-		mech.screen_fadecolor = Color(255,0,0,0);
-		mech.screen_fade = fadeto/255.0;
-		
-		fadeto += fadeout ? -3 : 3;
-		if(fadeto >= 300 && !fadeout) 
-			activate = true;
-		else if(fadeto <= 20 && fadeout) 
-			done = true;
-	
-		if(mech && activate)
-		{
-			vector3 spawnpos;
-			double spawnangle;
-			[spawnpos, spawnangle] = level.PickPlayerStart(mech.PlayerNumber());
-			mech.SetOrigin(spawnpos, false);
-			mech.angle = spawnangle;
-			mech.LegAng = mech.angle;
-			mech.ChangeMech(mechbaynum);
-			fadeout = true;
-			activate = false;
-		}
-		if(done)
-		{
-			mech.RemoveInventory(self);
-			mech.doShutdown = true;
-			mech.forceshutdown = false;
-			mech.manualshutdown = false;
-		}
-		super.DoEffect();
-	}
-}
-
 class SuperCooled : Powerup
 {
 	Default
@@ -93,6 +30,24 @@ class SuperCooled : Powerup
 		
 		let mech = MechWarriorBase(Owner.player.mo);
 		mech.supersink = false;
+	}
+}
+
+// Used for temporarily decreasing damage.
+class DamageDebuff : Inventory
+{
+	Default
+	{
+		inventory.maxamount 1;
+	}
+	override void DoEffect()
+	{
+		if(GetAge() > 35*10) 
+		{
+			Owner.RemoveInventory(self);
+			GoAwayAndDie();
+		}
+		super.DoEffect();
 	}
 }
 

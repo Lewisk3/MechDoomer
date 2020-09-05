@@ -128,6 +128,9 @@ Mech/WeaponBusy WEAPBUSY
 Mech/Footstep MECSTEP
 Mech/NavBlip NAVBLIP
 Mech/Blip BLIP
+Mech/Damage/Warn MDMGWARN
+Mech/Damage/Minimal MPAINLW
+Mech/Damage/Critical MPAINME
 
 // Target sequence
 Mech/Target/Get 	  TARGGET

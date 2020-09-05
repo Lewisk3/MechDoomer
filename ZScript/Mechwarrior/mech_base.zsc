@@ -187,6 +187,7 @@ class MechWarrior : MechWarriorBase
 		MechWarriorBase.Acceleration 1.0;
 		MechWarriorBase.TwistRange 90;
 		MechWarriorBase.PitchRange 30,20;
+		+NOBLOOD
 	}
 	// This may seem like a mistake, it's not.
 	// This somehow makes movement a WHOLE lot smoother, idek, it WAS a mistake at first.

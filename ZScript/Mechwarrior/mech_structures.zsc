@@ -302,12 +302,12 @@ class ArmoryUtility : Inventory
 	
 }
 
-class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
+class StandardArmor : ArmoryUtility replaces BasicArmorBonus
 {
 	Default
 	{	
-		Inventory.PickupMessage "Picked up a small Endosteel component";
-		Tag "Endosteel Piece";
+		Inventory.PickupMessage "Picked up a small armor component";
+		Tag "Armor Piece";
 		Inventory.Icon "ENDOA0";
 		XScale 0.3;
 		YScale 0.3;
@@ -348,21 +348,21 @@ class EndosteelBonus : ArmoryUtility replaces BasicArmorBonus
 		}
 	}
 }
-class EndoGreen : EndosteelBonus replaces GreenArmor 
+class ArmorGreen : StandardArmor replaces GreenArmor 
 {
 	Default
 	{
-		ArmoryUtility.Setup "EndosteelBonus", 10;
-		Inventory.PickupMessage "Picked up a medium Endosteel component";
+		ArmoryUtility.Setup "StandardArmor", 10;
+		Inventory.PickupMessage "Picked up a medium armor component";
 	}
 
 }
-class EndoBlue : EndosteelBonus replaces BlueArmor 
+class ArmorBlue : StandardArmor replaces BlueArmor 
 {
 	Default
 	{
-		ArmoryUtility.Setup "EndosteelBonus", 20;
-		Inventory.PickupMessage "Picked up a large Endosteel component";
+		ArmoryUtility.Setup "StandardArmor", 20;
+		Inventory.PickupMessage "Picked up a large armor component";
 	}
 }
 

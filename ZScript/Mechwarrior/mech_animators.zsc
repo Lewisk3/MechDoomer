@@ -1,0 +1,217 @@
+// Mech animator base
+class MechAnimator : Inventory
+{
+	MechWarriorBase mech;
+	Color FadeColor;
+	double fadeto;
+	double fadespd;
+	double xshake, yshake, zshake;
+	double ashake, pshake, rshake;
+	int quaketimer;
+	int fdelay;
+	int dir;
+	
+	Property FadeAnimate : FadeColor, fadeto, fadespd;
+	Property DelayFadeout : fdelay;
+	Property Quake : quaketimer, ashake, pshake, rshake, xshake, yshake, zshake;
+	
+	Default
+	{
+		MechAnimator.FadeAnimate "FF FF FF", 1.0, 0.05;
+		MechAnimator.DelayFadeout 35;
+		MechAnimator.Quake 70, 3,3,0, 0,0,10;
+		inventory.maxamount 1;
+	}
+	
+	int CountAnimators()
+	{
+		if(!mech) return 0;
+		int cnt = 0;
+		for(let i = mech.Inv; i != NULL; i = i.Inv)
+		{
+			if(i is "MechAnimator") cnt++;
+		}
+		return cnt;
+	}
+	
+	
+	override void DoEffect()
+	{
+		super.DoEffect();
+		if(!mech) 
+		{
+			mech = MechWarriorBase(Owner);			
+			return;
+		}
+		
+		if(GetAge() > fdelay+(35*3))
+		{
+			mech.screen_fadecolor = 0;
+			mech.screen_fade = 0;
+			mech.RemoveInventory(self);
+			GoAwayAndDie();
+		}
+		if(mech && CountAnimators() > 1) 
+		{	
+			mech.RemoveInventory(self);
+			GoAwayAndDie();
+		}
+		
+		if(mech && mech.isdead) 
+		{
+			mech.screen_fadecolor = 0;
+			mech.screen_fade = 0;
+			mech.RemoveInventory(self);
+			GoAwayAndDie();
+		}
+		
+		if(fadeto != -1)
+		{
+			mech.screen_fadecolor = fadecolor;
+			if(dir && fdelay) fdelay--;
+			if(!dir || dir && !fdelay) 
+				mech.screen_fade = MDMath.Lerp(mech.screen_fade, !dir ? fadeto : 0, fadespd);
+			
+			if(abs(mech.screen_fade-fadeto) < 0.05) mech.screen_fade = fadeto;
+			
+			if(mech.screen_fade >= fadeto*0.995 && !dir) dir = 1;
+			else if(mech.screen_fade <= 0.01 && dir && !quaketimer)
+			{
+				mech.screen_fadecolor = 0;
+				mech.screen_fade = 0;
+				mech.RemoveInventory(self);
+				GoAwayAndDie();
+			}
+		}
+		
+		if(quaketimer)
+		{	
+			Actor cockpit = mech;
+			Actor cam = cockpit;
+			if(mech.models_reference)
+			{
+				cockpit = mech.models_reference.cockpit;
+				cam = MechCockpitModel(cockpit).cockpitcam;
+			}
+			if(cockpit)
+			{
+				cockpit.SetOrigin(
+					cockpit.Vec3Offset( frandom(-xshake,xshake),
+										frandom(-yshake,yshake),
+										frandom(-zshake,zshake)  ), true
+				);
+				cockpit.A_SetAngle(cockpit.angle+frandom(-ashake, ashake), SPF_INTERPOLATE);
+				cockpit.A_SetPitch(cockpit.pitch+frandom(-pshake, pshake), SPF_INTERPOLATE);
+				cockpit.A_SetRoll(cockpit.roll+frandom(-rshake, rshake), SPF_INTERPOLATE);
+				if(cockpit != cam)
+				{
+					cam.SetOrigin(
+						cam.Vec3Offset( frandom(-xshake,xshake),
+											frandom(-yshake,yshake),
+											frandom(-zshake,zshake)  ), true
+					);
+					cam.A_SetAngle(cam.angle+frandom(-ashake, ashake), SPF_INTERPOLATE);
+					cam.A_SetPitch(cam.pitch+frandom(-pshake, pshake), SPF_INTERPOLATE);
+					cam.A_SetRoll(cam.roll+frandom(-rshake, rshake), SPF_INTERPOLATE);
+				}
+			}
+			quaketimer--;
+		}
+	}
+}
+
+// Damage animators
+class MechAnimate_InternalDamage : MechAnimator
+{
+	Default
+	{
+		MechAnimator.Quake 5, 2,2,2, 0,0,2;
+		MechAnimator.FadeAnimate "FF 00 00", 0.3, 0.20;
+		MechAnimator.DelayFadeout 4;
+	}	
+}
+class MechAnimate_CriticalDamage : MechAnimator
+{
+	Default
+	{
+		MechAnimator.Quake 15, 2,2,4, 0,10,8;
+		MechAnimator.FadeAnimate "FF 00 00", 0.5, 0.12;
+		MechAnimator.DelayFadeout 12;
+	}	
+}
+class MechAnimate_DamageShake : MechAnimator
+{
+	Default
+	{
+		MechAnimator.Quake 10, 1,1,0, 1,1,2;
+		MechAnimator.FadeAnimate "00 00 00", -1, 0;
+	}	
+}
+
+// Mech deploy fade
+class MechExchange_Animator : Powerup
+{
+	MechWarriorBase mech;
+	int mechbaynum;
+	double fadeto;
+	bool activate;
+	bool fadeout;
+	bool done;
+	int clock;
+	
+	Default
+	{
+		Powerup.Duration 0x7FFFFFFD; // lasts about 2 years;
+	}
+	
+	static MechExchange_Animator Setup(MechWarriorBase curmech, int swapmechbay)
+	{
+		curmech.Cockpit_Alert("\c[SAPPHIRE]Deploying new mech...", 35);
+		curmech.GiveInventory("MechExchange_Animator",1);
+		let mea = MechExchange_Animator(curmech.FindInventory("MechExchange_Animator"));
+		if(mea) 
+		{
+			mea.mechbaynum = swapmechbay;
+			mea.mech = curmech;
+		}
+		return mea;
+	}
+
+	override void DoEffect()
+	{
+		if(clock) clock--;
+		mech.screen_fadecolor = Color(255,0,0,0);
+		mech.screen_fade = fadeto/255.0;
+		
+		fadeto += fadeout ? -3 : 3;
+		if(fadeto >= 300 && !fadeout) 
+			activate = true;
+		else if(fadeto <= 20 && fadeout) 
+			done = true;
+	
+		if(mech && activate)
+		{
+			vector3 spawnpos;
+			double spawnangle;
+			[spawnpos, spawnangle] = level.PickPlayerStart(mech.PlayerNumber());
+			mech.SetOrigin(spawnpos, false);
+			mech.angle = spawnangle;
+			mech.LegAng = mech.angle;
+			mech.ChangeMech(mechbaynum);
+			fadeout = true;
+			activate = false;
+		}
+		if(done)
+		{
+			mech.screen_fade = 0;
+			mech.RemoveInventory(self);
+			mech.doShutdown = true;
+			mech.forceshutdown = false;
+			mech.manualshutdown = false;
+			GoAwayAndDie();
+		}
+		super.DoEffect();
+	}
+}
+
+// Damage Animators

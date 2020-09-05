@@ -70,13 +70,17 @@ void StartMechChange(int invmech)
 		if(corpse) 
 		{
 			corpse.isdead = true;
-			corpse.angle = angle;
-			corpse.pitch = pitch;
+			corpse.player = NULL;
 			corpse.LegAng = LegAng;
 			corpse.roll = models_reference.roll;
+			corpse.pitch = models_reference.pitch;
+			corpse.angle = models_reference.angle;
+			corpse.rolldistort = rolldistort;
+			if(corpse.models_reference) corpse.models_reference.mechowner = corpse;
 			corpse.A_SetHealth(0);
 			if(deathexplosions) deathexplosions.owner = corpse;
 		}
+		GiveInventory("DamageDebuff", 1);
 	}
 	if(dronecam_active) dronecam_active = false;
 	
@@ -376,11 +380,7 @@ override void PostBeginPlay()
 }
 	
 override void tick()
-{
-	// Check if teleported (Drastic position change)
-	if(!CheckMove(prevpos.xy)) LegAng = angle;
-	prevpos = pos;
-	
+{	
 	// Hold onto reference of all mechs for shop
 	if(!shopmechs.Size()) GetAllMechs(shopmechs);
 	// Grab Items reference for shop

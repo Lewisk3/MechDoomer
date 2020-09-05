@@ -40,6 +40,7 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Huds/Mechlab/mechlab_main.zsc"
 #include "ZScript/Huds/Mechlab/mechlab_armory.zsc"
 #include "ZScript/Huds/Mechlab/mechlab_shop.zsc"
+#include "ZScript/Mechwarrior/mech_animators.zsc"
 
 // Mainmenu(s)
 #include "ZScript/Mainmenu/Base/titlemenu_base.zsc"
