@@ -68,6 +68,7 @@ void MAB_LookLegs(double dangle)
 }
 double MAB_PitchTo(Mechwarrior mech)
 {
+	if(!mech.hitbox_middle) return 0;
 	return MDMath.getPitchBetween(hitbox_middle.pos, mech.hitbox_middle.pos);
 }
 void MAB_Common()

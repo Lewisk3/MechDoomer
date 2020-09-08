@@ -67,7 +67,7 @@ class MechAI_Controller : Actor
 	virtual void A_ShootSimple()
 	{
 		Array<Mechbase_Weapon> usableweaps;
-		mech.GetOptimalWeapons(tdistm, usableweaps, true, wclass-1, 0.20 + (0.22 * aggro));
+		mech.GetOptimalWeapons(tdistm, usableweaps, true, wclass-1, 0.20 + (0.4 * aggro));
 	}
 	
 	int CountWeapons()
@@ -102,18 +102,13 @@ class MechAI_Controller : Actor
 			if(!retreat_point)
 			{
 				bool circling = false;				
-	
+				bool hasweapons = CountWeapons();
+					
 				double tOptimal = range_optimal;
 				double tMin = range_min;
 				
 				// Run, LOL.
-				if(!CountWeapons())
-				{
-					combat_ai = AIC_HitAndRun;
-					tOptimal = 240;
-					tMin = 180;
-					dohitrun = true;
-				}
+				if(!hasweapons) combat_ai = AIC_HitAndRun;
 				
 				if(movement_ai == AIM_Scout)
 				{
@@ -125,7 +120,7 @@ class MechAI_Controller : Actor
 					}
 					else if(combat_ai == AIC_HitAndRun && !dohitrun)
 					{
-						tOptimal = 20;
+						tOptimal = !hasweapons ? 90 : 20;
 						tMin = tOptimal;
 					}	
 										
@@ -156,14 +151,14 @@ class MechAI_Controller : Actor
 					if(tdistm < tMin && tdistm >= 10 && combat_ai == AIC_HitAndRun && !dohitrun) 
 					{
 						dohitrun = true;
-						tOptimal = range_max;
+						tOptimal = !hasweapons ? 420 : range_max;
 						tMin = tOptimal;
 					}
 					if(dohitrun) 
 					{	
 						angto += 180;
 						circling = false;
-						if(tdistm <= 10)
+						if(tdistm <= 10 && hasweapons)
 						{
 							dohitrun = false;
 							tOptimal = 20;	
@@ -188,7 +183,7 @@ class MechAI_Controller : Actor
 					}
 					else if(combat_ai == AIC_HitAndRun && !dohitrun)
 					{
-						tOptimal = 40;
+						tOptimal = hasweapons ? 40 : 120;
 						tMin = tOptimal;
 					}	
 										
@@ -217,7 +212,7 @@ class MechAI_Controller : Actor
 						if(tdistm < tMin && tdistm >= 30 && combat_ai == AIC_HitAndRun && !dohitrun) 
 						{
 							dohitrun = true;
-							tOptimal = range_max;
+							tOptimal = hasweapons ? range_max : 300;
 							tMin = tOptimal;
 						}
 						if(dohitrun) 
@@ -253,8 +248,8 @@ class MechAI_Controller : Actor
 					}
 					else if(combat_ai == AIC_HitAndRun && !dohitrun)
 					{
-						tOptimal = 45;	
-						tMin = 50;
+						tOptimal = hasweapons ? 45 : 100;	
+						tMin = hasweapons ? 50 : 90;
 					}
 					
 					// Hit and Run tactics.
@@ -264,10 +259,10 @@ class MechAI_Controller : Actor
 					}
 					if(dohitrun) 
 					{	
-						tOptimal = range_optimal*0.6;
+						tOptimal = hasweapons ? range_optimal*0.6 : 360;
 						angto += 180;
 						circling = false;
-						if(tdistm <= 40)
+						if(tdistm <= 40 && hasweapons)
 						{
 							dohitrun = false;
 							tOptimal = 45;	
@@ -303,9 +298,7 @@ class MechAI_Controller : Actor
 							}
 							else
 							{
-								if( tdistm < tMin*1.8 && 
-									abs(mech.angle-angto) < precision && 
-									canrotate ) 
+								if( abs(mech.angle-angto) < precision && canrotate ) 
 								{	
 									mech.MAB_Accelerate(throttle_max, true);
 								}
