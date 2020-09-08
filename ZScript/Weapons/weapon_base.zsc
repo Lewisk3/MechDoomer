@@ -29,7 +29,7 @@ class Mechbase_Actor : FastProjectile
 	
 	override void PostBeginPlay()
 	{
-		if(mechplayer.player) 
+		if(mechplayer.player ) 
 			controlplr = mechplayer.player;
 		else 
 			controlplr = players[consoleplayer];
@@ -52,7 +52,7 @@ class Mechbase_Actor : FastProjectile
 	}
 	void Converge(double spdfac=1.0)
 	{
-		double spd = !mechplayer.player ? 0.12*spdfac : CVar.GetCVar("mwd_converge_speed", controlplr).getFloat()*spdfac;
+		double spd = (!mechplayer.player || mechplayer.checkAI()) ? 0.12*spdfac : CVar.GetCVar("mwd_converge_speed", controlplr).getFloat()*spdfac;
 		if(mechplayer && spd > 0)
 		{
 			double truespd = vel.length()*spd;

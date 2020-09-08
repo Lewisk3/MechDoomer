@@ -17,7 +17,6 @@ void MAB_Accelerate(double percnt, bool set = false)
 	else 
 		throttle += percnt;
 	throttle = clamp(throttle,-(throttle_max/2),throttle_max);	
-	if(percnt == 0) GiveInventory("IBTN_STOP",1);
 }
 bool MAB_CheckTorsoRotation(double angdir)
 {	
@@ -139,7 +138,7 @@ void MAB_Common()
 		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*5)) )*0.5;
 		if( !pilotlook && !mech_shutdown && (!models_reference || !models_reference.noroll) ) 
 		{
-			if(player) 
+			if(!checkAI()) 
 				A_SetRoll( roll + rolldistort );
 			else
 				A_SetRoll( rolldistort );
@@ -152,7 +151,7 @@ void MAB_Common()
 		// If we're in the air we can move our legs freely of friction.
 		double finalmod = ((player && player.onground) ? turnmod*spdmod : 2);
 		finalmod = clamp(finalmod, 0.15, 2);
-		if(!player || !CVar.GetCVar("mwd_relativelegspeed",player).getBool()) 
+		if((!player || checkAI()) || !CVar.GetCVar("mwd_relativelegspeed",player).getBool()) 
 			finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
 		
 		// Leg Delta gets how much the leg angle changed between movement.

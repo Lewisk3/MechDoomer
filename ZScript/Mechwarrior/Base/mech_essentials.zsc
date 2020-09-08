@@ -80,7 +80,7 @@ void StartMechChange(int invmech)
 			corpse.A_SetHealth(0);
 			if(deathexplosions) deathexplosions.owner = corpse;
 		}
-		GiveInventory("DamageDebuff", 1);
+		GiveLocalInv("DamageDebuff", 1);
 	}
 	if(dronecam_active) dronecam_active = false;
 	
@@ -242,10 +242,10 @@ void GetStoredWeapons(in out Array<mw_StoredWeapon> weaps)
 // Inventory
 bool setupInventory()
 {
-	if(!FindInventory("WeaponsHandler")) GiveInventory("WeaponsHandler",1);
+	if(!FindInventory("WeaponsHandler")) GiveLocalInv("WeaponsHandler",1);
 	if(!inv_context && !CheckVoodoo())
 	{
-		GiveInventory("mw_InvInfo",1);
+		GiveLocalInv("mw_InvInfo",1);
 		inv_context = mw_InvInfo(FindInventory("mw_InvInfo"));
 		inv_context.Init();
 		hardpoints = inv_context.hardpoints;
@@ -386,7 +386,7 @@ override void tick()
 	if(!shopmechs.Size()) GetAllMechs(shopmechs);
 	// Grab Items reference for shop
 	if(!shopitems) shopitems = GetAllItems();
-	
+		
 	if(checkVoodoo()) 
 	{
 		super.Tick();
@@ -411,7 +411,7 @@ override void tick()
 		// Don't hold onto dead target.
 		if(targetenemy && targetenemy.health <= 0) targetenemy = null;
 		
-		if(player) mech_cockpitbob();
+		if(player && !checkAI()) mech_cockpitbob();
 		mech_movement(); 
 		if(!mech_shutdown)
 		{
@@ -430,7 +430,7 @@ override void tick()
 		}
 	}	
 	
-	if(!player) 
+	if(!player || checkAI()) 
 	{
 		super.Tick();
 		return;

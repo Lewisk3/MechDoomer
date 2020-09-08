@@ -41,10 +41,10 @@ class MechHitbox : Actor
 		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
 		
 		// Take a bit less damage from AI
-		if(mechdmg && !Mechwarrior(source).player) newdmg *= 0.4;
+		if(mechdmg && Mechwarrior(source).checkAI()) newdmg *= 0.4;
 		
 		// Take more damage if we are AI
-		if(!mech.player) newdmg *= 1.35;
+		if(mech.checkAI()) newdmg *= 1.35;
 		
 		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
 		return 0;
@@ -58,12 +58,12 @@ class MechHitbox : Actor
 	override void Tick()
 	{
 		super.Tick();
-		double truecockpit = mech.angle;
 		if(!mech || !mech.models_reference) 
 		{
 			Destroy();
 			return;
 		}
+		double truecockpit = mech.angle;
 		if(mech.models_reference.cockpit && mech.player) 
 			truecockpit = mech.models_reference.cockpit.angle;
 

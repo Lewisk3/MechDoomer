@@ -55,6 +55,7 @@ class MechAnimator : Inventory
 		{	
 			mech.RemoveInventory(self);
 			GoAwayAndDie();
+			return;
 		}
 		
 		if(mech && mech.isdead) 
@@ -63,6 +64,7 @@ class MechAnimator : Inventory
 			mech.screen_fade = 0;
 			mech.RemoveInventory(self);
 			GoAwayAndDie();
+			return;
 		}
 		
 		if(fadeto != -1)
@@ -81,6 +83,7 @@ class MechAnimator : Inventory
 				mech.screen_fade = 0;
 				mech.RemoveInventory(self);
 				GoAwayAndDie();
+				return;
 			}
 		}
 		

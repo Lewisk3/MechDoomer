@@ -155,7 +155,7 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, Actor dam
 	// Update for over-max armor, via EndosteelBonuses.
 	if(hp.armor > 0 && !noarmor) 
 	{
-		if(random(0,1)==1) GiveInventory("MechAnimate_DamageShake", 1);
+		if(random(0,1)==1) GiveLocalInv("MechAnimate_DamageShake", 1);
 		bool overarmor = (hp.armor > hp.max_armor);
 		if(hp.armor-dmg <= 0) A_StartLocalSound("Mech/Damaged/NoArmor", CHAN_BODY, CHANF_OVERLAP);
 		// Random chance armor doesn't absorb the remaining damage.
@@ -163,7 +163,7 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, Actor dam
 		{
 			hp.armor = 0;
 			DamageHardpoint(hp,dmg-hp.armor,random(0,1));
-			GiveInventory("MechAnimate_InternalDamage", 1);
+			GiveLocalInv("MechAnimate_InternalDamage", 1);
 		}
 		else
 		{
@@ -182,13 +182,13 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, Actor dam
 		if(random(0,2)==2) 
 		{
 			A_StartLocalSound("Mech/Damage/Warn", CHAN_VOICE);
-			GiveInventory("MechAnimate_InternalDamage", 1);
+			GiveLocalInv("MechAnimate_InternalDamage", 1);
 		}
 	
 		if(random(0,5)==5)
 		{
 			A_StartLocalSound("Mech/Damage/Critical", CHAN_VOICE);
-			GiveInventory("MechAnimate_CriticalDamage", 1);
+			GiveLocalInv("MechAnimate_CriticalDamage", 1);
 			mechsounds.pushSound("Mech/Betty/CriticalHit");
 			if(random(0,1)==1)
 				DamageHardpointWeapons(hp,50*random(1,2));
@@ -206,7 +206,7 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, Actor dam
 				A_StartLocalSound("Mech/Damaged/Explosion", CHAN_VOICE);
 			}
 			A_StartLocalSound("Mech/Damage/Critical", CHAN_VOICE);
-			GiveInventory("MechAnimate_CriticalDamage", 1);
+			GiveLocalInv("MechAnimate_CriticalDamage", 1);
 		
 			A_StartLocalSound("Mech/Damaged/HardpointDead", CHAN_VOICE);
 			DamageCritSounds(hp);

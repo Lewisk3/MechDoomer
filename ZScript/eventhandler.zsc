@@ -534,6 +534,7 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "-mwd_user5") plr.btn_jumpjets = false;
 			if(netcmd == "+mwd_pilotlook" && plr.modelcockpit && !plr.dronecam) plr.pilotlook = true;
 			if(netcmd == "-mwd_pilotlook")plr.pilotlook = false;
+		
 			Array<String> netcmds;
 			netcmds.Clear();
 			netcmd.split(netcmds,":");
@@ -552,6 +553,7 @@ class MechDoomerEvents : EventHandler
 					mechact.setupInventory();
 					mechact.mech_weapons();
 					mechact.baseclass = type;
+					mechact.player = players[consoleplayer];
 					let ai = MechAI_Controller(Actor.Spawn("MechAI_Controller"));
 					if(ai) ai.mech = mechact;
 				}

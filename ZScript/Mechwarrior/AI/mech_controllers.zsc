@@ -49,7 +49,7 @@ class MechAI_Controller : Actor
 		while(mechactor = Mechwarrior(it.Next()))
 		{
 			// Do not target other AI.
-			if(!mechactor.player || mechactor.CheckVoodoo()) 
+			if(!mechactor.player || mechactor.CheckVoodoo() || mechactor.CheckAI()) 
 				continue; 
 			
 			// Find closest mech.

@@ -58,7 +58,7 @@ void takeammo(class<Mechbase_Ammo> type, int amt)
 				left -= ammoobj.ammunition;
 				removeStruct(index);
 				// Search for more ammo
-				if(player)
+				if(player && !checkAI())
 				{
 					if(CVar.GetCVar("mwd_autoreload",player).getBool())
 					{

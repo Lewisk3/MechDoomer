@@ -156,6 +156,10 @@ class MechWarriorBase : DoomPlayer
 		
 		return 0;
 	}
+	clearscope bool checkAI()
+	{
+		return docopy_novoodoo;
+	}
 	clearscope bool checkVoodoo(bool checkpinfo=false) 
 	{ 
 		if(checkpinfo) 

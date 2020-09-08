@@ -80,8 +80,8 @@ void ProcessDeath(Actor killer)
 		mechsounds.Empty();
 		for(int i = 0; i < 5; i++) mechsounds.PushSound("Mech/Damaged/CriticalExplosion");
 		deathexplosions = RandomExplosions.TriggerOnActor(self, 75,15,viewheight);
-		AdjustDrone(350, 1, 0, true);
-		if(player) player.cheats |= CF_TOTALLYFROZEN;
+		if(!checkAI()) AdjustDrone(350, 1, 0, true);
+		if(player && !checkAI()) player.cheats |= CF_TOTALLYFROZEN;
 	}
 	
 	isdead = true;
@@ -151,7 +151,7 @@ void mech_weapons()
 	ticks++;
 	
 	// Return if invalid.
-	if(!player) return;
+	if(!player || checkAI()) return;
 	
 	bool firing = (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) || 
 				  (GetPlayerInput(INPUT_BUTTONS) & BT_USER1 ) ||

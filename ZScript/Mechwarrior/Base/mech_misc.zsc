@@ -111,6 +111,21 @@ void adjustMoney(int amt)
 	if(!CheckVoodoo()) inv_context.money_cbills += amt; 
 }
 
+// Extremely wierd but, needs to be done for AI.
+bool GiveLocalInv(class<Inventory> type, int amt = 1)
+{
+	if(checkAI())
+	{
+		let oplr = player;
+		player = NULL;
+		bool success = GiveInventory(type, amt);
+		player = oplr;
+		return success;
+	}
+	else
+		return GiveInventory(type, amt);
+}
+
 void A_StartLocalSound(Sound snd, uint channel = CHAN_BODY, uint flags = 0, double volume=1.0, double attn = ATTN_NORM, double pitch = 0.0)
 {
 	let cplr = MechwarriorBase(players[consoleplayer].mo);

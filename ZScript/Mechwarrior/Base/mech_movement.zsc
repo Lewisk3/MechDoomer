@@ -282,7 +282,7 @@ void mech_movement()
 	
 	// Process common control logic.
 	MAB_Common();
-	if(!player) return;
+	if(!player || checkAI()) return;
 	
 	// Leg Movement
 	if(!defaultmovement)
@@ -504,7 +504,7 @@ void powerup()
 // Bobbing
 void Bobbing() {
 	// Don't bob on voodoos!
-	if(!player || !player.mo || player.mo != self) return;
+	if(!player || !player.mo || player.mo != self || checkAI()) return;
 	
 	double tiltosc_amp =  10 + (vel.Length()/4);
 	double steposc_amp =  15 + (vel.Length()/2);
