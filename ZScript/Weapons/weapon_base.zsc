@@ -1,6 +1,7 @@
 // Weapon base
 class Mechbase_Actor : FastProjectile
 {
+	PlayerInfo controlplr;
 	double heatgen;
 	vector3 spawnpos;
 	double basedamage;
@@ -28,9 +29,14 @@ class Mechbase_Actor : FastProjectile
 	
 	override void PostBeginPlay()
 	{
+		if(mechplayer.player) 
+			controlplr = mechplayer.player;
+		else 
+			controlplr = players[consoleplayer];
+			
 		// Swap to alt-sound if CVar is flipped.
 		Sound finalsound = firesound;
-		if(mechplayer && DOS_firesound && CVar.GetCVar("mwd_useclassicsound", mechplayer.player).getBool())
+		if(mechplayer && DOS_firesound && CVar.GetCVar("mwd_useclassicsound", controlplr).getBool())
 			finalsound = DOS_firesound;
 		
 		if(finalsound) SoundOnActor.Trigger(finalsound, mechplayer);
@@ -46,13 +52,13 @@ class Mechbase_Actor : FastProjectile
 	}
 	void Converge(double spdfac=1.0)
 	{
-		double spd = CVar.GetCVar("mwd_converge_speed", mechplayer.player).getFloat()*spdfac;
+		double spd = !mechplayer.player ? 0.12*spdfac : CVar.GetCVar("mwd_converge_speed", controlplr).getFloat()*spdfac;
 		if(mechplayer && spd > 0)
 		{
 			double truespd = vel.length()*spd;
 			vector3 npos = Vec3Offset(-vel.x,-vel.y,-vel.z);
 			vector3 tpos = mechplayer.pos;
-			tpos.z += (mechplayer.viewheight*mechplayer.player.crouchfactor);
+			tpos.z += mechplayer.player ? (mechplayer.viewheight*mechplayer.player.crouchfactor) : mechplayer.viewheight;
 			double ato = AngleTo(mechplayer);
 			double pto = MDMath.getPitchBetween(pos,tpos);
 			double cpitch = cos(-pto);
@@ -148,10 +154,7 @@ class Mechbase_Weapon : Item_NoPickup
 	int worth;
 	int ammouse;
 	int ammogive;
-	double lockonspeed;
 	double hitscan_dmg;
-	bool aimtarget;
-	bool target_inview;
 	double hitscan_distance;
 	double basespreadx, basespready;
 	string specprefix; // Special prefix for certain weapons.
@@ -179,7 +182,6 @@ class Mechbase_Weapon : Item_NoPickup
 	Property AmmoUse : ammouse;
 	Property CValue : worth;
 	Property IsHommingMissile : isHomming;
-	Property LockingSpeed : lockonspeed;
 	Property WeaponDelay : delay;
 	Property AttackSound : atksnd;
 	Property ClassicAttackSound : DOS_atksnd;
@@ -215,7 +217,9 @@ class Mechbase_Weapon : Item_NoPickup
 	action bool CheckClassicSounds() 
 	{
 		if(!invoker.mechplr) return false;	
-		return CVar.GetCVar("mwd_useclassicsound", invoker.mechplr.player).GetBool();
+		PlayerInfo controlplr = players[consoleplayer];
+		if(invoker.mechplr.player) controlplr = invoker.mechplr.player;
+		return CVar.GetCVar("mwd_useclassicsound", controlplr).GetBool();
 	}
 
 	action bool FireBullets(int damage,int distance=0,int sxoff=1, int syoff=1)
@@ -309,7 +313,7 @@ class Mechbase_Weapon : Item_NoPickup
 				offsangle = mechparts.cockpit.cockpitcam.angle;
 			
 			// If this weapon is NOT on an actuated arm, fire from torso aim.
-			bool notorsoaim = CVar.GetCVar("mwd_universalactuation", plr.player).getBool();
+			bool notorsoaim = plr.player ? CVar.GetCVar("mwd_universalactuation", plr.player).getBool() : true;
 			
 			// Align to cockpit model's rotation.
 			if(!onarms && !notorsoaim && mechparts.cockpit) 
@@ -317,9 +321,13 @@ class Mechbase_Weapon : Item_NoPickup
 			if(onlegs) 
 				offsangle = plr.LegAng;
 			
+			// AI has no real cockpit control.
+			if(!plr.player && !onlegs) offsangle = plr.angle;
+			
 			vector2 offs = MDMath.VOffset(offsangle, distance, xoffset, 1);			
 			
-			Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,(plr.viewheight*plr.player.CrouchFactor)+yoffset);
+			double heightmod = plr.player ? plr.viewheight*plr.player.CrouchFactor : plr.viewheight;
+			Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,heightmod+yoffset);
 			
 			let weap = Mechbase_Actor(Spawn(type,lpos));
 			if(weap)
@@ -405,57 +413,6 @@ class Mechbase_Weapon : Item_NoPickup
 			switch_timer = 35/2;
 			DoAmmoSwitch(ammo_mode+1);
 			plr.A_StartLocalSound("Mech/NextWeapon",CHAN_WEAPON);
-		}
-		
-		// Discard lock if we're not a homing weapon and we've just been selected.
-		if(plr.selectedWeapon == WeaponID && !isHomming && plr.locktimer )
-		{
-			plr.locktimer = 0;
-			plr.targetlocked = false;
-		}
-		
-		if(isHomming && Owner)
-		{
-			// If this weapon is selected.
-			if(plr.selectedWeapon == WeaponID && plr.targetenemy)
-			{	
-				// Target locked logic.		
-				aimtarget = (plr.targetenemy && plr.targetreticle && target_inview);
-				
-				// Only lock if weapon is ready.
-				if(checkCooldown() || volley_amt > 0)
-				{
-					if(plr.locktimer == 0 && aimtarget)SoundEmitter.SE_Trigger("Mech/Target/BeginLock",Owner.pos);
-					if(plr.locktimer < 100 && aimtarget) plr.locktimer += lockonspeed;
-					if(plr.locktimer > 90 && !plr.targetlocked && aimtarget) 
-					{
-						plr.targetlocked = true;
-						plr.prevlock = plr.targetenemy;
-						SoundEmitter.SE_Trigger("Mech/Target/Locked",Owner.pos);
-					}
-				}
-				
-				// Deplete lock under conditions.
-				if( ((!aimtarget || !checkCooldown()) && volley_amt <= 0) && plr.locktimer > 0)
-					plr.locktimer -= lockonspeed*2;
-					
-				if(plr.locktimer < 100) plr.targetlocked = false;				
-				if(plr.targetenemy && !plr.prevlock) plr.prevlock = plr.targetenemy;
-				if(plr.targetlocked && plr.targetenemy != plr.prevlock) 
-				{
-					plr.locktimer = 0;
-					plr.prevlock = NULL;
-				}
-				//console.printf("[Missile Status]\n LOS: %i\n Lock Process: %i%\n Has Lock: %i", aimtarget, plr.locktimer, plr.targetlocked);
-	
-				vector3 sight = level.SphericalCoords(
-					plr.Vec3Offset(0,0,plr.viewheight), 
-					plr.targetenemy.Vec3Offset(0,0,plr.targetenemy.height/2), 
-					(plr.angle,plr.pitch)
-				);
-				target_inview = (abs(sight.x) < 30 && abs(sight.y) < 30);
-			}
-			
 		}
 		
 		if(cooldown_timer > 0)cooldown_timer--;

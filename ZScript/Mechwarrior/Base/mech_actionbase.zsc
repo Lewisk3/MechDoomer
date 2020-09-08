@@ -1,0 +1,180 @@
+	/***********************************\
+	|  Contains all basic mech actions  |
+	|  This class primarily makes mechs |
+	|  "controller compatible"          |
+	\***********************************/
+extend class MechWarriorBase;
+
+bool MAB_CheckAction() 
+{
+	return !mech_shutdown;
+}
+void MAB_Accelerate(double percnt, bool set = false) 
+{
+	if(!MAB_CheckAction()) return;
+	if(set) 
+		throttle = percnt;
+	else 
+		throttle += percnt;
+	throttle = clamp(throttle,-(throttle_max/2),throttle_max);	
+	if(percnt == 0) GiveInventory("IBTN_STOP",1);
+}
+bool MAB_CheckTorsoRotation(double angdir)
+{	
+	double diff = MDMath.AngleDifference(angle, angdir);
+	double finspd = 45*(models_reference.cockpittwist_mod*0.5);
+	double newang = angle;
+	if(diff > 0) newang += finspd;
+	if(diff < 0) newang -= finspd;
+	return !(newang - LegAng > MaxYaw) && !(newang - LegAng < -MaxYaw);
+}
+void MAB_TurnLeft() 
+{
+	if(!MAB_CheckAction()) return;
+	TakeInventory("IBTN_CENTER",1);
+	LegVel = -LegSpeed;
+	LookVel = -LegSpeed;
+}
+void MAB_TurnRight() 
+{
+	if(!MAB_CheckAction()) return;
+	TakeInventory("IBTN_CENTER",1);
+	LegVel = LegSpeed;
+	LookVel = LegSpeed;
+}
+void MAB_LookTorso(double dangle, double dpitch) 
+{
+	if(!MAB_CheckAction()) return;
+	double torsospd = models_reference.cockpittwist_mod* 0.5;
+	double finspd = 45*torsospd;
+	double diff = MDMath.AngleDifference(angle, dangle);
+
+	if(diff > 0) angle += finspd;
+	if(diff < 0) angle -= finspd;
+	if(abs(diff) < finspd*2) angle = dangle;
+	double topitch = dpitch;
+	A_SetPitch(MDMath.Lerp(pitch, topitch, 0.5), SPF_INTERPOLATE);
+}
+void MAB_LookLegs(double dangle)
+{
+	if(!MAB_CheckAction()) return;
+	double diff = MDMath.NormalizeAngle(dangle-LegAng);
+	if(diff > 0) LegVel =  LegSpeed;
+	if(diff < 0) LegVel = -LegSpeed;
+	if(abs(diff) < LegSpeed*2) 
+	{	
+		LegAng = dangle;
+		LegVel = 0;
+	}
+}
+double MAB_PitchTo(Mechwarrior mech)
+{
+	return MDMath.getPitchBetween(hitbox_middle.pos, mech.hitbox_middle.pos);
+}
+void MAB_Common()
+{
+	if(!defaultmovement) 
+	{
+		// Movement related maths
+		if(!stepping) 
+		{
+			double accel = ((1000/mech_tonnage)/100) * (0.12*move_accel);
+			move_throttle = MDMath.Lerp( move_throttle, throttle, clamp(accel,0.008,0.4) );
+			vel = (cos(LegAng)*(move_throttle*MoveSpeed),sin(LegAng)*(move_throttle*MoveSpeed),vel.z);
+		}
+		throttle = clamp(throttle,-(throttle_max/2),throttle_max);
+		
+		// Speed decay when engine removed.
+		if(!inv_context || !inv_context.engine)
+		{
+			if(abs(throttle) > 0.05)
+			{
+				throttle *= 0.97;
+			}
+			else if(MoveSpeedKPH > 0)
+			{
+				throttle = 0;
+				setupSpeedKPH(0);
+			}
+			return;
+		}
+		// Other common logic.
+		if(countinv("IBTN_STOP"))
+		{
+			if(abs(throttle) <= 0.1)TakeInventory("IBTN_STOP",1);
+			if(throttle < 0)throttle += 0.02;
+			if(throttle > 0)throttle -= 0.02;
+			if(!snd_accelerate){A_StartLocalSound("Mech/DeccelToStop", CHAN_WEAPON, CHANF_OVERLAP); snd_accelerate = true;}
+			if(abs(throttle) <= 0.1)throttle = 0;
+		}
+		if(countinv("IBTN_CENTER"))
+		{
+			double yaw = MDMath.NormalizeAngle(angle-LegAng);
+			if(yaw > 0) LegVel =  LegSpeed;
+			if(yaw < 0) LegVel = -LegSpeed;
+			if(abs(yaw) < LegSpeed*2) 
+			{	
+				LegAng = angle;
+				LegVel = 0;
+				TakeInventory("IBTN_CENTER",1);
+			}
+			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTER",1);
+		}
+		if(countinv("IBTN_CENTERTORSO"))
+		{
+			double yaw = MDMath.NormalizeAngle(angle-LegAng);
+			if(yaw > 0)angle-=2;
+			if(yaw < 0)angle+=2;
+			if(pitch > 0)pitch-=2;
+			if(pitch < 0)pitch+=2;
+			if(abs(yaw) < 2)
+			{
+				angle = LegAng;
+				TakeInventory("IBTN_CENTERTORSO",1);
+			}
+			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTERTORSO",1);
+		}
+		
+		// Roll distortion when looking far up/down at odd leg angle.
+		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*5)) )*0.5;
+		if( !pilotlook && !mech_shutdown && (!models_reference || !models_reference.noroll) ) 
+		{
+			if(player) 
+				A_SetRoll( roll + rolldistort );
+			else
+				A_SetRoll( rolldistort );
+		}
+	
+		double curspd = MoveSpeedKPH*move_throttle;
+		double turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
+		double spdmod = 1.0 - (abs(curspd)/2)*0.007;	
+		
+		// If we're in the air we can move our legs freely of friction.
+		double finalmod = ((player && player.onground) ? turnmod*spdmod : 2);
+		finalmod = clamp(finalmod, 0.15, 2);
+		if(!player || !CVar.GetCVar("mwd_relativelegspeed",player).getBool()) 
+			finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
+		
+		// Leg Delta gets how much the leg angle changed between movement.
+		// This conditionally does not track when center button is active.
+		LegDelta = !countinv("IBTN_CENTER") ? (LegVel*finalmod)*2 : 0;
+		
+		LegAng += LegVel*finalmod;
+		angle  += LookVel*finalmod;
+	
+		if( !mech_shutdown )
+		{
+			if(!pilotlook) Pitch = clamp(Pitch, -minPitch, maxPitch);
+			if(MaxYaw < 360 && !uncappedtorso && !pilotlook )
+			{
+				if(angle - LegAng > MaxYaw)  angle = LegAng + MaxYaw;
+				if(angle - LegAng < -MaxYaw) angle = LegAng - MaxYaw;
+			}
+		}
+		
+	}
+	else
+	{
+		LegAng = angle;
+	}
+}

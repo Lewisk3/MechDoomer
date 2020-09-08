@@ -539,7 +539,12 @@ class MechDoomerEvents : EventHandler
 			netcmd.split(netcmds,":");
 			if(netcmds[0] == "createmech")
 			{
-				string type = netcmds[1];
+				class<Mechwarrior> type = netcmds[1];
+				if(!type)
+				{
+					console.printf("Unknown mech type: %s", netcmds[1]);
+					return;
+				}
 				let mechact = MechwarriorBase(plr.Spawn(type,plr.pos));
 				if(mechact)
 				{
@@ -547,6 +552,8 @@ class MechDoomerEvents : EventHandler
 					mechact.setupInventory();
 					mechact.mech_weapons();
 					mechact.baseclass = type;
+					let ai = MechAI_Controller(Actor.Spawn("MechAI_Controller"));
+					if(ai) ai.mech = mechact;
 				}
 			}
 			if(netcmds[0] == "mechlab_alert")

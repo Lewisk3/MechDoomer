@@ -64,7 +64,7 @@ class WeaponsHandler : Weapon_NoPickup
 						if(weap) 
 						{
 							int crosshair;
-							if(weap.isHomming) 
+							if(plr.FindHomingWeapon()) 
 								crosshair = plr.targetlocked ? 12 : plr.locktimer > 25 ? 11 : 10;
 							else
 								crosshair = (weap.cooldown_timer || plr.weapons_fired) ? 9 : 8;

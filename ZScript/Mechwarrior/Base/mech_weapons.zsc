@@ -367,7 +367,139 @@ void FireWeapons(bool groupfire=true)
 		}
 	}
 }
+bool FireWeaponByRef(Mechbase_Weapon ww)
+{
+	bool success = false;
+	if(ww && !mech_shutdown) 
+	{
+		success = ww.MWFire();
+		if(!success && !weapons_fired) A_StartLocalSound("Mech/WeaponBusy", CHAN_OVERLAP);
+		weapons_fired = true;
+	}
+	return success;
+}
+void FireWeaponsList(Array<Mechbase_Weapon> wls, bool checkheat)
+{
+	for(int w = 0; w < wls.Size(); w++) FireWeaponByRef(wls[w]);
+}
+bool FindHomingWeapon(bool mustbeactive = false)
+{
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww && ww.isHomming) 
+		{
+			if(!mustbeactive) return true; 
+			if(ww.cooldown_timer > 0 && ww.volley_amt <= 0) return false;
+			return true;
+		}
+	}
+	return false;
+}
 
+// Find (AI protocols)
+void GetAllWeapons(in out Array<Mechbase_Weapon> weaps)
+{
+	weaps.Clear();
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww) weaps.Push(ww);
+	}
+}
+void GetOptimalWeapons(double range, in out Array<Mechbase_Weapon> weaps, bool fire, int chooseamt = 0, double heatperc = 0.36)
+{
+	weaps.Clear();
+	int fired = 0;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww)
+		{
+			if(ww.isHomming && !targetlocked) continue;
+			
+			let wobj = Mechbase_Actor(GetDefaultByType(ww.weapType));
+			if(!wobj) continue;
+			
+			// Out of range checks
+			if(wobj.minimum_range > 0 && range < wobj.minimum_range) 
+				continue;	
+			if(wobj.maximum_range > 0 && range > wobj.maximum_range)
+				continue;
+				
+			// Cooldown check
+			if(ww.cooldown_timer > 0)
+				continue; // Weapon is busy
+				
+			// Heat check
+			if(fire)
+			{
+				// Fire a randomly selected weapon.
+				if(fired < chooseamt && random[AIWeapSel](0,2)==2 || !chooseamt)
+				{
+					if((heatlevel + wobj.heatgen) < MWHEAT_MAX*heatperc ) 
+						if(FireWeaponByRef(ww)) fired++;
+				}
+			}
+		
+			// Add weapon to list
+			weaps.Push(ww);
+		}
+	}
+}
+double FindAverageRange(Array<Mechbase_Weapon> from = NULL)
+{
+	double ranges;
+	double weapcnt = 1; // Prevent division by 0
+	if(!from)
+	{
+		for(let w = Inv; w != null; w = w.Inv)
+		{	
+			let ww = Mechbase_Weapon(w);
+			if(ww) 
+			{
+				let wobj = Mechbase_Actor(GetDefaultByType(ww.weapType));
+				if(wobj && wobj.maximum_range > 0) 
+				{
+					ranges += wobj.maximum_range;
+					weapcnt++;
+				}
+			}
+		}
+	}
+	else
+	{
+		for(int w = 0; w < from.Size(); w++) 
+		{	
+			let ww = from[w];
+			let wobj = Mechbase_Actor(GetDefaultByType(ww.weapType));
+			if(wobj && wobj.maximum_range > 0) 
+			{
+				ranges += wobj.maximum_range;
+				weapcnt++;
+			}
+		}
+	}
+	return ranges/weapcnt;
+}
+double, double FindRanges(bool countminzero = false)
+{
+	double minrange = 0;
+	double maxrange = 0;
+	bool nominimum = false;
+	for(let w = Inv; w != null; w = w.Inv)
+	{	
+		let ww = Mechbase_Weapon(w);
+		if(ww) 
+		{
+			let wobj = Mechbase_Actor(GetDefaultByType(ww.weapType));
+			if(wobj && wobj.maximum_range > maxrange) maxrange = wobj.maximum_range;
+			if(wobj && wobj.minimum_range > minrange) minrange = wobj.minimum_range;		
+			if(wobj && wobj.minimum_range <= 0 && countminzero) nominimum = true;
+		}
+	}
+	return nominimum ? 0 : minrange, maxrange;
+}
 
 /*
 bool swapWeaponToInv(int weap_ind, int inv_ind)

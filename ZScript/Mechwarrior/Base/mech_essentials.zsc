@@ -257,6 +257,7 @@ bool setupInventory()
 		}
 		setupCriticals();
 		SetupHitboxes();
+		inv_context.maxgroup = getMaxWeaponGrouping();
 	}
 	return inv_context==NULL;
 }
@@ -405,7 +406,35 @@ override void tick()
 		MechHitbox.SetupHitbox(Mechwarrior(self), hardpoints.rl);
 	}
 	
-	if(!player) return;
+	if(!isdead) 
+	{		
+		// Don't hold onto dead target.
+		if(targetenemy && targetenemy.health <= 0) targetenemy = null;
+		
+		if(player) mech_cockpitbob();
+		mech_movement(); 
+		if(!mech_shutdown)
+		{
+			if(vel.length() >= 5) 
+			{
+				double stompdmg = (2*(mech_tonnage/100.)) * (vel.length()/10.);
+				RadiusDamage(stompdmg, 64, "Crush", "MechHitBox");
+			}
+			HardpointDamageEffects();
+			mech_weapons();
+		}
+		if(mech_shutdown)
+		{
+			dronecam_active = false;
+			process_shutdown();
+		}
+	}	
+	
+	if(!player) 
+	{
+		super.Tick();
+		return;
+	}
 	// Betty sound for automap toggle
 	if(automapactive && !prev_automap) 
 	{
@@ -437,32 +466,7 @@ override void tick()
 		{
 			if(!(weap is "WeaponsHandler")) weap.Destroy();
 		}
-	}
-	
-	if(!isdead) 
-	{		
-		// Don't hold onto dead target.
-		if(targetenemy && targetenemy.health <= 0) targetenemy = null;
-		
-		mech_cockpitbob();
-		mech_movement(); 
-		if(!mech_shutdown)
-		{
-			if(vel.length() >= 5) 
-			{
-				double stompdmg = (2*(mech_tonnage/100.)) * (vel.length()/10.);
-				RadiusDamage(stompdmg, 64, "Crush", "MechHitBox");
-			}
-			HardpointDamageEffects();
-			mech_weapons();
-		}
-		if(mech_shutdown)
-		{
-			dronecam_active = false;
-			process_shutdown();
-		}
 	}	
-	
 	mechsounds.Tick();
 	super.tick();
 }

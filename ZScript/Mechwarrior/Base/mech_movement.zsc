@@ -240,7 +240,7 @@ void mech_cockpitbob()
 
 void mech_movement()
 {
-	if(!player || isdead) return;
+	if(isdead) return;
 	if(!CheckCompensative() && mech_shutdown) return;
 	if(autopilot) DoAutopilot();
 	CVar throttle_taptoggle = CVar.GetCVar("mwd_throttletaptoggle", player);
@@ -280,32 +280,13 @@ void mech_movement()
 		A_SetSpeed(finalspd);
 	}
 	
+	// Process common control logic.
+	MAB_Common();
+	if(!player) return;
+	
 	// Leg Movement
 	if(!defaultmovement)
-	{
-		// Move mech by a percentage of throttle.
-		if(!stepping) 
-		{
-			double accel = ((1000/mech_tonnage)/100) * (0.12*move_accel);
-			move_throttle = MDMath.Lerp( move_throttle, throttle, clamp(accel,0.008,0.4) );
-			vel = (cos(LegAng)*(move_throttle*MoveSpeed),sin(LegAng)*(move_throttle*MoveSpeed),vel.z);
-		}
-		
-		// Speed decay when engine removed.
-		if(!inv_context || !inv_context.engine)
-		{
-			if(abs(throttle) > 0.05)
-			{
-				throttle *= 0.97;
-			}
-			else if(MoveSpeedKPH > 0)
-			{
-				throttle = 0;
-				setupSpeedKPH(0);
-			}
-			return;
-		}
-			
+	{			
 		if(throttle == 0) snd_accelerate = true;
 		if(GetPlayerInput(INPUT_FORWARDMOVE) > 0)
 		{
@@ -314,7 +295,10 @@ void mech_movement()
 			if(throttle > 0 && reversing && taptoaccelerate) 
 			{
 				if(prevaccel) 
+				{
 					throttle = 0;
+					snd_accelerate = false;
+				}
 				else
 				{
 					reversing = false;
@@ -330,7 +314,6 @@ void mech_movement()
 			throttle -= 0.02;
 			if(!snd_accelerate){ A_StartLocalSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }
 		}
-		
 		if(GetPlayerInput(INPUT_FORWARDMOVE) < 0) 
 		{
 			bool prevdecel = GetPlayerInput(INPUT_OLDBUTTONS) & BT_BACK;
@@ -338,11 +321,14 @@ void mech_movement()
 			if(throttle < 0 && !reversing && taptoaccelerate) 
 			{
 				if(prevdecel) 
+				{
 					throttle = 0;
+					snd_accelerate = true;
+				}
 				else
 					reversing = true;
 			}	
-				
+			
 			TakeInventory("IBTN_STOP",1);
 			if(!snd_accelerate){ A_StartLocalSound("Mech/DeccelToStop", CHAN_WEAPON); snd_accelerate = true; }
 		}
@@ -351,8 +337,6 @@ void mech_movement()
 			throttle += 0.02;
 			if(snd_accelerate){ A_StartLocalSound("Mech/AccelFromStop", CHAN_WEAPON); snd_accelerate = false; }
 		}
-		
-		throttle = clamp(throttle,-(throttle_max/2),throttle_max);
 		
 		if(throttle > 0.5 && !snd_reactor)
 		{
@@ -364,6 +348,8 @@ void mech_movement()
 			A_StopSound(CHAN_6);
 			snd_reactor = false;
 		}
+		
+		throttle = clamp(throttle,-(throttle_max/2),throttle_max);
 		
 		if(!pilotlook)
 		{
@@ -383,74 +369,7 @@ void mech_movement()
 		if( !floor(GetPlayerInput(INPUT_SIDEMOVE)*10) )
 		{
 			LookVel = 0;
-			LegVel = 0;
-		}
-		   
-		if(countinv("IBTN_STOP"))
-		{
-			if(abs(throttle) <= 0.1)TakeInventory("IBTN_STOP",1);
-			if(throttle < 0)throttle += 0.02;
-			if(throttle > 0)throttle -= 0.02;
-			if(!snd_accelerate){A_StartLocalSound("Mech/DeccelToStop", CHAN_WEAPON, CHANF_OVERLAP); snd_accelerate = true;}
-			if(abs(throttle) <= 0.1)throttle = 0;
-		}
-		if(countinv("IBTN_CENTER"))
-		{
-			double yaw = MDMath.NormalizeAngle(angle-LegAng);
-			if(yaw > 0) LegVel =  LegSpeed;
-			if(yaw < 0) LegVel = -LegSpeed;
-			if(abs(yaw) < LegSpeed*2) 
-			{	
-				LegAng = angle;
-				LegVel = 0;
-				TakeInventory("IBTN_CENTER",1);
-			}
-			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTER",1);
-		}
-		if(countinv("IBTN_CENTERTORSO"))
-		{
-			double yaw = MDMath.NormalizeAngle(angle-LegAng);
-			if(yaw > 0)angle-=2;
-			if(yaw < 0)angle+=2;
-			if(pitch > 0)pitch-=2;
-			if(pitch < 0)pitch+=2;
-			if(abs(yaw) < 2)
-			{
-				angle = LegAng;
-				TakeInventory("IBTN_CENTERTORSO",1);
-			}
-			if(abs(yaw) <= 0.1)TakeInventory("IBTN_CENTERTORSO",1);
-		}
-		
-		// Roll distortion when looking far up/down at odd leg angle.
-		rolldistort = ( (cos((angle-LegAng)-90) * pitch) - (cos(angle) * (sin(pitch)*5)) )*0.5;
-		if( !pilotlook && !mech_shutdown && (!models_reference || !models_reference.noroll) ) 
-			A_SetRoll( roll + rolldistort );
-	
-		double curspd = MoveSpeedKPH*move_throttle;
-		double turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
-		double spdmod = 1.0 - (abs(curspd)/2)*0.007;	
-		
-		// If we're in the air we can move our legs freely of friction.
-		double finalmod = (player.onground ? turnmod*spdmod : 2);
-		finalmod = clamp(finalmod, 0.15, 2);
-		if(!CVar.GetCVar("mwd_relativelegspeed",player).getBool()) finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
-		
-		// Leg Delta gets how much the leg angle changed between movement.
-		// This conditionally does not track when center button is active.
-		LegDelta = !countinv("IBTN_CENTER") ? (LegVel*finalmod)*2 : 0;
-		
-		LegAng += LegVel*finalmod;
-		angle  += LookVel*finalmod;
-	
-		if( !mech_shutdown )
-		{
-			if(!pilotlook) Pitch = clamp(Pitch, -minPitch, maxPitch);
-			if(MaxYaw < 360 && !uncappedtorso && !pilotlook)
-			{
-				if(angle - LegAng > MaxYaw)  angle = LegAng + MaxYaw;
-				if(angle - LegAng < -MaxYaw) angle = LegAng - MaxYaw;
-			}
+			if(!countinv("IBTN_CENTER")) LegVel = 0;
 		}
 	}
 	else
@@ -459,6 +378,7 @@ void mech_movement()
 		LegAng = angle;
 	}
 	
+	// Jump Jets, Zoom and Override
 	bool jets = (GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) || btn_jumpjets;
 	if(jets && Mech_HasJets && mech_jetsfuel > 0)
 	{

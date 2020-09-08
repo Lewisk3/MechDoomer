@@ -383,3 +383,50 @@ void HardpointDamageEffects()
 		LegSpeed = default.LegSpeed;
 	}
 }
+// Get vitals
+double GetVitals(bool hd=1, bool ct=1, bool lt=1, bool rt=1, bool la=1, bool ra=1, bool ll=1, bool rl=1)
+{
+	double vprc;
+	double vcnt = 1; // Prevent division by 0
+	if(hd) 
+	{
+		vprc += GetHardpointVitalRatio(hardpoints.hd);
+		vcnt++;
+	}
+	if(ct) 
+	{
+		vprc += GetHardpointVitalRatio(hardpoints.ct);
+		vcnt++;
+	}
+	if(lt) 
+	{
+		vprc += GetHardpointVitalRatio(hardpoints.lt);
+		vcnt++;
+	}
+	if(rt) 
+	{
+		vprc += GetHardpointVitalRatio(hardpoints.rt);
+		vcnt++;
+	}
+	if(la) 
+	{
+		vprc += GetHardpointVitalRatio(hardpoints.la);
+		vcnt++;
+	}
+	if(ra) 
+	{
+		vprc += GetHardpointVitalRatio(hardpoints.ra);
+		vcnt++;
+	}
+	if(ll) 
+	{
+		vprc += GetHardpointVitalRatio(hardpoints.ll);
+		vcnt++;
+	}
+	if(rl) 
+	{
+		vprc += GetHardpointVitalRatio(hardpoints.rl);
+		vcnt++;
+	}
+	return vprc/vcnt;
+}

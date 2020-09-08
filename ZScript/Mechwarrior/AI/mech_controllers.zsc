@@ -1,0 +1,395 @@
+class MechAI_Controller : Actor
+{
+	enum MoveAI
+	{
+		AIM_Scout = 1,
+		AIM_Mobile,
+		AIM_Tank
+	};
+	
+	enum CombatAI
+	{
+		AIC_Default = 1,
+		AIC_HitAndRun,
+		AIC_Indirect
+	};
+
+	MechwarriorBase mech;
+	Mechwarrior targetmech;
+	int movement_ai;
+	int combat_ai;
+	int wclass;
+	double aggro;
+	double vitals;
+	double tdistm;
+	double range_optimal;
+	double range_max;
+	double range_min;
+	double throttle_max;
+	Actor retreat_point;
+	bool dohitrun; // For hit and run 
+	
+	property Aggression : aggro;
+	property SpeedRange : throttle_max;
+	
+	Default
+	{	
+		+NOINTERACTION;
+		MechAI_Controller.Aggression 0.5;
+		MechAI_Controller.SpeedRange 1.0;
+	}
+	
+	
+	virtual state A_MechLook()
+	{
+		let it = ThinkerIterator.Create("Mechwarrior");
+		double close_distm = double.max;
+		Mechwarrior finalmech;
+		Mechwarrior mechactor;
+		while(mechactor = Mechwarrior(it.Next()))
+		{
+			// Do not target other AI.
+			if(!mechactor.player || mechactor.CheckVoodoo()) 
+				continue; 
+			
+			// Find closest mech.
+			double curdist = mech.Distance3D(mechactor);
+			if( curdist < close_distm && mech.CheckSight(mechactor) )
+			{
+				close_distm = curdist;
+				finalmech = mechactor;
+			}
+		}
+		targetmech = finalmech;
+		return FindState("MechSee");
+	}
+	
+	virtual void A_ShootSimple()
+	{
+		Array<Mechbase_Weapon> usableweaps;
+		mech.GetOptimalWeapons(tdistm, usableweaps, true, wclass-1, 0.20 + (0.22 * aggro));
+	}
+	
+	int CountWeapons()
+	{	
+		return mech && mech.inv_context.weapons_count;
+	}
+	
+	
+	virtual bool A_FaceMech(double adiff = 10)
+	{
+		if(!targetmech) return false; 
+		double angto = MDMath.SmarterAngleTo(mech, targetmech);
+		mech.MAB_LookTorso(angto, mech.MAB_PitchTo(targetmech));
+		mech.MAB_LookLegs(angto);
+		if(!mech.MAB_CheckTorsoRotation(angto)) return false;
+		if(abs(mech.angle-angto) < adiff) return true;
+		return false;
+	}
+	
+	virtual void A_MechChase(double precision = 10)
+	{
+		if(!targetmech || !mech) return;
+		bool cansee = mech.CheckSight(targetmech);
+        if(!cansee) mech.RandomChaseDir();
+		if(cansee)
+		{
+			double angto = MDMath.SmarterAngleTo(mech, targetmech);
+			if(retreat_point) angto += 180;
+			bool canrotate = mech.MAB_CheckTorsoRotation(angto);
+						
+			// Main AI
+			if(!retreat_point)
+			{
+				bool circling = false;				
+	
+				double tOptimal = range_optimal;
+				double tMin = range_min;
+				
+				// Run, LOL.
+				if(!CountWeapons())
+				{
+					combat_ai = AIC_HitAndRun;
+					tOptimal = 240;
+					tMin = 180;
+					dohitrun = true;
+				}
+				
+				if(movement_ai == AIM_Scout)
+				{
+					if(vitals <= 0.75) aggro = default.aggro*1.5;
+					
+					if(combat_ai == AIC_Indirect) 
+					{
+						tMin = range_optimal; 
+					}
+					else if(combat_ai == AIC_HitAndRun && !dohitrun)
+					{
+						tOptimal = 20;
+						tMin = tOptimal;
+					}	
+										
+					// Back up if too close.
+					if(tdistm < tMin*0.5 && canrotate && !dohitrun) 
+					{
+						mech.MAB_Accelerate(-0.5, true);
+					}
+					// Move forward if distance is too far away.
+					else if(!dohitrun)
+					{
+						circling = tdistm <= tMin*1.8;
+						if( tdistm > tMin && 
+							abs(mech.angle-angto) < precision && 
+							canrotate ) 
+						{	
+							mech.MAB_Accelerate(throttle_max, true);
+						}
+					}
+					else if(tdistm < tOptimal)
+					{
+						mech.MAB_Accelerate(throttle_max, true);
+					}
+					
+					if(tdistm >= tOptimal && dohitrun) dohitrun = false;
+					
+					// Hit and Run tactics.
+					if(tdistm < tMin && tdistm >= 10 && combat_ai == AIC_HitAndRun && !dohitrun) 
+					{
+						dohitrun = true;
+						tOptimal = range_max;
+						tMin = tOptimal;
+					}
+					if(dohitrun) 
+					{	
+						angto += 180;
+						circling = false;
+						if(tdistm <= 10)
+						{
+							dohitrun = false;
+							tOptimal = 20;	
+							tMin = 20;
+							angto -= 180;
+						}
+					}
+				}
+				else if(movement_ai == AIM_Mobile)
+				{
+					if(vitals <= 0.75) aggro = default.aggro*1.5;
+					if(vitals <= 0.50) 
+					{
+						aggro = default.aggro*2.0;
+						tMin = range_min * 0.25;
+						combat_ai = AIC_HitAndRun;
+					}
+					
+					if(combat_ai == AIC_Indirect) 
+					{
+						tMin = range_optimal; 
+					}
+					else if(combat_ai == AIC_HitAndRun && !dohitrun)
+					{
+						tOptimal = 40;
+						tMin = tOptimal;
+					}	
+										
+					// Back up if too close.
+					if(tdistm < tMin*0.8 && canrotate && !dohitrun) 
+					{
+						mech.MAB_Accelerate(-0.5, true);
+					}
+					// Move forward if distance is too far away.
+					else 
+					{
+						circling = tdistm <= tMin*1.2;
+						if( tdistm > tMin && 
+							abs(mech.angle-angto) < precision && 
+							canrotate ) 
+						{	
+							mech.MAB_Accelerate(throttle_max, true);
+						}
+					}
+					
+					if(tdistm >= tOptimal && dohitrun) dohitrun = false;
+					
+					// Hit and Run tactics.
+					if(combat_ai == AIC_HitAndRun)
+					{
+						if(tdistm < tMin && tdistm >= 30 && combat_ai == AIC_HitAndRun && !dohitrun) 
+						{
+							dohitrun = true;
+							tOptimal = range_max;
+							tMin = tOptimal;
+						}
+						if(dohitrun) 
+						{	
+							angto += 180;
+							circling = false;
+							if(tdistm <= 30)
+							{
+								dohitrun = false;
+								tOptimal = 45;	
+								tMin = 40;
+								angto -= 180;
+							}
+						}
+					}
+					
+					// Slow movement if our torso needs to catch aim.
+					if(!canrotate && !dohitrun) mech.MAB_Accelerate(0.8, true);
+				}
+				else if(movement_ai == AIM_Tank)
+				{
+					if(vitals <= 0.55) 
+					{
+						tOptimal = range_optimal*1.5; 
+						tMin = tMin*2.0;
+					}
+					if(vitals <= 0.25) movement_ai = AIM_Mobile;
+					
+					if(combat_ai == AIC_Indirect) 
+					{
+						tMin = range_optimal; 
+						circling = false;
+					}
+					else if(combat_ai == AIC_HitAndRun && !dohitrun)
+					{
+						tOptimal = 45;	
+						tMin = 50;
+					}
+					
+					// Hit and Run tactics.
+					if(tdistm < tMin && tdistm >= 40 && combat_ai == AIC_HitAndRun && !dohitrun) 
+					{
+						dohitrun = true;
+					}
+					if(dohitrun) 
+					{	
+						tOptimal = range_optimal*0.6;
+						angto += 180;
+						circling = false;
+						if(tdistm <= 40)
+						{
+							dohitrun = false;
+							tOptimal = 45;	
+							tMin = 50;
+							angto -= 180;
+						}
+					}
+					
+					// Stop if in optimal range.
+					if(abs(tdistm-tOptimal) <= 10 && tdistm > tMin*2.0)
+					{
+						mech.MAB_Accelerate(0, true);
+						if(dohitrun) dohitrun = false;
+					}
+					// Back up if too close.
+					else if(tdistm < tMin && canrotate && !dohitrun) 
+					{
+						mech.MAB_Accelerate(-0.5, true);
+					}
+					else 
+					{
+						// Move forward if distance is too far away.
+						if(!dohitrun)
+						{
+							circling = (tdistm <= tMin*1.5);
+							if(!circling)
+							{
+								if(abs(mech.angle-angto) < precision && canrotate)
+								{
+									if(tdistm > tOptimal) mech.MAB_Accelerate(throttle_max, true);
+									if(tdistm < tOptimal) mech.MAB_Accelerate(-0.5, true);
+								}
+							}
+							else
+							{
+								if( tdistm < tMin*1.8 && 
+									abs(mech.angle-angto) < precision && 
+									canrotate ) 
+								{	
+									mech.MAB_Accelerate(throttle_max, true);
+								}
+							}
+						}
+						else if( tdistm < tOptimal ) 
+						{	
+							mech.MAB_Accelerate(throttle_max, true);
+						}
+					}
+					
+					// Stop movement if our torso needs to catch aim.
+					if(!canrotate) mech.MAB_Accelerate(0, true);
+				}
+				
+				// Track mech.		
+				mech.MAB_LookTorso(angto, mech.MAB_PitchTo(targetmech));
+				mech.MAB_LookLegs(circling ? angto+90 : angto);
+			}
+			else
+			{
+				// Retreat.
+				mech.MAB_LookTorso(angto, mech.MAB_PitchTo(targetmech));
+				mech.MAB_LookLegs(angto);
+			}
+		}
+	}
+		
+	override void Tick()
+	{
+		if(!mech) return;
+		wclass = mech.getWeightClass();
+		
+		if(wclass >= 4) movement_ai = AIM_Tank;
+		if(wclass < 4) movement_ai = AIM_Mobile;
+		if(wclass < 3) movement_ai = AIM_Scout;
+				
+		// Calculate ranges
+		[range_min, range_max] = mech.FindRanges();
+		range_optimal = (range_min+(range_max*0.25))/2.;
+		range_min *= 1.0 - (1.5 * aggro-0.5);
+		range_max *= 1.0 + (1.5 * aggro-0.5);
+	
+		vitals = 1.0-mech.GetVitals();
+		
+		// Determine combat role
+		if(movement_ai == AIM_Scout && !range_min) combat_ai = AIC_HitAndRun;
+		if(mech.FindRanges(true)) combat_ai = AIC_Indirect;
+		
+		// If not all minimum range weapons, reduce engagement to optimum
+		// for weight class.
+		if(range_min == 0) range_min = 60 - (10*wclass);
+		if(range_optimal <= 0) range_optimal = range_min*1.25;
+		
+		
+		// Process valid target
+		if(targetmech)
+		{
+			mech.targetenemy = targetmech.hitbox_middle;
+			tdistm = mech.Distance3D(targetmech) / MWGAMEPLAY_UNITMETER;
+			if(targetmech.isdead) 
+			{	
+				target = NULL;
+				targetmech = NULL;
+				tdistm = 0;
+			}
+		}
+		super.Tick();
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 1 A_MechLook();
+		Loop;
+		MechSee:
+			TNT1 A 1 
+			{	
+				A_MechChase();	
+				double rfire = frandom(0,1);
+				if(rfire <= (aggro-0.30) && !dohitrun && A_FaceMech()) A_ShootSimple();
+				if(!targetmech) return ResolveState("Spawn");
+				return ResolveState(Null);
+			}
+		Loop;
+	}
+}

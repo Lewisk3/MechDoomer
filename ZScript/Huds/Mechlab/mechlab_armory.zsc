@@ -12,17 +12,6 @@ bool ValidateHardpoint(int ind)
 	return (hp.internalhp > 0);
 }
 
-double GetHardpointVitalRatio(MechHardpoint hp)
-{
-	double hp_vitals    = hp.armor+hp.internalhp;
-	double hp_maxvitals = hp.defmax_armor+hp.max_internal;
-	if(hp.internalhp <= 0) hp_vitals = 0;
-	if(hp_vitals == 0) return 1.0;
-	double vres = 1.0 - (hp_vitals / hp_maxvitals);
-	if(vres < 0.1) vres = 0;
-	return vres;
-}
-
 Color getHealthyColor(double ratio, double tintalpha=1.0)
 {
 	if(ratio <= 0) return StatusColor.HSLtoRGB(0,1.0,0.0,1.0);
@@ -112,7 +101,7 @@ void DrawDamagedHardpoints(vector2 pos)
 		MechHardpoint hp = valid_hardpoints.FindByIndex(i);
 		if(!hp) return;
 		
-		double ratio = 1.0-GetHardpointVitalRatio(hp);
+		double ratio = 1.0-mechplr.GetHardpointVitalRatio(hp);
 		Color hpcolor = getHealthyColor(ratio,ratio<1.0 ? 0.5 : 0);
 		if(ratio >= 1.0) continue;
 		

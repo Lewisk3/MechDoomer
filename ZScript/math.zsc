@@ -48,10 +48,18 @@ class MDMath Abstract
 	
 	
 	// Normalizes angle between -180, 180 degrees.
-	static double NormalizeAngle(double ang)
+	static double NormalizeAngle(double ang, bool full=false)
 	{
-		while(ang > 180) ang -= 360;
-		while(ang < -180) ang += 360;
+		if(!full)
+		{
+			while(ang > 180) ang -= 360;
+			while(ang < -180) ang += 360;
+		}
+		else
+		{
+			while(ang > 359) ang -= 360;
+			while(ang < 0) ang += 360;
+		}
 		return ang;
 	}
 	
@@ -92,6 +100,19 @@ class MDMath Abstract
 	static int Sign(double num)
 	{
 		return (num < 0 ? -1 : 1);
+	}
+	
+	// Get shortest distance between angles.
+	static double AngleDifference( double angle1, double angle2 )
+	{
+		double diff = ( angle2 - angle1 + 180 ) % 360 - 180;
+		return diff < -180 ? diff + 360 : diff;
+	}
+	
+	static double SmarterAngleTo(Actor from, Actor to)
+	{
+		vector3 scoord = level.SphericalCoords(from.pos, to.pos, (from.angle,0));
+		return from.angle-scoord.x;
 	}
 	
 	// Pitch between 2 vectors.

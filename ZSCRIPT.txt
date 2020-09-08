@@ -78,11 +78,15 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Mechwarrior/Base/mech_sort.zsc"
 #include "ZScript/Mechwarrior/Base/mech_misc.zsc"
 #include "ZScript/Mechwarrior/Base/mech_essentials.zsc"
+#include "ZScript/Mechwarrior/Base/mech_actionbase.zsc"
 #include "ZScript/Mechwarrior/Base/mech_movement.zsc"
 #include "ZScript/Mechwarrior/Base/mech_weapons.zsc"
 #include "ZScript/Mechwarrior/Base/mech_structs.zsc"
 #include "ZScript/Mechwarrior/Base/mech_hardpoints.zsc"
 #include "ZScript/Mechwarrior/Base/mech_combat.zsc"
+
+// AI (VERY WIP)
+#include "ZScript/Mechwarrior/AI/mech_controllers.zsc"
 
 // Mechs
 #include "ZScript/Mechs/mechs.zsc"

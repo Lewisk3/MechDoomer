@@ -39,6 +39,13 @@ class MechHitbox : Actor
 		double realdamage = mechweap ? mechweap.truedamage : damage;
 		bool mechdmg = (inflictor is "Mechwarrior") || (source is "Mechwarrior");
 		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
+		
+		// Take a bit less damage from AI
+		if(mechdmg && !Mechwarrior(source).player) newdmg *= 0.4;
+		
+		// Take more damage if we are AI
+		if(!mech.player) newdmg *= 1.35;
+		
 		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
 		return 0;
 	}
@@ -51,13 +58,17 @@ class MechHitbox : Actor
 	override void Tick()
 	{
 		super.Tick();
-		if(!mech || !mech.models_reference || !mech.models_reference.cockpit) 
+		double truecockpit = mech.angle;
+		if(!mech || !mech.models_reference) 
 		{
 			Destroy();
 			return;
 		}
+		if(mech.models_reference.cockpit && mech.player) 
+			truecockpit = mech.models_reference.cockpit.angle;
+
 		if(!mounted_hp) return;
-		double offsangle = CheckTorsoMount() ? mech.models_reference.cockpit.angle : mech.LegAng;
+		double offsangle = CheckTorsoMount() ? truecockpit : mech.LegAng;
 		double offspitch = CheckTorsoMount() ? mech.models_reference.roll*-MDMath.Sign(xoffs) : 0;
 		vector3 offs = MDMath.VOffsetPitch(offsangle,offspitch, forward, xoffs, 1);	
 		Vector3 finalpos = mech.Vec3Offset(offs.x,offs.y,yoffs+(offs.z*18));

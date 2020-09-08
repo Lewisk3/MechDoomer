@@ -313,7 +313,6 @@ class SSRM2 : SRM2
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 4800;
 		Mechbase_Weapon.IsHommingMissile true;
-		Mechbase_Weapon.LockingSpeed 2.8; // 35 tics until concise lock.
 		Mechbase_Weapon.Cooldown MWCOOL_SSRM2, 0.2;
 		Mechbase_Weapon.FlavorText SSRMText;
 	}
@@ -350,7 +349,6 @@ class SSRM4 : SRM4
 		Mechbase_Weapon.HardslotSize 3;
 		Mechbase_Weapon.CValue 6250;
 		Mechbase_Weapon.IsHommingMissile true;
-		Mechbase_Weapon.LockingSpeed 2.8; // 35 tics until concise lock.
 		Mechbase_Weapon.Cooldown MWCOOL_SSRM4, 0.2;
 		Mechbase_Weapon.FlavorText SSRMText;
 	}
@@ -387,7 +385,6 @@ class SSRM6 : SRM6
 		Mechbase_Weapon.HardslotSize 4;
 		Mechbase_Weapon.CValue 8520;
 		Mechbase_Weapon.IsHommingMissile true;
-		Mechbase_Weapon.LockingSpeed 2.8; // 35 tics until concise lock.
 		Mechbase_Weapon.Cooldown MWCOOL_SSRM6, 0.2;
 		Mechbase_Weapon.FlavorText SSRMText;
 	}
@@ -571,7 +568,6 @@ class LRM5: Mechbase_Weapon
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 8200;
 		Mechbase_Weapon.IsHommingMissile true;
-		Mechbase_Weapon.LockingSpeed 2; // 50 tics until concise lock.
 		Mechbase_Weapon.Cooldown MWCOOL_LRM5, 0.12;
 		Mechbase_Weapon.FlavorText LRMText;
 	}
@@ -590,7 +586,6 @@ class LRM10: LRM5
 		Mechbase_Weapon.HardslotSize 3;
 		Mechbase_Weapon.CValue 11600;
 		Mechbase_Weapon.IsHommingMissile true;
-		Mechbase_Weapon.LockingSpeed 2; // 50 tics until concise lock.
 		Mechbase_Weapon.Cooldown MWCOOL_LRM10, 0.12;
 		Mechbase_Weapon.FlavorText LRMText;
 	}
@@ -609,7 +604,6 @@ class LRM15: LRM5
 		Mechbase_Weapon.HardslotSize 4;
 		Mechbase_Weapon.CValue 14200;
 		Mechbase_Weapon.IsHommingMissile true;
-		Mechbase_Weapon.LockingSpeed 2; // 50 tics until concise lock.
 		Mechbase_Weapon.Cooldown MWCOOL_LRM15, 0.12;
 		Mechbase_Weapon.FlavorText LRMText;
 	}
@@ -628,7 +622,6 @@ class LRM20: LRM5
 		Mechbase_Weapon.HardslotSize 5;
 		Mechbase_Weapon.CValue 15560;
 		Mechbase_Weapon.IsHommingMissile true;
-		Mechbase_Weapon.LockingSpeed 2; // 50 tics until concise lock.
 		Mechbase_Weapon.Cooldown MWCOOL_LRM20, 0.12;
 		Mechbase_Weapon.FlavorText LRMText;
 	}

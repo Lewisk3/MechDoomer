@@ -112,6 +112,16 @@ class mw_InvInfo : Item_NoPickup
 }
 class MechWarriorBase : DoomPlayer
 {
+	enum WeightClass
+	{
+		WC_UltraLight = 1,
+		WC_Light,
+		WC_Medium,
+		WC_Heavy,
+		WC_Assault,
+		WC_SuperHeavy
+	};
+
 	// Chassis properties
 	Property Size : mech_radius, mech_height;
 	Property heatEff  : baseHeatEfficiency;
@@ -157,6 +167,25 @@ class MechWarriorBase : DoomPlayer
 	{
 		if(!baseclass) return "???";
 		return GetDefaultByType(baseclass).getClassName();
+	}
+	clearscope double GetHardpointVitalRatio(MechHardpoint hp)
+	{
+		double hp_vitals    = hp.armor+hp.internalhp;
+		double hp_maxvitals = hp.max_armor+hp.max_internal;
+		if(hp.internalhp <= 0) hp_vitals = 0;
+		if(hp_vitals == 0) return 1.0;
+		double vres = 1.0 - (hp_vitals / hp_maxvitals);
+		if(vres < 0.1) vres = 0;
+		return vres;
+	}
+	clearscope int GetWeightClass()
+	{		
+		if(mech_tonnage <  20) return WC_UltraLight;
+		if(mech_tonnage > 100) return WC_SuperHeavy;
+		if(mech_tonnage >  75) return WC_Assault;
+		if(mech_tonnage >  55) return WC_Heavy;
+		if(mech_tonnage >  35) return WC_Medium;
+		return WC_Light;
 	}
 }
 

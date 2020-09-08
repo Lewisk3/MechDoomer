@@ -479,7 +479,7 @@ class MechTorsoBase : MechPartsBase
 			
 			if(!notwist)
 			{
-				if(cockpit)
+				if(cockpit && mechowner.player)
 				{
 					pitch = cockpit.pitch;
 					if(!noroll) roll = MDMath.Lerp(roll, cockpit.roll, 0.1);
@@ -487,9 +487,9 @@ class MechTorsoBase : MechPartsBase
 				}
 				else // Mainly for "MechCorpses".
 				{
-					pitch = mechowner.pitch*cockpitpitch_mod;
-					roll = mechowner.roll;
-					angle = mechowner.angle*cockpitangle_mod;
+					pitch = mechowner.pitch;
+					roll = MDMath.Lerp(roll, mechowner.roll, 0.1);
+					angle = mechowner.angle;
 				}
 			}
 			else
@@ -592,7 +592,7 @@ class MechLegsBase : MechPartsBase
 	{
 		return ( 
 			 mechowner && !mechowner.checkVoodoo() && !mechowner.mech_shutdown && 
-		     mechowner.player && mechowner.player.onground && 
+		     (mechowner.player && mechowner.player.onground || !mechowner.player) && 
 			(mechowner.vel.xy.length() >= 0.1 || mechowner.throttle != 0 || mechowner.LegVel) && 
 			!mechowner.isdead
 		);
