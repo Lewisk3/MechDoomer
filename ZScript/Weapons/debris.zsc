@@ -27,13 +27,14 @@ class Debris_Spawner : Actor
 {
 	int pieces;
 	double spread;
+	double scale;
 	class<Actor> debris_type;
-	property Debris : debris_type;
+	property Debris : debris_type, scale;
 	
 	Default
 	{
 		+NOINTERACTION;
-		Debris_Spawner.Debris "DEBRIS_3D";
+		Debris_Spawner.Debris "DEBRIS_3D", 1.0;
 	}
 
 	override void PostBeginPlay()
@@ -52,9 +53,11 @@ class Debris_Spawner : Actor
 			let debris = Spawn(debris_type,npos);
 			if(debris)
 			{
+				if(!damage) debris.bSOLID = false;
 				debris.SetDamage(damage); // Small cluster damage.
 				debris.A_SetRoll(roll+random(-180,180));
 				debris.pitch = pitch;
+				debris.A_SetScale(scale, scale);
 				debris.vel = 
 				(
 					cos(angle+180)*cos(debris.pitch),

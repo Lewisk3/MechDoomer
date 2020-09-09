@@ -314,6 +314,7 @@ void CreateHitbox(MechHardpoint hp, double xo, double yo, double r, double h, do
 // Override
 override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
 {	
+	if(damage == 0) return 0; // Debris can proc this for some bizarre reason.
 	if(checkVoodoo()) return super.DamageMobj(inflictor,source,damage,mod,flags,angle);
 	if(mod == "Hitscan") return ProcessHitscanDamageMobJ(inflictor, source, damage, mod, flags, angle);
 	
@@ -376,21 +377,26 @@ override void PostBeginPlay()
 		level.airfriction = 0.87;
 	}	
 	
+	// startDropship();
 	// startMechbay();
+	
 	super.PostBeginPlay();
 }
 	
 override void tick()
-{	
-	// Hold onto reference of all mechs for shop
-	if(!shopmechs.Size()) GetAllMechs(shopmechs);
-	// Grab Items reference for shop
-	if(!shopitems) shopitems = GetAllItems();
-		
+{			
 	if(checkVoodoo()) 
 	{
 		super.Tick();
 		return;
+	}
+	
+	if(!checkAI())
+	{
+		// Hold onto reference of all mechs for shop
+		if(!shopmechs.Size()) GetAllMechs(shopmechs);
+		// Grab Items reference for shop
+		if(!shopitems) shopitems = GetAllItems();
 	}
 	
 	if(reset_hitboxes && models_reference)
@@ -435,6 +441,33 @@ override void tick()
 		super.Tick();
 		return;
 	}
+	
+	// Process FOV
+	if( (GetPlayerInput(0) & BT_ZOOM) )
+	{
+		if(player.DesiredFOV > 30)
+		{
+			player.DesiredFOV -= 3;
+			A_StartLocalSound("Mech/Zoom", CHAN_7);
+		}
+		else
+			A_StopSound(CHAN_7);
+	}
+	else
+	{
+		double trueFOV = CVar.GetCVar("mwd_CockpitFOV", player).getFloat();
+		if(player.DesiredFOV < trueFOV)
+		{
+			player.DesiredFOV += 3;
+			A_StartLocalSound("Mech/Zoom", CHAN_7);
+		}
+		else
+		{
+			player.DesiredFOV = trueFOV;
+			A_StopSound(CHAN_7);
+		}
+	}
+	
 	// Betty sound for automap toggle
 	if(automapactive && !prev_automap) 
 	{

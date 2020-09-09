@@ -148,7 +148,7 @@ void DamageCritSounds(MechHardpoint hp)
 	if(hp == hardpoints.ct) mechsounds.pushSound("Mech/Betty/CenterTorso");
 }
 
-void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, Actor damager = NULL)
+void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, bool spread = true, Actor damager = NULL)
 {
 	if(FindInventory("DamageDebuff")) dmg *= 0.05;
 	
@@ -179,13 +179,13 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, Actor dam
 	}
 	else if(hp.internalhp > 0)
 	{
-		if(random(0,2)==2) 
+		if(random(0,10)==10) 
 		{
 			A_StartLocalSound("Mech/Damage/Warn", CHAN_VOICE);
 			GiveLocalInv("MechAnimate_InternalDamage", 1);
 		}
 	
-		if(random(0,5)==5)
+		if(random(0,20)==20)
 		{
 			A_StartLocalSound("Mech/Damage/Critical", CHAN_VOICE);
 			GiveLocalInv("MechAnimate_CriticalDamage", 1);
@@ -209,20 +209,32 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, Actor dam
 			GiveLocalInv("MechAnimate_CriticalDamage", 1);
 		
 			A_StartLocalSound("Mech/Damaged/HardpointDead", CHAN_VOICE);
+			mechsounds.pushSound("Mech/Betty/CriticalHit");
 			DamageCritSounds(hp);
 			DestroyHardpointItems(hp);
 		}
 	}
-	else
+	else if(spread)
 	{
 		SpreadHardpointDamage(hp,dmg);
+	}
+	
+	// Process connected hardpoints
+	if(hardpoints.lt.internalhp <= 0 && hardpoints.la.internalhp > 0)
+	{
+		DamageHardpoint(hardpoints.la, 0x7FFFFFFF, true, false);
+	}
+	if(hardpoints.rt.internalhp <= 0 && hardpoints.ra.internalhp > 0)
+	{
+		DamageHardpoint(hardpoints.ra, 0x7FFFFFFF, true, false);
 	}
 	
 	// Process death-state.
 	if( inv_context.engine && (inv_context.engine.ltslots+inv_context.engine.rtslots) > 2 )
 	{
-		if((hardpoints.lt.internalhp <= 0 || hardpoints.rt.internalhp <= 0) && (mechtype != MechType_Clan)) ProcessDeath(damager);
-		if((hardpoints.lt.internalhp <= 0 && hardpoints.rt.internalhp <= 0) && (mechtype == MechType_Clan)) ProcessDeath(damager);
+		// XL Engine goes critical when both side torsos are destroyed.
+		if(hardpoints.lt.internalhp <= 0 && hardpoints.rt.internalhp <= 0) 
+			ProcessDeath(damager);
 	}
 	if(  hardpoints.hd.internalhp <= 0 || hardpoints.ct.internalhp <= 0 ||
 		(hardpoints.ll.internalhp <= 0 && hardpoints.rl.internalhp <= 0)   ) 
@@ -365,12 +377,21 @@ void DestroyHardpointStructs(MechHardpoint hp, bool recurse=true)
 }
 void HardpointDamageEffects()
 {	
-	// Process hardpoint damage effects
+	// Process hardpoint damage effects	
 	if( hardpoints.ll.internalhp <= 0 || 
 		hardpoints.rl.internalhp <= 0   )
 	{
 		throttle_max = 0.5;
 		LegSpeed = 1;
+	}
+	else if( inv_context.engine && (inv_context.engine.ltslots+inv_context.engine.rtslots) > 2 )
+	{
+		// Lower speed if XL engine and side torso damage.
+		if((hardpoints.lt.internalhp <= 0 || hardpoints.rt.internalhp <= 0)) 
+		{
+			throttle_max = 0.65;
+			LegSpeed = default.LegSpeed;
+		}
 	}
 	else if(countStructDamaged("StructEngine",true))
 	{

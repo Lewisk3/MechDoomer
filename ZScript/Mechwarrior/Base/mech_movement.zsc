@@ -21,6 +21,7 @@ bool Mech_HasJets;
 bool doShutdown;
 bool mech_shutdown;
 bool mech_poweringup;
+bool slient_powerup; // Used to make betty not talk during end of power sequence
 bool zoomed_in;
 bool canShutdown;
 bool manualshutdown;
@@ -395,31 +396,6 @@ void mech_movement()
 		A_StopSound(CHAN_5);
 	}
 	
-	if( (GetPlayerInput(0) & BT_ZOOM) )
-	{
-		if(player.DesiredFOV > 30)
-		{
-			player.DesiredFOV -= 3;
-			A_StartLocalSound("Mech/Zoom", CHAN_7);
-		}
-		else
-			A_StopSound(CHAN_7);
-	}
-	else
-	{
-		double trueFOV = CVar.GetCVar("mwd_CockpitFOV", player).getFloat();
-		if(player.DesiredFOV < trueFOV)
-		{
-			player.DesiredFOV += 3;
-			A_StartLocalSound("Mech/Zoom", CHAN_7);
-		}
-		else
-		{
-			player.DesiredFOV = trueFOV;
-			A_StopSound(CHAN_7);
-		}
-	}
-
 	// Cool utilities for easier pilotability!
 	if(countinv("IBTN_OVERRIDE"))
 	{
@@ -443,6 +419,44 @@ void mech_movement()
 	 !btn_jumpjets && player.OnGround) mech_jetsfuel += 0.5;
 }
 
+void shutdown_setup(bool critical = true, bool forced = false, bool silent = false)
+{
+	if(!silent)
+	{
+		A_StopSound(CHAN_VOICE);
+		Cockpit_Alert("\c[SAPPHIRE]Shutting down...");
+		A_StartLocalSound("Mech/Betty/ShuttingDown", CHAN_VOICE);
+		A_StartLocalSound("Mech/Shutdown", CHAN_VOICE, CHANF_OVERLAP);
+		hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
+	}
+	else
+		hAlert.hud_powersequence = 0;
+	
+	doShutdown = true;
+	lockangle = angle;
+	lockpitch = pitch;
+	mech_shutdown = true;
+	
+	if(critical) 
+		shutdown_timer = ticks;
+	else
+		manualshutdown = true;
+	if(forced) forceshutdown = true;
+}
+void powerup_setup(bool critical = true, bool forced = false, bool silent = false)
+{
+	prevticks = ticks;
+	mech_poweringup = true;
+	doShutdown = false;
+	hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
+	A_StartLocalSound("Mech/Power", CHAN_BODY, CHANF_OVERLAP);
+	Cockpit_Alert("\c[GREEN]Powering up...", 30);	
+	slient_powerup = silent;
+	
+	if(!critical) manualshutdown = false;
+	if(forced) forceshutdown = false;
+}
+
 void process_shutdown()
 {
 	if(!defaultmovement && !modelcockpit)
@@ -461,35 +475,23 @@ void process_shutdown()
 		if( ((ticks - shutdown_timer) > 35) && HeatLevel <= (MWHEAT_MAX*0.2) && doShutdown)
 		{
 			// If we are very efficiently cooled, powerup early
-			prevticks = ticks;
-			mech_poweringup = true;
-			// mechsounds.pushSound("Mech/Betty/SystemsCheck");
-			A_StartLocalSound("Mech/Power", CHAN_BODY, CHANF_OVERLAP);
-			doShutdown = false;
-			Cockpit_Alert("\c[GREEN]Powering up...", 30);
-			hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
+			powerup_setup();
 		}
 		if(!doShutdown && (ticks-prevticks) > 35*4)
 		{
-			powerup();
 			A_StartLocalSound("Mech/StartupDone", CHAN_BODY, CHANF_OVERLAP);
-			mechsounds.pushSound("Mech/Betty/SystemsCheck");
-		}
+			if(!slient_powerup) 
+				mechsounds.pushSound("Mech/Betty/SystemsCheck");
+			powerup();
+		} 
 		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*3.0;
 	}
 	else
 	{
 		if(countinv("IBTN_SHUTDOWN") && !forceshutdown)
 		{
-			doShutdown = false;
-			mech_poweringup = true;
-			// mechsounds.pushSound("Mech/Betty/SystemsCheck");
-			A_StartLocalSound("Mech/Power", CHAN_OVERLAP);
-			manualshutdown = false;
+			powerup_setup(false);
 			TakeInventory("IBTN_SHUTDOWN",1);
-			prevticks = ticks;
-			Cockpit_Alert("\c[GREEN]Powering up...", 30);
-			hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
 		}
 	}
 	ticks++;
@@ -499,6 +501,7 @@ void powerup()
 	mech_shutdown = false;
 	doShutdown = false;
 	mech_poweringup = false;
+	slient_powerup = false;
 }
 
 // Bobbing

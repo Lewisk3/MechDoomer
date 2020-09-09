@@ -479,12 +479,6 @@ class MechMissile : Mechbase_Actor
 	{	
 		Radius 6;
 		Height 2;
-		//+DEHEXPLOSION
-		//+ROCKETTRAIL
-		//+PUFFGETSOWNER
-		//+SCREENSEEKER
-		SeeSound "weapons/rocklf";
-		//DeathSound "weapons/rocklx";
 		Projectile;
 		MechMissile.ExplosionScale 1.0;
 	}
@@ -581,9 +575,9 @@ class MechMissile : Mechbase_Actor
 					vector3 sight = level.SphericalCoords( pos, 
 						tracer.Vec3Offset(homspread.x,homspread.y,tracer.height/2), 
 						(angle, pitch)
-					);
+					); 
 					double hspd = clamp(90/(sight.z/MWGAMEPLAY_UNITMETER), 0.25, 1.0);
-					if(sight.z > 32)
+					if(sight.z > 32 && sight.x < 60)
 					{
 						A_SetAngle(MDMath.Lerp(angle, angle-sight.x, hspd), SPF_INTERPOLATE);
 						A_SetPitch(MDMath.Lerp(pitch, pitch-sight.y, hspd), SPF_INTERPOLATE);
@@ -722,7 +716,17 @@ class MissileExplosion : Actor
 		Spawn:
 			EXPL A 2 NoDelay
 			{
-				A_StartSound("weapons/rocklx", CHAN_BODY);
+				A_StartSound("Missiles/Explosion", CHAN_BODY);
+				let deb = Debris_Spawner(Spawn("Debris_Spawner",pos));
+				if(deb)
+				{
+					deb.scale = 0.37;
+					deb.spread = 5;
+					deb.pieces = 6;
+					deb.angle = angle;
+					deb.pitch = pitch;
+					deb.SetDamage(0);
+				}
 			}
 			EXPL BCDEFGHIJKLMNOP 2;
 		stop;
@@ -1104,7 +1108,7 @@ class MechBullet : Mechbase_Actor
 	{
 		Damage 5;
 		Height 1;
-		Speed 100;
+		Speed 150;
 		Projectile;
 	}
 	

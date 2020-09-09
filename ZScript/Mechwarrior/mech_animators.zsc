@@ -4,22 +4,25 @@ class MechAnimator : Inventory
 	MechWarriorBase mech;
 	Color FadeColor;
 	double fadeto;
-	double fadespd;
+	double fadeinspd, fadeoutspd;
 	double xshake, yshake, zshake;
 	double ashake, pshake, rshake;
 	int quaketimer;
 	int fdelay;
 	int dir;
+	bool persistent;
 	
-	Property FadeAnimate : FadeColor, fadeto, fadespd;
-	Property DelayFadeout : fdelay;
+	Property FadeAnimate : FadeColor, fadeto, fadeinspd;
+	Property DelayFadeout : fdelay, fadeoutspd;
 	Property Quake : quaketimer, ashake, pshake, rshake, xshake, yshake, zshake;
+	Property Persists : persistent;
 	
 	Default
 	{
 		MechAnimator.FadeAnimate "FF FF FF", 1.0, 0.05;
-		MechAnimator.DelayFadeout 35;
+		MechAnimator.DelayFadeout 35, 0.05;
 		MechAnimator.Quake 70, 3,3,0, 0,0,10;
+		MechAnimator.Persists false;
 		inventory.maxamount 1;
 	}
 	
@@ -43,19 +46,29 @@ class MechAnimator : Inventory
 			mech = MechWarriorBase(Owner);			
 			return;
 		}
-		
-		if(GetAge() > fdelay+(35*3))
+		if(mech.checkAI()) 
 		{
-			mech.screen_fadecolor = 0;
-			mech.screen_fade = 0;
-			mech.RemoveInventory(self);
-			GoAwayAndDie();
-		}
-		if(mech && CountAnimators() > 1) 
-		{	
 			mech.RemoveInventory(self);
 			GoAwayAndDie();
 			return;
+		}
+		
+		if(!persistent)
+		{
+			if(GetAge() > fdelay+(35*3))
+			{
+				mech.screen_fadecolor = 0;
+				mech.screen_fade = 0;
+				mech.RemoveInventory(self);
+				GoAwayAndDie();
+				return;
+			}
+			if(mech && CountAnimators() > 1) 
+			{	
+				mech.RemoveInventory(self);
+				GoAwayAndDie();
+				return;
+			}
 		}
 		
 		if(mech && mech.isdead) 
@@ -72,7 +85,7 @@ class MechAnimator : Inventory
 			mech.screen_fadecolor = fadecolor;
 			if(dir && fdelay) fdelay--;
 			if(!dir || dir && !fdelay) 
-				mech.screen_fade = MDMath.Lerp(mech.screen_fade, !dir ? fadeto : 0, fadespd);
+				mech.screen_fade = MDMath.Lerp(mech.screen_fade, !dir ? fadeto : 0, !dir ? fadeinspd : fadeoutspd);
 			
 			if(abs(mech.screen_fade-fadeto) < 0.05) mech.screen_fade = fadeto;
 			
@@ -81,8 +94,11 @@ class MechAnimator : Inventory
 			{
 				mech.screen_fadecolor = 0;
 				mech.screen_fade = 0;
-				mech.RemoveInventory(self);
-				GoAwayAndDie();
+				if(!persistent)
+				{
+					mech.RemoveInventory(self);
+					GoAwayAndDie();
+				}
 				return;
 			}
 		}
@@ -130,7 +146,7 @@ class MechAnimate_InternalDamage : MechAnimator
 	{
 		MechAnimator.Quake 5, 2,2,2, 0,0,2;
 		MechAnimator.FadeAnimate "FF 00 00", 0.3, 0.20;
-		MechAnimator.DelayFadeout 4;
+		MechAnimator.DelayFadeout 4, 0.20;
 	}	
 }
 class MechAnimate_CriticalDamage : MechAnimator
@@ -139,7 +155,7 @@ class MechAnimate_CriticalDamage : MechAnimator
 	{
 		MechAnimator.Quake 15, 2,2,4, 0,10,8;
 		MechAnimator.FadeAnimate "FF 00 00", 0.5, 0.12;
-		MechAnimator.DelayFadeout 12;
+		MechAnimator.DelayFadeout 12, 0.12;
 	}	
 }
 class MechAnimate_DamageShake : MechAnimator
@@ -217,4 +233,61 @@ class MechExchange_Animator : Powerup
 	}
 }
 
-// Damage Animators
+// General Animators
+class DropshipAnimator : MechAnimator
+{ 
+	double holdtime, groundtime;
+	bool introplayed;
+	
+	Property DropTiming : holdtime, groundtime;
+	Default
+	{
+		MechAnimator.FadeAnimate "FF FF FF", 1.0, 1.0;
+		MechAnimator.DelayFadeout 35*2, 0.05;
+		MechAnimator.Quake 35*6, 0.25,0.25,0.25, 0.25,0.25,0.25;
+		DropShipAnimator.DropTiming 35*2, 35*8;
+		MechAnimator.Persists true;
+	}
+	
+	virtual void BettyIntro()
+	{
+		mech.mechsounds.pushSound("Mech/Betty/Intros/Macduff_One");
+	}
+	
+	override void DoEffect()
+	{
+		super.DoEffect();
+		if(!mech) return;
+		if(GetAge() <= 2)
+		{
+			mech.SetAI_Enabled(false);
+			mech.SetOrigin(mech.Vec3Offset(0,0,mech.ceilingz), false);
+			mech.shutdown_setup(false, true, true);
+		}
+
+		if(GetAge() < holdtime) 
+			mech.bNOGRAVITY = true;
+		else
+		{
+			mech.bNOGRAVITY = false;
+			if(!introplayed) 
+			{
+				BettyIntro();
+				introplayed = true;
+			}
+			mech.A_SetGravity(mech.default.gravity*0.25);
+		}
+		
+		if(mech.player.onground && (GetAge() > groundtime) && mech.doShutdown)
+		{
+			mech.powerup_setup(false, true, true);
+		}
+		
+		if(!mech.doShutdown && !mech.mech_poweringup)
+		{
+			mech.SetAI_Enabled(true);
+			persistent = false;
+			mech.A_SetGravity(mech.default.gravity);
+		}
+	}
+}

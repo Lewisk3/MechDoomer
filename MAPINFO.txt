@@ -6,6 +6,31 @@ DoomEdNums
 	14202 = "NAV_Delta"
 	14203 = "NAV_Chi"
 	14204 = "NAV_Epsilon"
+	
+	// Lonewolf Spawners
+	14205 = "MAIS_Jenner"
+	14206 = "MAIS_Raven"
+	14207 = "MAIS_Urbanmech"
+	14208 = "MAIS_Commando"
+	14209 = "MAIS_Tarantula"
+	14210 = "MAIS_Kitfox"
+	14211 = "MAIS_Firemoth"
+	14212 = "MAIS_Stormcrow"
+	14213 = "MAIS_Nova"
+	14214 = "MAIS_Centurion"
+	14215 = "MAIS_Hunchback"
+	14216 = "MAIS_Crab"
+	14217 = "MAIS_Timberwolf"
+	14218 = "MAIS_Summoner"
+	14219 = "MAIS_HellBringer"
+	14220 = "MAIS_Maddog"
+	14221 = "MAIS_Rifleman"
+	14222 = "MAIS_Direwolf"
+	14223 = "MAIS_Warhawk"
+	14224 = "MAIS_Warhammer"
+	14225 = "MAIS_Gargoyle"
+	14226 = "MAIS_Marauder"
+	14227 = "MAIS_Atlas"
 }
 
 GameInfo 
@@ -40,3 +65,4 @@ GameInfo
 					"Centurion",
 					"TestingDoomguy"
 }
+

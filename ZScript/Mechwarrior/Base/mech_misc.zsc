@@ -50,14 +50,12 @@ void startMechbay()
 	let door = Spawn("Door_3D",(pos.x+xo,pos.y+yo,pos.z+60));
 	if(bay)bay.angle = angle;
 	if(door)door.angle = angle+128;
-	mech_shutdown = true;
-	//mechsounds.pushSound("Mech/Betty/SystemsCheck");
-	//A_PlaySound("Mech/Power",4);
-	//mechsounds.pushSound("Mech/StartupDone");
-	manualshutdown = true;
-	prevticks = ticks;
-	lockangle = angle;
-	lockpitch = pitch;
+	shutdown_setup(false, false, true);
+}
+
+void startDropship()
+{
+	if(!checkAI()) GiveLocalInv("DropshipAnimator");
 }
 
 void Mechlab_Alert(String str)
@@ -130,4 +128,16 @@ void A_StartLocalSound(Sound snd, uint channel = CHAN_BODY, uint flags = 0, doub
 {
 	let cplr = MechwarriorBase(players[consoleplayer].mo);
 	if(cplr && (cplr == self))  A_StartSound(snd, channel, flags, volume, attn, pitch);
+}
+
+// AI Switches
+void SetAI_Enabled(bool enabled)
+{
+	let evh = MechDoomerEvents(EventHandler.Find("MechDoomerEvents"));
+	if(evh) evh.AIDisabled = !enabled;
+}
+bool GetAI_Enabled()
+{
+	let evh = MechDoomerEvents(EventHandler.Find("MechDoomerEvents"));
+	return evh && !evh.AIDisabled;
 }

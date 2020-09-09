@@ -3,6 +3,7 @@ class MechDoomerEvents : EventHandler
 {
 	ColorTintShaderManager ShaderManager;
 	ui Mechlab_Menu mechlab;
+	play bool AIDisabled;
 	
 	ui void PrintException(String fmt, int xoffs=0, int yoffs=0)
 	{	
@@ -347,6 +348,14 @@ class MechDoomerEvents : EventHandler
 		
 		if(plr)
 		{
+			if(netcmd == "ai_toggle") 
+			{
+				AIDisabled = !AIDisabled;
+				if(AIDisabled) 
+					console.printf("AI Disabled.");
+				else 
+					console.printf("AI Enabled.");
+			}
 			if(netcmd == "screen_setfadecolor") plr.screen_fadecolor = Color(255, e.Args[0],e.Args[1],e.Args[2]);
 			if(netcmd == "screen_setfade") 
 			{

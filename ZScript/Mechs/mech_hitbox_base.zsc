@@ -31,8 +31,11 @@ class MechHitbox : Actor
 	 
 	override int DamageMobJ(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
 	{
+		// Damage fail conditions.
+		if(!mech || mech.checkVoodoo() || !mounted_hp || Mechwarrior(inflictor) == mech || Mechwarrior(source) == mech || damage == 0) 
+			return 0;
+		
 		// Take no damage directly, instead redirect to hardpoint.
-		if(!mech || mech.checkVoodoo() || !mounted_hp || Mechwarrior(inflictor) == mech || Mechwarrior(source) == mech) return 0;
 		Actor damager = inflictor;
 		let mechweap = Mechbase_Actor(inflictor);
 		if(mod == "hitscan") damager = source;
@@ -41,10 +44,10 @@ class MechHitbox : Actor
 		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
 		
 		// Take a bit less damage from AI
-		if(mechdmg && Mechwarrior(source).checkAI()) newdmg *= 0.4;
+		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.35;
 		
-		// Take more damage if we are AI
-		if(mech.checkAI()) newdmg *= 1.35;
+		// Take TT damage if we are AI
+		if(mech.checkAI()) newdmg = realdamage * 0.4;
 		
 		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
 		return 0;

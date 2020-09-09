@@ -1,0 +1,192 @@
+class MechAI_Spawner : Actor
+{
+	class<MechAI_Controller> ai_type;
+	int timer;
+	int lancecount;
+	int curlance;
+	string mechtypes1, mechtypes2, mechtypes3, mechtypes4;
+	int delay1, delay2, delay3, delay4;
+	int activedelay;
+	
+	Property Setup1  : lancecount, mechtypes1, delay1;
+	Property Setup2 : mechtypes2, delay2;
+	Property Setup3 : mechtypes3, delay3;
+	Property Setup4 : mechtypes4, delay4;
+	Property AIControl : ai_type;
+	
+	Default
+	{	
+		MechAI_Spawner.Setup1 4, "Tarantula;Raven;Commando;Urbanmech", 35*5;
+		MechAI_Spawner.Setup2 "Stormcrow;Centurion;Hunchback;Nova", 35*60;
+		MechAI_Spawner.Setup3 "Rifleman;Timberwolf;Maddog;Summoner", 35*60*2;
+		MechAI_Spawner.Setup4 "Direwolf;Warhammer;Atlas;Warhawk", 35*60*3;
+
+		MechAI_Spawner.AIControl "MechAI_Controller";
+		+NOINTERACTION;
+	}
+	
+	void GetLanceInfo(in out Array<String> lancemechs)
+	{
+		lancemechs.Clear();
+		switch(curlance)
+		{
+			case 0:
+				mechtypes1.Split(lancemechs, ";");
+				activedelay = delay1;
+			break;
+			case 1:
+				activedelay = delay2;
+				mechtypes2.Split(lancemechs, ";");
+			break;
+			case 2:
+				activedelay = delay3;
+				mechtypes3.Split(lancemechs, ";");
+			break;
+			case 3:
+				activedelay = delay4;
+				mechtypes4.Split(lancemechs, ";");
+			break;
+		}
+	}
+	
+	override void BeginPlay()
+	{
+		super.BeginPlay();
+		timer = GetAge();
+	}
+	
+	override void Tick()
+	{
+		Array<String> sp_mechs;
+		GetLanceInfo(sp_mechs);
+		
+		if(sp_mechs.Size() > 0)
+		{
+			if(GetAge()-timer > activedelay)
+			{
+				for(int i = 0; i < sp_mechs.Size(); i++)
+				{
+					class<Mechwarrior> type = sp_mechs[i];
+					if(!type) continue;
+					
+					vector2 sp_offs = MDMath.VOffset(angle, 128, 128*i, 1);		
+					vector3 spawnpos = Vec3Offset(sp_offs.x, sp_offs.y, floorz-64);
+					
+					let mechact = MechwarriorBase(Actor.Spawn(type,spawnpos));
+					if(mechact)
+					{
+						mechact.docopy_novoodoo = true;
+						mechact.setupInventory();
+						mechact.mech_weapons();
+						mechact.baseclass = type;
+						mechact.player = players[consoleplayer];
+						let ai = MechAI_Controller(Actor.Spawn(ai_type));
+						if(ai) ai.mech = mechact;
+					}
+				}
+				curlance++;
+				timer = GetAge();
+				if(curlance >= lancecount) Destroy();
+			}
+		}
+		super.Tick();
+	}
+	
+}
+
+// Lonewolf Spawners
+class MAIS_Jenner : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Jenner", 35*3; }
+}
+class MAIS_Raven : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Raven", 35*3; }
+}
+class MAIS_Urbanmech : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Urbanmech", 35*3; }
+}
+class MAIS_Commando : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Commando", 35*3; }
+}
+class MAIS_Tarantula : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Tarantula", 35*3; }
+}
+class MAIS_Kitfox : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Kitfox", 35*3; }
+}
+class MAIS_Firemoth : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Firemoth", 35*3; }
+}
+// Medium
+class MAIS_Stormcrow : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Stormcrow", 35*3; }
+}
+class MAIS_Nova : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Nova", 35*3; }
+}
+class MAIS_Centurion : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Centurion", 35*3; }
+}
+class MAIS_Hunchback : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Hunchback", 35*3; }
+}
+class MAIS_Crab : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Crab", 35*3; }
+}
+// Heavy
+class MAIS_Timberwolf : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Timberwolf", 35*3; }
+}
+class MAIS_Summoner : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Summoner", 35*3; }
+}
+class MAIS_HellBringer : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "HellBringer", 35*3; }
+}
+class MAIS_Maddog : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Maddog", 35*3; }
+}
+class MAIS_Rifleman : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Rifleman", 35*3; }
+}
+// Assault
+class MAIS_Direwolf : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Direwolf", 35*3; }
+}
+class MAIS_Warhawk : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Warhawk", 35*3; }
+}
+class MAIS_Warhammer : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Warhammer", 35*3; }
+}
+class MAIS_Gargoyle : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Gargoyle", 35*3; }
+}
+class MAIS_Marauder : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Marauder", 35*3; }
+}
+class MAIS_Atlas : MechAI_Spawner
+{
+	Default { MechAI_Spawner.Setup1 1, "Atlas", 35*3; }
+}

@@ -14,6 +14,7 @@ class MechAI_Controller : Actor
 		AIC_Indirect
 	};
 
+	bool initialized;
 	MechwarriorBase mech;
 	Mechwarrior targetmech;
 	int movement_ai;
@@ -43,7 +44,7 @@ class MechAI_Controller : Actor
 	virtual state A_MechLook()
 	{
 		let it = ThinkerIterator.Create("Mechwarrior");
-		double close_distm = double.max;
+		double close_distm = ((range_optimal+range_max*0.8)/2.) * MWGAMEPLAY_UNITMETER;
 		Mechwarrior finalmech;
 		Mechwarrior mechactor;
 		while(mechactor = Mechwarrior(it.Next()))
@@ -52,7 +53,7 @@ class MechAI_Controller : Actor
 			if(!mechactor.player || mechactor.CheckVoodoo() || mechactor.CheckAI()) 
 				continue; 
 			
-			// Find closest mech.
+			// Find closest mech.			
 			double curdist = mech.Distance3D(mechactor);
 			if( curdist < close_distm && mech.CheckSight(mechactor) )
 			{
@@ -60,14 +61,24 @@ class MechAI_Controller : Actor
 				finalmech = mechactor;
 			}
 		}
+		if(finalmech && (mech.mech_shutdown || mech.doShutdown))
+		{
+			if(finalmech.mechSounds && close_distm <= 256*MWGAMEPLAY_UNITMETER) 
+				finalmech.mechSounds.PushSound("Mech/Betty/EnemyPowerup");
+				
+			mech.powerup_setup(false, true);
+		}
 		targetmech = finalmech;
-		return FindState("MechSee");
+		if(targetmech)
+			return FindState("MechSee");
+		else
+			return FindState(Null);
 	}
 	
 	virtual void A_ShootSimple()
 	{
 		Array<Mechbase_Weapon> usableweaps;
-		mech.GetOptimalWeapons(tdistm, usableweaps, true, wclass-1, 0.20 + (0.4 * aggro));
+		mech.GetOptimalWeapons(tdistm, usableweaps, true, clamp(wclass-1, 1, 2), 0.20 + (0.4 * aggro));
 	}
 	
 	int CountWeapons()
@@ -86,8 +97,10 @@ class MechAI_Controller : Actor
 		if(abs(mech.angle-angto) < adiff) return true;
 		return false;
 	}
-	
-	virtual void A_MechChase(double precision = 10)
+	 
+    // Precision is for movement precision when tracking the player
+	// get within # degree's before accelerating.
+	virtual void A_MechChase(double precision = 30)
 	{
 		if(!targetmech || !mech) return;
 		bool cansee = mech.CheckSight(targetmech);
@@ -120,7 +133,7 @@ class MechAI_Controller : Actor
 					}
 					else if(combat_ai == AIC_HitAndRun && !dohitrun)
 					{
-						tOptimal = !hasweapons ? 90 : 20;
+						tOptimal = !hasweapons ? 180 : range_min;
 						tMin = tOptimal;
 					}	
 										
@@ -148,7 +161,7 @@ class MechAI_Controller : Actor
 					if(tdistm >= tOptimal && dohitrun) dohitrun = false;
 					
 					// Hit and Run tactics.
-					if(tdistm < tMin && tdistm >= 10 && combat_ai == AIC_HitAndRun && !dohitrun) 
+					if(tdistm < tMin && tdistm >= 30 && combat_ai == AIC_HitAndRun && !dohitrun) 
 					{
 						dohitrun = true;
 						tOptimal = !hasweapons ? 420 : range_max;
@@ -158,11 +171,11 @@ class MechAI_Controller : Actor
 					{	
 						angto += 180;
 						circling = false;
-						if(tdistm <= 10 && hasweapons)
+						if(tdistm <= 30 && hasweapons)
 						{
 							dohitrun = false;
-							tOptimal = 20;	
-							tMin = 20;
+							tOptimal = 40;	
+							tMin = 40;
 							angto -= 180;
 						}
 					}
@@ -183,7 +196,7 @@ class MechAI_Controller : Actor
 					}
 					else if(combat_ai == AIC_HitAndRun && !dohitrun)
 					{
-						tOptimal = hasweapons ? 40 : 120;
+						tOptimal = hasweapons ? 90 : 200;
 						tMin = tOptimal;
 					}	
 										
@@ -248,8 +261,8 @@ class MechAI_Controller : Actor
 					}
 					else if(combat_ai == AIC_HitAndRun && !dohitrun)
 					{
-						tOptimal = hasweapons ? 45 : 100;	
-						tMin = hasweapons ? 50 : 90;
+						tOptimal = hasweapons ? 80 : 160;	
+						tMin = hasweapons ? 70 : 120;
 					}
 					
 					// Hit and Run tactics.
@@ -315,7 +328,7 @@ class MechAI_Controller : Actor
 				}
 				
 				// Track mech.		
-				mech.MAB_LookTorso(angto, mech.MAB_PitchTo(targetmech));
+				 mech.MAB_LookTorso(!dohitrun ? angto : angto-180, mech.MAB_PitchTo(targetmech));
 				mech.MAB_LookLegs(circling ? angto+90 : angto);
 			}
 			else
@@ -330,6 +343,23 @@ class MechAI_Controller : Actor
 	override void Tick()
 	{
 		if(!mech) return;
+		
+		if(!mech.GetAI_Enabled()) 
+		{
+			mech.vel *= 0;
+			mech.LegVel = 0;
+			mech.LookVel = 0;
+			mech.move_throttle = 0;
+			mech.throttle = 0;
+			return;
+		}
+		
+		if(!initialized)
+		{
+			mech.shutdown_setup(false, true);
+			initialized = true;
+		}
+		
 		wclass = mech.getWeightClass();
 		
 		if(wclass >= 4) movement_ai = AIM_Tank;
@@ -350,8 +380,8 @@ class MechAI_Controller : Actor
 		
 		// If not all minimum range weapons, reduce engagement to optimum
 		// for weight class.
-		if(range_min == 0) range_min = 60 - (10*wclass);
-		if(range_optimal <= 0) range_optimal = range_min*1.25;
+		if(range_min == 0) range_min = 70 - (10*wclass);
+		if(range_optimal <= 0) range_optimal = range_min*1.35;
 		
 		
 		// Process valid target
@@ -372,7 +402,8 @@ class MechAI_Controller : Actor
 	States
 	{
 		Spawn:
-			TNT1 A 1 A_MechLook();
+			TNT1 A 1;
+			TNT1 A 0 A_MechLook();
 		Loop;
 		MechSee:
 			TNT1 A 1 

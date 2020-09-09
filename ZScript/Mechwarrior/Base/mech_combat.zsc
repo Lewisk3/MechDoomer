@@ -328,6 +328,7 @@ void process_targeting()
 {
 	bool HasActiveHoming = FindHomingWeapon(true);
 	bool target_inview = false;
+	if(targetenemy is "NavPoint") return;
 	
 	if(HasActiveHoming && targetenemy)
 	{

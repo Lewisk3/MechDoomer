@@ -87,6 +87,7 @@ class HudSpriteInitializer : Actor
 
 // AI (VERY WIP)
 #include "ZScript/Mechwarrior/AI/mech_controllers.zsc"
+#include "ZScript/Mechwarrior/AI/mechai_spawners.zsc"
 
 // Mechs
 #include "ZScript/Mechs/mechs.zsc"

@@ -22,6 +22,19 @@ Ballistics/Gauss      MECGAUSS
 Energy/PPC    MECPPC
 Energy/Flamer MECHFLM
 
+Missiles/Explosion1 MISLEXP1
+Missiles/Explosion2 MISLEXP2
+Missiles/Explosion3 MISLEXP3
+Missiles/Explosion4 MISLEXP4
+Missiles/Explosion5 MISLEXP5
+Missiles/Explosion6 MISLEXP6
+
+$random Missiles/Explosion { 
+	Missiles/Explosion1 Missiles/Explosion2 
+	Missiles/Explosion3 Missiles/Explosion4 
+	Missiles/Explosion5 Missiles/Explosion6 
+}
+
 Classic/PPC CLSPPC
 Classic/PPC/Impact CLSEXPPC
 Classic/PulseLasers/Small  CLSSPLAS
@@ -99,6 +112,10 @@ Mech/Betty/SelfDestruct SELFDEST
 Mech/Betty/Autopilot AUTOPLOT
 Mech/Betty/ExternalCamera EXTCAM
 Mech/Betty/SatLinkEstablished SATLINK
+Mech/Betty/EnemyPowerup ENEMYPWR
+
+// Mission Intros
+Mech/Betty/Intros/Macduff_One MACDUFF1
 
 // Unused betty
 Mech/Betty/NoAmmo AMMODEPL
