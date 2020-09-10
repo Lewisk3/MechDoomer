@@ -48,6 +48,7 @@ double LookVel;
 double LegVel;
 double overfactor;
 double rolloffs;
+double defgravity;
 
 // Bobbing
 double boboffs;
@@ -386,29 +387,32 @@ void mech_movement()
 		class<JumpJet> jj = "JumpJet";
 		double w = CheckCompensative() ? inv_context.weapons_tonnage : mech_tonnage;
 		double jthrust = GetDefaultByType(jj).thrust_power;
-		double boost    = ( Mech_JetCount/(2.0+Mech_JetCount*0.2) ) + 1;
-		double weight_t = (((100-w)/100) * 2.16) + 1;
-		double fuel_t   = (((100 - mech_jetsfuel)**2 / 200**2) + 0.8);
+		double boost    = ( Mech_JetCount/(2.0+Mech_JetCount*0.2) ) + 0.5;
+		double weight_t = (((100-w)/100) * 1.23) + 1;
+		double fuel_t   = (((100 - mech_jetsfuel)**2 / 100**2) + 0.8);
 		double zthrust  = fuel_t * (jthrust * boost) * weight_t;
-		double finalthrust = clamp(zthrust, 0.1, 0.7) * 0.5;
+		double finalthrust = clamp(zthrust, 0.1, 1.0) * 0.26;
 		
 		// Apply velocity
-		double jetpitch = 40;
+		double jetpitch = 45;
 		vel += (
-			cos(LegAng)*cos(jetpitch)*(zthrust*10), 
-			sin(LegAng)*cos(jetpitch)*(zthrust*10), 
+			cos(LegAng)*cos(jetpitch)*(zthrust*5), 
+			sin(LegAng)*cos(jetpitch)*(zthrust*5), 
 			sin(jetpitch)*finalthrust
 		);
 		
 		mech_jetsfuel -= 0.5;
 		if(mech_jetsfuel > 10) 
-		{
-			A_SetGravity(default.gravity*0.75);
+		{	
+			bNOGRAVITY = true;
+			//A_SetGravity(default.gravity * 0.75);
 			A_StartSound("Mech/JetLoop", CHAN_5, CHANF_LOOPING);
 		}
 	} 
 	else if(!jets || player.onground || mech_jetsfuel <= 10)
-	{
+	{	
+		bNOGRAVITY = false;
+		//A_SetGravity(default.gravity);
 		A_StopSound(CHAN_5);
 	}
 	

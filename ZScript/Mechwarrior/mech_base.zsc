@@ -208,6 +208,7 @@ class MechWarrior : MechWarriorBase
 		Player.JumpZ 0;
 		Player.SoundClass "MechWarrior";
 		Player.DisplayName "";
+		Gravity 0.75;
 		
 		MechWarriorBase.Size 48, 64;
 		MechWarriorBase.CValue 1000000;
