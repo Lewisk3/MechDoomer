@@ -46,12 +46,6 @@ class MechAnimator : Inventory
 			mech = MechWarriorBase(Owner);			
 			return;
 		}
-		if(mech.checkAI()) 
-		{
-			mech.RemoveInventory(self);
-			GoAwayAndDie();
-			return;
-		}
 		
 		if(!persistent)
 		{

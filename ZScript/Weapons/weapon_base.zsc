@@ -1161,9 +1161,12 @@ class MachineGunFlash : PPCExplosion
 	
 	override void PostBeginPlay()
 	{
-		angle = master.angle;
-		pitch = master.pitch+90;
-		A_SetRoll(random(0,359));
+		if(master)
+		{
+			angle = master.angle;
+			pitch = master.pitch+90;
+			A_SetRoll(random(0,359));
+		}
 		super.PostBeginPlay();
 	}
 	

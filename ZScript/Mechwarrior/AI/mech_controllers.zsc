@@ -410,7 +410,7 @@ class MechAI_Controller : Actor
 			{	
 				A_MechChase();	
 				double rfire = frandom(0,1);
-				if(rfire <= (aggro-0.30) && !dohitrun && A_FaceMech()) A_ShootSimple();
+				if(rfire <= (aggro-0.30) && A_FaceMech()) A_ShootSimple();
 				if(!targetmech) return ResolveState("Spawn");
 				return ResolveState(Null);
 			}
