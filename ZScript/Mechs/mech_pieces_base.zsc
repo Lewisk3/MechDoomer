@@ -659,7 +659,7 @@ class MechLegsBase : MechPartsBase
 	{
 		if(!mechowner) return false;
 		mechowner.stepping = idle ? false : (frame == frameone || frame == frametwo);
-		if(mechowner.stepping) mechowner.A_AlertMonsters(1024);
+		if(mechowner.stepping) mechowner.A_AlertMonsters();
 		return true;
 	}
 	
