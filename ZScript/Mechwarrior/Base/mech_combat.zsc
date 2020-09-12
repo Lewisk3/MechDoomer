@@ -19,6 +19,7 @@ Array<mw_CombatObjective> objectives;
 bool display_objectives;
 MechCamera dronecam;
 RandomExplosions deathexplosions;
+MechAI_Controller AICore;
 bool dronecam_active;
 bool heatwarn;
 bool supersink;
@@ -423,9 +424,12 @@ void trigger_ams(mw_InvStruct amsitem)
 	Actor obj;
 	while(obj = Actor(ams_it.Next()))
 	{
-		if(obj is "AMS_Missile" || obj is "Mechbase_Actor") continue;
-		if(obj && obj.Damage && amsitem.active_cooldown <= 0)
+		let mechweap = Mechbase_Actor(obj);
+		if(mechweap && mechweap.mechplayer == self && !mechweap.mechplayer.CheckAI()) continue;
+		if(obj is "AMS_Missile") continue;
+		if(obj && amsitem.active_cooldown <= 0)
 		{	
+			if( (!mechweap && !obj.Damage) || !(mechweap is "MechMissile") ) continue;
 			if(CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
 			{
 				//console.printf("Firing AMS at: " .. obj.getTag());

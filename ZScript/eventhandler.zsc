@@ -3,6 +3,8 @@ class MechDoomerEvents : EventHandler
 {
 	ColorTintShaderManager ShaderManager;
 	ui Mechlab_Menu mechlab;
+	ui transient CVar rendermode;
+	ui transient CVar overridewarn;
 	play bool AIDisabled;
 	
 	ui void PrintException(String fmt, int xoffs=0, int yoffs=0)
@@ -17,8 +19,9 @@ class MechDoomerEvents : EventHandler
 	override void RenderOverlay(RenderEvent e)
 	{
 		// NOTE: vid_rendermode does not exist in LZDoom, apparently.
-		CVar rendermode = CVar.FindCVar("vid_rendermode");
-		if(rendermode && rendermode.GetInt() != 4)
+		if(!rendermode) rendermode = CVar.FindCVar("vid_rendermode");
+		if(!overridewarn) overridewarn = CVar.FindCVar("mwd_override_warn"); 
+		if(rendermode && rendermode.GetInt() != 4 && !overridewarn.getBool())
 		{
 			Color dimcol = Color(0,0,0,0);
 			Screen.Dim(dimcol,1.0,0,0,Screen.GetWidth(),Screen.GetHeight());
@@ -543,6 +546,25 @@ class MechDoomerEvents : EventHandler
 			if(netcmd == "-mwd_user5") plr.btn_jumpjets = false;
 			if(netcmd == "+mwd_pilotlook" && plr.modelcockpit && !plr.dronecam) plr.pilotlook = true;
 			if(netcmd == "-mwd_pilotlook")plr.pilotlook = false;
+			if(netcmd == "botme")
+			{
+				plr.player.cheats |= CF_TOTALLYFROZEN;
+				plr.shutdown_setup(false, true);
+				plr.docopy_novoodoo = true;
+				let ai = MechAI_Controller(Actor.Spawn("MechAI_Controller"));
+				if(ai) 
+				{
+					ai.mech = plr;
+					plr.AICore = ai;
+					ai.bFRIENDLY = true;
+				}
+			}
+			if(netcmd == "unbotme")
+			{
+				plr.player.cheats &= ~CF_TOTALLYFROZEN;
+				plr.AICore = NULL;
+				plr.docopy_novoodoo = false;
+			}
 		
 			Array<String> netcmds;
 			netcmds.Clear();
@@ -564,7 +586,11 @@ class MechDoomerEvents : EventHandler
 					mechact.baseclass = type;
 					mechact.player = players[consoleplayer];
 					let ai = MechAI_Controller(Actor.Spawn("MechAI_Controller"));
-					if(ai) ai.mech = mechact;
+					if(ai) 
+					{
+						ai.mech = mechact;
+						mechact.AICore = ai;
+					}
 				}
 			}
 			if(netcmds[0] == "mechlab_alert")

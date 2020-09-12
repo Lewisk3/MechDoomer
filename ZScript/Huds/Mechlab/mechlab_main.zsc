@@ -179,8 +179,11 @@ void ProcessLoadoutButtons()
 				}
 				else if(mechmode)
 				{
-					// TODO: Switch mech logic, require mech shutdown.
-					if(!mechplr.mech_shutdown)
+					// Require mech shutdown to switch or, allow if mech is dead.
+					// Mech should be shutdown if dead but, if it isn't, that 
+					// would result in a game breaking bug of not being able to
+					// respawn.
+					if(!mechplr.mech_shutdown || mechplr.isdead)
 					{
 						mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 						MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Active mech must be shutdown\nfirst!");

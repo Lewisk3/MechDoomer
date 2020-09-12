@@ -52,7 +52,7 @@ class Mechbase_Actor : FastProjectile
 	}
 	void Converge(double spdfac=1.0)
 	{
-		double spd = (!mechplayer.player || mechplayer.checkAI()) ? 0.12*spdfac : CVar.GetCVar("mwd_converge_speed", controlplr).getFloat()*spdfac;
+		double spd = (!mechplayer.player || mechplayer.checkAI()) ? 0.08*spdfac : CVar.GetCVar("mwd_converge_speed", controlplr).getFloat()*spdfac;
 		if(mechplayer && spd > 0)
 		{
 			double truespd = vel.length()*spd;
@@ -855,6 +855,7 @@ class AMS_Missile : Mechbase_Actor
 	  SpawnLoop:
 		AMSL A 1 Bright
 		{
+			let mechwp = Mechbase_Weapon(tracer);
 			if(tracer)
 			{
 				angle = AngleTo(tracer);
@@ -862,14 +863,23 @@ class AMS_Missile : Mechbase_Actor
 				
 				if(Distance3D(tracer) <= radius*4) 
 				{
-					if(tracer.damage <= 0) 
+					if(!mechwp)
 					{
-						tracer.Destroy();
-						return ResolveState(Null);
+						if(tracer.damage <= 0) 
+						{
+							tracer.ExplodeMissile(null, tracer.target);
+							return ResolveState(Null);
+						}
+						
+						tracer.SetDamage(tracer.damage-projdmg);
+						return ResolveState("DeathCollide");
 					}
-					
-					tracer.SetDamage(tracer.damage-projdmg);
-					return ResolveState("DeathCollide");
+					else 
+					{
+						tracer.SetState(tracer.FindState("Death"));
+						tracer.ExplodeMissile(null, tracer.target);
+						return ResolveState("DeathCollide");			
+					}
 				}
 				A_SeekerMissile(20,20,SMF_CURSPEED,999/64);
 			}

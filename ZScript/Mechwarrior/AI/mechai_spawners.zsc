@@ -81,7 +81,11 @@ class MechAI_Spawner : Actor
 						mechact.baseclass = type;
 						mechact.player = players[consoleplayer];
 						let ai = MechAI_Controller(Actor.Spawn(ai_type));
-						if(ai) ai.mech = mechact;
+						if(ai) 
+						{	
+							ai.mech = mechact;	
+							mechact.AICore = ai;
+						}
 					}
 				}
 				curlance++;

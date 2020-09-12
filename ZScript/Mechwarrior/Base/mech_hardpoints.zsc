@@ -152,6 +152,10 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, bool spre
 {
 	if(FindInventory("DamageDebuff")) dmg *= 0.05;
 	
+	// Powerup inactive mech AI if taking damage.
+	if(mech_shutdown && !mech_poweringup && checkAI())
+		powerup_setup(false, true);
+	
 	// Update for over-max armor, via EndosteelBonuses.
 	if(hp.armor > 0 && !noarmor) 
 	{
@@ -212,6 +216,9 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, bool spre
 			mechsounds.pushSound("Mech/Betty/CriticalHit");
 			DamageCritSounds(hp);
 			DestroyHardpointItems(hp);
+			
+			// Hardpoint explosions
+			if(hp.hitbox) RandomExplosions.TriggerOnActor(hp.hitbox, 3, 2, 0);
 		}
 	}
 	else if(spread)

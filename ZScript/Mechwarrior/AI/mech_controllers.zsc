@@ -49,9 +49,13 @@ class MechAI_Controller : Actor
 		Mechwarrior mechactor;
 		while(mechactor = Mechwarrior(it.Next()))
 		{
-			// Do not target other AI.
-			if(!mechactor.player || mechactor.CheckVoodoo() || mechactor.CheckAI()) 
-				continue; 
+			if(mechactor == mech) continue; // OMEGALUL
+			// Do not target voodoos or other AI if hostile 
+			if(  mechactor.isdead ||
+				 mechactor.CheckVoodoo() || 
+				(!bFRIENDLY &&  mechactor.CheckAI() && !mechactor.AICore.bFRIENDLY) || 
+				( bFRIENDLY && !mechactor.CheckAI())    ) 
+				continue;
 			
 			// Find closest mech.			
 			double curdist = mech.Distance3D(mechactor);
@@ -61,7 +65,7 @@ class MechAI_Controller : Actor
 				finalmech = mechactor;
 			}
 		}
-		if(finalmech && (mech.mech_shutdown || mech.doShutdown))
+		if(finalmech && (mech.mech_shutdown || mech.doShutdown) && !mech.mech_poweringup)
 		{
 			if(finalmech.mechSounds && close_distm <= 256*MWGAMEPLAY_UNITMETER) 
 				finalmech.mechSounds.PushSound("Mech/Betty/EnemyPowerup");
@@ -89,7 +93,7 @@ class MechAI_Controller : Actor
 	
 	virtual bool A_FaceMech(double adiff = 10)
 	{
-		if(!targetmech) return false; 
+		if(!targetmech || !mech.CheckSight(targetmech)) return false; 
 		double angto = MDMath.SmarterAngleTo(mech, targetmech);
 		mech.MAB_LookTorso(angto, mech.MAB_PitchTo(targetmech));
 		mech.MAB_LookLegs(angto);
@@ -102,12 +106,14 @@ class MechAI_Controller : Actor
 	// get within # degree's before accelerating.
 	virtual void A_MechChase(double precision = 30)
 	{
-		if(!targetmech || !mech) return;
-		bool cansee = mech.CheckSight(targetmech);
-        if(!cansee) mech.RandomChaseDir();
+		if(!mech) return;
+		
+		double wandir;
+		bool cansee = !targetmech ? false : mech.CheckSight(targetmech);
+	
 		if(cansee)
 		{
-			double angto = MDMath.SmarterAngleTo(mech, targetmech);
+			double angto = MDMath.SmarterAngleTo(mech, targetmech.hitbox_middle);
 			if(retreat_point) angto += 180;
 			bool canrotate = mech.MAB_CheckTorsoRotation(angto);
 						
@@ -150,7 +156,7 @@ class MechAI_Controller : Actor
 							abs(mech.angle-angto) < precision && 
 							canrotate ) 
 						{	
-							mech.MAB_Accelerate(throttle_max, true);
+							mech.MAB_Accelerate(circling ? throttle_max*0.8 : throttle_max, true);
 						}
 					}
 					else if(tdistm < tOptimal)
@@ -213,7 +219,7 @@ class MechAI_Controller : Actor
 							abs(mech.angle-angto) < precision && 
 							canrotate ) 
 						{	
-							mech.MAB_Accelerate(throttle_max, true);
+							mech.MAB_Accelerate(circling ? throttle_max*0.7 : throttle_max, true);
 						}
 					}
 					
@@ -243,7 +249,7 @@ class MechAI_Controller : Actor
 					}
 					
 					// Slow movement if our torso needs to catch aim.
-					if(!canrotate && !dohitrun) mech.MAB_Accelerate(0.8, true);
+					if(!canrotate && !dohitrun) mech.MAB_Accelerate(0.5, true);
 				}
 				else if(movement_ai == AIM_Tank)
 				{
@@ -328,7 +334,7 @@ class MechAI_Controller : Actor
 				}
 				
 				// Track mech.		
-				 mech.MAB_LookTorso(!dohitrun ? angto : angto-180, mech.MAB_PitchTo(targetmech));
+				mech.MAB_LookTorso(!dohitrun ? angto : angto-180, mech.MAB_PitchTo(targetmech));
 				mech.MAB_LookLegs(circling ? angto+90 : angto);
 			}
 			else
@@ -338,12 +344,47 @@ class MechAI_Controller : Actor
 				mech.MAB_LookLegs(angto);
 			}
 		}
+		// Cannot see target, wander.
+		else
+		{
+			mech.RandomChaseDir();
+			wandir = mech.movedir*45.;
+			
+			// Find colliding wall, slide against normal.
+			FLineTraceData lt;
+			double adiff;
+			mech.LineTrace(mech.LegAng,64,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,20,0,0,lt);
+			if(lt.HitLine)
+			{
+				double wnormal = VectorAngle(lt.HitLine.delta.x, lt.HitLine.delta.y);
+				int sign = wnormal > 0 ? 1 : -1;
+				if( abs(wnormal) == 180 ) wnormal = 160 * sign;
+				double walloffs = 180;
+				adiff = MDMath.NormalizeAngle(mech.LegAng - wnormal+walloffs);
+			}
+			else
+			{
+				mech.MAB_LookLegs(wandir);
+			}
+			
+			mech.MAB_LookTorso(wandir, 0);
+			mech.MAB_Accelerate(0.5, true);
+			if(adiff > 0) mech.MAB_TurnLeft();
+			if(adiff < 0) mech.MAB_TurnRight();
+		}
 	}
 		
 	override void Tick()
 	{
 		if(!mech) return;
 		
+		// Destroy if Mech is not ment to be AI.
+		if(!mech.CheckAI())
+		{
+			Destroy();
+			return;
+		}
+				
 		if(!mech.GetAI_Enabled()) 
 		{
 			mech.vel *= 0;
@@ -393,6 +434,7 @@ class MechAI_Controller : Actor
 			{	
 				target = NULL;
 				targetmech = NULL;
+				mech.targetenemy = NULL;
 				tdistm = 0;
 			}
 		}
@@ -408,11 +450,14 @@ class MechAI_Controller : Actor
 		MechSee:
 			TNT1 A 1 
 			{	
-				A_MechChase();	
-				double rfire = frandom(0,1);
-				if(rfire <= (aggro-0.30) && A_FaceMech()) A_ShootSimple();
-				if(!targetmech) return ResolveState("Spawn");
-				return ResolveState(Null);
+				A_MechChase();
+				if(targetmech) 
+				{
+					double rfire = frandom(0,1);
+					if(rfire <= (aggro-0.30) && A_FaceMech()) A_ShootSimple();
+				}
+				else
+					A_MechLook();
 			}
 		Loop;
 	}

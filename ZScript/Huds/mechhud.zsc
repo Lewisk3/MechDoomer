@@ -719,7 +719,7 @@ class MechStatusBar : BaseStatusBar
 		}
 		H_DrawImage("MWTARGET",(200,886),0, fscale);
 		
-		if(mech.targetenemy)
+		if(mech.targetenemy && mech.targetreticle)
 		{	
 			let targetMechBase = MechHitBox(mech.targetenemy);
 			bool isNav = NAVPoint(mech.targetenemy) != NULL;
@@ -728,9 +728,15 @@ class MechStatusBar : BaseStatusBar
 				cam = mech.targetreticle.cam;
 			else
 				cam = mech.targetenemy;
-				
-			TexMan.SetCameraToTexture(cam,"TargetCamera",90.0);
-			TextureID targ = TexMan.CheckForTexture("TargetCamera",TexMan.TYPE_ANY);
+			
+			// LZDoom check
+			let mwd_evh = MechDoomerEvents(EventHandler.Find("MechDoomerEvents"));
+			String camtexture = "TargetCamera";
+			if(mwd_evh && !mwd_evh.rendermode) camtexture = "LZ_TargetCamera";
+			
+			// Draw target camera
+			TexMan.SetCameraToTexture(cam,camtexture,90.0);
+			TextureID targ = TexMan.CheckForTexture(camtexture, TexMan.TYPE_ANY);
 			H_DrawTexture(targ,(199,884),0, fscale);
 			double mdist = mech.Distance3D(mech.targetenemy)/MWGAMEPLAY_UNITMETER;
 			String dist = String.Format("%.0f", mdist);

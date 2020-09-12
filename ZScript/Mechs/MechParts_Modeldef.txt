@@ -184,10 +184,23 @@ Model Torso_Jenner
 	
    FrameIndex TRSO A 0 0
 }
-Model Arms_Jenner
+Model LeftArm_Jenner
 {
 	Path "models/Mechs"
-	Model 0 "Jenner/jn_arms.md3"
+	Model 0 "Jenner/jn_leftarm.md3"
+	SurfaceSkin 0 0 "Jenner/jn_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Jenner
+{
+	Path "models/Mechs"
+	Model 0 "Jenner/jn_rightarm.md3"
 	SurfaceSkin 0 0 "Jenner/jn_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
@@ -211,7 +224,7 @@ Model Hips_Jenner
 Model Cockpit_Jenner
 {
 	Path "models/Mechs"
-	Model 0 "Jenner/jn_head2.md3"
+	Model 0 "Jenner/jn_head.md3"
 	Scale 0.05 0.05 0.05
 	Skin 0 "Jenner/jn_head.png" // Main
 	USEACTORPITCH
@@ -555,10 +568,23 @@ Model Torso_Rifleman
 	
    FrameIndex TRSO A 0 0
 }
-Model Arms_Rifleman
+Model RightArm_Rifleman
 {
 	Path "models/Mechs"
-	Model 0 "Rifleman/rf_arms.md3"
+	Model 0 "Rifleman/rf_rightarm.md3"
+	SurfaceSkin 0 0 "Rifleman/rf_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	Offset -5 0 0
+ 	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Rifleman
+{
+	Path "models/Mechs"
+	Model 0 "Rifleman/rf_leftarm.md3"
 	SurfaceSkin 0 0 "Rifleman/rf_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
@@ -782,10 +808,22 @@ Model Torso_Warhammer
 	
    FrameIndex TRSO A 0 0
 }
-Model Arms_Warhammer
+Model LeftArm_Warhammer
 {
 	Path "models/Mechs"
-	Model 0 "Warhammer/wh_arms.md3"
+	Model 0 "Warhammer/wh_leftarm.md3"
+	SurfaceSkin 0 0 "Warhammer/wh_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Warhammer
+{
+	Path "models/Mechs"
+	Model 0 "Warhammer/wh_rightarm.md3"
 	SurfaceSkin 0 0 "Warhammer/wh_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0

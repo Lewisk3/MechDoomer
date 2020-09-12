@@ -139,6 +139,7 @@ class MechPartsBase : Actor
 	
 	bool CheckLocalObserver()
 	{
+		if(mechowner.CheckAI()) return false;
 		return mechowner == MechwarriorBase(players[consoleplayer].mo);
 	}
 	
@@ -332,7 +333,10 @@ class MechCockpitModel : MechPartsBase
 // Arms
 class MechArmsBase : MechPartsBase
 {
+	MechHardpoint arm_hp;
+	double def_mzoffs;
 	double mzoffs;
+	double rcoffs, pcoffs;
 	
 	Default
 	{
@@ -342,7 +346,7 @@ class MechArmsBase : MechPartsBase
 	
 	bool IsThirdPerson()
 	{
-		return mechowner.dronecam || mechowner.CheckVoodoo();
+		return mechowner.CheckAI() || mechowner.dronecam || mechowner.CheckVoodoo();
 	}
 	
 	override vector3 getMechPos()
@@ -351,7 +355,8 @@ class MechArmsBase : MechPartsBase
 			return super.getMechPos();
 		double cos_angle = cos(mechowner.angle);
 		double sin_angle = sin(mechowner.angle);
-		double pitchcorrect = -cos(pitch-90)*20;
+		double pitchcorrect = -cos(pitch-90)*(IsThirdPerson() ? pcoffs : 20);
+		double rollcorrect  = -roll*rcoffs;
 		vector3 basepos;
 		
 		if(!IsThirdPerson())
@@ -359,49 +364,70 @@ class MechArmsBase : MechPartsBase
 			double forward = mechowner.models_reference.cockpit.cockpitcam.cxoffs+
 							 mechowner.models_reference.cockpit.mxoffs;
 			basepos = mechowner.Vec3Offset(
-					(cos_angle*pitchcorrect) + (cos_angle*forward),
-					(sin_angle*pitchcorrect) + (sin_angle*forward),
+					(cos_angle*pitchcorrect) + (cos_angle*forward) + (cos(angle+90)*rollcorrect),
+					(sin_angle*pitchcorrect) + (sin_angle*forward) + (sin(angle+90)*rollcorrect),
 					zoffs+mzoffs
 			);
 		}
 		else
 		{
-			basepos = mechowner.Vec3Offset(cos_angle, sin_angle, zoffs+mzoffs);
+			vector3 vpc = (
+				-(cos_angle*pitchcorrect),
+				-(sin_angle*pitchcorrect),
+				(sin_angle*pitchcorrect*0.1)
+			);
+			vector3 bpo = (
+				(cos(angle+90)*rollcorrect),
+				(sin(angle+90)*rollcorrect),
+				(zoffs+mzoffs*sin(pitch))
+			);
+			bpo += vpc;
+			basepos = mechowner.Vec3Offset(bpo.x, bpo.y, bpo.z);
 		}
 		return basepos;
+	}
+	
+	override void BeginPlay()
+	{
+		def_mzoffs = mzoffs;
+		super.BeginPlay();
 	}
 	
 	override void tick()
 	{
 		if(!mechowner)
 		{
+			A_SetPitch(pitch+1, SPF_INTERPOLATE);
 			super.Tick();	
 			return;
 		}
 		let base = mechowner.models_reference;
 		let cockpit = base.cockpit;
-		if(mechowner && base && CheckLocalObserver())
+		if( mechowner && base && (!arm_hp || arm_hp.internalhp > 0) )
 		{		
 			// For now, the arms will be invisible in 3rd person but, i do want them to actually
 			// function at some point, can't get the math just right atm.
-			bInvisible = IsThirdPerson();
+			bInvisible = !base.fullarms && IsThirdPerson();
 			
-			if(!IsThirdPerson())
+			if(!IsThirdPerson() && CheckLocalObserver())
 			{
 				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
 				A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
-				if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, (base.roll*0.5), 0.5), SPF_INTERPOLATE);
+				if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, cockpit.roll, 0.1), SPF_INTERPOLATE);
 				mzoffs = mechowner.viewzoffs;
 			}
 			else
 			{
 				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
-				if(!base.noroll) roll = MDMath.Lerp(roll, cockpit.roll, 0.1);
-				angle = cockpit.angle;
+				if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, cockpit.roll, 0.1), SPF_INTERPOLATE);
+				A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
+				//A_SetRoll(roll+1, SPF_INTERPOLATE);
+				mzoffs = def_mzoffs;
 			}
 		}
 		else
 			bInvisible = true;
+			
 		super.tick();
 	}
 }
@@ -412,23 +438,27 @@ class MechTorsoBase : MechPartsBase
 	bool noroll;
 	bool notwist;
 	bool setup;
+	bool fullarms; 
 	double cockpitpitch_mod;
 	double cockpitangle_mod;
 	double cockpittwist_mod;
 	double cockpitbob_mod;
-	double arms_offs;
+	double arms_offs, arms_rcoffs, arms_pcoffs;
 	MechPartsBase hips;
 	MechPartsBase legs;
-	MechPartsBase arms;
+	MechPartsBase arms_left;
+	MechPartsBase arms_right;
 	MechPartsbase cockpit_camera;
 	MechCockpitModel cockpit;
-	class<MechPartsBase> arms_type;
+	class<MechPartsBase> arms_left_type;
+	class<MechPartsBase> arms_right_type;
 	class<MechPartsBase> hips_type;
 	class<MechPartsBase> legs_type;
 	class<MechCockpitModel> cockpit_type;
-	Property Pieces : hips_type, legs_type, cockpit_type, arms_type;
+	Property Pieces : hips_type, legs_type, cockpit_type, arms_left_type, arms_right_type;
 	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod, cockpitbob_mod;
 	Property ArmsHeight : arms_offs;
+	Property ArmsRollPitchMod : arms_rcoffs, arms_pcoffs;
 	Property TwistSpeed : cockpittwist_mod;
 	Property DoNotTwist : notwist;
 	Property DoNotRoll : noroll;
@@ -437,16 +467,40 @@ class MechTorsoBase : MechPartsBase
 	{
 		MechTorsoBase.CockpitRange 0.7, 0.7, 1.0;
 		MechTorsoBase.TwistSpeed 0.1;
+		MechTorsoBase.ArmsRollPitchMod 0.25, 0;
 	}
 		
-	void SetupParts(class<MechPartsBase> phips, class<MechPartsBase> plegs, class<MechCockpitModel> cpit, class<MechPartsBase> parms)
+	void SetupParts(class<MechPartsBase> phips, class<MechPartsBase> plegs, class<MechCockpitModel> cpit, class<MechPartsBase> parms_left, class<MechPartsBase> parms_right)
 	{
 		cockpit_camera = MechPartsBase.Create("MechCockpitCamera", mechowner);
 		if(phips) hips = MechPartsBase.Create(phips, mechowner);
 		if(plegs) legs = MechPartsBase.Create(plegs, mechowner);
-		if(parms) arms = MechPartsBase.Create(parms, mechowner);
+		if(parms_left) 
+		{
+			arms_left = MechPartsBase.Create(parms_left, mechowner);
+			if(arms_left) 
+			{
+				let arm = MechArmsBase(arms_left);
+				arm.zoffs = arms_offs;
+				arm.rcoffs = arms_rcoffs;
+				arm.pcoffs = arms_pcoffs;
+				if(parms_right) arm.arm_hp = mechowner.hardpoints.la;
+			}
+		}
+		if(parms_right)
+		{
+			arms_right = MechPartsBase.Create(parms_right, mechowner);
+			if(arms_right) 
+			{	
+				let arm = MechArmsBase(arms_right);
+				arm.zoffs = arms_offs;
+				arm.rcoffs = arms_rcoffs;
+				arm.pcoffs = arms_pcoffs;
+				if(parms_left) arm.arm_hp = mechowner.hardpoints.ra;
+			}
+		}
+		if(arms_left && arms_right) fullarms = true; 
 		if(hips) hips.zoffs = zoffs;
-		if(arms) arms.zoffs = arms_offs;
 		if(cockpit_camera) 
 		{
 			cockpit_camera.cxoffs = cxoffs;
@@ -470,9 +524,9 @@ class MechTorsoBase : MechPartsBase
 	
 	override void tick()
 	{
-		if(!setup) SetupParts(hips_type, legs_type, cockpit_type, arms_type);
 		if(mechowner)
 		{
+			if(!setup) SetupParts(hips_type, legs_type, cockpit_type, arms_left_type, arms_right_type);
 			if( !mechowner.dronecam && !mechowner.dronecam_active &&
 				 mechowner.player && mechowner.player.camera == mechowner ) 
 				mechowner.player.camera = cockpit_camera;
@@ -512,8 +566,10 @@ class MechTorsoBase : MechPartsBase
 	{
 		if(hips) hips.Destroy();
 		if(legs) legs.Destroy();
-		if(arms) arms.Destroy();
+		if(arms_left) arms_left.Destroy();
+		if(arms_right) arms_right.Destroy();
 		if(cockpit_camera) cockpit_camera.Destroy();
+		if(cockpit) cockpit.Destroy();
 	}
 	States
 	{

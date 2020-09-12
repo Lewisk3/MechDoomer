@@ -25,6 +25,7 @@ class MechHitbox : Actor
 			box.forward = mountpoint.hitbox_info.forward;
 			box.mech = basemech;
 			box.mounted_hp = mountpoint;
+			mountpoint.hitbox = box;
 		}
 		return box;
 	}
@@ -44,10 +45,10 @@ class MechHitbox : Actor
 		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
 		
 		// Take a bit less damage from AI
-		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.35;
+		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.3;
 		
 		// Take TT damage if we are AI
-		if(mech.checkAI()) newdmg = realdamage * 0.55;
+		if(mech.checkAI()) newdmg = realdamage*0.5;
 		
 		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
 		return 0;

@@ -20,6 +20,7 @@ class MechHardpoint : Object
 {
 	// Hitbox
 	HitboxInfo hitbox_info;
+	MechHitbox hitbox; 
 	
 	// Position
 	vector2 pos;
