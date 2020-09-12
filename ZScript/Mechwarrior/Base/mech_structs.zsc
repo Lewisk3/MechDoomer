@@ -138,7 +138,7 @@ clearscope bool CheckCompensative()
 	return inv_context.engine && (inv_context.engine.model == EngineDatabase.Type_Compensative);
 }
 	
-void DequipEngine()
+void DequipEngine(bool destroyengine=false)
 {
 	if(!inv_context.engine) return;
 	MechBase_EngineOBJ engobj = inv_context.engine;
@@ -171,7 +171,8 @@ void DequipEngine()
 	inv_context.heateff -= (GetDefaultByType("Heatsink").cooling/35)*engobj.intrinsic_heatsinks;
 	inv_context.heateff -= (GetDefaultByType("DoubleHeatsink").cooling/35)*engobj.intrinsic_doubleheatsinks;
 	adjustTonnage(-engobj.weight);
-	inv_context.GiveItem(engobj.ClassType);
+	if(!destroyengine) 
+		inv_context.GiveItem(engobj.ClassType);
 	
 	// RIP
 	engobj.Destroy();

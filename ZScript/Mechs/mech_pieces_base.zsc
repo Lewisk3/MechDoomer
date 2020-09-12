@@ -484,7 +484,8 @@ class MechTorsoBase : MechPartsBase
 				arm.zoffs = arms_offs;
 				arm.rcoffs = arms_rcoffs;
 				arm.pcoffs = arms_pcoffs;
-				if(parms_right) arm.arm_hp = mechowner.hardpoints.la;
+				if(parms_right && !mechowner.CheckVoodoo()) 
+					arm.arm_hp = mechowner.hardpoints.la;
 			}
 		}
 		if(parms_right)
@@ -496,7 +497,8 @@ class MechTorsoBase : MechPartsBase
 				arm.zoffs = arms_offs;
 				arm.rcoffs = arms_rcoffs;
 				arm.pcoffs = arms_pcoffs;
-				if(parms_left) arm.arm_hp = mechowner.hardpoints.ra;
+				if(parms_left && !mechowner.CheckVoodoo()) 
+					arm.arm_hp = mechowner.hardpoints.ra;
 			}
 		}
 		if(arms_left && arms_right) fullarms = true; 

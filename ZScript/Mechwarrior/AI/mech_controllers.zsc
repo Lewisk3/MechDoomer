@@ -111,7 +111,7 @@ class MechAI_Controller : Actor
 		double wandir;
 		bool cansee = !targetmech ? false : mech.CheckSight(targetmech);
 	
-		if(cansee)
+		if(cansee && targetmech.hitbox_middle)
 		{
 			double angto = MDMath.SmarterAngleTo(mech, targetmech.hitbox_middle);
 			if(retreat_point) angto += 180;
@@ -156,7 +156,7 @@ class MechAI_Controller : Actor
 							abs(mech.angle-angto) < precision && 
 							canrotate ) 
 						{	
-							mech.MAB_Accelerate(circling ? throttle_max*0.8 : throttle_max, true);
+							mech.MAB_Accelerate(circling ? throttle_max*0.7 : throttle_max, true);
 						}
 					}
 					else if(tdistm < tOptimal)

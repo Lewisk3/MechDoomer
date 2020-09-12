@@ -572,6 +572,7 @@ class MechDoomerEvents : EventHandler
 			if(netcmds[0] == "createmech")
 			{
 				class<Mechwarrior> type = netcmds[1];
+				bool friend = netcmds.Size() > 2 ? netcmds[2].toInt() : 0;
 				if(!type)
 				{
 					console.printf("Unknown mech type: %s", netcmds[1]);
@@ -589,6 +590,7 @@ class MechDoomerEvents : EventHandler
 					if(ai) 
 					{
 						ai.mech = mechact;
+						ai.bFRIENDLY = friend;
 						mechact.AICore = ai;
 					}
 				}

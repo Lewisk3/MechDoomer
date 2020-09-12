@@ -19,7 +19,7 @@ void DestroyWeapon(Mechbase_Weapon weap)
 {
 	removeWeapon(weap);
 	normalizeWeaponsID(1);
-	Cockpit_Alert("\c[DARKRED]Weapon destroyed! ".. weap.displayName, true);
+	Cockpit_Alert("\c[DARKRED]Weapon destroyed! ".. weap.displayName, 6.0);
 	mechsounds.pushSound("Mech/Betty/WeaponDestroyed");
 }
 

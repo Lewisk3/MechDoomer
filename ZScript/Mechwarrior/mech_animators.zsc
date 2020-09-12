@@ -218,9 +218,7 @@ class MechExchange_Animator : Powerup
 		{
 			mech.screen_fade = 0;
 			mech.RemoveInventory(self);
-			mech.doShutdown = true;
-			mech.forceshutdown = false;
-			mech.manualshutdown = false;
+			mech.powerup_setup(false, true);
 			GoAwayAndDie();
 		}
 		super.DoEffect();

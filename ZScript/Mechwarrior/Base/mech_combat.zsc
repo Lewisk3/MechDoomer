@@ -86,9 +86,7 @@ void ProcessDeath(Actor killer)
 	}
 	
 	isdead = true;
-	mech_shutdown = true; 
-	manualshutdown = false;
-	forceshutdown = true;
+	shutdown_setup(false, true, true);
 }
 
 // Main
