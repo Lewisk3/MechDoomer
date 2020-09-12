@@ -177,6 +177,8 @@ $volume Mech/Target/Get 0.5
 $volume Mech/Target/Lock 0.5
 
 // MechWarrior - plr sounds
+
+$playersound            MechWarrior	other	*usefail	WEAPBUSY
 $playersound            MechWarrior	other	*land		MLAND
 $playersound            MechWarrior	other	*grunt		MLAND
 $playersound            MechWarrior	other	*pain25		MPAINLW
@@ -189,6 +191,7 @@ $playersound            MechWarrior	other	*wimpydeath  MDEDWIM
 $playersound            MechWarrior	other	*death  	 MDED
 $playersound            MechWarrior	other	*xdeath 	 MDEDWOW
 
+$playersound            MechWarrior	female	*usefail	WEAPBUSY
 $playersound            MechWarrior	female	*land		MLAND
 $playersound            MechWarrior	female	*grunt		MLAND
 $playersound            MechWarrior	female	*pain25		MPAINLW
@@ -201,6 +204,7 @@ $playersound            MechWarrior	female	*wimpydeath  MDEDWIM
 $playersound            MechWarrior	female	*death  	 MDED
 $playersound            MechWarrior	female	*xdeath 	 MDEDWOW
 
+$playersound            MechWarrior	male	*usefail	WEAPBUSY
 $playersound            MechWarrior	male	*land		MLAND
 $playersound            MechWarrior	male	*grunt		MLAND
 $playersound            MechWarrior	male	*pain25		MPAINLW
