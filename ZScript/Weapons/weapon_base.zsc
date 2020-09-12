@@ -127,6 +127,20 @@ class Mechbase_Actor : FastProjectile
 	{
 		heatgen=val;
 	}
+	
+	void ExplodeEx(double pow, double dist, bool damagemechs=false)
+	{
+		let it = ThinkerIterator.Create("Actor");
+		Actor act;
+		while(act = Actor(it.Next()))
+		{
+			double todist = Distance3DSquared(act);
+			double dmgfalloff = pow * (1. - (1./(todist - (dist*dist))));
+			if(todist > dist*dist) continue; 
+			if( (act is "Mechwarrior" || act is "MechHitbox") && !damagemechs) continue;
+			act.DamageMobJ(self, mechplayer, dmgfalloff, "Explosive", 0, angle); 
+		}
+	}
 }
 
 class Mechbase_Weapon : Item_NoPickup
@@ -596,7 +610,7 @@ class MechMissile : Mechbase_Actor
 			{ 
 				if(inrange) 
 				{
-					A_Explode(damage/2,256,0); 
+					ExplodeEx(basedamage*2,128,0); 
 					let expl = Spawn("MissileExplosion",pos);
 					if(expl) expl.A_SetScale(explosionscale,explosionscale);
 				}
@@ -928,6 +942,15 @@ class PPCBall : Mechbase_Actor
 		super.BeginPlay();
 	}
 
+	override int SpecialMissileHit(Actor victim)
+	{
+		if(!(victim is "MechHitbox") && !(victim is "Mechwarrior"))
+		{
+			A_Explode(128,256);
+		}
+		return super.SpecialMissileHit(victim);
+	}
+
 	override void tick()
 	{
 		Converge();
@@ -1025,7 +1048,7 @@ class GaussBall : Mechbase_Actor
 		Speed 30;
 		Projectile;
 	}
-
+	
 	States
 	{
 		Spawn:
