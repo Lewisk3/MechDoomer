@@ -55,7 +55,18 @@ class Mechbase_Actor : FastProjectile
 		double spd = (!mechplayer.player || mechplayer.checkAI()) ? 0.08*spdfac : CVar.GetCVar("mwd_converge_speed", controlplr).getFloat()*spdfac;
 		if(mechplayer && spd > 0)
 		{
-			double truespd = vel.length()*spd;
+			// Find distance to aim
+			FLineTraceData lt;
+			mechplayer.LineTrace( mechplayer.angle, 1000 * MWGAMEPLAY_UNITMETER, 
+								  mechplayer.pitch, TRF_SOLIDACTORS, 
+								  mechplayer.viewheight, 80,0, lt     );
+			double aimdist = lt.Distance;
+			aimdist = clamp(aimdist, 1, 256*256);
+			double facedist = 20 * MWGAMEPLAY_UNITMETER;
+			double distspd = (facedist/aimdist) * 0.24;
+			double truespd = vel.length()*clamp(distspd, 0, spd);
+			
+			// Converge onto aim
 			vector3 npos = Vec3Offset(-vel.x,-vel.y,-vel.z);
 			vector3 tpos = mechplayer.pos;
 			tpos.z += mechplayer.player ? (mechplayer.viewheight*mechplayer.player.crouchfactor) : mechplayer.viewheight;

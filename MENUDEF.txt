@@ -87,9 +87,9 @@ OptionMenu "MechDoomerMenu"
 	StaticText "with an FOV of 90 in mind, so they might look odd.", "Black"
 	StaticText " "
 	Slider "Weapon convergence speed", "mwd_converge_speed", 0.00, 0.3, 0.01, 2
-	StaticText "Adjust the speed weapons converge to", "Black"
-	StaticText "point of aim when fired", "Black"
-	StaticText "Defaults to 0.15", "Black"
+	StaticText "Adjust the maximum speed weapons", "Black"
+	StaticText "convert at point of aim when fired", "Black"
+	StaticText "Defaults to 0.3", "Black"
 	StaticText " "
 	
 	Option "Enable throttle decay", "mwd_throttledecay", "YesNo"
