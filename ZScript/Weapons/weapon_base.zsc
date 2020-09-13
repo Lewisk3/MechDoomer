@@ -357,7 +357,7 @@ class Mechbase_Weapon : Item_NoPickup
 			let weap = Mechbase_Actor(Spawn(type,lpos));
 			if(weap)
 			{
-				plr.A_AlertMonsters(1024);
+				plr.A_AlertMonsters();
 				invoker.cooldown_timer = invoker.cooldown*35.0;
 				weap.target = invoker.Owner;
 				weap.mechplayer = MechWarrior(invoker.Owner);
@@ -506,6 +506,19 @@ class MechMissile : Mechbase_Actor
 		Height 2;
 		Projectile;
 		MechMissile.ExplosionScale 1.0;
+	}
+	
+	override int SpecialMissileHit(Actor victim)
+	{
+		if( !(victim is "Mechwarrior" || victim is "MechHitbox") )
+		{
+			if(!inrange)
+			{
+				victim.Thrust(basedamage*2 * MDMath.GetInertia(victim.mass), angle);
+				ExplodeEx(64,64);
+			}
+		}
+		return super.SpecialMissileHit(victim);
 	}
 	
 	override void PostBeginPlay()
@@ -953,15 +966,6 @@ class PPCBall : Mechbase_Actor
 		super.BeginPlay();
 	}
 
-	override int SpecialMissileHit(Actor victim)
-	{
-		if(!(victim is "MechHitbox") && !(victim is "Mechwarrior"))
-		{
-			A_Explode(128,256);
-		}
-		return super.SpecialMissileHit(victim);
-	}
-
 	override void tick()
 	{
 		Converge();
@@ -994,7 +998,7 @@ class PPCBall : Mechbase_Actor
 			MPPC A 1;
 			TNT1 A 5 
 			{
-				// /A_Explode();
+				ExplodeEx(128,128);
 				Spawn("PPCExplosion",pos);
 			}
 			TNT1 A 0 
