@@ -374,12 +374,12 @@ class MechArmsBase : MechPartsBase
 			vector3 vpc = (
 				-(cos_angle*pitchcorrect),
 				-(sin_angle*pitchcorrect),
-				(sin_angle*pitchcorrect*0.1)
+				(pitchcorrect*0.5)
 			);
 			vector3 bpo = (
 				(cos(angle+90)*rollcorrect),
 				(sin(angle+90)*rollcorrect),
-				(zoffs+mzoffs*sin(pitch))
+				(zoffs+mzoffs)
 			);
 			bpo += vpc;
 			basepos = mechowner.Vec3Offset(bpo.x, bpo.y, bpo.z);

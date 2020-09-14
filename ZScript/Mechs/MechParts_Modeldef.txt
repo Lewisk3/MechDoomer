@@ -442,10 +442,22 @@ Model Torso_MadDog
 	
    FrameIndex TRSO A 0 0
 }
-Model Arms_MadDog
+Model LeftArm_MadDog
 {
 	Path "models/Mechs"
-	Model 0 "MadDog/md_arms.md3"
+	Model 0 "MadDog/md_leftarm.md3"
+	SurfaceSkin 0 0 "MadDog/md_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_MadDog
+{
+	Path "models/Mechs"
+	Model 0 "MadDog/md_rightarm.md3"
 	SurfaceSkin 0 0 "MadDog/md_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
@@ -632,10 +644,22 @@ Model Torso_Marauder
 	
    FrameIndex TRSO A 0 0
 }
-Model Arms_Marauder
+Model LeftArm_Marauder
 {
 	Path "models/Mechs"
-	Model 0 "Marauder/mr_arms.md3"
+	Model 0 "Marauder/mr_leftarm.md3"
+	SurfaceSkin 0 0 "Marauder/mr_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Marauder
+{
+	Path "models/Mechs"
+	Model 0 "Marauder/mr_rightarm.md3"
 	SurfaceSkin 0 0 "Marauder/mr_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
@@ -758,10 +782,10 @@ Model Torso_Warhawk
 	
    FrameIndex TRSO A 0 0
 }
-Model Arms_Warhawk
+Model LeftArm_Warhawk
 {
 	Path "models/Mechs"
-	Model 0 "Warhawk/wk_arms.md3"
+	Model 0 "Warhawk/wk_leftarm.md3"
 	SurfaceSkin 0 0 "Warhawk/wk_full.png"
 	SurfaceSkin 0 1 "c_glass.png"
 	Scale 1.0 1.0 1.0
@@ -770,6 +794,19 @@ Model Arms_Warhawk
 	
    FrameIndex MODL A 0 0
 }
+Model RightArm_Warhawk
+{
+	Path "models/Mechs"
+	Model 0 "Warhawk/wk_rightarm.md3"
+	SurfaceSkin 0 0 "Warhawk/wk_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+
 Model Hips_Warhawk
 {
 	Path "models/Mechs/Warhawk"

@@ -63,8 +63,8 @@ class Mechbase_Actor : FastProjectile
 			double aimdist = lt.Distance;
 			aimdist = clamp(aimdist, 1, 256*256);
 			double facedist = 20 * MWGAMEPLAY_UNITMETER;
-			double distspd = (facedist/aimdist) * 0.24;
-			double truespd = vel.length()*clamp(distspd, 0, spd);
+			double distspd = (facedist/aimdist) * 0.4;
+			double truespd = vel.length()*clamp(distspd, 0.08, spd*1.25);
 			
 			// Converge onto aim
 			vector3 npos = Vec3Offset(-vel.x,-vel.y,-vel.z);
