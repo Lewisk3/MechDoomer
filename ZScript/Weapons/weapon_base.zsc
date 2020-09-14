@@ -62,7 +62,7 @@ class Mechbase_Actor : FastProjectile
 								  mechplayer.viewheight, 80,0, lt     );
 			double aimdist = lt.Distance;
 			aimdist = clamp(aimdist, 1, 256*256);
-			double facedist = 20 * MWGAMEPLAY_UNITMETER;
+			double facedist = 45 * MWGAMEPLAY_UNITMETER;
 			double distspd = (facedist/aimdist) * 0.4;
 			double truespd = vel.length()*clamp(distspd, 0.08, spd*1.25);
 			
@@ -94,8 +94,13 @@ class Mechbase_Actor : FastProjectile
 			double damagefinal =  is_battlearmor ? ceil(truedamage*MWGAMEPLAY_BADMGSCALE) : truedamage;
 			if(!cosmetic)
 			{
-				if(!(victim is "MechHitBox")) damagefinal *= MWGAMEPLAY_WEAPDMGSCALE;
-				victim.DamageMobJ(self,mechplayer,damagefinal,damagetype,0,mechplayer.angle);
+				if(!(victim is "MechHitBox")) 
+				{
+					damagefinal *= MWGAMEPLAY_WEAPDMGSCALE;
+					victim.DamageMobJ(self,mechplayer,damagefinal,damagetype,0,mechplayer.angle);
+				}
+				else
+					MechHitBox(victim).DamageMech(self, mechplayer, truedamage, angle); 
 			}
 			SetState(ResolveState("Death"));
 			return 0;
@@ -170,6 +175,7 @@ class Mechbase_Weapon : Item_NoPickup
 	int volley_inital;
 	double volley_xspread;
 	double volley_yspread;
+	double lockonspeed;
 	bool volley_cosmetic;
 	int hardslots;
 	double weight;
@@ -207,6 +213,7 @@ class Mechbase_Weapon : Item_NoPickup
 	Property AmmoUse : ammouse;
 	Property CValue : worth;
 	Property IsHommingMissile : isHomming;
+	Property LockingSpeed : lockonspeed;
 	Property WeaponDelay : delay;
 	Property AttackSound : atksnd;
 	Property ClassicAttackSound : DOS_atksnd;
@@ -527,7 +534,7 @@ class MechMissile : Mechbase_Actor
 		if(mechplayer && mechplayer.targetlocked) tracer = mechplayer.targetenemy;
 		if(homming)
 		{
-			homspread = (frandom(-25,25),frandom(-25,25));
+			homspread = (frandom(-40,40),frandom(-40,40));
 		}
 		if(minimum_range > 0) 
 		{
@@ -595,7 +602,7 @@ class MechMissile : Mechbase_Actor
 			// Not seeking.
 			TNT1 A 0 
 			{
-				A_SetPitch(pitch + 1.2*(getTravelDistance()/maximum_range), SPF_INTERPOLATE);
+				A_SetPitch(pitch + 0.6*(getTravelDistance()/maximum_range), SPF_INTERPOLATE);
 				vel = (
 					cos(angle)*cos(pitch),
 					sin(angle)*cos(pitch),
@@ -998,7 +1005,7 @@ class PPCBall : Mechbase_Actor
 			MPPC A 1;
 			TNT1 A 5 
 			{
-				ExplodeEx(128,128);
+				ExplodeEx(64,128);
 				Spawn("PPCExplosion",pos);
 			}
 			TNT1 A 0 
@@ -1102,7 +1109,7 @@ class AutocannonBall : Mechbase_Actor
 		Height 5;
 		Projectile;
 		AutocannonBall.ClusterMode false, 0;
-		Mechbase_Actor.Gravity 1.0;
+		// Mechbase_Actor.Gravity 1.0;
 	}
 
 	States

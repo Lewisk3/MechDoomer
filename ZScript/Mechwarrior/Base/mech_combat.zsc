@@ -101,7 +101,8 @@ void mech_weapons()
 	// Process Heat levels and struct functionality.
 	deltaHeat = HeatLevel-prevheat;
 	process_antimissilesystem();
-	// Targetting systems
+	
+	// Targetting systems for AI
 	process_targeting();
 		
 	Mech_HasJets = (countStruct("JumpJet") > 0);
@@ -322,12 +323,22 @@ void mech_weapons()
 	}
 }
 
-// Homing weapons
+// Homing weapons for AI
 void process_targeting()
 {
+	let curweap = getSelectedWeapon();
 	bool HasActiveHoming = FindHomingWeapon(true);
 	bool target_inview = false;
-	if(targetenemy is "NavPoint") return;
+	if(targetenemy is "NavPoint" || !curweap) return;
+	double lockspd = checkAI() ? 2.4 : curweap.lockonspeed;
+	
+	if(!checkAI() && curweap && !curweap.isHomming)
+	{
+		// Discard lock if we're not a homing weapon and we've just been selected.
+		locktimer = 0;
+		targetlocked = false;
+		return;
+	}
 	
 	if(HasActiveHoming && targetenemy)
 	{
@@ -348,7 +359,7 @@ void process_targeting()
 		if(target_inview)
 		{
 			if(locktimer == 0) A_StartLocalSound("Mech/Target/BeginLock",CHAN_WEAPON, CHANF_OVERLAP);
-			if(locktimer < 100) locktimer += 2.4;
+			if(locktimer < 100) locktimer += lockspd;
 			if(locktimer > 90 && !targetlocked) 
 			{
 				targetlocked = true;
@@ -358,13 +369,13 @@ void process_targeting()
 		}
 		else
 		{
-			if(locktimer > 0) locktimer -= 2.4*2;
+			if(locktimer > 0) locktimer -= lockspd*2;
 		}
 	}
 	else
 	{
 		// Deplete lock under conditions.
-		if(locktimer > 0) locktimer -= 2.4*2;
+		if(locktimer > 0) locktimer -= lockspd*2;
 	}
 	
 	if(locktimer < 100) targetlocked = false;				

@@ -530,7 +530,7 @@ void Bobbing() {
 	if(!player || !player.mo || player.mo != self || checkAI()) return;
 	
 	double tiltosc_amp =  10 + (vel.Length()/4);
-	double steposc_amp =  15 + (vel.Length()/2);
+	double steposc_amp =  5 + (vel.Length()/2);
 	tiltosc_amp = clamp(tiltosc_amp,0,18);
 	steposc_amp = clamp(steposc_amp,0,24);
 	TiltOsc += tiltosc_amp;
@@ -557,7 +557,7 @@ void Bobbing() {
 		StepOffset  = sin(StepOsc);
 		StepOffset *= (vel/2) + (LegVel*2);
 		StepOffset *= (1.78 + ((mech_tonnage)/100));
-		StepOffset *= 0.54;
+		StepOffset *= 0.54; // 0.54
 		if(defaultmovement) StepOffset *= 0.7;
 		StepOffset *= CrouchMulti;
 	}

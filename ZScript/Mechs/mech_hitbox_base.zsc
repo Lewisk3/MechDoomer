@@ -10,6 +10,7 @@ class MechHitbox : Actor
 		+SHOOTABLE;
 		+NOGRAVITY;
 		+NOBLOOD;
+		+NORADIUSDMG;
 		Radius 5;
 		Height 5;
 	}
@@ -32,26 +33,33 @@ class MechHitbox : Actor
 	 
 	override int DamageMobJ(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
 	{
+		if( (source is "Mechbase_Weapon") || (inflictor is "Mechbase_Weapon") ) return 0;
+		DamageMech(inflictor, source, damage, angle);
+		return 0;
+	}
+	
+	// Custom damage routine which will handle non-int damage.
+	virtual void DamageMech(Actor inflictor, Actor source, double damage, double angle)
+	{
 		// Damage fail conditions.
 		if(!mech || mech.checkVoodoo() || !mounted_hp || Mechwarrior(inflictor) == mech || Mechwarrior(source) == mech || damage == 0) 
-			return 0;
+			return;
 		
 		// Take no damage directly, instead redirect to hardpoint.
 		Actor damager = inflictor;
 		let mechweap = Mechbase_Actor(inflictor);
-		if(mod == "hitscan") damager = source;
 		double realdamage = mechweap ? mechweap.truedamage : damage;
 		bool mechdmg = (inflictor is "Mechwarrior") || (source is "Mechwarrior");
 		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
 		
 		// Take a bit less damage from AI
-		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.3;
+		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.4;
 		
 		// Take TT damage if we are AI
-		if(mech.checkAI()) newdmg = realdamage*0.5;
+		if(mech.checkAI()) newdmg = realdamage*0.8;
 		
 		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
-		return 0;
+		return;
 	}
 	
 	bool CheckTorsoMount()

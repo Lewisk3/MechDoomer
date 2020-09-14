@@ -147,12 +147,12 @@ void MAB_Common()
 	
 		double curspd = MoveSpeedKPH*move_throttle;
 		double turnmod = clamp(1.0/(mech_tonnage/100), 0.5, 2);
-		double spdmod = 1.0 - (abs(curspd)/2)*0.007;	
+		double spdmod = 1.0 - (abs(curspd)/2)*0.010;	
 		
 		// If we're in the air we can move our legs freely of friction.
 		double finalmod = ((player && player.onground) ? turnmod*spdmod : 2);
 		finalmod = clamp(finalmod, 0.15, 2);
-		if((!player || checkAI()) || !CVar.GetCVar("mwd_relativelegspeed",player).getBool()) 
+		if(player && !CVar.GetCVar("mwd_relativelegspeed",player).getBool()) 
 			finalmod = clamp(finalmod, turnmod*LegSpeed, 2);
 		
 		// Leg Delta gets how much the leg angle changed between movement.

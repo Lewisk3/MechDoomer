@@ -82,7 +82,7 @@ class MechAI_Controller : Actor
 	virtual void A_ShootSimple()
 	{
 		Array<Mechbase_Weapon> usableweaps;
-		mech.GetOptimalWeapons(tdistm, usableweaps, true, clamp(wclass-1, 1, 2), 0.20 + (0.4 * aggro));
+		mech.GetOptimalWeapons(tdistm, usableweaps, true, clamp(wclass-1, 1, 2), 0.20 + (0.25 * aggro));
 	}
 	
 	int CountWeapons()
@@ -421,8 +421,8 @@ class MechAI_Controller : Actor
 		
 		// If not all minimum range weapons, reduce engagement to optimum
 		// for weight class.
-		if(range_min == 0) range_min = 70 - (10*wclass);
-		if(range_optimal <= 0) range_optimal = range_min*1.35;
+		if(range_min == 0) range_min = 90 - (10*wclass);
+		if(range_optimal <= 0) range_optimal = range_min*1.25;
 		
 		
 		// Process valid target
