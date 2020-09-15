@@ -384,6 +384,7 @@ override void tick()
 {			
 	if(checkVoodoo()) 
 	{
+		MaxStepHeight = 24;
 		super.Tick();
 		return;
 	}

@@ -112,7 +112,7 @@ void mech_weapons()
 	if(waterlevel > 0) HeatEfficiency *= 2;
 	if(HeatLevel > 0) HeatLevel -= HeatEfficiency;
 	if(HeatLevel < 0) HeatLevel = 0; 
-	if(HeatLevel > MWHEAT_MAX*0.53) DamageMobj(self,null,frandom(24,36),"overheating",DMG_NO_ARMOR | DMG_NO_FACTOR);
+	if(HeatLevel > MWHEAT_MAX*0.53) DamageMobj(self,null,random(4,8),"overheating",DMG_NO_ARMOR | DMG_NO_FACTOR);
 	if(HeatLevel <= MWHEAT_MAX*0.15) heatwarn = false;
 	if(HeatLevel > MWHEAT_MAX*0.275 && !heatwarn)
 	{
