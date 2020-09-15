@@ -226,6 +226,60 @@ class MechExchange_Animator : Powerup
 }
 
 // General Animators
+class FallAnimator : MechAnimator
+{
+	double force;
+	int atime;
+	int timer;
+	int wait_timer;
+	Default
+	{
+		MechAnimator.FadeAnimate "FF FF FF", -1, 0; // Disable fade animations
+		MechAnimator.DelayFadeout 0, 0;
+		MechAnimator.Quake 0, 0,0,0, 0,0,0;
+		MechAnimator.Persists true;
+	}
+	
+	static FallAnimator Animate(MechwarriorBase mech, double force, int atime = 30)
+	{
+		mech.GiveLocalInv("FallAnimator");
+		let anim = FallAnimator(mech.FindInventory("FallAnimator"));
+		if(anim)
+		{
+			anim.force = force;
+			anim.atime = atime;
+		}
+		return anim;
+	}
+	
+	override void DoEffect()
+	{
+		super.DoEffect();
+		if(!mech) return;
+		
+		double topitch = force*sin(dir);
+		Actor cockpit = mech;
+		if(mech.models_reference) 
+		{
+			cockpit = mech.models_reference.cockpit.cockpitcam;
+			let cmodel = mech.models_reference.cockpit;
+			cmodel.A_SetPitch(MDMath.Lerp(cmodel.pitch, -cmodel.pitch+topitch, 0.1), SPF_INTERPOLATE);
+		}
+		cockpit.A_SetPitch(MDMath.Lerp(cockpit.pitch, cockpit.pitch+topitch, 0.25), SPF_INTERPOLATE);
+			
+		if(timer > atime && abs(force) <= 1) 
+		{
+			mech.RemoveInventory(self);
+			GoAwayAndDie();
+		}
+		
+		dir += 10;
+		force *= 0.92;
+		timer++;
+	}
+}
+
+
 class DropshipAnimator : MechAnimator
 { 
 	double holdtime, groundtime;

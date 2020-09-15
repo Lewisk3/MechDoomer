@@ -440,6 +440,14 @@ override void tick()
 		return;
 	}
 	
+	// Falling animation
+	vector3 nextpos = Vec3Offset(0,0, vel.z);
+	if(!player.onground && nextpos.z <= floorz && vel.z != 0 && models_reference)
+	{
+		let cockpit = models_reference.cockpit;
+		FallAnimator.Animate(self, -(vel.z*4.));
+	}
+	
 	// Process FOV
 	if( (GetPlayerInput(0) & BT_ZOOM) )
 	{
