@@ -99,7 +99,7 @@ void mech_weapons()
 	HeatEfficiency = inv_context.heateff+baseHeatEfficiency+HSinkEff;
 
 	// Process Heat levels and struct functionality.
-	deltaHeat = HeatLevel-prevheat;
+	deltaHeat = MDMath.Lerp(deltaHeat, HeatLevel-prevheat, 0.5);
 	process_antimissilesystem();
 	
 	// Targetting systems for AI
@@ -147,7 +147,7 @@ void mech_weapons()
 	if(selectedWeapon > inv_context.weapons_count)selectedWeapon = 1;
 	if(selectedGroup > 4)selectedGroup = 1;
 	
-	prevheat = HeatLevel;
+	if(!(level.maptime%8)) prevheat = HeatLevel;
 	ticks++;
 	
 	// Return if invalid.

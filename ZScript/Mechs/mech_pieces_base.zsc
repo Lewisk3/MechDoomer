@@ -127,6 +127,7 @@ class MechPartsBase : Actor
 		+INTERPOLATEANGLES
 		+NOGRAVITY;
 		+DONTTHRUST;
+		+NORADIUSDMG;
 		MechPartsBase.ZOffset 0;
 		MechPartsBase.CockpitOffset 0, 60;
 	}

@@ -84,6 +84,7 @@ class Legs_Hunchback   : Legs_Smooth {}
 class Legs_Centurion   : Legs_Smooth {} 
 
 // Arms
+class Arm_Invisible 	   : MechArmsBase {}
 class LeftArm_Jenner       : MechArmsBase {}
 class RightArm_Jenner      : MechArmsBase {}
 class LeftArm_Warhammer    : MechArmsBase {}
@@ -145,8 +146,10 @@ class Model_BattleArmor : MechTorsoBase
 // Light
 class Torso_Commando : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Commando", "Legs_Commando", "Cockpit_Commando", "", "";
+		MechTorsoBase.Pieces "Hips_Commando", "Legs_Commando", "Cockpit_Commando", "LeftArm_Commando", "RightArm_Commando";
 		MechPartsBase.ZOffset 40;
+		MechTorsoBase.ArmsHeight 50;
+		MechTorsoBase.ArmsRollPitchMod 0.25, 0;
 		MechPartsBase.CockpitOffset 0, 70;
 		MechTorsoBase.CockpitRange 0.6, 0.4, 1.0;
 		MechTorsoBase.TwistSpeed 0.25;
@@ -154,8 +157,10 @@ class Torso_Commando : MechTorsoBase {
 }
 class Torso_Urbanmech : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Urbanmech", "Legs_Urbanmech", "Cockpit_Urbanmech", "", "";
+		MechTorsoBase.Pieces "Hips_Urbanmech", "Legs_Urbanmech", "Cockpit_Urbanmech", "RightArm_Urbanmech", "LeftArm_Urbanmech";
 		MechPartsBase.ZOffset 35;
+		MechTorsoBase.ArmsHeight 55;
+		//MechTorsoBase.ArmsRollPitchMod 0.25, 0;
 		MechTorsoBase.CockpitRange 1.0, 0.45, 2.0;
 		MechTorsoBase.TwistSpeed 0.8;
 	}
@@ -182,8 +187,10 @@ class Torso_Tarantula : MechTorsoBase {
 }
 class Torso_Firemoth : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Firemoth", "Legs_Firemoth", "Cockpit_Firemoth", "", "";
+		MechTorsoBase.Pieces "Hips_Firemoth", "Legs_Firemoth", "Cockpit_Firemoth", "LeftArm_Firemoth", "RightArm_Firemoth";
 		MechPartsBase.ZOffset 40;
+		MechTorsoBase.ArmsHeight 55;
+		//MechTorsoBase.ArmsRollPitchMod 0.25, 0;
 		MechPartsBase.CockpitOffset 10, 50;
 		MechTorsoBase.CockpitRange 1.0, 0.25, 0.55;
 		MechTorsoBase.TwistSpeed 0.4;
@@ -191,8 +198,10 @@ class Torso_Firemoth : MechTorsoBase {
 }
 class Torso_Raven : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Raven", "Legs_Raven", "Cockpit_Raven", "", "";
+		MechTorsoBase.Pieces "Hips_Raven", "Legs_Raven", "Cockpit_Raven", "LeftArm_Raven", "Arm_Invisible";
 		MechPartsBase.ZOffset 42;
+		MechTorsoBase.ArmsHeight 62;
+		MechTorsoBase.ArmsRollPitchMod 0.25, 0;
 		MechPartsBase.CockpitOffset 20, 55;
 		MechTorsoBase.CockpitRange 1.0, 0.4, 0.8;
 		MechTorsoBase.TwistSpeed 0.35;
@@ -201,8 +210,10 @@ class Torso_Raven : MechTorsoBase {
 class Torso_Kitfox : MechTorsoBase {
 	Default {
 		MechTorsoBase.DoNotRoll true;
-		MechTorsoBase.Pieces "Hips_Kitfox", "Legs_Kitfox", "Cockpit_Kitfox", "", "";
+		MechTorsoBase.Pieces "Hips_Kitfox", "Legs_Kitfox", "Cockpit_Kitfox", "RightArm_Kitfox", "LeftArm_Kitfox";
 		MechPartsBase.ZOffset 50;
+		MechTorsoBase.ArmsHeight 64;
+		MechTorsoBase.ArmsRollPitchMod 0.25, 0;
 		MechPartsBase.CockpitOffset 5, 57;
 		MechTorsoBase.CockpitRange 0.2, 0.4, 0.35;
 		MechTorsoBase.TwistSpeed 0.3;

@@ -16,29 +16,13 @@ struct MechMsg
 class MechStatusBar : BaseStatusBar
 {
 	Mechwarrior mechplr;
-	HUDFont mHUDFont;
 	Actor prevtarg;
-	int tAlign;
-	TextureID compass;
+	
 	bool invalid;
+	HUDFont mHUDFont;
+	TextureID compass;
 	double compassoffs;
 	double compassdir;
-	int hpcounter;
-	int scrwidth;
-	int scrheight;
-	bool inHUDLoadout;
-	Vector2 loadm_base;
-	int loadm_selected;
-	int loadm_invselected;
-	int loadm_weapselected;
-	int struc_invselected;
-	int struc_weapselected;
-	Mechbase_Weapon loadout_weapon;
-	bool infomode;
-	int internalcash;
-	int cashcounter;
-	String loadout_invweapon;
-	int invoffset;
 	FadingText dCash;
 	vector2 font_scale;
 	
@@ -46,11 +30,11 @@ class MechStatusBar : BaseStatusBar
 	uint power_animflags;
 	bool power_animating;
 	
-	// Scalar constant
-	double defwidth;
-	double defheight;
-	double hud_xoffs;
-	double hud_yoffs;
+	// Interpolated values
+	double curDeltaHeat;
+	double curHeat;
+	int hpcounter;
+	int cashcounter;
 	
 	// Counters
 	double tAnim_radar;
@@ -111,17 +95,11 @@ class MechStatusBar : BaseStatusBar
 	override void Init()
 	{
 		Super.Init();
-		defwidth = 1920;
-		defheight = 1080;
-		hud_xoffs = 800;
-		hud_yoffs = 860;
 		SetSize(0, 320, 200);
 		font_scale = (0.5, 0.5);
 		compassoffs = 0;
 		compassdir = 1;
 		compass = TexMan.CheckForTexture("MBEARING",TexMan.TYPE_ANY);
-		tAlign = DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_BOTTOM;
-		internalcash = -1; 
 		
 		// Create the font used for the fullscreen HUD
 		fnt = "MechFont";
@@ -481,6 +459,10 @@ class MechStatusBar : BaseStatusBar
 			uint strcol = 0xFF00D300;
 			vector2 strsz = (1.5, 1.3);
 			
+			curDeltaHeat = MDMath.Lerp(curDeltaHeat, mech.deltaHeat, 0.25*deltatime);
+			curHeat = MDMath.Lerp(curHeat, mech.HeatLevel, 0.25*deltatime);
+			if(abs(curHeat - mech.HeatLevel) <= 0.05) curHeat = mech.HeatLevel;
+						
 			if(!mech.defaultmovement)
 			{
 				H_DrawString(
@@ -519,23 +501,23 @@ class MechStatusBar : BaseStatusBar
 			H_Fill(Color(255,206,206,0),heatpos.x-147,heatpos.y,290,20, MD_SBS.SS_SCREEN_CENTER);
 			double heatmid = MWHEAT_MAX*0.25;
 			double sizemul = (200/MWHEAT_MAX)*3;
-			if(mech.HeatLevel > heatmid)
+			if(curHeat > heatmid)
 			{
-				double hmin = clamp(mech.HeatLevel-heatmid,0,heatmid);
-				double hmax = clamp(-(mech.HeatLevel-heatmid),-heatmid,0);
+				double hmin = clamp(curHeat-heatmid,0,heatmid);
+				double hmax = clamp(-(curHeat-heatmid),-heatmid,0);
 				H_Fill(Color(255,255,0,0),heatpos.x,heatpos.y,hmin*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
 				H_Fill(Color(255,255,0,0),heatpos.x,heatpos.y,hmax*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
 			}
 			else
 			{
-				double hmin = clamp(mech.HeatLevel,0,heatmid);
-				double hmax = clamp(-(mech.HeatLevel),-heatmid,0);
+				double hmin = clamp(curHeat,0,heatmid);
+				double hmax = clamp(-curHeat,-heatmid,0);
 				H_Fill(Color(255,2,30,216),heatpos.x,heatpos.y,143-(hmin)*sizemul,20, MD_SBS.SS_SCREEN_CENTER);
 				H_Fill(Color(255,2,30,216),heatpos.x,heatpos.y,-(148+((hmax)*sizemul)),20, MD_SBS.SS_SCREEN_CENTER);
 			}
 			H_DrawString("dH/dT",(deltapos.x-127,deltapos.y+30),MD_SBS.SS_SCREEN_CENTER, scale:strsz, tint:strcol);
 			H_Fill(Color(255,206,206,0),deltapos.x-128,deltapos.y,125,20, MD_SBS.SS_SCREEN_CENTER);
-			double hmax = clamp(-(mech.deltaHeat),-heatmid,0);
+			double hmax = clamp(-(curDeltaHeat),-heatmid,0);
 			H_Fill(Color(255,2,30,216),deltapos.x,deltapos.y,-(130+((hmax)*sizemul)),20, MD_SBS.SS_SCREEN_CENTER);
 			
 		}
@@ -765,10 +747,8 @@ class MechStatusBar : BaseStatusBar
 					}
 					H_Fill(Color(255,0,0,0), 80, 970, 242, 16, 0);
 					H_Fill( Color(255,0,173,0), 80, 970,
-							percenthealth*242, 16, 0     );						
-					String percenthp = percenthealth*100 .. "";
-					percenthp.truncate(percenthp.Length()-6);
-					H_DrawString(percenthp .. "%" ,(170,970));
+							clamp(percenthealth, 0, 1)*242, 16, 0     );						
+					H_DrawString(String.Format("%d", percenthealth*100),(170,970));
 				}
 				if(targetMechBase && targetMechBase.mech)
 				{

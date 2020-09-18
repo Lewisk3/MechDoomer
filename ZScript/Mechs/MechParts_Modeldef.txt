@@ -29,6 +29,28 @@ Model Torso_Commando
 	
    FrameIndex TRSO A 0 0
 }
+Model LeftArm_Commando
+{
+	Path "models/Mechs"
+	Model 0 "Commando/cm_leftarm.md3"
+	SurfaceSkin 0 0 "Commando/cm_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Commando
+{
+	Path "models/Mechs"
+	Model 0 "Commando/cm_rightarm.md3"
+	SurfaceSkin 0 0 "Commando/cm_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 Model Hips_Commando
 {
 	Path "models/Mechs/Commando"
@@ -264,15 +286,39 @@ Model Hips_Urbanmech
 	
    FrameIndex MODL A 0 0
 }
+Model LeftArm_Urbanmech
+{
+	Path "models/Mechs"
+	Model 0 "Urbanmech/ur_leftarm.md3"
+	Skin 0 "Urbanmech/ur_full.png"
+	Scale 1.0 -1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Urbanmech
+{
+	Path "models/Mechs"
+	Model 0 "Urbanmech/ur_rightarm.md3"
+	Skin 0 "Urbanmech/ur_full.png"
+	Scale 1.0 -1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 Model Cockpit_Urbanmech
 {
 	Path "models/Mechs/Urbanmech"
 	Model 0 "ur_head.md3"
-	Model 1 "ur_weaps.md3"
+	//Model 1 "ur_weaps.md3"
 	Scale 0.20 -0.20 0.17
 	Skin 0 "ur_head.png" // Main
-	Path "models/Mechs"
-	Skin 1 "c_dark.png"
+	//Path "models/Mechs"
+	//Skin 1 "c_dark.png"
 	USEACTORPITCH
 	USEACTORROLL 
 	AngleOffset 90
@@ -415,6 +461,28 @@ Model Hips_Firemoth
 	
    FrameIndex MODL A 0 0
 }
+Model LeftArm_Firemoth
+{
+	Path "models/Mechs/Firemoth"
+	Model 0 "fm_leftarm.md3"
+	Skin 0 "fm_full" // Main
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Firemoth
+{
+	Path "models/Mechs/Firemoth"
+	Model 0 "fm_rightarm.md3"
+	Skin 0 "fm_full" // Main
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 Model Cockpit_Firemoth
 {
 	Path "models/Mechs/"
@@ -550,6 +618,30 @@ Model Hips_Raven
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
 	USEACTORPITCH
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Raven
+{
+	Path "models/Mechs/Raven"
+	Model 0 "rv_leftarm.md3"
+	Skin 0 "rv_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Raven
+{
+	Path "models/Mechs/Raven"
+	Model 0 "rv_rightarm.md3"
+	Skin 0 "rv_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }
@@ -714,6 +806,30 @@ Model Hips_Kitfox
 	Scale 1.0 1.0 1.0
 	Offset 0 0 0
 	USEACTORPITCH
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Kitfox
+{
+	Path "models/Mechs/Kitfox"
+	Model 0 "kf_leftarm.md3"
+	Skin 0 "kf_full.png" // Main
+	Scale 1.0 -1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Kitfox
+{
+	Path "models/Mechs/Kitfox"
+	Model 0 "kf_rightarm.md3"
+	Skin 0 "kf_full.png" // Main
+	Scale 1.0 -1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }

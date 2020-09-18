@@ -1,6 +1,5 @@
 
 // Used for processing messages between UI elements.
-// Probably Hax, if it is, I'll fix it but right now it "JustWorks".
 struct HudAlert 
 {	
 	String mechlab_text;
