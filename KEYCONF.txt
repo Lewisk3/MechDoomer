@@ -1,4 +1,6 @@
 alias "shillforcomstar" "netevent iamspaceatandt 999999999"
+alias "vid_beautify" "vid_rendermode 4; gl_fxaa 3; gl_bloom 1; gl_bloom_amount 0.25; gl_ssao 3; gl_lightmode 8; gl_texture_filter 4; gl_texture_hqresizemode 6; gl_texture_hqresizemult 4"
+alias "mouse_fix" "m_noprescale 1; m_filter 1; m_yaw 1.0; m_pitch 0.5"
 alias "EJECT" "netevent \"kill mech\""
 alias +jumpjets "netevent +mwd_user5"
 alias -jumpjets "netevent -mwd_user5"

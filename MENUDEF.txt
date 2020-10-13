@@ -89,7 +89,7 @@ OptionMenu "MechDoomerMenu"
 	Slider "Weapon convergence speed", "mwd_converge_speed", 0.00, 0.3, 0.01, 2
 	StaticText "Adjust the maximum speed weapons", "Black"
 	StaticText "convert at point of aim when fired", "Black"
-	StaticText "Defaults to 0.3", "Black"
+	StaticText "Defaults to 0.15", "Black"
 	StaticText " "
 	
 	Option "Enable throttle decay", "mwd_throttledecay", "YesNo"

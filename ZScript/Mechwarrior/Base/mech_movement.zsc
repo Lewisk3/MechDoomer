@@ -284,7 +284,7 @@ void mech_movement()
 	
 	// Process common control logic.
 	MAB_Common();
-	if(!player || checkAI()) return;
+	if(!player || checkAI() || checkVoodoo()) return;
 	
 	// Leg Movement
 	if(!defaultmovement)
@@ -382,7 +382,7 @@ void mech_movement()
 	
 	// Jump Jets, Zoom and Override
 	bool jets = (GetPlayerInput(INPUT_BUTTONS) & BT_JUMP) || btn_jumpjets;
-	if(jets && Mech_HasJets && mech_jetsfuel > 0)
+	if(jets && Mech_HasJets && mech_jetsfuel > 0 && !mech_shutdown)
 	{
 		class<JumpJet> jj = "JumpJet";
 		double w = CheckCompensative() ? inv_context.weapons_tonnage : mech_tonnage;
@@ -395,6 +395,7 @@ void mech_movement()
 		
 		// Apply velocity
 		double jetpitch = 45;
+		if(defaultmovement) zthrust *= 0.25;
 		vel += (
 			cos(LegAng)*cos(jetpitch)*(zthrust*5), 
 			sin(LegAng)*cos(jetpitch)*(zthrust*5), 

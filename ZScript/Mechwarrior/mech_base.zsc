@@ -106,6 +106,9 @@ class mw_InvInfo : Item_NoPickup
 	
 	Default
 	{
+		+INVENTORY.UNDROPPABLE;
+		+INVENTORY.UNTOSSABLE;
+		+INVENTORY.PERSISTENTPOWER;
 		inventory.maxamount 1;
 	}
 }

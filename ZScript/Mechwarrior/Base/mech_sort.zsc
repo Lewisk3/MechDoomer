@@ -199,7 +199,7 @@ static void GetItemsList(in out Array<String> items_names)
 			lines[i].Replace(" ", "");
 			lines[i].Replace("\t", "");
 			// Remove carrage return (Byte 13)
-			lines[i].Truncate(lines[i].Length()-1);
+			if(lines[i].ByteAt(lines[i].Length()-1) == 13) lines[i].Truncate(lines[i].Length()-1);
 			if( 
 				lines[i].ByteAt(0) != comment.ByteAt(0) && 
 				lines[i].ByteAt(0) !=  marker.ByteAt(0) &&

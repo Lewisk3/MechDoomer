@@ -26,7 +26,7 @@ class MDMath Abstract
 	// Linear interpolate
 	static double Lerp(double a, double b, double lerpFactor)
 	{
-		double result = ((1.f - lerpFactor) * a) + (lerpFactor * b);
+		double result = (a * (1.f - lerpFactor)) + (b * lerpFactor);
 		return result;
 	}
 	
