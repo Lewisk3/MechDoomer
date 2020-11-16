@@ -179,15 +179,32 @@ class MechExchange_Animator : Powerup
 	
 	static MechExchange_Animator Setup(MechWarriorBase curmech, int swapmechbay)
 	{
-		curmech.Cockpit_Alert("\c[SAPPHIRE]Deploying new mech...", 35);
 		curmech.GiveInventory("MechExchange_Animator",1);
 		let mea = MechExchange_Animator(curmech.FindInventory("MechExchange_Animator"));
 		if(mea) 
 		{
 			mea.mechbaynum = swapmechbay;
 			mea.mech = curmech;
+			mea.begin();
 		}
 		return mea;
+	}
+	
+	void begin()
+	{
+		let tomech = mech.inv_context.mechs[mechbaynum];
+		bool ismech = true;
+		if( tomech.inv_context && tomech.inv_context.engine && 
+		    tomech.inv_context.engine.model == EngineDatabase.Type_Organic )
+			ismech = false;
+			
+		string msg;
+		if(ismech) 
+			msg = "\c[SAPPHIRE]Deploying new mech...";
+		else
+			msg = "\c[SAPPHIRE]Exiting mech...";
+			
+		mech.Cockpit_Alert(msg, 35);
 	}
 
 	override void DoEffect()

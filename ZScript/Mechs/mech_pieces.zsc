@@ -224,8 +224,11 @@ class Torso_Kitfox : MechTorsoBase {
 class Torso_Nova : MechTorsoBase {
 	Default {
 		MechTorsoBase.DoNotTwist true;
-		MechTorsoBase.Pieces "Hips_Nova", "Legs_Nova", "Cockpit_Nova", "", "";
+		MechTorsoBase.Pieces "Hips_Nova", "Legs_Nova", "Cockpit_Nova", "LeftArm_Nova", "RightArm_Nova";
 		MechPartsBase.ZOffset 60;
+		MechTorsoBase.ArmsHeight 60;
+		MechTorsoBase.ArmsForward -20;
+		MechTorsoBase.ArmsRollPitchMod 0, 0;
 		MechPartsBase.CockpitOffset 18, 57;
 		MechTorsoBase.CockpitRange 0, 1.0, 0.75;
 		MechTorsoBase.TwistSpeed 1.0;
@@ -233,26 +236,33 @@ class Torso_Nova : MechTorsoBase {
 }
 class Torso_Stormcrow : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow", "Cockpit_Stormcrow", "", "";
+		MechTorsoBase.Pieces "Hips_Stormcrow", "Legs_Stormcrow", "Cockpit_Stormcrow", "LeftArm_Stormcrow", "RightArm_Stormcrow";
 		MechPartsBase.ZOffset 60;
+		MechTorsoBase.ArmsHeight 85;
+		MechTorsoBase.ArmsRollPitchMod 0.5, 8;
 		MechPartsBase.CockpitOffset 15, 80;
-		MechTorsoBase.CockpitRange 0.78, 0.4, 1.0;
+		MechTorsoBase.CockpitRange 0.78, 0.4, 0.35;
 		MechTorsoBase.TwistSpeed 0.45;
 	}
 }
 class Torso_Hunchback : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Hunchback", "Legs_Hunchback", "Cockpit_Hunchback", "", "";
+		MechTorsoBase.Pieces "Hips_Hunchback", "Legs_Hunchback", "Cockpit_Hunchback", "LeftArm_Hunchback", "RightArm_Hunchback";
 		MechPartsBase.ZOffset 55;
-		MechPartsBase.CockpitOffset 0, 65;
+		MechTorsoBase.ArmsHeight 75;
+		MechTorsoBase.ArmsForward 0;
+		MechTorsoBase.ArmsRollPitchMod 0.36, 6;
+		MechPartsBase.CockpitOffset 0, 80;
 		MechTorsoBase.CockpitRange 0.76, 0.45, 0.36;
 		MechTorsoBase.TwistSpeed 0.50;
 	}
 }
 class Torso_Centurion : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Centurion", "Legs_Centurion", "Cockpit_Centurion", "", "";
+		MechTorsoBase.Pieces "Hips_Centurion", "Legs_Centurion", "Cockpit_Centurion", "LeftArm_Centurion", "RightArm_Centurion";
 		MechPartsBase.ZOffset 50;
+		MechTorsoBase.ArmsHeight 75;
+		MechTorsoBase.ArmsRollPitchMod 0.5, 8;
 		MechPartsBase.CockpitOffset 0, 85;
 		MechTorsoBase.CockpitRange 0.74, 0.45, 0.25;
 		MechTorsoBase.TwistSpeed 0.55;
@@ -265,7 +275,7 @@ class Torso_Timberwolf : MechTorsoBase {
 		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf", "Cockpit_Timberwolf", "", "";
 		MechPartsBase.ZOffset 50;
 		MechPartsBase.CockpitOffset 20, 70;
-		MechTorsoBase.CockpitRange 0.76, 0.4, 1.0;
+		MechTorsoBase.CockpitRange 0.76, 0.4, 0.8;
 		MechTorsoBase.TwistSpeed 0.35;
 	}
 }

@@ -65,6 +65,42 @@ class TestingDoomguy : DoomPlayer
 	}
 }
 
+// Pilot
+class MechPilot : MechWarrior
+{
+	Default
+	{
+		Mass 100;
+		MaxStepHeight 16;
+		Player.DisplayName "Exit Mech";
+		Player.ViewHeight 20;
+		Player.ViewBob 0.24;
+		Player.JumpZ 8;
+		Player.AttackZOffset 8;
+		Player.GruntSpeed 12;
+		Player.FallingScreamSpeed 35, 40;
+		Player.UseRange 64;
+		Gravity 1;
+		
+		MechWarriorBase.Size 16, 16;
+		MechWarriorBase.Manufacturer MechWarriorBase.MechType_BattleArmor;
+		MechWarriorBase.heatEff 0;
+		MechWarriorBase.CockpitIsModel false;
+		MechWarriorBase.HudCockpit "";
+		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.Weight 0.08;
+		MechWarriorBase.Engine "Engine_NUL_10";
+		MechWarriorBase.DefaultMovement true;
+		MechWarriorBase.HiddenFromShop true;
+		MechWarriorBase.WalkingSpeed 0.25;
+		MechWarriorBase.CValue 0;
+	}
+	
+	override void setupCriticals() {}
+	override void SetupWeapons() {}
+	override void SetupHitboxes() {}
+}
+
 // Elemental(s) or Battle Armor(s)
 class BattleArmor : MechWarrior
 {

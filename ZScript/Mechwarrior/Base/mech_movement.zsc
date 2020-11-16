@@ -13,6 +13,7 @@ double minPitch, maxPitch;
 double LegSpeed;
 double MoveSpeedKPH;
 double MaxYaw;
+double PilotSpeed;
 
 // Vars
 bool snd_reactor;
@@ -286,6 +287,9 @@ void mech_movement()
 	MAB_Common();
 	if(!player || checkAI() || checkVoodoo()) return;
 	
+	if(inv_context.engine && inv_context.engine.model == EngineDatabase.Type_Organic)
+		A_SetSpeed(PilotSpeed);
+	
 	// Leg Movement
 	if(!defaultmovement)
 	{			
@@ -440,8 +444,9 @@ void mech_movement()
 	 !btn_jumpjets && player.OnGround) mech_jetsfuel += 0.5;
 }
 
-void shutdown_setup(bool critical = true, bool forced = false, bool silent = false)
+void shutdown_setup(bool critical = true, bool forced = false, bool silent = false, bool switching = false)
 {
+	if(CheckOrganic() && !switching) return;
 	if(!silent)
 	{
 		A_StopSound(CHAN_VOICE);
@@ -466,6 +471,14 @@ void shutdown_setup(bool critical = true, bool forced = false, bool silent = fal
 }
 void powerup_setup(bool critical = true, bool forced = false, bool silent = false)
 {
+	if(CheckOrganic()) 
+	{
+		mech_shutdown = false;
+		doShutdown = false;
+		mech_poweringup = false;
+		slient_powerup = true;
+		return;
+	}
 	prevticks = ticks;
 	mech_poweringup = true;
 	doShutdown = false;
@@ -480,6 +493,7 @@ void powerup_setup(bool critical = true, bool forced = false, bool silent = fals
 
 void process_shutdown()
 {
+	if(CheckOrganic()) return;
 	if(!defaultmovement && !modelcockpit)
 	{	
 		angle = lockangle;

@@ -105,7 +105,9 @@ bool EquipEngine(class<Mechbase_Engine> engine)
 	
 	if( 
 		 (gyroslots+ctslots > slots_ct || ltslots > slots_lt || rtslots > slots_rt) || 
-		 (MDMath.RoundFloat(inv_context.weapons_tonnage+weight > mech_tonnage) && !CheckCompensative())
+		 (MDMath.RoundFloat(inv_context.weapons_tonnage+weight > mech_tonnage) && 
+		 engobj.model != EngineDatabase.Type_Compensative && 
+		 engobj.model != EngineDatabase.Type_Organic )
 	  )
 	{
 		inv_context.engine.Destroy();
@@ -136,6 +138,11 @@ clearscope bool CheckCompensative()
 {	
 	// if(!inv_context) return;
 	return inv_context.engine && (inv_context.engine.model == EngineDatabase.Type_Compensative);
+}
+clearscope bool CheckOrganic()
+{
+	if(!inv_context) return false;
+	return inv_context.engine && inv_context.engine.model == EngineDatabase.Type_Organic;
 }
 	
 void DequipEngine(bool destroyengine=false)

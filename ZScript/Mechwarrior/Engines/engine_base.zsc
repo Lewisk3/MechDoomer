@@ -4,6 +4,7 @@ class EngineDatabase Abstract
 {
 	enum EngineType 
 	{
+		Type_Organic,
 		Type_STD,
 		Type_Light,
 		Type_XL,
@@ -52,6 +53,7 @@ class EngineDatabase Abstract
 			214.5,243.0,313.0,356.0,405.5,462.5
 		};
 		double tons = std_index_tons[floor(engine/5)-2];
+		if(type == Type_Organic) return 0;
 		if(type == Type_Compensative) return roundTons(tons*1.1);
 		if(type == Type_STD    		) return tons;
 		if(type == Type_Light  		) return roundTons(tons*0.75);
@@ -128,6 +130,7 @@ class Mechbase_Engine : Mechbase_Utility
 		string t_prefix = cnametokens[1];
 		int cname_type = cname.ToInt();
 		uint engmodel = 0;
+		if(cnametokens[1] ==   "NUL") engmodel = EngineDatabase.Type_Organic;
 		if(cnametokens[1] ==   "CMP") engmodel = EngineDatabase.Type_Compensative;
 		if(cnametokens[1] ==   "STD") engmodel = EngineDatabase.Type_STD;
 		if(cnametokens[1] ==    "XL") engmodel = EngineDatabase.Type_XL;
@@ -135,7 +138,10 @@ class Mechbase_Engine : Mechbase_Utility
 		if(cnametokens[1] == "LIGHT") engmodel = EngineDatabase.Type_Light;
 		if(cnametokens[1] ==   "COM") engmodel = EngineDatabase.Type_Compact;
 		
-		string displayname = t_prefix .. cname_type .. " ENGINE";
+		string displayname = "NONE";
+		if(engmodel != EngineDatabase.Type_Organic)
+			displayname = t_prefix .. cname_type .. " ENGINE";
+			
 		int type = defs.enginetype | cname_type;
 		double weight = EngineDatabase.GetTonnage(cname_type,engmodel);
 		double worth = defs.baseworth ? defs.baseworth*type : defs.worth;

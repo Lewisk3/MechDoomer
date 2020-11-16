@@ -349,16 +349,17 @@ class MechDoomerEvents : EventHandler
 			}
 		}
 		
+		if(netcmd == "ai_toggle") 
+		{
+			AIDisabled = !AIDisabled;
+			if(AIDisabled) 
+				console.printf("AI Disabled.");
+			else 
+				console.printf("AI Enabled.");
+		}
+		
 		if(plr)
 		{
-			if(netcmd == "ai_toggle") 
-			{
-				AIDisabled = !AIDisabled;
-				if(AIDisabled) 
-					console.printf("AI Disabled.");
-				else 
-					console.printf("AI Enabled.");
-			}
 			if(netcmd == "screen_setfadecolor") plr.screen_fadecolor = Color(255, e.Args[0],e.Args[1],e.Args[2]);
 			if(netcmd == "screen_setfade") 
 			{
@@ -368,20 +369,6 @@ class MechDoomerEvents : EventHandler
 			if(netcmd ==  "open_mechlab") plr.uiopen_mechlab = true;
 			if(netcmd == "close_mechlab") plr.uiopen_mechlab = false;
 			
-			if(netcmd == "screen_toggleinfrared") 
-			{
-				if(ShaderManager)
-				{
-					plr.InfraredActive = !plr.InfraredActive;
-					ShaderManager.imageEnhancementOn = plr.InfraredActive;
-					if(plr.InfraredActive) 
-					{
-						plr.mechSounds.pushSound("Mech/Betty/LightAmp");
-						plr.mechSounds.pushSound("Mech/Betty/Engaged");
-						plr.S_StartSound("Mech/Infrared",CHAN_WEAPON);
-					}
-				}
-			}
 			if(netcmd == "cycle_navpoint") 
 			{
 				int curnav = NAVPoint.ALPHA-1;
@@ -391,82 +378,13 @@ class MechDoomerEvents : EventHandler
 				if(nav) plr.targetenemy = nav;
 				SoundEmitter.SE_Trigger("Mech/NavBlip",plr.pos);
 			}
-			if(netcmd == "toggle_ams") 
-			{
-				if(!plr.CheckHasAMS())
-				{
-					plr.Cockpit_Alert("\c[GREEN]Not equipped with an AntiMissileSystem.");
-				}
-				else
-				{
-					SoundOnActor.Trigger("Mech/Blip",plr);
-					String alertmsg = "\c[GREEN] AntiMissileSystems: ";
-					plr.ams_passive = !plr.ams_passive;	
-					if(!plr.ams_passive) 
-						alertmsg = alertmsg.."Disabled.";
-					else
-						alertmsg = alertmsg.."Enabled.";
-					plr.Cockpit_Alert(alertmsg);
-				}
-			}
-			if(netcmd == "hud_toggle_htal") 
-			{
-				SoundOnActor.Trigger("Mech/Blip",plr);
-				plr.hud_htal = !plr.hud_htal;
-			}
+			
 			if(netcmd == "hud_resetanimflags") plr.hAlert.hud_powersequence = 0;
-			if(netcmd == "toggle_autopilot") plr.ToggleAutopilot();
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);
-			if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
-			if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(200,0,15,false);
-			if(netcmd == "droneviewswitch" && !plr.isdead) 
-			{
-				if(!plr.dronecam) plr.ToggleDrone(200,0,15,false);
-				plr.dronecam.frontcam = !plr.dronecam.frontcam;
-			}
-			if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageHardpoint(plr.hardpoints.hd, 1); }
-			if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
-			if(netcmd == "adjust_armor") plr.AdjustMaxArmor(plr.hardpoints.FindByIndex(e.Args[0]),e.Args[1], true);
-			if(netcmd == "equip_invweap") plr.equipWeaponInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);
-			if(netcmd == "move_weapinv" ) plr.moveWeaponToInv(e.Args[0]);
-			if(netcmd == "equip_structinvweap") plr.equipStructInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);
-			if(netcmd == "movestruct_weapinv") plr.moveStructToInv(e.Args[0],1);
 			if(netcmd == "mechs_getlist") plr.GetAllMechs(plr.shopmechs);
 			if(netcmd == "sort_inv") plr.sortWeaponInv();
 			if(netcmd == "sort_mechs") plr.SortMechs(plr.inv_context.mechs);
-			if(netcmd == "radar_switchrange")
-			{
-				SoundOnActor.Trigger("Mech/Blip",plr);
-				if(plr.radar_scale == 2)
-				{
-					plr.Cockpit_Alert("\c[GREEN]Radar is hidden.");
-				}
-				else
-				{
-					plr.radar_range++;
-					if(plr.radar_range > 3) plr.radar_range = 0;
-				}
-			}
-			if(netcmd == "radar_switchscale")
-			{
-				plr.radar_scale++;
-				if(plr.radar_scale > 2) plr.radar_scale = 0;
-				SoundOnActor.Trigger("Mech/Blip",plr);
-			}
-			if(netcmd == "throttledecay_toggle") 
-			{
-				CVar throtd = CVar.FindCVar("mwd_throttledecay");
-				bool bdecay = throtd.GetBool();
-				throtd.SetBool(!bdecay);
-				
-				String alertmsg = "\c[GREEN] Throttle Decay: ";
-				if(!bdecay) 
-					alertmsg = alertmsg.."Enabled.";
-				else
-					alertmsg = alertmsg.."Disabled.";
-				plr.Cockpit_Alert(alertmsg);
-			}
 			if(netcmd == "shop_buyitem" && plr.shopitems) 
 			{
 				let item = plr.shopitems.items[e.Args[0]];
@@ -539,13 +457,6 @@ class MechDoomerEvents : EventHandler
 				mplr.player.cheats &= ~CF_TOTALLYFROZEN;
 				console.printf("Restored mech status for player #%d", mplr.PlayerNumber()); 
 			}	
-			if(netcmd == "-mwd_switchammo") plr.btn_switchammo = false;
-			if(netcmd == "+mwd_switchammo") plr.btn_switchammo = true;
-	
-			if(netcmd == "+mwd_user5") plr.btn_jumpjets = true;
-			if(netcmd == "-mwd_user5") plr.btn_jumpjets = false;
-			if(netcmd == "+mwd_pilotlook" && plr.modelcockpit && !plr.dronecam) plr.pilotlook = true;
-			if(netcmd == "-mwd_pilotlook")plr.pilotlook = false;
 			if(netcmd == "botme")
 			{
 				plr.player.cheats |= CF_TOTALLYFROZEN;
@@ -714,6 +625,102 @@ class MechDoomerEvents : EventHandler
 				{
 					console.printf("Weapon not of type \"Mechbase_Weapon\" or \"Mechbase_Utility\"");
 				}
+			}
+			
+			// Commands reserved for mechs.
+			if(!plr.CheckOrganic())
+			{
+				if(netcmd == "screen_toggleinfrared") 
+				{
+					if(ShaderManager)
+					{
+						plr.InfraredActive = !plr.InfraredActive;
+						ShaderManager.imageEnhancementOn = plr.InfraredActive;
+						if(plr.InfraredActive) 
+						{
+							plr.mechSounds.pushSound("Mech/Betty/LightAmp");
+							plr.mechSounds.pushSound("Mech/Betty/Engaged");
+							plr.S_StartSound("Mech/Infrared",CHAN_WEAPON);
+						}
+					}
+				}
+				if(netcmd == "toggle_ams") 
+				{
+					if(!plr.CheckHasAMS())
+					{
+						plr.Cockpit_Alert("\c[GREEN]Not equipped with an AntiMissileSystem.");
+					}
+					else
+					{
+						SoundOnActor.Trigger("Mech/Blip",plr);
+						String alertmsg = "\c[GREEN] AntiMissileSystems: ";
+						plr.ams_passive = !plr.ams_passive;	
+						if(!plr.ams_passive) 
+							alertmsg = alertmsg.."Disabled.";
+						else
+							alertmsg = alertmsg.."Enabled.";
+						plr.Cockpit_Alert(alertmsg);
+					}
+				}
+				if(netcmd == "hud_toggle_htal") 
+				{
+					SoundOnActor.Trigger("Mech/Blip",plr);
+					plr.hud_htal = !plr.hud_htal;
+				}
+				if(netcmd == "toggle_autopilot") plr.ToggleAutopilot();
+				if(netcmd == "engine_dequip" && plr.inv_context.engine) plr.DequipEngine();
+				if(netcmd == "dronebackchase" && !plr.isdead && !plr.pilotlook && !plr.mech_shutdown) plr.ToggleDrone(200,0,15,false);
+				if(netcmd == "droneviewswitch" && !plr.isdead) 
+				{
+					if(!plr.dronecam) plr.ToggleDrone(200,0,15,false);
+					plr.dronecam.frontcam = !plr.dronecam.frontcam;
+				}
+				if(netcmd == "kill mech") { plr.hardpoints.hd.internalhp = 0; plr.DamageHardpoint(plr.hardpoints.hd, 1); }
+				if(netcmd == "repair_hardpoint") plr.repairHardpointStat(e.Args[0],e.Args[1]);
+				if(netcmd == "adjust_armor") plr.AdjustMaxArmor(plr.hardpoints.FindByIndex(e.Args[0]),e.Args[1], true);
+				if(netcmd == "equip_invweap") plr.equipWeaponInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);
+				if(netcmd == "move_weapinv" ) plr.moveWeaponToInv(e.Args[0]);
+				if(netcmd == "equip_structinvweap") plr.equipStructInv(e.Args[0]+1,plr.hardpoints.FindByIndex(e.Args[1]),1);
+				if(netcmd == "movestruct_weapinv") plr.moveStructToInv(e.Args[0],1);
+					if(netcmd == "radar_switchrange")
+				{
+					SoundOnActor.Trigger("Mech/Blip",plr);
+					if(plr.radar_scale == 2)
+					{
+						plr.Cockpit_Alert("\c[GREEN]Radar is hidden.");
+					}
+					else
+					{
+						plr.radar_range++;
+						if(plr.radar_range > 3) plr.radar_range = 0;
+					}
+				}
+				if(netcmd == "radar_switchscale")
+				{
+					plr.radar_scale++;
+					if(plr.radar_scale > 2) plr.radar_scale = 0;
+					SoundOnActor.Trigger("Mech/Blip",plr);
+				}
+				if(netcmd == "throttledecay_toggle") 
+				{
+					CVar throtd = CVar.FindCVar("mwd_throttledecay");
+					bool bdecay = throtd.GetBool();
+					throtd.SetBool(!bdecay);
+					
+					String alertmsg = "\c[GREEN] Throttle Decay: ";
+					if(!bdecay) 
+						alertmsg = alertmsg.."Enabled.";
+					else
+						alertmsg = alertmsg.."Disabled.";
+					plr.Cockpit_Alert(alertmsg);
+				}
+				if(netcmd == "-mwd_switchammo") plr.btn_switchammo = false;
+				if(netcmd == "+mwd_switchammo") plr.btn_switchammo = true;
+		
+				if(netcmd == "+mwd_user5") plr.btn_jumpjets = true;
+				if(netcmd == "-mwd_user5") plr.btn_jumpjets = false;
+				if(netcmd == "+mwd_pilotlook" && plr.modelcockpit && !plr.dronecam) plr.pilotlook = true;
+				if(netcmd == "-mwd_pilotlook")plr.pilotlook = false;
 			}
 		}
 	}	

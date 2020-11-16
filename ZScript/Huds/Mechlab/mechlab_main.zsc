@@ -7,6 +7,7 @@ String loadout_invweapon;
 int hardpoint;  			  // Selected mechplr hardpoint
 SelectedObject selected_item; // Selected item
 int maxpageitems;
+bool mechsmode_forced;
 
 void setSelected(String tag, MechHardpoint location, class<Mechbase_Utility> util, class<Mechbase_Weapon> weap, class<Mechbase_Engine> eng, int index)
 {
@@ -46,8 +47,9 @@ int Mechlab_GetInvSize()
 
 void ProcessLoadoutButtons()
 {
-	// Force mechmode if dead.
-	if(mechplr.isdead && !mechmode) mechmode = true;
+	// Force mechmode if dead or a pilot.
+	mechsmode_forced = (mechplr.isdead || !CheckActiveMech());
+	if(!mechmode && mechsmode_forced) mechmode = true;
 
 	// Buttons and highlights
 	H_DrawImage(tBtn_Scrap,  ( scrapbtn.x+61, scrapbtn.y+30),0);
@@ -73,7 +75,7 @@ void ProcessLoadoutButtons()
 		H_DrawImage(mechmode ? tBtnlit_Items : tBtnlit_Mechs,(invmodebtn.x+64,invmodebtn.y+30),0);
 	if(checkCollision(mouse, sortbtn)) 
 		H_DrawImage(tBtnlit_Sort,   ( sortbtn.x+64,  sortbtn.y+31),0);
-	if(checkCollision(mouse, modebtn))
+	if(checkCollision(mouse, modebtn) && CheckActiveMech())
 		H_DrawImage(tBtnlit_ArmorAndRepair, (  modebtn.x+125,  modebtn.y+35),0);
 	if(checkCollision(mouse, shopbtn) )
 		H_DrawImage(tBtnlit_Shop, (shopbtn.x+57,shopbtn.y+35),0);
@@ -106,7 +108,7 @@ void ProcessLoadoutButtons()
 		}
 		
 		// Change mode - Mechs or Items
-		if(checkCollision(mouse,invmodebtn) && !mechplr.isdead) 
+		if(checkCollision(mouse,invmodebtn) && !mechsmode_forced) 
 		{
 			clearSelected();
 			mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
@@ -159,6 +161,7 @@ void ProcessLoadoutButtons()
 		// Hardpoint safe check
 		if( !mechmode && !ValidateHardpoint(hardpoint) && ( checkCollision(mouse,dequipbtn) || checkCollision(mouse,equipbtn) ) ) 
 		{
+			if(!CheckActiveMech()) return;
 			mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[DarkRed]Hardpoint is destroyed!");
 			return;
@@ -183,7 +186,7 @@ void ProcessLoadoutButtons()
 					// Mech should be shutdown if dead but, if it isn't, that 
 					// would result in a game breaking bug of not being able to
 					// respawn.
-					if(!mechplr.mech_shutdown && !mechplr.isdead)
+					if(!mechplr.mech_shutdown && !mechplr.isdead && CheckActiveMech())
 					{
 						mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
 						MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Active mech must be shutdown\nfirst!");
@@ -369,17 +372,24 @@ void drawMechlabInfo()
 	vector2 detailpos = mechmode ? (300,111) : (300,415);
 	
 	H_DrawString("- Active Mech -", detailpos);
-	H_DrawString("Chassis: " .. mechplr.getChassisName(),(detailpos.x,detailpos.y+25));
-	H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+50));
-	H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+75));
-	H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+100));
-	H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+125));
-	H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+150));
-	H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+175));
-	H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+200));
-	H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+225));
+	if(CheckActiveMech())
+	{
+		H_DrawString("Chassis: " .. mechplr.getChassisName(),(detailpos.x,detailpos.y+25));
+		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+50));
+		H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+75));
+		H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+100));
+		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+125));
+		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+150));
+		H_DrawString("Slots free: " .. mechplr.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+175));
+		H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+200));
+		H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+225));
+	}
+	else
+	{
+		H_DrawString("No active mech.",(detailpos.x,detailpos.y+25));
+	}
 	
-	if(mechmode) 
+	if(mechmode && CheckActiveMech()) 
 	{
 		H_DrawString("Worth: " .. int(mechplr.worth/2),(detailpos.x,detailpos.y+250));
 		H_DrawString("- Selected Mech -", (detailpos.x,detailpos.y+285));
@@ -388,6 +398,11 @@ void drawMechlabInfo()
 	{
 		let mech = mechplr.inv_context.mechs[selected_item.index];
 		if(!mech) return;
+		
+		bool ismech = true;
+		if(mech.inv_context.engine)
+			ismech = mech.inv_context.engine.model != EngineDatabase.Type_Organic;
+			
 		let mechdefs = GetDefaultByType(mech.baseclass);
 		[ap, ip] = GetHardpointHealthPerc(mech.inv_context.hardpoints);
 		
@@ -410,16 +425,24 @@ void drawMechlabInfo()
 		internalpercent.truncate(internalpercent.length()-6);
 		
 		detailpos = (300,295);
-		H_DrawString("Chassis: " .. mechdefs.getClassName(),(detailpos.x,detailpos.y+125));
-		H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+150));
-		H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+175));
-		H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+200));
-		H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+225));
-		H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+250));
-		H_DrawString("Slots free: " .. mech.inv_context.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+275));
-		H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+300));
-		H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+325));
-		H_DrawString("Worth: " .. int(mechdefs.worth/2),(detailpos.x,detailpos.y+350));
+		
+		if(ismech)
+		{
+			H_DrawString("Chassis: " .. mechdefs.getClassName(),(detailpos.x,detailpos.y+125));
+			H_DrawString("Tonnage: " .. weapston .. "/" .. mechston,(detailpos.x,detailpos.y+150));
+			H_DrawString("Armor: " .. armston .. " tons",(detailpos.x,detailpos.y+175));
+			H_DrawString("Engine: " .. enginetype,(detailpos.x,detailpos.y+200));
+			H_DrawString("Heat Efficiency: " .. heateff,(detailpos.x,detailpos.y+225));
+			H_DrawString("Max Speed: " .. maxspd .. "Kph",(detailpos.x,detailpos.y+250));
+			H_DrawString("Slots free: " .. mech.inv_context.hardpoints.getTotalFreeSlots(),(detailpos.x,detailpos.y+275));
+			H_DrawString("Armor Status: " .. armorpercent .. "%", (detailpos.x,detailpos.y+300));
+			H_DrawString("Internals Status: " .. internalpercent .. "%", (detailpos.x,detailpos.y+325));
+			H_DrawString("Worth: " .. int(mechdefs.worth/2),(detailpos.x,detailpos.y+350));
+		}
+		else
+		{
+			H_DrawString("N/A",(detailpos.x,detailpos.y+125));
+		}
 	}
 
 	drawLoadoutItemInfo();

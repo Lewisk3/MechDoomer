@@ -82,8 +82,13 @@ double, double GetHardpointHealthPerc(MechHardpoints hps)
 		maxinternal += hps.rl.max_internal;
 	}
 	
-	double armorp = maxarmor <= 0 ? 100 : (curarmor/maxarmor * 100);
-	double internalp = (curinternal/maxinternal * 100);
+	double armorp = 1.0;
+	double internalp = 1.0;
+	if(maxarmor != 0 && maxinternal != 0) 
+	{
+		armorp = maxarmor <= 0 ? 100 : (curarmor/maxarmor * 100);
+		internalp = (curinternal/maxinternal * 100);
+	}
 	
 	return armorp, internalp;
 }

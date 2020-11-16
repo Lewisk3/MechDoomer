@@ -19,6 +19,7 @@ bool pilotlook;
 bool isdead;
 bool docopy_novoodoo;
 bool prev_automap;
+bool hiddenfromshop;
 int ticks;
 int prevticks;
 double mech_tonnage;
@@ -84,11 +85,16 @@ void StartMechChange(int invmech)
 	}
 	if(dronecam_active) dronecam_active = false;
 	
-	if(!mech_shutdown)
-	{
-		mechsounds.pushSound("Mech/Betty/ShuttingDown");
-		A_StartLocalSound("Mech/Shutdown", CHAN_WEAPON);
-	}
+	if(CheckOrganic()) shutdown_setup(false, true, true, true);
+	
+	// Have to deal with old-style item buttons, because I implemented
+	// these ages ago...
+	A_TakeInventory("IBTN_SHOOTALLWEAPONSLIKEAMADLAD", 999);
+	A_TakeInventory("IBTN_SHUTDOWN", 999);
+	A_TakeInventory("IBTN_TARGET", 999);
+	A_TakeInventory("IBTN_CENTER", 999);
+	A_TakeInventory("IBTN_CENTERTORSO", 999);
+	
 	player.cheats &= ~CF_TOTALLYFROZEN;
     MechExchange_Animator.Setup(self, invmech);
 }
@@ -170,6 +176,8 @@ void ChangeMech(int invmech)
 	ViewHeight = defs.ViewHeight;
 	defviewz = defs.ViewHeight;
 	player.ViewHeight = defs.ViewHeight;
+	PilotSpeed = defs.PilotSpeed;
+	JumpZ = defs.JumpZ;
 	HeatLevel = 0;
 	viewzoffs = 0;
 	
@@ -311,6 +319,13 @@ void CreateHitbox(MechHardpoint hp, double xo, double yo, double r, double h, do
 // Override
 override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
 {	
+	// Do not take damage if we've exitted the mech.
+	// Subject to change later, once I figure out some other solution, somehow.
+	if(CheckOrganic()) 
+	{
+		return 0;
+	}
+	
 	if(damage == 0) return 0; // Debris can proc this for some bizarre reason.
 	if(checkVoodoo()) return super.DamageMobj(inflictor,source,damage,mod,flags,angle);
 	if(mod == "Hitscan") return ProcessHitscanDamageMobJ(inflictor, source, damage, mod, flags, angle);
@@ -358,6 +373,8 @@ override void PostBeginPlay()
 		mech_jetsfuel = 100;
 		defviewz = Player.ViewHeight;
 		inv_context.maxgroup = getMaxWeaponGrouping();
+		if(!CheckOrganic())
+			inv_context.mechs.Push(CreateStoredMech("MechPilot"));
 		defaultfov = player.desiredFOV;
 	}
 	// SoundQueue 
@@ -388,7 +405,7 @@ override void tick()
 		super.Tick();
 		return;
 	}
-	
+		
 	if(!checkAI())
 	{
 		// Hold onto reference of all mechs for shop

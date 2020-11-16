@@ -138,15 +138,35 @@ class MechPartsBase : Actor
 		return super.CanCollideWith(other, passive);
 	}
 	
+	bool IsThirdPerson()
+	{
+		return mechowner.CheckAI() || mechowner.dronecam || mechowner.CheckVoodoo();
+	}
+	
 	bool CheckLocalObserver()
 	{
 		if(mechowner.CheckAI()) return false;
 		return mechowner == MechwarriorBase(players[consoleplayer].mo);
 	}
 	
+	virtual double getPushback(double xoffs, double zoffs)
+	{
+		double distoffs = xoffs;
+		FLineTraceData lndata;
+		mechowner.LineTrace(angle,xoffs+128,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,zoffs+sin(mechowner.pitch),0,0,lndata);
+		if( lndata.HitType == lndata.TRACE_HitWall    || 
+		    lndata.HitType == lndata.TRACE_HitCeiling || 
+			lndata.HitType == TRACE_HitFloor			  ) 
+		{
+			if(distoffs > lndata.Distance-80) distoffs = lndata.Distance-80;
+		}
+		return distoffs;
+	}
+	
 	virtual vector3 getMechPos()
 	{
-		vector3 basepos = mechowner.Vec3Offset(0,0,zoffs);
+		double collidepush = (!IsThirdPerson() && CheckLocalObserver()) ? getPushback(cxoffs, czoffs) : 0; 
+		vector3 basepos = mechowner.Vec3Offset(cos(mechowner.angle)*collidepush,sin(mechowner.angle)*collidepush,zoffs);
 		return basepos;
 	}
 	
@@ -335,8 +355,9 @@ class MechCockpitModel : MechPartsBase
 class MechArmsBase : MechPartsBase
 {
 	MechHardpoint arm_hp;
+	bool notwist;
 	double def_mzoffs;
-	double mzoffs;
+	double mzoffs, mxoffs;
 	double rcoffs, pcoffs;
 	
 	Default
@@ -345,17 +366,14 @@ class MechArmsBase : MechPartsBase
 		+CLIENTSIDEONLY
 	}
 	
-	bool IsThirdPerson()
-	{
-		return mechowner.CheckAI() || mechowner.dronecam || mechowner.CheckVoodoo();
-	}
-	
 	override vector3 getMechPos()
 	{
 		if(!mechowner.models_reference || !mechowner.models_reference.cockpit) 
 			return super.getMechPos();
-		double cos_angle = cos(mechowner.angle);
-		double sin_angle = sin(mechowner.angle);
+		double trueangle = notwist ? mechowner.LegAng : mechowner.angle;
+		double cos_angle = cos(trueangle);
+		double sin_angle = sin(trueangle);
+		double collidepush = getPushback(mxoffs, mzoffs); 
 		double pitchcorrect = -cos(pitch-90)*(IsThirdPerson() ? pcoffs : 20);
 		double rollcorrect  = -roll*rcoffs;
 		vector3 basepos;
@@ -365,16 +383,16 @@ class MechArmsBase : MechPartsBase
 			double forward = mechowner.models_reference.cockpit.cockpitcam.cxoffs+
 							 mechowner.models_reference.cockpit.mxoffs;
 			basepos = mechowner.Vec3Offset(
-					(cos_angle*pitchcorrect) + (cos_angle*forward) + (cos(angle+90)*rollcorrect),
-					(sin_angle*pitchcorrect) + (sin_angle*forward) + (sin(angle+90)*rollcorrect),
+					(cos_angle*pitchcorrect) + (cos_angle*(forward+collidepush)) + (cos(angle+90)*rollcorrect),
+					(sin_angle*pitchcorrect) + (sin_angle*(forward+collidepush)) + (sin(angle+90)*rollcorrect),
 					zoffs+mzoffs
 			);
 		}
 		else
 		{
 			vector3 vpc = (
-				-(cos_angle*pitchcorrect),
-				-(sin_angle*pitchcorrect),
+				-(cos_angle*pitchcorrect) + (cos_angle*mxoffs),
+				-(sin_angle*pitchcorrect) + (sin_angle*mxoffs),
 				(pitchcorrect*0.5)
 			);
 			vector3 bpo = (
@@ -444,7 +462,7 @@ class MechTorsoBase : MechPartsBase
 	double cockpitangle_mod;
 	double cockpittwist_mod;
 	double cockpitbob_mod;
-	double arms_offs, arms_rcoffs, arms_pcoffs;
+	double arms_offs, arms_foffs, arms_rcoffs, arms_pcoffs;
 	MechPartsBase hips;
 	MechPartsBase legs;
 	MechPartsBase arms_left;
@@ -459,6 +477,7 @@ class MechTorsoBase : MechPartsBase
 	Property Pieces : hips_type, legs_type, cockpit_type, arms_left_type, arms_right_type;
 	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod, cockpitbob_mod;
 	Property ArmsHeight : arms_offs;
+	Property ArmsForward : arms_foffs;
 	Property ArmsRollPitchMod : arms_rcoffs, arms_pcoffs;
 	Property TwistSpeed : cockpittwist_mod;
 	Property DoNotTwist : notwist;
@@ -485,6 +504,8 @@ class MechTorsoBase : MechPartsBase
 				arm.zoffs = arms_offs;
 				arm.rcoffs = arms_rcoffs;
 				arm.pcoffs = arms_pcoffs;
+				arm.mxoffs = arms_foffs;
+				arm.notwist = notwist;
 				if(parms_right && !mechowner.CheckVoodoo()) 
 					arm.arm_hp = mechowner.hardpoints.la;
 			}
@@ -498,6 +519,8 @@ class MechTorsoBase : MechPartsBase
 				arm.zoffs = arms_offs;
 				arm.rcoffs = arms_rcoffs;
 				arm.pcoffs = arms_pcoffs;
+				arm.mxoffs = arms_foffs;
+				arm.notwist = notwist;
 				if(parms_left && !mechowner.CheckVoodoo()) 
 					arm.arm_hp = mechowner.hardpoints.ra;
 			}

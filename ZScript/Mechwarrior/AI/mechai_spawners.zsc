@@ -49,6 +49,23 @@ class MechAI_Spawner : Actor
 		}
 	}
 	
+	static MechwarriorBase SpawnMechAI(class<Mechwarrior> mechtype, class<MechAI_Controller> aicontroller, vector3 pos)
+	{
+		let mechact = MechwarriorBase(Actor.Spawn(mechtype,pos));
+		mechact.docopy_novoodoo = true;
+		mechact.setupInventory();
+		mechact.mech_weapons();
+		mechact.baseclass = mechtype;
+		mechact.player = players[consoleplayer];
+		let ai = MechAI_Controller(Actor.Spawn(aicontroller));
+		if(ai) 
+		{	
+			ai.mech = mechact;	
+			mechact.AICore = ai;
+		}
+		return mechact;
+	}
+	
 	override void BeginPlay()
 	{
 		super.BeginPlay();
@@ -72,21 +89,7 @@ class MechAI_Spawner : Actor
 					vector2 sp_offs = MDMath.VOffset(angle, 128, 128*i, 1);		
 					vector3 spawnpos = Vec3Offset(sp_offs.x, sp_offs.y, floorz-64);
 					
-					let mechact = MechwarriorBase(Actor.Spawn(type,spawnpos));
-					if(mechact)
-					{
-						mechact.docopy_novoodoo = true;
-						mechact.setupInventory();
-						mechact.mech_weapons();
-						mechact.baseclass = type;
-						mechact.player = players[consoleplayer];
-						let ai = MechAI_Controller(Actor.Spawn(ai_type));
-						if(ai) 
-						{	
-							ai.mech = mechact;	
-							mechact.AICore = ai;
-						}
-					}
+					SpawnMechAI(type, ai_type, spawnpos);
 				}
 				curlance++;
 				timer = GetAge();
@@ -194,3 +197,74 @@ class MAIS_Atlas : MechAI_Spawner
 {
 	Default { MechAI_Spawner.Setup1 1, "Atlas", 35*3; }
 }
+
+// BOSS spawners
+class MechBossSpawner : Actor
+{
+	MechwarriorBase finalmech;
+	array<String> mechtypes;
+	Default
+	{
+		+NOINTERACTION;
+	}
+	
+	virtual void SetupMechs()
+	{
+		mechtypes.Push("Direwolf");
+		mechtypes.Push("Warhawk");
+		mechtypes.Push("Warhammer");
+		mechtypes.Push("Gargoyle");
+		mechtypes.Push("Marauder");
+		mechtypes.Push("Atlas");
+	}
+	
+	virtual void OnMechDeath()
+	{
+		// Do stuff
+		Destroy();
+	}
+	
+	override void BeginPlay()
+	{
+		SetupMechs();
+		class<Mechwarrior> mechtospawn = mechtypes[random[MechSpawns](0,mechtypes.Size()-1)];
+		if(mechtospawn) finalmech = MechAI_Spawner.SpawnMechAI(mechtospawn, "MechAI_Controller", pos);
+		super.BeginPlay();
+	}
+	
+	override void Tick()
+	{
+		super.Tick();
+		if(finalmech && finalmech.isdead) 
+		{
+			OnMechDeath();
+		}
+	}
+}
+
+// Cyberdemon spawner
+class CyberMechReplacer : MechBossSpawner // replaces Cyberdemon
+{
+	bool mechdead;
+	override void OnMechDeath()
+	{
+		// I cannot simply set the State from here, wtf.
+		mechdead = true; 
+	}
+	
+	States
+	{
+		Spawn:
+			TNT1 A 1 A_JumpIf(mechdead, "XDeath");
+		loop;
+		
+		XDeath:
+			TNT1 A 175;
+			TNT1 A 0 
+			{
+				A_BossDeath();
+			}
+		stop;
+	}
+}
+

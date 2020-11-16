@@ -141,6 +141,8 @@ class MechWarriorBase : DoomPlayer
 	Property MechPieces : mech_models;
 	Property Manufacturer : mechtype;
 	Property HideLegsPerspective : nofirstpersonlegs;
+	Property WalkingSpeed : PilotSpeed;
+	Property HiddenFromShop : hiddenfromshop;
 	property CValue : worth;
 	
 	// Clearscope

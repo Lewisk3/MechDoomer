@@ -21,7 +21,8 @@ void GetAllMechs(in out Array<mw_StoredMech> items)
 	for(int i = 0; i < AllActorClasses.Size(); i++) 
 	{
 		let act = AllActorClasses[i];
-		if(act is "MechWarrior") 
+		let defs = MechwarriorBase(GetDefaultByType(act));
+		if(act is "MechWarrior" && !defs.hiddenfromshop) 
 		{	
 			let defs = MechWarrior(GetDefaultByType(act));
 			String actname = defs.getClassName();
@@ -95,7 +96,7 @@ clearscope int, int, int, int GetMechSortIndexes()
 	return indices[0], indices[1], indices[2], indices[3];
 }
 
-// HUGE sort list. I tried to make this not super ugly but, it's still probably pretty ugly. :/
+// Shop sorting list, grabbed from items data file.
 clearscope Items_ShopData GetSortList()
 {
 	Items_ShopData shop_data = new("Items_ShopData");

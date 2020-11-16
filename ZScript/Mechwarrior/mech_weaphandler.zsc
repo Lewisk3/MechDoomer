@@ -35,13 +35,6 @@ class WeaponsHandler : Weapon_NoPickup
 		return plr;
 	}
 	
-	action PSprite getPSprite()
-	{
-		let plr = getPilot();
-		if(!plr) return NULL;
-		return plr.player.GetPSprite(PSP_WEAPON);
-	}
-	
 	States
 	{			
 		Ready:
@@ -52,9 +45,11 @@ class WeaponsHandler : Weapon_NoPickup
 				if(plr) 
 				{	
 					// Footsteps when bob is at adequite length.
-					if(!plr.mech_models && plr.bobdir != invoker.bobdir && plr.vel.length() >= 0.08 )
+					if(!plr.mech_models && plr.bobdir != invoker.bobdir && plr.vel.length() >= 0.08)
 					{
-						if(plr.bobdir == 1) A_FireProjectile("MechFootstepEmitter");
+						if(plr.bobdir == 1 && !plr.CheckOrganic()) 
+							A_FireProjectile("MechFootstepEmitter");
+							
 						invoker.bobdir = plr.bobdir;
 					}
 					

@@ -17,7 +17,7 @@ LISTMENU "MainMenu"
 		Position 1, 1
 		Font "SMALLFONT", "ORANGE"
 		*/
-		class "Mech_TitleMenu"
+		class "Mech_TitleMenu" 
 		StaticText 68,50,"MechDoomer 2.80a - Alpha."
 }
 
@@ -144,7 +144,7 @@ OptionMenu "MechDoomerMenu"
 }
 
 OptionMenu "MechDoomerCredits"
-{
+{ 
 	Title "MechDoomer Credits"
 	StaticText " "
 	StaticText "Lead Programmer","Sapphire"
@@ -246,8 +246,8 @@ OptionMenu "MechDoomerMouseMenu"
 }
 
 
-OptionMenu "MechDoomerControlsMenu"
-{
+OptionMenu "MechDoomerControlsMenu" 
+{ 
 	Title "MechDoomer Controls"
 	ScrollTop 2
 	StaticTextSwitchable "$CNTRLMNU_SWITCHTEXT1", "$CNTRLMNU_SWITCHTEXT2", "ControlMessage"	

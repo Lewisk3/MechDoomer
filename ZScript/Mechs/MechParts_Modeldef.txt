@@ -144,11 +144,33 @@ Model Cockpit_Stormcrow
 {
 	Path "models/Mechs/Stormcrow"
 	Model 0 "sc_head.md3"
-	Scale 0.20 0.20 0.17
+	Scale 0.03 0.04 0.03
 	Skin 0 "sc_head.png" // Main
 	USEACTORPITCH
 	USEACTORROLL 
-	Offset -56 0 -14;
+	Offset -6 0 4;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Stormcrow
+{
+	Path "models/Mechs"
+	Model 0 "Stormcrow/sc_leftarm.md3"
+	SurfaceSkin 0 0 "Stormcrow/sc_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Stormcrow
+{
+	Path "models/Mechs"
+	Model 0 "Stormcrow/sc_rightarm.md3"
+	SurfaceSkin 0 0 "Stormcrow/sc_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }
@@ -362,6 +384,28 @@ Model Cockpit_Nova
 	USEACTORPITCH
 	USEACTORROLL 
 	Offset -45 0 8;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Nova
+{
+	Path "models/Mechs"
+	Model 0 "Nova/nv_leftarm.md3"
+	SurfaceSkin 0 0 "Nova/nv_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Nova
+{
+	Path "models/Mechs"
+	Model 0 "Nova/nv_rightarm.md3"
+	SurfaceSkin 0 0 "Nova/nv_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }
@@ -1085,6 +1129,28 @@ Model Cockpit_Hunchback
 	
    FrameIndex MODL A 0 0
 }
+Model LeftArm_Hunchback
+{
+	Path "models/Mechs"
+	Model 0 "Hunchback/hbk_leftarm.md3"
+	SurfaceSkin 0 0 "Hunchback/hbk_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Hunchback
+{
+	Path "models/Mechs"
+	Model 0 "Hunchback/hbk_rightarm.md3"
+	SurfaceSkin 0 0 "Hunchback/hbk_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 
 // Centurion
 Model Torso_Centurion
@@ -1120,6 +1186,28 @@ Model Cockpit_Centurion
 	USEACTORROLL 
 	AngleOffset 0
 	Offset -2 0 0.8;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Centurion
+{
+	Path "models/Mechs"
+	Model 0 "Centurion/ct_leftarm.md3"
+	SurfaceSkin 0 0 "Centurion/ct_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Centurion
+{
+	Path "models/Mechs"
+	Model 0 "Centurion/ct_rightarm.md3"
+	SurfaceSkin 0 0 "Centurion/ct_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }

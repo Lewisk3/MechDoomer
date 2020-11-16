@@ -296,12 +296,21 @@ class Mechlab_Menu : GenericMenu
 		{
 			if(!page_init)
 			{
-				valid_hardpoints = mechplr.hardpoints;
-				valid_inv_context = mechplr.inv_context;
-				page_offs = -1;
-				if(hardpoint < 0) hardpoint = 1;
-				initRect(modebtn,460,625,250,60);
-				page_init = true;
+				if(!CheckActiveMech())
+				{
+					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Yellow]Armory can only be accessed when\n\c[Yellow]a mech is currently active.");
+					hud_page = 0;
+					return;
+				}
+				else
+				{
+					valid_hardpoints = mechplr.hardpoints;
+					valid_inv_context = mechplr.inv_context;
+					page_offs = -1;
+					if(hardpoint < 0) hardpoint = 1;
+					initRect(modebtn,460,625,250,60);
+					page_init = true;
+				}
 			}
 			H_DrawImage(tArmory, (0,0), MD_SBS.SS_SCREEN_CENTER, (1.0, 1.0) );
 			drawLoadoutBody(-90,-460,hardpoint);

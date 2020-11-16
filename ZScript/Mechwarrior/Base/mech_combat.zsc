@@ -152,6 +152,7 @@ void mech_weapons()
 	
 	// Return if invalid.
 	if(!player || checkAI()) return;
+	if(CheckOrganic()) return;
 	
 	bool firing = (GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK) || 
 				  (GetPlayerInput(INPUT_BUTTONS) & BT_USER1 ) ||
@@ -218,7 +219,7 @@ void mech_weapons()
 		TakeInventory("IBTN_PRVGROUP",1);
 	}
 	
-	if(countinv("IBTN_SHUTDOWN") || (!mech_shutdown && !inv_context.engine) )
+	if( (countinv("IBTN_SHUTDOWN") || (!mech_shutdown && !inv_context.engine)) && !CheckOrganic() )
 	{
 		Cockpit_Alert("\c[RED]Shutting down...");
 		mechsounds.pushSound("Mech/Betty/ShuttingDown");
