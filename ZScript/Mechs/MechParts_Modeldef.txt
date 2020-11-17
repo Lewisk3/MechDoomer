@@ -103,13 +103,35 @@ Model Cockpit_Timberwolf
 {
 	Path "models/Mechs/Timberwolf"
 	Model 0 "tw_head.md3"
-	Scale 0.20 0.20 0.17
+	Scale 0.10 0.10 0.07
 	Skin 0 "tw_head.png" // Main
 	USEACTORPITCH
 	USEACTORROLL
 	RollOffset 8
 	AngleOffset 90
-	Offset -48 0 -8;
+	Offset -25 0.48 1;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Timberwolf
+{
+	Path "models/Mechs"
+	Model 0 "Timberwolf/tw_leftarm.md3"
+	SurfaceSkin 0 0 "Timberwolf/tw_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Timberwolf
+{
+	Path "models/Mechs"
+	Model 0 "Timberwolf/tw_rightarm.md3"
+	SurfaceSkin 0 0 "Timberwolf/tw_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }
@@ -640,6 +662,28 @@ Model Cockpit_Summoner
 	
    FrameIndex MODL A 0 0
 }
+Model LeftArm_Summoner
+{
+	Path "models/Mechs"
+	Model 0 "Summoner/su_leftarm.md3"
+	SurfaceSkin 0 0 "Summoner/su_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Summoner
+{
+	Path "models/Mechs"
+	Model 0 "Summoner/su_rightarm.md3"
+	SurfaceSkin 0 0 "Summoner/su_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
 
 // Raven
 Model Torso_Raven
@@ -1088,6 +1132,28 @@ Model Cockpit_Hellbringer
 	USEACTORROLL 
 	AngleOffset 90
 	Offset 3 0 -8;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Hellbringer
+{
+	Path "models/Mechs"
+	Model 0 "Hellbringer/hb_leftarm.md3"
+	SurfaceSkin 0 0 "Hellbringer/hb_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Hellbringer
+{
+	Path "models/Mechs"
+	Model 0 "Hellbringer/hb_rightarm.md3"
+	SurfaceSkin 0 0 "Hellbringer/hb_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }

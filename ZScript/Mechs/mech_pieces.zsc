@@ -272,18 +272,24 @@ class Torso_Centurion : MechTorsoBase {
 // Heavy
 class Torso_Timberwolf : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf", "Cockpit_Timberwolf", "", "";
+		MechTorsoBase.Pieces "Hips_Timberwolf", "Legs_Timberwolf", "Cockpit_Timberwolf", "LeftArm_Timberwolf", "RightArm_Timberwolf";
 		MechPartsBase.ZOffset 50;
-		MechPartsBase.CockpitOffset 20, 70;
-		MechTorsoBase.CockpitRange 0.76, 0.4, 0.8;
+		MechTorsoBase.ArmsHeight 72;
+		//MechTorsoBase.ArmsForward -7;
+		MechTorsoBase.ArmsRollPitchMod 0.4, 6;
+		MechPartsBase.CockpitOffset 30, 70;
+		MechTorsoBase.CockpitRange 0.76, 0.4, 0.5;
 		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
 class Torso_Summoner : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Summoner", "Legs_Summoner", "Cockpit_Summoner", "", "";
+		MechTorsoBase.Pieces "Hips_Summoner", "Legs_Summoner", "Cockpit_Summoner", "LeftArm_Summoner", "RightArm_Summoner";
 		MechPartsBase.ZOffset 45;
-		MechPartsBase.CockpitOffset 0, 90;
+		MechTorsoBase.ArmsHeight 75;
+		MechTorsoBase.ArmsForward -2;
+		MechTorsoBase.ArmsRollPitchMod 0.55, 6;
+		MechPartsBase.CockpitOffset 0, 75;
 		MechTorsoBase.CockpitRange 0.8, 0.4, 0.6;
 		MechTorsoBase.TwistSpeed 0.25;
 	}
@@ -310,30 +316,12 @@ class Torso_Rifleman : MechTorsoBase {
 		MechTorsoBase.TwistSpeed 0.45;
 	}
 }
-class Torso_Marauder : MechTorsoBase {
-	Default {
-		MechTorsoBase.Pieces "Hips_Marauder", "Legs_Marauder", "Cockpit_Marauder", "LeftArm_Marauder", "RightArm_Marauder";
-		MechPartsBase.ZOffset 65;
-		MechPartsBase.CockpitOffset 0, 85;
-		MechTorsoBase.ArmsHeight 78;
-		MechTorsoBase.ArmsRollPitchMod 0.5, 10;
-		MechTorsoBase.CockpitRange 0.80, 0.40, 0.08;
-		MechTorsoBase.TwistSpeed 0.35;
-	}
-}
-class Torso_Gargoyle : MechTorsoBase {
-	Default {
-		MechTorsoBase.Pieces "Hips_Gargoyle", "Legs_Gargoyle", "Cockpit_Gargoyle", "", "";
-		MechPartsBase.ZOffset 42;
-		MechPartsBase.CockpitOffset 0, 90;
-		MechTorsoBase.CockpitRange 0.82, 0.40, 0.25;
-		MechTorsoBase.TwistSpeed 0.35;
-	}
-}
 class Torso_Hellbringer : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Hellbringer", "Legs_Hellbringer", "Cockpit_Hellbringer", "", "";
+		MechTorsoBase.Pieces "Hips_Hellbringer", "Legs_Hellbringer", "Cockpit_Hellbringer", "LeftArm_Hellbringer", "RightArm_Hellbringer";
 		MechPartsBase.ZOffset 45;
+		MechTorsoBase.ArmsHeight 74;
+		MechTorsoBase.ArmsRollPitchMod 0.52, 5;
 		MechPartsBase.CockpitOffset 0, 75;
 		MechTorsoBase.CockpitRange 0.8, 0.4, 0.4;
 		MechTorsoBase.TwistSpeed 0.35;
@@ -379,6 +367,26 @@ class Torso_Warhammer : MechTorsoBase {
 		MechTorsoBase.ArmsHeight 63;
 		MechTorsoBase.CockpitRange 0.72, 0.4, 0.2;
 		MechTorsoBase.TwistSpeed 0.16;
+	}
+}
+class Torso_Marauder : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Marauder", "Legs_Marauder", "Cockpit_Marauder", "LeftArm_Marauder", "RightArm_Marauder";
+		MechPartsBase.ZOffset 65;
+		MechPartsBase.CockpitOffset 0, 85;
+		MechTorsoBase.ArmsHeight 78;
+		MechTorsoBase.ArmsRollPitchMod 0.5, 10;
+		MechTorsoBase.CockpitRange 0.80, 0.40, 0.08;
+		MechTorsoBase.TwistSpeed 0.35;
+	}
+}
+class Torso_Gargoyle : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Gargoyle", "Legs_Gargoyle", "Cockpit_Gargoyle", "", "";
+		MechPartsBase.ZOffset 42;
+		MechPartsBase.CockpitOffset 0, 90;
+		MechTorsoBase.CockpitRange 0.82, 0.40, 0.25;
+		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
 

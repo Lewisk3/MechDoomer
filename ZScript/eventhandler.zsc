@@ -283,6 +283,15 @@ class MechDoomerEvents : EventHandler
 			}
 		}
 		
+		// Earthquake effect negation
+		if(!plr.CheckOrganic())
+		{
+			it = ThinkerIterator.Create("Thinker", Thinker.STAT_EARTHQUAKE);
+			Thinker quaker;
+			while(quaker = Thinker(it.Next())) 
+				quaker.ChangeStatNum(Thinker.STAT_DEFAULT);
+		}
+			
 		if(!plr)
 		{
 			let newplr = players[consoleplayer].mo;
