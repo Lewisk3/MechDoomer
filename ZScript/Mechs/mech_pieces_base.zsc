@@ -153,7 +153,7 @@ class MechPartsBase : Actor
 	{
 		double distoffs = xoffs;
 		FLineTraceData lndata;
-		mechowner.LineTrace(angle,xoffs+128,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,zoffs+sin(mechowner.pitch),0,0,lndata);
+		mechowner.LineTrace(angle,xoffs+64,0,TRF_THRUACTORS|TRF_THRUBLOCK|TRF_ABSOFFSET,zoffs+sin(mechowner.pitch),0,0,lndata);
 		if( lndata.HitType == lndata.TRACE_HitWall    || 
 		    lndata.HitType == lndata.TRACE_HitCeiling || 
 			lndata.HitType == TRACE_HitFloor			  ) 
@@ -370,15 +370,17 @@ class MechArmsBase : MechPartsBase
 	{
 		if(!mechowner.models_reference || !mechowner.models_reference.cockpit) 
 			return super.getMechPos();
+			
+		bool checkview = IsThirdPerson() || !CheckLocalObserver();
 		double trueangle = notwist ? mechowner.LegAng : mechowner.angle;
 		double cos_angle = cos(trueangle);
 		double sin_angle = sin(trueangle);
 		double collidepush = getPushback(mxoffs, mzoffs); 
-		double pitchcorrect = -cos(pitch-90)*(IsThirdPerson() ? pcoffs : 20);
+		double pitchcorrect = -cos(pitch-90)*(checkview ? pcoffs : 20);
 		double rollcorrect  = -roll*rcoffs;
 		vector3 basepos;
 		
-		if(!IsThirdPerson())
+		if(!checkview)
 		{
 			double forward = mechowner.models_reference.cockpit.cockpitcam.cxoffs+
 							 mechowner.models_reference.cockpit.mxoffs;

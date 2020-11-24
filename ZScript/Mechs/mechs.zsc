@@ -679,7 +679,7 @@ class Timberwolf : MechWarrior
 	override void SetupWeapons()
 	{
 		hardpoints.setupVitals( 8,46,32,32,24,24,32,32, 5,23,16,16,12,12,16,16 );
-		hardpoints.setupLocations( (0,20), (0,-10), (25,10), (-25,10), (40,-25), (-40,-25), (30,-85), (-30,-85) );
+		hardpoints.setupLocations( (0,20), (0,-10), (25,25), (-25,25), (40,-35), (-40,-35), (30,-90), (-30,-90) );
 		hardpoints.setupSlots();
 		equipWeapon("ERLargeLaser",hardpoints.ra,1);
 		equipWeapon("ERMediumLaser",hardpoints.ra,2);
@@ -1081,7 +1081,7 @@ class Direwolf : MechWarrior
 	{
 		Mass 4000;
 		Player.DisplayName "Direwolf - Prime";
-		Player.ViewHeight 80;
+		Player.ViewHeight 70;
 		
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.CockpitIsModel true;

@@ -332,20 +332,26 @@ class Torso_Hellbringer : MechTorsoBase {
 // Assault
 class Torso_Atlas : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas", "Cockpit_Atlas", "", "";
+		MechTorsoBase.Pieces "Hips_Atlas", "Legs_Atlas", "Cockpit_Atlas", "LeftArm_Atlas", "RightArm_Atlas";
 		MechPartsBase.ZOffset 60;
 		MechPartsBase.CockpitOffset 0, 110;
 		MechTorsoBase.CockpitRange 0.69, 0.34, 0.7;
 		MechTorsoBase.TwistSpeed 0.12;
+		MechTorsoBase.ArmsHeight 96;
+		MechTorsoBase.ArmsForward -3;
+		MechTorsoBase.ArmsRollPitchMod 0.8, 10;
 	}
 }
 class Torso_Direwolf : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Direwolf", "Legs_Direwolf", "Cockpit_Direwolf", "", "";
+		MechTorsoBase.Pieces "Hips_Direwolf", "Legs_Direwolf", "Cockpit_Direwolf", "LeftArm_Direwolf", "RightArm_Direwolf";
 		MechPartsBase.ZOffset 45;
-		MechPartsBase.CockpitOffset 15, 90;
+		MechPartsBase.CockpitOffset 15, 80;
 		MechTorsoBase.CockpitRange 0.66, 0.4, 0.6;
 		MechTorsoBase.TwistSpeed 0.14;
+		MechTorsoBase.ArmsHeight 77;
+		MechTorsoBase.ArmsForward 0;
+		MechTorsoBase.ArmsRollPitchMod 0.65, 4;
 	}
 }
 class Torso_Warhawk : MechTorsoBase {
@@ -382,11 +388,14 @@ class Torso_Marauder : MechTorsoBase {
 }
 class Torso_Gargoyle : MechTorsoBase {
 	Default {
-		MechTorsoBase.Pieces "Hips_Gargoyle", "Legs_Gargoyle", "Cockpit_Gargoyle", "", "";
+		MechTorsoBase.Pieces "Hips_Gargoyle", "Legs_Gargoyle", "Cockpit_Gargoyle", "LeftArm_Gargoyle", "RightArm_Gargoyle";
 		MechPartsBase.ZOffset 42;
 		MechPartsBase.CockpitOffset 0, 90;
 		MechTorsoBase.CockpitRange 0.82, 0.40, 0.25;
 		MechTorsoBase.TwistSpeed 0.35;
+		MechTorsoBase.ArmsHeight 82;
+		MechTorsoBase.ArmsForward 0;
+		MechTorsoBase.ArmsRollPitchMod 0.65, 6;
 	}
 }
 

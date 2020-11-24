@@ -227,11 +227,33 @@ Model Cockpit_Atlas
 {
 	Path "models/Mechs"
 	Model 0 "Atlas/at_head.md3"
-	Scale 0.20 0.20 0.17
+	Scale 0.10 0.10 0.07
 	Skin 0 "Atlas/at_head.png" // Main
 	USEACTORPITCH
 	USEACTORROLL 
-	Offset -18 0 10;
+	Offset -10 0 7.5;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Atlas
+{
+	Path "models/Mechs"
+	Model 0 "Atlas/at_leftarm.md3"
+	SurfaceSkin 0 0 "Atlas/at_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Atlas
+{
+	Path "models/Mechs"
+	Model 0 "Atlas/at_rightarm.md3"
+	SurfaceSkin 0 0 "Atlas/at_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }
@@ -500,6 +522,28 @@ Model Cockpit_Direwolf
 	USEACTORROLL 
 	AngleOffset 90
 	Offset -137 1 -65;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Direwolf
+{
+	Path "models/Mechs"
+	Model 0 "Direwolf/dw_leftarm.md3"
+	SurfaceSkin 0 0 "Direwolf/dw_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Direwolf
+{
+	Path "models/Mechs"
+	Model 0 "Direwolf/dw_rightarm.md3"
+	SurfaceSkin 0 0 "Direwolf/dw_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }
@@ -969,6 +1013,28 @@ Model Cockpit_Gargoyle
 	USEACTORROLL 
 	AngleOffset 90
 	Offset -10 0 -8;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Gargoyle
+{
+	Path "models/Mechs"
+	Model 0 "Gargoyle/gg_leftarm.md3"
+	SurfaceSkin 0 0 "Gargoyle/gg_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Gargoyle
+{
+	Path "models/Mechs"
+	Model 0 "Gargoyle/gg_rightarm.md3"
+	SurfaceSkin 0 0 "Gargoyle/gg_full.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
 	
    FrameIndex MODL A 0 0
 }
