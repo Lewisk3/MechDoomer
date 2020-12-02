@@ -647,6 +647,7 @@ class MechDoomerEvents : EventHandler
 						ShaderManager.imageEnhancementOn = plr.InfraredActive;
 						if(plr.InfraredActive) 
 						{
+							MechHeadlight.MountLight(plr.hardpoints.ct.hitbox, (0,30,0));
 							plr.mechSounds.pushSound("Mech/Betty/LightAmp");
 							plr.mechSounds.pushSound("Mech/Betty/Engaged");
 							plr.S_StartSound("Mech/Infrared",CHAN_WEAPON);
@@ -665,9 +666,9 @@ class MechDoomerEvents : EventHandler
 						String alertmsg = "\c[GREEN] AntiMissileSystems: ";
 						plr.ams_passive = !plr.ams_passive;	
 						if(!plr.ams_passive) 
-							alertmsg = alertmsg.."Disabled.";
-						else
 							alertmsg = alertmsg.."Enabled.";
+						else
+							alertmsg = alertmsg.."Disabled.";
 						plr.Cockpit_Alert(alertmsg);
 					}
 				}

@@ -239,7 +239,7 @@ class MechCockpitCamera : MechPartsBase
 			angle = MDMath.Lerp(angle,mechowner.angle,0.6*fovdiff);
 			pitch = MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.065),0.6*fovdiff);
 			roll = mechowner.roll;
-			czoffs = defz+(mechowner.viewzoffs);
+			czoffs = defz+(mechowner.viewzoffs*0.25);
 		}
 		super.tick();
 	}
@@ -308,7 +308,7 @@ class MechCockpitModel : MechPartsBase
 					double old_pitch = pitch;
 					double old_angle = angle;
 					A_SetAngle(MDMath.Lerp(angle,toangle, rotatespeed*0.6),SPF_INTERPOLATE);
-					A_SetPitch(MDMath.Lerp(pitch,topitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
+					A_SetPitch(MDMath.Lerp(pitch,topitch+(mechowner.viewzoffs*1.8),0.1),SPF_INTERPOLATE);
 					
 					// Follow Roll
 					if(!mechowner.models_reference.noroll)
@@ -333,7 +333,7 @@ class MechCockpitModel : MechPartsBase
 					roll = mechowner.roll;
 				}
 			}
-			mzoffs = (mechowner.viewzoffs*0.12)*bobrange;
+			mzoffs = (mechowner.viewzoffs*0.24)*bobrange;
 		}
 		
 		// Only visible for the local player.
@@ -426,20 +426,17 @@ class MechArmsBase : MechPartsBase
 		let cockpit = base.cockpit;
 		if( mechowner && base && (!arm_hp || arm_hp.internalhp > 0) )
 		{		
-			// For now, the arms will be invisible in 3rd person but, i do want them to actually
-			// function at some point, can't get the math just right atm.
 			bInvisible = !base.fullarms && IsThirdPerson();
-			
 			if(!IsThirdPerson() && CheckLocalObserver())
 			{
-				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
+				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*1.2),0.1),SPF_INTERPOLATE);
 				A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
 				if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, cockpit.roll, 0.1), SPF_INTERPOLATE);
-				mzoffs = mechowner.viewzoffs;
+				mzoffs = mechowner.viewzoffs*0.5;
 			}
 			else
 			{
-				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*0.75),0.1),SPF_INTERPOLATE);
+				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*1.2),0.1),SPF_INTERPOLATE);
 				if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, cockpit.roll, 0.1), SPF_INTERPOLATE);
 				A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
 				//A_SetRoll(roll+1, SPF_INTERPOLATE);
@@ -741,7 +738,11 @@ class Legs_Smooth  : MechLegsBase
 			{	
 				if(!mechowner) return ResolveState("Null"); // This occurs on disconnect while walking.
 				if( (frame == 1 || frame == 15) && (spdrating > 0.3 || mechowner.LegVel) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
-				if(checkStepping(false, 2, 16) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(checkStepping(false, 2, 16) && mechowner.stepping) 
+				{
+					FallAnimator.Animate(mechowner, 3, 8, 1);
+					mechowner.vel.xy *= stompfriction;	
+				}
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 2);
 				return !isMoving() ? ResolveState("SpawnIdle") : ResolveState(Null);
 			}
@@ -756,7 +757,11 @@ class Legs_Smooth  : MechLegsBase
 			{	
 				if(!mechowner) return ResolveState("Null"); // This occurs on disconnect while running.
 				if(frame == 7 || frame == 22) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
-				if(checkStepping(false, 8, 23) && mechowner.stepping) mechowner.vel.xy *= stompfriction;	
+				if(checkStepping(false, 8, 23) && mechowner.stepping) 
+				{
+					FallAnimator.Animate(mechowner, 3, 10, 1);
+					mechowner.vel.xy *= stompfriction;	
+				}
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);
 				return !isMoving() ? ResolveState("WalkCycle") : (tics >= 2 && frame == 1) ? ResolveState("WalkCycle") : ResolveState(Null);
 			}

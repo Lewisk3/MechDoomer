@@ -1,7 +1,7 @@
 colorchanger LaserDecalAnimator
 {
 	Color "Black"
-	FadeTime 0.3
+	FadeTime 0.78
 	FadeStart 0
 }
 

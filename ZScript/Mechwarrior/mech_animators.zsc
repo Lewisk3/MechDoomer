@@ -245,10 +245,10 @@ class MechExchange_Animator : Powerup
 // General Animators
 class FallAnimator : MechAnimator
 {
+	int priority;
 	double force;
 	int atime;
 	int timer;
-	int wait_timer;
 	Default
 	{
 		MechAnimator.FadeAnimate "FF FF FF", -1, 0; // Disable fade animations
@@ -257,14 +257,16 @@ class FallAnimator : MechAnimator
 		MechAnimator.Persists true;
 	}
 	
-	static FallAnimator Animate(MechwarriorBase mech, double force, int atime = 30)
+	static FallAnimator Animate(MechwarriorBase mech, double force, int atime = 30, int priority = int.max)
 	{
 		mech.GiveLocalInv("FallAnimator");
 		let anim = FallAnimator(mech.FindInventory("FallAnimator"));
-		if(anim)
+		if(anim && priority >= anim.priority)
 		{
 			anim.force = force;
 			anim.atime = atime;
+			anim.priority = priority;
+			anim.timer = 0;
 		}
 		return anim;
 	}

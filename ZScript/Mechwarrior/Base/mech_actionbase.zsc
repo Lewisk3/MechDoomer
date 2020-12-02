@@ -80,7 +80,10 @@ void MAB_Common()
 		{
 			double accel = ((1000/mech_tonnage)/100) * (0.12*move_accel);
 			move_throttle = MDMath.Lerp( move_throttle, throttle, clamp(accel,0.008,0.4) );
-			vel = (cos(LegAng)*(move_throttle*MoveSpeed),sin(LegAng)*(move_throttle*MoveSpeed),vel.z);
+			if(player.onground)
+				vel = (cos(LegAng)*(move_throttle*MoveSpeed),sin(LegAng)*(move_throttle*MoveSpeed),vel.z);
+			else
+				vel.xy *= 0.98;
 		}
 		throttle = clamp(throttle,-(throttle_max/2),throttle_max);
 		

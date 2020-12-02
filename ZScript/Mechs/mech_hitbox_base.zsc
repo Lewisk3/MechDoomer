@@ -3,6 +3,7 @@ class MechHitbox : Actor
 	MechHardpoint mounted_hp;
 	Mechwarrior mech;
 	double xoffs, yoffs, forward;
+	double curangle, curpitch;
 	
 	Default
 	{
@@ -84,6 +85,8 @@ class MechHitbox : Actor
 		double offspitch = CheckTorsoMount() ? mech.models_reference.roll*-MDMath.Sign(xoffs) : 0;
 		vector3 offs = MDMath.VOffsetPitch(offsangle,offspitch, forward, xoffs, 1);	
 		Vector3 finalpos = mech.Vec3Offset(offs.x,offs.y,yoffs+(offs.z*18));
+		curangle = offsangle;
+		curpitch = offspitch;
 		SetOrigin(finalpos, false);
 	}
 	

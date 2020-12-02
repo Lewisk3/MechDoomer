@@ -88,3 +88,95 @@ class SuperCoolant_Pickup : CustomInventory replaces Berserk
 		Stop;
 	}
 }
+
+class MechHeadlightBase : Spotlight 
+{
+	MechHitbox mount;
+	Vector3 offset;  
+	
+	uint8 Red;
+	uint8 Green;
+	uint8 Blue;
+	uint8 Intensity;
+	uint16 InnerAngle;
+	uint16 OuterAngle;
+	Property Red:Red;
+	Property Green:Green;
+	Property Blue:Blue;
+	Property Intensity:Intensity;
+	Property SpotInnerAngle:InnerAngle;
+	Property SpotOuterAngle:OuterAngle;
+
+	Default
+	{
+	  MechHeadlightBase.Red 220;
+	  MechHeadlightBase.Green 220;
+	  MechHeadlightBase.Blue 220;
+	  MechHeadlightBase.Intensity 150;
+	  MechHeadlightBase.SpotInnerAngle 15;
+	  MechHeadlightBase.SpotOuterAngle 45;     
+	}
+   
+	override void Activate(Actor activator) 
+	{
+		args[LIGHT_RED] = Red;
+		args[LIGHT_GREEN] = Green;
+		args[LIGHT_BLUE] = Blue;
+		args[LIGHT_INTENSITY] = Intensity;
+		SpotInnerAngle = InnerAngle;
+		SpotOuterAngle = OuterAngle;
+		super.Activate(activator);       
+	}
+
+	override void DeActivate(Actor activator) 
+	{
+		super.DeActivate(activator);
+		Destroy();
+	}
+		   
+    virtual bool OffSwitch() 
+	{
+		return false;
+	}
+		   
+    override void Tick() 
+	{
+		vector3 offs = MDMath.VOffsetPitch(mount.curangle, mount.curpitch, offset.y, offset.x, 1);	
+		Vector3 finalpos = mount.Vec3Offset(offs.x,offs.y,offset.z+offs.z+mount.height/2.);
+		A_SetAngle(mount.curangle);
+		A_SetPitch(mount.mech.pitch);
+        SetOrigin(finalpos, true);
+		if(OffSwitch()) DeActivate(mount.mech);
+        Super.Tick();             
+    }
+}
+
+class MechHeadlight : MechHeadlightBase
+{
+	 static MechHeadlight MountLight(MechhitBox hboxpos, vector3 offs = (0,0,0))
+	 {
+		let headlight = MechHeadlight(Spawn("MechHeadlight", hboxpos.pos));
+		if(headlight) 
+		{
+			headlight.mount = hboxpos;
+			headlight.offset = offs;
+			headlight.Activate(hboxpos.mech);
+		}
+		return headlight;
+	 }
+
+	 override bool OffSwitch() 
+	 {
+		return !mount.mech.InfraredActive;
+	 }
+	 States
+	 {
+		Spawn:
+			PLSS A 1;
+		loop;
+	 }
+}
+
+   
+   
+    

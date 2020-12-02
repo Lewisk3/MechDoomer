@@ -693,12 +693,12 @@ class MechStatusBar : BaseStatusBar
 		}
 		H_DrawImage("MWTARGET",(200,886),0, fscale);
 		
-		if(mechplr.targetenemy && mechplr.targetreticle)
+		if(mechplr.targetenemy)
 		{	
 			let targetMechBase = MechHitBox(mechplr.targetenemy);
 			bool isNav = NAVPoint(mechplr.targetenemy) != NULL;
 			Actor cam;
-			if(!isNav)
+			if(!isNav && mechplr.targetreticle)
 				cam = mechplr.targetreticle.cam;
 			else
 				cam = mechplr.targetenemy;

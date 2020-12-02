@@ -235,9 +235,9 @@ void mech_cockpitbob()
 		double gyros = countStruct("StructGyro") - countStructDamaged("StructGyro",true);
 		double bfactor = 2.76-(gyros*gfactor);
 		double bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 1.2, 3.15);
-		if(defaultmovement) bobmod *= 0.55;
-		Player.ViewZ -= bobmod;
-		viewzoffs = (Player.ViewZ-pos.z)-defviewz;
+		if(defaultmovement) bobmod *= 0.25;
+		Player.ViewZ -= bobmod*0.75;
+		viewzoffs = ((Player.ViewZ-pos.z)-defviewz);
 	}
 }
 
@@ -287,8 +287,7 @@ void mech_movement()
 	MAB_Common();
 	if(!player || checkAI() || checkVoodoo()) return;
 	
-	if(inv_context.engine && inv_context.engine.model == EngineDatabase.Type_Organic)
-		A_SetSpeed(PilotSpeed);
+	if(CheckOrganic()) A_SetSpeed(PilotSpeed);
 	
 	// Leg Movement
 	if(!defaultmovement)
@@ -401,8 +400,8 @@ void mech_movement()
 		double jetpitch = 45;
 		if(defaultmovement) zthrust *= 0.25;
 		vel += (
-			cos(LegAng)*cos(jetpitch)*(zthrust*5), 
-			sin(LegAng)*cos(jetpitch)*(zthrust*5), 
+			cos(LegAng)*cos(jetpitch)*(zthrust*0.35), 
+			sin(LegAng)*cos(jetpitch)*(zthrust*0.35), 
 			sin(jetpitch)*finalthrust
 		);
 		

@@ -436,10 +436,10 @@ void trigger_ams(mw_InvStruct amsitem)
 	{
 		let mechweap = Mechbase_Actor(obj);
 		if(mechweap && mechweap.mechplayer == self && !mechweap.mechplayer.CheckAI()) continue;
-		if(obj is "AMS_Missile") continue;
+		if(obj is "AMS_Missile" || obj is "MissileDebris" || obj is "DEBRIS_3D" || !obj.Damage) continue;
 		if(obj && amsitem.active_cooldown <= 0)
 		{	
-			if( (!mechweap && !obj.Damage) || !(mechweap is "MechMissile") ) continue;
+			if( mechweap && ((!mechweap && !obj.Damage) || !(mechweap is "MechMissile")) ) continue;
 			if(CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
 			{
 				//console.printf("Firing AMS at: " .. obj.getTag());
