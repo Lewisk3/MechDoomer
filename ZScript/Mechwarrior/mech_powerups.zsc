@@ -89,6 +89,7 @@ class SuperCoolant_Pickup : CustomInventory replaces Berserk
 	}
 }
 
+// Headlights 
 class MechHeadlightBase : Spotlight 
 {
 	MechHitbox mount;
@@ -169,14 +170,4 @@ class MechHeadlight : MechHeadlightBase
 	 {
 		return !mount.mech.InfraredActive;
 	 }
-	 States
-	 {
-		Spawn:
-			PLSS A 1;
-		loop;
-	 }
 }
-
-   
-   
-    

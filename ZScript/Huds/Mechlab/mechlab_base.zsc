@@ -64,6 +64,7 @@ void CloseMechlab()
 
 bool CheckActiveMech()
 {
+	if(!mechplr.inv_context.engine) return true;
 	return mechplr.inv_context.engine && mechplr.inv_context.engine.model != EngineDatabase.Type_Organic;
 }
 
