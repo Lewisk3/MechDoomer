@@ -290,7 +290,7 @@ class Tarantula : MechWarrior
 		MechWarriorBase.MechPieces "Torso_Tarantula";
 		MechWarriorBase.HudMech "#Atlas";
 		MechWarriorBase.Acceleration 2.0;
-		MechWarriorBase.LegSpeed 1.3;
+		MechWarriorBase.LegSpeed 1.5;
 		MechWarriorBase.CValue 3560417*MWMECHPRICE_FACTOR;
 	}
 		

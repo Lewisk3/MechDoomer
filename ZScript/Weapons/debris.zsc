@@ -95,6 +95,11 @@ class DEBRIS_3D : Actor
 	
 	override void Tick()
 	{
+		if(!damage) 
+		{
+			bRIPPER = false;
+			bSOLID = false;
+		}
 		A_SetPitch(pitch+8, SPF_INTERPOLATE);
 		super.Tick();
 	}

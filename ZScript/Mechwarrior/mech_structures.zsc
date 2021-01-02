@@ -419,7 +419,7 @@ class LaserAntiMissileSystem : AntiMissileSystem
 		Mechbase_Utility.Criticals 2;
 		Mechbase_Utility.Moveable 1;
 		Mechbase_Utility.CValue 19600;
-		AntiMissileSystem.Cooldown 8;
+		AntiMissileSystem.Cooldown 5;
 		AntiMissileSystem.ActiveRange 800;
 		AntiMissileSystem.AmmoUse 0;
 		AntiMissileSystem.AmmoType "";

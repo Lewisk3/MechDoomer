@@ -3,7 +3,7 @@ class AntiMissile : AMS_Missile
 {
 	Default
 	{
-		AMS_Missile.Effectiveness (MWDMG_SRM);
+		AMS_Missile.Effectiveness (MWDMG_SRM*4);
 		AMS_Missile.Efficiency 0.6;
 	}
 }
@@ -213,7 +213,7 @@ class CATM : MechMissile
 		Mechbase_Actor.ConstDamage (MWDMG_ATM);
 		Mechbase_Actor.MinimumRange 80;
 		Mechbase_Actor.MaximumRange 800;
-		MechMissile.Homming false, 0;
+		MechMissile.Homming true, 0;
 		Mechbase_Actor.Heat MWHEAT_ATM;
 		MechMissile.ExplosionScale 0.5;
 	}
@@ -224,6 +224,7 @@ class HE_CATM : CATM
 	{
 		Mechbase_Actor.ConstDamage (MWDMG_HEATM);
 		Mechbase_Actor.MinimumRange 0;
+		Mechbase_Actor.MaximumRange 180;
 	}
 }
 

@@ -214,6 +214,8 @@ class HE_ATM_Ammo : Mechbase_Ammo
 			"\c[Brick]!Highly Explosive!\n"
 			"\c[Orange]Removes Minimum range\n"
 			"\c[Orange]at the cost of accuracy.\n"
+			"\c[Orange]Drastically reduces\n"
+			"\c[Orange]maximum range.\n"
 			"\c[Yellow]-------------------------------------------" 
 		);
 	}

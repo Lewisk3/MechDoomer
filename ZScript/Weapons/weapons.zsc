@@ -279,7 +279,11 @@ class ERPPC : PPC
 
 // Missiles - SRM
 const SRMSpread = 0.054;
-const SSRMText = "\c[Orange]Streak SRM's have Lock-On\n\c[Orange]capabilities.";
+const SSRMText = (
+	"\c[Orange]Streak SRM's must have a\n"
+	"\c[Orange]valid target locked\n"
+	"\c[Orange]in-order to fire."
+);
 
 class SRM2 : Mechbase_Weapon
 {
@@ -316,6 +320,11 @@ class SSRM2 : SRM2
 		Mechbase_Weapon.IsHommingMissile true;
 		Mechbase_Weapon.Cooldown MWCOOL_SSRM2, 0.2;
 		Mechbase_Weapon.FlavorText SSRMText;
+	}
+	
+	override bool MWFire()
+	{
+		return mechplr.targetlocked ? super.MWFire() : false;
 	}
 }
 class SRM4 : Mechbase_Weapon
@@ -354,6 +363,11 @@ class SSRM4 : SRM4
 		Mechbase_Weapon.Cooldown MWCOOL_SSRM4, 0.2;
 		Mechbase_Weapon.FlavorText SSRMText;
 	}
+	
+	override bool MWFire()
+	{
+		return mechplr.targetlocked ? super.MWFire() : false;
+	}
 }
 
 class SRM6 : Mechbase_Weapon
@@ -391,14 +405,20 @@ class SSRM6 : SRM6
 		Mechbase_Weapon.Cooldown MWCOOL_SSRM6, 0.2;
 		Mechbase_Weapon.FlavorText SSRMText;
 	}
+	
+	override bool MWFire()
+	{
+		return mechplr.targetlocked ? super.MWFire() : false;
+	}
 }
 
 // Missiles - ATM
 const ATMSpread = 0.23;
 const ATMText = (
-	"\c[Orange]ATMs utilize ammo switching.\n"
-	"\c[Orange]Switches between: \n"
-	"\c[Orange]ATM and HE-ATM Ammo" 
+	"\c[Orange]Can optionally take highly\n"
+	"\c[Orange]explosive ammunition (HE-ATM)\n"
+	"\c[Orange]Has homing capabilities if not\n"
+	"\c[Orange]Using HE-ATM Ammo.\n"
 );
 
 class CATM3 : Mechbase_Weapon
@@ -415,7 +435,15 @@ class CATM3 : Mechbase_Weapon
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 18500;
 		Mechbase_Weapon.Cooldown MWCOOL_ATM3, 0.05;
+		Mechbase_Weapon.LockingSpeed 4.0;
 		Mechbase_Weapon.FlavorText ATMText;
+	}
+	
+	override void weapon_tick()
+	{
+		super.weapon_tick();
+		// Homing if not high explosive.
+		isHomming = (ammo_mode == 0);
 	}
 	
 	override bool MWFire()

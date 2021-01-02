@@ -15,7 +15,7 @@ class MechDoomerEvents : EventHandler
 			MD_SBS.SS_SCREEN_CENTER, Font.CR_RED
 		);
 	}
-	
+
 	override void RenderOverlay(RenderEvent e)
 	{
 		// NOTE: vid_rendermode does not exist in LZDoom, apparently.
@@ -281,17 +281,7 @@ class MechDoomerEvents : EventHandler
 			{
 				RadiusDebug.Disable(act);
 			}
-		}
-		
-		// Earthquake effect negation
-		if(!plr.CheckOrganic())
-		{
-			it = ThinkerIterator.Create("Thinker", Thinker.STAT_EARTHQUAKE);
-			Thinker quaker;
-			while(quaker = Thinker(it.Next())) 
-				quaker.ChangeStatNum(Thinker.STAT_DEFAULT);
-		}
-			
+		}			
 		if(!plr)
 		{
 			let newplr = players[consoleplayer].mo;
@@ -320,6 +310,15 @@ class MechDoomerEvents : EventHandler
 				ShaderManager.resetInfrared = false;
 			}
 			ShaderManager.imageEnhancementOn = plr.InfraredActive;
+		}
+			
+		// Earthquake effect negation
+		if(plr && !plr.CheckOrganic())
+		{
+			it = ThinkerIterator.Create("Thinker", Thinker.STAT_EARTHQUAKE);
+			Thinker quaker;
+			while(quaker = Thinker(it.Next())) 
+				quaker.ChangeStatNum(Thinker.STAT_DEFAULT);
 		}
 	}
 		

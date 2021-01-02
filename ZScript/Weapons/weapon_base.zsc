@@ -429,7 +429,7 @@ class Mechbase_Weapon : Item_NoPickup
 		return ammo_mode;
 	}
 	
-	void weapon_tick()
+	virtual void weapon_tick()
 	{
 		let plr = MechWarrior(Owner);
 		if(!plr) return;
@@ -942,6 +942,8 @@ class AMS_Missile : Mechbase_Actor
 			if(exp)
 			{
 				exp.A_SetScale(0.3,0.3);
+				exp.angle = angle;
+				exp.pitch = pitch;
 			}
 		}
 		Death:
@@ -1016,6 +1018,8 @@ class PPCBall : Mechbase_Actor
 					spos.x += frandom(-8,8);
 					spos.y += frandom(-8,8);
 					let expl = Spawn("MissileExplosion",spos);
+					expl.angle = angle;
+					expl.pitch = pitch;
 					expl.Scale.x = frandom(0.6,1.3);
 					expl.Scale.y = frandom(0.6,1.3);
 				}

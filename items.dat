@@ -28,8 +28,8 @@ Flamer
 <E_ENERGY>
 
 <S_BALLISTIC>
-[Ballistics]
-MachineGun  
+[Ballistics]  
+MachineGun
 GaussRifle  
 [Autocannons]
 Autocannon2  
