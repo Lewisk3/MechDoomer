@@ -171,7 +171,7 @@ class Torso_Jenner : MechTorsoBase {
 		MechPartsBase.ZOffset 42;
 		MechPartsBase.CockpitOffset 25, 47;
 		MechTorsoBase.ArmsHeight 52;
-		MechTorsoBase.CockpitRange 1.0, 0.4, 0.3;
+		MechTorsoBase.CockpitRange 0.85, 0.4, 0.3;
 		MechTorsoBase.TwistSpeed 0.35;
 	}
 }
