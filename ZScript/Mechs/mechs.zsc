@@ -654,6 +654,51 @@ class Centurion : MechWarrior
 		CreateHitbox(hardpoints.ct,   0,40, 6,40, 0);
 	}
 }
+class Crab : MechWarrior
+{
+	Default
+	{
+		Mass 2200;
+		Player.DisplayName "Crab - 20";
+		Player.ViewHeight 60;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 150;
+		MechWarriorBase.PitchRange 55, 55;
+		MechWarriorBase.LegSpeed 55.00*MWGAMEPLAY_TURNRATE;
+		MechWarriorBase.Acceleration 0.8;
+		MechWarriorBase.Weight 50;
+		MechWarriorBase.Engine "ENGINE_STD_250";
+		MechWarriorBase.MechPieces "Torso_Crab";
+		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.CValue 4050875*MWMECHPRICE_FACTOR;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 10,34,26,26,16,16,26,26, 5,17,13,13,8,8,13,13 );
+		hardpoints.setupLocations( (0,40), (0,16), (10,13), (-10,13), (75,-7), (-75,-7), (30,-60), (-30,-60) );
+		hardpoints.setupSlots();
+		
+		equipStruct("Heatsink",hardpoints.ct,2);
+		equipStruct("Heatsink",hardpoints.la,2);
+		equipStruct("Heatsink",hardpoints.ra,2);
+		equipWeapon("LargeLaser", hardpoints.la, 1);
+		equipWeapon("LargeLaser", hardpoints.ra, 1);
+		equipWeapon("MediumLaser", hardpoints.ct, 2);
+		equipWeapon("SmallLaser", hardpoints.hd, 3);
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  25, 0, 8,45,0);
+		CreateHitbox(hardpoints.rl, -25, 0, 8,45,0);
+		CreateHitbox(hardpoints.la,  50,48,14,13,20);
+		CreateHitbox(hardpoints.ra, -50,48,14,13,20);
+		CreateHitbox(hardpoints.lt,  26,55,10,12, 0);
+		CreateHitbox(hardpoints.rt, -26,55,10,12, 0);
+		CreateHitbox(hardpoints.ct,   0,55,16,12,24);
+	}
+}
+
 
 // Heavy Mechs
 class Timberwolf : MechWarrior

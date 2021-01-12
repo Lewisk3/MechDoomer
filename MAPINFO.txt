@@ -63,6 +63,7 @@ GameInfo
 					"Hellbringer",
 					"Hunchback",
 					"Centurion",
+					"Crab",
 					"TestingDoomguy"
 }
 

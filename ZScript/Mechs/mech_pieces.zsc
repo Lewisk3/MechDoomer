@@ -25,6 +25,7 @@ class Cockpit_Warhammer   : MechCockpitModel {}
 class Cockpit_Hellbringer : MechCockpitModel {}
 class Cockpit_Hunchback   : MechCockpitModel {}
 class Cockpit_Centurion   : MechCockpitModel {}
+class Cockpit_Crab	      : MechCockpitModel {}
 
 // Hips
 class Hips_Invisible   : MechHipsBase {}
@@ -49,6 +50,7 @@ class Hips_Warhammer   : MechHipsBase {}
 class Hips_Hellbringer : MechHipsBase {}
 class Hips_Hunchback   : MechHipsBase {}
 class Hips_Centurion   : MechHipsBase {}
+class Hips_Crab        : MechHipsBase {}
 class Hips_Kitfox	   : MechHipsBase {
 	override void Tick()
 	{
@@ -82,6 +84,7 @@ class Legs_Warhammer   : Legs_Smooth {}
 class Legs_Hellbringer : Legs_Smooth {}
 class Legs_Hunchback   : Legs_Smooth {} 
 class Legs_Centurion   : Legs_Smooth {} 
+class Legs_Crab        : Legs_Smooth {} 
 
 // Arms
 class Arm_Invisible 	   : MechArmsBase {}
@@ -129,7 +132,8 @@ class LeftArm_Hunchback    : MechArmsBase {}
 class RightArm_Hunchback   : MechArmsBase {} 
 class LeftArm_Centurion    : MechArmsBase {} 
 class RightArm_Centurion   : MechArmsBase {} 
-
+class LeftArm_Crab         : MechArmsBase {} 
+class RightArm_Crab        : MechArmsBase {} 
 
 // Torsos
 class Model_BattleArmor : MechTorsoBase
@@ -266,6 +270,18 @@ class Torso_Centurion : MechTorsoBase {
 		MechPartsBase.CockpitOffset 0, 85;
 		MechTorsoBase.CockpitRange 0.74, 0.45, 0.25;
 		MechTorsoBase.TwistSpeed 0.55;
+	}
+}
+class Torso_Crab : MechTorsoBase {
+	Default {
+		MechTorsoBase.Pieces "Hips_Crab", "Legs_Crab", "Cockpit_Crab", "LeftArm_Crab", "RightArm_Crab";
+		MechPartsBase.ZOffset 50;
+		MechTorsoBase.ArmsHeight 60;
+		MechTorsoBase.ArmsForward 8;
+		MechTorsoBase.ArmsRollPitchMod 0.15, 4;
+		MechPartsBase.CockpitOffset 0, 70;
+		MechTorsoBase.CockpitRange 0.77, 0.45, 0.25;
+		MechTorsoBase.TwistSpeed 0.47;
 	}
 }
 

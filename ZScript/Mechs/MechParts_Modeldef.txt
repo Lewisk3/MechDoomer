@@ -1343,3 +1343,63 @@ Model RightArm_Centurion
 	
    FrameIndex MODL A 0 0
 }
+
+// Crab
+Model Torso_Crab
+{
+	Path "models/Mechs"
+	Model 0 "Crab/cr_torso.md3"
+	SurfaceSkin 0 0 "Crab/cr_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Crab
+{
+	Path "models/Mechs/Crab"
+	Model 0 "cr_hips.md3"
+	Skin 0 "cr_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	USEACTORPITCH
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Crab
+{
+	Path "models/Mechs/"
+	Model 0 "Crab/cr_head.md3"
+	Scale 0.05 0.06 0.05
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 0
+	Offset 11 4 2.5;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Crab
+{
+	Path "models/Mechs"
+	Model 0 "Crab/cr_rightarm.md3"
+	SurfaceSkin 0 0 "Crab/cr_full.png"
+	Scale 1.0 -1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Crab
+{
+	Path "models/Mechs"
+	Model 0 "Crab/cr_leftarm.md3"
+	SurfaceSkin 0 0 "Crab/cr_full.png"
+	Scale 1.0 -1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}

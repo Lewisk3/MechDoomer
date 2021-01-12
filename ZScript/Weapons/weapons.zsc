@@ -592,7 +592,7 @@ class LRM5: Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "LRM5";
 		Mechbase_Weapon.WeaponType "LRM";
-		Mechbase_Weapon.Distance_Speed 30,40;
+		Mechbase_Weapon.Distance_Speed 30,80;
 		Mechbase_Weapon.AmmoType "LRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_Weapon.Tonnage 1;
