@@ -149,17 +149,20 @@ class Mechbase_Actor : FastProjectile
 		heatgen=val;
 	}
 	
-	void ExplodeEx(double pow, double dist, bool damagemechs=false)
+	void ExplodeEx(double pow, double dist, double mechdmgmod=0, double normalmod = 1.0)
 	{
 		let it = ThinkerIterator.Create("Actor");
 		Actor act;
 		while(act = Actor(it.Next()))
 		{
+			bool ismech = (act is "Mechwarrior" || act is "MechHitbox");
 			double todist = Distance3DSquared(act);
+			if(ismech) dist *= mechdmgmod;
 			double dmgfalloff = pow * (1. - (1./(todist - (dist*dist))));
 			if(todist > dist*dist) continue; 
-			if( (act is "Mechwarrior" || act is "MechHitbox") && !damagemechs) continue;
-			act.DamageMobJ(self, mechplayer, dmgfalloff, "Explosive", 0, angle); 
+			dmgfalloff *= ismech ? mechdmgmod : normalmod;	
+			if(dmgfalloff > 0)
+				act.DamageMobJ(self, mechplayer, dmgfalloff, "Explosive", 0, angle); 
 		}
 	}
 }
@@ -514,8 +517,8 @@ class MechMissile : Mechbase_Actor
 	
 	Default
 	{	
-		Radius 6;
-		Height 2;
+		Radius 12;
+		Height 4;
 		Projectile;
 		MechMissile.ExplosionScale 1.0;
 	}
@@ -685,8 +688,8 @@ class Laser : Mechbase_Actor
 	
 	Default
 	{
-		Height 1;
-		Radius 1;
+		Height 6;
+		Radius 4;
 		+NOGRAVITY;
 		Alpha 1.0;
 		RenderStyle "Add";
@@ -1020,8 +1023,8 @@ class PPCBall : Mechbase_Actor
 {	
 	Default
 	{
-		Height 3;
-		Radius 3;
+		Height 8;
+		Radius 8;
 		Damage 0;
 		Speed 1;
 		Alpha 0.25;
@@ -1071,7 +1074,7 @@ class PPCBall : Mechbase_Actor
 			MPPC A 1;
 			TNT1 A 5 
 			{
-				ExplodeEx(64,128);
+				ExplodeEx(64,128, 0.15);
 				Spawn("PPCExplosion",pos);
 			}
 			TNT1 A 0 
@@ -1134,7 +1137,9 @@ class Flame : Mechbase_Actor
 class GaussBall : Mechbase_Actor
 {
 	Default
-	{
+	{	
+		Radius 10;
+		Height 10;
 		Speed 30;
 		Projectile;
 	}
@@ -1174,7 +1179,7 @@ class AutocannonBall : Mechbase_Actor
 	{
 		Speed 80;
 		Radius 10;
-		Height 5;
+		Height 10;
 		Projectile;
 		AutocannonBall.ClusterMode false, 0;
 		// Mechbase_Actor.Gravity 1.0;
@@ -1230,7 +1235,8 @@ class MechBullet : Mechbase_Actor
 	Default
 	{
 		Damage 5;
-		Height 1;
+		Height 4;
+		Radius 4;
 		Speed 150;
 		Projectile;
 	}

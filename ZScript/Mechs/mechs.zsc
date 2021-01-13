@@ -185,9 +185,9 @@ class Commando : MechWarrior
 		CreateHitbox(hardpoints.rl, -12, 0, 4,36, 0);
 		CreateHitbox(hardpoints.la,  20,44, 8,24, 5);
 		CreateHitbox(hardpoints.ra, -20,44, 8,24, 5);
-		CreateHitbox(hardpoints.lt,   8,44,6,21, 0);
-		CreateHitbox(hardpoints.rt,  -8,44,6,21, 0);
-		CreateHitbox(hardpoints.ct,   0,40,6,28,10);
+		CreateHitbox(hardpoints.lt,   8,44,8,21, 0);
+		CreateHitbox(hardpoints.rt,  -8,44,8,21, 0);
+		CreateHitbox(hardpoints.ct,   0,40,4,28,10);
 	}
 }
 class Jenner : MechWarrior
@@ -231,9 +231,9 @@ class Jenner : MechWarrior
 		CreateHitbox(hardpoints.rl, -16, 0, 4,46, 0);
 		CreateHitbox(hardpoints.la,  36,44, 8,20, 5);
 		CreateHitbox(hardpoints.ra, -36,44, 8,20, 5);
-		CreateHitbox(hardpoints.lt,  12, 44,6,18, 0);
-		CreateHitbox(hardpoints.rt, -12, 44,6,18, 0);
-		CreateHitbox(hardpoints.ct,  0, 40,10,24,20);
+		CreateHitbox(hardpoints.lt,  12, 44,8,20, 0);
+		CreateHitbox(hardpoints.rt, -12, 44,8,20, 0);
+		CreateHitbox(hardpoints.ct,  0,  43,8,18,14);
 	}
 }
 class Urbanmech : MechWarrior
@@ -271,9 +271,9 @@ class Urbanmech : MechWarrior
 		CreateHitbox(hardpoints.rl, -14, 0, 6,40, 0);
 		CreateHitbox(hardpoints.la,  26,50,6,12, 5);
 		CreateHitbox(hardpoints.ra, -26,50,6,12, 5);
-		CreateHitbox(hardpoints.lt,  12,40,8,28, 0);
-		CreateHitbox(hardpoints.rt, -12,40,8,28, 0);
-		CreateHitbox(hardpoints.ct,   0,30,10,36,10);
+		CreateHitbox(hardpoints.lt,  12,40, 8,28, 0);
+		CreateHitbox(hardpoints.rt, -12,40, 8,28, 0);
+		CreateHitbox(hardpoints.ct,   0,38, 8,28,10);
 	}
 }
 class Tarantula : MechWarrior
@@ -361,11 +361,11 @@ class Firemoth : MechWarrior
 	{
 		CreateHitbox(hardpoints.ll,   8, 0, 4,40,  0);
 		CreateHitbox(hardpoints.rl,  -8, 0, 4,40,  0);
-		CreateHitbox(hardpoints.la,  24,60, 6,18,  0);
-		CreateHitbox(hardpoints.ra, -24,60, 6,18,  0);
-		CreateHitbox(hardpoints.lt,   8,40, 4,24,  0);
-		CreateHitbox(hardpoints.rt,  -8,40, 4,24,  0);
-		CreateHitbox(hardpoints.ct,   0,40, 6,24, 10);
+		CreateHitbox(hardpoints.la,  24,45, 6,24,  0);
+		CreateHitbox(hardpoints.ra, -24,45, 6,24,  0);
+		CreateHitbox(hardpoints.lt,   8,40, 6,24,  0);
+		CreateHitbox(hardpoints.rt,  -8,40, 6,24,  0);
+		CreateHitbox(hardpoints.ct,   0,40, 8,24,  5);
 	}
 }
 class Raven : MechWarrior
@@ -502,9 +502,9 @@ class Stormcrow : MechWarrior
 		CreateHitbox(hardpoints.rl, -20, 0, 8,55,10);
 		CreateHitbox(hardpoints.la,  34,60, 8,36,15);
 		CreateHitbox(hardpoints.ra, -34,60, 8,36,15);
-		CreateHitbox(hardpoints.lt,  15,65, 6,36, 0);
-		CreateHitbox(hardpoints.rt, -15,65, 6,36, 0);
-		CreateHitbox(hardpoints.ct,   0,60,10,38,24);
+		CreateHitbox(hardpoints.lt,  15,65, 8,36, 0);
+		CreateHitbox(hardpoints.rt, -15,65, 8,36, 0);
+		CreateHitbox(hardpoints.ct,   0,60, 6,38,10);
 	}
 }
 class Nova : MechWarrior
@@ -607,7 +607,7 @@ class Hunchback : MechWarrior
 		CreateHitbox(hardpoints.ra, -32,53, 8,29,8);
 		CreateHitbox(hardpoints.lt,  15,60, 8,31, 0);
 		CreateHitbox(hardpoints.rt, -15,55, 4,31, 0);
-		CreateHitbox(hardpoints.ct,   0,55,10,32, 0);
+		CreateHitbox(hardpoints.ct,   0,55, 6,32, 0);
 	}
 }
 class Centurion : MechWarrior
@@ -649,9 +649,9 @@ class Centurion : MechWarrior
 		CreateHitbox(hardpoints.rl, -15, 0, 6,47, 0);
 		CreateHitbox(hardpoints.la,  22,50, 6,30, 4);
 		CreateHitbox(hardpoints.ra, -22,50, 6,30, 4);
-		CreateHitbox(hardpoints.lt,  10,50, 4,28, 0);
-		CreateHitbox(hardpoints.rt, -10,50, 4,28, 0);
-		CreateHitbox(hardpoints.ct,   0,40, 6,40, 0);
+		CreateHitbox(hardpoints.lt,  10,50, 5,28, 0);
+		CreateHitbox(hardpoints.rt, -10,50, 5,28, 0);
+		CreateHitbox(hardpoints.ct,   0,40, 4,40, 0);
 	}
 }
 class Crab : MechWarrior
@@ -693,9 +693,9 @@ class Crab : MechWarrior
 		CreateHitbox(hardpoints.rl, -25, 0, 8,45,0);
 		CreateHitbox(hardpoints.la,  50,48,14,13,20);
 		CreateHitbox(hardpoints.ra, -50,48,14,13,20);
-		CreateHitbox(hardpoints.lt,  26,55,10,12, 0);
-		CreateHitbox(hardpoints.rt, -26,55,10,12, 0);
-		CreateHitbox(hardpoints.ct,   0,55,16,12,24);
+		CreateHitbox(hardpoints.lt,  26,55,12,12, 0);
+		CreateHitbox(hardpoints.rt, -26,55,12,12, 0);
+		CreateHitbox(hardpoints.ct,   0,55,10,12,24);
 	}
 }
 
@@ -748,9 +748,9 @@ class Timberwolf : MechWarrior
 		CreateHitbox(hardpoints.rl, -16, 0, 8,46,-10);
 		CreateHitbox(hardpoints.la,  34,44, 8,36, 5);
 		CreateHitbox(hardpoints.ra, -34,44, 8,36, 5);
-		CreateHitbox(hardpoints.lt,  15,65,10,36, 0);
-		CreateHitbox(hardpoints.rt, -15,65,10,36, 0);
-		CreateHitbox(hardpoints.ct,   0,40,10,48,10);
+		CreateHitbox(hardpoints.lt,  15,65,12,36, 0);
+		CreateHitbox(hardpoints.rt, -15,65,12,36, 0);
+		CreateHitbox(hardpoints.ct,   0,56, 8,36,10);
 	}
 }
 
@@ -793,9 +793,9 @@ class Summoner : MechWarrior
 		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 0);
 		CreateHitbox(hardpoints.la,  34,60, 8,26, 5);
 		CreateHitbox(hardpoints.ra, -34,44, 8,36, 5);
-		CreateHitbox(hardpoints.lt,  15,65,10,36, 0);
-		CreateHitbox(hardpoints.rt, -15,55,10,36, 0);
-		CreateHitbox(hardpoints.ct,   0,55,10,36,10);
+		CreateHitbox(hardpoints.lt,  15,65,11,36, 0);
+		CreateHitbox(hardpoints.rt, -15,55,11,36, 0);
+		CreateHitbox(hardpoints.ct,   0,55, 8,36,10);
 	}
 }
 
@@ -838,9 +838,9 @@ class MadDog : MechWarrior
 		CreateHitbox(hardpoints.rl, -26, 0, 8,48,-10);
 		CreateHitbox(hardpoints.la,  38,55, 8,20, 8);
 		CreateHitbox(hardpoints.ra, -38,55, 8,20, 8);
-		CreateHitbox(hardpoints.lt,  15,65,10,28, 0);
-		CreateHitbox(hardpoints.rt, -15,65,10,28, 0);
-		CreateHitbox(hardpoints.ct,   0,55,10,36,20);
+		CreateHitbox(hardpoints.lt,  15,65,11,28, 0);
+		CreateHitbox(hardpoints.rt, -15,65,11,28, 0);
+		CreateHitbox(hardpoints.ct,   0,55, 8,36,20);
 	}
 }
 
@@ -889,7 +889,7 @@ class Rifleman : MechWarrior
 		CreateHitbox(hardpoints.ra, -40,65,16,20, 30);
 		CreateHitbox(hardpoints.lt,  15,60,10,20, 0);
 		CreateHitbox(hardpoints.rt, -15,60,10,20, 0);
-		CreateHitbox(hardpoints.ct,   0,40,10,48,10);
+		CreateHitbox(hardpoints.ct,   0,40, 8,48,10);
 	}
 }
 
@@ -964,9 +964,9 @@ class Marauder : MechWarrior
 		CreateHitbox(hardpoints.rl, -27, 0, 8,54,-10);
 		CreateHitbox(hardpoints.la,  50,40,12,36, 20);
 		CreateHitbox(hardpoints.ra, -50,40,12,36, 20);
-		CreateHitbox(hardpoints.lt,  10,70, 8,30, 0);
-		CreateHitbox(hardpoints.rt, -10,70, 8,30, 0);
-		CreateHitbox(hardpoints.ct,   0,65,10,44,10);
+		CreateHitbox(hardpoints.lt,  10,70,10,30, 0);
+		CreateHitbox(hardpoints.rt, -10,70,10,30, 0);
+		CreateHitbox(hardpoints.ct,   0,65, 8,44,10);
 	}
 }
 
@@ -1013,7 +1013,7 @@ class Gargoyle : MechWarrior
 		CreateHitbox(hardpoints.ra, -34,54, 8,36, 8);
 		CreateHitbox(hardpoints.lt,  15,55,10,36, 0);
 		CreateHitbox(hardpoints.rt, -15,55,10,36, 0);
-		CreateHitbox(hardpoints.ct,   0,38,10,52,10);
+		CreateHitbox(hardpoints.ct,   0,38, 8,52,10);
 	}
 }
 
@@ -1061,9 +1061,9 @@ class Hellbringer : MechWarrior
 		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 5);
 		CreateHitbox(hardpoints.la,  38,44, 8,30, 8);
 		CreateHitbox(hardpoints.ra, -38,44, 8,30, 8);
-		CreateHitbox(hardpoints.lt,  15,55, 8,36, 0);
-		CreateHitbox(hardpoints.rt, -15,55, 8,36, 0);
-		CreateHitbox(hardpoints.ct,   0,44,10,36, 0);
+		CreateHitbox(hardpoints.lt,  15,55, 9,36, 0);
+		CreateHitbox(hardpoints.rt, -15,55, 9,36, 0);
+		CreateHitbox(hardpoints.ct,   0,44, 8,36, 0);
 	}
 }
 
@@ -1114,9 +1114,9 @@ class Atlas : MechWarrior
 		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 5);
 		CreateHitbox(hardpoints.la,  44,70,12,36,20);
 		CreateHitbox(hardpoints.ra, -44,70,12,36,20);
-		CreateHitbox(hardpoints.lt,  22,68, 8,36, 5);
-		CreateHitbox(hardpoints.rt, -22,68, 8,36, 5);
-		CreateHitbox(hardpoints.ct,   0,55,10,48,10);
+		CreateHitbox(hardpoints.lt,  22,68, 9,36, 5);
+		CreateHitbox(hardpoints.rt, -22,68, 9,36, 5);
+		CreateHitbox(hardpoints.ct,   0,65, 8,36,10);
 	}
 }
 
@@ -1171,7 +1171,7 @@ class Direwolf : MechWarrior
 		CreateHitbox(hardpoints.ra, -44,44,12,36, 12);
 		CreateHitbox(hardpoints.lt,  15,48,10,36,  8);
 		CreateHitbox(hardpoints.rt, -15,48,10,36,  8);
-		CreateHitbox(hardpoints.ct,   0,40,12,48, 20);
+		CreateHitbox(hardpoints.ct,   0,48, 8,36, 30);
 	}
 }
 
@@ -1220,7 +1220,7 @@ class Warhawk : MechWarrior
 		CreateHitbox(hardpoints.ra, -44,50,18,36, 16);
 		CreateHitbox(hardpoints.lt,  15,65,10,30,  8);
 		CreateHitbox(hardpoints.rt, -15,65,10,30,  8);
-		CreateHitbox(hardpoints.ct,   0,55,12,40, 20);
+		CreateHitbox(hardpoints.ct,   0,55, 8,40, 20);
 	}
 }
 
@@ -1269,11 +1269,11 @@ class Warhammer : MechWarrior
 	{
 		CreateHitbox(hardpoints.ll,  16, 0, 8,46, 5);
 		CreateHitbox(hardpoints.rl, -16, 0, 8,46, 5);
-		CreateHitbox(hardpoints.la,  44,44,18,30,20);
-		CreateHitbox(hardpoints.ra, -44,44,18,30,20);
+		CreateHitbox(hardpoints.la,  44,44,12,30,20);
+		CreateHitbox(hardpoints.ra, -44,44,12,30,20);
 		CreateHitbox(hardpoints.lt,  20,60, 8,38, 0);
 		CreateHitbox(hardpoints.rt, -20,60, 8,38, 0);
-		CreateHitbox(hardpoints.ct,   0,44,10,36, 0);
+		CreateHitbox(hardpoints.ct,   0,44, 8,36, 0);
 	}	
 }
 // SuperHeavy Mechs

@@ -373,6 +373,7 @@ bool FireWeaponByRef(Mechbase_Weapon ww)
 	if(ww && !mech_shutdown) 
 	{
 		success = ww.MWFire();
+		
 		if(!success && !weapons_fired) A_StartLocalSound("Mech/WeaponBusy", CHAN_OVERLAP);
 		weapons_fired = true;
 	}

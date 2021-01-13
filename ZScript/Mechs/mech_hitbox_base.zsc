@@ -54,10 +54,10 @@ class MechHitbox : Actor
 		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
 		
 		// Take a bit less damage from AI
-		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.4;
+		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.5;
 		
-		// Take TT damage if we are AI
-		if(mech.checkAI()) newdmg = realdamage*0.9;
+		// Take more damage if we are AI
+		if(mech.checkAI()) newdmg = realdamage;
 		
 		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
 		return;

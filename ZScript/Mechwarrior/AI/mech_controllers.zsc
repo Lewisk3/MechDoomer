@@ -27,17 +27,20 @@ class MechAI_Controller : Actor
 	double range_max;
 	double range_min;
 	double throttle_max;
+	double weapacc; // Get within this many degrees of target before shooting.
 	Actor retreat_point;
 	bool dohitrun; // For hit and run 
 	
 	property Aggression : aggro;
+	property Accuracy : weapacc; 
 	property SpeedRange : throttle_max;
 	
 	Default
 	{	
 		+NOINTERACTION;
-		MechAI_Controller.Aggression 0.5;
+		MechAI_Controller.Aggression 0.10;
 		MechAI_Controller.SpeedRange 1.0;
+		MechAI_Controller.Accuracy 60;
 	}
 	
 	
@@ -94,7 +97,7 @@ class MechAI_Controller : Actor
 	virtual bool A_FaceMech(double adiff = 10)
 	{
 		if(!targetmech || !mech.CheckSight(targetmech)) return false; 
-		double angto = MDMath.SmarterAngleTo(mech, targetmech);
+		double angto = MDMath.SmarterAngleTo(mech, targetmech) + frandom(-(weapacc*0.8),weapacc*0.8);
 		mech.MAB_LookTorso(angto, mech.MAB_PitchTo(targetmech));
 		mech.MAB_LookLegs(angto);
 		if(!mech.MAB_CheckTorsoRotation(angto)) return false;
@@ -453,8 +456,8 @@ class MechAI_Controller : Actor
 				A_MechChase();
 				if(targetmech) 
 				{
-					double rfire = frandom(0,1);
-					if(rfire <= (aggro-0.30) && A_FaceMech()) A_ShootSimple();
+					double rfire = frandom[MechAI_AggroFire](0,2);
+					if(rfire <= (aggro*0.5) && A_FaceMech(weapacc)) A_ShootSimple();
 				}
 				else
 					A_MechLook();

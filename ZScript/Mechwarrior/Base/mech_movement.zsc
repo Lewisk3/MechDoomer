@@ -235,6 +235,7 @@ void mech_cockpitbob()
 		double gyros = countStruct("StructGyro") - countStructDamaged("StructGyro",true);
 		double bfactor = 2.76-(gyros*gfactor);
 		double bobmod = boboffs*clamp( (bfactor*(mech_tonnage/100.0)), 1.2, 3.15);
+		if(CheckLegged()) bobmod *= 1.5;
 		if(defaultmovement) bobmod *= 0.25;
 		Player.ViewZ -= bobmod*0.75;
 		viewzoffs = ((Player.ViewZ-pos.z)-defviewz);
@@ -518,7 +519,7 @@ void process_shutdown()
 				mechsounds.pushSound("Mech/Betty/SystemsCheck");
 			powerup();
 		} 
-		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*3.0;
+		if(HeatLevel > 0)HeatLevel -= HeatEfficiency*1.5;
 	}
 	else
 	{

@@ -462,7 +462,8 @@ override void tick()
 	if(!player.onground && nextpos.z <= floorz && vel.z != 0 && models_reference)
 	{
 		let cockpit = models_reference.cockpit;
-		FallAnimator.Animate(self, -(vel.z*2.));
+		double fallmod = checkLegged() ? 6. : 2.; 
+		FallAnimator.Animate(self, -(vel.z*fallmod));
 	}
 	
 	// Process FOV

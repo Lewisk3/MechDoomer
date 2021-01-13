@@ -48,7 +48,7 @@ class ERSmallPulseLaser : SmallPulseLaser
 	{
 		Mechbase_Weapon.DisplayName "erSPLAS";
 		Mechbase_Weapon.WeaponType "Laser_ERSMLP";
-		Mechbase_Weapon.Tonnage 1.5;
+		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.CValue 6100;
 	}	
 	override bool MWFire()
@@ -129,6 +129,7 @@ class ERMediumPulseLaser : SmallPulseLaser
 		Mechbase_Weapon.DisplayName "erMPLAS";
 		Mechbase_Weapon.WeaponType "Laser_ERMEDP";
 		Mechbase_Weapon.HardslotSize 2;
+		Mechbase_Weapon.Tonnage 2;
 		Mechbase_Weapon.CValue 8600;
 	}	
 	override bool MWFire()
@@ -292,7 +293,7 @@ class SRM2 : Mechbase_Weapon
 		Mechbase_Weapon.DisplayName "SRM2 ";
 		
 		Mechbase_Weapon.WeaponType "SRM";
-		Mechbase_Weapon.Distance_Speed 30,30;
+		Mechbase_Weapon.Distance_Speed 30,50;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_Weapon.Tonnage 0.5; // 1
@@ -333,7 +334,7 @@ class SRM4 : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "SRM4 ";
 		Mechbase_Weapon.WeaponType "SRM";
-		Mechbase_Weapon.Distance_Speed 30,30;
+		Mechbase_Weapon.Distance_Speed 30,50;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_weapon.HardslotSize 4;
@@ -376,7 +377,7 @@ class SRM6 : Mechbase_Weapon
 	{
 		Mechbase_Weapon.DisplayName "SRM6 ";
 		Mechbase_Weapon.WeaponType "SRM";
-		Mechbase_Weapon.Distance_Speed 30,30;
+		Mechbase_Weapon.Distance_Speed 30,50;
 		Mechbase_Weapon.AmmoType "SRM_Ammo";
 		Mechbase_Weapon.AmmoUse 1;
 		Mechbase_Weapon.Tonnage 1.5;

@@ -667,6 +667,7 @@ class MechLegsBase : MechPartsBase
 			
 			spdrating = curspd / (truemove*runspeed);
 			stompfriction = stomp_wrating + stomp_spdrating;
+			if(mechowner.CheckLegged()) stompfriction *= 2.5;
 		}
 	}
 	bool isMoving()
@@ -740,7 +741,7 @@ class Legs_Smooth  : MechLegsBase
 				if( (frame == 1 || frame == 15) && (spdrating > 0.3 || mechowner.LegVel) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 2, 16) && mechowner.stepping) 
 				{
-					FallAnimator.Animate(mechowner, 3, 8, 1);
+					FallAnimator.Animate(mechowner, mechowner.CheckLegged() ? 4 : 3, 8, 1);
 					mechowner.vel.xy *= stompfriction;	
 				}
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 2);
@@ -759,7 +760,7 @@ class Legs_Smooth  : MechLegsBase
 				if(frame == 7 || frame == 22) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 8, 23) && mechowner.stepping) 
 				{
-					FallAnimator.Animate(mechowner, 3, 10, 1);
+					FallAnimator.Animate(mechowner, mechowner.CheckLegged() ? 4 : 3, 10, 1);
 					mechowner.vel.xy *= stompfriction;	
 				}
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);

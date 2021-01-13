@@ -59,6 +59,7 @@ class MechAnimator : Inventory
 			}
 			if(mech && CountAnimators() > 1) 
 			{	
+				mech.screen_fade = 0;
 				mech.RemoveInventory(self);
 				GoAwayAndDie();
 				return;
