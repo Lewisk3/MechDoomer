@@ -11,6 +11,7 @@ bool mechsmode_forced;
 
 void setSelected(String tag, MechHardpoint location, class<Mechbase_Utility> util, class<Mechbase_Weapon> weap, class<Mechbase_Engine> eng, int index)
 {
+	if(selected_item.location != location) clearSelected();
 	selected_item.tag = tag;
 	selected_item.location = location;
 	selected_item.mUtil = util;
@@ -45,11 +46,53 @@ int Mechlab_GetInvSize()
 	return mechmode ? mechplr.inv_context.mechs.Size() : mechplr.inv_context.weapon_items.Size();
 }
 
+bool EquipSelected(bool nextitem=false)
+{
+	if(selected_item.index > -1)
+	{
+		mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
+		int amt = valid_inv_context.weapon_items[selected_item.index].amt;
+		if(selected_item.mWeapon) MechDoomerEvents.SendNetworkEvent("equip_invweap",selected_item.index,hardpoint);
+		if(selected_item.mUtil  ) MechDoomerEvents.SendNetworkEvent("equip_structinvweap",selected_item.index,hardpoint);
+		if(amt-1 < 0 && nextitem) 
+		{
+			updateSelected();
+		}
+		if(!nextitem) clearSelected();
+		mstats.left_btn = false;
+		return true;
+	}
+	return false;
+}
+bool DequipSelected()
+{
+	if(selected_item.index > -1)
+	{
+		mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
+		if(selected_item.location)
+		{
+			if(selected_item.mWeaponOBJ) MechDoomerEvents.SendNetworkEvent("move_weapinv",selected_item.mWeaponOBJ.WeaponID);
+			if(selected_item.mUtil	   ) MechDoomerEvents.SendNetworkEvent("movestruct_weapinv",selected_item.index);
+		}
+		mstats.left_btn = false;
+		clearSelected();
+		return true;
+	}
+	return false;
+}
+
+
 void ProcessLoadoutButtons()
 {
 	// Force mechmode if dead or a pilot.
 	mechsmode_forced = (mechplr.isdead || !CheckActiveMech());
 	if(!mechmode && mechsmode_forced) mechmode = true;
+	
+	// Fix selected item if invalid (ffs...)
+	if(selected_item.index < 0) clearSelected();
+	if( (selected_item.location && selected_item.index >= valid_inv_context.mechstructs.Size()) 
+		|| (!selected_item.location && selected_item.index >= valid_inv_context.weapon_items.Size()) )
+		clearSelected();
 
 	// Buttons and highlights
 	H_DrawImage(tBtn_Scrap,  ( scrapbtn.x+61, scrapbtn.y+30),0);
@@ -170,50 +213,33 @@ void ProcessLoadoutButtons()
 		// Dequip
 		if(checkCollision(mouse,dequipbtn)) 
 		{
-			if(selected_item.index > -1)
+			if(!mechmode)
 			{
-				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
-				mstats.left_btn = false;
-				
-				if(!mechmode && selected_item.location)
-				{
-					if(selected_item.mWeaponOBJ) MechDoomerEvents.SendNetworkEvent("move_weapinv",selected_item.mWeaponOBJ.WeaponID);
-					if(selected_item.mUtil	   ) MechDoomerEvents.SendNetworkEvent("movestruct_weapinv",selected_item.index);
-				}
-				else if(mechmode)
-				{
-					// Require mech shutdown to switch or, allow if mech is dead.
-					// Mech should be shutdown if dead but, if it isn't, that 
-					// would result in a game breaking bug of not being able to
-					// respawn.
-					if(!mechplr.mech_shutdown && !mechplr.isdead && CheckActiveMech())
-					{
-						mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
-						MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Active mech must be shutdown\nfirst!");
-						return;
-					}
-					MechDoomerEvents.SendNetworkEvent("exchange_mech",selected_item.index);
-					CloseMechlab();
-				}
-				clearSelected();
+				DequipSelected();
 			}
+			else if(selected_item.index > -1)
+			{
+				// Require mech shutdown to switch or, allow if mech is dead.
+				// Mech should be shutdown if dead but, if it isn't, that 
+				// would result in a game breaking bug of not being able to
+				// respawn.
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
+				if(!mechplr.mech_shutdown && !mechplr.isdead && CheckActiveMech())
+				{
+					mechplr.S_StartSound("UI/Error",CHAN_WEAPON);
+					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Orange]Active mech must be shutdown\nfirst!");
+					return;
+				}
+				MechDoomerEvents.SendNetworkEvent("exchange_mech",selected_item.index);
+				CloseMechlab();
+			}
+			clearSelected();
 		}
 		
 		// Equip
 		if(!mechmode && checkCollision(mouse,equipbtn) && !selected_item.location) 
 		{
-			if(selected_item.index > -1)
-			{
-				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
-				int amt = valid_inv_context.weapon_items[selected_item.index].amt;
-				if(selected_item.mWeapon) MechDoomerEvents.SendNetworkEvent("equip_invweap",selected_item.index,hardpoint);
-				if(selected_item.mUtil  ) MechDoomerEvents.SendNetworkEvent("equip_structinvweap",selected_item.index,hardpoint);
-				if(amt-1 < 0) 
-				{
-					updateSelected();
-				}
-				mstats.left_btn = false;
-			}
+			EquipSelected(true);
 		}
 	}
 }
@@ -478,11 +504,24 @@ void drawInventory(int px, int py, int start, int max)
 			{
 				fcr = selected_item.mEngine ? Font.CR_GREEN : selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
 			}
-			if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
+			
+			if(mstats.left_pressed && checkCollision(mouse,checkmouse))
 			{
-				clearSelected();
-				setSelected(weapname, null, ut, mw, eng, i);
+				bool sameitem = !selected_item.location && selected_item.index == i;
+				if(sameitem) 
+				{
+					// Equip
+					EquipSelected();
+					mstats.left_pressed = false;
+					break;
+				}
+				else 
+				{
+					setSelected(weapname, null, ut, mw, eng, i);
+					mstats.left_pressed = false;
+				}
 			}
+			
 			string displayName = weapname.. " \c[Orange]["..slots.."]";
 			if(ut) displayName = GetDefaultByType(ut).displayName.. " \c[Orange]["..slots.."]";
 			if(eng) displayName = MechBase_Engine.GetRealName(eng);
@@ -539,9 +578,22 @@ vector2 DrawCriticalHardpointItems(int ind, int sx, int sy)
 						Rect checkmouse;
 						initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+3),15);
 						// drawRect(checkmouse,Color(255,255,64,64));
-						if(mstats.left_btn && checkCollision(mouse,checkmouse) && eng && !mechmode && eng_moveable) 
-						{	
-							setSelected(ut.getClassName(), hp, ut, null, valid_inv_context.engine.ClassType, i);
+						if(mstats.left_pressed && checkCollision(mouse,checkmouse) && eng && !mechmode && eng_moveable)
+						{
+							bool sameitem = selected_item.location && selected_item.index == i;
+							if(sameitem) 
+							{
+								// Dequip
+								DequipSelected();
+								mstats.left_pressed = false;
+								break;
+							}
+							else 
+							{
+								clearSelected();
+								setSelected(ut.getClassName(), hp, ut, null, valid_inv_context.engine.ClassType, i);
+								mstats.left_pressed = false;
+							}
 						}
 						if(valid_inv_context.mechstructs[i].broken) fcr = Font.CR_TAN;
 						H_DrawString(def_ut.displayName, (sx,sy+offs.y-15),0,fcr);
@@ -600,10 +652,22 @@ void DrawHardpointItems(int ind, int sx, int sy)
 					Rect checkmouse;
 					initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
 					//drawRect(checkmouse,Color(255,128,128,128));
-					if(mstats.left_btn && checkCollision(mouse,checkmouse) && !mechmode) 
-					{	
-						clearSelected();
-						setSelected(ut.getClassName(), hp, ut, null, null, i);
+					if(mstats.left_pressed && checkCollision(mouse,checkmouse) && !mechmode)
+					{
+						bool sameitem = selected_item.location && selected_item.index == i;
+						if(sameitem) 
+						{
+							// Dequip
+							DequipSelected();
+							mstats.left_pressed = false;
+							break;
+						}
+						else 
+						{
+							clearSelected();
+							setSelected(ut.getClassName(), hp, ut, null, null, i);
+							mstats.left_pressed = false;
+						}
 					}
 					H_DrawString(def_ut.displayName .. suffix, (sx,sy+offs.y-15),0,fcr);
 					offs.y += 24;
@@ -632,11 +696,23 @@ void DrawHardpointItems(int ind, int sx, int sy)
 						String weapname = ww.GetClassName();
 						initRect(checkmouse,sx,sy+offs.x-10,14*(weapname.Length()+suffix.Length()+4),15);
 						// drawRect(checkmouse,Color(255,255,255,128));
-						if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
-						{ 
-							clearSelected();
-							setSelected(weapname, hp, null, ww.getClassName(), null, wind);
-							selected_item.mWeaponOBJ = ww; 
+						if(mstats.left_pressed && checkCollision(mouse,checkmouse))
+						{
+							bool sameitem = selected_item.location && selected_item.index == wind;
+							if(sameitem) 
+							{
+								// Dequip
+								DequipSelected();
+								mstats.left_pressed = false;
+								break;
+							}
+							else 
+							{
+								clearSelected();
+								setSelected(weapname, hp, null, ww.getClassName(), null, wind);
+								selected_item.mWeaponOBJ = ww; 
+								mstats.left_pressed = false;
+							}
 						}
 						H_DrawString(ww.GetClassName() .. suffix, (sx,sy+offs.y-15),0,fcr);
 						offs.y += 24;

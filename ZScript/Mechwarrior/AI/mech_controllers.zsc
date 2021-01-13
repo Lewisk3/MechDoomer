@@ -38,7 +38,7 @@ class MechAI_Controller : Actor
 	Default
 	{	
 		+NOINTERACTION;
-		MechAI_Controller.Aggression 0.10;
+		MechAI_Controller.Aggression 0.15;
 		MechAI_Controller.SpeedRange 1.0;
 		MechAI_Controller.Accuracy 60;
 	}

@@ -140,6 +140,17 @@ Model MGunBullet
    FrameIndex AUTO A 0 0
 } 
 
+Model AutocannonTrail
+{
+	Path "models"
+	Model 0 "Weapons/bullet.md3"
+	Scale -0.3 0.5 0.5
+	USEACTORPITCH
+	SurfaceSkin 0 0  "Textures/bullet.png" // Full mesh
+	
+   FrameIndex AUTO A 0 0
+}
+
 Model UAC_2
 {
 	Path "models"

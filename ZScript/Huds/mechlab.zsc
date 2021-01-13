@@ -369,8 +369,6 @@ class Mechlab_Menu : GenericMenu
 	
 		if(inputclear == 0)
 		{
-			mstats.left_pressed = false;
-			mstats.right_pressed = false;
 			mstats.scroll = 0;
 			inputclear = 12;
 		}

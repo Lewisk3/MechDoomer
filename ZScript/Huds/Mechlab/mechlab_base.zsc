@@ -78,6 +78,8 @@ override bool OnUIEvent(UiEvent ev)
 		mpos.y = ev.MouseY-5;
 		mouse.x = mpos.x;
 		mouse.y = mpos.y;
+		mstats.left_pressed = false;
+		mstats.right_pressed = false;
 	}
 	
 	if(ev.Type == UIEvent.Type_RButtonDown) mstats.right_btn = true;
@@ -86,10 +88,13 @@ override bool OnUIEvent(UiEvent ev)
 		if(mstats.right_btn) mstats.right_pressed = true;
 		mstats.right_btn = false;
 	}
-	if(ev.Type == UIEvent.Type_LButtonDown) mstats.left_btn  = true;
+	if(ev.Type == UIEvent.Type_LButtonDown) 
+	{
+		if(!mstats.left_btn) mstats.left_pressed  = true;
+		mstats.left_btn  = true;
+	}
 	if(ev.Type == UIEvent.Type_LButtonUp  ) 
 	{
-		if(mstats.left_btn) mstats.left_pressed  = true;
 		mstats.left_btn = false;
 	}
 	if(ev.Type == UIEvent.Type_WheelUp  ) mstats.scroll = -1;

@@ -1188,7 +1188,17 @@ class AutocannonBall : Mechbase_Actor
 	States
 	{
 		Spawn:
-			AUTO A 1 NoDelay Spawn("AutocannonLight", pos);
+			AUTO A 1 NoDelay 
+			{
+				Spawn("AutocannonLight", pos);
+				let trail = Spawn("AutocannonTrail", pos);
+				if(trail)
+				{
+					trail.vel = vel*0.8;
+					trail.angle = angle;
+					trail.pitch = pitch;
+				}
+			}
 		SpawnLoop:
 			AUTO A 1;
 		loop;
@@ -1227,7 +1237,24 @@ class AutocannonLight : MissileLight
 		stop;
 	}
 }
+class AutocannonTrail : Mechbase_Actor
+{
+	Default
+	{
+		Speed 80;
+	}
 
+	States
+	{
+		Spawn:
+			AUTO A 1;
+		loop;
+		
+		Death:
+			AUTO A 1;
+		stop;
+	}
+}
 
 
 class MechBullet : Mechbase_Actor
