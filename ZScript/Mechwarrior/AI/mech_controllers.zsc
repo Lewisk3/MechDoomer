@@ -222,7 +222,7 @@ class MechAI_Controller : Actor
 							abs(mech.angle-angto) < precision && 
 							canrotate ) 
 						{	
-							mech.MAB_Accelerate(circling ? throttle_max*0.7 : throttle_max, true);
+							mech.MAB_Accelerate(circling ? throttle_max*0.55 : throttle_max, true);
 						}
 					}
 					
@@ -281,7 +281,7 @@ class MechAI_Controller : Actor
 					}
 					if(dohitrun) 
 					{	
-						tOptimal = hasweapons ? range_optimal*0.6 : 360;
+						tOptimal = hasweapons ? range_optimal*0.4 : 360;
 						angto += 180;
 						circling = false;
 						if(tdistm <= 40 && hasweapons)

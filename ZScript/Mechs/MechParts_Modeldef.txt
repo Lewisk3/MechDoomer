@@ -1403,3 +1403,62 @@ Model RightArm_Crab
 	
    FrameIndex MODL A 0 0
 }
+
+// Cicada
+Model Torso_Cicada
+{
+	Path "models/Mechs"
+	Model 0 "Cicada/cc_torso.md3"
+	SurfaceSkin 0 0 "c_glass.png"
+	SurfaceSkin 0 1 "Cicada/cc_full"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Cicada
+{
+	Path "models/Mechs/Cicada"
+	Model 0 "cc_hips.md3"
+	Skin 0 "cc_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Cicada
+{
+	Path "models/Mechs/"
+	Model 0 "Cicada/cc_head.obj"
+	Scale 0.03 0.03 0.03
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset -0.26 0 7.6;
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Cicada
+{
+	Path "models/Mechs"
+	Model 0 "Cicada/cc_rightarm.md3"
+	SurfaceSkin 0 0 "Cicada/cc_full.png"
+	Scale 1.0 -1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Cicada
+{
+	Path "models/Mechs"
+	Model 0 "Cicada/cc_leftarm.md3"
+	SurfaceSkin 0 0 "Cicada/cc_full.png"
+	Scale 1.0 -1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}

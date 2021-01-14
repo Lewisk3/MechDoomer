@@ -64,6 +64,7 @@ GameInfo
 					"Hunchback",
 					"Centurion",
 					"Crab",
+					"Cicada",
 					"TestingDoomguy"
 }
 

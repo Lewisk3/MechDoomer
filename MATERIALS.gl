@@ -212,3 +212,7 @@ material texture models/Mechs/Centurion/ct_full.png {
 material texture models/Mechs/Crab/cr_full.png {
 	shader "shaders/simsun.fp"
 }
+
+material texture models/Mechs/Cicada/cc_full.png {
+	shader "shaders/simsun.fp"
+}

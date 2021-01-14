@@ -328,7 +328,7 @@ class Firemoth : MechWarrior
 	{
 		Mass 400;
 		Player.DisplayName "Firemoth - Prime";
-		Player.ViewHeight 60;
+		Player.ViewHeight 40;
 		MechWarriorBase.Manufacturer MechWarriorBase.MechType_Clan;
 		MechWarriorBase.PitchRange 80, 80;
 		MechWarriorBase.CockpitIsModel true;
@@ -699,6 +699,49 @@ class Crab : MechWarrior
 	}
 }
 
+class Cicada : MechWarrior
+{
+	Default
+	{
+		Mass 1400;
+		Player.DisplayName "Cicada - 2A";
+		Player.ViewHeight 50;
+		
+		MechWarriorBase.Engine "ENGINE_STD_320";
+		MechWarriorBase.TwistRange 120;
+		MechWarriorBase.PitchRange 60, 60;
+		MechWarriorBase.Weight 40;
+		MechWarriorBase.LegSpeed 92.82*MWGAMEPLAY_TURNRATE;
+		MechWarriorBase.Acceleration 0.90;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.MechPieces "Torso_Cicada";
+
+		MechWarriorBase.CValue 3705217*MWMECHPRICE_FACTOR;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 10,24,18,18,9,9,16,16, 5,12,9,9,4,4,8,8 );
+		hardpoints.setupLocations( (0,30), (0,20), (30,25), (-30,25), (50,25), (-50,25), (30,-50), (-30,-50) );
+		hardpoints.setupSlots();
+		
+		equipWeapon("MediumLaser",hardpoints.lt,1);
+		equipWeapon("MediumLaser",hardpoints.rt,1);
+		equipWeapon("SmallLaser",hardpoints.ct,2);
+		
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  24, 0, 4,40, 0);
+		CreateHitbox(hardpoints.rl, -24, 0, 4,40, 0);
+		CreateHitbox(hardpoints.la,  36,62, 4, 8, 5);
+		CreateHitbox(hardpoints.ra, -36,62, 4, 8, 5);
+		CreateHitbox(hardpoints.lt,  18,50, 8,16, 0);
+		CreateHitbox(hardpoints.rt, -18,50, 8,16, 0);
+		CreateHitbox(hardpoints.ct,   0,50, 8,20, 0);
+	}
+}
 
 // Heavy Mechs
 class Timberwolf : MechWarrior

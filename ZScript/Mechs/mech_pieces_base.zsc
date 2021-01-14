@@ -250,6 +250,7 @@ class MechCockpitModel : MechPartsBase
 	double mzoffs;
 	double maxpitch;
 	double maxangle;
+	double rollmod; 
 	double rotatespeed;
 	double bobrange;
 	Property Offset: mxoffs, mzoffs;
@@ -312,7 +313,7 @@ class MechCockpitModel : MechPartsBase
 					
 					// Follow Roll
 					if(!mechowner.models_reference.noroll)
-						A_SetRoll (mechowner.roll,SPF_INTERPOLATE);
+						A_SetRoll (mechowner.roll*rollmod,SPF_INTERPOLATE);
 					
 					// Torso rotation sounds.
 					bool angle_move = abs(old_angle-angle) > 0.1;
@@ -461,6 +462,7 @@ class MechTorsoBase : MechPartsBase
 	double cockpitangle_mod;
 	double cockpittwist_mod;
 	double cockpitbob_mod;
+	double cockpitroll_mod;
 	double arms_offs, arms_foffs, arms_rcoffs, arms_pcoffs;
 	MechPartsBase hips;
 	MechPartsBase legs;
@@ -474,7 +476,7 @@ class MechTorsoBase : MechPartsBase
 	class<MechPartsBase> legs_type;
 	class<MechCockpitModel> cockpit_type;
 	Property Pieces : hips_type, legs_type, cockpit_type, arms_left_type, arms_right_type;
-	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod, cockpitbob_mod;
+	Property CockpitRange : cockpitangle_mod, cockpitpitch_mod, cockpitbob_mod, cockpitroll_mod;
 	Property ArmsHeight : arms_offs;
 	Property ArmsForward : arms_foffs;
 	Property ArmsRollPitchMod : arms_rcoffs, arms_pcoffs;
@@ -484,7 +486,7 @@ class MechTorsoBase : MechPartsBase
 	
 	Default
 	{
-		MechTorsoBase.CockpitRange 0.7, 0.7, 1.0;
+		MechTorsoBase.CockpitRange 0.7, 0.7, 1.0, 1.0;
 		MechTorsoBase.TwistSpeed 0.1;
 		MechTorsoBase.ArmsRollPitchMod 0.25, 0;
 	}
@@ -542,6 +544,7 @@ class MechTorsoBase : MechPartsBase
 				cockpit.maxangle = mechowner.MaxYaw * cockpitangle_mod;
 				cockpit.rotatespeed = cockpittwist_mod;
 				cockpit.bobrange = cockpitbob_mod;
+				cockpit.rollmod = cockpitroll_mod;
 			}
 		}
 		setup = true;
