@@ -90,8 +90,8 @@ void ProcessLoadoutButtons()
 	
 	// Fix selected item if invalid (ffs...)
 	if(selected_item.index < 0) clearSelected();
-	if( (selected_item.location && selected_item.index >= valid_inv_context.mechstructs.Size()) 
-		|| (!selected_item.location && selected_item.index >= valid_inv_context.weapon_items.Size()) )
+	if( ((selected_item.location && selected_item.index >= valid_inv_context.mechstructs.Size()) 
+		|| (!selected_item.location && selected_item.index >= valid_inv_context.weapon_items.Size())) && !mechmode )
 		clearSelected();
 
 	// Buttons and highlights
