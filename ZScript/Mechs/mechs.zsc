@@ -1110,6 +1110,55 @@ class Hellbringer : MechWarrior
 	}
 }
 
+class Catapult : MechWarrior
+{
+	Default
+	{
+		Mass 2500;
+		Player.DisplayName "Catapult - C1";
+		Player.ViewHeight 60;
+		MechWarriorBase.CockpitIsModel true;
+		MechWarriorBase.TwistRange 120;
+		MechWarriorBase.LegSpeed 47.56*MWGAMEPLAY_TURNRATE*1.5;
+		MechWarriorBase.Weight 65;
+		MechWarriorBase.PitchRange 50, 50;
+		MechWarriorBase.Engine "ENGINE_STD_260";
+		MechWarriorBase.MechPieces "Torso_Catapult";
+		MechWarriorBase.HudMech "#Atlas";
+		MechWarriorBase.CValue 5790125*MWMECHPRICE_FACTOR;
+	}
+		
+	override void SetupWeapons()
+	{
+		hardpoints.setupVitals( 8,42,30,30,20,20,30,30, 4,21,15,15,10,10,15,15 );
+		hardpoints.setupLocations( (0,-2), (0,-8), (20,-4), (-20,-4), (42,40), (-42,40), (30,-90), (-30,-90) );
+		hardpoints.setupSlots();
+		equipWeapon("LRM15",hardpoints.la,2);
+		equipWeapon("LRM15",hardpoints.ra,2);
+		equipWeapon("MediumLaser",hardpoints.lt,1);
+		equipWeapon("MediumLaser",hardpoints.lt,1);
+		equipWeapon("MediumLaser",hardpoints.rt,1);
+		equipWeapon("MediumLaser",hardpoints.rt,1);
+		equipStruct("LRM_Ammo",hardpoints.rt,1);
+		equipStruct("LRM_Ammo",hardpoints.lt,1);
+		equipStruct("Heatsink",hardpoints.ct,3);
+		equipStruct("Heatsink",hardpoints.lt,1);
+		equipStruct("Heatsink",hardpoints.rt,1);
+		equipStruct("JumpJet",hardpoints.lt,4);
+		equipStruct("JumpJet",hardpoints.rt,4);
+		
+	}
+	override void SetupHitboxes()
+	{
+		CreateHitbox(hardpoints.ll,  16, 0, 8,46,-10);
+		CreateHitbox(hardpoints.rl, -16, 0, 8,46,-10);
+		CreateHitbox(hardpoints.la,  35,75,10,30,-5);
+		CreateHitbox(hardpoints.ra, -35,75,10,30,-5);
+		CreateHitbox(hardpoints.lt,  12,64, 8,24,10);
+		CreateHitbox(hardpoints.rt, -12,64, 8,24,10);
+		CreateHitbox(hardpoints.ct,  0,64, 6,24,25);
+	}
+}
 
 // Assault Mechs
 class Atlas : MechWarrior

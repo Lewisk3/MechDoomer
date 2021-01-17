@@ -65,6 +65,7 @@ GameInfo
 					"Centurion",
 					"Crab",
 					"Cicada",
+					"Catapult",
 					"TestingDoomguy"
 }
 

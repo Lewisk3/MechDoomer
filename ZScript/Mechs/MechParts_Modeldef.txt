@@ -1462,3 +1462,62 @@ Model RightArm_Cicada
 	
    FrameIndex MODL A 0 0
 }
+
+// Catapult
+Model Torso_Catapult
+{
+	Path "models/Mechs"
+	Model 0 "Catapult/cp_torso.md3"
+	SurfaceSkin 0 0 "Cicada/cc_full.png"
+	SurfaceSkin 0 1 "c_glass.png"
+	Scale 1.0 1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex TRSO A 0 0
+}
+Model Hips_Catapult
+{
+	Path "models/Mechs/Catapult"
+	Model 0 "cp_hips.md3"
+	Skin 0 "cp_full.png" // Main
+	Scale 1.0 1.0 1.0
+	Offset 0 0 0
+	
+   FrameIndex MODL A 0 0
+}
+Model Cockpit_Catapult
+{
+	Path "models/Mechs/"
+	Model 0 "Catapult/cp_head.obj"
+	Scale 0.03 0.03 0.03
+	Skin 0 "c_dark.png" // Main
+	USEACTORPITCH
+	USEACTORROLL 
+	AngleOffset 90
+	Offset -2.4 0 6.7
+	
+   FrameIndex MODL A 0 0
+}
+Model LeftArm_Catapult
+{
+	Path "models/Mechs"
+	Model 0 "Catapult/cp_rightarm.md3"
+	SurfaceSkin 0 0 "Catapult/cp_full.png"
+	Scale 1.0 -1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
+Model RightArm_Catapult
+{
+	Path "models/Mechs"
+	Model 0 "Catapult/cp_leftarm.md3"
+	SurfaceSkin 0 0 "Catapult/cp_full.png"
+	Scale 1.0 -1.0 1.0
+	USEACTORPITCH
+	USEACTORROLL
+	
+   FrameIndex MODL A 0 0
+}
