@@ -438,7 +438,7 @@ override void tick()
 		{
 			if(vel.length() >= 5) 
 			{
-				double stompdmg = (2*(mech_tonnage/100.)) * (vel.length()/10.);
+				double stompdmg = (4*(mech_tonnage/100.)) * (vel.length()/10.);
 				RadiusDamage(stompdmg, 64, "Crush", "MechHitBox");
 			}
 			HardpointDamageEffects();

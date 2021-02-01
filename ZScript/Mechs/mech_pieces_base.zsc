@@ -145,7 +145,7 @@ class MechPartsBase : Actor
 	
 	bool CheckLocalObserver()
 	{
-		if(mechowner.CheckAI()) return false;
+		if(!mechowner || mechowner.CheckAI()) return false;
 		return mechowner == MechwarriorBase(players[consoleplayer].mo);
 	}
 	
@@ -744,7 +744,8 @@ class Legs_Smooth  : MechLegsBase
 				if( (frame == 1 || frame == 15) && (spdrating > 0.3 || mechowner.LegVel) ) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 2, 16) && mechowner.stepping) 
 				{
-					FallAnimator.Animate(mechowner, mechowner.CheckLegged() ? 4 : 3, 8, 1);
+					if(mechowner.vel.xy.length() >= 3)
+						FallAnimator.Animate(mechowner, mechowner.CheckLegged() ? 4 : 3, 8, 1);
 					mechowner.vel.xy *= stompfriction;	
 				}
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 2);
@@ -763,7 +764,8 @@ class Legs_Smooth  : MechLegsBase
 				if(frame == 7 || frame == 22) SoundEmitter.SE_Trigger("Mech/Footstep",mechowner.pos);
 				if(checkStepping(false, 8, 23) && mechowner.stepping) 
 				{
-					FallAnimator.Animate(mechowner, mechowner.CheckLegged() ? 4 : 3, 10, 1);
+					if(mechowner.vel.xy.length() >= 3)
+						FallAnimator.Animate(mechowner, mechowner.CheckLegged() ? 4 : 3, 10, 1);
 					mechowner.vel.xy *= stompfriction;	
 				}
 				if(spdrating > 0) tics = clamp(10-(abs(spdrating)*10.), 1, 3);

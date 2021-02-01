@@ -588,7 +588,7 @@ class MechMissile : Mechbase_Actor
 		  Spawn:
 			MISS A 1 NoDelay Bright
 			{
-				if(arc > 0 && tracer && (!CheckSight(tracer) || fDist() > 180)) 
+				if(arc > 0 && tracer && !CheckSight(tracer)) 
 				{
 					A_SetPitch(pitch-arc);
 					vel = (
@@ -602,7 +602,7 @@ class MechMissile : Mechbase_Actor
 		  Spawn.Loop:
 			MISS AB 1 Bright 
 			{
-				if(tracer && CheckSight(tracer) && fDist() > 16 && getTravelDistance() < maximum_range) 
+				if(tracer && CheckSight(tracer) && fDist() > 64 && getTravelDistance() < maximum_range) 
 					return ResolveState("Seek");
 				else
 					return ResolveState(Null);
@@ -787,7 +787,18 @@ class PPCExplosion : LaserExplosion
 		Spawn:
 			// PPC Impacts sound really good without attenuation.
 			TNT1 A 0 NoDelay S_StartSound("Classic/PPC/Impact", CHAN_BODY);
-			PEXP OPABCDEFGHIJKLMN 2;
+			PEXP OP 2;
+			TNT1 A 0
+			{
+				let ppc_hit = LaserExplosion(Spawn("LaserExplosion",pos));
+				if(ppc_hit) 
+				{
+					ppc_hit.SetShade(0x5512B4);
+					ppc_hit.A_SetScale(1.5,1.5);
+					ppc_hit.noexplosion = true;
+				}
+			}
+			PEXP ABCDEFGHIJKLMN 2;
 		stop;
 	}
 }
