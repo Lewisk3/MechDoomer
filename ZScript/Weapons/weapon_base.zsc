@@ -550,7 +550,7 @@ class Mechbase_Weapon : Item_NoPickup
 						   plr.viewheight, 80,0, lt     );
 			double aimdist = lt.Distance;
 			vector3 rangles = level.SphericalCoords(lpos, lt.HitLocation, (plr.angle,plr.pitch));
-			double corange = clamp(aimdist / 1080, 0.5, 1.0);  
+			double corange = clamp(aimdist / 340, 0.5, 1.0);  
 			vector2 conview = (-rangles.x*corange, -rangles.y);
 			activelaserbeam.SetPos(plr.pos,activelaserbeam.posoffs, conview); 
 			if(beam_pulsefreq > 0)

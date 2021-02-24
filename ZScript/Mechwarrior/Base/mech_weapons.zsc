@@ -165,6 +165,7 @@ void removeWeapon(Mechbase_Weapon w)
 	// This is need because hardpoints and stuff.
 	adjustTonnage(-w.weight);
 	w.hardpoint.adjustHardslots(-w.hardslots);
+	w.OnDestroy(); // Handle laserbeams so they do not linger.
 	RemoveInventory(w);
 }
 bool removeWeaponAt(int ind)
