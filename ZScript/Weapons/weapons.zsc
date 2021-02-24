@@ -37,7 +37,7 @@ class SmallPulseLaser : Mechbase_Weapon
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 3050;
 		Mechbase_Weapon.Cooldown MWCOOL_SPLAS, 0.1;
-		MechBase_Weapon.LaserBeamSetup "LaserBeam_SMLP", 0.2, 1, "LaserBeam/Small/Fire", "LaserBeam/Cont";
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_SMLP", 0.4, 1, "LaserBeam/Small/Fire", "LaserBeam/Cont";
 	}	
 	override bool MWFire()
 	{
@@ -54,7 +54,7 @@ class ERSmallPulseLaser : SmallPulseLaser
 		Mechbase_Weapon.WeaponType "Laser_ERSMLP";
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.CValue 6100;
-		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERSMLP", 0.4, 1, "LaserBeam/Small/Fire", "LaserBeam/Cont";
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERSMLP", 0.5, 2, "LaserBeam/Small/Fire", "LaserBeam/Cont";
 	}	
 }
 

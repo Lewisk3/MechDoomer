@@ -72,6 +72,28 @@ class LaserBeamPuffs : LaserPuff
 }
 
 // Lasers
+const SBEM_DMG     = 0.5;
+const SBEM_HEAT    = 0.1;
+const SPBEM_DMG    = 0.4 *3;
+const SPBEM_HEAT   = 0.2;
+const ERSPBEM_DMG  = 0.4 *3;
+const ERSPBEM_HEAT = 0.3;
+
+const MBEM_DMG     = 0.35;
+const MBEM_HEAT    = 0.1;
+const MPBEM_DMG    = 0.35 *3;
+const MPBEM_HEAT   = 0.4;
+const ERMPBEM_DMG  = 0.35 *3;
+const ERMPBEM_HEAT = 0.5;
+
+const LBEM_DMG     = 0.70;
+const LBEM_HEAT    = 0.3;
+const LPBEM_DMG    = 0.70 *2;
+const LPBEM_HEAT   = 0.6;
+const ERLPBEM_DMG  = 0.70 *2;
+const ERLPBEM_HEAT = 0.8;
+
+
 class MechLaserBeam : LaserBase
 {
 	double heatgen;
@@ -110,9 +132,9 @@ class LaserBeam_SML : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[255,0,0]";
 		LaserBase.LaserPuff "LaserBeam_SMLPuff";
-		LaserBase.Damage 0.3;
+		LaserBase.Damage SBEM_DMG;
 		LaserBase.MaxRange 200;
-		MechLaserBeam.Heat 0.1;
+		MechLaserBeam.Heat SBEM_HEAT;
 		Alpha 1.0;
 	}
 }
@@ -120,8 +142,8 @@ class LaserBeam_SMLP : LaserBeam_SML
 {
 	Default
 	{
-		MechLaserBeam.Heat 0.2;
-		LaserBase.Damage 0.45;
+		MechLaserBeam.Heat SPBEM_HEAT;
+		LaserBase.Damage SPBEM_DMG;
 	}
 }
 class LaserBeam_ERSML : LaserBeam_SML
@@ -149,8 +171,8 @@ class LaserBeam_MED : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[0,255,0]"; 
 		LaserBase.LaserPuff "LaserBeam_MEDPuff";
-		LaserBase.Damage 0.2;
-		MechLaserBeam.Heat 0.1;
+		LaserBase.Damage MBEM_DMG;
+		MechLaserBeam.Heat MBEM_HEAT;
 		LaserBase.MaxRange 540;
 		Alpha 1.0;
 	}
@@ -160,8 +182,8 @@ class LaserBeam_MEDP : LaserBeam_MED
 	Default
 	{
 		LaserBase.MaxRange 440;
-		MechLaserBeam.Heat 0.4;
-		LaserBase.Damage 0.55;
+		MechLaserBeam.Heat MPBEM_HEAT;
+		LaserBase.Damage MPBEM_DMG;
 	}
 }
 class LaserBeam_ERMED : LaserBeam_MED
@@ -189,8 +211,8 @@ class LaserBeam_LRG : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[16,0,142]";
 		LaserBase.LaserPuff "LaserBeam_LRGPuff";
-		LaserBase.Damage 0.25;
-		MechLaserBeam.Heat 0.2;
+		LaserBase.Damage LBEM_DMG;
+		MechLaserBeam.Heat LBEM_HEAT;
 		LaserBase.MaxRange 900;
 		Alpha 1.0;
 	}
@@ -200,8 +222,8 @@ class LaserBeam_LRGP : LaserBeam_LRG
 	Default
 	{
 		LaserBase.MaxRange 700;
-		MechLaserBeam.Heat 0.6;
-		LaserBase.Damage 0.70;
+		MechLaserBeam.Heat LPBEM_HEAT;
+		LaserBase.Damage LPBEM_DMG;
 	}
 }
 class LaserBeam_ERLRG : LaserBeam_LRG
@@ -232,8 +254,8 @@ class LaserBeam_ERSMLP : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[128,64,0]";
 		LaserBase.LaserPuff "LaserBeam_ERSMLPPuff";
-		LaserBase.Damage 0.40;
-		MechLaserBeam.Heat 0.3;
+		LaserBase.Damage ERSPBEM_DMG;
+		MechLaserBeam.Heat ERSPBEM_HEAT;
 		LaserBase.MaxRange 400;
 		Alpha 1.0;
 	}
@@ -256,8 +278,8 @@ class LaserBeam_ERMEDP : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[255,255,0]"; 
 		LaserBase.LaserPuff "LaserBeam_ERMEDPPuff";
-		LaserBase.Damage 0.50;
-		MechLaserBeam.Heat 0.5;
+		LaserBase.Damage ERMPBEM_DMG;
+		MechLaserBeam.Heat ERMPBEM_HEAT;
 		LaserBase.MaxRange 640;
 		Alpha 1.0;
 	}
@@ -280,8 +302,8 @@ class LaserBeam_ERLRGP : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[80,0,160]";
 		LaserBase.LaserPuff "LaserBeam_ERLRGPPuff";
-		LaserBase.Damage 0.70;
-		MechLaserBeam.Heat 0.8;
+		LaserBase.Damage ERLPBEM_DMG;
+		MechLaserBeam.Heat ERLPBEM_HEAT;
 		LaserBase.MaxRange 900;
 		Alpha 1.0;
 	}

@@ -484,10 +484,17 @@ class Mechbase_Weapon : Item_NoPickup
 		vector3 lpos, loffs;
 		vector2 langs;
 		bool onarms, onlegs;
-		//[onarms, onlegs] = CheckMountPos();
+		[onarms, onlegs] = CheckMountPos();
 		[lpos, loffs, langs] = GetShootPos(xoffset, yoffset, distance);
 		
-		if(!mechplr.CheckAI() && !onarms) loffs.z -= 16;
+		if(!mechplr.CheckAI())
+		{
+			if(!onarms) 
+				loffs.z -= 16;
+			else
+				loffs.z -= 4;
+		}
+		
 			
 		// Get Beam convergence 
 		activelaserbeam.SetPos(mechplr.pos, loffs, (0,0));
@@ -560,6 +567,7 @@ class Mechbase_Weapon : Item_NoPickup
 		if(beam_counter > 0 && activelaserbeam) 
 		{
 			beam_counter--;
+			bool dopredict = plr.defaultmovement;
 			plr.A_StartSound(beamloopsnd, CHAN_WEAPON, CHANF_LOOPING);
 			vector3 lpos = level.Vec3Offset(plr.pos, activelaserbeam.posoffs);
 			FLineTraceData lt;
@@ -572,8 +580,10 @@ class Mechbase_Weapon : Item_NoPickup
 						   src.pitch, TRF_SOLIDACTORS, 
 						   0, 80,0, lt     );
 			double aimdist = lt.Distance;
-			vector3 rangles = level.SphericalCoords(lpos, lt.HitLocation, (plr.angle,plr.pitch));
-			double corange = clamp(aimdist / 340, 0.5, 1.0);  
+			vector3 finpos = lt.HitActor ? lt.HitActor.pos : lt.HitLocation;
+			finpos.z = lt.HitLocation.z;
+			vector3 rangles = level.SphericalCoords(lpos, finpos, (src.angle,src.pitch));
+			double corange = clamp(aimdist / 340, 0.6, 0.8);  
 			vector2 conview = (-rangles.x*corange, -rangles.y);
 			UpdateBeamPos(hardpoint.pos.x,hardpoint.pos.y,weapDistance);
 			activelaserbeam.SetPos(plr.pos,activelaserbeam.posoffs, conview); 
@@ -582,23 +592,25 @@ class Mechbase_Weapon : Item_NoPickup
 				if(!(beam_counter%beam_pulsefreq)) 
 				{
 					pulsetoggle = !pulsetoggle;
-					if(pulsetoggle)
+					if(!pulsetoggle)
 					{
-						Sound finalsnd = GetAttackSound();
-						SoundOnActor.Trigger(finalsnd, plr);
+						// Sound finalsnd = GetAttackSound();
+						if(beam_pulsefreq > 1 || !(beam_counter%3))
+							SoundOnActor.Trigger("LaserBeam/Pulse", plr);
+						//plr.A_StartSound("LaserBeam/Pulse", CHAN_5, CHANF_OVERLAP);
 					}
 				}
 				
 				if(pulsetoggle)
 				{
-					activelaserbeam.Fire();
+					activelaserbeam.Fire(predict:dopredict);
 				}
 				else
 					activelaserbeam.LaserOff();
 			}
 			else
 			{
-				activelaserbeam.Fire();
+				activelaserbeam.Fire(predict:dopredict);
 			}
 			if(beam_counter <= 0 || plr.mech_shutdown)
 			{

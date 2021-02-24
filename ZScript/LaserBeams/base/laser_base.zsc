@@ -76,9 +76,9 @@ class LaserEmitter : Actor
 	{
 		FLineTraceData lt;
 		if(!laser_on || !activelaser)
-			LineTrace(angle, maxdist, pitch, flags,0, source.radius+16,0, lt);
+			LineTrace(angle, maxdist, pitch, flags,0, 32,0, lt);
 		else
-			LineTrace(activelaser.angle, maxdist, activelaser.pitch-90, flags,0, source.radius+16,0, lt);
+			LineTrace(activelaser.angle, maxdist, activelaser.pitch-90, flags,0, 32,0, lt);
 		aimpos = lt.HitLocation;
 		aimactor = lt.HitActor;
 		return lt.Distance;
@@ -130,21 +130,9 @@ class LaserEmitter : Actor
 	{
 		if(!source) return null;
 		let lasdefs = GetDefaultByType(curbeam);
-		curdist = GetDist(ltflags, lasdefs.maxrange*MWGAMEPLAY_UNITMETER);	
-		
 		class<Actor> laspuff = lasdefs.pufftype;
 		LaserPuff spwnpuff;
 		
-		if(laspuff && laser_on)
-		{
-			spwnpuff = LaserPuff(Spawn(laspuff, aimpos));
-			if(spwnpuff) 
-			{
-				spwnpuff.angle = angle;
-				spwnpuff.pitch = pitch;
-				spwnpuff.truedamage = lasdefs.truedamage;
-			}
-		}
 		if(!laser_on)
 		{
 			let lasobj = LaserBase(Actor.Spawn(curbeam,pos));
@@ -153,15 +141,27 @@ class LaserEmitter : Actor
 				lasobj.emitter = self;
 				lasobj.angle = angle;
 				lasobj.pitch = pitch+90;
-				lasobj.aimpuff = spwnpuff;
 				lasobj.predictaim = predict;
 				lasobj.onarms = onarms;
 				lasobj.onlegs = onlegs;
+				lasobj.InitAngles();
 			}
 			activelaser = lasobj;
+			laser_on = true;
+		}
+		curdist = GetDist(ltflags, lasdefs.maxrange*MWGAMEPLAY_UNITMETER);	
+		if(laspuff && activelaser)
+		{
+			spwnpuff = LaserPuff(Spawn(laspuff, aimpos));
+			if(spwnpuff) 
+			{
+				spwnpuff.angle = angle;
+				spwnpuff.pitch = pitch;
+				spwnpuff.truedamage = lasdefs.truedamage;
+				activelaser.aimpuff = spwnpuff;
+			}
 		}
 		if(spwnpuff) spwnpuff.target = activelaser;
-		laser_on = true;
 		return activelaser;
 	}
 	
@@ -197,6 +197,29 @@ class LaserBase : Actor
 		Radius 6;
 	}
 
+	void InitAngles()
+	{
+		vector2 angs = GetFollowAngles();
+		angle = angs.x;
+		pitch = angs.y;
+	}
+	
+	vector2 GetFollowAngles()
+	{
+		let plr = MechWarrior(emitter.source);
+		vector2 paim = (0,0);
+		if(predictaim) paim = emitter.viewvel*0.5;
+		vector2 finalangs = (emitter.angle, emitter.pitch);
+		if(plr && plr.models_reference)
+		{
+			let mechparts = plr.models_reference;
+			if(!onarms) finalangs.x = mechparts.cockpit.angle;
+			if(onlegs) finalangs.x = plr.LegAng;
+		}
+		vector2 toangles = (finalangs.x + paim.x, finalangs.y+90 + paim.y);
+		return toangles;
+	}
+
 	override void Tick() 
 	{
 		if(!emitter || !emitter.laser_on || !emitter.source) 
@@ -207,23 +230,12 @@ class LaserBase : Actor
 		
 		// Carefully follow emitter.
 		bool localplr = false; //(players[consoleplayer] == emitter.source.player);
-		let plr = MechWarrior(emitter.source);
-		vector2 paim = (0,0);
-		if(predictaim) paim = emitter.viewvel;
-		vector2 finalangs = (emitter.angle, emitter.pitch);
-		if(plr && plr.models_reference)
-		{
-			let mechparts = plr.models_reference;
-			if(!onarms) finalangs.x = mechparts.cockpit.angle;
-			if(onlegs) finalangs.x = plr.LegAng;
-		}
-		vector2 toangles = (finalangs.x + paim.x, finalangs.y+90 + paim.y);
-		if(GetAge() < 1)
-		{
-			angle = toangles.x;
-			pitch = toangles.y;
-			return;
-		}
+		vector2 toangles = GetFollowAngles();
+
+		// Scale to correct size.
+		double scalequanta = (double(radius)*default.scale.x) * (localplr ? 0.5 : 1.0);
+		double newscale = default.scale.x * (emitter.curdist / scalequanta);
+		Scale.Y = newscale;
 	
 		A_SetAngle(LaserGlobals.Lerp(angle, toangles.x, 0.5), SPF_INTERPOLATE);
 		A_SetPitch(LaserGlobals.Lerp(pitch, toangles.y, 0.5), SPF_INTERPOLATE);
@@ -235,11 +247,6 @@ class LaserBase : Actor
 			sin(angle) * cosp,
 			sin(pitch+90)
 		) * (localplr ? 1 : dist_desired); 
-
-		// Scale to correct size.
-		double scalequanta = (double(radius)*default.scale.x) * (localplr ? 0.5 : 1.0);
-		double newscale = default.scale.x * (emitter.curdist / scalequanta);
-		Scale.Y = newscale;
 		
 		// Warp to emitter.
 		posdir = level.Vec3Offset(posdir, emitter.pos);		

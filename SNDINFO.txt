@@ -53,8 +53,11 @@ LaserBeam/Small/Fire SBEMFIRE
 LaserBeam/Medium/Fire MBEMFIRE
 LaserBeam/Large/Fire LBEMFIRE
 LaserBeam/Cont BEAMCONT;
+LaserBeam/Pulse LBEMPLS
 
-$volume LaserBeam/Small/Fire 0.25;
+$volume LaserBeam/Small/Fire 0.5;
+$volume LaserBeam/Medium/Fire 0.5;
+$volume LaserBeam/Large/Fire 0.5;
 
 $volume Ballistics/Gauss 0.6
 $volume Ballistics/Autocannon 0.5

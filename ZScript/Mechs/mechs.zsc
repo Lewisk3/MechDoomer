@@ -116,7 +116,7 @@ class BattleArmor : MechWarrior
 		MechWarriorBase.HudCockpit "WARHHUD";
 		MechWarriorBase.HudMech "#Atlas";
 		MechWarriorBase.Weight 5;
-		MechWarriorBase.Engine "Engine_CMP_100";
+		MechWarriorBase.Engine "Engine_CMP_60";
 		MechWarriorBase.MechPieces "Model_BattleArmor";
 		MechWarriorBase.DefaultMovement true;
 		MechWarriorBase.HideLegsPerspective true;
