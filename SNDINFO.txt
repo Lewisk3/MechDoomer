@@ -48,6 +48,14 @@ Classic/Missiles/SRM4      CLSPPC
 Classic/Missiles/SRM6      CLSPPC
 Classic/Missiles/LRM	   CLSMISL
 
+// Beam Lazorz
+LaserBeam/Small/Fire SBEMFIRE
+LaserBeam/Medium/Fire MBEMFIRE
+LaserBeam/Large/Fire LBEMFIRE
+LaserBeam/Cont BEAMCONT;
+
+$volume LaserBeam/Small/Fire 0.25;
+
 $volume Ballistics/Gauss 0.6
 $volume Ballistics/Autocannon 0.5
 $volume Missiles/SRM2 0.5

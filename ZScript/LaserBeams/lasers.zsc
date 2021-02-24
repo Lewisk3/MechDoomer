@@ -1,0 +1,289 @@
+// LaserBeam FX
+class LaserBeamDecals : LaserDecal
+{
+	Default
+	{
+		RenderStyle "Add";
+		LaserDecal.DecalOnActors true;
+		Alpha 0.4;
+	}
+	States
+	{
+		Spawn:
+			LASH A 1 Bright 
+			{
+				A_FadeOut(onactor ? 0.1 : 0.008);
+				if(random(1,60)==60) 
+				{
+					LaserGlobals.SpawnFX(self, "LaserSmoke", frandom(-10,10), -90 + frandom(0,30), frandom(-10,10), -16);
+				}
+				/*
+				if(GetAge() < 2 && target)
+				{
+					let las_hit = LaserExplosion(LaserGlobals.SpawnFX(self, "LaserExplosion", 0,0,0, -8));
+					if(las_hit) 
+					{
+						las_hit.translation = target.translation;
+						las_hit.A_SetRenderStyle(1.0, STYLE_Normal);
+						las_hit.noexplosion = true;
+					}
+				}
+				*/
+			}
+		wait;
+	}
+}
+class LaserBeamPuffs : LaserPuff
+{
+	class<LaserDecal> DecalType;
+	Property LaserDecal : DecalType;
+	
+	Default
+	{
+		RenderStyle "Add";
+	}
+	States
+	{
+		Spawn:
+			TNT1 A 1 NoDelay
+			{
+				DoSmoke(3);
+				let dec = DoDecal(DecalType);
+				if(dec)
+				{
+					dec.A_SetScale(frandom(0.25,0.5));
+				}
+				DoParticles(spd:frandom(2,5));
+				double rangemod = 1.0;
+				let lbase = LaserBase(target);
+				if(lbase)
+				{
+					let emit = LaserEmitter(lbase.emitter);
+					if(emit)
+					{
+						double dist = LaserGlobals.Distance3D(emit.pos, pos) / MWGAMEPLAY_UNITMETER;
+						rangemod = clamp(1.0 - (dist / lbase.maxrange), 0, 1.0);
+					}
+				}
+				DamageHitActor(truedamage * rangemod);
+			}
+		stop;
+	}
+}
+
+// Lasers
+class MechLaserBeam : LaserBase
+{
+	double heatgen;
+	Property Heat : heatgen;
+	
+	override void Tick()
+	{
+		if(!emitter || !emitter.source) 
+		{
+			super.tick();
+			return;
+		}
+		
+		let plr = Mechwarrior(emitter.source);
+		if(!plr) return;
+		
+		plr.HeatLevel += heatgen*MWHEAT_MOD;
+		super.tick();
+	}
+}
+
+// Small
+class LaserBeam_SMLDecal : LaserBeamDecals {}
+class LaserBeam_SMLPuff : LaserBeamPuffs 
+{
+	Default
+	{
+		LaserBeamPuffs.LaserDecal "LaserBeam_SMLDecal";
+	}
+}
+class LaserBeam_SML : MechLaserBeam
+{
+	Default
+	{
+		Scale 0.8;
+		RenderStyle "Add";
+		Translation "0:255=@80[255,0,0]";
+		LaserBase.LaserPuff "LaserBeam_SMLPuff";
+		LaserBase.Damage 0.32;
+		LaserBase.MaxRange 200;
+		MechLaserBeam.Heat 0.1;
+		Alpha 1.0;
+	}
+}
+class LaserBeam_SMLP : LaserBeam_SML
+{
+	Default
+	{
+		MechLaserBeam.Heat 0.2;
+		LaserBase.Damage 0.55;
+	}
+}
+class LaserBeam_ERSML : LaserBeam_SML
+{
+	Default
+	{
+		LaserBase.MaxRange 370;
+	}
+}
+
+// Medium
+class LaserBeam_MEDDecal : LaserBeamDecals {}
+class LaserBeam_MEDPuff : LaserBeamPuffs 
+{
+	Default
+	{
+		LaserBeamPuffs.LaserDecal "LaserBeam_MEDDecal";
+	}
+}
+class LaserBeam_MED : MechLaserBeam
+{
+	Default
+	{
+		Scale 0.8;
+		RenderStyle "Add";
+		Translation "0:255=@80[0,255,0]"; 
+		LaserBase.LaserPuff "LaserBeam_MEDPuff";
+		LaserBase.Damage 0.18;
+		MechLaserBeam.Heat 0.1;
+		LaserBase.MaxRange 540;
+		Alpha 1.0;
+	}
+}
+class LaserBeam_MEDP : LaserBeam_MED
+{
+	Default
+	{
+		LaserBase.MaxRange 440;
+		MechLaserBeam.Heat 0.4;
+		LaserBase.Damage 0.44;
+	}
+}
+class LaserBeam_ERMED : LaserBeam_MED
+{
+	Default
+	{
+		LaserBase.MaxRange 750;
+	}
+}
+
+// Large
+class LaserBeam_LRGDecal : LaserBeamDecals {}
+class LaserBeam_LRGPuff : LaserBeamPuffs 
+{
+	Default
+	{
+		LaserBeamPuffs.LaserDecal "LaserBeam_LRGDecal";
+	}
+}
+class LaserBeam_LRG : MechLaserBeam
+{
+	Default
+	{
+		Scale 0.8;
+		RenderStyle "Add";
+		Translation "0:255=@80[16,0,142]";
+		LaserBase.LaserPuff "LaserBeam_LRGPuff";
+		LaserBase.Damage 0.22;
+		MechLaserBeam.Heat 0.2;
+		LaserBase.MaxRange 900;
+		Alpha 1.0;
+	}
+}
+class LaserBeam_LRGP : LaserBeam_LRG
+{
+	Default
+	{
+		LaserBase.MaxRange 700;
+		MechLaserBeam.Heat 0.6;
+		LaserBase.Damage 0.53;
+	}
+}
+class LaserBeam_ERLRG : LaserBeam_LRG
+{
+	Default
+	{
+		LaserBase.MaxRange 1350;
+	}
+}
+
+
+// ER Pulse
+
+// Small
+class LaserBeam_ERSMLPDecal : LaserBeamDecals {}
+class LaserBeam_ERSMLPPuff : LaserBeamPuffs 
+{
+	Default
+	{
+		LaserBeamPuffs.LaserDecal "LaserBeam_SMLDecal";
+	}
+}
+class LaserBeam_ERSMLP : MechLaserBeam
+{
+	Default
+	{
+		Scale 0.8;
+		RenderStyle "Add";
+		Translation "0:255=@80[128,64,0]";
+		LaserBase.LaserPuff "LaserBeam_ERSMLPPuff";
+		LaserBase.Damage 0.55;
+		MechLaserBeam.Heat 0.3;
+		LaserBase.MaxRange 400;
+		Alpha 1.0;
+	}
+}
+
+// Medium
+class LaserBeam_ERMEDPDecal : LaserBeamDecals {}
+class LaserBeam_ERMEDPPuff : LaserBeamPuffs 
+{
+	Default
+	{
+		LaserBeamPuffs.LaserDecal "LaserBeam_ERMEDPDecal";
+	}
+}
+class LaserBeam_ERMEDP : MechLaserBeam
+{
+	Default
+	{
+		Scale 0.8;
+		RenderStyle "Add";
+		Translation "0:255=@80[255,255,0]"; 
+		LaserBase.LaserPuff "LaserBeam_ERMEDPPuff";
+		LaserBase.Damage 0.44;
+		MechLaserBeam.Heat 0.5;
+		LaserBase.MaxRange 640;
+		Alpha 1.0;
+	}
+}
+
+// Large
+class LaserBeam_ERLRGPDecal : LaserBeamDecals {}
+class LaserBeam_ERLRGPPuff : LaserBeamPuffs 
+{
+	Default
+	{
+		LaserBeamPuffs.LaserDecal "LaserBeam_ERLRGPDecal";
+	}
+}
+class LaserBeam_ERLRGP : MechLaserBeam
+{
+	Default
+	{
+		Scale 0.8;
+		RenderStyle "Add";
+		Translation "0:255=@80[80,0,160]";
+		LaserBase.LaserPuff "LaserBeam_ERLRGPPuff";
+		LaserBase.Damage 0.53;
+		MechLaserBeam.Heat 0.8;
+		LaserBase.MaxRange 900;
+		Alpha 1.0;
+	}
+}
+

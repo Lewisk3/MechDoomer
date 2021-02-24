@@ -60,7 +60,8 @@ class Hips_Kitfox	   : MechHipsBase {
 	{
 		super.Tick();
 		// Follows torso angle.
-		angle = mechowner.models_reference.cockpit.angle;
+		if(mechowner.models_reference)
+			angle = mechowner.models_reference.cockpit.angle;
 	}
 }
 

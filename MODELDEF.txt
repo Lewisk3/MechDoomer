@@ -6,6 +6,9 @@
 // Misc modeldefs
 #include "models/radiusdebug/rd_models.txt"
 
+// Beam modeldefs
+#include "ZScript/LaserBeams/Lasers_Modeldef.txt"
+
 Model DEBRIS_3D
 {
 	Path "models"

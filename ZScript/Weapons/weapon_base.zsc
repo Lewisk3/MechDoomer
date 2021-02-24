@@ -174,9 +174,12 @@ class Mechbase_Weapon : Item_NoPickup
 	int cooldown_timer;
 	double volleycooldown;
 	double cooldown;
+	double beam_counter;
+	double beam_pulsefreq;
 	int group;
 	int WeaponID;
 	MechHardpoint hardpoint;
+	LaserEmitter activelaserbeam;
 	bool dofire;
 	bool isHomming;
 	int volley_amt;
@@ -184,7 +187,9 @@ class Mechbase_Weapon : Item_NoPickup
 	double volley_xspread;
 	double volley_yspread;
 	double lockonspeed;
+	double beam_duration;
 	bool volley_cosmetic;
+	bool pulsetoggle;
 	int hardslots;
 	double weight;
 	Name displayName;
@@ -199,12 +204,14 @@ class Mechbase_Weapon : Item_NoPickup
 	string specprefix; // Special prefix for certain weapons.
 	//double hitscan_amt;
 	int delay;
-	Sound atksnd, DOS_atksnd;
+	Sound atksnd, DOS_atksnd, beamsnd;
+	Sound beamloopsnd;
 	
 	int ammo_mode;
 	int switch_timer; // Retarded solution but idgaf anymore.
 	string weapname2;
 	string weapname3;
+	class<LaserBase> laserbeam;
 	class<Mechbase_Actor> weapType;
 	class<Mechbase_Actor> weapType2;
 	class<Mechbase_Actor> weapType3;
@@ -214,7 +221,10 @@ class Mechbase_Weapon : Item_NoPickup
 	
 	Property DisplayName : displayName;
 	Property DefaultGroup : group;
-	Property WeaponType : weapType;
+	Property WeaponType : weapType; 
+	Property LaserBeamSetup : laserbeam, beam_duration, beam_pulsefreq, beamsnd, beamloopsnd;
+	Property LaserBeamDuration : beam_duration;
+	Property LaserBeamPulseFreq : beam_pulsefreq;
 	Property Hitscan : hitscan_dmg, hitscan_distance;
 	Property AmmoType : ammotype;
 	Property AmmoGive : ammogive;
@@ -223,6 +233,7 @@ class Mechbase_Weapon : Item_NoPickup
 	Property IsHommingMissile : isHomming;
 	Property LockingSpeed : lockonspeed;
 	Property WeaponDelay : delay;
+	Property BeamSound : beamloopsnd;
 	Property AttackSound : atksnd;
 	Property ClassicAttackSound : DOS_atksnd;
 	Property Distance_Speed : weapDistance, weapSpeed;
@@ -247,6 +258,57 @@ class Mechbase_Weapon : Item_NoPickup
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.WeaponBaseSpread 5, 5;
 		Inventory.maxamount 12; // Each weapon should have atleast 12 available slots.
+	}
+	
+	Sound GetAttackSound()
+	{
+		if(!mechplr) return atksnd;
+		
+		// Legacy Sound
+		Sound finalsnd = atksnd;
+		if((mwd_laserbeams && laserbeam) || (!weapType && laserbeam))
+			return beamsnd;
+	
+		if(DOS_atksnd && CVar.GetCVar("mwd_useclassicsound", mechplr.player).getBool()) 
+			finalsnd = DOS_atksnd;
+		if(finalsnd) SoundOnActor.Trigger(finalsnd, mechplr);
+		
+		return finalsnd;
+	}
+	
+	vector3, vector3, vector2 GetShootPos(int xoffset, int yoffset, int distance)
+	{
+		// Get shoot position and offsets
+		let plr = mechplr;
+		let mechparts = plr.models_reference;
+		double offsangle = plr.angle;
+		double offspitch = plr.pitch;
+		Array<FoundStruct> tmp;
+		bool onarms = ( hardpoint == plr.hardpoints.la && plr.FindStructs("StructActuator", plr.hardpoints.la, true, tmp) ) || 
+					  ( hardpoint == plr.hardpoints.ra && plr.FindStructs("StructActuator", plr.hardpoints.ra, true, tmp) );
+		bool onlegs = ( hardpoint == plr.hardpoints.ll || hardpoint == plr.hardpoints.rl);
+		
+		// If we've got a cockpit model, always default align to the camera.
+		if(mechparts && mechparts.cockpit && mechparts.cockpit.cockpitcam)
+			offsangle = mechparts.cockpit.cockpitcam.angle;
+		
+		// If this weapon is NOT on an actuated arm, fire from torso aim.
+		bool notorsoaim = plr.player ? CVar.GetCVar("mwd_universalactuation", plr.player).getBool() : true;
+		
+		// Align to cockpit model's rotation.
+		if(!onarms && !notorsoaim && mechparts.cockpit) 
+			offsangle = mechparts.cockpit.angle;
+		if(onlegs) 
+			offsangle = plr.LegAng;
+		
+		// AI has no real cockpit control.
+		if(!plr.player && !onlegs) offsangle = plr.angle;
+		
+		vector2 offs = MDMath.VOffset(offsangle, distance, xoffset, 1);			
+		double heightmod = plr.player ? plr.viewheight*plr.player.CrouchFactor : plr.viewheight;
+		Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,heightmod+yoffset);
+		
+		return lpos, (offs.x, offs.y, heightmod+yoffset), (offsangle, offspitch);
 	}
 	
 	action bool checkCooldown()
@@ -323,51 +385,27 @@ class Mechbase_Weapon : Item_NoPickup
 		{
 			let plr = MechWarrior(invoker.Owner);
 			if(!plr) return false;
+			
+			// Process ammunition
 			if(invoker.ammouse > 0)
 			{
 				if(plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
 				plr.TakeAmmo(invoker.ammotype,invoker.ammouse);
 			}
 			
-			// Legacy Sound
-			Sound finalsnd = invoker.atksnd;
-			if(invoker.DOS_atksnd && CVar.GetCVar("mwd_useclassicsound", plr.player).getBool()) 
-				finalsnd = invoker.DOS_atksnd;
-			if(finalsnd) SoundOnActor.Trigger(finalsnd, plr);
+			// Attacking sound
+			Sound finalsnd = invoker.GetAttackSound();
+			SoundOnActor.Trigger(finalsnd, plr);
 			
-			// Get shoot position and offsets
+			// Shoot weapon
 			xoffset += random(-invoker.basespreadx,invoker.basespreadx);
 			yoffset += random(-invoker.basespready,invoker.basespready);
 			let weapdefs = GetDefaultByType(type);
 			if(MechMissile(weapdefs)) yoffset = clamp(yoffset, weapdefs.height, int.max);
-			let mechparts = plr.models_reference;
-			double offsangle = plr.angle;
-			double offspitch = plr.pitch;
-			Array<FoundStruct> tmp;
-			bool onarms = ( invoker.hardpoint == plr.hardpoints.la && plr.FindStructs("StructActuator", plr.hardpoints.la, true, tmp) ) || 
-						  ( invoker.hardpoint == plr.hardpoints.ra && plr.FindStructs("StructActuator", plr.hardpoints.ra, true, tmp) );
-			bool onlegs = ( invoker.hardpoint == plr.hardpoints.ll || invoker.hardpoint == plr.hardpoints.rl);
-			
-			// If we've got a cockpit model, always default align to the camera.
-			if(mechparts && mechparts.cockpit && mechparts.cockpit.cockpitcam)
-				offsangle = mechparts.cockpit.cockpitcam.angle;
-			
-			// If this weapon is NOT on an actuated arm, fire from torso aim.
-			bool notorsoaim = plr.player ? CVar.GetCVar("mwd_universalactuation", plr.player).getBool() : true;
-			
-			// Align to cockpit model's rotation.
-			if(!onarms && !notorsoaim && mechparts.cockpit) 
-				offsangle = mechparts.cockpit.angle;
-			if(onlegs) 
-				offsangle = plr.LegAng;
-			
-			// AI has no real cockpit control.
-			if(!plr.player && !onlegs) offsangle = plr.angle;
-			
-			vector2 offs = MDMath.VOffset(offsangle, distance, xoffset, 1);			
-			
-			double heightmod = plr.player ? plr.viewheight*plr.player.CrouchFactor : plr.viewheight;
-			Vector3 lpos = plr.Vec3Offset(offs.x,offs.y,heightmod+yoffset);
+
+			vector3 lpos, loffs;
+			vector2 langs;
+			[lpos, loffs, langs] = invoker.GetShootPos(xoffset, yoffset, distance);
 			
 			let weap = Mechbase_Actor(Spawn(type,lpos));
 			if(weap)
@@ -376,13 +414,13 @@ class Mechbase_Weapon : Item_NoPickup
 				invoker.cooldown_timer = invoker.cooldown*35.0;
 				weap.target = invoker.Owner;
 				weap.mechplayer = MechWarrior(invoker.Owner);
-				weap.pitch = offspitch;
-				weap.angle = offsangle;
+				weap.angle = langs.x;
+				weap.pitch = langs.y;
 				weap.speed = spd;
 				weap.vel = (
-						cos(offsangle)*cos(-offspitch),
-						sin(offsangle)*cos(-offspitch),
-						-sin(offspitch)
+						cos(langs.x)*cos(-langs.y),
+						sin(langs.x)*cos(-langs.y),
+						-sin(langs.y)
 						) * spd;
 				weap.cosmetic = cosmetic;
 				return true;
@@ -390,6 +428,51 @@ class Mechbase_Weapon : Item_NoPickup
 		}
 		if(!invoker.volley_amt) invoker.MWPostFire();
 		return false;
+	}
+	
+	action bool FireLaserBeam(class<LaserBase> type, int xoffset, int yoffset, int distance, bool instant=false)
+	{	
+		if(checkCooldown() || instant)
+		{
+			let plr = MechWarrior(invoker.Owner);
+			if(!plr) return false;
+			
+			// Process ammunition
+			if(invoker.ammouse > 0)
+			{
+				if(plr.countammo(invoker.ammotype) < invoker.ammouse) return false;
+				plr.TakeAmmo(invoker.ammotype,invoker.ammouse);
+			}
+			
+			// Setup
+			if(!invoker.activelaserbeam) 
+				invoker.activelaserbeam = LaserEmitter.Attach(plr);
+				
+			// Attacking sound
+			Sound finalsnd = invoker.GetAttackSound();
+			SoundOnActor.Trigger(finalsnd, plr);
+			
+			// Get shoot position and offsets
+			xoffset += random(-invoker.basespreadx,invoker.basespreadx);
+			yoffset += random(-invoker.basespready,invoker.basespready);
+			
+			// Shoot laserbeam
+			vector3 lpos, loffs;
+			vector2 langs;
+			[lpos, loffs, langs] = invoker.GetShootPos(xoffset, yoffset, distance);
+			
+			if(!plr.CheckAI()) loffs.z -= 16;
+			
+			// Get Beam convergence 
+			invoker.activelaserbeam.SetPos(plr.pos, loffs, (0,0));
+			invoker.activelaserbeam.SetupFire(type);
+			invoker.beam_counter = invoker.beam_duration*35.0;
+			invoker.cooldown_timer = (invoker.cooldown*35.0) + invoker.beam_counter;
+			invoker.pulsetoggle = true;
+		}
+		if(!invoker.volley_amt) invoker.MWPostFire();
+		return false;
+		
 	}
 	
 	int CheckAllAmmo()
@@ -456,6 +539,53 @@ class Mechbase_Weapon : Item_NoPickup
 		}
 		
 		if(cooldown_timer > 0)cooldown_timer--;
+		if(beam_counter > 0 && activelaserbeam) 
+		{
+			beam_counter--;
+			plr.A_StartSound(beamloopsnd, CHAN_WEAPON, CHANF_LOOPING);
+			vector3 lpos = level.Vec3Offset(plr.pos, activelaserbeam.posoffs);
+			FLineTraceData lt;
+			plr.LineTrace( plr.angle, 1000 * MWGAMEPLAY_UNITMETER, 
+						   plr.pitch, TRF_SOLIDACTORS, 
+						   plr.viewheight, 80,0, lt     );
+			double aimdist = lt.Distance;
+			vector3 rangles = level.SphericalCoords(lpos, lt.HitLocation, (plr.angle,plr.pitch));
+			double corange = clamp(aimdist / 1080, 0.5, 1.0);  
+			vector2 conview = (-rangles.x*corange, -rangles.y);
+			activelaserbeam.SetPos(plr.pos,activelaserbeam.posoffs, conview); 
+			if(beam_pulsefreq > 0)
+			{
+				if(!(beam_counter%beam_pulsefreq)) 
+				{
+					pulsetoggle = !pulsetoggle;
+					if(pulsetoggle)
+					{
+						Sound finalsnd = GetAttackSound();
+						SoundOnActor.Trigger(finalsnd, plr);
+					}
+				}
+				
+				if(pulsetoggle)
+				{
+					activelaserbeam.Fire();
+				}
+				else
+					activelaserbeam.LaserOff();
+			}
+			else
+			{
+				activelaserbeam.Fire();
+			}
+			if(beam_counter <= 0 || plr.mech_shutdown)
+			{
+				if(activelaserbeam)
+				{
+					plr.A_StopSound(CHAN_WEAPON);
+					activelaserbeam.LaserOff();
+					activelaserbeam.Destroy();
+				}
+			}
+		}
 		if(dofire)FireVolley();
 	}
 	
@@ -471,23 +601,38 @@ class Mechbase_Weapon : Item_NoPickup
 		weapon_tick();
 		super.tick();
 	}
+	
+	override void OnDestroy()
+	{
+		if(activelaserbeam)
+		{
+			activelaserbeam.LaserOff();
+			activelaserbeam.Destroy();
+		}
+	}
 
 	virtual void MWPostFire() {}
 	virtual bool MWFire()
 	{
 		let plr = MechwarriorBase(Owner);
 		if(!plr) return false;
-		
-		int curammo = 0;
 		bool ret;
+		int curammo = 0;
 		if(ammotype) curammo = plr.countammo(ammotype);
-		if(weapType)
+		if((mwd_laserbeams && laserbeam) || (!weapType && laserbeam))
 		{
-			ret = FireWeapon(weapType,hardpoint.pos.x,hardpoint.pos.y,weapDistance,weapSpeed);
+			ret = FireLaserBeam(laserbeam,hardpoint.pos.x,hardpoint.pos.y,weapDistance);
 		}
 		else
 		{
-			ret = FireBullets(hitscan_dmg,hitscan_distance);
+			if(weapType)
+			{
+				ret = FireWeapon(weapType,hardpoint.pos.x,hardpoint.pos.y,weapDistance,weapSpeed);
+			}
+			else
+			{
+				ret = FireBullets(hitscan_dmg,hitscan_distance);
+			}
 		}
 		if(curammo > 0)
 		{

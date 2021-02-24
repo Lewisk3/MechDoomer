@@ -196,3 +196,6 @@ object LaserAntiMissile
 {
 	Frame AMSL { light RedPointLight }
 }
+
+// LaserBeam FX
+#include "ZScript/LaserBeams/lasers_light.gl"

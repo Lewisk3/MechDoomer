@@ -43,6 +43,13 @@ material texture Sprites/Weapons/MGMZA0.png {
 	brightmap "Sprites/Weapons/MGMZA0.png"
 	brightness 1.0
 }
+material texture models/LaserBeams/BEAM.png {
+	brightmap models/LaserBeams/BEAM.png
+	brightness 1.0
+}
+material texture sprites/Explosions/LaserBeams/LASHA0.png {
+	brightmap sprites/Explosions/LaserBeams/LASHA0.png
+}
 
 // Some PBR stuff for cockpits/models.
 material texture models/Mechs/c_dark.png {

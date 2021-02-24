@@ -60,6 +60,11 @@ class HudSpriteInitializer : Actor
 #include "ZScript/Weapons/weapon_disp.zsc"
 #include "ZScript/Weapons/ammo_disp.zsc"
 
+// LaserBeam 
+#include "ZScript/LaserBeams/base/laser_base.zsc"
+#include "ZScript/LaserBeams/base/laserfx_base.zsc"
+#include "ZScript/LaserBeams/lasers.zsc"
+
 // Engines
 #include "ZScript/Mechwarrior/Engines/engine_base.zsc"
 #include "ZScript/Mechwarrior/Engines/engines_standard.zsc"

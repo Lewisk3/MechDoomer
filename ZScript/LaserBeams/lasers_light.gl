@@ -1,0 +1,56 @@
+pointlight BeamGreen
+{
+    color 0 0.5 0
+    size 12
+}
+pointlight BeamRed
+{
+    color 0.5 0 0
+    size 12
+}
+pointlight BeamBlue
+{
+    color 0 0 0.67
+    size 12
+}
+pointlight BeamOrange
+{
+    color 1.0 0.5 0.0
+    size 12
+}
+pointlight BeamPurple
+{
+	color 0.29 0.13 0.77
+	size 12
+}
+pointlight BeamYellow
+{
+    color 5.0 5.0 0.0
+    size 12
+}
+
+
+object LaserBeam_SMLDecal
+{
+	Frame LASH { light BeamRed }
+}
+object LaserBeam_MEDDecal 
+{
+	Frame LASH { light BeamGreen }
+}
+object LaserBeam_LRGDecal
+{
+	Frame LASH { light BeamBlue }
+}
+object LaserBeam_ERSMLPDecal
+{
+	Frame LASH { light BeamOrange }
+}
+object LaserBeam_ERMEDPDecal
+{
+	Frame LASH { light BeamYellow }
+}
+object LaserBeam_ERLRGPDecal
+{
+	Frame LASH { light BeamPurple }
+}

@@ -1,0 +1,233 @@
+// Globals
+class LaserGlobals abstract
+{
+	static play Actor SpawnFX(Actor src, class<Actor> type, double xyoffs, double poffs, double zoffs, double dist=16)
+	{
+		vector3 spos = src.Vec3Offset(cos(src.angle+xyoffs)*dist, sin(src.angle+xyoffs)*dist, zoffs);
+		let proj = Actor.Spawn(type, spos);
+		if(proj)
+		{
+			proj.target = src; // Assign target to shooter.
+			proj.angle = src.angle+xyoffs;
+			proj.pitch = src.pitch+poffs;
+			proj.vel = (
+				cos(proj.angle)*cos(proj.pitch),
+				sin(proj.angle)*cos(proj.pitch),
+				-sin(proj.pitch)
+			) * proj.default.speed;
+		}
+		return proj;
+	}
+	
+	// Linear interpolate
+	static double Lerp(double a, double b, double lerpFactor)
+	{
+		double result = (a * (1.f - lerpFactor)) + (b * lerpFactor);
+		return result;
+	}
+	
+	// Offset vector position.
+	static Vector2 VOffset(double fromangle, double forward, double leftright, double distance = 1.)
+	{
+		return ( forward * cos(fromangle) - leftright * sin(fromangle),
+				 leftright * cos(fromangle) + forward * sin(fromangle) )*distance;
+	}
+	
+	// Linear interpolate 3D vectors
+	static vector3 Lerp3D(vector3 a, vector3 b, double lerpfactor)
+	{
+		vector3 result = a;
+		result.x = Lerp(result.x,b.x,lerpfactor);
+		result.y = Lerp(result.y,b.y,lerpfactor);
+		result.z = Lerp(result.z,b.z,lerpfactor);
+		return result;
+	}
+	
+	// Distance 3D on vectors, not actors. (Precise version)
+	static double Distance3D(vector3 one, vector3 two)
+	{
+		return sqrt( (two.x - one.x)**2 + (two.y - one.y)**2 + (two.z - one.z)**2 );
+	}
+}
+
+
+// Laser Emitter
+class LaserEmitter : Actor
+{
+	Actor source;
+	Actor aimactor;
+	LaserBase activelaser;
+	vector3 aimpos;
+	vector2 viewoffs, viewvel;
+	vector3 posoffs;
+	bool laser_on;
+	double curdist, maxdist;
+	class<LaserBase> curbeam;
+	
+	Default
+	{
+		+NOINTERACTION;
+		+INTERPOLATEANGLES;
+	}
+	
+	private double GetDist(uint flags, int maxdist = int.max)
+	{
+		FLineTraceData lt;
+		if(!laser_on || !activelaser)
+			LineTrace(angle, maxdist, pitch, flags,0, source.radius+16,0, lt);
+		else
+			LineTrace(activelaser.angle, maxdist, activelaser.pitch-90, flags,0, source.radius+16,0, lt);
+		aimpos = lt.HitLocation;
+		aimactor = lt.HitActor;
+		return lt.Distance;
+	}
+
+	override void Tick()
+	{
+		if(!source) return;
+		
+		double iyaw = source.player.cmd.yaw * (360./65536.);
+		double ipit = -source.player.cmd.pitch * (360./65536.);
+		A_SetAngle(source.angle + viewoffs.x, SPF_INTERPOLATE);
+		A_SetPitch(source.pitch + viewoffs.y, SPF_INTERPOLATE);
+		viewvel = (iyaw, ipit);
+		super.Tick();
+	}
+	
+	void SetPos(Vector3 pos, vector3 pos_offset = (0,0,0), vector2 view_offset = (0,0))
+	{
+		viewoffs = view_offset;
+		posoffs = pos_offset;
+		A_SetAngle(source.angle + viewoffs.x, SPF_INTERPOLATE);
+		A_SetPitch(source.pitch + viewoffs.y, SPF_INTERPOLATE);
+		SetOrigin(level.Vec3Offset(pos,pos_offset), false);
+	}
+	
+	static LaserEmitter Attach(Actor to)
+	{
+		let lasersource = LaserEmitter(Spawn("LaserEmitter"));
+		if(lasersource) 
+		{
+			lasersource.source = to;
+			lasersource.SetPos(to.pos);
+			lasersource.angle = to.angle;
+			lasersource.pitch = to.pitch;
+		}
+		return lasersource;
+	}
+
+	void SetupFire(class<LaserBase> parts)
+	{
+		if(!source) return;
+		curbeam = parts;
+	}
+	
+	LaserBase Fire(uint ltflags = 0, bool predict = true)
+	{
+		if(!source) return null;
+		let lasdefs = GetDefaultByType(curbeam);
+		curdist = GetDist(ltflags, lasdefs.maxrange*MWGAMEPLAY_UNITMETER);	
+		
+		class<Actor> laspuff = lasdefs.pufftype;
+		LaserPuff spwnpuff;
+		
+		if(laspuff)
+		{
+			spwnpuff = LaserPuff(Spawn(laspuff, aimpos));
+			if(spwnpuff) 
+			{
+				spwnpuff.angle = angle;
+				spwnpuff.pitch = pitch;
+				spwnpuff.truedamage = lasdefs.truedamage;
+			}
+		}
+		if(!laser_on)
+		{
+			let lasobj = LaserBase(Actor.Spawn(curbeam,pos));
+			if(lasobj) 
+			{
+				lasobj.emitter = self;
+				lasobj.angle = angle;
+				lasobj.pitch = pitch+90;
+				lasobj.aimpuff = spwnpuff;
+				lasobj.predictaim = predict;
+			}
+			activelaser = lasobj;
+		}
+		if(spwnpuff) spwnpuff.target = activelaser;
+		laser_on = true;
+		return activelaser;
+	}
+	
+	void LaserOff()
+	{
+		laser_on = false;
+	}
+}
+
+// Laser Object
+class LaserBase : Actor
+{
+	LaserEmitter emitter;
+	class<LaserPuff> pufftype;
+	Actor aimpuff;
+	double dist;
+	double truedamage;
+	double maxrange;
+	
+	bool predictaim;
+	
+	Property LaserPuff : pufftype;
+	Property Damage : truedamage;
+	Property MaxRange : maxrange;
+	
+	Default
+	{	
+		+NOINTERACTION;
+		+INTERPOLATEANGLES;
+		LaserBase.LaserPuff "";
+		LaserBase.MaxRange 42069;
+		Radius 6;
+	}
+
+	override void Tick() 
+	{
+		if(!emitter || !emitter.laser_on || !emitter.source) 
+		{
+			Destroy();
+			return;
+		}
+		// Carefully follow emitter.
+		bool localplr = false; //(players[consoleplayer] == emitter.source.player);
+		vector2 paim = (0,0);
+		if(predictaim) paim = emitter.viewvel;
+		vector2 toangles = (emitter.angle + paim.x, emitter.pitch+90 + paim.y);
+		
+		A_SetAngle(LaserGlobals.Lerp(angle, toangles.x, 0.5), SPF_INTERPOLATE);
+		A_SetPitch(LaserGlobals.Lerp(pitch, toangles.y, 0.5), SPF_INTERPOLATE);
+		
+		double cosp = cos(pitch-90);
+		double dist_desired = emitter.curdist/2.;
+		vector3 posdir = (
+			cos(angle) * cosp,
+			sin(angle) * cosp,
+			sin(pitch+90)
+		) * (localplr ? 1 : dist_desired); 
+
+		// Scale to correct size.
+		double scalequanta = (double(radius)*default.scale.x) * (localplr ? 0.5 : 1.0);
+		double newscale = default.scale.x * (emitter.curdist / scalequanta);
+		Scale.Y = newscale;
+		
+		// Warp to emitter.
+		posdir = level.Vec3Offset(posdir, emitter.pos);		
+		SetOrigin(posdir, true);
+	}
+	
+	States
+	{
+		Spawn:
+			BEAM A 1;
+		loop;
+	}	
+}

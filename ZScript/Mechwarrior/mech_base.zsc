@@ -232,7 +232,7 @@ class MechWarrior : MechWarriorBase
 	// This somehow makes movement a WHOLE lot smoother, idek, it WAS a mistake at first.
 	override void tick()
 	{
-		if(!checkVoodoo() && inv_context) 
+		if(!checkVoodoo()) 
 		{
 			mech_movement();
 			Bobbing();

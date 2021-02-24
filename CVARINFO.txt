@@ -12,3 +12,4 @@ user float mwd_crosshairsize = 0.90;
 user bool mwd_throttletaptoggle = true;
 user bool mwd_override_warn = false;
 server bool mwd_debug_hitboxes = false;
+server bool mwd_laserbeams = false;

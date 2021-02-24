@@ -386,7 +386,7 @@ class MechDoomerEvents : EventHandler
 				if(nav) plr.targetenemy = nav;
 				SoundEmitter.SE_Trigger("Mech/NavBlip",plr.pos);
 			}
-			
+		
 			if(netcmd == "hud_resetanimflags") plr.hAlert.hud_powersequence = 0;
 			if(netcmd == "toggle_objectives") plr.display_objectives = !plr.display_objectives;
 			if(netcmd == "exchange_mech" && plr.inv_context.mechs.Size() >= e.Args[0]) plr.StartMechChange(e.Args[0]);

@@ -10,6 +10,7 @@ class SmallLaser : Mechbase_Weapon
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 2400;
 		Mechbase_Weapon.Cooldown MWCOOL_SLASER, 0;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_SML", 0.25, 0, "LaserBeam/Small/Fire", "LaserBeam/Cont";
 	}	
 }
 class ERSmallLaser : SmallLaser
@@ -22,6 +23,7 @@ class ERSmallLaser : SmallLaser
 		Mechbase_Weapon.Tonnage 0.5;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 2850;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERSML", 0.3, 0, "LaserBeam/Small/Fire", "LaserBeam/Cont";
 	}	
 }
 class SmallPulseLaser : Mechbase_Weapon
@@ -35,10 +37,12 @@ class SmallPulseLaser : Mechbase_Weapon
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 3050;
 		Mechbase_Weapon.Cooldown MWCOOL_SPLAS, 0.1;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_SMLP", 0.2, 1, "LaserBeam/Small/Fire", "LaserBeam/Cont";
 	}	
 	override bool MWFire()
 	{
 		// Only the first laser will deal damage/generate heat.
+		if(mwd_laserbeams) return super.MWFire();
 		return FireVolley(2,0,0,"","",true);
 	}
 }
@@ -50,12 +54,8 @@ class ERSmallPulseLaser : SmallPulseLaser
 		Mechbase_Weapon.WeaponType "Laser_ERSMLP";
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.CValue 6100;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERSMLP", 0.4, 1, "LaserBeam/Small/Fire", "LaserBeam/Cont";
 	}	
-	override bool MWFire()
-	{
-		// Only the first laser will deal damage/generate heat.
-		return FireVolley(2,0,0,"","",true);
-	}
 }
 
 const HeavyLaserText = (
@@ -76,9 +76,11 @@ class HeavySmallLaser : Mechbase_Weapon
 		Mechbase_Weapon.CValue 6105;
 		Mechbase_Weapon.Cooldown MWCOOL_HSLAS, 0.1;
 		Mechbase_Weapon.FlavorText HeavyLaserText;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERSML", 0.2, 0, "LaserBeam/Small/Fire", "LaserBeam/Cont";
 	}	
 	override bool MWFire()
 	{
+		if(mwd_laserbeams) return super.MWFire();
 		return FireVolley(8,0,0,"","",false);
 	}
 }
@@ -95,6 +97,7 @@ class MediumLaser : Mechbase_Weapon
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 3200;
 		Mechbase_Weapon.Cooldown MWCOOL_MLASER, 0;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_MED", 0.8, 0, "LaserBeam/Medium/Fire", "LaserBeam/Cont";
 	}	
 }
 class ERMediumLaser : MediumLaser
@@ -107,6 +110,7 @@ class ERMediumLaser : MediumLaser
 		Mechbase_Weapon.Tonnage 1;
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 4150;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERMED", 1.0, 0, "LaserBeam/Medium/Fire", "LaserBeam/Cont";
 	}	
 }
 class MediumPulseLaser : SmallPulseLaser
@@ -120,6 +124,8 @@ class MediumPulseLaser : SmallPulseLaser
 		Mechbase_Weapon.HardslotSize 1;
 		Mechbase_Weapon.CValue 4300;
 		Mechbase_Weapon.Cooldown MWCOOL_MPLAS, 0.1;
+		MechBase_Weapon.BeamSound "LaserBeam/Cont";
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_MEDP", 0.4, 2, "LaserBeam/Medium/Fire", "LaserBeam/Cont";
 	}	
 }
 class ERMediumPulseLaser : SmallPulseLaser
@@ -131,12 +137,8 @@ class ERMediumPulseLaser : SmallPulseLaser
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.Tonnage 2;
 		Mechbase_Weapon.CValue 8600;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERMEDP", 0.6, 2, "LaserBeam/Medium/Fire", "LaserBeam/Cont";
 	}	
-	override bool MWFire()
-	{
-		// Only the first laser will deal damage/generate heat.
-		return FireVolley(2,0,0,"","",true);
-	}
 }
 class HeavyMediumLaser : Mechbase_Weapon
 {
@@ -150,9 +152,11 @@ class HeavyMediumLaser : Mechbase_Weapon
 		Mechbase_Weapon.CValue 7550;
 		Mechbase_Weapon.Cooldown MWCOOL_HMLAS, 0.15;
 		Mechbase_Weapon.FlavorText HeavyLaserText;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERMED", 0.25, 0, "LaserBeam/Medium/Fire", "LaserBeam/Cont";
 	}	
 	override bool MWFire()
 	{
+		if(mwd_laserbeams) return super.MWFire();
 		return FireVolley(5,0,0,"","",false);
 	}
 }
@@ -168,6 +172,7 @@ class LargeLaser : Mechbase_Weapon
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 5700;
 		Mechbase_Weapon.Cooldown MWCOOL_LLASER, 0;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_LRG", 1.2, 0, "LaserBeam/Large/Fire", "LaserBeam/Cont";
 	}	
 }
 class ERLargeLaser : LargeLaser
@@ -180,6 +185,7 @@ class ERLargeLaser : LargeLaser
 		Mechbase_Weapon.Tonnage 4;
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 6210;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERLRG", 1.4, 0, "LaserBeam/Large/Fire", "LaserBeam/Cont";
 	}	
 }
 class LargePulseLaser : SmallPulseLaser
@@ -193,6 +199,7 @@ class LargePulseLaser : SmallPulseLaser
 		Mechbase_Weapon.HardslotSize 2;
 		Mechbase_Weapon.CValue 6420;
 		Mechbase_Weapon.Cooldown MWCOOL_LPLAS, 0.7;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_LRGP", 0.6, 3, "LaserBeam/Large/Fire", "LaserBeam/Cont";
 	}	
 }
 class ERLargePulseLaser : SmallPulseLaser
@@ -204,6 +211,7 @@ class ERLargePulseLaser : SmallPulseLaser
 		Mechbase_Weapon.Tonnage 6;
 		Mechbase_Weapon.HardslotSize 3;
 		Mechbase_Weapon.CValue 12840;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERLRGP", 0.8, 4, "LaserBeam/Large/Fire", "LaserBeam/Cont";
 	}	
 }
 class HeavyLargeLaser : Mechbase_Weapon
@@ -218,9 +226,11 @@ class HeavyLargeLaser : Mechbase_Weapon
 		Mechbase_Weapon.CValue 10740;
 		Mechbase_Weapon.Cooldown MWCOOL_HLLAS, 0.18;
 		Mechbase_Weapon.FlavorText HeavyLaserText;
+		MechBase_Weapon.LaserBeamSetup "LaserBeam_ERLRG", 0.36, 0, "LaserBeam/Large/Fire", "LaserBeam/Cont";
 	}	
 	override bool MWFire()
 	{
+		if(mwd_laserbeams) return super.MWFire();
 		return FireVolley(3,0,0,"","",false);
 	}
 }
