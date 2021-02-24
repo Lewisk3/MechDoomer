@@ -5,7 +5,7 @@ class LaserBeamDecals : LaserDecal
 	{
 		RenderStyle "Add";
 		LaserDecal.DecalOnActors true;
-		Alpha 0.4;
+		Alpha 0.7;
 	}
 	States
 	{
@@ -17,9 +17,10 @@ class LaserBeamDecals : LaserDecal
 				{
 					LaserGlobals.SpawnFX(self, "LaserSmoke", frandom(-10,10), -90 + frandom(0,30), frandom(-10,10), -16);
 				}
-				/*
-				if(GetAge() < 2 && target)
+				
+				if(GetAge() < 2 && target && (target.GetAge() < 2 || ((target.GetAge()%10) == 0)))
 				{
+					
 					let las_hit = LaserExplosion(LaserGlobals.SpawnFX(self, "LaserExplosion", 0,0,0, -8));
 					if(las_hit) 
 					{
@@ -28,7 +29,6 @@ class LaserBeamDecals : LaserDecal
 						las_hit.noexplosion = true;
 					}
 				}
-				*/
 			}
 		wait;
 	}
@@ -51,7 +51,7 @@ class LaserBeamPuffs : LaserPuff
 				let dec = DoDecal(DecalType);
 				if(dec)
 				{
-					dec.A_SetScale(frandom(0.25,0.5));
+					dec.A_SetScale(frandom(0.4,0.7));
 				}
 				DoParticles(spd:frandom(2,5));
 				double rangemod = 1.0;
@@ -110,7 +110,7 @@ class LaserBeam_SML : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[255,0,0]";
 		LaserBase.LaserPuff "LaserBeam_SMLPuff";
-		LaserBase.Damage 0.32;
+		LaserBase.Damage 0.3;
 		LaserBase.MaxRange 200;
 		MechLaserBeam.Heat 0.1;
 		Alpha 1.0;
@@ -121,7 +121,7 @@ class LaserBeam_SMLP : LaserBeam_SML
 	Default
 	{
 		MechLaserBeam.Heat 0.2;
-		LaserBase.Damage 0.55;
+		LaserBase.Damage 0.45;
 	}
 }
 class LaserBeam_ERSML : LaserBeam_SML
@@ -149,7 +149,7 @@ class LaserBeam_MED : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[0,255,0]"; 
 		LaserBase.LaserPuff "LaserBeam_MEDPuff";
-		LaserBase.Damage 0.18;
+		LaserBase.Damage 0.2;
 		MechLaserBeam.Heat 0.1;
 		LaserBase.MaxRange 540;
 		Alpha 1.0;
@@ -161,7 +161,7 @@ class LaserBeam_MEDP : LaserBeam_MED
 	{
 		LaserBase.MaxRange 440;
 		MechLaserBeam.Heat 0.4;
-		LaserBase.Damage 0.44;
+		LaserBase.Damage 0.55;
 	}
 }
 class LaserBeam_ERMED : LaserBeam_MED
@@ -189,7 +189,7 @@ class LaserBeam_LRG : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[16,0,142]";
 		LaserBase.LaserPuff "LaserBeam_LRGPuff";
-		LaserBase.Damage 0.22;
+		LaserBase.Damage 0.25;
 		MechLaserBeam.Heat 0.2;
 		LaserBase.MaxRange 900;
 		Alpha 1.0;
@@ -201,7 +201,7 @@ class LaserBeam_LRGP : LaserBeam_LRG
 	{
 		LaserBase.MaxRange 700;
 		MechLaserBeam.Heat 0.6;
-		LaserBase.Damage 0.53;
+		LaserBase.Damage 0.70;
 	}
 }
 class LaserBeam_ERLRG : LaserBeam_LRG
@@ -232,7 +232,7 @@ class LaserBeam_ERSMLP : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[128,64,0]";
 		LaserBase.LaserPuff "LaserBeam_ERSMLPPuff";
-		LaserBase.Damage 0.55;
+		LaserBase.Damage 0.40;
 		MechLaserBeam.Heat 0.3;
 		LaserBase.MaxRange 400;
 		Alpha 1.0;
@@ -256,7 +256,7 @@ class LaserBeam_ERMEDP : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[255,255,0]"; 
 		LaserBase.LaserPuff "LaserBeam_ERMEDPPuff";
-		LaserBase.Damage 0.44;
+		LaserBase.Damage 0.50;
 		MechLaserBeam.Heat 0.5;
 		LaserBase.MaxRange 640;
 		Alpha 1.0;
@@ -280,7 +280,7 @@ class LaserBeam_ERLRGP : MechLaserBeam
 		RenderStyle "Add";
 		Translation "0:255=@80[80,0,160]";
 		LaserBase.LaserPuff "LaserBeam_ERLRGPPuff";
-		LaserBase.Damage 0.53;
+		LaserBase.Damage 0.70;
 		MechLaserBeam.Heat 0.8;
 		LaserBase.MaxRange 900;
 		Alpha 1.0;

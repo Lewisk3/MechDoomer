@@ -1,32 +1,32 @@
 pointlight BeamGreen
 {
     color 0 0.5 0
-    size 12
+    size 8
 }
 pointlight BeamRed
 {
     color 0.5 0 0
-    size 12
+    size 8
 }
 pointlight BeamBlue
 {
     color 0 0 0.67
-    size 12
+    size 8
 }
 pointlight BeamOrange
 {
     color 1.0 0.5 0.0
-    size 12
+    size 8
 }
 pointlight BeamPurple
 {
 	color 0.29 0.13 0.77
-	size 12
+	size 8
 }
 pointlight BeamYellow
 {
     color 5.0 5.0 0.0
-    size 12
+    size 8
 }
 
 

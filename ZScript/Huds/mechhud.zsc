@@ -453,7 +453,7 @@ class MechStatusBar : BaseStatusBar
 			uint strcol = 0xFF00D300;
 			vector2 strsz = (1.5, 1.3);
 			
-			curDeltaHeat = MDMath.Lerp(curDeltaHeat, mechplr.deltaHeat, 0.25*deltatime);
+			curDeltaHeat = MDMath.Lerp(curDeltaHeat, mechplr.deltaHeat*5.0, 0.25*deltatime);
 			curHeat = MDMath.Lerp(curHeat, mechplr.HeatLevel, 0.25*deltatime);
 			if(abs(curHeat - mechplr.HeatLevel) <= 0.05) curHeat = mechplr.HeatLevel;
 						

@@ -63,6 +63,8 @@ class LaserEmitter : Actor
 	bool laser_on;
 	double curdist, maxdist;
 	class<LaserBase> curbeam;
+	// Mech logic
+	bool onarms, onlegs;
 	
 	Default
 	{
@@ -116,13 +118,15 @@ class LaserEmitter : Actor
 		return lasersource;
 	}
 
-	void SetupFire(class<LaserBase> parts)
+	void SetupFire(class<LaserBase> parts, bool armfired, bool legfired)
 	{
 		if(!source) return;
 		curbeam = parts;
+		onarms = armfired;
+		onlegs = legfired;
 	}
 	
-	LaserBase Fire(uint ltflags = 0, bool predict = true)
+	LaserBase Fire(uint ltflags = 0, bool predict = false)
 	{
 		if(!source) return null;
 		let lasdefs = GetDefaultByType(curbeam);
@@ -131,7 +135,7 @@ class LaserEmitter : Actor
 		class<Actor> laspuff = lasdefs.pufftype;
 		LaserPuff spwnpuff;
 		
-		if(laspuff)
+		if(laspuff && laser_on)
 		{
 			spwnpuff = LaserPuff(Spawn(laspuff, aimpos));
 			if(spwnpuff) 
@@ -151,6 +155,8 @@ class LaserEmitter : Actor
 				lasobj.pitch = pitch+90;
 				lasobj.aimpuff = spwnpuff;
 				lasobj.predictaim = predict;
+				lasobj.onarms = onarms;
+				lasobj.onlegs = onlegs;
 			}
 			activelaser = lasobj;
 		}
@@ -174,6 +180,7 @@ class LaserBase : Actor
 	double dist;
 	double truedamage;
 	double maxrange;
+	bool onarms, onlegs;
 	
 	bool predictaim;
 	
@@ -197,12 +204,27 @@ class LaserBase : Actor
 			Destroy();
 			return;
 		}
+		
 		// Carefully follow emitter.
 		bool localplr = false; //(players[consoleplayer] == emitter.source.player);
+		let plr = MechWarrior(emitter.source);
 		vector2 paim = (0,0);
 		if(predictaim) paim = emitter.viewvel;
-		vector2 toangles = (emitter.angle + paim.x, emitter.pitch+90 + paim.y);
-		
+		vector2 finalangs = (emitter.angle, emitter.pitch);
+		if(plr && plr.models_reference)
+		{
+			let mechparts = plr.models_reference;
+			if(!onarms) finalangs.x = mechparts.cockpit.angle;
+			if(onlegs) finalangs.x = plr.LegAng;
+		}
+		vector2 toangles = (finalangs.x + paim.x, finalangs.y+90 + paim.y);
+		if(GetAge() < 1)
+		{
+			angle = toangles.x;
+			pitch = toangles.y;
+			return;
+		}
+	
 		A_SetAngle(LaserGlobals.Lerp(angle, toangles.x, 0.5), SPF_INTERPOLATE);
 		A_SetPitch(LaserGlobals.Lerp(pitch, toangles.y, 0.5), SPF_INTERPOLATE);
 		

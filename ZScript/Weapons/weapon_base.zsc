@@ -276,6 +276,16 @@ class Mechbase_Weapon : Item_NoPickup
 		return finalsnd;
 	}
 	
+	bool, bool CheckMountPos()
+	{
+		Array<FoundStruct> tmp;
+		let plr = mechplr;
+		bool onarms = ( hardpoint == plr.hardpoints.la && plr.FindStructs("StructActuator", plr.hardpoints.la, true, tmp) ) || 
+					  ( hardpoint == plr.hardpoints.ra && plr.FindStructs("StructActuator", plr.hardpoints.ra, true, tmp) );
+		bool onlegs = ( hardpoint == plr.hardpoints.ll || hardpoint == plr.hardpoints.rl);
+		return onarms, onlegs;
+	}
+	
 	vector3, vector3, vector2 GetShootPos(int xoffset, int yoffset, int distance)
 	{
 		// Get shoot position and offsets
@@ -283,10 +293,8 @@ class Mechbase_Weapon : Item_NoPickup
 		let mechparts = plr.models_reference;
 		double offsangle = plr.angle;
 		double offspitch = plr.pitch;
-		Array<FoundStruct> tmp;
-		bool onarms = ( hardpoint == plr.hardpoints.la && plr.FindStructs("StructActuator", plr.hardpoints.la, true, tmp) ) || 
-					  ( hardpoint == plr.hardpoints.ra && plr.FindStructs("StructActuator", plr.hardpoints.ra, true, tmp) );
-		bool onlegs = ( hardpoint == plr.hardpoints.ll || hardpoint == plr.hardpoints.rl);
+		bool onarms, onlegs;
+		[onarms, onlegs] = CheckMountPos();
 		
 		// If we've got a cockpit model, always default align to the camera.
 		if(mechparts && mechparts.cockpit && mechparts.cockpit.cockpitcam)
@@ -455,17 +463,11 @@ class Mechbase_Weapon : Item_NoPickup
 			// Get shoot position and offsets
 			xoffset += random(-invoker.basespreadx,invoker.basespreadx);
 			yoffset += random(-invoker.basespready,invoker.basespready);
+			bool onarms, onlegs;
+			[onarms, onlegs] = invoker.CheckMountPos();
 			
-			// Shoot laserbeam
-			vector3 lpos, loffs;
-			vector2 langs;
-			[lpos, loffs, langs] = invoker.GetShootPos(xoffset, yoffset, distance);
-			
-			if(!plr.CheckAI()) loffs.z -= 16;
-			
-			// Get Beam convergence 
-			invoker.activelaserbeam.SetPos(plr.pos, loffs, (0,0));
-			invoker.activelaserbeam.SetupFire(type);
+			invoker.UpdateBeamPos(xoffset, yoffset, distance);
+			invoker.activelaserbeam.SetupFire(type,onarms,onlegs);
 			invoker.beam_counter = invoker.beam_duration*35.0;
 			invoker.cooldown_timer = (invoker.cooldown*35.0) + invoker.beam_counter;
 			invoker.pulsetoggle = true;
@@ -473,6 +475,22 @@ class Mechbase_Weapon : Item_NoPickup
 		if(!invoker.volley_amt) invoker.MWPostFire();
 		return false;
 		
+	}
+	
+	void UpdateBeamPos(int xoffset, int yoffset, int distance)
+	{
+		if(!activelaserbeam || !mechplr) return;
+		// Shoot laserbeam
+		vector3 lpos, loffs;
+		vector2 langs;
+		bool onarms, onlegs;
+		//[onarms, onlegs] = CheckMountPos();
+		[lpos, loffs, langs] = GetShootPos(xoffset, yoffset, distance);
+		
+		if(!mechplr.CheckAI() && !onarms) loffs.z -= 16;
+			
+		// Get Beam convergence 
+		activelaserbeam.SetPos(mechplr.pos, loffs, (0,0));
 	}
 	
 	int CheckAllAmmo()
@@ -545,13 +563,19 @@ class Mechbase_Weapon : Item_NoPickup
 			plr.A_StartSound(beamloopsnd, CHAN_WEAPON, CHANF_LOOPING);
 			vector3 lpos = level.Vec3Offset(plr.pos, activelaserbeam.posoffs);
 			FLineTraceData lt;
-			plr.LineTrace( plr.angle, 1000 * MWGAMEPLAY_UNITMETER, 
-						   plr.pitch, TRF_SOLIDACTORS, 
-						   plr.viewheight, 80,0, lt     );
+			let mechparts = plr.models_reference;
+			Actor src = plr; 
+			if(mechparts && mechparts.cockpit && mechparts.cockpit.cockpitcam)
+				src = mechparts.cockpit.cockpitcam;
+				
+			src.LineTrace( src.angle, 1000 * MWGAMEPLAY_UNITMETER, 
+						   src.pitch, TRF_SOLIDACTORS, 
+						   0, 80,0, lt     );
 			double aimdist = lt.Distance;
 			vector3 rangles = level.SphericalCoords(lpos, lt.HitLocation, (plr.angle,plr.pitch));
 			double corange = clamp(aimdist / 340, 0.5, 1.0);  
 			vector2 conview = (-rangles.x*corange, -rangles.y);
+			UpdateBeamPos(hardpoint.pos.x,hardpoint.pos.y,weapDistance);
 			activelaserbeam.SetPos(plr.pos,activelaserbeam.posoffs, conview); 
 			if(beam_pulsefreq > 0)
 			{

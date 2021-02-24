@@ -11,8 +11,9 @@ class LaserSmoke : Actor
 		+CLIENTSIDEONLY
 		Speed 1;
 		RenderStyle "Add";
-		Alpha		0.28;
+		Alpha		0.14;
 		Scale		0.45;
+		Translation "0:255=@70[86,64,0]";  
 	}
 	States
 	{
@@ -37,7 +38,7 @@ class LaserDecal : Actor
 	{
 		+NOINTERACTION;
 		+FLATSPRITE
-		Alpha 0.5;
+		Alpha 0.7;
 		Height 10;
 	}
 	
@@ -126,7 +127,7 @@ class LaserPuff : Actor
 	Actor DamageHitActor(double dmg, Name dmgtype = "Fire", uint flags = 0)
 	{
 		FLineTraceData lt;
-		LineTrace(angle, 8, pitch, data:lt);
+		LineTrace(angle, 16, pitch, data:lt);
 		if(lt.HitActor)
 		{
 			let lbase = LaserBase(target);
