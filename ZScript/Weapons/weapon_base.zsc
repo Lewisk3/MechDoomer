@@ -528,7 +528,6 @@ class Mechbase_Weapon : Item_NoPickup
 				loffs.z -= 4;
 		}
 		
-			
 		// Get Beam convergence 
 		activelaserbeam.SetPos(mechplr.pos, loffs, (0,0));
 	}
@@ -616,7 +615,7 @@ class Mechbase_Weapon : Item_NoPickup
 			vector3 finpos = lt.HitActor ? lt.HitActor.pos : lt.HitLocation;
 			finpos.z = lt.HitLocation.z;
 			vector3 rangles = level.SphericalCoords(lpos, finpos, (src.angle,src.pitch));
-			vector2 conview = (-rangles.x, -rangles.y);
+			vector2 conview = (-rangles.x * (plr.CheckAI() ? 0.6 : 1.0), -rangles.y);
 			UpdateBeamPos(hardpoint.pos.x,hardpoint.pos.y,weapDistance);
 			activelaserbeam.SetPos(plr.pos,activelaserbeam.posoffs, conview);
 			activelaserbeam.middledist = aimdist*1.25;

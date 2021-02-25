@@ -216,8 +216,8 @@ class LaserBase : Actor
 		if(plr && plr.models_reference)
 		{
 			let mechparts = plr.models_reference;
-			if(!onarms) finalangs.x = mechparts.cockpit.angle;
-			if(onlegs) finalangs.x = plr.LegAng;
+			if(!onarms) finalangs.x = mechparts.cockpit.angle + emitter.viewoffs.x;
+			if(onlegs) finalangs.x = plr.LegAng + emitter.viewoffs.x;
 		}
 		vector2 toangles = (finalangs.x + paim.x, finalangs.y+90 + paim.y);
 		return toangles;
