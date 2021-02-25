@@ -583,10 +583,10 @@ class Mechbase_Weapon : Item_NoPickup
 			vector3 finpos = lt.HitActor ? lt.HitActor.pos : lt.HitLocation;
 			finpos.z = lt.HitLocation.z;
 			vector3 rangles = level.SphericalCoords(lpos, finpos, (src.angle,src.pitch));
-			double corange = clamp(aimdist / 340, 0.6, 0.8);  
-			vector2 conview = (-rangles.x*corange, -rangles.y);
+			vector2 conview = (-rangles.x, -rangles.y);
 			UpdateBeamPos(hardpoint.pos.x,hardpoint.pos.y,weapDistance);
-			activelaserbeam.SetPos(plr.pos,activelaserbeam.posoffs, conview); 
+			activelaserbeam.SetPos(plr.pos,activelaserbeam.posoffs, conview);
+			activelaserbeam.middledist = aimdist*1.25;
 			if(beam_pulsefreq > 0)
 			{
 				if(!(beam_counter%beam_pulsefreq)) 
@@ -618,7 +618,6 @@ class Mechbase_Weapon : Item_NoPickup
 				{
 					plr.A_StopSound(CHAN_WEAPON);
 					activelaserbeam.LaserOff();
-					activelaserbeam.Destroy();
 				}
 			}
 		}

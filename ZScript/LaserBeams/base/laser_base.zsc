@@ -61,7 +61,7 @@ class LaserEmitter : Actor
 	vector2 viewoffs, viewvel;
 	vector3 posoffs;
 	bool laser_on;
-	double curdist, maxdist;
+	double curdist, maxdist, middledist;
 	class<LaserBase> curbeam;
 	// Mech logic
 	bool onarms, onlegs;
@@ -180,6 +180,7 @@ class LaserBase : Actor
 	double dist;
 	double truedamage;
 	double maxrange;
+	double fadein, fadeout;
 	bool onarms, onlegs;
 	
 	bool predictaim;
@@ -187,6 +188,7 @@ class LaserBase : Actor
 	Property LaserPuff : pufftype;
 	Property Damage : truedamage;
 	Property MaxRange : maxrange;
+	Property FadeSpeed : fadein, fadeout;
 	
 	Default
 	{	
@@ -202,6 +204,7 @@ class LaserBase : Actor
 		vector2 angs = GetFollowAngles();
 		angle = angs.x;
 		pitch = angs.y;
+		alpha = 0;
 	}
 	
 	vector2 GetFollowAngles()
@@ -222,10 +225,24 @@ class LaserBase : Actor
 
 	override void Tick() 
 	{
-		if(!emitter || !emitter.laser_on || !emitter.source) 
+		if(!emitter || !emitter.laser_on)
 		{
-			Destroy();
-			return;
+			alpha -= fadeout;
+			if(!emitter) return;
+			if(alpha <= 0)
+			{
+				Destroy();
+				return;
+			}		
+			if(!emitter.source) 
+			{
+				Destroy();
+				return;
+			}
+		}
+		else
+		{
+			alpha = clamp(alpha + fadein, 0, default.alpha);
 		}
 		
 		// Carefully follow emitter.
@@ -242,6 +259,9 @@ class LaserBase : Actor
 		
 		double cosp = cos(pitch-90);
 		double dist_desired = emitter.curdist/2.;
+		if(emitter.middledist && emitter.middledist < emitter.curdist) 
+			dist_desired = emitter.middledist/2.;
+			
 		vector3 posdir = (
 			cos(angle) * cosp,
 			sin(angle) * cosp,

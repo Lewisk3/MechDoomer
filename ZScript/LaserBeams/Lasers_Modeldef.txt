@@ -2,7 +2,7 @@ Model LaserBeam_SML
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -15,7 +15,7 @@ Model LaserBeam_MED
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -28,7 +28,7 @@ Model LaserBeam_LRG
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -41,7 +41,7 @@ Model LaserBeam_SMLP
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -54,7 +54,7 @@ Model LaserBeam_MEDP
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -67,7 +67,7 @@ Model LaserBeam_LRGP
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -80,7 +80,7 @@ Model LaserBeam_ERSML
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -93,7 +93,7 @@ Model LaserBeam_ERMED
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -106,7 +106,7 @@ Model LaserBeam_ERLRG
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -119,7 +119,7 @@ Model LaserBeam_ERSMLP
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -132,7 +132,7 @@ Model LaserBeam_ERMEDP
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0
@@ -145,7 +145,7 @@ Model LaserBeam_ERLRGP
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
-	Scale 1.0 1.0 1.2
+	Scale 10.0 10.0 10.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0

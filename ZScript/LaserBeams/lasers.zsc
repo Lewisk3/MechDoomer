@@ -99,6 +99,14 @@ class MechLaserBeam : LaserBase
 	double heatgen;
 	Property Heat : heatgen;
 	
+	Default
+	{
+		RenderStyle "Add";
+		LaserBase.FadeSpeed 0.04, 0.20;
+		Alpha 1.0;
+		Radius 12;
+	}
+	
 	override void Tick()
 	{
 		if(!emitter || !emitter.source) 
@@ -110,7 +118,11 @@ class MechLaserBeam : LaserBase
 		let plr = Mechwarrior(emitter.source);
 		if(!plr) return;
 		
-		plr.HeatLevel += heatgen*MWHEAT_MOD;
+		if(emitter.laser_on) 
+			plr.HeatLevel += heatgen*MWHEAT_MOD;
+		else if(alpha <= 0.05)
+			emitter.Destroy();
+			
 		super.tick();
 	}
 }
@@ -144,6 +156,7 @@ class LaserBeam_SMLP : LaserBeam_SML
 	{
 		MechLaserBeam.Heat SPBEM_HEAT;
 		LaserBase.Damage SPBEM_DMG;
+		LaserBase.FadeSpeed 1.0, 1.0;
 	}
 }
 class LaserBeam_ERSML : LaserBeam_SML
@@ -184,6 +197,7 @@ class LaserBeam_MEDP : LaserBeam_MED
 		LaserBase.MaxRange 440;
 		MechLaserBeam.Heat MPBEM_HEAT;
 		LaserBase.Damage MPBEM_DMG;
+		LaserBase.FadeSpeed 1.0, 1.0;
 	}
 }
 class LaserBeam_ERMED : LaserBeam_MED
@@ -209,7 +223,7 @@ class LaserBeam_LRG : MechLaserBeam
 	{
 		Scale 0.8;
 		RenderStyle "Add";
-		Translation "0:255=@80[16,0,142]";
+		Translation "0:255=@80[100,70,255]";
 		LaserBase.LaserPuff "LaserBeam_LRGPuff";
 		LaserBase.Damage LBEM_DMG;
 		MechLaserBeam.Heat LBEM_HEAT;
@@ -224,6 +238,7 @@ class LaserBeam_LRGP : LaserBeam_LRG
 		LaserBase.MaxRange 700;
 		MechLaserBeam.Heat LPBEM_HEAT;
 		LaserBase.Damage LPBEM_DMG;
+		LaserBase.FadeSpeed 1.0, 1.0;
 	}
 }
 class LaserBeam_ERLRG : LaserBeam_LRG
@@ -257,6 +272,7 @@ class LaserBeam_ERSMLP : MechLaserBeam
 		LaserBase.Damage ERSPBEM_DMG;
 		MechLaserBeam.Heat ERSPBEM_HEAT;
 		LaserBase.MaxRange 400;
+		LaserBase.FadeSpeed 1.0, 1.0;
 		Alpha 1.0;
 	}
 }
@@ -281,6 +297,7 @@ class LaserBeam_ERMEDP : MechLaserBeam
 		LaserBase.Damage ERMPBEM_DMG;
 		MechLaserBeam.Heat ERMPBEM_HEAT;
 		LaserBase.MaxRange 640;
+		LaserBase.FadeSpeed 1.0, 1.0;
 		Alpha 1.0;
 	}
 }
@@ -305,6 +322,7 @@ class LaserBeam_ERLRGP : MechLaserBeam
 		LaserBase.Damage ERLPBEM_DMG;
 		MechLaserBeam.Heat ERLPBEM_HEAT;
 		LaserBase.MaxRange 900;
+		LaserBase.FadeSpeed 1.0, 1.0;
 		Alpha 1.0;
 	}
 }
