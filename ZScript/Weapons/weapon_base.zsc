@@ -47,6 +47,39 @@ class Mechbase_Actor : FastProjectile
 		super.PostBeginPlay();
 	}
 	
+	void Smoke(int amt, class<Actor> type = "LaserSmoke")
+	{
+		for(int i = 0; i < amt; i++)
+			LaserGlobals.SpawnFX(self, type, random(-10,10), random(-10,10), random(-10,10), -16);		
+	}
+	
+	void Particles(Color col = 0xFFF0E11A, double amt = 30, double size = 2, double spd = 5, vector3 pos_spread = (30,30,30), vector2 ang_spread = (90,30))
+	{
+		for(int i = 0; i < 30; i++)
+		{
+			double part_angle = (angle+180)+frandom(-ang_spread.x,ang_spread.x);
+			double part_pitch = pitch+frandom(-ang_spread.y,ang_spread.y);
+
+			vector3 partpos = (
+				cos(part_angle)*frandom(-pos_spread.x,pos_spread.x),
+				sin(part_angle)*frandom(-pos_spread.y,pos_spread.y),
+				sin(part_pitch)*frandom(-pos_spread.z,pos_spread.z)
+			);
+			
+			vector3 partvel = (
+				sin(part_angle)  * cos(part_pitch+90),
+				sin(part_angle)  * cos(part_pitch+90),
+				sin(part_pitch)) * spd;
+		
+			A_SpawnParticle(
+				col,SPF_FULLBRIGHT | SPF_RELATIVE,16,size,
+				part_angle,
+				partpos.x,partpos.y,partpos.z,
+				partvel.x,partvel.y,partvel.z
+			);
+		}
+	}
+	
 	void BaseInit()
 	{
 		spawnpos = pos;
@@ -594,17 +627,13 @@ class Mechbase_Weapon : Item_NoPickup
 					pulsetoggle = !pulsetoggle;
 					if(!pulsetoggle)
 					{
-						// Sound finalsnd = GetAttackSound();
 						if(beam_pulsefreq > 1 || !(beam_counter%3))
 							SoundOnActor.Trigger("LaserBeam/Pulse", plr);
-						//plr.A_StartSound("LaserBeam/Pulse", CHAN_5, CHANF_OVERLAP);
 					}
 				}
 				
 				if(pulsetoggle)
-				{
 					activelaserbeam.Fire(predict:dopredict);
-				}
 				else
 					activelaserbeam.LaserOff();
 			}
@@ -754,6 +783,7 @@ class MechMissile : Mechbase_Actor
 			SetConstDamage(basedamage); 
 		}
 		
+		Smoke(2, "MissileSmoke");
 		Spawn("MissileLight", Vec3Offset(cos(angle)*-10,sin(angle)*-10,0));
 		super.tick();
 	}
@@ -830,6 +860,7 @@ class MechMissile : Mechbase_Actor
 				if(inrange) 
 				{
 					ExplodeEx(basedamage*2,128,0); 
+					Smoke(8);
 					let expl = Spawn("MissileExplosion",pos);
 					if(expl) expl.A_SetScale(explosionscale,explosionscale);
 				}
@@ -855,6 +886,15 @@ class MissileLight : Actor
 		Spawn:
 			TNT1 A 1;
 		stop;
+	}
+}
+class MissileSmoke : LaserSmoke
+{
+	Default
+	{
+		Scale 0.15;
+		Alpha 0.45;
+		Translation "0:255=@60[0,0,0]";
 	}
 }
 
@@ -1230,6 +1270,14 @@ class PPCBall : Mechbase_Actor
 	override void BeginPlay()
 	{
 		if(!basedamage) BaseInit();
+		let trail = PPCTrail(Spawn("PPCTrail", pos));
+		if(trail)
+		{
+			trail.angle = angle;
+			trail.pitch = pitch;
+			trail.target = self;
+			trail.dist = -30;
+		}
 		super.BeginPlay();
 	}
 
@@ -1258,7 +1306,12 @@ class PPCBall : Mechbase_Actor
 	States
 	{
 		Spawn:
-			MPPC A 1 Spawn("PPCLight", pos);
+			MPPC A 1 NoDelay
+			{
+				Smoke(4,"MissileSmoke");
+				Spawn("PPCLight", pos);
+				Particles(0xFF340A49,100,5,3,(30,30,30),(30,10));
+			}
 		loop;
 		
 		Death:
@@ -1286,6 +1339,38 @@ class PPCBall : Mechbase_Actor
 	}
 }
 class PPCLight : AutocannonLight {}
+class PPCTrail : AutocannonTrail
+{
+	double dist;
+	Default
+	{
+		Speed 1;
+		Scale 3.0;
+		Alpha 0.5;
+		+INTERPOLATEANGLES;
+		Translation "0:255=@70[0,0,255]";
+	}
+	
+	override void Tick()
+	{
+		if(target) 
+		{
+			angle = target.angle;
+			pitch = target.pitch;
+			vector3 fpos = (
+				cos(target.angle),
+				sin(target.angle),
+				-sin(target.pitch)
+			) * dist;
+			SetOrigin(target.Vec3Offset(fpos.x,fpos.y,fpos.z-32),true);
+		}
+		else
+			Destroy();
+			
+		super.Tick();
+	}
+}
+
 
 class Flame : Mechbase_Actor
 {
@@ -1375,17 +1460,18 @@ class AutocannonBall : Mechbase_Actor
 		AutocannonBall.ClusterMode false, 0;
 		// Mechbase_Actor.Gravity 1.0;
 	}
-
+	
 	States
 	{
 		Spawn:
 			AUTO A 1 NoDelay 
 			{
 				Spawn("AutocannonLight", pos);
-				let trail = Spawn("AutocannonTrail", pos);
+				Smoke(3);
+				let trail = Spawn("AutocannonTrail", Vec3Offset(0,0,height));
 				if(trail)
 				{
-					trail.vel = vel*0.8;
+					trail.vel = vel;
 					trail.angle = angle;
 					trail.pitch = pitch;
 				}
@@ -1398,6 +1484,9 @@ class AutocannonBall : Mechbase_Actor
 			AUTO A 1;
 			AUTO A 1 
 			{
+				Smoke(10);
+				let achit = LaserExplosion(Spawn("LaserExplosion",pos));
+				if(achit) achit.alpha = 0;
 				let deb = Debris_Spawner(Spawn("Debris_Spawner",pos));
 				if(deb && isCluster)
 				{
@@ -1433,16 +1522,19 @@ class AutocannonTrail : Mechbase_Actor
 	Default
 	{
 		Speed 80;
+		Scale 2.0;
+		RenderStyle "Add";
+		Alpha 0.75;
 	}
 
 	States
 	{
 		Spawn:
-			AUTO A 1;
+			AUTO A 1 Bright;
 		loop;
 		
 		Death:
-			AUTO A 1;
+			AUTO A 1 Bright;
 		stop;
 	}
 }

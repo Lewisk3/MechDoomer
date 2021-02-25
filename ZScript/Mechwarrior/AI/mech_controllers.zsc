@@ -47,7 +47,7 @@ class MechAI_Controller : Actor
 	virtual state A_MechLook()
 	{
 		let it = ThinkerIterator.Create("Mechwarrior");
-		double close_distm = ((range_optimal+range_max*0.8)/2.) * MWGAMEPLAY_UNITMETER;
+		double close_distm = (range_optimal+range_max*0.8) * MWGAMEPLAY_UNITMETER;
 		Mechwarrior finalmech;
 		Mechwarrior mechactor;
 		while(mechactor = Mechwarrior(it.Next()))

@@ -154,6 +154,20 @@ Model AutocannonTrail
    FrameIndex AUTO A 0 0
 }
 
+Model PPCTrail
+{
+	Path "models"
+	Model 0 "Weapons/bullet.md3"
+	Scale -0.3 6.0 3.2
+	Offset 0 -1 3
+	USEACTORPITCH
+	SurfaceSkin 0 0  "LaserBeams/BEAM.png" // Full mesh
+	
+   FrameIndex AUTO A 0 0
+}
+
+
+
 Model UAC_2
 {
 	Path "models"

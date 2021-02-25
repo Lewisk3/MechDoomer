@@ -280,7 +280,7 @@ class ERPPC : PPC
 	{
 		Mechbase_Weapon.DisplayName "ER PPC";
 		Mechbase_Weapon.WeaponType "ERPPCProjectile";
-		Mechbase_Weapon.Distance_Speed 30, 65;
+		Mechbase_Weapon.Distance_Speed 30, 65; // 65
 		Mechbase_Weapon.Tonnage 6;
 		Mechbase_Weapon.HardslotSize 3;
 		Mechbase_Weapon.CValue 13250;

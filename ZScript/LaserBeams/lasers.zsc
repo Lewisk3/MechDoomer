@@ -147,6 +147,7 @@ class LaserBeam_SML : MechLaserBeam
 		LaserBase.Damage SBEM_DMG;
 		LaserBase.MaxRange 200;
 		MechLaserBeam.Heat SBEM_HEAT;
+		LaserBase.FadeSpeed 0.10, 0.20;
 		Alpha 1.0;
 	}
 }
