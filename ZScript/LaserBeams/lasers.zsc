@@ -72,25 +72,25 @@ class LaserBeamPuffs : LaserPuff
 }
 
 // Lasers
-const SBEM_DMG     = 0.5;
+const SBEM_DMG     = 0.4;
 const SBEM_HEAT    = 0.1;
-const SPBEM_DMG    = 0.4 *3;
+const SPBEM_DMG    = 0.3 *3;
 const SPBEM_HEAT   = 0.2;
-const ERSPBEM_DMG  = 0.4 *3;
+const ERSPBEM_DMG  = 0.3 *3;
 const ERSPBEM_HEAT = 0.3;
 
-const MBEM_DMG     = 0.35;
+const MBEM_DMG     = 0.25;
 const MBEM_HEAT    = 0.1;
-const MPBEM_DMG    = 0.35 *3;
+const MPBEM_DMG    = 0.25 *3;
 const MPBEM_HEAT   = 0.4;
-const ERMPBEM_DMG  = 0.35 *3;
+const ERMPBEM_DMG  = 0.25 *3;
 const ERMPBEM_HEAT = 0.5;
 
-const LBEM_DMG     = 0.70;
+const LBEM_DMG     = 0.60;
 const LBEM_HEAT    = 0.3;
-const LPBEM_DMG    = 0.70 *2;
+const LPBEM_DMG    = 0.60 *2;
 const LPBEM_HEAT   = 0.6;
-const ERLPBEM_DMG  = 0.70 *2;
+const ERLPBEM_DMG  = 0.60 *2;
 const ERLPBEM_HEAT = 0.8;
 
 
@@ -102,7 +102,7 @@ class MechLaserBeam : LaserBase
 	Default
 	{
 		RenderStyle "Add";
-		LaserBase.FadeSpeed 0.04, 0.20;
+		LaserBase.FadeSpeed 0.05, 0.25;
 		Alpha 1.0;
 		Radius 12;
 	}

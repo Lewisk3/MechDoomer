@@ -148,7 +148,7 @@ class LaserPuff : Actor
 			}
 			else
 			{
-				if(!hitmech.mech.CheckAI()) finaldmg *= 0.40;
+				if(!hitmech.mech.CheckAI()) finaldmg *= 0.5;
 				hitmech.DamageMech(self,emit.source,finaldmg*0.7,angle);
 			}
 		}

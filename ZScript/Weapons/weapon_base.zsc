@@ -234,6 +234,7 @@ class Mechbase_Weapon : Item_NoPickup
 	double hitscan_dmg;
 	double hitscan_distance;
 	double basespreadx, basespready;
+	vector2 cachedspread; // Used for laserbeams, to keep random spread consistent.
 	string specprefix; // Special prefix for certain weapons.
 	//double hitscan_amt;
 	int delay;
@@ -494,12 +495,14 @@ class Mechbase_Weapon : Item_NoPickup
 			SoundOnActor.Trigger(finalsnd, plr);
 			
 			// Get shoot position and offsets
-			xoffset += random(-invoker.basespreadx,invoker.basespreadx);
-			yoffset += random(-invoker.basespready,invoker.basespready);
+			invoker.cachedspread = (
+				random(-invoker.basespreadx,invoker.basespreadx),
+				random(-invoker.basespready,invoker.basespready)
+			) * (plr.CheckAI() ? 0.5 : 3.0);
 			bool onarms, onlegs;
 			[onarms, onlegs] = invoker.CheckMountPos();
 			
-			invoker.UpdateBeamPos(xoffset, yoffset, distance);
+			invoker.UpdateBeamPos(xoffset+invoker.cachedspread.x, yoffset+invoker.cachedspread.y, distance);
 			invoker.activelaserbeam.SetupFire(type,onarms,onlegs);
 			invoker.beam_counter = invoker.beam_duration*35.0;
 			invoker.cooldown_timer = (invoker.cooldown*35.0) + invoker.beam_counter;
@@ -616,7 +619,7 @@ class Mechbase_Weapon : Item_NoPickup
 			finpos.z = lt.HitLocation.z;
 			vector3 rangles = level.SphericalCoords(lpos, finpos, (src.angle,src.pitch));
 			vector2 conview = (-rangles.x * (plr.CheckAI() ? 0.6 : 1.0), -rangles.y);
-			UpdateBeamPos(hardpoint.pos.x,hardpoint.pos.y,weapDistance);
+			UpdateBeamPos(hardpoint.pos.x+cachedspread.x,hardpoint.pos.y+cachedspread.y,weapDistance);
 			activelaserbeam.SetPos(plr.pos,activelaserbeam.posoffs, conview);
 			activelaserbeam.middledist = aimdist*1.25;
 			if(beam_pulsefreq > 0)
