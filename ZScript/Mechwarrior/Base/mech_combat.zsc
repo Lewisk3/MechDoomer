@@ -80,7 +80,8 @@ void ProcessDeath(Actor killer)
 	{
 		mechsounds.Empty();
 		for(int i = 0; i < 5; i++) mechsounds.PushSound("Mech/Damaged/CriticalExplosion");
-		deathexplosions = RandomExplosions.TriggerOnActor(self, 75,15,viewheight);
+		if(hardpoints.ll.internalhp >= 0 || hardpoints.rl.internalhp >= 0 )
+			deathexplosions = RandomExplosions.TriggerOnActor(self, 10,10,viewheight);
 		if(!checkAI()) AdjustDrone(350, 1, 0, true);
 		if(player && !checkAI()) player.cheats |= CF_TOTALLYFROZEN;
 	}
@@ -104,6 +105,15 @@ void mech_weapons()
 	
 	// Targetting systems for AI
 	process_targeting();
+	
+	// Lose dead mech targets.
+	let mechenemy = MechHitBox(targetenemy);
+	if(mechenemy && mechenemy.mech.isdead) 
+	{
+		// Play target destroyed sound.
+		mechsounds.pushSound("Mech/Betty/TargetEliminated");
+		targetenemy = NULL;
+	}
 		
 	Mech_HasJets = (countStruct("JumpJet") > 0);
 	Mech_JetCount = countStruct("JumpJet");

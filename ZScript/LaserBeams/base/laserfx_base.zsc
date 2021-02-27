@@ -126,33 +126,34 @@ class LaserPuff : Actor
 	
 	Actor DamageHitActor(double dmg, Name dmgtype = "Fire", uint flags = 0)
 	{
-		FLineTraceData lt;
-		LineTrace(angle, 16, pitch, data:lt);
-		if(lt.HitActor)
+		LaserDamageTracer lt;
+		lt = LaserDamageTracer.CreateTrace(pos,angle,pitch,16);
+		Actor hitactor = lt.results.HitActor;
+		if(hitactor)
 		{
 			let lbase = LaserBase(target);
-			if(!lbase) return lt.HitActor;
+			if(!lbase) return hitactor;
 			
 			let emit = LaserEmitter(lbase.emitter);
-			if(!emit) return lt.HitActor;
+			if(!emit) return hitactor;
 			
 			// Check if mech
-			let hitmech = MechHitBox(lt.HitActor);
+			let hitmech = MechHitBox(hitactor);
 			double finaldmg = dmg;
 			
 			if(!hitmech)
 			{
 				finaldmg *= MWGAMEPLAY_WEAPDMGSCALE;
-				if(!lt.HitActor.bNOBLOOD) lt.HitActor.BloodSplatter(pos, angle);
-				lt.HitActor.DamageMobJ(self,emit.source,finaldmg,dmgtype,0,angle);
+				if(!hitactor.bNOBLOOD) hitactor.BloodSplatter(pos, angle);
+				hitactor.DamageMobJ(self,emit.source,finaldmg,dmgtype,0,angle);
 			}
 			else
 			{
 				if(!hitmech.mech.CheckAI()) finaldmg *= 0.5;
-				hitmech.DamageMech(self,emit.source,finaldmg*0.7,angle);
+				hitmech.DamageMech(self,emit.source,finaldmg,angle, dmgtype);
 			}
 		}
-		return lt.HitActor;
+		return hitactor;
 	}
 	
 	LaserDecal DoDecal(class<LaserDecal> type)

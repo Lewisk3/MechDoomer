@@ -40,7 +40,7 @@ class MechHitbox : Actor
 	}
 	
 	// Custom damage routine which will handle non-int damage.
-	virtual void DamageMech(Actor inflictor, Actor source, double damage, double angle)
+	virtual void DamageMech(Actor inflictor, Actor source, double damage, double angle, Name dmgtype = "Default")
 	{
 		// Damage fail conditions.
 		if(!mech || mech.checkVoodoo() || !mounted_hp || Mechwarrior(inflictor) == mech || Mechwarrior(source) == mech || damage == 0) 
@@ -52,14 +52,13 @@ class MechHitbox : Actor
 		double realdamage = mechweap ? mechweap.truedamage : damage;
 		bool mechdmg = (inflictor is "Mechwarrior") || (source is "Mechwarrior");
 		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
-		
+			
 		// Take a bit less damage from AI
 		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.5;
 		
 		// Take more damage if we are AI
 		if(mech.checkAI()) newdmg = realdamage;
-		
-		mech.DamageHardpoint(mounted_hp, newdmg, false, damager);
+		mech.DamageHardpoint(mounted_hp, newdmg, false, true, damager, dmgtype);
 		return;
 	}
 	
@@ -71,6 +70,11 @@ class MechHitbox : Actor
 	override void Tick()
 	{
 		super.Tick();
+		if(mech.isdead)
+		{
+			bSHOOTABLE = false;
+			bSOLID = false;
+		}
 		if(!mech || !mech.models_reference) 
 		{
 			Destroy();
@@ -78,7 +82,7 @@ class MechHitbox : Actor
 		}
 		double truecockpit = mech.angle;
 		if(mech.models_reference.cockpit && mech.player) 
-			truecockpit = mech.models_reference.cockpit.angle;
+			truecockpit = mech.models_reference.cockpit.angle;			
 
 		if(!mounted_hp) return;
 		double offsangle = CheckTorsoMount() ? truecockpit : mech.LegAng;
@@ -87,6 +91,30 @@ class MechHitbox : Actor
 		Vector3 finalpos = mech.Vec3Offset(offs.x,offs.y,yoffs+(offs.z*18));
 		curangle = offsangle;
 		curpitch = offspitch;
+		
+		bool ishpdisabled = mounted_hp.internalhp <= 0;
+		bool isarms = (mounted_hp == mech.hardpoints.la || mounted_hp == mech.hardpoints.ra);
+		if(!mech.isdead && ishpdisabled && (GetAge()%10) == 0)
+		{
+			for(int i = 0; i < 20; i++)
+			{
+				class<Actor> smoketype = "MissileSmoke";
+				if(random(0,20)==20 && !isarms) smoketype = "SmallExplosion";
+				let smk = LaserGlobals.SpawnFX(self,smoketype, curangle+frandom(-180,180), curpitch+frandom(-20,20), frandom(-40,40));
+				if(smk)
+				{
+					smk.SetOrigin(smk.Vec3Offset(0,0,height/2.), false);
+					if(smk is "SmallExplosion")
+					{
+						smk.alpha = 0.45;
+						smk.A_SetScale(frandom(0.25,0.5));
+					}
+				}
+				if(smk && random(0,100)==100)
+					Debris_Spawner.SpawnDebris("Spark_Debris", smk, 10, 0, 0.5, 7, posoffs:(5,5), zoffs:(5,5));					
+			}	
+		}
+		
 		SetOrigin(finalpos, false);
 	}
 	

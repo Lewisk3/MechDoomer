@@ -4,12 +4,15 @@ class Mechbase_Actor : FastProjectile
 	PlayerInfo controlplr;
 	double heatgen;
 	vector3 spawnpos;
+	vector3 aimpos;
+	vector2 spawnangs;
 	double basedamage;
 	double truedamage;
+	double aimdist;
 	MechWarrior mechplayer;
 	double minimum_range;
 	double maximum_range;
-	double projGravity; 
+	double projGravity;
 	bool cosmetic;
 	Sound firesound;
 	Sound DOS_firesound;
@@ -31,6 +34,7 @@ class Mechbase_Actor : FastProjectile
 	{
 		if(mechplayer)
 		{
+			if(!basedamage) BaseInit();
 			if(mechplayer.player) 
 				controlplr = mechplayer.player;
 			else 
@@ -83,35 +87,38 @@ class Mechbase_Actor : FastProjectile
 	void BaseInit()
 	{
 		spawnpos = pos;
+		FLineTraceData lt;
+		mechplayer.LineTrace( mechplayer.angle, 1000 * MWGAMEPLAY_UNITMETER, 
+							  mechplayer.pitch, TRF_SOLIDACTORS, 
+							  mechplayer.viewheight, 80,0, lt     );
+		aimpos = lt.HitLocation;
+		aimdist = lt.Distance;
+		spawnangs = (angle, pitch);
 		// SetDamage(truedamage);
 		_SetBaseDamage();
 	}
-	void Converge(double spdfac=1.0)
+	void Converge()
 	{
-		double spd = (!mechplayer.player || mechplayer.checkAI()) ? 0.08*spdfac : CVar.GetCVar("mwd_converge_speed", controlplr).getFloat()*spdfac;
-		if(mechplayer && spd > 0)
-		{
-			// Find distance to aim
-			FLineTraceData lt;
-			mechplayer.LineTrace( mechplayer.angle, 1000 * MWGAMEPLAY_UNITMETER, 
-								  mechplayer.pitch, TRF_SOLIDACTORS, 
-								  mechplayer.viewheight, 80,0, lt     );
-			double aimdist = lt.Distance;
-			aimdist = clamp(aimdist, 1, 256*256);
-			double facedist = 45 * MWGAMEPLAY_UNITMETER;
-			double distspd = (facedist/aimdist) * 0.4;
-			double truespd = vel.length()*clamp(distspd, 0.10, spd*1.5);
-			
+		if(mechplayer)
+		{			
 			// Converge onto aim
 			vector3 npos = Vec3Offset(-vel.x,-vel.y,-vel.z);
-			vector3 tpos = mechplayer.pos;
-			tpos.z += mechplayer.player ? (mechplayer.viewheight*mechplayer.player.crouchfactor) : mechplayer.viewheight;
-			double ato = AngleTo(mechplayer);
-			double pto = MDMath.getPitchBetween(pos,tpos);
-			double cpitch = cos(-pto);
-			vector3 addpos = (cos(ato)*truespd*cpitch, sin(ato)*truespd*cpitch, -sin(pto)*truespd);
-			npos = level.Vec3Offset(npos, addpos+vel);
-			SetOrigin(npos,true);
+			vector3 toangs = level.SphericalCoords(npos, aimpos, (angle, pitch));
+			pitch -= toangs.y;
+			angle -= toangs.x;
+			if(aimdist > 180*MWGAMEPLAY_UNITMETER)
+			{
+				if(abs(toangs.x) >= 5) angle = spawnangs.x;
+				if(abs(toangs.y) >= 5) pitch = spawnangs.y;
+			}
+			
+			double cosp = cos(pitch);
+			vector3 newvel = (	
+				cos(angle) * cosp,
+				sin(angle) * cosp,
+				-sin(pitch)
+			) * vel.length();
+			vel = newvel;
 		}
 	}
 	
@@ -148,7 +155,7 @@ class Mechbase_Actor : FastProjectile
 	
 	override void Tick()
 	{
-		if(mechplayer) Converge();	
+		if(mechplayer && !(GetClass() is "MechMissile")) Converge();	
 		if(projGravity && pos.z > floorz)
 		{
 			A_SetPitch(pitch + (projGravity*0.2), SPF_INTERPOLATE);
@@ -1042,16 +1049,7 @@ class MissileExplosion : Actor
 			EXPL A 2 NoDelay
 			{
 				A_StartSound("Missiles/Explosion", CHAN_BODY);
-				let deb = Debris_Spawner(Spawn("Debris_Spawner",pos));
-				if(deb)
-				{
-					deb.scale = 0.37;
-					deb.spread = 5;
-					deb.pieces = 6;
-					deb.angle = angle;
-					deb.pitch = pitch;
-					deb.SetDamage(0);
-				}
+				Debris_Spawner.SpawnDebris("DEBRIS_3D", self, 6, 0, 0.37, posoffs:(10,10));
 			}
 			EXPL BCDEFGHIJKLMNOP 2;
 		stop;
@@ -1144,6 +1142,18 @@ class RandomExplosions : MissileExplosion
 		{
 			timer = wait+random(wait*0.5,wait);
 			DoExplosion();
+			for(int i = 0; i < expl_count; i++)
+			{
+				let expl = LaserGlobals.SpawnFX(self,"SmallExplosion", angle+frandom(-180,180), pitch+frandom(-20,20), frandom(-40,40));
+				if(expl)
+				{
+					expl.alpha = 0.35;
+					expl.A_SetScale(frandom(0.25,0.5));
+				}
+				LaserGlobals.SpawnFX(self,"Spark_Debris", angle+frandom(-180,180), pitch+frandom(-20,20), frandom(-40,40));
+				for(int s = 0; s < 20; s++)
+					LaserGlobals.SpawnFX(self,"MissileSmoke", angle+frandom(-180,180), pitch+frandom(-20,20), frandom(-40,40));
+			}
 			expl_count--;
 		}
 		else
@@ -1269,7 +1279,7 @@ class PPCBall : Mechbase_Actor
 		Projectile;
 	}
 
-	override void BeginPlay()
+	override void PostBeginPlay()
 	{
 		if(!basedamage) BaseInit();
 		let trail = PPCTrail(Spawn("PPCTrail", pos));
@@ -1432,16 +1442,7 @@ class GaussBall : Mechbase_Actor
 			GAUS A 1;
 			GAUS A 1 
 			{
-				let deb = Debris_Spawner(Spawn("Debris_Spawner",pos));
-				if(deb)
-				{
-					deb.debris_type = "Gauss_Debris";
-					deb.spread = 8;
-					deb.pieces = 20;
-					deb.angle = angle;
-					deb.pitch = pitch;
-					deb.SetDamage(0);
-				}
+				Debris_Spawner.SpawnDebris("Gauss_Debris", self, 20, posoffs:(8,8));
 			}
 		stop;
 	}
@@ -1489,22 +1490,20 @@ class AutocannonBall : Mechbase_Actor
 				Smoke(10);
 				let achit = LaserExplosion(Spawn("LaserExplosion",pos));
 				if(achit) achit.alpha = 0;
-				let deb = Debris_Spawner(Spawn("Debris_Spawner",pos));
-				if(deb && isCluster)
+				Debris_Spawner.SpawnDebris(
+					"Spark_Debris", self, 12, posoffs:(10,10)
+				);
+				if(isCluster)
 				{
-					deb.spread = 30;
-					deb.pieces = clusterAmt;
-					deb.angle = angle;
-					deb.pitch = pitch;
-					deb.SetDamage(truedamage);
+					Debris_Spawner.SpawnDebris(
+						"DEBRIS_3D", self, clusterAmt, truedamage, 1.0, 3
+					);
 				}
-				else if(deb)
+				else
 				{
-					deb.spread = 3;
-					deb.pieces = 4;
-					deb.angle = angle;
-					deb.pitch = pitch;
-					deb.SetDamage(0);
+					Debris_Spawner.SpawnDebris(
+						"DEBRIS_3D", self, 4, posoffs:(10,10)
+					);
 				}
 			}
 		stop;
@@ -1578,6 +1577,13 @@ class MechBullet : Mechbase_Actor
 		loop;
 		
 		Death:
+			TNT1 A 0 
+			{
+				Smoke(3);
+				Debris_Spawner.SpawnDebris(
+					"Spark_Debris", self, 4, 0, 0.5, 5, posoffs:(10,10)
+				);
+			}
 			PUFF ABCD 2;
 		stop;
 	}

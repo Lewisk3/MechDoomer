@@ -121,6 +121,7 @@ class MechPartsBase : Actor
 	double czoffs;
 	Property ZOffset : zoffs;
 	Property CockpitOffset : cxoffs, czoffs;
+	bool stopfollowing;
 	
 	Default
 	{
@@ -128,6 +129,7 @@ class MechPartsBase : Actor
 		+NOGRAVITY;
 		+DONTTHRUST;
 		+NORADIUSDMG;
+		Gravity 0.3;
 		MechPartsBase.ZOffset 0;
 		MechPartsBase.CockpitOffset 0, 60;
 	}
@@ -170,9 +172,19 @@ class MechPartsBase : Actor
 		return basepos;
 	}
 	
+	virtual bool CheckMechExploded(bool legdmgonly = false)
+	{
+		bool mechreactordead = (
+			(mechowner.hardpoints.ct.internalhp <= 0 && !legdmgonly) ||
+			mechowner.hardpoints.ll.internalhp <= 0 && 
+			mechowner.hardpoints.rl.internalhp <= 0 
+		);
+		return mechreactordead;
+	}
+	
 	override void tick()
 	{
-		if(mechowner) SetOrigin(getMechPos(),true);
+		if(mechowner && !stopfollowing) SetOrigin(getMechPos(),true);
 		super.Tick();
 	}	
 	
@@ -363,7 +375,6 @@ class MechArmsBase : MechPartsBase
 	
 	Default
 	{
-		+NOINTERACTION
 		+CLIENTSIDEONLY
 	}
 	
@@ -371,7 +382,9 @@ class MechArmsBase : MechPartsBase
 	{
 		if(!mechowner.models_reference || !mechowner.models_reference.cockpit) 
 			return super.getMechPos();
-			
+		
+		if(CheckMechExploded(true)) return pos;
+		
 		bool checkview = IsThirdPerson() || !CheckLocalObserver();
 		double trueangle = notwist ? mechowner.LegAng : mechowner.angle;
 		double cos_angle = cos(trueangle);
@@ -425,28 +438,45 @@ class MechArmsBase : MechPartsBase
 		}
 		let base = mechowner.models_reference;
 		let cockpit = base.cockpit;
-		if( mechowner && base && (!arm_hp || arm_hp.internalhp > 0) )
+		if( mechowner && base && (!arm_hp || arm_hp.internalhp > 0))
 		{		
-			bInvisible = !base.fullarms && IsThirdPerson();
-			if(!IsThirdPerson() && CheckLocalObserver())
+			if(!CheckMechExploded(true))
 			{
-				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*1.2),0.1),SPF_INTERPOLATE);
-				A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
-				if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, cockpit.roll, 0.1), SPF_INTERPOLATE);
-				mzoffs = mechowner.viewzoffs*0.5;
+				bInvisible = !base.fullarms && IsThirdPerson();
+				if(!IsThirdPerson() && CheckLocalObserver())
+				{
+					A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*1.2),0.1),SPF_INTERPOLATE);
+					A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
+					if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, cockpit.roll, 0.1), SPF_INTERPOLATE);
+					mzoffs = mechowner.viewzoffs*0.5;
+				}
+				else
+				{
+					A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*1.2),0.1),SPF_INTERPOLATE);
+					if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, cockpit.roll, 0.1), SPF_INTERPOLATE);
+					A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
+					//A_SetRoll(roll+1, SPF_INTERPOLATE);
+					mzoffs = def_mzoffs;
+				}
 			}
 			else
 			{
-				A_SetPitch(MDMath.Lerp(pitch,mechowner.pitch+(mechowner.viewzoffs*1.2),0.1),SPF_INTERPOLATE);
-				if(!base.noroll) A_SetRoll(MDMath.Lerp(roll, cockpit.roll, 0.1), SPF_INTERPOLATE);
-				A_SetAngle(cockpit.angle, SPF_INTERPOLATE);
-				//A_SetRoll(roll+1, SPF_INTERPOLATE);
-				mzoffs = def_mzoffs;
+				A_SetPitch(mechowner.models_reference.pitch, SPF_INTERPOLATE);
 			}
 		}
 		else
 			bInvisible = true;
 			
+		if(mechowner.hardpoints.ct.internalhp <= 0)
+			bInvisible = true;
+		
+		if(CheckMechExploded(true))
+		{
+			bNOGRAVITY = false;
+			stopfollowing = true;
+			if(pos.z-(zoffs*0.6) <= floorz) mechowner.DamageHardpoint(arm_hp, double.max, true, false);
+		}
+	
 		super.tick();
 	}
 }
@@ -458,6 +488,7 @@ class MechTorsoBase : MechPartsBase
 	bool notwist;
 	bool setup;
 	bool fullarms; 
+	double floortime;
 	double cockpitpitch_mod;
 	double cockpitangle_mod;
 	double cockpittwist_mod;
@@ -559,24 +590,27 @@ class MechTorsoBase : MechPartsBase
 				 mechowner.player && mechowner.player.camera == mechowner ) 
 				mechowner.player.camera = cockpit_camera;
 			
-			if(!notwist)
+			if(!stopfollowing)
 			{
-				if(cockpit && mechowner.player)
+				if(!notwist)
 				{
-					pitch = cockpit.pitch;
-					if(!noroll) roll = MDMath.Lerp(roll, cockpit.roll, 0.1);
-					angle = cockpit.angle;
+					if(cockpit && mechowner.player)
+					{
+						pitch = cockpit.pitch;
+						if(!noroll) roll = MDMath.Lerp(roll, cockpit.roll, 0.1);
+						angle = cockpit.angle;
+					}
+					else // Mainly for "MechCorpses".
+					{
+						pitch = mechowner.pitch;
+						roll = MDMath.Lerp(roll, mechowner.roll, 0.1);
+						angle = mechowner.angle;
+					}
 				}
-				else // Mainly for "MechCorpses".
+				else
 				{
-					pitch = mechowner.pitch;
-					roll = MDMath.Lerp(roll, mechowner.roll, 0.1);
-					angle = mechowner.angle;
+					angle = mechowner.LegAng;
 				}
-			}
-			else
-			{
-				angle = mechowner.LegAng;
 			}
 			if(CheckLocalObserver())
 			{
@@ -587,6 +621,20 @@ class MechTorsoBase : MechPartsBase
 			}
 			else
 				bInvisible = false;
+			if(mechowner.hardpoints.ct.internalhp <= 0)
+				bInvisible = true;
+			
+			if(CheckMechExploded(true))
+			{
+				stopfollowing = true;
+				bNOGRAVITY = false;
+				if(pos.z != floorz) 
+					pitch = MDMath.Lerp(pitch, 90, 0.02);
+				else
+					floortime++;
+			}
+			if(floortime > 35*3)
+				 mechowner.DamageHardpoint(mechowner.hardpoints.ct, double.max, true, false);
 		}
 		super.tick();
 	}
@@ -612,6 +660,7 @@ class MechHipsBase : MechPartsBase
 {
 	override void tick()
 	{
+		
 		if(mechowner)
 		{
 			angle = mechowner.LegAng;
@@ -626,6 +675,8 @@ class MechHipsBase : MechPartsBase
 			}
 			else
 				bInvisible = false;
+			if(CheckMechExploded(true))
+				bInvisible = true;
 		}
 		super.tick();
 	}
@@ -661,7 +712,10 @@ class MechLegsBase : MechPartsBase
 			}
 			else
 				bInvisible = false;
-				
+			
+			if(CheckMechExploded(true))
+				bInvisible = true;
+			
 			double truemove = !mechowner.MoveSpeedKPH ? 1 : mechowner.MoveSpeedKPH; 
 			double curspd = abs(mechowner.LegVel*0.5)+(abs(mechowner.move_throttle) * truemove);
 			double wrating = double(mechowner.inv_context.weapons_tonnage)/100.;

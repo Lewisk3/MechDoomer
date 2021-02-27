@@ -24,56 +24,41 @@ class MissileDebris : Actor
 }
 
 class Debris_Spawner : Actor
-{
-	int pieces;
-	double spread;
-	double scale;
-	class<Actor> debris_type;
-	property Debris : debris_type, scale;
-	
+{	
 	Default
 	{
 		+NOINTERACTION;
-		Debris_Spawner.Debris "DEBRIS_3D", 1.0;
 	}
-
-	override void PostBeginPlay()
+	
+	static void SpawnDebris( class<Actor> type, Actor src, int pieces, int dmg = 0, double size = 1.0, 
+							 double speed = 10, vector3 angoffs = (30,60,180), 
+							 vector2 posoffs = (30,30), vector2 zoffs = (0,5) )
 	{
 		for(int i = 0; i < pieces; i++)
 		{
-			int angle = angle+random(-360,360);
-			int speed = 3;
-			Vector3 npos = pos;
-			double xo = -(cos(angle)*spread);
-			double yo = -(sin(angle)*spread);
-			double zo = frandom(-spread, spread);
-			npos.x += xo;
-			npos.y += yo;
-			npos.z += zo;
-			let debris = Spawn(debris_type,npos);
+			double dbangle  = src.angle+frandom(-angoffs.x, angoffs.x);
+			double dbpitch  = src.pitch+frandom(-angoffs.y, angoffs.y); 
+			double dbroll   = src.roll+frandom(-angoffs.z,angoffs.z);
+			double cosp     = cos(dbpitch);
+			vector2 xyoffs  = LaserGlobals.VOffset(src.angle, posoffs.x, posoffs.y);
+			vector3 posoffs = (xyoffs.x, xyoffs.y, frandom(zoffs.x, zoffs.y));
+			let debris = Spawn(type,level.Vec3Offset(src.pos,posoffs));
 			if(debris)
 			{
-				if(!damage) debris.bSOLID = false;
-				debris.SetDamage(damage); // Small cluster damage.
-				debris.A_SetRoll(roll+random(-180,180));
-				debris.pitch = pitch;
-				debris.A_SetScale(scale, scale);
+				if(!dmg) debris.bSOLID = false;
+				debris.SetDamage(dmg); // Small cluster damage.
+				debris.pitch = dbpitch;
+				debris.angle = dbangle;
+				debris.roll  = dbroll;
+				debris.A_SetScale(size, size);
 				debris.vel = 
 				(
-					cos(angle+180)*cos(debris.pitch),
-					sin(angle+180)*cos(debris.pitch),
-					sin(debris.pitch+frandom(-45,45))*speed
+					cos(dbangle)*cosp,
+					sin(dbangle)*cosp,
+					-sin(dbpitch)
 				) * speed;
 			}
 		}
-		super.PostBeginPlay();
-	}
-	
-	States
-	{
-		Spawn:
-			TNT1 A 2;
-		stop;
 	}
 }
 class DEBRIS_3D : Actor
@@ -134,3 +119,32 @@ class DEBRIS_3D : Actor
 	}
 }
 class Gauss_Debris : DEBRIS_3D {}
+class Spark_Debris : DEBRIS_3D
+{
+	Default
+	{
+		BounceCount 2;
+		BounceFactor 0.6;
+		Gravity 0.05;
+		Projectile;
+		-NOGRAVITY
+		-RIPPER
+		+INTERPOLATEANGLES
+	}
+	
+	States
+	{
+		Spawn:
+			DEBR A 1 A_FadeOut(0.1);
+		loop;
+		Bounce:
+			DEBR A 1;
+		goto DeathFinal;
+		Death:
+			DEBR A 1;
+			TNT1 A 0 { bSOLID = false; }
+		DeathFinal:
+			DEBR A 1 A_FadeOut(0.08);
+		wait;
+	}
+}

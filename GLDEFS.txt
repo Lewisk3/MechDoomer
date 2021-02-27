@@ -42,7 +42,11 @@ pointlight YellowPointLight
     color 5.0 5.0 0.0
     size 65
 }
-
+pointlight YellowSmallLight
+{
+    color 5.0 5.0 0.0
+    size 4
+}
 pointlight BlueBrightLight
 {
     color 0.0 0.0 1.0
@@ -195,6 +199,10 @@ object Laser_ERLRGP
 object LaserAntiMissile
 {
 	Frame AMSL { light RedPointLight }
+}
+object Spark_Debris
+{
+	Frame DEBR { light YellowSmallLight }
 }
 
 // LaserBeam FX

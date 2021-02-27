@@ -148,7 +148,7 @@ void DamageCritSounds(MechHardpoint hp)
 	if(hp == hardpoints.ct) mechsounds.pushSound("Mech/Betty/CenterTorso");
 }
 
-void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, bool spread = true, Actor damager = NULL)
+void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, bool spread = true, Actor damager = NULL, Name dmgtype = "Default")
 {
 	if(FindInventory("DamageDebuff")) dmg *= 0.05;
 	
@@ -183,13 +183,17 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, bool spre
 	}
 	else if(hp.internalhp > 0)
 	{
-		if(random(0,10)==10) 
+		int critroll = 20;
+		// Prevent rapid crit from laser damage.
+		if(dmgtype == "Fire") critroll = 80; 
+		
+		if(random(0,critroll*0.5)==critroll*0.5) 
 		{
 			A_StartLocalSound("Mech/Damage/Warn", CHAN_VOICE);
 			GiveLocalInv("MechAnimate_InternalDamage", 1);
 		}
-	
-		if(random(0,20)==20)
+		
+		if(random(0,critroll) == critroll)
 		{
 			A_StartLocalSound("Mech/Damage/Critical", CHAN_VOICE);
 			GiveLocalInv("MechAnimate_CriticalDamage", 1);
@@ -204,7 +208,7 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, bool spre
 		if(hp.internalhp <= 0) 
 		{
 			hp.internalhp = 0;
-			if( random(1,3)==3 ) 
+			if( random(0,3)==3 ) 
 			{
 				SpreadHardpointDamage(hp,dmg/2);
 				A_StartLocalSound("Mech/Damaged/Explosion", CHAN_VOICE);
@@ -253,13 +257,13 @@ void DamageHardpoint(MechHardpoint hp, double dmg, bool noarmor=false, bool spre
 void ProcessHardpointDamage(Name mod, double damage, Actor damager = NULL)
 {	
 	bool heatdmg = ( mod == "overheating" );
-	if(mod == "MechDamage_CT" || (heatdmg && random(1,5)==5) ) DamageHardpoint(hardpoints.ct,damage,heatdmg&&random(0,1),damager);
-	if(mod == "MechDamage_LT" || (heatdmg && random(1,3)==3) ) DamageHardpoint(hardpoints.lt,damage,heatdmg&&random(0,1),damager);
-	if(mod == "MechDamage_RT" || (heatdmg && random(1,3)==3) ) DamageHardpoint(hardpoints.rt,damage,heatdmg&&random(0,1),damager);
-	if(mod == "MechDamage_LA" || (heatdmg && random(1,4)==4) ) DamageHardpoint(hardpoints.la,damage,heatdmg&&random(0,1),damager);
-	if(mod == "MechDamage_RA" || (heatdmg && random(1,4)==4) ) DamageHardpoint(hardpoints.ra,damage,heatdmg&&random(0,1),damager);
-	if(mod == "MechDamage_LL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.ll,damage,heatdmg&&random(0,1),damager);
-	if(mod == "MechDamage_RL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.rl,damage,heatdmg&&random(0,1),damager);
+	if(mod == "MechDamage_CT" || (heatdmg && random(1,5)==5) ) DamageHardpoint(hardpoints.ct,damage,heatdmg&&random(0,1),true,damager);
+	if(mod == "MechDamage_LT" || (heatdmg && random(1,3)==3) ) DamageHardpoint(hardpoints.lt,damage,heatdmg&&random(0,1),true,damager);
+	if(mod == "MechDamage_RT" || (heatdmg && random(1,3)==3) ) DamageHardpoint(hardpoints.rt,damage,heatdmg&&random(0,1),true,damager);
+	if(mod == "MechDamage_LA" || (heatdmg && random(1,4)==4) ) DamageHardpoint(hardpoints.la,damage,heatdmg&&random(0,1),true,damager);
+	if(mod == "MechDamage_RA" || (heatdmg && random(1,4)==4) ) DamageHardpoint(hardpoints.ra,damage,heatdmg&&random(0,1),true,damager);
+	if(mod == "MechDamage_LL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.ll,damage,heatdmg&&random(0,1),true,damager);
+	if(mod == "MechDamage_RL" || (heatdmg && random(1,7)==7) ) DamageHardpoint(hardpoints.rl,damage,heatdmg&&random(0,1),true,damager);
 }
 void SpreadHardpointDamage(MechHardpoint hp, double dmg)
 {

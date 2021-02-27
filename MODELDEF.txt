@@ -33,7 +33,18 @@ Model Gauss_Debris
 	
    FrameIndex DEBR A 0 0
 } 
-
+Model Spark_Debris
+{
+	Path "models"
+	Model 0 "Weapons/debris.md3"
+	Scale -0.5 0.5 0.5
+	USEACTORPITCH
+	USEACTORROLL
+	SurfaceSkin 0 0  "Textures/bullet.png" // Full mesh
+	AngleOffset 90
+	
+   FrameIndex DEBR A 0 0
+} 
 
 Model MechCamera
 {

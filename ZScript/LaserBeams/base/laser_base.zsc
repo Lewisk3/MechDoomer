@@ -74,14 +74,15 @@ class LaserEmitter : Actor
 	
 	private double GetDist(uint flags, int maxdist = int.max)
 	{
-		FLineTraceData lt;
+		LaserDamageTracer lt;
+		lt = LaserDamageTracer.CreateTrace(pos,angle,pitch,32,flags);
 		if(!laser_on || !activelaser)
-			LineTrace(angle, maxdist, pitch, flags,0, 32,0, lt);
+			lt = LaserDamageTracer.CreateTrace(pos,angle,pitch,maxdist,flags,32);
 		else
-			LineTrace(activelaser.angle, maxdist, activelaser.pitch-90, flags,0, 32,0, lt);
-		aimpos = lt.HitLocation;
-		aimactor = lt.HitActor;
-		return lt.Distance;
+			lt = LaserDamageTracer.CreateTrace(pos,activelaser.angle,activelaser.pitch-90,maxdist,flags,32);
+		aimpos = lt.results.HitPos;
+		aimactor = lt.results.HitActor;
+		return lt.results.Distance;
 	}
 
 	override void Tick()

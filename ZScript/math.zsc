@@ -222,6 +222,7 @@ class MechTargetTracer : LineTracer
 			// Handle mech hit, redirect to mech center.
 			if(Mechwarrior(hitactor)) 
 			{
+				if(Mechwarrior(HitActor).isdead) return Trace_Skip;
 				hit_target = Mechwarrior(hitactor).hitbox_middle;
 				return Trace_Stop;
 			}
@@ -230,6 +231,7 @@ class MechTargetTracer : LineTracer
 			let hitbox = MechHitBox(hitactor);
 			if(hitbox)
 			{
+				if(hitbox.mech.isdead) return Trace_Skip;
 				if(hitbox.mech == source) 
 					return Trace_Skip;
 				else
@@ -241,6 +243,88 @@ class MechTargetTracer : LineTracer
 			
 			// Default
 			hit_target = hitactor;
+		}
+		return Trace_Stop;
+	}
+}
+
+// LineTracer for laser damage (skips player hitbox)
+class LaserDamageTracer : LineTracer
+{
+	play static LaserDamageTracer CreateTrace(vector3 startpos, double tangle, double tpitch, 
+											  double dist, uint traceflags = 0,
+											  double forwardoffs = 0, double sideoffs = 0, 
+											  double zoffs = 0 )
+	{
+		vector3 dir;
+		double cosp = cos(tpitch);
+		dir = (
+			cos(tangle) * cosp,
+			sin(tangle) * cosp,
+			-sin(tpitch)
+		);
+		let tracer = new("LaserDamageTracer");
+		if(tracer) 
+		{
+			vector2 posoffset = LaserGlobals.VOffset(tangle,forwardoffs,sideoffs);
+			startpos = level.Vec3Offset(startpos, (posoffset.x, posoffset.y, zoffs));
+			let secget = Actor.Spawn("Actor",startpos);
+			tracer.Trace(startpos, secget.CurSector, dir, dist, traceflags);
+			secget.Destroy();
+		}
+		return tracer;
+	}
+
+	// Thanks to PhantomBeta 
+	// (https://github.com/Doom2fan/Se7evidas/blob/master/PK3%20Source/S7ZScript/Bases/S7_Projectile/Linetracer.ZS)
+    transient Array<F3DFloor> ffloorsToIgnore;
+	ETraceStatus HandleWall() 
+	{
+        if (Results.Tier == TIER_Upper || Results.Tier == TIER_Lower)
+            return TRACE_Stop;
+
+        let hl = Results.HitLine;
+        if (Results.ffloor && ffloorsToIgnore.Find (Results.ffloor) == ffloorsToIgnore.Size ())
+		{
+            ffloorsToIgnore.Push (Results.ffloor);
+            return TRACE_Stop;
+        }
+
+        if (Results.Tier == TIER_Middle && !hl.backsector)
+            return TRACE_Stop;
+			
+        if (Results.Tier == TIER_Middle && (hl.flags & Line.ML_Blocking) && (hl.flags & Line.ML_TwoSided))
+            return TRACE_Skip;
+
+        if ((hl.flags & Line.ML_3DMidTex) && !(hl.flags & Line.ML_3DMidTex_Impass))
+            return TRACE_Stop;
+
+        if (hl.flags & (Line.ML_Blocking | Line.ML_BlockEverything))
+            return TRACE_Stop;
+
+        return TRACE_Skip;
+    }
+	
+	override ETraceStatus TraceCallback()
+	{
+		if(results.HitType == Trace_HitWall)
+		{
+			let stat = HandleWall();
+			return stat;
+		}
+		if(results.HitType == Trace_HitActor)
+		{
+			let hitactor = results.HitActor;
+			if(hitactor is "LaserBase" || 
+			   hitactor is "LaserEmitter" ) return Trace_Skip;
+				
+			if(!hitactor.bSHOOTABLE) 
+			{
+				results.HitActor = null;
+				return Trace_Skip;
+			}
+			if(hitactor is "Mechwarrior")
+				return Trace_Skip;
 		}
 		return Trace_Stop;
 	}
