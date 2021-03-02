@@ -126,17 +126,17 @@ class LaserPuff : Actor
 	
 	Actor DamageHitActor(double dmg, Name dmgtype = "Fire", uint flags = 0)
 	{
+		let lbase = LaserBase(target);
+		if(!lbase) return null;	
+		let emit = LaserEmitter(lbase.emitter);
+		if(!emit) return null;
+		
+		let mechsrc = Mechwarrior(emit.source);
 		LaserDamageTracer lt;
-		lt = LaserDamageTracer.CreateTrace(pos,angle,pitch,16);
+		lt = LaserDamageTracer.CreateTrace(mechsrc,pos,angle,pitch,16);
 		Actor hitactor = lt.results.HitActor;
 		if(hitactor)
 		{
-			let lbase = LaserBase(target);
-			if(!lbase) return hitactor;
-			
-			let emit = LaserEmitter(lbase.emitter);
-			if(!emit) return hitactor;
-			
 			// Check if mech
 			let hitmech = MechHitBox(hitactor);
 			double finaldmg = dmg;

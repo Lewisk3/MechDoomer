@@ -452,7 +452,7 @@ void trigger_ams(mw_InvStruct amsitem)
 			if( mechweap && ((!mechweap && !obj.Damage) || !(mechweap is "MechMissile")) ) continue;
 			if(CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
 			{
-				SoundEmitter.SE_Trigger(def_ams.firesound);
+				SoundEmitter.SE_Trigger(def_ams.firesound, pos);
 				amshardpoint.x += random(-5,5);
 				amshardpoint.y += random(-5,5);
 				vector2 offs = MDMath.VOffset(angle, 25, amshardpoint.x, 1);	

@@ -167,7 +167,7 @@ class SoundEmitter : Actor
 	
 	override void PostBeginPlay()
 	{
-		A_StartSound(audio, CHAN_BODY, 0, 1.0, 2);
+		A_StartSound(audio, CHAN_BODY, CHANF_OVERLAP);
 		super.PostBeginPlay();
 	}
 

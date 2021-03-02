@@ -5,6 +5,7 @@ class AntiMissile : AMS_Missile
 	{
 		AMS_Missile.Effectiveness (MWDMG_SRM*4);
 		AMS_Missile.Efficiency 0.6;
+		Mechbase_Actor.FireSound "Missiles/AMS";
 	}
 }
 class LaserAntiMissile : AMS_Missile
@@ -173,6 +174,7 @@ class SRM : MechMissile
 		MechMissile.Homming false, 0;
 		Mechbase_Actor.Heat MWHEAT_SRM;
 		MechMissile.ExplosionScale 0.5;
+		Mechbase_Actor.DontConverge false;
 	}
 }
 class SSRM : SRM
@@ -180,6 +182,7 @@ class SSRM : SRM
 	Default
 	{
 		MechMissile.Homming true, 0;
+		Mechbase_Actor.DontConverge true;
 	}
 }
 
@@ -225,6 +228,7 @@ class HE_CATM : CATM
 		Mechbase_Actor.ConstDamage (MWDMG_HEATM);
 		Mechbase_Actor.MinimumRange 0;
 		Mechbase_Actor.MaximumRange 180;
+		Mechbase_Actor.DontConverge false;
 	}
 }
 
@@ -236,6 +240,7 @@ class RocketMissile : MechMissile
 		Mechbase_Actor.MaximumRange 540;
 		MechMissile.Homming false, 0;
 		Mechbase_Actor.Heat MWHEAT_ROCKET;
+		Mechbase_Actor.DontConverge false;
 	}
 } 
 

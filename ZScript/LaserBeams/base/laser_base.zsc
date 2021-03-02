@@ -74,15 +74,16 @@ class LaserEmitter : Actor
 	
 	private double GetDist(uint flags, int maxdist = int.max)
 	{
+		let mechsrc = Mechwarrior(source);
 		LaserDamageTracer lt;
-		lt = LaserDamageTracer.CreateTrace(pos,angle,pitch,32,flags);
+		lt = LaserDamageTracer.CreateTrace(mechsrc,pos,angle,pitch,32,flags);
 		if(!laser_on || !activelaser)
-			lt = LaserDamageTracer.CreateTrace(pos,angle,pitch,maxdist,flags,32);
+			lt = LaserDamageTracer.CreateTrace(mechsrc,pos,angle,pitch,maxdist,flags,32);
 		else
-			lt = LaserDamageTracer.CreateTrace(pos,activelaser.angle,activelaser.pitch-90,maxdist,flags,32);
+			lt = LaserDamageTracer.CreateTrace(mechsrc,pos,activelaser.angle,activelaser.pitch-90,maxdist,flags,32);
 		aimpos = lt.results.HitPos;
 		aimactor = lt.results.HitActor;
-		return lt.results.Distance;
+		return lt.results.HitType ? lt.results.Distance : maxdist;
 	}
 
 	override void Tick()
@@ -151,7 +152,7 @@ class LaserEmitter : Actor
 			laser_on = true;
 		}
 		curdist = GetDist(ltflags, lasdefs.maxrange*MWGAMEPLAY_UNITMETER);	
-		if(laspuff && activelaser)
+		if(laspuff && activelaser && curdist < lasdefs.maxrange*MWGAMEPLAY_UNITMETER)
 		{
 			spwnpuff = LaserPuff(Spawn(laspuff, aimpos));
 			if(spwnpuff) 
@@ -175,6 +176,7 @@ class LaserEmitter : Actor
 // Laser Object
 class LaserBase : Actor
 {
+	Sound impactsnd;
 	LaserEmitter emitter;
 	class<LaserPuff> pufftype;
 	Actor aimpuff;
@@ -190,6 +192,7 @@ class LaserBase : Actor
 	Property Damage : truedamage;
 	Property MaxRange : maxrange;
 	Property FadeSpeed : fadein, fadeout;
+	Property HitSound : impactsnd;
 	
 	Default
 	{	
@@ -197,6 +200,7 @@ class LaserBase : Actor
 		+INTERPOLATEANGLES;
 		LaserBase.LaserPuff "";
 		LaserBase.MaxRange 42069;
+		LaserBase.HitSound "LaserBeam/Impact";
 		Radius 6;
 	}
 
@@ -245,7 +249,7 @@ class LaserBase : Actor
 		{
 			alpha = clamp(alpha + fadein, 0, default.alpha);
 		}
-		
+				
 		// Carefully follow emitter.
 		bool localplr = false; //(players[consoleplayer] == emitter.source.player);
 		vector2 toangles = GetFollowAngles();
@@ -254,6 +258,9 @@ class LaserBase : Actor
 		double scalequanta = (double(radius)*default.scale.x) * (localplr ? 0.5 : 1.0);
 		double newscale = default.scale.x * (emitter.curdist / scalequanta);
 		Scale.Y = newscale;
+	
+		if(GetAge() <= 0 && emitter.curdist < maxrange*MWGAMEPLAY_UNITMETER)
+			S_StartSound(impactsnd, CHAN_BODY); 
 	
 		A_SetAngle(LaserGlobals.Lerp(angle, toangles.x, 0.5), SPF_INTERPOLATE);
 		A_SetPitch(LaserGlobals.Lerp(pitch, toangles.y, 0.5), SPF_INTERPOLATE);

@@ -251,7 +251,8 @@ class MechTargetTracer : LineTracer
 // LineTracer for laser damage (skips player hitbox)
 class LaserDamageTracer : LineTracer
 {
-	play static LaserDamageTracer CreateTrace(vector3 startpos, double tangle, double tpitch, 
+	Mechwarrior mechsrc;
+	play static LaserDamageTracer CreateTrace(Mechwarrior fmechsrc, vector3 startpos, double tangle, double tpitch, 
 											  double dist, uint traceflags = 0,
 											  double forwardoffs = 0, double sideoffs = 0, 
 											  double zoffs = 0 )
@@ -263,14 +264,16 @@ class LaserDamageTracer : LineTracer
 			sin(tangle) * cosp,
 			-sin(tpitch)
 		);
-		let tracer = new("LaserDamageTracer");
+		LaserDamageTracer tracer = new("LaserDamageTracer");
 		if(tracer) 
 		{
+			tracer.mechsrc = fmechsrc;
 			vector2 posoffset = LaserGlobals.VOffset(tangle,forwardoffs,sideoffs);
 			startpos = level.Vec3Offset(startpos, (posoffset.x, posoffset.y, zoffs));
 			let secget = Actor.Spawn("Actor",startpos);
-			tracer.Trace(startpos, secget.CurSector, dir, dist, traceflags);
+			Sector sec = secget.CurSector;
 			secget.Destroy();
+			tracer.Trace(startpos, sec, dir, dist, traceflags);
 		}
 		return tracer;
 	}
@@ -315,17 +318,30 @@ class LaserDamageTracer : LineTracer
 		if(results.HitType == Trace_HitActor)
 		{
 			let hitactor = results.HitActor;
+			
+			// Skip laserparts and non-shootable objects.
 			if(hitactor is "LaserBase" || 
-			   hitactor is "LaserEmitter" ) return Trace_Skip;
+			   hitactor is "LaserEmitter" ) 
+			{
+				results.HitActor = null;
+				return Trace_Skip;
+			}
 				
 			if(!hitactor.bSHOOTABLE) 
 			{
 				results.HitActor = null;
 				return Trace_Skip;
 			}
+			
+			// Skip source mech's hitboxes.
+			let hitbox = MechHitBox(hitactor);
+			if(hitbox && hitbox.mech == mechsrc)
+				return Trace_Skip;
+				
 			if(hitactor is "Mechwarrior")
 				return Trace_Skip;
 		}
+		
 		return Trace_Stop;
 	}
 }

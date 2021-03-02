@@ -17,9 +17,12 @@ Missiles/AMS       MECWAMS
 $pitchshiftrange 2
 Ballistics/MGUN       BALMGUN
 Ballistics/Autocannon MECAUTOC
+Ballistics/MGUN/Impact MGUNIMP
+Ballistics/Autocannon/Impact AUTOCIMP
 $pitchshiftrange 4
 Ballistics/Gauss      MECGAUSS
 Energy/PPC    MECPPC
+Energy/PPC/Impact MPPCIMP
 Energy/Flamer MECHFLM
 
 Missiles/Explosion1 MISLEXP1
@@ -52,6 +55,8 @@ Classic/Missiles/LRM	   CLSMISL
 LaserBeam/Small/Fire SBEMFIRE
 LaserBeam/Medium/Fire MBEMFIRE
 LaserBeam/Large/Fire LBEMFIRE
+LaserBeam/Impact BEMIMP
+LaserBeam/Impact/Pulse PBEMIMP
 LaserBeam/Cont BEAMCONT;
 LaserBeam/Pulse LBEMPLS
 
@@ -59,6 +64,8 @@ $volume LaserBeam/Small/Fire 0.5;
 $volume LaserBeam/Medium/Fire 0.5;
 $volume LaserBeam/Large/Fire 0.5;
 
+$attenuation Ballistics/Autocannon/Impact 0.25
+$attenuation Energy/PPC/Impact 0.25
 $volume Ballistics/Gauss 0.6
 $volume Ballistics/Autocannon 0.5
 $volume Missiles/SRM2 0.5
