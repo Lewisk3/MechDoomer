@@ -147,7 +147,25 @@ class LaserEmitter : Actor
 				lasobj.onarms = onarms;
 				lasobj.onlegs = onlegs;
 				lasobj.InitAngles();
+				let lasmid = LaserBase(Actor.Spawn("LaserMiddleBeam",pos));
+				if(lasmid) 
+				{
+					lasmid.translation = lasobj.translation;
+					lasmid.emitter = self;
+					lasmid.truedamage = 0;
+					lasmid.fadein = lasobj.fadein; 
+					lasmid.fadeout = lasobj.fadeout;
+					lasmid.angle = angle;
+					lasmid.pitch = pitch+90;
+					lasmid.predictaim = predict;
+					lasmid.onarms = onarms;
+					lasmid.onlegs = onlegs;
+					lasmid.InitAngles();
+					lasmid.A_SetRenderStyle(1.0, lasobj.GetRenderStyle());
+					lasmid.A_SetScale(lasobj.scale.x*0.5);
+				}
 			}
+
 			activelaser = lasobj;
 			laser_on = true;
 		}
@@ -176,6 +194,8 @@ class LaserEmitter : Actor
 // Laser Object
 class LaserBase : Actor
 {
+	bool cosmetic;
+	double spawnscale;
 	Sound impactsnd;
 	LaserEmitter emitter;
 	class<LaserPuff> pufftype;
@@ -228,12 +248,30 @@ class LaserBase : Actor
 		return toangles;
 	}
 
+	override void BeginPlay()
+	{
+		spawnscale = Scale.X;
+		super.BeginPlay();
+	}
+
 	override void Tick() 
 	{
-		if(!emitter || !emitter.laser_on)
+		if(!emitter)
 		{
 			alpha -= fadeout;
-			if(!emitter) return;
+			return;
+		}
+		
+		// Get emitter angles.
+		vector2 toangles = GetFollowAngles();
+		double interp = GetAge() <= 1 ? 1.0 : 0.35;
+		A_SetAngle(LaserGlobals.Lerp(angle, toangles.x, interp), SPF_INTERPOLATE);
+		A_SetPitch(LaserGlobals.Lerp(pitch, toangles.y, interp), SPF_INTERPOLATE);
+		
+		// Power cycle (fade)
+		if(!emitter.laser_on)
+		{
+			alpha -= fadeout;
 			if(alpha <= 0)
 			{
 				Destroy();
@@ -250,31 +288,26 @@ class LaserBase : Actor
 			alpha = clamp(alpha + fadein, 0, default.alpha);
 		}
 				
-		// Carefully follow emitter.
-		bool localplr = false; //(players[consoleplayer] == emitter.source.player);
-		vector2 toangles = GetFollowAngles();
-
 		// Scale to correct size.
-		double scalequanta = (double(radius)*default.scale.x) * (localplr ? 0.5 : 1.0);
-		double newscale = default.scale.x * (emitter.curdist / scalequanta);
+		double scalequanta = double(radius)*spawnscale;
+		double newscale = spawnscale * (emitter.curdist / scalequanta);
 		Scale.Y = newscale;
 	
 		if(GetAge() <= 0 && emitter.curdist < maxrange*MWGAMEPLAY_UNITMETER)
 			S_StartSound(impactsnd, CHAN_BODY); 
-	
-		A_SetAngle(LaserGlobals.Lerp(angle, toangles.x, 0.5), SPF_INTERPOLATE);
-		A_SetPitch(LaserGlobals.Lerp(pitch, toangles.y, 0.5), SPF_INTERPOLATE);
 		
-		double cosp = cos(pitch-90);
+		// Get centered distance.
 		double dist_desired = emitter.curdist/2.;
 		if(emitter.middledist && emitter.middledist < emitter.curdist) 
 			dist_desired = emitter.middledist/2.;
 			
+		// Set to middle of aim.
+		double cosp = cos(pitch-90);
 		vector3 posdir = (
 			cos(angle) * cosp,
 			sin(angle) * cosp,
 			sin(pitch+90)
-		) * (localplr ? 1 : dist_desired); 
+		) * dist_desired; 
 		
 		// Warp to emitter.
 		posdir = level.Vec3Offset(posdir, emitter.pos);		
@@ -288,3 +321,4 @@ class LaserBase : Actor
 		loop;
 	}	
 }
+class LaserMiddleBeam : LaserBase {}

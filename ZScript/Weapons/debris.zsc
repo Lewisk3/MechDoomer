@@ -123,10 +123,11 @@ class Spark_Debris : DEBRIS_3D
 {
 	Default
 	{
-		BounceCount 2;
-		BounceFactor 0.6;
+		BounceCount 0;
 		Gravity 0.05;
 		Projectile;
+		+NOINTERACTION;
+		-SOLID;
 		-NOGRAVITY
 		-RIPPER
 		+INTERPOLATEANGLES
@@ -136,15 +137,6 @@ class Spark_Debris : DEBRIS_3D
 	{
 		Spawn:
 			DEBR A 1 A_FadeOut(0.1);
-		loop;
-		Bounce:
-			DEBR A 1;
-		goto DeathFinal;
-		Death:
-			DEBR A 1;
-			TNT1 A 0 { bSOLID = false; }
-		DeathFinal:
-			DEBR A 1 A_FadeOut(0.08);
 		wait;
 	}
 }

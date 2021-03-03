@@ -94,6 +94,11 @@ class Mechbase_Actor : FastProjectile
 							  mechplayer.pitch, TRF_SOLIDACTORS, 
 							  mechplayer.viewheight, 80,0, lt     );
 		aimpos = lt.HitLocation;
+		if(lt.HitActor && !mechplayer.CheckAI())
+		{
+			aimpos = lt.HitActor.pos;
+			aimpos.z = lt.HitLocation.z;
+		}
 		aimdist = lt.Distance;
 		spawnangs = (angle, pitch);
 		// SetDamage(truedamage);
@@ -508,7 +513,7 @@ class Mechbase_Weapon : Item_NoPickup
 			invoker.cachedspread = (
 				random(-invoker.basespreadx,invoker.basespreadx),
 				random(-invoker.basespready,invoker.basespready)
-			) * (plr.CheckAI() ? 0.5 : 3.0);
+			) * (plr.CheckAI() ? 0.5 : 2.0);
 			bool onarms, onlegs;
 			[onarms, onlegs] = invoker.CheckMountPos();
 			
@@ -627,6 +632,7 @@ class Mechbase_Weapon : Item_NoPickup
 			double aimdist = lt.Distance;
 			vector3 finpos = lt.HitActor ? lt.HitActor.pos : lt.HitLocation;
 			finpos.z = lt.HitLocation.z;
+			if(plr.CheckAI()) finpos = lt.HitLocation;
 			vector3 rangles = level.SphericalCoords(lpos, finpos, (src.angle,src.pitch));
 			vector2 conview = (-rangles.x * (plr.CheckAI() ? 0.6 : 1.0), -rangles.y);
 			UpdateBeamPos(hardpoint.pos.x+cachedspread.x,hardpoint.pos.y+cachedspread.y,weapDistance);
@@ -828,7 +834,7 @@ class MechMissile : Mechbase_Actor
 		  Spawn.Loop:
 			MISS AB 1 Bright 
 			{
-				if(tracer && CheckSight(tracer) && fDist() > 64 && getTravelDistance() < maximum_range) 
+				if(tracer && CheckSight(tracer) && getTravelDistance() < maximum_range) 
 					return ResolveState("Seek");
 				else
 					return ResolveState(Null);
@@ -861,6 +867,7 @@ class MechMissile : Mechbase_Actor
 						A_SetAngle(MDMath.Lerp(angle, angle-sight.x, hspd), SPF_INTERPOLATE);
 						A_SetPitch(MDMath.Lerp(pitch, pitch-sight.y, hspd), SPF_INTERPOLATE);
 					}
+					if(abs(angle-spawnangs.x) >= 90) angle = spawnangs.x;
 					vel = (
 						cos(angle)*cos(pitch),
 						sin(angle)*cos(pitch),

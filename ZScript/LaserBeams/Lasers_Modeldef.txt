@@ -1,8 +1,23 @@
+Model LaserMiddleBeam
+{
+	Path "models/LaserBeams"
+	Model 0 "cbeam.md3"
+	//Scale 10.0 10.0 10.2
+	Scale 1.0 1.0 1.2
+	USEACTORPITCH
+	SurfaceSkin 0 0 "BEAM.png" // Full mesh
+	AngleOffset 0
+	PitchOffset 0
+	
+   FrameIndex BEAM A 0 0
+} 
+
 Model LaserBeam_SML
 {
 	Path "models/LaserBeams"
 	Model 0 "beam.md3"
 	Scale 10.0 10.0 10.2
+	//Scale 1.0 1.0 1.2
 	USEACTORPITCH
 	SurfaceSkin 0 0 "BEAM.png" // Full mesh
 	AngleOffset 0

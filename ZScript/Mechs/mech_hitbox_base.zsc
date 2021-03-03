@@ -51,8 +51,10 @@ class MechHitbox : Actor
 		let mechweap = Mechbase_Actor(inflictor);
 		double realdamage = mechweap ? mechweap.truedamage : damage;
 		bool mechdmg = (inflictor is "Mechwarrior") || (source is "Mechwarrior");
+		bool is_battlearmor = (mech.mechtype == mech.MechType_BattleArmor);
 		double newdmg = mechdmg ? (realdamage*0.5) : (realdamage*MWGAMEPLAY_DAMAGESCALE);
-			
+		if(is_battlearmor && !mechdmg) newdmg = realdamage*(MWGAMEPLAY_DAMAGESCALE*0.5);		
+		
 		// Take a bit less damage from AI
 		if(mechdmg && Mechwarrior(source).checkAI()) newdmg = realdamage*0.5;
 		
