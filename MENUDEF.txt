@@ -232,16 +232,13 @@ OptionMenu "MechDoomerMouseMenu"
 {
 	Title "MechDoomer Recommended Mouse Options"
 	StaticText " "
-	Option "Prescale Mouse (No)"    , "m_noprescale", "NoYes"
-	StaticText "Mouse movement feels a bit better with this off.", "Black"
-	Option "Smooth Mouse (Yes)"   , "smooth_mouse", "YesNo"
-	StaticText "This will make angle/pitch changes smoother.", "Black"
-	Slider "Horizontal Scale (1.0)"     , "m_yaw", 0, 2.5, 0.1
-	Slider "Vertical Scale (0.5)", "m_pitch", 0, 2.5, 0.1
+	Option "Smooth Mouse (Yes)"      ,"m_filter", "YesNo"
+	Slider "Horizontal Scale (1.0)"  , "m_yaw", 0, 2.5, 0.1
+	Slider "Vertical Scale (0.5)"    , "m_pitch", 0, 2.5, 0.1
 	StaticText "GZDoom scales the mouse differently along", "Black"
 	StaticText "the Y axis, this needs to be set to 0.5", "Black" 
-	StaticText "if we disable Prescale Mouse.", "Black"
-	StaticText 	""
+	StaticText "for 1:1 mouse sensitivity. ", "Black"
+	StaticText " "
 }
 
 
@@ -253,7 +250,8 @@ OptionMenu "MechDoomerControlsMenu"
 	StaticText " "
 	StaticText 	"Mouse Setup", "Yellow"
 	Option 	   "Enable Mouselook (Yes)"  , "freelook", "YesNo"
-	Slider "$MOUSEMNU_SENSITIVITY",		"mouse_sensitivity", 0.5, 2.5, 0.1
+	Slider "$MOUSEMNU_SENSITIVITY_X",	"m_sensitivity_x", 0.5, 8, 0.25
+	Slider "$MOUSEMNU_SENSITIVITY_Y",	"m_sensitivity_y", 0.5, 8, 0.25
 	Submenu    "More Mouse Options", "MechDoomerMouseMenu"
 	StaticText " "
 	StaticText "Movement Systems", "Yellow"
