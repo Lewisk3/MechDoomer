@@ -67,9 +67,12 @@ class MechWeaponDispenser : Inventory
 	override bool TryPickup (in out Actor toucher)
 	{
 		mechtoucher = MechWarrior(toucher);
-		bool result = giveWeapons(mechtoucher);;
+		// Stupidly hacky but, pretty much the only way to prevent 
+		// mech AI from recieving pickups. As they're voodoos.
+		if(!mechtoucher || mechtoucher.Distance3D(self) > radius) return false;
+		bool result = giveWeapons(mechtoucher);
 		if(result)GoAwayAndDie();
-		return result; //result;
+		return result;
 	}
 }
 

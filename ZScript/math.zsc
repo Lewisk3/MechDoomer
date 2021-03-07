@@ -128,6 +128,11 @@ class MDMath Abstract
 	{
 		return sqrt( (two.x - one.x)**2 + (two.y - one.y)**2 + (two.z - one.z)**2 );
 	}
+	// Distance 2D on vectors, not actors. (Precise version)
+	static double Distance2D(vector2 one, vector2 two)
+	{
+		return sqrt( (two.x - one.x)**2 + (two.y - one.y)**2 );
+	}
 	
 	// Rotate vectors.
 	static Vector2 VRotate(Vector2 pos, double angle, bool invert=false)

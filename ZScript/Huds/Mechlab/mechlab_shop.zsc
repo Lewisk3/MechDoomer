@@ -105,7 +105,7 @@ void ProcessShopButtons()
 	H_DrawImage( (checkCollision(mouse, buyitembtn)&&pricevalid&&!mechmode) ? tBtnlit_BuyItem : tBtn_BuyItem,(buyitembtn.x+61,buyitembtn.y+31),0);
 	H_DrawImage( (checkCollision(mouse, buymechbtn)&&pricevalid&& mechmode) ? tBtnlit_BuyMech : tBtn_BuyMech,(buymechbtn.x+68,buymechbtn.y+31),0);
 	H_DrawImage(mechmode ? tBtnlit_Mechsmode : tBtn_Mechsmode,(mechsmodebtn.x+120,mechsmodebtn.y+31),0);
-	
+		
 	// Scroll
 	if(mstats.scroll == -1)
 	{
@@ -120,6 +120,9 @@ void ProcessShopButtons()
 			invoffset = clamp(GetMaxShopItems()-maxpageitems, forceminitems, GetMaxShopItems()); 
 		mstats.scroll = 0;
 	}
+	
+	// Don't process buttons if the main mechlab is busy.
+	if(isbusy) return;
 	
 	if( mstats.left_btn && !messagebox_active)
 	{

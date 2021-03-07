@@ -241,6 +241,9 @@ void drawArmoryInfo()
 	H_DrawImage(util,(1080,454));
 	H_DrawImage(mode,(590,660));
 	
+	// Don't process buttons if the main mechlab is busy.
+	if(isbusy) return;
+	
 	if( mstats.left_btn )
 	{
 		// Armor status selector

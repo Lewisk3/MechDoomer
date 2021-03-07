@@ -8,8 +8,15 @@ int hardpoint;  			  // Selected mechplr hardpoint
 SelectedObject selected_item; // Selected item
 int maxpageitems;
 bool mechsmode_forced;
+bool doscrapall;
 
-void setSelected(String tag, MechHardpoint location, class<Mechbase_Utility> util, class<Mechbase_Weapon> weap, class<Mechbase_Engine> eng, int index)
+// Prompt IDs, will be expanded on as features call for it.
+enum PromptIDs
+{
+	PrID_SCRAPALL = 1
+};
+
+void setSelected(String tag, MechHardpoint location, class<Mechbase_Utility> util, class<Mechbase_Weapon> weap, class<Mechbase_Engine> eng, int index, vector2 selpos = (-1,-1))
 {
 	if(selected_item.location != location) clearSelected();
 	selected_item.tag = tag;
@@ -18,6 +25,7 @@ void setSelected(String tag, MechHardpoint location, class<Mechbase_Utility> uti
 	selected_item.mWeapon = weap;
 	selected_item.mEngine = eng;
 	selected_item.index = index;
+	selected_item.selpos = selpos;
 }
 void clearSelected(bool test=true)
 {
@@ -122,11 +130,60 @@ void ProcessLoadoutButtons()
 		H_DrawImage(tBtnlit_ArmorAndRepair, (  modebtn.x+125,  modebtn.y+35),0);
 	if(checkCollision(mouse, shopbtn) )
 		H_DrawImage(tBtnlit_Shop, (shopbtn.x+57,shopbtn.y+35),0);
-	
+		
 	// Scroll
 	if(mstats.scroll == -1 && invoffset-1 > -1){ mstats.scroll = 0;  invoffset--; }
 	if(mstats.scroll ==  1 && invoffset+maxpageitems < Mechlab_GetInvSize()){ mstats.scroll = 0;  invoffset++; }
+	
+	// Don't process buttons if the main mechlab is busy.
+	if(isbusy) return;
 
+	// Process UI key-button events.
+	if( !selected_item.location )
+	{
+		double seldist = MDMath.Distance2D((mouse.x,mouse.y),selected_item.selpos);
+		// Scrap
+		if(mstats.left_btn && checkCollision(mouse,scrapbtn) || (kstats.key_scrap && seldist <= 50))
+		{
+			if(kstats.shift_down && !mechmode)
+			{
+				CallPrompt("Scrap all items?", "Confirm", "Cancel", PrID_SCRAPALL);
+			}
+			else if(selected_item.index > -1)
+			{
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
+				if(!mechmode)
+				{
+					int amt = valid_inv_context.weapon_items[selected_item.index].amt;
+					MechDoomerEvents.SendNetworkEvent("remove_inv",selected_item.index);
+					if(amt-1 < 0) clearSelected();
+				}
+				else
+				{
+					String mechname = mechplr.GetPrintableDisplayName(mechplr.inv_context.mechs[selected_item.index].baseclass);
+					if(!(mechname ~== "Exit Mech"))
+					{
+						MechDoomerEvents.SendNetworkEvent("sell_mech",selected_item.index);
+						MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[DarkRed]Sold mech: \n"..mechname);
+					}
+					clearSelected();
+				}
+				kstats.key_scrap = false;
+				mstats.left_btn = false;
+			}
+		}
+	}
+	
+	// Confirm prompt actions.
+	if(prompt_stats.ID == PrID_SCRAPALL && !prompt_active)
+	{
+		if(prompt_stats.result == prompt_stats.one) 
+		{
+			MechDoomerEvents.SendNetworkEvent("remove_allinv");
+			MechDoomerEvents.SendNetworkEvent("mechlab_alert:All Items have been Scrapped.");
+		}
+		ClearPrompt();
+	}
 	
 	if( mstats.left_btn )
 	{	
@@ -173,29 +230,6 @@ void ProcessLoadoutButtons()
 			else
 				MechDoomerEvents.SendNetworkEvent("sort_mechs");
 			mstats.left_btn = false;
-		}
-		
-		// Scrap
-		if(checkCollision(mouse,scrapbtn) && !selected_item.location )
-		{
-			if(selected_item.index > -1)
-			{
-				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
-				if(!mechmode)
-				{
-					int amt = valid_inv_context.weapon_items[selected_item.index].amt;
-					MechDoomerEvents.SendNetworkEvent("remove_inv",selected_item.index);
-					if(amt-1 < 0) clearSelected();
-				}
-				else
-				{
-					String mechname = mechplr.GetPrintableDisplayName(mechplr.inv_context.mechs[selected_item.index].baseclass);
-					MechDoomerEvents.SendNetworkEvent("sell_mech",selected_item.index);
-					MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[DarkRed]Sold mech: \n"..mechname);
-					clearSelected();
-				}
-				mstats.left_btn = false;
-			}
 		}
 		
 		// Hardpoint isn't valid. Do not proceed.
@@ -517,7 +551,7 @@ void drawInventory(int px, int py, int start, int max)
 				}
 				else 
 				{
-					setSelected(weapname, null, ut, mw, eng, i);
+					setSelected(weapname, null, ut, mw, eng, i, (mouse.x,mouse.y));
 					mstats.left_pressed = false;
 				}
 			}

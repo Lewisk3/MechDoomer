@@ -82,6 +82,7 @@ addmenukey "Set Group One (1)" SetGroup1
 addmenukey "Set Group Two (2)" SetGroup2				 
 addmenukey "Set Group Three (3)" SetGroup3			 
 addmenukey "Set Group Four (4)"	SetGroup4	
+addmenukey "Scrap Item (Y)", "menu:mechlab_scrapitem"
 defaultbind W +forward
 defaultbind S +back
 defaultbind A +moveleft
@@ -123,3 +124,4 @@ defaultbind 1 SetGroup1
 defaultbind 2 SetGroup2				 
 defaultbind 3 SetGroup3			 
 defaultbind 4 SetGroup4	 	 
+defaultbind Y "menu:mechlab_scrapitem"

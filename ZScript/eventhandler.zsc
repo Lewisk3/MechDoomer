@@ -192,6 +192,14 @@ class MechDoomerEvents : EventHandler
 	ui int keycache;
 	override bool InputProcess(InputEvent e)
 	{
+		// Filter menu keys.
+		if(e.Type == e.Type_KeyDown)
+		{
+		    Array<int> keys;
+			Bindings.GetAllKeysForCommand(keys, "menu:mechlab_scrapitem");
+			if(keys.Find(e.KeyScan) != keys.Size()) return true;
+		}
+		
 		let plr = Mechwarrior(players[consoleplayer].mo);
 		Menu m = Menu.GetCurrentMenu();
 		if(plr && !plr.uiopen_mechlab) keycache = e.KeyChar;
@@ -434,6 +442,22 @@ class MechDoomerEvents : EventHandler
 					plr.RemoveInventory(mech.inv_context);
 					plr.inv_context.mechs.delete(e.Args[0]);
 					plr.adjustMoney(value);
+				}
+			}
+			if(netcmd == "remove_allinv")
+			{
+				while(plr.inv_context.weapon_items.Size() >= 1)
+				{
+					int index = plr.inv_context.weapon_items.Size()-1;
+					let item = plr.inv_context.weapon_items[index];
+					class<Mechbase_Weapon>  witem = item.Tag;
+					class<Mechbase_Utility> uitem = item.Tag;
+					class<Mechbase_Engine>  eitem = item.Tag;
+					
+					if(uitem) plr.adjustMoney(GetDefaultByType(uitem).worth);
+					if(witem) plr.adjustMoney(GetDefaultByType(witem).worth);
+					if(eitem) plr.adjustMoney(Mechbase_Engine.GetRealWorth(eitem));
+					plr.inv_context.RemoveItem(index,item.amt);
 				}
 			}
 			

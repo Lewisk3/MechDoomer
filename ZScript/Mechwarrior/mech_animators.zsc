@@ -279,7 +279,7 @@ class FallAnimator : MechAnimator
 		
 		double topitch = force*sin(dir);
 		Actor cockpit = mech;
-		if(mech.models_reference) 
+		if(mech.models_reference && mech.models_reference.cockpit) 
 		{
 			cockpit = mech.models_reference.cockpit.cockpitcam;
 			let cmodel = mech.models_reference.cockpit;

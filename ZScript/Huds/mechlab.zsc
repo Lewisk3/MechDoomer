@@ -8,10 +8,24 @@ struct MouseStatus
 	int scroll;
 }
 
+struct KeyStatus
+{
+	bool key_scrap;
+	bool shift_down;
+}
+
+struct PromptStatus
+{
+	int ID;
+	String msg;
+	String one,two, result;
+}
+
 struct SelectedObject
 {	
 	Name tag;
 	int index;
+	vector2 selpos;
 	MechHardpoint location;
 	Mechbase_Weapon mWeaponOBJ;
 	class<Mechbase_Weapon>  mWeapon;
@@ -22,7 +36,9 @@ struct SelectedObject
 class Mechlab_Menu : GenericMenu
 {
 	// Structs
+	KeyStatus kstats;
 	MouseStatus mstats;
+	PromptStatus prompt_stats;
 	Vector2 mpos;
 	Mechwarrior mechplr;
 	FadingText plrHudMessage;
@@ -57,10 +73,12 @@ class Mechlab_Menu : GenericMenu
 			  tBtn_MechsMode, tBtnlit_MechsMode, tBtn_All, tBtnlit_All, tBtn_Light, 
 			  tBtnlit_Light, tBtn_Medium, tBtnlit_Medium, tBtn_Heavy, tBtnlit_Heavy,
 			  tBtn_Assault, tBtnlit_Assault;
-	
+			  
 	// Bools
 	bool page_init;
 	bool messagebox_active;
+	bool prompt_active;
+	bool isbusy;
 	
 	// Ints
 	int hud_page;
@@ -80,7 +98,8 @@ class Mechlab_Menu : GenericMenu
 	Rect mouse, rHD, rCT, rLT, rRT, rLA, rRA, rLL, rRL, weapbox, invbox, 
 		 equipbtn, dequipbtn, scrapbtn, sortbtn, modebtn, autilbtn, repairbtn,
 		 plusbtn, minusbtn, buyitembtn, buymechbtn, energybtn, ballisticbtn,
-		 missilesbtn, ammobtn, enginesbtn, mechsmodebtn, shopbtn, invmodebtn;
+		 missilesbtn, ammobtn, enginesbtn, mechsmodebtn, shopbtn, invmodebtn,
+		 prompt_onebtn, prompt_twobtn;
 	
 	// Fonts
 	HUDFont mHUDFont;
@@ -232,6 +251,10 @@ class Mechlab_Menu : GenericMenu
 		initRect(buymechbtn,980,960,140,50);
 		initRect(mechsmodebtn,1415,965,240,50);
 		
+		// Prompt Buttons
+		initRect(prompt_onebtn, 770,500,150,40);
+		initRect(prompt_twobtn, 1030,500,150,40);
+		
 		initRect(mouse, mpos.x, mpos.y, 8,8);
 	}
 
@@ -266,12 +289,36 @@ class Mechlab_Menu : GenericMenu
 		//drawRect(shopbtn, debug_color);
 		//drawRect(plusbtn, debug_color);
 		//drawRect(minusbtn, debug_color);
+		//drawRect(prompt_onebtn, debug_color);
+		//drawRect(prompt_twobtn, debug_color);
+	}
+
+	void CallPrompt(String msg, String yes, String no, int ID = -1)
+	{
+		if(prompt_active) return;
+		prompt_stats.ID = ID;
+		prompt_stats.msg = msg;
+		prompt_stats.one = yes;
+		prompt_stats.two = no;
+		prompt_active = true;
+		messagepos_yscale = 0;
+		MechDoomerEvents.SendNetworkEvent(String.Format("mechlab_alert:%s",msg));
+	}
+	
+	void ClearPrompt()
+	{
+		prompt_active = false;
+		prompt_stats.ID  = -1;
+		prompt_stats.msg = "";
+		prompt_stats.one = "";
+		prompt_stats.two = "";
 	}
 
 	override void Drawer ()
 	{
+		isbusy = messagebox_active || prompt_active;
 		statusbar.BeginHUD();
-		
+	
 		// Mechlab mode
 		if(hud_page == 0)
 		{
@@ -350,12 +397,24 @@ class Mechlab_Menu : GenericMenu
 					double yoffs = (messagepos.y-200) + i*25;
 					H_DrawString(text[i],(messagepos.x-240,yoffs),0,0,(1,1),1.0);
 				}
-				H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-80),0,Font.CR_White,(1,1),plrHudMessage.alpha);
+				if(!prompt_active) 
+				{
+					H_DrawString("Click to continue",(messagepos.x-116,messagepos.y-80),0,Font.CR_White,(1,1),plrHudMessage.alpha);
+				}
+				else
+				{
+					vector2 basepos = (messagepos.x-116,messagepos.y-80);
+					H_DrawImage(tBtn_Highlight, basepos,0,(1.8,1.2),1.0);
+					H_DrawString(prompt_stats.one, (basepos.x-50,basepos.y-10),0,Font.CR_Green,(1,1),plrHudMessage.alpha);
+					basepos.x += 260;
+					H_DrawImage(tBtn_Highlight, basepos,0,(1.8,1.2),1.0);
+					H_DrawString(prompt_stats.two, (basepos.x-50,basepos.y-10),0,Font.CR_Red,(1,1),plrHudMessage.alpha);
+				}
 			}
 		}
 			
 		// Global Actions
-		if(mstats.left_btn && checkCollision(mouse,modebtn) && page_init) 
+		if(mstats.left_btn && checkCollision(mouse,modebtn) && page_init && !isbusy) 
 		{
 			HUD_ChangePageRelative(page_offs);
 		}		
@@ -383,17 +442,39 @@ class Mechlab_Menu : GenericMenu
 			MechDoomerEvents.SendNetworkEvent("mechlab_alert:[reset]");
 			messagebox_active = true; 
 		}
-		if(mstats.left_btn && messagebox_active && plrHudMessage.alpha >= 0.4) 
+		if(mstats.left_btn && messagebox_active && !prompt_active && plrHudMessage.alpha >= 0.4) 
 		{
 			messagebox_active = false;
 			mstats.left_btn = false;
 		}
+		if(prompt_active)
+		{
+			if(mstats.left_btn)
+			{
+				if(checkCollision(mouse, prompt_onebtn)) 
+				{
+					prompt_stats.result = prompt_stats.one;
+					messagebox_active = false;
+				}
+				else if(checkCollision(mouse, prompt_twobtn)) 
+				{
+					prompt_stats.result = prompt_stats.two;
+					messagebox_active = false;
+				}
+				mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
+			}
+			mstats.left_btn = false;
+		}
 		
-		if(!messagebox_active && plrHudMessage.alpha > 0)
+		if(!messagebox_active && messagepos_yscale > 0.1)
 		{
 			plrHudMessage.alpha -= 0.004;
 			messagepos_yscale = MDMath.Lerp(messagepos_yscale,0.0,0.1);
-			if(plrHudMessage.alpha <= 0) plrHudMessage.txt = "";
+			if(plrHudMessage.alpha <= 0 || messagepos_yscale <= 0.3) 
+			{
+				plrHudMessage.txt = "";
+				prompt_active = false;
+			}
 		}
 		
 		if(plrHudMessage.txt != "" && plrHudMessage.alpha > 0 && messagebox_active)

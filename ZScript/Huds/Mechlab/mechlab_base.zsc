@@ -68,10 +68,42 @@ bool CheckActiveMech()
 	return mechplr.inv_context.engine && mechplr.inv_context.engine.model != EngineDatabase.Type_Organic;
 }
 
+virtual bool CheckUIKey(int KeyChar, String KeyBind)
+{
+	Array<int> keycodes;
+	Array<String> allkeys;
+	String keynames;
+	
+	Bindings.GetAllKeysForCommand(keycodes, KeyBind);
+	if(keycodes.Size() > 0)
+	{
+		keynames = Bindings.NameAllKeys(keycodes);
+		keynames.Replace(" ", "");
+		keynames.Replace("-", "");
+		keynames.Replace("KP", "");
+		keynames.Split(allkeys, "\c");
+		String ckey = String.Format("%c", KeyChar);
+		ckey.ToUpper();
+		for(int i = 0; i < allkeys.Size(); i++)
+		{
+			if(ckey == allkeys[i])
+				return true;
+		}
+	}
+	return false;
+}
+
 // Controls
 override bool OnUIEvent(UiEvent ev)
 {
+	kstats.shift_down = ev.IsShift;
 	if(ev.KeyChar == ui_closekey) CloseMechlab(); 
+	if(ev.Type == UIEvent.Type_Char)
+	{
+		if(CheckUIKey(ev.KeyChar, "menu:mechlab_scrapitem"))
+			kstats.key_scrap = true;
+	}
+	
 	if(ev.Type == UIEvent.Type_MouseMove)
 	{
 		mpos.x = ev.MouseX-5;
@@ -80,8 +112,9 @@ override bool OnUIEvent(UiEvent ev)
 		mouse.y = mpos.y;
 		mstats.left_pressed = false;
 		mstats.right_pressed = false;
+		kstats.key_scrap = false;
 	}
-	
+
 	if(ev.Type == UIEvent.Type_RButtonDown) mstats.right_btn = true;
 	if(ev.Type == UIEvent.Type_RButtonUp  ) 
 	{

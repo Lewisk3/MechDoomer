@@ -449,7 +449,8 @@ void trigger_ams(mw_InvStruct amsitem)
 		if(obj is "AMS_Missile" || obj is "MissileDebris" || obj is "DEBRIS_3D") continue;
 		if(obj && amsitem.active_cooldown <= 0)
 		{	
-			if( mechweap && ((!mechweap && !obj.Damage) || !(mechweap is "MechMissile")) ) continue;
+			if(!mechweap && !obj.Damage) continue;
+			if( mechweap && !(mechweap is "MechMissile") ) continue;
 			if(CheckSight(obj) && (obj.bMISSILE) && Distance3D(obj) < def_ams.activerange )
 			{
 				SoundEmitter.SE_Trigger(def_ams.firesound, pos);

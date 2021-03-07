@@ -10,6 +10,12 @@ class Item_NoPickup : Inventory
 		// This also has the neat side-effect of making the Weapon Registry
 		// Completely unneeded! 
 		// Weapons will no longer stack with this active.
+		if(Mechwarrior(Owner))
+		{
+			// AI cannot pickup items.
+			if(Mechwarrior(Owner).CheckAI())
+				return false;
+		}
 		if (item.GetClass() == GetClass()) return false;
 		return super.HandlePickup(item);
 	}	

@@ -269,6 +269,11 @@ OptionMenu "MechDoomerControlsMenu"
 	Control    "Toggle throttle decay (Backspace)" , "ThrottleDecay"
 	StaticText " "
 	
+	StaticText "Mechlab HotKeys", "Yellow"
+	StaticText "Do NOT assign non-standard keys, such as DEL or SHIFT", "Black"
+	Control    "Scrap Item (Y)"		 		 , "menu:mechlab_scrapitem"
+	StaticText " "
+	
 	StaticText "Primary Systems", "Yellow"
 	Control    "Interact (E)"				 , "+use"
 	Control	   "Shutdown (P)"				 , "MechShutdown"
@@ -314,4 +319,6 @@ OptionMenu "MechDoomerControlsMenu"
 	Control "Set Group Two (2)"				 , "SetGroup2"
 	Control "Set Group Three (3)"			 , "SetGroup3"
 	Control "Set Group Four (4)"			 , "SetGroup4"
+	
+	
 }
