@@ -1,0 +1,2 @@
+#Ignore Music 
+Music/MWD_TRK*.mp3

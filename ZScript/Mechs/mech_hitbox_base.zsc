@@ -72,16 +72,17 @@ class MechHitbox : Actor
 	override void Tick()
 	{
 		super.Tick();
-		if(mech.isdead)
-		{
-			bSHOOTABLE = false;
-			bSOLID = false;
-		}
 		if(!mech || !mech.models_reference) 
 		{
 			Destroy();
 			return;
 		}
+		if(mech.isdead)
+		{
+			bSHOOTABLE = false;
+			bSOLID = false;
+		}
+
 		double truecockpit = mech.angle;
 		if(mech.models_reference.cockpit && mech.player) 
 			truecockpit = mech.models_reference.cockpit.angle;			
