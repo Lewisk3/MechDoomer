@@ -29,27 +29,23 @@ class MechDoomerEvents : EventHandler
 			return;
 		}
 		
-		let plr = Mechwarrior(e.Camera);
+		let plr = Mechwarrior.GetViewCam(e.Camera);
+		ViewProjection viewproj = MD_SBS.GetRenderEventViewProj(e);
 		NAVPoint nav;
 		CVar target_mode;		
-		
-		if(!plr) 
-		{
-			let cam = MechCockpitCamera(e.Camera);
-			if(cam) plr = Mechwarrior(cam.mechowner);
-		}
 		
 		if(plr) 
 		{
 			target_mode = CVar.GetCVar("mwd_viewport_target",plr.player);	
 			nav = NAVPoint(plr.targetenemy);
 		}
+		
+		// Draw NAV points to HUD
 		if(nav && !automapactive)
 		{
-			let proj = MD_SBS.GetRenderEventViewProj(e);
 			bool front;
 			vector2 ptarget;
-			[front, ptarget] = MD_SBS.GetActorHUDPos(proj, nav, 0,0,nav.height*2);
+			[front, ptarget] = MD_SBS.GetActorHUDPos(viewproj, nav, 0,0,nav.height*2);
 			vector2 distscale = (0.15,0.15);
 			distscale *= plr.Distance2D(nav)/1200.;
 			distscale.x = clamp(distscale.x, 0.15, 0.25);
@@ -58,106 +54,39 @@ class MechDoomerEvents : EventHandler
 				MD_SBS.DrawImage("NAV", ptarget, 0, 1.0, distscale, absolute:true);
 		}
 		
-		// https://forum.zdoom.org/viewtopic.php?f=122&t=61330#p1064117
-		if( !automapactive && plr && plr.targetenemy && 
-			!nav && target_mode.getBool() )
+		// Draw targeting box
+		if( !automapactive && plr && plr.targetenemy && !nav && target_mode.getBool() )
 		{
-			double fovH = (e.camera.player != NULL) ? e.camera.player.FOV : e.camera.cameraFOV;
-			mwd_Matrix worldToClip = mwd_Matrix.worldToClip(e.viewPos, e.viewAngle, e.viewPitch, e.viewRoll, fovH);
-			Actor projActor = plr.targetenemy;
-			double projRadius = projActor.radius;
-			double projHeight = projActor.height;
-			double bottom = 0;
-			double top = projHeight;
-			if(projActor is "MechHitbox")
+			let targ = plr.targetenemy;
+			vector3 tSize = (targ.radius, targ.height, 0);
+			if(targ is "MechHitbox")
 			{
-				let hbox = MechHitBox(projActor);
-				if(projActor)
-				{
-					let mech = Mechwarrior(hbox.mech);
-					projRadius = mech.mech_radius;
-					projHeight = mech.mech_height;
-					bottom = mech.pos.z-projActor.pos.z;
-					top = projHeight;
-				}
+				let hbox = MechHitBox(targ);
+				let mech = Mechwarrior(hbox.mech);
+				tSize.x = mech.mech_radius;
+				tSize.y = mech.mech_height;
+				tSize.z = mech.pos.z-targ.pos.z;
 			}
-			if (plr && projActor) 
-			{
-				// this moves the position of the actor into absolute coordinates relative to the viewPos
-				// (which the view matrix is expecting)
-				Vector3 adjustedWorldPos = e.viewPos + LevelLocals.vec3Diff(e.viewPos, projActor.pos);
-				
-				Vector3 positions[8];
-				positions[0] = (adjustedWorldPos + ( projRadius,  projRadius, bottom    ));
-				positions[1] = (adjustedWorldPos + (-projRadius,  projRadius, bottom    ));
-				positions[2] = (adjustedWorldPos + ( projRadius, -projRadius, bottom    ));
-				positions[3] = (adjustedWorldPos + (-projRadius, -projRadius, bottom    ));
-				positions[4] = (adjustedWorldPos + ( projRadius,  projRadius, top		));
-				positions[5] = (adjustedWorldPos + (-projRadius,  projRadius, top		));
-				positions[6] = (adjustedWorldPos + ( projRadius, -projRadius, top		));
-				positions[7] = (adjustedWorldPos + (-projRadius, -projRadius, top		));
-				
-				Vector3 ndcPositions[8];
-				// ndcCounter tracks how many valid ndcPositions were found, if it's not 8 by the end of the loop then
-				// we won't draw anything
-				int ndcCounter = 0;
-				bool anyOnScreen = false;
-				for (int i = 0; i < 8; i++) 
-				{
-					Vector3 worldPos = positions[i];
-					Vector3 ndcPos = worldToClip.multiplyVector3(worldPos).asVector3();
-					
-					if (ndcPos.x <= 1 && ndcPos.x >= -1 &&
-						ndcPos.y <= 1 && ndcPos.y >= -1   ) anyOnScreen = true;
-					if (ndcPos.z <= 1 && ndcPos.z >= -1) 
-					{
-						ndcCounter++;
-						ndcPositions[i] = ndcPos;
-					}
-				}
-				
-				if (anyOnScreen && ndcCounter >= 8) 
-				{
-					// the infinities are used here since any real number will be automatically lower/higher than infinity/-infinity
-					double lowestX  =  double.infinity;
-					double lowestY  =  double.infinity;
-					double highestX = -double.infinity;
-					double highestY = -double.infinity;
-					
-					// create a bounding box from the projected positions
-					for (int i = 0; i < 8; i++) 
-					{
-						Vector2 ndc = ndcPositions[i].xy;
-						if (ndc.x < lowestX ) lowestX  = ndc.x;
-						if (ndc.y < lowestY ) lowestY  = ndc.y;
-						if (ndc.x > highestX) highestX = ndc.x;
-						if (ndc.y > highestY) highestY = ndc.y;
-					}
-					
-					Vector3 corners[4];
-					corners[0] = (clamp(lowestX , -0.95, 0.95), clamp(lowestY , -0.95, 0.95), 0);
-					corners[1] = (clamp(highestX, -0.95, 0.95), clamp(lowestY , -0.95, 0.95), 0);
-					corners[2] = (clamp(lowestX , -0.95, 0.95), clamp(highestY, -0.95, 0.95), 0);
-					corners[3] = (clamp(highestX, -0.95, 0.95), clamp(highestY, -0.95, 0.95), 0);
-					string cornerTextures[4];
-					cornerTextures[0] = "RETCC0";
-					cornerTextures[1] = "RETCD0";
-					cornerTextures[2] = "RETCA0";
-					cornerTextures[3] = "RETCB0";
-					Vector2 cornerDirs[4];
-					cornerDirs[0] = (-1,  1);
-					cornerDirs[1] = ( 1,  1);
-					cornerDirs[2] = (-1, -1);
-					cornerDirs[3] = ( 1, -1);
-					
-					for (int i = 0; i < 4; i++) 
-					{
-						Vector2 viewportPos = mwd_GlobalMaths.ndcToViewPort(corners[i]);
-						viewportPos.y -= 15;	
-						Screen.drawTexture(TexMan.checkForTexture(cornerTextures[i], TexMan.Type_Any), false, viewportPos.x, viewportPos.y);
-					}
-				}
-			}
+			
+			// Draw corner graphics
+			bool front;
+			vector2 topos;
+			
+			// Top Left
+			[front, topos] = MD_SBS.GetActorHUDPos(viewproj, targ, tSize.x, 0, tSize.y);
+			if(front) MD_SBS.DrawImage("RETCA0", topos, 0, absolute:true);
+			
+			// Top Right
+			[front, topos] = MD_SBS.GetActorHUDPos(viewproj, targ, -tSize.x, 0, tSize.y);
+			if(front) MD_SBS.DrawImage("RETCB0", topos, 0, absolute:true);
+			
+			// Bottom Left
+			[front, topos] = MD_SBS.GetActorHUDPos(viewproj, targ, tSize.x, 0, tSize.z);
+			if(front) MD_SBS.DrawImage("RETCC0", topos, 0, absolute:true);
+			
+			// Bottom Right
+			[front, topos] = MD_SBS.GetActorHUDPos(viewproj, targ, -tSize.x, 0, tSize.z);
+			if(front) MD_SBS.DrawImage("RETCD0", topos, 0, absolute:true);
 		}
 		
 		// Print distance on HUD space
@@ -166,8 +95,8 @@ class MechDoomerEvents : EventHandler
 		{
 			double mdist = plr.Distance3D(plr.targetenemy)/MWGAMEPLAY_UNITMETER;
 			String dist = String.Format("%.0fm", mdist);
+			
 			bool infront;
-			ViewProjection viewproj = MD_SBS.GetMechViewProj(plr);
 			vector2 apos;
 			[infront, apos] = MD_SBS.GetActorHUDPos(
 				viewproj,

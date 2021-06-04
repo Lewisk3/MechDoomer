@@ -12,10 +12,6 @@ class HudSpriteInitializer : Actor
 	}
 }
 
-// Gutamatics includes
-#include "zscript/Gutamatics/GlobalMaths.zsc"
-#include "zscript/Gutamatics/Matrix.zsc"
-
 // RadiusDebug 
 #include "ZScript/RadiusDebug/RadiusDebug.zsc"
 

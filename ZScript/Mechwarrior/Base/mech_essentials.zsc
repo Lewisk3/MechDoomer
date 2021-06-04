@@ -582,3 +582,16 @@ int ProcessHitscanDamageMobJ(Actor inflictor, Actor source, int damage, Name mod
 	}
 	return 0;
 }
+
+// Utility
+clearscope static Mechwarrior GetViewCam(Actor formech)
+{
+	// Find true view camera.
+	let mech = Mechwarrior(formech);
+	if(!mech) 
+	{
+		let cam = MechCockpitCamera(formech);
+		if(cam) mech = Mechwarrior(cam.mechowner);
+	}
+	return mech;
+}
