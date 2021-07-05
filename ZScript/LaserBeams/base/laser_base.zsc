@@ -50,9 +50,30 @@ class LaserGlobals abstract
 	}
 }
 
+class CheapActor : Actor
+{
+	override void Tick()
+	{			
+		if (alpha < 0)
+		{
+			destroy();
+			return;
+		}
+		if (isFrozen()) return;
+		
+		//animation:
+		if (tics != -1) 
+		{
+			if(tics > 0) tics--;
+			while (!tics) 
+				if(!SetState(CurState.NextState)) return;
+		}
+	}
+}
+
 
 // Laser Emitter
-class LaserEmitter : Actor
+class LaserEmitter : CheapActor
 {
 	Actor source;
 	Actor aimactor;

@@ -681,15 +681,15 @@ void DrawHardpointItems(int ind, int sx, int sy)
 				int fcr = am ? Font.CR_PURPLE : Font.CR_DARKGRAY;
 				for(int s = 0; s < def_ut.hardslots; s++)
 				{	
-					if(i == selected_item.index && selected_item.mUtil && selected_item.location)fcr = Font.CR_GREEN;
+					bool cur_selected = (i == selected_item.index && selected_item.mUtil && selected_item.location);
+					if(cur_selected) fcr = Font.CR_GREEN;
 					String suffix = def_ut.hardslots > 1 ? " \c[Orange][" .. s+1 .. "]" : "";
 					Rect checkmouse;
 					initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+suffix.Length()+3),15);
-					//drawRect(checkmouse,Color(255,128,128,128));
+					// drawRect(checkmouse,Color(255,128,128,128));
 					if(mstats.left_pressed && checkCollision(mouse,checkmouse) && !mechmode)
 					{
-						bool sameitem = selected_item.location && selected_item.index == i;
-						if(sameitem) 
+						if(cur_selected) 
 						{
 							// Dequip
 							DequipSelected();
@@ -721,7 +721,8 @@ void DrawHardpointItems(int ind, int sx, int sy)
 			{
 				if(ww.hardpoint == hp)
 				{
-					int fcr = (wind == selected_item.index && selected_item.mWeapon && selected_item.location) ? Font.CR_YELLOW : Font.CR_WHITE;
+					bool cur_selected = (wind == selected_item.index && selected_item.mWeapon && selected_item.location);
+					int fcr = cur_selected ? Font.CR_YELLOW : Font.CR_WHITE;
 					for(int i = 0; i < ww.hardslots; i++)
 					{							
 						String suffix = "";
@@ -732,8 +733,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 						// drawRect(checkmouse,Color(255,255,255,128));
 						if(mstats.left_pressed && checkCollision(mouse,checkmouse))
 						{
-							bool sameitem = selected_item.location && selected_item.index == wind;
-							if(sameitem) 
+							if(cur_selected) 
 							{
 								// Dequip
 								DequipSelected();

@@ -681,7 +681,15 @@ class Mechbase_Weapon : Item_NoPickup
 	override void tick()
 	{
 		weapon_tick();
-		super.tick();
+		if (isFrozen()) return;
+		
+		//animation:
+		if (tics != -1) 
+		{
+			if(tics > 0) tics--;
+			while (!tics) 
+				if(!SetState(CurState.NextState)) return;
+		}
 	}
 	
 	override void OnDestroy()

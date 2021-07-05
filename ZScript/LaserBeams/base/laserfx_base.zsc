@@ -1,6 +1,6 @@
 
 // Smoke
-class LaserSmoke : Actor
+class LaserSmoke : CheapActor
 {
 	Default
 	{
@@ -15,6 +15,7 @@ class LaserSmoke : Actor
 		Scale		0.45;
 		Translation "0:255=@70[86,64,0]";  
 	}
+	
 	States
 	{
 		Spawn:

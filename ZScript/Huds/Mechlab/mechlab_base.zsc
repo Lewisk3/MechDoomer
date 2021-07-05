@@ -106,8 +106,8 @@ override bool OnUIEvent(UiEvent ev)
 	
 	if(ev.Type == UIEvent.Type_MouseMove)
 	{
-		mpos.x = ev.MouseX-5;
-		mpos.y = ev.MouseY-5;
+		mpos.x = ev.MouseX;
+		mpos.y = ev.MouseY;
 		mouse.x = mpos.x;
 		mouse.y = mpos.y;
 		mstats.left_pressed = false;
