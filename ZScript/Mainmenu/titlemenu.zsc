@@ -171,13 +171,9 @@ class Mech_InGameMenu : CustomMenuBase
 		for(int i = 0; i < buttons.Size(); i++)
 		{
 			buttons[i].Update(mMouse, btn_selected == -1);
+			bool btn_active = (btn_selected == i) || buttons[i].hovered || buttons[i].pressed;
 			
-			if(buttons[i].pressed)
-			{
-				buttons[i].btntext.font_color = Font.CR_RED;
-			}
-			else
-				buttons[i].btntext.font_color = Font.CR_GRAY;
+			buttons[i].btntext.font_color = btn_active ? Font.CR_RED : Font.CR_GRAY;
 			
 			if(buttons[i].clicked)
 			{

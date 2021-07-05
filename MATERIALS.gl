@@ -47,8 +47,8 @@ material texture models/LaserBeams/BEAM.png {
 	brightmap models/LaserBeams/BEAM.png
 	brightness 1.0
 }
-material texture sprites/Explosions/LaserBeams/LASHA0.png {
-	brightmap sprites/Explosions/LaserBeams/LASHA0.png
+material texture sprites/Explosions/Lasers/LaserBeams/LASHA0.png {
+	brightmap sprites/Explosions/Lasers/LaserBeams/LASHA0.png
 }
 
 // Some PBR stuff for cockpits/models.

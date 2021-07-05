@@ -83,7 +83,7 @@ virtual bool CheckUIKey(int KeyChar, String KeyBind)
 		keynames.Replace("KP", "");
 		keynames.Split(allkeys, "\c");
 		String ckey = String.Format("%c", KeyChar);
-		ckey.ToUpper();
+		ckey.MakeUpper();
 		for(int i = 0; i < allkeys.Size(); i++)
 		{
 			if(ckey == allkeys[i])

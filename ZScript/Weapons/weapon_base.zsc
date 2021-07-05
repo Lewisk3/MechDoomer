@@ -1522,7 +1522,7 @@ class AutocannonBall : Mechbase_Actor
 						"DEBRIS_3D", self, 4, posoffs:(10,10)
 					);
 				}
-				A_PlaySound("Ballistics/Autocannon/Impact", CHAN_AUTO, CHANF_OVERLAP);
+				A_StartSound("Ballistics/Autocannon/Impact", CHAN_AUTO, CHANF_OVERLAP);
 			}
 		stop;
 	}
