@@ -132,7 +132,7 @@ void mech_weapons()
 	}
 	if(HeatLevel >= MWHEAT_MAX*0.42 && !doShutdown && canShutdown) 
 	{
-		Cockpit_Alert("\c[SAPPHIRE]Shutdown sequence initiated!");
+		Cockpit_Alert("\c[Blue]Shutdown sequence initiated!");
 		mechsounds.pushSound("Mech/Betty/ShutdownInit");
 		doShutdown = true;
 		canShutdown = false;
@@ -142,7 +142,7 @@ void mech_weapons()
 	if( ((ticks - shutdown_timer) > MWHEAT_MAX) && doShutdown )
 	{
 		A_StopSound(CHAN_VOICE);
-		Cockpit_Alert("\c[SAPPHIRE]Shutting down...");
+		Cockpit_Alert("\c[Blue]Shutting down...");
 		A_StartLocalSound("Mech/Betty/ShuttingDown", CHAN_VOICE);
 		doShutdown = true;
 		lockangle = angle;
@@ -289,14 +289,14 @@ void mech_weapons()
 		weapon_groupfire = !weapon_groupfire;
 		if(weapon_groupfire)
 		{
-			Cockpit_Alert("\c[GREEN]Group Fire: Engaged");
+			Cockpit_Alert("\c[DarkGreen]Group Fire: Engaged");
 			mechsounds.pushSound("Mech/Betty/Groupfire");
 			mechsounds.pushSound("Mech/Betty/Engaged");
 			TakeInventory("IBTN_bFIREMODE",1);
 		} 
 		else 
 		{
-			Cockpit_Alert("\c[GREEN]Chain Fire: Engaged");
+			Cockpit_Alert("\c[DarkGreen]Chain Fire: Engaged");
 			mechsounds.pushSound("Mech/Betty/Chainfire");
 			mechsounds.pushSound("Mech/Betty/Engaged");
 			TakeInventory("IBTN_bFIREMODE",1);

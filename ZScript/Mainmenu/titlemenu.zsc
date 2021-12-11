@@ -1,6 +1,5 @@
 class Mech_TitleMenu : CustomMenuBase
 {
-
 	void DStr(String str, vector2 pos, vector2 scale=(1.15,1.15))
 	{
 		MD_SBS.DrawString("MechFont", str,pos,0,Font.CR_WHITE,1.0,scale);

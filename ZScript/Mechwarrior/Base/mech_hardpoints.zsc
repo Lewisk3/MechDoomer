@@ -124,7 +124,7 @@ void _DoHardpointRepair(MechHardpoint hp, int stats)
 		}
 		hp.internalhp = hp.max_internal;	
 	}
-	Mechlab_Alert("\c[GREEN]Hardpoint repaired!");
+	Mechlab_Alert("\c[DarkGreen]Hardpoint repaired!");
 }
 void ActivateArmorUtility(class<ArmoryUtility> type, int hindex)
 {	

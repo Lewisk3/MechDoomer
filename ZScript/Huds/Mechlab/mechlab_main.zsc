@@ -536,7 +536,7 @@ void drawInventory(int px, int py, int start, int max)
 			int fcr = eng ? Font.CR_ORANGE : ut ? Font.CR_DARKGRAY : Font.CR_WHITE;
 			if(i == selected_item.index && !selected_item.location) 
 			{
-				fcr = selected_item.mEngine ? Font.CR_GREEN : selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
+				fcr = selected_item.mEngine ? Font.CR_DARKGREEN : selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
 			}
 			
 			if(mstats.left_pressed && checkCollision(mouse,checkmouse))
@@ -559,7 +559,7 @@ void drawInventory(int px, int py, int start, int max)
 			string displayName = weapname.. " \c[Orange]["..slots.."]";
 			if(ut) displayName = GetDefaultByType(ut).displayName.. " \c[Orange]["..slots.."]";
 			if(eng) displayName = MechBase_Engine.GetRealName(eng);
-			if(item.amt > 0) displayName = displayName .. "\c[Green] x" .. item.amt+1;
+			if(item.amt > 0) displayName = displayName .. "\c[DarkGreen] x" .. item.amt+1;
 			H_DrawString(displayName, (px-68,py+sely),0,fcr);
 			if(ut && !GetDefaultByType(ut).moveable)H_DrawString("ERROR: Immoveable Item!", (px-68,py+sely),0,Font.CR_DARKRED);	
 		}
@@ -573,7 +573,7 @@ void drawInventory(int px, int py, int start, int max)
 			// drawRect(checkmouse,debug_color);
 			
 			int sely = (i-start)*25;
-			int fcr = (i == selected_item.index) ? Font.CR_GREEN : Font.CR_WHITE;
+			int fcr = (i == selected_item.index) ? Font.CR_DARKGREEN : Font.CR_WHITE;
 			
 			if(mstats.left_btn && checkCollision(mouse,checkmouse)) 
 			{
@@ -682,7 +682,7 @@ void DrawHardpointItems(int ind, int sx, int sy)
 				for(int s = 0; s < def_ut.hardslots; s++)
 				{	
 					bool cur_selected = (i == selected_item.index && selected_item.mUtil && selected_item.location);
-					if(cur_selected) fcr = Font.CR_GREEN;
+					if(cur_selected) fcr = Font.CR_DARKGREEN;
 					String suffix = def_ut.hardslots > 1 ? " \c[Orange][" .. s+1 .. "]" : "";
 					Rect checkmouse;
 					initRect(checkmouse,sx,sy+offs.x-10,14*(def_ut.displayName.Length()+suffix.Length()+3),15);

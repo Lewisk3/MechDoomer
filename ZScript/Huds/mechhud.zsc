@@ -132,7 +132,7 @@ class MechStatusBar : BaseStatusBar
 				{ 
 					cashcounter+= money/20; 
 					dCash.txt = "+" .. money;
-					dCash.col = Font.CR_GREEN;
+					dCash.col = Font.CR_DARKGREEN;
 					if(cashcounter > mechplr.inv_context.money_cbills) cashcounter = mechplr.inv_context.money_cbills;
 					if(money/20 == 0) cashcounter = mechplr.inv_context.money_cbills;
 				}
@@ -246,13 +246,13 @@ class MechStatusBar : BaseStatusBar
 							continue;
 					}
 					
-					int ftranslation = Font.CR_GREEN;
+					int ftranslation = Font.CR_DARKGREEN;
 					static const int group_colors[] =
 					{
-						Font.CR_GREEN,
+						Font.CR_DARKGREEN,
 						Font.CR_WHITE,
-						Font.CR_YELLOW,
-						Font.CR_LIGHTBLUE
+						Font.CR_GOLD,
+						Font.CR_SAPPHIRE
 					};
 					int grp = clamp(ww.group-1,0,3);
 					ftranslation = group_colors[grp];
@@ -578,7 +578,7 @@ class MechStatusBar : BaseStatusBar
 					drawAngledLine(scrmid.x,scrmid.y,166*3,drawang,mechplr.player.FOV/2,linecol);
 					drawAngledLine(scrmid.x,scrmid.y,166*3,drawang,-mechplr.player.FOV/2,linecol);
 					H_DrawImage("RADARMID",(0,0),MD_SBS.SS_SCREEN_CENTER,(1.0,0.9));
-					H_DrawString("\c[GREEN]R= " .. metertext, (500,100), scale:(1.75,1.85));
+					H_DrawString("\c[DARKGREEN]R= " .. metertext, (500,100), scale:(1.75,1.85));
 				}
 				else
 				{
@@ -586,7 +586,7 @@ class MechStatusBar : BaseStatusBar
 					drawAngledLine(radarx,radary,fradius-2,drawang,-mechplr.player.FOV/2,linecol);
 					H_DrawCircle("YLWPXL", (radarx, radary), fradius, 0);
 					H_DrawImage("RADARMID",(radarx, radary),0,(1.0,0.9));
-					H_DrawString("\c[GREEN]R= " .. metertext, (65,35), scale:(1.25,1.35));
+					H_DrawString("\c[DARKGREEN]R= " .. metertext, (65,35), scale:(1.25,1.35));
 				}
 			
 				while(obj = Actor(act_it.Next()))
@@ -724,7 +724,7 @@ class MechStatusBar : BaseStatusBar
 				else
 					H_DrawString("\c[RED]" .. targetname,(50,1005),scale:(1.5,1.5));
 					
-				H_DrawString("\c[GREEN]"..dist .. "m",(55,1036),scale:(1.35,1.35));
+				H_DrawString("\c[DARKGREEN]"..dist .. "m",(55,1036),scale:(1.35,1.35));
 				// Enemy health bar (If not NAVPoint)
 				if(!isNav && !targetMechBase)
 				{
@@ -1040,7 +1040,7 @@ class MechStatusBar : BaseStatusBar
 			String prefix = pstrs[objt.priority] .. ":";
 			String main   = objt.description;
 			String suffix = objt.completed ? "Completed" : "In Progress";
-			uint scol = objt.completed ? Font.CR_SAPPHIRE : Font.CR_GREEN;
+			uint scol = objt.completed ? Font.CR_SAPPHIRE : Font.CR_DARKGREEN;
 			if(objt.failed) 
 			{
 				suffix = "Failed";
@@ -1048,7 +1048,7 @@ class MechStatusBar : BaseStatusBar
 			}
 			double xoffs = prefix.length()*17;
 			H_DrawString(prefix,(objpos.x,objpos.y+yoffs),flags,Font.CR_SAPPHIRE,(smallscale,smallscale));
-			H_DrawString(main,(objpos.x+xoffs,objpos.y+yoffs),flags,Font.CR_GREEN,(smallscale,smallscale));
+			H_DrawString(main,(objpos.x+xoffs,objpos.y+yoffs),flags,Font.CR_DARKGREEN,(smallscale,smallscale));
 			H_DrawString(suffix,(objpos.x+940,objpos.y+yoffs),flags,scol,(smallscale,smallscale));
 			yoffs+=30;
 		}

@@ -90,9 +90,10 @@ class Mechbase_Actor : FastProjectile
 	{
 		spawnpos = pos;
 		FLineTraceData lt;
+		let aimz = mechplayer.models_reference.cockpit_camera;
 		mechplayer.LineTrace( mechplayer.angle, 1000 * MWGAMEPLAY_UNITMETER, 
 							  mechplayer.pitch, TRF_SOLIDACTORS, 
-							  mechplayer.viewheight, 80,0, lt     );
+							  aimz.pos.z - mechplayer.pos.z, 80,0, lt     );
 		aimpos = lt.HitLocation;
 		if(lt.HitActor && !mechplayer.CheckAI())
 		{
@@ -967,8 +968,8 @@ class Laser : Mechbase_Actor
 			LASR A 1;
 		loop;
 		Death:
-			LASR A 1;
-			LASR A 1
+			TNT1 A 1;
+			TNT1 A 1
 			{
 				// console.printf("Damage: %d", floor(realdamage) );
 				for(int i = 0; i < 30; i++)

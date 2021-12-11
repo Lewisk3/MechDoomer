@@ -289,7 +289,7 @@ class MechDoomerEvents : EventHandler
 							count++;
 						}
 					}
-					console.printf("\c[Red]Destroyed \c[White]%d \c[Blue]Objects \c[White]of type \c[Green]\"%s\"", count, netcmds[1]);
+					console.printf("\c[Red]Destroyed \c[White]%d \c[Blue]Objects \c[White]of type \c[DarkGreen]\"%s\"", count, netcmds[1]);
 				}
 			}
 		}
@@ -489,7 +489,7 @@ class MechDoomerEvents : EventHandler
 				}
 				else
 				{
-					plr.cockpit_alert("\c[GREEN]"..netcmds[1]);
+					plr.cockpit_alert("\c[DarkGreen]"..netcmds[1]);
 				}
 			}
 			// Hardpoint debug
@@ -610,12 +610,12 @@ class MechDoomerEvents : EventHandler
 				{
 					if(!plr.CheckHasAMS())
 					{
-						plr.Cockpit_Alert("\c[GREEN]Not equipped with an AntiMissileSystem.");
+						plr.Cockpit_Alert("\c[DarkGreen]Not equipped with an AntiMissileSystem.");
 					}
 					else
 					{
 						SoundOnActor.Trigger("Mech/Blip",plr);
-						String alertmsg = "\c[GREEN] AntiMissileSystems: ";
+						String alertmsg = "\c[DarkGreen] AntiMissileSystems: ";
 						plr.ams_passive = !plr.ams_passive;	
 						if(!plr.ams_passive) 
 							alertmsg = alertmsg.."Enabled.";
@@ -649,7 +649,7 @@ class MechDoomerEvents : EventHandler
 					SoundOnActor.Trigger("Mech/Blip",plr);
 					if(plr.radar_scale == 2)
 					{
-						plr.Cockpit_Alert("\c[GREEN]Radar is hidden.");
+						plr.Cockpit_Alert("\c[DarkGreen]Radar is hidden.");
 					}
 					else
 					{
@@ -669,7 +669,7 @@ class MechDoomerEvents : EventHandler
 					bool bdecay = throtd.GetBool();
 					throtd.SetBool(!bdecay);
 					
-					String alertmsg = "\c[GREEN] Throttle Decay: ";
+					String alertmsg = "\c[DarkGreen] Throttle Decay: ";
 					if(!bdecay) 
 						alertmsg = alertmsg.."Enabled.";
 					else

@@ -75,12 +75,12 @@ void ToggleAutopilot(bool forceoff = false)
 	mechSounds.PushSound("Mech/Betty/Autopilot");
 	if(autopilot) 
 	{
-		Cockpit_Alert("\c[GREEN]Autopilot: Engaged");
+		Cockpit_Alert("\c[DarkGreen]Autopilot: Engaged");
 		mechSounds.PushSound("Mech/Betty/Engaged");
 	}
 	else
 	{
-		Cockpit_Alert("\c[GREEN]Autopilot: Disabled");
+		Cockpit_Alert("\c[DarkGreen]Autopilot: Disabled");
 		mechSounds.PushSound("Mech/Betty/Disabled");
 	}
 }
@@ -430,7 +430,7 @@ void mech_movement()
 		}
 		else
 		{
-			Cockpit_Alert("\c[SAPPHIRE]Shutdown overridden.");
+			Cockpit_Alert("\c[Blue]Shutdown overridden.");
 			doShutdown = false;
 			shutdown_timer = ticks;
 			A_StartLocalSound("Mech/Override", CHAN_BODY, CHANF_OVERLAP);
@@ -450,7 +450,7 @@ void shutdown_setup(bool critical = true, bool forced = false, bool silent = fal
 	if(!silent)
 	{
 		A_StopSound(CHAN_VOICE);
-		Cockpit_Alert("\c[SAPPHIRE]Shutting down...");
+		Cockpit_Alert("\c[Blue]Shutting down...");
 		A_StartLocalSound("Mech/Betty/ShuttingDown", CHAN_VOICE);
 		A_StartLocalSound("Mech/Shutdown", CHAN_VOICE, CHANF_OVERLAP);
 		hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
@@ -484,7 +484,7 @@ void powerup_setup(bool critical = true, bool forced = false, bool silent = fals
 	doShutdown = false;
 	hAlert.hud_powersequence = MechStatusBar.GetAnimFlags();
 	A_StartLocalSound("Mech/Power", CHAN_BODY, CHANF_OVERLAP);
-	Cockpit_Alert("\c[GREEN]Powering up...", 30);	
+	Cockpit_Alert("\c[DARKGREEN]Powering up...", 30);	
 	slient_powerup = silent;
 	
 	if(!critical) manualshutdown = false;

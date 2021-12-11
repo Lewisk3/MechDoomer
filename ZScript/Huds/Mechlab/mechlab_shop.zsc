@@ -143,7 +143,7 @@ void ProcessShopButtons()
 			mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 			MechDoomerEvents.SendNetworkEvent("shop_buyitem",selected_item.index, item_cost);
 			mstats.left_btn = false;
-			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Green]Item purchased: \n"..selected_item.Tag);
+			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[DarkGreen]Item purchased: \n"..selected_item.Tag);
 		}
 		if( checkCollision(mouse, buymechbtn) && pricevalid && selected_item.index >= 0 &&  mechmode)
 		{
@@ -152,7 +152,7 @@ void ProcessShopButtons()
 			mechplr.S_StartSound("UI/PressButton",CHAN_WEAPON);
 			MechDoomerEvents.SendNetworkEvent("shop_buymech",selected_item.index, item_cost);
 			mstats.left_btn = false;
-			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[Green]Mech purchased: \n"..PlayerPawn.GetPrintableDisplayName(mech.baseclass));
+			MechDoomerEvents.SendNetworkEvent("mechlab_alert:\c[DarkGreen]Mech purchased: \n"..PlayerPawn.GetPrintableDisplayName(mech.baseclass));
 		}
 		
 		if( checkCollision(mouse, energybtn) )
@@ -425,7 +425,7 @@ void drawShopInventory(int px, int py, int start, int max)
 			int fcr = eng ? Font.CR_ORANGE : ut ? Font.CR_DARKGRAY : Font.CR_WHITE;
 			if(i == selected_item.index && !selected_item.location) 
 			{
-				fcr = selected_item.mEngine ? Font.CR_GREEN : selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
+				fcr = selected_item.mEngine ? Font.CR_DARKGREEN : selected_item.mUtil ? Font.CR_SAPPHIRE : Font.CR_DARKRED;  
 			}
 			if(mstats.left_btn && checkCollision(mouse,checkmouse) && !marker) 
 			{

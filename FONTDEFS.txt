@@ -1,11 +1,11 @@
 MechFont
 {
 	Template FURR%03d
-	DONTTRANSLATE
+//	DONTTRANSLATE
 }
 
 BattleTechFont
 {
 	Template BTLP%03d
-	DONTTRANSLATE
+//	DONTTRANSLATE
 }

@@ -406,7 +406,7 @@ class Mechlab_Menu : GenericMenu
 				{
 					vector2 basepos = (messagepos.x-116,messagepos.y-80);
 					H_DrawImage(tBtn_Highlight, basepos,0,(1.8,1.2),1.0);
-					H_DrawString(prompt_stats.one, (basepos.x-50,basepos.y-10),0,Font.CR_Green,(1,1),plrHudMessage.alpha);
+					H_DrawString(prompt_stats.one, (basepos.x-50,basepos.y-10),0,Font.CR_DarkGreen,(1,1),plrHudMessage.alpha);
 					basepos.x += 260;
 					H_DrawImage(tBtn_Highlight, basepos,0,(1.8,1.2),1.0);
 					H_DrawString(prompt_stats.two, (basepos.x-50,basepos.y-10),0,Font.CR_Red,(1,1),plrHudMessage.alpha);

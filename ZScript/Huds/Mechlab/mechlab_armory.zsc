@@ -155,7 +155,7 @@ void DrawArmorUtilites(int sx, int sy)
 			// drawRect(checkmouse, debug_color);
 			if( checkCollision(mouse, checkmouse) && mstats.left_btn ) autil_item = armorutil;
 			uint fcr = Font.CR_WHITE;
-			if(armorutil == autil_item) fcr = Font.CR_GREEN;
+			if(armorutil == autil_item) fcr = Font.CR_DARKGREEN;
 			H_DrawString(itemstr, (sx,sy+offsy-15), 0, fcr);
 			offsy += 15;
 		}
@@ -198,9 +198,9 @@ void drawArmoryInfo()
 		selectallstr = "Select All";
 		ArmorFont = (hp.armor < hp.defmax_armor) ? Font.CR_DARKRED : Font.CR_WHITE;
 		InternalsFont = (hp.internalhp < hp.max_internal) ? Font.CR_DARKRED : Font.CR_WHITE;
-		if( astat_selected ==  0) ArmorFont = Font.CR_GREEN;
-		if( astat_selected ==  1) InternalsFont = Font.CR_GREEN;
-		if( astat_selected ==  2) SelectFont = Font.CR_GREEN;
+		if( astat_selected ==  0) ArmorFont = Font.CR_DARKGREEN;
+		if( astat_selected ==  1) InternalsFont = Font.CR_DARKGREEN;
+		if( astat_selected ==  2) SelectFont = Font.CR_DARKGREEN;
 		if( astat_selected != -1)
 		{	
 			if(astat_selected < 2)
